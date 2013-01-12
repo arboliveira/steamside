@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.vdf;
 
+import br.com.arbo.steamside.vdf.Region.KeyValueVisitor;
+
 public class App {
 
 	private final Region content;
@@ -9,16 +11,23 @@ public class App {
 	}
 
 	public void category(String category) {
-		class CategoryChange implements Region.KeyValueVisitor {
+		class CategoryChange implements KeyValueVisitor {
 
 			@Override
-			public void visit(KeyValue kv) {
+			public void onKeyValue(String k, String v) {
 				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onSubRegion(String k, Region r) {
+				// TODO Auto-generated method stub
+
 			}
 
 		}
 		Region tags = content.region("tags");
-		Region.KeyValueVisitor categoryChange = new CategoryChange();
+		KeyValueVisitor categoryChange = new CategoryChange();
 		tags.accept(categoryChange);
 
 	}

@@ -1,5 +1,12 @@
 package br.com.arbo.steamside.vdf;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+
+import br.com.arbo.steamside.vdf.Region.KeyValueVisitor;
+
 public class Vdf {
 
 	final String content;
@@ -7,7 +14,7 @@ public class Vdf {
 
 	public Vdf(String content) {
 		this.content = content;
-		this.root = new Region(this, 0);
+		this.root = new Region(new RootReaderFactory(this));
 	}
 
 	public Region region(String name) {
@@ -35,4 +42,27 @@ public class Vdf {
 	}
 
 	private static final char q = '"';
+
+	public static void main(String[] args) throws IOException {
+		final String text = FileUtils.readFileToString(
+				new File("etc/sharedconfig.vdf"));
+		Vdf vdf = new Vdf(text);
+		vdf.root().accept(new Dump());
+	}
+
+	static final class Dump implements
+			KeyValueVisitor {
+
+		@Override
+		public void onSubRegion(String k, Region r) {
+			System.out.println(k + ": REGION");
+			r.accept(new Dump());
+		}
+
+		@Override
+		public void onKeyValue(String k, String v) {
+			System.out.println(k + ": " + v);
+		}
+	}
+
 }
