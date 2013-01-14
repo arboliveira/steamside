@@ -3,43 +3,66 @@ package br.com.arbo.steamside.vdf;
 import java.io.IOException;
 import java.io.StreamTokenizer;
 
-import br.com.arbo.steamside.java.io.PositionalStringReader;
+import br.com.arbo.java.io.PositionalStringReader;
 
 class Region {
 
 	private final Vdf vdf;
 	private final Token head;
 	private final int from;
-	private final Region parent;
 	private final String name;
-	private ReaderFactory rf;
+	final ReaderFactory parent;
 
 	Region(ReaderFactory rf) {
-		this.rf = rf;
+		this.parent = rf;
 		this.from = -1;
 		this.vdf = null;
 		this.head = null;
-		this.parent = null;
 		this.name = null;
 	}
 
+	/*
 	Region(Vdf vdf, int from) {
 		this.vdf = vdf;
 		this.from = from;
 		this.head = vdf.seek(from);
-		this.parent = null;
 		this.name = null;
 	}
 
 	Region(Region parent, String name) {
 		this.vdf = parent.vdf;
-		this.parent = parent;
 		this.name = name;
 		this.from = -1;
 		this.head = null;
 	}
+	*/
 
-	Region region(String name) {
+	Region region(final String name) {
+		class Find implements KeyValueVisitor {
+
+			Region found;
+
+			@Override
+			public void onKeyValue(String k, String v) {
+				// Do nothing
+			}
+
+			@Override
+			public void onSubRegion(String k, Region r) throws Finished {
+				if (k.equals(name)) {
+					found = r;
+					throw new Finished();
+				}
+			}
+
+		}
+
+		Find find = new Find();
+		accept(find);
+		if (find.found != null) return find.found;
+		throw new RuntimeException("No sub-region with name: " + name);
+
+		/*
 		final int body = head.to + 1;
 		int pos = body;
 		while (true) {
@@ -48,13 +71,14 @@ class Region {
 				return new Region(vdf, next.from);
 			pos = next.to + 1;
 		}
+		*/
 	}
 
 	interface KeyValueVisitor {
 
 		void onKeyValue(String k, String v);
 
-		void onSubRegion(String k, Region r);
+		void onSubRegion(String k, Region r) throws Finished;
 	}
 
 	/*
@@ -70,43 +94,111 @@ class Region {
 	*/
 
 	void accept(KeyValueVisitor visitor) {
+		final PositionalStringReader reader = parent.readerPositionedInside();
+		StreamTokenizer tokenizer = StreamTokenizerBuilder.build(reader);
+		accept(visitor, tokenizer);
+	}
+
+	void accept(KeyValueVisitor visitor, StreamTokenizer tokenizer) {
 		try {
-			final PositionalStringReader reader =
-					rf.readerPositionedInside();
-			if (parent != null) {
-				//parent.skipIntoRegion(reader, this.name);
-				//int begin = 666; //parent.positionOfRegion(this.name);
-				//reader.skip(begin);
-			}
-			StreamTokenizer parser = StreamTokenizerBuilder.build(reader);
-
-			// Read node name
-			parser.nextToken();
-			String name = parser.sval;
-
-			parser.nextToken();
-			String value = parser.sval;
-
-			// Check if next token is value or open of branch
-			if (value != null)
-			{
-				// If token is value, read value
-				visitor.onKeyValue(name, value);
-
-			} else if (parser.ttype == '{')
-			{
-				// If token is open branch, read child nodes
-
-				Region sub = new Region(new RegionReaderFactory(rf, name));
-				visitor.onSubRegion(name, sub);
-
-				while (parser.nextToken() != '}')
-				{
-					// keep trying
-				}
-			}
+			acceptX(visitor, tokenizer);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private void acceptX(KeyValueVisitor visitor, StreamTokenizer tokenizer)
+			throws IOException {
+		try {
+			while (true)
+				advance(visitor, tokenizer);
+		} catch (Finished ok) {
+			//
+		}
+	}
+
+	private void advance(KeyValueVisitor visitor, StreamTokenizer tokenizer)
+			throws IOException, Finished {
+		tokenizer.nextToken();
+		String key = tokenizer.sval;
+
+		if (key == null) {
+			int ttype = tokenizer.ttype;
+			if (ttype == '}' || ttype == StreamTokenizer.TT_EOF)
+				throw new Finished();
+			throw new RuntimeException();
+		}
+
+		tokenizer.nextToken();
+		String value = tokenizer.sval;
+
+		if (value != null) {
+			visitor.onKeyValue(key, value);
+			return;
+		}
+
+		if (tokenizer.ttype == '{') {
+			Region sub = new Region(new RegionReaderFactory(key));
+			visitor.onSubRegion(key, sub);
+			skipPastEndOfRegion(tokenizer);
+			return;
+		}
+
+		throw new RuntimeException();
+	}
+
+	private void skipPastEndOfRegion(StreamTokenizer parser) throws IOException {
+		acceptX(new DoNothing(), parser);
+	}
+
+	static class DoNothing implements KeyValueVisitor {
+
+		@Override
+		public void onKeyValue(String k, String v) {
+			// 
+		}
+
+		@Override
+		public void onSubRegion(String k, Region r) throws Finished {
+			// 
+		}
+
+	}
+
+	static class Finished extends Throwable {
+		//
+	}
+
+	class RegionReaderFactory implements ReaderFactory {
+
+		final String name;
+
+		public RegionReaderFactory(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public PositionalStringReader readerPositionedInside() {
+			PositionalStringReader reader = parent.readerPositionedInside();
+			StreamTokenizer t = StreamTokenizerBuilder.build(reader);
+
+			class SkipToName implements KeyValueVisitor {
+
+				@Override
+				public void onKeyValue(String k, String v) {
+					// do nothing
+				}
+
+				@Override
+				public void onSubRegion(String k, Region r) throws Finished {
+					if (k.equals(name)) throw new Finished();
+				}
+
+			}
+
+			accept(new SkipToName(), t);
+			return reader;
+		}
+
 	}
 }

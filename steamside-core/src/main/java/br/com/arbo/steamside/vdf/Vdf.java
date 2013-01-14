@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
+import br.com.arbo.java.io.PositionalStringReader;
 import br.com.arbo.steamside.vdf.Region.KeyValueVisitor;
 
 public class Vdf {
@@ -14,7 +15,7 @@ public class Vdf {
 
 	public Vdf(String content) {
 		this.content = content;
-		this.root = new Region(new RootReaderFactory(this));
+		this.root = new Region(new RootReaderFactory());
 	}
 
 	public Region region(String name) {
@@ -25,7 +26,7 @@ public class Vdf {
 		return content;
 	}
 
-	public Region root() {
+	private Region root() {
 		return root;
 	}
 
@@ -63,6 +64,15 @@ public class Vdf {
 		public void onKeyValue(String k, String v) {
 			System.out.println(k + ": " + v);
 		}
+	}
+
+	public class RootReaderFactory implements ReaderFactory {
+
+		@Override
+		public PositionalStringReader readerPositionedInside() {
+			return new PositionalStringReader(content());
+		}
+
 	}
 
 }

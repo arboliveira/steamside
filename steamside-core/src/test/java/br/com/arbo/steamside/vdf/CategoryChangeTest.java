@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.vdf;
 
+import static br.com.arbo.org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class CategoryChangeTest {
 	public void loadVdfFragment() throws IOException {
 		templates = new TemplatePair(name.getMethodName());
 		vdff = new Vdf(templates.before);
-		App app = new App(vdff.root());
+		App app = new App(vdff.region("42"));
 		app.category("Expected");
 	}
 

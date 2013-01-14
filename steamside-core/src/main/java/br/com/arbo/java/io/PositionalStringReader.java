@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.java.io;
+package br.com.arbo.java.io;
 
 import java.io.IOException;
 import java.io.StringReader;
