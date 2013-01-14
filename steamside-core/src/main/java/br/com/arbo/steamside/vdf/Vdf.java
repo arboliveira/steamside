@@ -1,16 +1,10 @@
 package br.com.arbo.steamside.vdf;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
-
 import br.com.arbo.java.io.PositionalStringReader;
-import br.com.arbo.steamside.vdf.Region.KeyValueVisitor;
 
 public class Vdf {
 
-	final String content;
+	String content;
 	private final Region root;
 
 	public Vdf(String content) {
@@ -26,53 +20,36 @@ public class Vdf {
 		return content;
 	}
 
-	private Region root() {
+	Region root() {
 		return root;
 	}
 
-	Token seek(int from) {
-		int open = nextq(from);
-		int close = nextq(open + 1);
-		return new Token(this, open, close);
-	}
-
-	private int nextq(int from) {
-		int open = content.indexOf(q, from);
-		if (open == -1) throw new TokenNotFound();
-		return open;
-	}
-
-	private static final char q = '"';
-
-	public static void main(String[] args) throws IOException {
-		final String text = FileUtils.readFileToString(
-				new File("etc/sharedconfig.vdf"));
-		Vdf vdf = new Vdf(text);
-		vdf.root().accept(new Dump());
-	}
-
-	static final class Dump implements
-			KeyValueVisitor {
-
-		@Override
-		public void onSubRegion(String k, Region r) {
-			System.out.println(k + ": REGION");
-			r.accept(new Dump());
-		}
-
-		@Override
-		public void onKeyValue(String k, String v) {
-			System.out.println(k + ": " + v);
-		}
-	}
-
-	public class RootReaderFactory implements ReaderFactory {
+	class RootReaderFactory implements ReaderFactory {
 
 		@Override
 		public PositionalStringReader readerPositionedInside() {
-			return new PositionalStringReader(content());
+			return Vdf.this.readerPositionedInside();
 		}
 
+		@Override
+		public void replaceTokenBefore(
+				String previous, String newvalue, int position) {
+			Vdf.this.replaceTokenBefore(previous, newvalue, position);
+		}
+
+	}
+
+	void replaceTokenBefore(String previous, String newvalue, int position) {
+		String part1 = content.substring(0, position);
+		String part2 = content.substring(position);
+		int i = part1.lastIndexOf(previous);
+		String part1a = part1.substring(0, i);
+		String part1b = part1.substring(i + previous.length());
+		content = part1a + newvalue + part1b + part2;
+	}
+
+	PositionalStringReader readerPositionedInside() {
+		return new PositionalStringReader(content);
 	}
 
 }

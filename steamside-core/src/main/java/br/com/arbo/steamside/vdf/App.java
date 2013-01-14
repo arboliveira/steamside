@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.vdf;
 
-import br.com.arbo.steamside.vdf.Region.KeyValueVisitor;
+import br.com.arbo.java.io.PositionalStringReader;
 
 public class App {
 
@@ -10,25 +10,28 @@ public class App {
 		this.content = content;
 	}
 
-	public void category(String category) {
+	public void category(String newvalue) {
+		final Region tags = content.region("tags");
+		final PositionalStringReader reader = tags.reader();
 		class CategoryChange implements KeyValueVisitor {
 
-			@Override
-			public void onKeyValue(String k, String v) {
-				// TODO Auto-generated method stub
+			String previous;
 
+			@Override
+			public void onKeyValue(String k, String v) throws Finished {
+				previous = v;
+				throw new Finished();
 			}
 
 			@Override
 			public void onSubRegion(String k, Region r) {
-				// TODO Auto-generated method stub
-
+				// do nothing
 			}
 
 		}
-		Region tags = content.region("tags");
-		KeyValueVisitor categoryChange = new CategoryChange();
-		tags.accept(categoryChange);
-
+		CategoryChange categoryChange = new CategoryChange();
+		tags.accept(categoryChange, reader);
+		content.replaceTokenBefore(
+				categoryChange.previous, newvalue, reader.position());
 	}
 }

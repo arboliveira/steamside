@@ -4,38 +4,15 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 
 import br.com.arbo.java.io.PositionalStringReader;
+import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 
 class Region {
 
-	private final Vdf vdf;
-	private final Token head;
-	private final int from;
-	private final String name;
-	final ReaderFactory parent;
+	private final ReaderFactory parent;
 
 	Region(ReaderFactory rf) {
 		this.parent = rf;
-		this.from = -1;
-		this.vdf = null;
-		this.head = null;
-		this.name = null;
 	}
-
-	/*
-	Region(Vdf vdf, int from) {
-		this.vdf = vdf;
-		this.from = from;
-		this.head = vdf.seek(from);
-		this.name = null;
-	}
-
-	Region(Region parent, String name) {
-		this.vdf = parent.vdf;
-		this.name = name;
-		this.from = -1;
-		this.head = null;
-	}
-	*/
 
 	Region region(final String name) {
 		class Find implements KeyValueVisitor {
@@ -43,7 +20,7 @@ class Region {
 			Region found;
 
 			@Override
-			public void onKeyValue(String k, String v) {
+			public void onKeyValue(String k, String v) throws Finished {
 				// Do nothing
 			}
 
@@ -61,45 +38,23 @@ class Region {
 		accept(find);
 		if (find.found != null) return find.found;
 		throw new RuntimeException("No sub-region with name: " + name);
-
-		/*
-		final int body = head.to + 1;
-		int pos = body;
-		while (true) {
-			Token next = vdf.seek(pos);
-			if (next.text().equals(name))
-				return new Region(vdf, next.from);
-			pos = next.to + 1;
-		}
-		*/
 	}
-
-	interface KeyValueVisitor {
-
-		void onKeyValue(String k, String v);
-
-		void onSubRegion(String k, Region r) throws Finished;
-	}
-
-	/*
-	void accept(KeyValueVisitor visitor) {
-		final int body = head.to + 1;
-		int pos = body;
-		while (true) {
-			Token key = vdf.seek(pos);
-			Token value = vdf.seek(key.to + 1);
-			visitor.visit(new KeyValue(key, value));
-		}
-	}
-	*/
 
 	void accept(KeyValueVisitor visitor) {
-		final PositionalStringReader reader = parent.readerPositionedInside();
+		accept(visitor, reader());
+	}
+
+	PositionalStringReader reader() {
+		return parent.readerPositionedInside();
+	}
+
+	void accept(KeyValueVisitor visitor,
+			final PositionalStringReader reader) {
 		StreamTokenizer tokenizer = StreamTokenizerBuilder.build(reader);
 		accept(visitor, tokenizer);
 	}
 
-	void accept(KeyValueVisitor visitor, StreamTokenizer tokenizer) {
+	private void accept(KeyValueVisitor visitor, StreamTokenizer tokenizer) {
 		try {
 			acceptX(visitor, tokenizer);
 		} catch (IOException e) {
@@ -110,11 +65,16 @@ class Region {
 	private void acceptX(KeyValueVisitor visitor, StreamTokenizer tokenizer)
 			throws IOException {
 		try {
-			while (true)
-				advance(visitor, tokenizer);
+			sweep(visitor, tokenizer);
 		} catch (Finished ok) {
 			//
 		}
+	}
+
+	private void sweep(KeyValueVisitor visitor, StreamTokenizer tokenizer)
+			throws IOException, Finished {
+		while (true)
+			advance(visitor, tokenizer);
 	}
 
 	private void advance(KeyValueVisitor visitor, StreamTokenizer tokenizer)
@@ -147,26 +107,22 @@ class Region {
 		throw new RuntimeException();
 	}
 
-	private void skipPastEndOfRegion(StreamTokenizer parser) throws IOException {
+	private void skipPastEndOfRegion(StreamTokenizer parser)
+			throws IOException {
+		class DoNothing implements KeyValueVisitor {
+
+			@Override
+			public void onKeyValue(String k, String v) throws Finished {
+				// 
+			}
+
+			@Override
+			public void onSubRegion(String k, Region r) throws Finished {
+				// 
+			}
+
+		}
 		acceptX(new DoNothing(), parser);
-	}
-
-	static class DoNothing implements KeyValueVisitor {
-
-		@Override
-		public void onKeyValue(String k, String v) {
-			// 
-		}
-
-		@Override
-		public void onSubRegion(String k, Region r) throws Finished {
-			// 
-		}
-
-	}
-
-	static class Finished extends Throwable {
-		//
 	}
 
 	class RegionReaderFactory implements ReaderFactory {
@@ -179,13 +135,10 @@ class Region {
 
 		@Override
 		public PositionalStringReader readerPositionedInside() {
-			PositionalStringReader reader = parent.readerPositionedInside();
-			StreamTokenizer t = StreamTokenizerBuilder.build(reader);
-
 			class SkipToName implements KeyValueVisitor {
 
 				@Override
-				public void onKeyValue(String k, String v) {
+				public void onKeyValue(String k, String v) throws Finished {
 					// do nothing
 				}
 
@@ -195,10 +148,20 @@ class Region {
 				}
 
 			}
-
-			accept(new SkipToName(), t);
+			PositionalStringReader reader = reader();
+			accept(new SkipToName(), reader);
 			return reader;
 		}
 
+		@Override
+		public void replaceTokenBefore(
+				String previous, String newvalue, int position) {
+			Region.this.replaceTokenBefore(previous, newvalue, position);
+		}
+
+	}
+
+	void replaceTokenBefore(String previous, String newvalue, int position) {
+		parent.replaceTokenBefore(previous, newvalue, position);
 	}
 }
