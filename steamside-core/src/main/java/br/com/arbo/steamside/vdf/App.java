@@ -34,4 +34,5 @@ public class App {
 		content.replaceTokenBefore(
 				categoryChange.previous, newvalue, reader.position());
 	}
+
 }

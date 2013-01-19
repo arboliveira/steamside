@@ -5,14 +5,14 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
-final class Dump implements
+final class ZSpikeDumpVdfStructure implements
 		KeyValueVisitor {
 
 	public static void main(String[] args) throws IOException {
 		final String text = FileUtils.readFileToString(
 				new File("etc/sharedconfig.vdf"));
 		Vdf vdf = new Vdf(text);
-		vdf.root().accept(new Dump());
+		vdf.root().accept(new ZSpikeDumpVdfStructure());
 	}
 
 	@Override
