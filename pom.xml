@@ -8,7 +8,9 @@
 	<name>SteamSide</name>
 	<description>On one side Steam, on the other... SteamSide</description>
 	<modules>
-		<module>steamside-core</module>
+		<module>core</module>
+		<module>webui</module>
+		<module>app</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
