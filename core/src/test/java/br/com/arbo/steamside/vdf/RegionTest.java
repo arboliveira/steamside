@@ -4,10 +4,12 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
+@Ignore
 public class RegionTest {
 
 	@Rule
