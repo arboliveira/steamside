@@ -1,12 +1,113 @@
-<!DOCTYPE html>
-<html xmlns:wicket="http://wicket.apache.org">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" 
+xml:lang="en" lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>Apache Wicket Quickstart</title>
+		<title>SteamSide</title>
 		<link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet' type='text/css' />
 		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
+
+
+<wicket:link>
+    <script src="jquery-1.7.2.js"></script>
+    <script src="underscore.js"></script>
+    <script src="backbone.js"></script>
+   </wicket:link>
+    <link href="http://fonts.googleapis.com/css?family=Abel" rel="stylesheet" type="text/css">
+
+
+
+
+
+		<script>
+		
+var Status = Backbone.Model.extend();
+
+var Statuses = Backbone.Collection.extend({
+    model: Status,
+    value: null,
+    url: function(){ return "search?query=" + this.value;}
+});
+
+var SearchTextView = Backbone.View.extend({
+    events: {
+        'submit form': 'submitSearch'
+    },
+
+    initialize: function() {
+        
+    },
+
+    submitSearch: function(e) {
+        e.preventDefault();
+
+		var c = this.collection;
+		c.value = this.$('textarea').val();
+		c.fetch({
+			success: function(){ if (false) console.log(c.models); },
+			error: function() { console.log(arguments); }
+		});
+    }
+});
+
+var SearchResultsView = Backbone.View.extend({
+    initialize: function() {
+        this.collection.on('reset', this.displaySearchResults, this);
+    },
+
+    displaySearchResults: function() {
+    	var resultsEl = this.$('#ul-id-search-results');
+        this.collection.each( function(oneResult) {
+	        resultsEl.append('<li>' + oneResult.escape('name') + '</li>');
+        });
+    }
+});
+
+$(document).ready(function() {
+    var statuses = new Statuses();
+    new SearchTextView({ el: $('#div-id-search-text'), collection: statuses });
+    new SearchResultsView({ el: $('#div-id-search-results'), collection: statuses });
+});			
+		</script>
+
+
 	</head>
 	<body>
+		
+
+
+		<h1>Continue</h1>		
+		<big><strong>
+		<a wicket:id="link"><span wicket:id="caption">Skyrim</span></a>
+		</strong></big>
+		
+		<h1>Games</h1>
+		
+		<p><span wicket:id="number-of-games">101</span> games</p>
+		
+		<h1>Search</h1>
+		
+		
+		<div id="div-id-search-text">
+      <h2>Search...</h2>
+      <form action="">
+        <!--<input type="text" name="text-search" id="input-id-text-search"/>-->
+        <textarea></textarea>
+        	<br>
+        <input type="submit" value="Post"/>
+      </form>
+    </div>
+
+    <div id="div-id-search-results">
+      <h2>Search results</h2>
+      <ul id="ul-id-search-results" />
+    </div>
+		
+		
+<hr/>		
+		
+		
 		<div id="hd">
 			<div id="logo">
 				<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />
@@ -15,12 +116,7 @@
 		</div>
 		<div id="bd">
 		
-		
-		<big><strong>
-		<a wicket:id="link"><span wicket:id="caption">Skyrim</span></a>
-		</strong></big>
-		
-		
+
 			<h2>Congratulations!</h2>
 			<p>
 				Your quick start works! This project is especially useful to
@@ -66,5 +162,8 @@
 		</div>
 		<div id="ft">
 		</div>
+		
+		
+
 	</body>
 </html>

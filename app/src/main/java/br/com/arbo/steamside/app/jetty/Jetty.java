@@ -1,5 +1,8 @@
 package br.com.arbo.steamside.app.jetty;
 
+import java.awt.Desktop;
+import java.net.URL;
+
 import org.apache.wicket.protocol.http.ContextParamWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.protocol.http.WicketServlet;
@@ -17,7 +20,7 @@ public class Jetty {
 
 	static boolean DEV_MODE = true;
 
-	public static void main(final String[] args) throws Exception {
+	public static URL start() throws Exception {
 		final Server server = new Server();
 
 		/* Setup server (port, etc.) */
@@ -50,10 +53,16 @@ public class Jetty {
 		server.start();
 		Instructions.started(PORT);
 
+		final URL url = new URL("http://localhost:" + PORT);
+
+		// TODO Callback
+		Desktop.getDesktop().browse(url.toURI());
+
 		while (System.in.available() == 0)
 			Thread.sleep(5000);
 		server.stop();
 		server.join();
-	}
 
+		return url;
+	}
 }
