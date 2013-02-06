@@ -52,12 +52,18 @@ public class SharedconfigVdfLocation {
 	}
 
 	private static File windows() {
-		final String envProgramFiles = System.getenv("ProgramFiles");
+		final String envProgramFiles = envProgramFiles();
 		final File userdata = new File(envProgramFiles, "Steam/userdata");
 		final String userid = detect_userid(userdata);
 		return new File(userdata,
 				userid +
 						"/7/remote");
+	}
+
+	private static String envProgramFiles() {
+		final String x86 = System.getenv("ProgramFiles(x86)");
+		if (x86 != null) return x86;
+		return System.getenv("ProgramFiles");
 	}
 
 	private static String detect_userid(File userdata) {
