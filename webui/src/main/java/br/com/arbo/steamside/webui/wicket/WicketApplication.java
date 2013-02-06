@@ -2,8 +2,9 @@ package br.com.arbo.steamside.webui.wicket;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.ResourceReference;
+
+import br.com.arbo.steamside.webui.wicket.app.AppPage;
+import br.com.arbo.steamside.webui.wicket.search.SearchJsonResourceReference;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
@@ -32,18 +33,8 @@ public class WicketApplication extends WebApplication
 
 		mountResource("/search", new SearchJsonResourceReference());
 
+		mountPage("/app/${appid}/#{command}", AppPage.class);
+
 		// add your configuration here
-	}
-
-	static class SearchJsonResourceReference extends ResourceReference {
-
-		public SearchJsonResourceReference() {
-			super(SearchJsonResourceReference.class, "search-json-resource");
-		}
-
-		@Override
-		public IResource getResource() {
-			return new SearchJsonResource();
-		}
 	}
 }

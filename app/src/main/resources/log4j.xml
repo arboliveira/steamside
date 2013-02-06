@@ -28,8 +28,16 @@
 		<level value="debug" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
+	<logger name="org.eclipse.jetty.util.component.AbstractLifeCycle">
+		<level value="debug" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="org.eclipse.jetty.server.Server">
+		<level value="debug" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
 	<logger name="org.apache.wicket">
-		<level value="off" />
+		<level value="debug" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
 </log4j:configuration>

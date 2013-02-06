@@ -35,7 +35,8 @@ public class Search {
 	private static ResultDTO extractOne(
 			final Matcher matcher) {
 		final ResultDTO oneResult = new ResultDTO();
-		oneResult.appid = matcher.group(1);
+		final String appid = matcher.group(1);
+		oneResult.link = "app/" + appid + "/run";
 		oneResult.name = StringEscapeUtils.unescapeHtml4(matcher.group(2));
 		return oneResult;
 	}

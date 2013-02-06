@@ -68,12 +68,20 @@ var SearchResultsView = Backbone.View.extend({
     	var vtile = this.tile;
     	var vresultsEl = this.resultsEl;
         this.collection.each( function(oneResult) {
-	        //resultsEl.append('<li>' + oneResult.escape('name') + '</li>');
 	        var clonedtile = vtile.clone();
 	        clonedtile.find('.search-result-name').text(oneResult.get('name'));
-	        clonedtile.find('.search-result-link').click(function(e) {
-	        	e.preventDefault();
-			    alert('foobar');
+	        var link = clonedtile.find('.search-result-link');
+	        link.attr('href', oneResult.get('link'));
+	        link.click(function(e) {
+	        	var jLink = $( this );
+	        	var aUrl = jLink.attr( "href" );
+	        	alert(aUrl);
+				$.ajax(
+					{
+						url: aUrl
+					}
+				);
+				e.preventDefault();
     		});
 	        vresultsEl.append(clonedtile);
         });

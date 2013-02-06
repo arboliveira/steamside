@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class ResultDTO {
 
 	@JsonProperty
-	String appid;
+	String link;
 	@JsonProperty
 	String name;
 }
