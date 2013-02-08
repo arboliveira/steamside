@@ -2,10 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" 
 xml:lang="en" lang="en">
-	<head>
+<head>
+<!-- ----------------------------------------------------------------------- -->
+
 		<meta charset="utf-8" />
 		<title>SteamSide</title>
+		
+		<link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
+		<link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
+		
+		 <style type="text/css">
+		 #content h1 { font-family: Ubuntu; font-size: 36px; font-weight: bold; margin: 28px 0 16px 0; }
+		 #content p { font-family: Arvo; font-size: 20px; }
+		 </style>
+		
+		<!-- 
 		<link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet' type='text/css' />
+		 -->
 		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
 
 
@@ -14,23 +27,34 @@ xml:lang="en" lang="en">
     <script src="underscore.js"></script>
     <script src="backbone.js"></script>
    </wicket:link>
+   
+   <!-- 
     <link href="http://fonts.googleapis.com/css?family=Abel" rel="stylesheet" type="text/css">
+    -->
 
 
 
 
+<!-- ----------------------------------------------------------------------- -->
 
-		<script>
+<script>
 		
-var Status = Backbone.Model.extend();
+var Game = Backbone.Model.extend();
 
-var Statuses = Backbone.Collection.extend({
-    model: Status,
+var RecentlyPlayed = Backbone.Collection.extend({
+    model: Game,
+    url: function() {
+    	return 'search-results.json'; 
+    }
+});
+
+var GameCollection = Backbone.Collection.extend({
+    model: Game,
     value: null,
-    url: function(){
-    	//return 'search-results.json'; 
-    	return "search?query=" + this.value;
-    	}
+    url: function() {
+    	return 'search-results.json'; 
+    	//return "search?query=" + this.value;
+    }
 });
 
 var SearchTextView = Backbone.View.extend({
@@ -46,31 +70,40 @@ var SearchTextView = Backbone.View.extend({
         e.preventDefault();
 
 		var c = this.collection;
-		c.value = this.$('textarea').val();
+		c.value = this.$('#input-id-text-search').val();
 		c.fetch({
-			success: function(){ if (false) console.log(c.models); },
+			success: function() { if (false) console.log(c.models); },
 			error: function() { console.log(arguments); }
 		});
     }
 });
 
-var SearchResultsView = Backbone.View.extend({
+var GameCollectionView = Backbone.View.extend({
 	resultsEl: null,
-	tile: null,
+	gametileEl: null,
 
     initialize: function() {
-    	this.resultsEl = this.$('#ul-id-search-results');
-    	this.tile = this.$('#game-tile-search-result');
+    	this.gametileEl = this.options.gametileEl;
+    	this.resultsEl = this.$('.game-tiles');
         this.collection.on('reset', this.displaySearchResults, this);
     },
 
     displaySearchResults: function() {
-    	var vtile = this.tile;
+    	var vtile = this.gametileEl;
     	var vresultsEl = this.resultsEl;
+    	vresultsEl.empty();
         this.collection.each( function(oneResult) {
 	        var clonedtile = vtile.clone();
-	        clonedtile.find('.search-result-name').text(oneResult.get('name'));
-	        var link = clonedtile.find('.search-result-link');
+	        
+	        clonedtile.find('.game-name').text(oneResult.get('name'));
+	        
+	        var appid = oneResult.get('appid');
+	        var img = 
+	        	'http://cdn.steampowered.com/v/gfx/apps/' 
+	        	+ appid + '/header_292x136.jpg';
+	        clonedtile.find('.game-img').attr('src', img);
+	        
+	        var link = clonedtile.find('.game-link');
 	        link.attr('href', oneResult.get('link'));
 	        link.click(function(e) {
 	        	var jLink = $( this );
@@ -83,119 +116,108 @@ var SearchResultsView = Backbone.View.extend({
 				);
 				e.preventDefault();
     		});
+    		
 	        vresultsEl.append(clonedtile);
+	        clonedtile.fadeIn();
         });
     }
 });
 
 $(document).ready(function() {
-    var statuses = new Statuses();
-    new SearchTextView({ el: $('#div-id-search-text'), collection: statuses });
-    new SearchResultsView({ el: $('#div-id-search-results'), collection: statuses });
+	var gametile = $('#game-tile');
+	var recentlyplayed = new RecentlyPlayed();
+    var searchresults = new GameCollection();
+    new GameCollectionView({ 
+    	el: $('#recently-played'), 
+    	collection: recentlyplayed,
+    	gametileEl: gametile    	 
+    });
+    new SearchTextView({ 
+    	el: $('#div-id-search-text'), 
+    	collection: searchresults
+    });
+    new GameCollectionView({ 
+    	el: $('#div-id-search-results'), 
+    	collection: searchresults,
+    	gametileEl: gametile    	 
+    });
+    recentlyplayed.fetch();
 });			
-		</script>
+
+</script>
 
 
-	</head>
-	<body>
+<!-- ----------------------------------------------------------------------- -->
+</head>
+<body>
+<!-- ----------------------------------------------------------------------- -->
+
+<div id="game-tile" style="float:left; display:none;">
+	<a class="game-link" href="">
+	<img class="game-img" src="game.jpg" />
+	<br/>
+	<big><strong>
+	<span class="game-name">Search result</span>
+	</strong></big>
+	</a>
+</div>
+
 		
+		
+<div id="content">
 
+	<h1>Continue</h1>	
 
-		<h1>Continue</h1>	
-		<div id="game-tile-continue">	
-			<big><strong>
-			<a wicket:id="link"><span wicket:id="caption">Skyrim</span></a>
-			</strong></big>
+	<p class=handwritten>Played from SteamSide</p>
+		
+	<div id="continue-games">	
+		<big><strong>
+		<a wicket:id="link"><span wicket:id="caption">Skyrim</span></a>
+		</strong></big>
+	</div>
+
+    <div id="recently-played" style="float:right;">
+      	<div class="game-tiles">
 		</div>
+    </div>
+
 		
-		<h1>Games</h1>
+	<h1>Games</h1>
 		
-		<p><span wicket:id="number-of-games">101</span> games</p>
+	<p><span wicket:id="number-of-games">101</span> games</p>
 		
-		<h1>Search</h1>
+	<h1>Search</h1>
 		
-		
-		<div id="div-id-search-text">
-	      <h2>Search...</h2>
-    	  <form action="">
-        	<!--<input type="text" name="text-search" id="input-id-text-search"/>-->
-        	<textarea></textarea>
-        	<br>
+	<div id="div-id-search-text">
+		<h2>Search...</h2>
+		<form action="">
+			<input type="text" name="text-search" id="input-id-text-search"/>
+        	<br />
         	<input type="submit" value="Post"/>
-      	  </form>
-    	</div>
+      	</form>
+    </div>
 
     <div id="div-id-search-results">
-			<div id="game-tile-search-result">	
-				<big><strong>
-				<a class="search-result-link" href=""><span class="search-result-name">Search result</span></a>
-				</strong></big>
-			</div>
     	<h2>Search results</h2>
-      	<div id="ul-id-search-results">
+      	<div class="game-tiles">
 		</div>
     </div>
 		
+</div>
 		
 <hr/>		
 		
 		
-		<div id="hd">
-			<div id="logo">
-				<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />
-				<h1>Apache Wicket</h1>
-			</div>
-		</div>
-		<div id="bd">
-		
+<div id="bd">
+	<p>
+		Please mention the correct Wicket version: <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>.
+	</p>
+</div>
 
-			<h2>Congratulations!</h2>
-			<p>
-				Your quick start works! This project is especially useful to
-                start developing your Wicket application or to create a test
-                case for a bug report.
-			</p>
-			<h3>Get started</h3>
-			<p>
-				You can even <a href="https://localhost:8443">switch to HTTPS</a>!
-			</p> 
-			<p>
-				From here you can start hacking away at your application and
-                wow your clients:
-			</p>
-			<ul>
-				<li>work through <a href="http://wicket.apache.org/learn/examples" target="_blank" title="Hello world and friends">some examples</a></li>
-				<li>read <a href="http://wicket.apache.org/learn/books" target="_blank" title="Books about Wicket in English, German and Japanese">some books</a></li>
-				<li>find <a href="http://wicket.apache.org/learn/projects" target="_blank" title="Additional projects, components and libraries">additional components, projects and libraries</a></li>
-			</ul>
-			<h3>Get help</h3>
-			<p>
-				We are here to help!
-			</p>
-			<ul>
-				<li>join us on IRC on <a href="irc:%23%23wicket@irc.freenode.net">&#35;&#35;wicket@irc.freenode.net</a></li>
-				<li><a href="http://wicket-users.markmail.org/" target="_blank" title="Search the mailing list archives">search</a> our mailing list archives</li>
-				<li>ask a question on the <a href="http://wicket.apache.org/help/email.html">users list</a></li>
-			</ul>
-			<h3>Reporting a bug</h3>
-			<p>
-				Help us help you:
-			</p>
-			<ol>
-				<li>reproduce the bug with the <strong>least</strong> amount of code</li>
-				<li>create a unit test that shows the bug</li>
-				<li>fix the bug and create a patch</li>
-				<li>attach the result of step 1, 2 or 3 to a <a href="https://issues.apache.org/jira/browse/WICKET" target="_blank">JIRA issue</a></li>
-				<li>profit!</li>
-			</ol>
-			<p>
-				Please mention the correct Wicket version: <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>.
-			</p>
-		</div>
-		<div id="ft">
-		</div>
+<div id="ft">
+</div>
 		
 		
-
-	</body>
+<!-- ----------------------------------------------------------------------- -->
+</body>
 </html>
