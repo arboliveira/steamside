@@ -7,10 +7,13 @@ import br.com.arbo.steamside.protocol.RunGameId;
 
 public class AppPage extends EmptyPage {
 
+	public static final String PARAM_command = "command";
+	public static final String PARAM_appid = "appid";
+
 	public AppPage(final PageParameters p) {
 		super(p);
-		final String appid = p.get("appid").toString();
-		final String command = p.get("command").toString();
+		final String appid = p.get(PARAM_appid).toString();
+		final String command = p.get(PARAM_command).toString();
 		if (equalsCommand("run", command)) {
 			new RunGameId(appid).run();
 		}

@@ -34,11 +34,9 @@ public class Search {
 
 	private static ResultDTO extractOne(
 			final Matcher matcher) {
-		final ResultDTO oneResult = new ResultDTO();
 		final String appid = matcher.group(1);
-		oneResult.link = "app/" + appid + "/run";
-		oneResult.name = StringEscapeUtils.unescapeHtml4(matcher.group(2));
-		return oneResult;
+		final String name = StringEscapeUtils.unescapeHtml4(matcher.group(2));
+		return new ResultDTO(appid, name);
 	}
 
 	private static Pattern pattern() {

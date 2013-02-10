@@ -7,30 +7,28 @@ xml:lang="en" lang="en">
 
 		<meta charset="utf-8" />
 		<title>SteamSide</title>
+
+	<link href="game-tile.css" rel="stylesheet" type="text/css" />
+	<script src="jquery-1.7.2.js"></script>
+	<script src="underscore.js"></script>
+	<script src="backbone.js"></script>
+	<script src="steamside.js"></script>
+<wicket:link>
+</wicket:link>
+   
 		
 		<link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
 		<link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
 		
 		 <style type="text/css">
 		 #content h1 { font-family: Ubuntu; font-size: 36px; font-weight: bold; margin: 28px 0 16px 0; }
-		 #content p { font-family: Arvo; font-size: 20px; }
+		 #content .handwritten { font-family: Arvo; font-size: 20px; }
+		 
+		 
+		 
 		 </style>
 		
-		<!-- 
-		<link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet' type='text/css' />
-		 -->
 		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
-
-
-<wicket:link>
-    <script src="jquery-1.7.2.js"></script>
-    <script src="underscore.js"></script>
-    <script src="backbone.js"></script>
-   </wicket:link>
-   
-   <!-- 
-    <link href="http://fonts.googleapis.com/css?family=Abel" rel="stylesheet" type="text/css">
-    -->
 
 
 
@@ -78,56 +76,11 @@ var SearchTextView = Backbone.View.extend({
     }
 });
 
-var GameCollectionView = Backbone.View.extend({
-	resultsEl: null,
-	gametileEl: null,
-
-    initialize: function() {
-    	this.gametileEl = this.options.gametileEl;
-    	this.resultsEl = this.$('.game-tiles');
-        this.collection.on('reset', this.displaySearchResults, this);
-    },
-
-    displaySearchResults: function() {
-    	var vtile = this.gametileEl;
-    	var vresultsEl = this.resultsEl;
-    	vresultsEl.empty();
-        this.collection.each( function(oneResult) {
-	        var clonedtile = vtile.clone();
-	        
-	        clonedtile.find('.game-name').text(oneResult.get('name'));
-	        
-	        var appid = oneResult.get('appid');
-	        var img = 
-	        	'http://cdn.steampowered.com/v/gfx/apps/' 
-	        	+ appid + '/header_292x136.jpg';
-	        clonedtile.find('.game-img').attr('src', img);
-	        
-	        var link = clonedtile.find('.game-link');
-	        link.attr('href', oneResult.get('link'));
-	        link.click(function(e) {
-	        	var jLink = $( this );
-	        	var aUrl = jLink.attr( "href" );
-	        	alert(aUrl);
-				$.ajax(
-					{
-						url: aUrl
-					}
-				);
-				e.preventDefault();
-    		});
-    		
-	        vresultsEl.append(clonedtile);
-	        clonedtile.fadeIn();
-        });
-    }
-});
-
 $(document).ready(function() {
 	var gametile = $('#game-tile');
 	var recentlyplayed = new RecentlyPlayed();
     var searchresults = new GameCollection();
-    new GameCollectionView({ 
+    new AppCollectionView({ 
     	el: $('#recently-played'), 
     	collection: recentlyplayed,
     	gametileEl: gametile    	 
@@ -136,7 +89,7 @@ $(document).ready(function() {
     	el: $('#div-id-search-text'), 
     	collection: searchresults
     });
-    new GameCollectionView({ 
+    new AppCollectionView({ 
     	el: $('#div-id-search-results'), 
     	collection: searchresults,
     	gametileEl: gametile    	 
@@ -152,13 +105,16 @@ $(document).ready(function() {
 <body>
 <!-- ----------------------------------------------------------------------- -->
 
-<div id="game-tile" style="float:left; display:none;">
+<div id="game-tile" class="game-tile">
 	<a class="game-link" href="">
+	<div class="game-tile-inner">
 	<img class="game-img" src="game.jpg" />
-	<br/>
+	<div class="game-tile-caption">
 	<big><strong>
 	<span class="game-name">Search result</span>
 	</strong></big>
+	</div>
+	</div>
 	</a>
 </div>
 
@@ -176,9 +132,11 @@ $(document).ready(function() {
 		</strong></big>
 	</div>
 
-    <div id="recently-played" style="float:right;">
+    <div class="game-collection" id="recently-played">
+    	<br style="clear: both;" />
       	<div class="game-tiles">
 		</div>
+    	<br style="clear: both;" />
     </div>
 
 		

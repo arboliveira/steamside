@@ -6,8 +6,16 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonAutoDetect
 public class ResultDTO {
 
+	public ResultDTO(final String appid, final String name) {
+		this.appid = appid;
+		this.link = "app/" + appid + "/run";
+		this.name = name;
+	}
+
 	@JsonProperty
-	String link;
+	final String appid;
 	@JsonProperty
-	String name;
+	final String name;
+	@JsonProperty
+	final String link;
 }

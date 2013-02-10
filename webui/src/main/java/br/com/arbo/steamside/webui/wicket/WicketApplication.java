@@ -33,7 +33,13 @@ public class WicketApplication extends WebApplication
 
 		mountResource("/search", new SearchJsonResourceReference());
 
-		mountPage("/app/${appid}/#{command}", AppPage.class);
+		mountPage("/app" +
+				"/${" + AppPage.PARAM_appid + "}" +
+				"/#{" + AppPage.PARAM_command + "}", AppPage.class);
+		mountPage("/collection" +
+				"/${" + AppCollectionPage.PARAM_collectionname + "}" +
+				"/#{" + AppCollectionPage.PARAM_command + "}",
+				AppCollectionPage.class);
 
 		// add your configuration here
 	}

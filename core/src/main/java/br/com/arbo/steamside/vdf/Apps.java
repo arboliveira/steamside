@@ -31,6 +31,6 @@ public class Apps {
 
 	public interface Visitor {
 
-		void each(String app);
+		void each(String appid);
 	}
 }

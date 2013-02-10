@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" 
+xml:lang="en" lang="en">
+<head>
+<!-- ----------------------------------------------------------------------- -->
+
+		<meta charset="utf-8" />
+		<title>Collection</title>
+
+<wicket:link>
+	<link href="game-tile.css" rel="stylesheet" type="text/css" />
+	<script src="jquery-1.7.2.js"></script>
+	<script src="underscore.js"></script>
+	<script src="backbone.js"></script>
+	<script src="steamside.js"></script>
+</wicket:link>
+  
+		
+		<link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
+		<link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
+		
+		 <style type="text/css">
+		 #content h1 { font-family: Ubuntu; font-size: 36px; font-weight: bold; margin: 28px 0 16px 0; }
+		 #content .handwritten { font-family: Arvo; font-size: 20px; }
+		 </style>
+		
+		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
+
+
+
+<!-- ----------------------------------------------------------------------- -->
+
+<script>
+		
+var App = Backbone.Model.extend();
+
+var AppCollection = Backbone.Collection.extend({
+    model: App,
+    name: null,
+    url: function() {
+    	//return 'collection/' + this.name + '/apps.json';
+    	return 'apps.json'; 
+    }
+});
+
+$(document).ready(function() {
+	var gametile = $('#game-tile');
+	
+	var appcollection = new AppCollection();
+    
+    new AppCollectionView({ 
+    	el: $('#app-collection'), 
+    	collection: appcollection,
+    	gametileEl: gametile    	 
+    });
+    
+    appcollection.name = 'favorites';
+    
+	appcollection.fetch({
+		success: function() { if (false) console.log(c.models); },
+		error: function() { console.log(arguments); }
+	});
+    
+});			
+
+</script>
+
+
+<!-- ----------------------------------------------------------------------- -->
+</head>
+<body>
+<!-- ----------------------------------------------------------------------- -->
+
+<div id="game-tile" class="game-tile">
+	<a class="game-link" href="">
+	<div class="game-tile-inner">
+	<img class="game-img" src="game.jpg" />
+	<div class="game-tile-caption">
+	<big><strong>
+	<span class="game-name">Game</span>
+	</strong></big>
+	</div>
+	</div>
+	</a>
+</div>
+
+		
+		
+<div id="content">
+
+	<h1>Collection</h1>	
+
+	<p class=handwritten>Favorites</p>
+		
+    <div class="game-collection" id="app-collection">
+    	<br style="clear: both;" />
+      	<div class="game-tiles">
+		</div>
+    	<br style="clear: both;" />
+    </div>
+		
+</div>
+		
+		
+		
+		
+<!-- ----------------------------------------------------------------------- -->
+</body>
+</html>

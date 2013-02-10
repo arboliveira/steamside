@@ -1,0 +1,21 @@
+.game-tile {
+	display:none;
+	float:left; 
+	margin: 0 0 10px 10px; 
+	border-top: 1px solid #999;
+	border-right: 2px solid #555;
+	border-bottom: 2px solid #555;
+	border-left: 1px solid #999;
+}
+.game-tile-inner {
+	padding: 10px;
+}
+.game-img {
+	border-top: 2px solid #555;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+	border-left: 2px solid #555;
+}
+.game-tile-caption {
+	text-align: center;
+}
