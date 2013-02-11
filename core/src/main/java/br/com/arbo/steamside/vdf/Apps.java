@@ -4,13 +4,12 @@ public class Apps {
 
 	private final Region content;
 
-	public Apps(Region content) {
+	public Apps(final Region content) {
 		this.content = content;
 	}
 
-	public App app(String id) {
-		Region rapp =
-				content.region(id);
+	public App app(final String id) throws NotFound {
+		final Region rapp = content.region(id);
 		return new App(rapp);
 	}
 
@@ -18,12 +17,14 @@ public class Apps {
 		content.accept(new KeyValueVisitor() {
 
 			@Override
-			public void onSubRegion(String k, Region r) throws Finished {
+			public void onSubRegion(final String k, final Region r)
+					throws Finished {
 				visitor.each(k);
 			}
 
 			@Override
-			public void onKeyValue(String k, String v) throws Finished {
+			public void onKeyValue(final String k, final String v)
+					throws Finished {
 				// 
 			}
 		});

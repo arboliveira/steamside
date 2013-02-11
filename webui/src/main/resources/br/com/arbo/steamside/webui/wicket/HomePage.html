@@ -126,11 +126,14 @@ $(document).ready(function() {
 
 	<p class=handwritten>Played from SteamSide</p>
 		
+				<!-- 
+		
 	<div id="continue-games">	
 		<big><strong>
 		<a wicket:id="link"><span wicket:id="caption">Skyrim</span></a>
 		</strong></big>
 	</div>
+				-->
 
     <div class="game-collection" id="recently-played">
     	<br style="clear: both;" />
@@ -168,7 +171,15 @@ $(document).ready(function() {
 		
 <div id="bd">
 	<p>
-		Please mention the correct Wicket version: <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>.
+		Please mention the correct Wicket version:
+		<!-- 
+		 --> 
+		<wicket:container wicket:id="version">
+		1.5-SNAPSHOT
+		</wicket:container>
+		<!-- 
+		 --> 
+		.
 	</p>
 </div>
 

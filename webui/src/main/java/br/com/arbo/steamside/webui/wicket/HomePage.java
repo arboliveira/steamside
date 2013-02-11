@@ -3,21 +3,20 @@ package br.com.arbo.steamside.webui.wicket;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import br.com.arbo.steamside.vdf.SharedconfigVdfLocation.SharedconfigVdfMissing;
 
 public class HomePage extends WebPage {
 
-	public HomePage(final PageParameters parameters) {
-		super(parameters);
+	public HomePage() {
+		setStatelessHint(true);
 
 		add(new Label("version", getApplication().getFrameworkSettings()
 				.getVersion()));
 
 		final SharedConfigConsume config = new SharedConfigConsume();
 		try {
-			populateContinue();
+			if (false) populateContinue();
 			populateNumbers(config);
 		} catch (final SharedconfigVdfMissing e) {
 			// TODO Redirect to "Where is your Steam?" configuration page

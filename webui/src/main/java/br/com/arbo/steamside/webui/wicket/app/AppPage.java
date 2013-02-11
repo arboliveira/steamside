@@ -12,11 +12,10 @@ public class AppPage extends EmptyPage {
 
 	public AppPage(final PageParameters p) {
 		super(p);
+		setStatelessHint(true);
 		final String appid = p.get(PARAM_appid).toString();
 		final String command = p.get(PARAM_command).toString();
-		if (equalsCommand("run", command)) {
-			new RunGameId(appid).run();
-		}
+		if (equalsCommand("run", command)) new RunGameId(appid).run();
 	}
 
 	private static boolean equalsCommand(final String string,

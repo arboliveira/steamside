@@ -10,22 +10,24 @@ class Region {
 
 	private final ReaderFactory parent;
 
-	Region(ReaderFactory rf) {
+	Region(final ReaderFactory rf) {
 		this.parent = rf;
 	}
 
-	Region region(final String name) {
+	Region region(final String name) throws NotFound {
 		class Find implements KeyValueVisitor {
 
 			Region found;
 
 			@Override
-			public void onKeyValue(String k, String v) throws Finished {
+			public void onKeyValue(final String k, final String v)
+					throws Finished {
 				// Do nothing
 			}
 
 			@Override
-			public void onSubRegion(String k, Region r) throws Finished {
+			public void onSubRegion(final String k, final Region r)
+					throws Finished {
 				if (k.equals(name)) {
 					found = r;
 					throw new Finished();
@@ -34,13 +36,13 @@ class Region {
 
 		}
 
-		Find find = new Find();
+		final Find find = new Find();
 		accept(find);
 		if (find.found != null) return find.found;
-		throw new RuntimeException("No sub-region with name: " + name);
+		throw NotFound.name(name);
 	}
 
-	void accept(KeyValueVisitor visitor) {
+	void accept(final KeyValueVisitor visitor) {
 		accept(visitor, reader());
 	}
 
@@ -48,49 +50,53 @@ class Region {
 		return parent.readerPositionedInside();
 	}
 
-	void accept(KeyValueVisitor visitor,
+	void accept(final KeyValueVisitor visitor,
 			final PositionalStringReader reader) {
-		StreamTokenizer tokenizer = StreamTokenizerBuilder.build(reader);
+		final StreamTokenizer tokenizer = StreamTokenizerBuilder.build(reader);
 		accept(visitor, tokenizer);
 	}
 
-	private void accept(KeyValueVisitor visitor, StreamTokenizer tokenizer) {
+	private void accept(final KeyValueVisitor visitor,
+			final StreamTokenizer tokenizer) {
 		try {
 			acceptX(visitor, tokenizer);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void acceptX(KeyValueVisitor visitor, StreamTokenizer tokenizer)
+	private void acceptX(final KeyValueVisitor visitor,
+			final StreamTokenizer tokenizer)
 			throws IOException {
 		try {
 			sweep(visitor, tokenizer);
-		} catch (Finished ok) {
+		} catch (final Finished ok) {
 			//
 		}
 	}
 
-	private void sweep(KeyValueVisitor visitor, StreamTokenizer tokenizer)
+	private void sweep(final KeyValueVisitor visitor,
+			final StreamTokenizer tokenizer)
 			throws IOException, Finished {
 		while (true)
 			advance(visitor, tokenizer);
 	}
 
-	private void advance(KeyValueVisitor visitor, StreamTokenizer tokenizer)
+	private void advance(final KeyValueVisitor visitor,
+			final StreamTokenizer tokenizer)
 			throws IOException, Finished {
 		tokenizer.nextToken();
-		String key = tokenizer.sval;
+		final String key = tokenizer.sval;
 
 		if (key == null) {
-			int ttype = tokenizer.ttype;
+			final int ttype = tokenizer.ttype;
 			if (ttype == '}' || ttype == StreamTokenizer.TT_EOF)
 				throw new Finished();
 			throw new RuntimeException();
 		}
 
 		tokenizer.nextToken();
-		String value = tokenizer.sval;
+		final String value = tokenizer.sval;
 
 		if (value != null) {
 			visitor.onKeyValue(key, value);
@@ -98,7 +104,7 @@ class Region {
 		}
 
 		if (tokenizer.ttype == '{') {
-			Region sub = new Region(new RegionReaderFactory(key));
+			final Region sub = new Region(new RegionReaderFactory(key));
 			visitor.onSubRegion(key, sub);
 			skipPastEndOfRegion(tokenizer);
 			return;
@@ -107,17 +113,19 @@ class Region {
 		throw new RuntimeException();
 	}
 
-	private void skipPastEndOfRegion(StreamTokenizer parser)
+	private void skipPastEndOfRegion(final StreamTokenizer parser)
 			throws IOException {
 		class DoNothing implements KeyValueVisitor {
 
 			@Override
-			public void onKeyValue(String k, String v) throws Finished {
+			public void onKeyValue(final String k, final String v)
+					throws Finished {
 				// 
 			}
 
 			@Override
-			public void onSubRegion(String k, Region r) throws Finished {
+			public void onSubRegion(final String k, final Region r)
+					throws Finished {
 				// 
 			}
 
@@ -129,7 +137,7 @@ class Region {
 
 		final String name;
 
-		public RegionReaderFactory(String name) {
+		public RegionReaderFactory(final String name) {
 			this.name = name;
 		}
 
@@ -138,30 +146,33 @@ class Region {
 			class SkipToName implements KeyValueVisitor {
 
 				@Override
-				public void onKeyValue(String k, String v) throws Finished {
+				public void onKeyValue(final String k, final String v)
+						throws Finished {
 					// do nothing
 				}
 
 				@Override
-				public void onSubRegion(String k, Region r) throws Finished {
+				public void onSubRegion(final String k, final Region r)
+						throws Finished {
 					if (k.equals(name)) throw new Finished();
 				}
 
 			}
-			PositionalStringReader reader = reader();
+			final PositionalStringReader reader = reader();
 			accept(new SkipToName(), reader);
 			return reader;
 		}
 
 		@Override
 		public void replaceTokenBefore(
-				String previous, String newvalue, int position) {
+				final String previous, final String newvalue, final int position) {
 			Region.this.replaceTokenBefore(previous, newvalue, position);
 		}
 
 	}
 
-	void replaceTokenBefore(String previous, String newvalue, int position) {
+	void replaceTokenBefore(final String previous, final String newvalue,
+			final int position) {
 		parent.replaceTokenBefore(previous, newvalue, position);
 	}
 }

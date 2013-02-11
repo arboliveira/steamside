@@ -4,6 +4,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
+import br.com.arbo.steamside.webui.wicket.collection.Params;
 import br.com.arbo.steamside.webui.wicket.search.SearchJsonResourceReference;
 
 /**
@@ -37,8 +38,8 @@ public class WicketApplication extends WebApplication
 				"/${" + AppPage.PARAM_appid + "}" +
 				"/#{" + AppPage.PARAM_command + "}", AppPage.class);
 		mountPage("/collection" +
-				"/${" + AppCollectionPage.PARAM_collectionname + "}" +
-				"/#{" + AppCollectionPage.PARAM_command + "}",
+				"/${" + Params.PARAM_collectionname + "}" +
+				"/#{" + Params.PARAM_command + "}",
 				AppCollectionPage.class);
 
 		// add your configuration here

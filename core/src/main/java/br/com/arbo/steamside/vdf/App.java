@@ -11,7 +11,13 @@ public class App {
 	}
 
 	public void category(final String newvalue) {
-		final Region tags = content.region("tags");
+		final Region tags;
+		try {
+			tags = content.region("tags");
+		} catch (final NotFound e) {
+			// TODO Create tags region when it does not exist
+			throw new RuntimeException(e);
+		}
 		final PositionalStringReader reader = tags.reader();
 		class CategoryChange implements KeyValueVisitor {
 
@@ -37,7 +43,12 @@ public class App {
 	}
 
 	public boolean isFavorite() {
-		final Region tags = content.region("tags");
+		final Region tags;
+		try {
+			tags = content.region("tags");
+		} catch (final NotFound e) {
+			return false;
+		}
 		final PositionalStringReader reader = tags.reader();
 		class FavoriteFinder implements KeyValueVisitor {
 

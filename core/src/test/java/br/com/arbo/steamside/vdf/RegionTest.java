@@ -17,13 +17,14 @@ public class RegionTest {
 	private Vdf vdff;
 
 	@Test
-	public void nameOccursBefore_skipAndFindRegionProper() throws IOException {
+	public void nameOccursBefore_skipAndFindRegionProper() throws IOException,
+			NotFound {
 		final String mname = name.getMethodName();
-		Template template1 = new Template(mname + ".1apps");
+		final Template template1 = new Template(mname + ".1apps");
 		vdff = new Vdf(template1.content);
-		Region apps = vdff.region("apps");
-		Region app42 = apps.region("42");
-		Template template2 = new Template(mname + ".2app42expected");
+		final Region apps = vdff.root().region("apps");
+		final Region app42 = apps.region("42");
+		final Template template2 = new Template(mname + ".2app42expected");
 		fail();
 		//assertThat(app42.content(), equalTo(template2.content));
 	}

@@ -23,10 +23,10 @@ public class CategoryChangeTest {
 	private Vdf vdff;
 
 	@Before
-	public void loadVdfFragment() throws IOException {
+	public void loadVdfFragment() throws IOException, NotFound {
 		templates = new TemplatePair(name.getMethodName());
 		vdff = new Vdf(templates.before);
-		App app = new App(vdff.region("42"));
+		final App app = new App(vdff.root().region("42"));
 		app.category("Expected");
 	}
 
