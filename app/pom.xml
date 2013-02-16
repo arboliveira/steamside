@@ -49,4 +49,5 @@
 			</plugin>
 		</plugins>
 	</build>
+	<name>Executable</name>
 </project>

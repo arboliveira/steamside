@@ -16,23 +16,7 @@
 		<level value="debug" />
 		<appender-ref ref="CONSOLE-PLAIN" />
 	</logger>
-	<logger name="org.eclipse.jetty.util.log">
-		<level value="debug" />
-		<appender-ref ref="CONSOLE" />
-	</logger>
-	<logger name="org.eclipse.jetty.util.component.Container">
-		<level value="debug" />
-		<appender-ref ref="CONSOLE" />
-	</logger>
-	<logger name="org.eclipse.jetty.servlet.ServletHandler">
-		<level value="debug" />
-		<appender-ref ref="CONSOLE" />
-	</logger>
-	<logger name="org.eclipse.jetty.util.component.AbstractLifeCycle">
-		<level value="debug" />
-		<appender-ref ref="CONSOLE" />
-	</logger>
-	<logger name="org.eclipse.jetty.server.Server">
+	<logger name="org.eclipse.jetty">
 		<level value="debug" />
 		<appender-ref ref="CONSOLE" />
 	</logger>

@@ -1,9 +1,0 @@
-[ {
-  "appid" : "72850",
-  "name" : "Skyrim",
-  "link" : "app/72850/run"
-}, {
-  "appid" : "47500",
-  "name" : "Mishap",
-  "link" : "app/47500/run"
-} ]

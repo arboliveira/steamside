@@ -41,7 +41,5 @@ public class WicketApplication extends WebApplication
 				"/${" + Params.PARAM_collectionname + "}" +
 				"/#{" + Params.PARAM_command + "}",
 				AppCollectionPage.class);
-
-		// add your configuration here
 	}
 }
