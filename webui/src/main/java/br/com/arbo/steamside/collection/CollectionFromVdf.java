@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.webui.wicket.collection;
+package br.com.arbo.steamside.collection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import br.com.arbo.steamside.vdf.SharedconfigVdfLocation;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
 
-class CollectionFromVdf {
+public class CollectionFromVdf {
 
 	public static AppCollectionDTO fetch(final String name) {
 
@@ -38,7 +38,7 @@ class CollectionFromVdf {
 		@Override
 		public void each(final String appid) {
 			final App app = app(appid);
-			if (app.isFavorite()) {
+			if (app.isInCategory(name)) {
 				final AppDTO dto =
 						new AppDTO(appid,
 								"Oh no! I was parsing the name from the store page!");

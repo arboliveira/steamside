@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.request.Response;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
+import br.com.arbo.steamside.collection.CollectionFromVdf;
 
 public class RenderJson {
 

@@ -5,7 +5,8 @@ import org.apache.wicket.protocol.http.WebApplication;
 
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
-import br.com.arbo.steamside.webui.wicket.search.SearchJsonResourceReference;
+import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
+import br.com.arbo.steamside.webui.wicket.search.SearchJson;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
@@ -32,7 +33,8 @@ public class WicketApplication extends WebApplication
 	{
 		super.init();
 
-		mountResource("/search", new SearchJsonResourceReference());
+		mountResource("/search.json", new SearchJson());
+		mountResource("/continue.json", new ContinueJson(new ContinueNeeds()));
 
 		mountPage("/app" +
 				"/${" + AppPage.PARAM_appid + "}" +

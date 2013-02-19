@@ -1,36 +1,21 @@
 package br.com.arbo.steamside.webui.wicket.search;
 
-import org.apache.wicket.request.Response;
-import org.apache.wicket.request.resource.AbstractResource;
+import java.util.List;
 
-import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
+import org.apache.wicket.request.resource.IResource.Attributes;
+
 import br.com.arbo.steamside.search.Search;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
+import br.com.arbo.steamside.webui.appdto.AppDTO;
+import br.com.arbo.steamside.webui.wicket.json.JsonResource;
 
-class SearchJsonResource extends AbstractResource {
+class SearchJsonResource implements JsonResource.Needs {
 
 	@Override
-	protected ResourceResponse newResourceResponse(final Attributes a) {
-		final ResourceResponse r = new ResourceResponse();
-		r.setContentType("application/json;charset=UTF-8");
-		r.setWriteCallback(new WriteCallback() {
-
-			@Override
-			public void writeData(final Attributes a) {
-				SearchJsonResource.writeData(a);
-			}
-		});
-		return r;
-	}
-
-	static void writeData(final Attributes a) {
+	public Object fetchValue(final Attributes a) {
 		final String query = a.getParameters().get("query").toString();
 		final AppCollectionDTO results = Search.search(query);
-		final Response response = a.getResponse();
-		JsonUtils.write(response.getOutputStream(), results.apps);
-	}
-
-	public static void main(final String[] args) {
-		System.out.println(JsonUtils.asString(Search.search("mishap").apps));
+		final List<AppDTO> value = results.apps;
+		return value;
 	}
 }

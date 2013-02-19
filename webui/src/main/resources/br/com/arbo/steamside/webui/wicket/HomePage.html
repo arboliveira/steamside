@@ -1,12 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" 
 xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" 
 xml:lang="en" lang="en">
 <head>
 <!-- ----------------------------------------------------------------------- -->
-
-<meta charset="utf-8" />
 <title>SteamSide</title>
+
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 
 <link href="static/game-tile.css" rel="stylesheet" type="text/css" />
 <script src="static/jquery-1.7.2.js"></script>
@@ -18,7 +19,7 @@ xml:lang="en" lang="en">
 <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
 		
 <style type="text/css">
-#content h1 { font-family: Ubuntu; font-size: 36px; font-weight: bold; margin: 28px 0 16px 0; }
+#content h1 { font-family: Arvo; font-size: 36px; font-weight: bold; margin: 28px 0 16px 0; }
 #content .handwritten { font-family: Arvo; font-size: 20px; }
 </style>
 
@@ -32,7 +33,7 @@ var Game = Backbone.Model.extend();
 var RecentlyPlayed = Backbone.Collection.extend({
     model: Game,
     url: function() {
-    	return 'search-results.json'; 
+    	return 'continue.json'; 
     }
 });
 
@@ -40,8 +41,7 @@ var GameCollection = Backbone.Collection.extend({
     model: Game,
     value: null,
     url: function() {
-    	return 'search-results.json'; 
-    	//return "search?query=" + this.value;
+    	return "search.json?query=" + this.value;
     }
 });
 
@@ -116,17 +116,10 @@ $(document).ready(function() {
 
 	<h1>Continue</h1>	
 
+<!-- 
 	<p class=handwritten>Played from SteamSide</p>
+ -->
 		
-				<!-- 
-		
-	<div id="continue-games">	
-		<big><strong>
-		<a wicket:id="link"><span wicket:id="caption">Skyrim</span></a>
-		</strong></big>
-	</div>
-				-->
-
     <div class="game-collection" id="recently-played">
     	<br style="clear: both;" />
       	<div class="game-tiles">

@@ -43,6 +43,10 @@ public class App {
 	}
 
 	public boolean isFavorite() {
+		return isInCategory("favorite");
+	}
+
+	public boolean isInCategory(final String name) {
 		final Region tags;
 		try {
 			tags = content.region("tags");
@@ -50,15 +54,15 @@ public class App {
 			return false;
 		}
 		final PositionalStringReader reader = tags.reader();
-		class FavoriteFinder implements KeyValueVisitor {
+		class Finder implements KeyValueVisitor {
 
-			boolean favorite;
+			boolean found;
 
 			@Override
 			public void onKeyValue(final String k, final String v)
 					throws Finished {
-				if ("favorite".equals(v)) {
-					favorite = true;
+				if (name.equals(v)) {
+					found = true;
 					throw new Finished();
 				}
 			}
@@ -70,9 +74,9 @@ public class App {
 			}
 
 		}
-		final FavoriteFinder visitor = new FavoriteFinder();
+		final Finder visitor = new Finder();
 		tags.accept(visitor, reader);
-		return visitor.favorite;
+		return visitor.found;
 	}
 
 }

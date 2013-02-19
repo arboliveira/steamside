@@ -18,7 +18,7 @@ import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
 public class Jetty {
 
-	private static final int PORT = 42224;
+	private static final int PORT = 42424;
 
 	static boolean DEV_MODE = true;
 

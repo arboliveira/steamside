@@ -33,6 +33,8 @@ var AppCollection = Backbone.Collection.extend({
     name: null,
     url: function() {
     	//return 'collection/' + this.name + '/apps.json';
+    	
+    	// will already be under collection/favorites
     	return 'apps.json'; 
     }
 });

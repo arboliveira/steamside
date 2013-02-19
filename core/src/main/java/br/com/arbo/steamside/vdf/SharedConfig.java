@@ -14,7 +14,7 @@ public class SharedConfig {
 		final Region rValve =
 				region(rSoftware, "Valve");
 		final Region rsteam =
-				region(rValve, "steam");
+				region(rValve, "Steam");
 		final Region apps =
 				region(rsteam, "apps");
 		return new Apps(apps);
