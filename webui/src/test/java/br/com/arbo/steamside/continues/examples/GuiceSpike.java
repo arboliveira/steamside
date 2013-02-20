@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 import br.com.arbo.steamside.continues.Continue;
-import br.com.arbo.steamside.webui.wicket.ContinueNeeds;
+import br.com.arbo.steamside.webui.wicket.ContinueNeedsImpl;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -28,8 +28,9 @@ public class GuiceSpike {
 
 		@Override
 		protected void configure() {
-			bind(Continue.Needs.class).to(ContinueNeeds.class).in(
-					Scopes.SINGLETON);
+			bind(Continue.Needs.class)
+					.to(ContinueNeedsImpl.class)
+					.in(Scopes.SINGLETON);
 		}
 
 	}

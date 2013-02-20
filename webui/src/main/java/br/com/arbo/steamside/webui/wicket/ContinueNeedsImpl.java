@@ -4,7 +4,7 @@ import org.apache.commons.lang3.SystemUtils;
 
 import br.com.arbo.steamside.continues.Continue;
 
-public class ContinueNeeds implements Continue.Needs {
+public class ContinueNeedsImpl implements Continue.Needs {
 
 	@Override
 	public String name() {

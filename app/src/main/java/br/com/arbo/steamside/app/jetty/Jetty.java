@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.app.jetty;
 
-import java.awt.Desktop;
 import java.net.URL;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,16 +12,18 @@ import org.eclipse.jetty.server.bio.SocketConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.picocontainer.Startable;
 
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
-public class Jetty {
+public class Jetty implements Startable {
 
-	private static final int PORT = 42424;
+	public Jetty(final Callback callback) {
+		this.callback = callback;
+	}
 
-	static boolean DEV_MODE = true;
-
-	public static URL start() throws Exception {
+	@Override
+	public void start() {
 		final Server server = new Server();
 
 		/* Setup server (port, etc.) */
@@ -36,10 +37,10 @@ public class Jetty {
 
 		/* END Setup server (port, etc.) */
 
-		ServletContextHandler sch = new ServletContextHandler(
+		final ServletContextHandler sch = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
 
-		ServletHolder sh = new ServletHolder(WicketServlet.class);
+		final ServletHolder sh = new ServletHolder(WicketServlet.class);
 		final Class<WicketApplication> classWicketApplication = WicketApplication.class;
 		sh.setInitParameter(
 				ContextParamWebApplicationFactory.APP_CLASS_PARAM,
@@ -48,16 +49,16 @@ public class Jetty {
 		/* Define a variable DEV_MODE and set to false
 		 * if wicket should be used in deployment mode
 		 */
-		if (!DEV_MODE) {
+		if (!DEV_MODE)
 			sh.setInitParameter("wicket.configuration", "deployment");
-		}
 
 		// Static resources
 		final URL resource = classWicketApplication.getClassLoader()
 				.getResource(
 						parent_of_static(classWicketApplication) + "/static/");
-		String staticPath = resource.toExternalForm();
-		ServletHolder resourceServlet = new ServletHolder(DefaultServlet.class);
+		final String staticPath = resource.toExternalForm();
+		final ServletHolder resourceServlet = new ServletHolder(
+				DefaultServlet.class);
 		resourceServlet.setInitParameter("dirAllowed", "true");
 		resourceServlet.setInitParameter("resourceBase", staticPath);
 		resourceServlet.setInitParameter("pathInfoOnly", "true");
@@ -67,30 +68,27 @@ public class Jetty {
 		server.setHandler(sch);
 
 		Instructions.starting();
-		server.start();
-		Instructions.started(PORT);
-
-		final String root = "http://localhost:" + PORT;
-		final URL url = new URL(
-				true ? root :
-						favorites(root)
-				);
-
-		// TODO Callback
-		Desktop.getDesktop().browse(url.toURI());
-
-		while (System.in.available() == 0)
-			Thread.sleep(5000);
-		server.stop();
-		server.join();
-
-		return url;
+		doStart(server);
 	}
 
-	private static String favorites(final String root) {
-		return root + "/collection/favorites"
-				// TODO Without a final slash, relative apps.json becomes "collection/apps.json" instead of "collection/favorites/apps.json"
-				+ "/";
+	private void doStart(final Server server) {
+		try {
+			server.start();
+			started();
+			while (System.in.available() == 0)
+				Thread.sleep(5000);
+			server.stop();
+			server.join();
+		} catch (final RuntimeException e) {
+			throw e;
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void started() {
+		Instructions.started(PORT);
+		callback.started(PORT);
 	}
 
 	private static String parent_of_static(
@@ -99,4 +97,16 @@ public class Jetty {
 				.getName();
 		return StringUtils.replaceChars(packagename, '.', '/');
 	}
+
+	private final Callback callback;
+
+	private static final int PORT = 42424;
+
+	static boolean DEV_MODE = true;
+
+	@Override
+	public void stop() {
+		// Nothing to do
+	}
+
 }

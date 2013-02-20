@@ -34,7 +34,7 @@ public class WicketApplication extends WebApplication
 		super.init();
 
 		mountResource("/search.json", new SearchJson());
-		mountResource("/continue.json", new ContinueJson(new ContinueNeeds()));
+		mountResource("/continue.json", new ContinueJson(new ContinueNeedsImpl()));
 
 		mountPage("/app" +
 				"/${" + AppPage.PARAM_appid + "}" +
