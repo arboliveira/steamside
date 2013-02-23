@@ -13,9 +13,12 @@ import br.com.arbo.steamside.collection.CollectionFromVdf;
 public class RenderJson {
 
 	private final String name;
+	private final CollectionFromVdf collectionFromVdf;
 
-	public RenderJson(final String name) {
+	public RenderJson(final String name,
+			final CollectionFromVdf collectionFromVdf) {
 		this.name = name;
+		this.collectionFromVdf = collectionFromVdf;
 	}
 
 	public void render(final Response response) {
@@ -23,7 +26,8 @@ public class RenderJson {
 				(javax.servlet.http.HttpServletResponse)
 				response.getContainerResponse();
 		final ServletOutputStream outputStream = getOutputStream(httpServletResponse);
-		JsonUtils.write(outputStream, CollectionFromVdf.fetch(this.name).apps);
+		JsonUtils.write(outputStream,
+				this.collectionFromVdf.fetch(this.name).apps);
 	}
 
 	private static ServletOutputStream getOutputStream(

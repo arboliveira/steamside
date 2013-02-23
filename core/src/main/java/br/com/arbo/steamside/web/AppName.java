@@ -2,5 +2,9 @@ package br.com.arbo.steamside.web;
 
 public class AppName {
 
-	public String name;
+	public final String name;
+
+	public AppName(final String name) {
+		this.name = name;
+	}
 }

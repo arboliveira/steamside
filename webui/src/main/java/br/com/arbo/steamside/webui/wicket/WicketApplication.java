@@ -3,6 +3,9 @@ package br.com.arbo.steamside.webui.wicket;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
+import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.AppNameFromLocalFiles;
+import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.web.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
 import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
@@ -15,6 +18,17 @@ import br.com.arbo.steamside.webui.wicket.search.SearchJson;
  */
 public class WicketApplication extends WebApplication
 {
+
+	private final AppNameFactory appNameFactory =
+			new AppNameFromLocalFiles(new InMemory_appinfo_vdf());
+
+	public AppNameFactory appNameFactory() {
+		return appNameFactory;
+	}
+
+	public static WicketApplication get() {
+		return (WicketApplication) WebApplication.get();
+	}
 
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
@@ -34,7 +48,9 @@ public class WicketApplication extends WebApplication
 		super.init();
 
 		mountResource("/search.json", new SearchJson());
-		mountResource("/continue.json", new ContinueJson(new ContinueNeedsImpl()));
+		mountResource("/continue.json",
+				new ContinueJson(
+						new ContinueNeedsImpl(appNameFactory)));
 
 		mountPage("/app" +
 				"/${" + AppPage.PARAM_appid + "}" +

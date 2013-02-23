@@ -8,15 +8,23 @@ import br.com.arbo.steamside.vdf.Apps;
 import br.com.arbo.steamside.vdf.Apps.Visitor;
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.SharedconfigVdfLocation;
+import br.com.arbo.steamside.web.AppNameFactory;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
 
 public class CollectionFromVdf {
 
-	public static AppCollectionDTO fetch(final String name) {
+	private final AppNameFactory namefactory;
+
+	public CollectionFromVdf(final AppNameFactory namefactory) {
+		this.namefactory = namefactory;
+	}
+
+	public AppCollectionDTO fetch(final String name) {
 
 		final Apps apps = SharedconfigVdfLocation.make().apps();
-		final CollectionFromVdf.Filter filter = new Filter(name, apps);
+		final CollectionFromVdf.Filter filter = new Filter(name, apps,
+				namefactory);
 		apps.accept(filter);
 
 		final AppCollectionDTO results = new AppCollectionDTO();
@@ -29,10 +37,13 @@ public class CollectionFromVdf {
 		private final String name;
 		private final Apps apps;
 		final List<AppDTO> list = new ArrayList<AppDTO>(20);
+		private final AppNameFactory namefactory;
 
-		public Filter(final String name, final Apps apps) {
+		public Filter(final String name, final Apps apps,
+				final AppNameFactory namefactory) {
 			this.name = name;
 			this.apps = apps;
+			this.namefactory = namefactory;
 		}
 
 		@Override
@@ -41,7 +52,7 @@ public class CollectionFromVdf {
 			if (app.isInCategory(name)) {
 				final AppDTO dto =
 						new AppDTO(appid,
-								"Oh no! I was parsing the name from the store page!");
+								this.namefactory.nameOf(appid).name);
 				list.add(dto);
 			}
 		}

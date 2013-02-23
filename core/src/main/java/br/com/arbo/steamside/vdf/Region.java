@@ -6,7 +6,7 @@ import java.io.StreamTokenizer;
 import br.com.arbo.java.io.PositionalStringReader;
 import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 
-class Region {
+public class Region {
 
 	private final ReaderFactory parent;
 
@@ -42,7 +42,7 @@ class Region {
 		throw NotFound.name(name);
 	}
 
-	void accept(final KeyValueVisitor visitor) {
+	public void accept(final KeyValueVisitor visitor) {
 		accept(visitor, reader());
 	}
 

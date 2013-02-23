@@ -12,20 +12,20 @@ public class AppPage {
 
 	private final String html;
 
-	public AppPage(String id) {
-		URL url = url(id);
+	public AppPage(final String id) {
+		final URL url = url(id);
 		this.html = download(url);
 	}
 
 	public AppName name() {
-		AppName app = new AppName();
-		String details = details(html);
-		app.name = name(details);
+		final String details = details(html);
+		final String name = name(details);
+		final AppName app = new AppName(name);
 		//app.genres = genres(details);
 		return app;
 	}
 
-	private static String name(String details) {
+	private static String name(final String details) {
 		final String raw = StringUtils.substringBetween(
 				details,
 				"<b>Title:</b> ",
@@ -33,25 +33,25 @@ public class AppPage {
 		return StringEscapeUtils.unescapeHtml4(raw);
 	}
 
-	private static String details(String html) {
+	private static String details(final String html) {
 		return StringUtils.substringBetween(
 				html,
 				"<div class=\"details_block\">",
 				"</div>");
 	}
 
-	private static String download(URL url) {
+	private static String download(final URL url) {
 		try {
 			return IOUtils.toString(url.openStream());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private static URL url(String id) {
+	private static URL url(final String id) {
 		try {
 			return new URL("http://store.steampowered.com/app/" + id);
-		} catch (MalformedURLException e) {
+		} catch (final MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
 	}

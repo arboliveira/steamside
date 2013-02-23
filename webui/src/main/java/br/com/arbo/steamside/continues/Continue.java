@@ -7,6 +7,8 @@ public class Continue {
 	public interface Needs {
 
 		String name();
+
+		CollectionFromVdf collectionFromVdf();
 	}
 
 	private final Needs needs;
@@ -17,6 +19,6 @@ public class Continue {
 
 	public Object fetch() {
 
-		return CollectionFromVdf.fetch(needs.name()).apps;
+		return needs.collectionFromVdf().fetch(needs.name()).apps;
 	}
 }
