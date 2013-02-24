@@ -28,7 +28,7 @@ public class Region {
 			@Override
 			public void onSubRegion(final String k, final Region r)
 					throws Finished {
-				if (k.equals(name)) {
+				if (k.equalsIgnoreCase(name)) {
 					found = r;
 					throw new Finished();
 				}

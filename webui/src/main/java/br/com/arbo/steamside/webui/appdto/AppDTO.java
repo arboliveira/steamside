@@ -8,7 +8,7 @@ public class AppDTO {
 
 	public AppDTO(final String appid, final String name) {
 		this.appid = appid;
-		this.link = "app/" + appid + "/run";
+		this.link = "/app/" + appid + "/run";
 		this.name = name;
 	}
 
