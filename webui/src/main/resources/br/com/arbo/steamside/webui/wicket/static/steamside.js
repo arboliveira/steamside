@@ -12,8 +12,13 @@ var AppCollectionView = Backbone.View.extend({
     	var vtile = this.gametileEl;
     	var vtilesEl = this.tilesEl;
     	vtilesEl.empty();
+    	var position = 0;
         this.collection.each( function(oneResult) {
 	        var clonedtile = vtile.clone();
+        	position++;
+        	
+        	var sizeclass = position == 1 ? 'large' : 'regular';
+	        clonedtile.addClass('game-tile-' + sizeclass);
 	        
 	        clonedtile.find('.game-name').text(oneResult.get('name'));
 	        

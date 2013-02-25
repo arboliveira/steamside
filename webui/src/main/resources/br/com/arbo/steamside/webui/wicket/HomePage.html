@@ -19,86 +19,60 @@ xml:lang="en" lang="en">
 <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
 		
 <style type="text/css">
-#content h1 { font-family: Arvo; font-size: 36px; font-weight: bold; margin: 28px 0 16px 0; }
-#content .handwritten { font-family: Arvo; font-size: 20px; }
 
 
 
 /* ----- */
 
-
-
-
-
-
-/*
-
-#container
-{
-//width: 90%;
-//margin: 10px auto;
-//background-color: #fff;
-//color: #333;
-//border: 1px solid gray;
-//line-height: 130%;
+.container {
+	margin: 10px auto;
 }
 
-#leftnav
-{
-float: left;
-width: 160px;
-margin: 0;
-padding: 1em;
+.side-header {
+	width: 90px;
+	margin: 0;
+	padding: 0.8em;
+	border-bottom: 2px solid gray;
 }
 
-#content2
-{
-margin-left: 200px;
-border-left: 1px solid gray;
-padding: 1em;
-//max-width: 36em;
+.content-at-left {
+	margin-right: 120px;
+	float: left;
 }
 
-#leftnav p { margin: 0 0 1em 0; }
-#content2 h2 { margin: 0 0 .5em 0; }
-
-
-*/
-
-
-
-
-
-
-
-#container
-{
-//width: 90%;
-margin: 10px auto;
-//background-color: #fff;
-//color: #333;
-//border: 1px solid gray;
-//line-height: 130%;
+.content-at-right {
+	margin-left: 150px;
+//	float: right;  // this pushes content down somehow :-p
 }
 
-#leftnav
-{
-float: left;
-width: 160px;
-margin: 0;
-padding: 1em;
+.side-header-at-left {
+	float: left;
+	text-align: right;
+	border-right: 1px solid gray;
 }
 
-#content2
-{
-margin-left: 200px;
-border-left: 1px solid gray;
-padding: 1em;
-//max-width: 36em;
+.side-header-at-right {
+	float: right;
+	text-align: right;
+	border-left: 1px solid gray;
 }
 
-.leftnav-side { margin: 0 0 1em 0; }
-.side { font-family: Arvo; font-size: 48px; font-weight: bold; text-align: right; }
+
+.side-header-paragraph { 
+	margin: 0 0 0.6em 0; 
+}
+
+.side-text { font-family: Arvo; font-size: 28px; font-weight: bold; color: darkred; }
+
+.side-text-at-left  {text-shadow: -0.2em 0.2em 0.2em gray}
+.side-text-at-right {text-shadow: 0.2em 0.2em 0.2em gray}
+
+.footer {
+	clear: both;
+	margin: 0;
+	padding: .3em;
+	border-top: 1px dotted lightgray;
+}
 
 
 
@@ -180,12 +154,12 @@ $(document).ready(function() {
 <div id="game-tile" class="game-tile">
 	<a class="game-link" href="">
 	<div class="game-tile-inner">
-	<img class="game-img" src="game.jpg" />
-	<div class="game-tile-caption">
-	<big><strong>
-	<span class="game-name">Search result</span>
-	</strong></big>
-	</div>
+		<img class="game-img" src="game.jpg" />
+		<div class="game-tile-caption">
+			<big><strong>
+			<span class="game-name">Search result</span>
+			</strong></big>
+		</div>
 	</div>
 	</a>
 </div>
@@ -196,117 +170,140 @@ $(document).ready(function() {
 <!-- -->
 
 
-<div id="container" style="border: solid; clear:right;">
-<div id="leftnav">
-<p class="leftnav-side">
-<span class="side">
-Con<br/>
-ti<br/>
-nue<br/>
-</span>
-</p>
-</div>
-<div id="content2" style="border: solid;">
+<div class="container">
 
-    <div class="game-collection" id="recently-played" style="border: solid;">
-      	<div class="game-tiles" style="border: solid;">
-		</div>
-    </div>
-
-
-
-<p>
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
-</p>
-<p>
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-</p>
-<!--
--->
-
-
-
-</div>
-</div>
-
-
-
-
-
-<div id="container">
-<div id="leftnav">
-<span class="side">
-Con<br/>
-ti<br/>
-nue<br/>
-</span>
-</div>
-<div id="content2">
-
-
-
-
-
-
-</div>
-</div>
-
-
-<!-- -->
-
-
-
-
-
-
-<div id="content">
-
-	<a href="collection/favorite/">Favorites</a>
-
-	<h1>Continue</h1>	
-
-<!-- 
-	<p class=handwritten>Played from SteamSide</p>
- -->
-		
-		
-	<h1>Games</h1>
-		
-	<p><span wicket:id="number-of-games">101</span> games</p>
-		
-	<h1>Search</h1>
-		
-	<div id="div-id-search-text">
-		<h2>Search...</h2>
-		<form action="">
-			<input type="text" name="text-search" id="input-id-text-search"/>
-        	<br />
-        	<input type="submit" value="Post"/>
-      	</form>
-    </div>
-
-    <div id="div-id-search-results">
-    	<h2>Search results</h2>
-      	<div class="game-tiles">
-		</div>
-    </div>
-		
-</div>
-		
-<hr/>		
-		
-		
-<div id="bd">
-	<p>
-		Please mention the correct Wicket version:
+	<div class="side-header side-header-at-left">
+		<p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+			Con<br/>
+			tin<br/>
+			ue<br/>
+			</span>
+		</p>
 		<!-- 
-		 --> 
+		<p>more...</p>
+		 -->
+	</div>
+
+	<div class="content-at-right">
+	    <div class="game-collection" id="recently-played">
+	      	<div class="game-tiles">
+			</div>
+	    </div>
+	</div>
+
+	<div class="footer">
+	<!-- 
+		(footer)
+	 -->
+	</div>
+	
+</div>
+
+
+
+
+<div class="container">
+
+	<div class="side-header side-header-at-right">
+		<p class="side-header-paragraph">
+			<span class="side-text side-text-at-right">
+			Search<br/>
+			</span>
+		</p>
+	</div>
+
+	<div class="content-at-left">
+
+		<div id="div-id-search-text">
+			<form action="">
+				<input type="text" name="text-search" id="input-id-text-search"
+					style="width: 50%; font-size:24px;"/>
+	        	<input type="submit" value="Search"/>
+	      	</form>
+	    </div>
+	
+	    <div id="div-id-search-results">
+	      	<div class="game-tiles">
+			</div>
+	    </div>
+
+	</div>
+
+	<div class="footer">
+	<!-- 
+		(footer)
+	 -->
+	</div>
+	
+</div>
+
+
+
+
+<div class="container">
+
+	<div class="side-header side-header-at-left">
+		<p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+			Favor<br/>
+			ites<br/>
+			</span>
+		</p>
+		<!-- 
+		<p>more...</p>
+		 -->
+	</div>
+
+	<div class="content-at-right">
+
+		<a href="collection/favorite/">Favorites</a>
+
+	</div>
+
+	<div class="footer">
+	<!-- 
+		(footer)
+	 -->
+	</div>
+	
+</div>
+
+
+
+
+
+<div class="container">
+
+	<div class="side-header side-header-at-right">
+		<p class="side-header-paragraph">
+			<span class="side-text side-text-at-right">
+			My<br/>
+			Games<br/>
+			</span>
+		</p>
+	</div>
+
+	<div class="content-at-left">
+		<p><span wicket:id="number-of-games">101</span> owned</p>
+	</div>
+
+	<div class="footer">
+	<!-- 
+		(footer)
+	 -->
+	</div>
+	
+</div>
+
+
+		
+<div id="bd" style="display:none;">
+	<p>
+		Wicket version:
 		<wicket:container wicket:id="version">
 		1.5-SNAPSHOT
 		</wicket:container>
-		<!-- 
-		 --> 
-		.
 	</p>
 </div>
 

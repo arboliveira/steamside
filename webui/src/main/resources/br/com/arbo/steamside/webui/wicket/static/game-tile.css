@@ -6,7 +6,22 @@
 	border-right: 2px solid #555;
 	border-bottom: 2px solid #555;
 	border-left: 1px solid #999;
+	font-family: Sans;
 }
+
+.game-tile a {
+	text-decoration: none;	/* hide link underline */
+}
+
+.game-tile-large {
+	width: 38%;
+}
+
+.game-tile-regular {
+	width: 28%;
+	font-size: 60%;
+}
+
 .game-tile-inner {
 	padding: 10px;
 }
@@ -15,6 +30,7 @@
 	border-right: 1px solid #999;
 	border-bottom: 1px solid #999;
 	border-left: 2px solid #555;
+	width: 100%;
 }
 .game-tile-caption {
 	text-align: center;
