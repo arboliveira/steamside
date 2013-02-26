@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
-import br.com.arbo.steamside.steamclient.localfiles.steam.userdata.SharedconfigVdfFile;
+import br.com.arbo.steamside.steamclient.localfiles.steam.userdata.File_sharedconfig_vdf;
 
 /**
 
@@ -30,9 +30,9 @@ public class SharedconfigVdfLocation {
 	}
 
 	public static SharedConfig make() {
-		final File from = SharedconfigVdfFile.sharedconfig_vdf();
+		final File from = File_sharedconfig_vdf.sharedconfig_vdf();
 		final String content = readFileToString(from);
-		return new SharedConfig(content);
+		return new SharedConfigImpl(content);
 	}
 
 	private static String readFileToString(final File from) {

@@ -2,7 +2,7 @@ package br.com.arbo.steamside.steamclient.localfiles.steam.userdata;
 
 import java.io.File;
 
-public class SharedconfigVdfFile {
+public class File_sharedconfig_vdf {
 
 	public static File sharedconfig_vdf() {
 		final File userdata = UserdataDirectory.userdata();

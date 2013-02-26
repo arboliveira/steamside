@@ -5,23 +5,23 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
-import br.com.arbo.steamside.steamclient.localfiles.steam.userdata.SharedconfigVdfFile;
+import br.com.arbo.steamside.steamclient.localfiles.steam.userdata.File_sharedconfig_vdf;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.Region;
-import br.com.arbo.steamside.vdf.Vdf;
+import br.com.arbo.steamside.vdf.RegionImpl;
+import br.com.arbo.steamside.vdf.VdfImpl;
 
 final class DumpVdfStructure implements
 		KeyValueVisitor {
 
 	public static void main(final String[] args) throws IOException {
-		final File from = SharedconfigVdfFile.sharedconfig_vdf();
+		final File from = File_sharedconfig_vdf.sharedconfig_vdf();
 		final String text = FileUtils.readFileToString(from);
-		final Vdf vdf = new Vdf(text);
-		vdf.root().accept(new DumpVdfStructure());
+		final VdfImpl vdfImpl = new VdfImpl(text);
+		vdfImpl.root().accept(new DumpVdfStructure());
 	}
 
 	@Override
-	public void onSubRegion(final String k, final Region r) {
+	public void onSubRegion(final String k, final RegionImpl r) {
 		System.out.println(k + ": REGION");
 		r.accept(this);
 	}

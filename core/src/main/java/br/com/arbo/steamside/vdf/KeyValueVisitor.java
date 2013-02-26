@@ -8,5 +8,5 @@ public interface KeyValueVisitor {
 
 	void onKeyValue(String k, String v) throws Finished;
 
-	void onSubRegion(String k, Region r) throws Finished;
+	void onSubRegion(String k, RegionImpl r) throws Finished;
 }

@@ -20,13 +20,13 @@ public class CategoryChangeTest {
 	@Rule
 	public TestName name = new TestName();
 	private TemplatePair templates;
-	private Vdf vdff;
+	private VdfImpl vdff;
 
 	@Before
 	public void loadVdfFragment() throws IOException, NotFound {
 		templates = new TemplatePair(name.getMethodName());
-		vdff = new Vdf(templates.before);
-		final App app = new App(vdff.root().region("42"));
+		vdff = new VdfImpl(templates.before);
+		final AppImpl app = new AppImpl(vdff.root().region("42"));
 		app.category("Expected");
 	}
 

@@ -39,10 +39,10 @@ public class CollectionFromVdf {
 		final List<AppDTO> list = new ArrayList<AppDTO>(20);
 		private final AppNameFactory namefactory;
 
-		public Filter(final String name, final Apps apps,
+		public Filter(final String name, final Apps appsImpl,
 				final AppNameFactory namefactory) {
 			this.name = name;
-			this.apps = apps;
+			this.apps = appsImpl;
 			this.namefactory = namefactory;
 		}
 
