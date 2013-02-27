@@ -6,7 +6,7 @@ import java.io.StreamTokenizer;
 import br.com.arbo.java.io.PositionalStringReader;
 import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 
-public class RegionImpl implements Region {
+public class RegionImpl {
 
 	private final ReaderFactory parent;
 
@@ -14,7 +14,7 @@ public class RegionImpl implements Region {
 		this.parent = rf;
 	}
 
-	RegionImpl region(final String name) throws NotFound {
+	public RegionImpl region(final String name) throws NotFound {
 		class Find implements KeyValueVisitor {
 
 			RegionImpl found;
@@ -46,11 +46,11 @@ public class RegionImpl implements Region {
 		accept(visitor, reader());
 	}
 
-	PositionalStringReader reader() {
+	public PositionalStringReader reader() {
 		return parent.readerPositionedInside();
 	}
 
-	void accept(final KeyValueVisitor visitor,
+	public void accept(final KeyValueVisitor visitor,
 			final PositionalStringReader reader) {
 		final StreamTokenizer tokenizer = StreamTokenizerBuilder.build(reader);
 		accept(visitor, tokenizer);
@@ -171,7 +171,8 @@ public class RegionImpl implements Region {
 
 	}
 
-	void replaceTokenBefore(final String previous, final String newvalue,
+	public void replaceTokenBefore(final String previous,
+			final String newvalue,
 			final int position) {
 		parent.replaceTokenBefore(previous, newvalue, position);
 	}

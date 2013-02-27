@@ -4,7 +4,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 
-import br.com.arbo.steamside.vdf.Factory_sharedconfig_vdf.FileNotFound_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf.FileNotFound_sharedconfig_vdf;
 
 public class HomePage extends WebPage {
 

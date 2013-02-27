@@ -3,13 +3,13 @@ package br.com.arbo.steamside.collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps.AppVisitor;
 import br.com.arbo.steamside.steam.store.AppName;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.Category;
-import br.com.arbo.steamside.vdf.App;
-import br.com.arbo.steamside.vdf.Apps;
-import br.com.arbo.steamside.vdf.Apps.AppVisitor;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
 import br.com.arbo.steamside.webui.wicket.SharedConfigConsume;

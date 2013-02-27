@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.vdf;
+package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 
 /**
 

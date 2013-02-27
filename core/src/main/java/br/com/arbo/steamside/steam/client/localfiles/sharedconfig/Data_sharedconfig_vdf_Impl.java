@@ -1,4 +1,5 @@
-package br.com.arbo.steamside.vdf;
+package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
+
 
 public class Data_sharedconfig_vdf_Impl {
 

@@ -7,8 +7,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
-import br.com.arbo.steamside.vdf.Data_sharedconfig_vdf_Impl;
-import br.com.arbo.steamside.vdf.Factory_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf_Impl;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
 
 public class SharedConfigConsume {
 

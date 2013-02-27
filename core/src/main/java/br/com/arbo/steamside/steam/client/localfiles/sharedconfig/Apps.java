@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.vdf;
+package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.util.Map;
 
@@ -9,7 +9,18 @@ public class Apps {
 	public App app(final AppId appid) throws NotFound {
 		final App app = apps.get(appid.appid);
 		if (app != null) return app;
-		throw NotFound.name(appid.appid);
+		throw NotFound.appid(appid.appid);
+	}
+
+	public static class NotFound extends Exception {
+
+		public static NotFound appid(final String appid) {
+			return new NotFound("No app with id: " + appid);
+		}
+
+		private NotFound(final String message) {
+			super(message);
+		}
 	}
 
 	public void accept(final AppIdVisitor visitor) {
@@ -32,7 +43,7 @@ public class Apps {
 		void each(App app);
 	}
 
-	Map<String, App> apps;
+	public Map<String, App> apps;
 
 	public int count() {
 		return apps.size();

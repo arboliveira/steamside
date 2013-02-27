@@ -1,4 +1,8 @@
-package br.com.arbo.steamside.vdf;
+package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
+
+import br.com.arbo.steamside.vdf.NotFound;
+import br.com.arbo.steamside.vdf.RegionImpl;
+import br.com.arbo.steamside.vdf.VdfImpl;
 
 public class Parse_sharedconfig_vdf {
 

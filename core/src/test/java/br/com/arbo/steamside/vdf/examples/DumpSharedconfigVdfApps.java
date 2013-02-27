@@ -1,9 +1,9 @@
 package br.com.arbo.steamside.vdf.examples;
 
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps.AppIdVisitor;
 import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.vdf.Apps;
-import br.com.arbo.steamside.vdf.Apps.AppIdVisitor;
-import br.com.arbo.steamside.vdf.Factory_sharedconfig_vdf;
 
 public class DumpSharedconfigVdfApps {
 

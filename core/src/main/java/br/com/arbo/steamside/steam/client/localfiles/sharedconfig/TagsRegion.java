@@ -1,7 +1,10 @@
-package br.com.arbo.steamside.vdf;
+package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.util.Collection;
 import java.util.HashSet;
+
+import br.com.arbo.steamside.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.vdf.RegionImpl;
 
 class TagsRegion {
 

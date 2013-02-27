@@ -1,10 +1,11 @@
-package br.com.arbo.steamside.vdf;
+package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.util.HashMap;
 
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps.AppVisitor;
 import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.vdf.Apps.AppIdVisitor;
-import br.com.arbo.steamside.vdf.Apps.AppVisitor;
+import br.com.arbo.steamside.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.vdf.RegionImpl;
 
 class AppsRegion {
 
@@ -27,28 +28,6 @@ class AppsRegion {
 		});
 		a.apps = apps;
 		return a;
-	}
-
-	private AppRegion app(final AppId id) throws NotFound {
-		final RegionImpl rapp = content.region(id.appid);
-		return new AppRegion(rapp);
-	}
-
-	private void accept(final AppIdVisitor visitor) {
-		content.accept(new KeyValueVisitor() {
-
-			@Override
-			public void onSubRegion(final String k, final RegionImpl r)
-					throws Finished {
-				visitor.each(new AppId(k));
-			}
-
-			@Override
-			public void onKeyValue(final String k, final String v)
-					throws Finished {
-				// 
-			}
-		});
 	}
 
 	private void accept(final AppVisitor visitor) {

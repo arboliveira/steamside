@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.vdf;
+package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.util.Collection;
 
@@ -15,9 +15,16 @@ public class App {
 		return appid;
 	}
 
-	AppId appid;
+	public AppId appid;
 	String lastPlayed;
 	String cloudEnabled;
-	Collection<String> categories;
+	public Collection<String> categories;
+
+	public void onKeyValue(final String k, final String v) {
+		if ("LastPlayed".equalsIgnoreCase(k))
+			lastPlayed = v;
+		else if ("CloudEnabled".equalsIgnoreCase(k))
+			cloudEnabled = v;
+	}
 
 }

@@ -13,6 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.AppCategoryChange;
+
 @Ignore
 @SuppressWarnings("static-method")
 public class CategoryChangeTest {
