@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.web;
+package br.com.arbo.steamside.steamstore;
 
 public class AppName {
 

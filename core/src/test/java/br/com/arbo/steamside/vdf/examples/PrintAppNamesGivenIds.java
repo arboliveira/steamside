@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.types.AppId;
 
 public class PrintAppNamesGivenIds {
 
@@ -13,6 +14,6 @@ public class PrintAppNamesGivenIds {
 		final SysoutAppInfoLine dump = new SysoutAppInfoLine(appnameFactory);
 		for (final String appid : Arrays.asList(
 				"22000", "9050", "12800", "10150", "35460"))
-			dump.sysout(appid);
+			dump.sysout(new AppId(appid));
 	}
 }

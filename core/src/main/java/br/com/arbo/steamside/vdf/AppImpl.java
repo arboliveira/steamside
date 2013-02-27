@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.vdf;
 
 import br.com.arbo.java.io.PositionalStringReader;
+import br.com.arbo.steamside.types.Category;
 
 public class AppImpl implements App {
 
@@ -43,11 +44,11 @@ public class AppImpl implements App {
 	}
 
 	public boolean isFavorite() {
-		return isInCategory("favorite");
+		return isInCategory(new Category("favorite"));
 	}
 
 	@Override
-	public boolean isInCategory(final String name) {
+	public boolean isInCategory(final Category name) {
 		final RegionImpl tags;
 		try {
 			tags = content.region("tags");

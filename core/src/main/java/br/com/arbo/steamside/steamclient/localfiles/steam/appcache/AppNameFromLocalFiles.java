@@ -1,7 +1,8 @@
 package br.com.arbo.steamside.steamclient.localfiles.steam.appcache;
 
-import br.com.arbo.steamside.web.AppName;
-import br.com.arbo.steamside.web.AppNameFactory;
+import br.com.arbo.steamside.steamstore.AppName;
+import br.com.arbo.steamside.steamstore.AppNameFactory;
+import br.com.arbo.steamside.types.AppId;
 
 public final class AppNameFromLocalFiles implements AppNameFactory {
 
@@ -10,9 +11,9 @@ public final class AppNameFromLocalFiles implements AppNameFactory {
 	final static private String header = header();
 
 	@Override
-	public AppName nameOf(final String appid) {
+	public AppName nameOf(final AppId appid) {
 		final String vdf = this.appinfo_vdf.content();
-		final String begin = header + appid + BYTE_0;
+		final String begin = header + appid.appid + BYTE_0;
 		final int ibegin = vdf.indexOf(begin);
 
 		final String namekey = "name" + BYTE_0;

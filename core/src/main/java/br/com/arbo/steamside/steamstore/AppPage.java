@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.web;
+package br.com.arbo.steamside.steamstore;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -8,11 +8,13 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import br.com.arbo.steamside.types.AppId;
+
 public class AppPage {
 
 	private final String html;
 
-	public AppPage(final String id) {
+	public AppPage(final AppId id) {
 		final URL url = url(id);
 		this.html = download(url);
 	}
@@ -48,9 +50,9 @@ public class AppPage {
 		}
 	}
 
-	private static URL url(final String id) {
+	private static URL url(final AppId id) {
 		try {
-			return new URL("http://store.steampowered.com/app/" + id);
+			return new URL("http://store.steampowered.com/app/" + id.appid);
 		} catch (final MalformedURLException e) {
 			throw new RuntimeException(e);
 		}

@@ -14,8 +14,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import br.com.arbo.steamside.webui.appdto.AppDTO;
+import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
+import br.com.arbo.steamside.webui.appdto.AppDTO;
 
 public class Search {
 
@@ -39,7 +40,7 @@ public class Search {
 			final Matcher matcher) {
 		final String appid = matcher.group(1);
 		final String name = StringEscapeUtils.unescapeHtml4(matcher.group(2));
-		return new AppDTO(appid, name);
+		return new AppDTO(new AppId(appid), name);
 	}
 
 	private static Pattern pattern() {

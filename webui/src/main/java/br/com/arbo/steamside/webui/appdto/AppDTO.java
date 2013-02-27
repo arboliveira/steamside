@@ -3,12 +3,14 @@ package br.com.arbo.steamside.webui.appdto;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import br.com.arbo.steamside.types.AppId;
+
 @JsonAutoDetect
 public class AppDTO {
 
-	public AppDTO(final String appid, final String name) {
-		this.appid = appid;
-		this.link = "/app/" + appid + "/run";
+	public AppDTO(final AppId appid, final String name) {
+		this.appid = appid.appid;
+		this.link = "/app/" + this.appid + "/run";
 		this.name = name;
 	}
 

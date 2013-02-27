@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steamclient.localfiles.steam.userdata;
+package br.com.arbo.steamside.steamclient.localfiles.steam.sharedconfig;
 
 import java.io.File;
 

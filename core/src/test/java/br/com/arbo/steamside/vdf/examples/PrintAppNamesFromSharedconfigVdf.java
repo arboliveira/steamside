@@ -2,7 +2,7 @@ package br.com.arbo.steamside.vdf.examples;
 
 import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.web.AppNameFactory;
+import br.com.arbo.steamside.steamstore.AppNameFactory;
 import br.com.arbo.steamside.web.AppNameFromSteamStore;
 
 class PrintAppNamesFromSharedconfigVdf {

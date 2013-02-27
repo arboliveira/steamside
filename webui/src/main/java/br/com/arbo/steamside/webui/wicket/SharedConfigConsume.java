@@ -7,7 +7,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
-import br.com.arbo.steamside.vdf.Apps.Visitor;
+import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.vdf.Apps.AppIdVisitor;
 import br.com.arbo.steamside.vdf.SharedconfigVdfLocation;
 
 public class SharedConfigConsume {
@@ -33,12 +34,12 @@ public class SharedConfigConsume {
 
 	}
 
-	class State implements Visitor {
+	class State implements AppIdVisitor {
 
 		int number;
 
 		@Override
-		public void each(final String app) {
+		public void each(final AppId app) {
 			number++;
 		}
 	}

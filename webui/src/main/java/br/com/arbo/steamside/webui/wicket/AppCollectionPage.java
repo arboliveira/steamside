@@ -5,6 +5,7 @@ import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import br.com.arbo.steamside.collection.CollectionFromVdf;
+import br.com.arbo.steamside.types.Category;
 import br.com.arbo.steamside.webui.wicket.AppCollectionPage.State.NotSuper;
 import br.com.arbo.steamside.webui.wicket.collection.Command;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
@@ -70,14 +71,17 @@ public class AppCollectionPage extends WebPage {
 
 	static class JsonState implements State {
 
-		private final String name;
+		private final Category name;
 		private final WebPage page;
 		private final CollectionFromVdf collectionFromVdf;
 
 		public JsonState(final PageParameters p,
 				final WebPage page) {
 			this.page = page;
-			this.name = p.get(Params.PARAM_collectionname).toString();
+			this.name =
+					new Category(
+							p.get(Params.PARAM_collectionname).toString()
+					);
 			this.collectionFromVdf = new CollectionFromVdf(
 					WicketApplication.get().appNameFactory());
 		}

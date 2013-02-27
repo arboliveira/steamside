@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.vdf;
 
+import br.com.arbo.steamside.types.AppId;
+
 public class AppsImpl implements Apps {
 
 	private final RegionImpl content;
@@ -9,19 +11,19 @@ public class AppsImpl implements Apps {
 	}
 
 	@Override
-	public App app(final String id) throws NotFound {
-		final RegionImpl rapp = content.region(id);
+	public App app(final AppId id) throws NotFound {
+		final RegionImpl rapp = content.region(id.appid);
 		return new AppImpl(rapp);
 	}
 
 	@Override
-	public void accept(final Visitor visitor) {
+	public void accept(final AppIdVisitor visitor) {
 		content.accept(new KeyValueVisitor() {
 
 			@Override
 			public void onSubRegion(final String k, final RegionImpl r)
 					throws Finished {
-				visitor.each(k);
+				visitor.each(new AppId(k));
 			}
 
 			@Override

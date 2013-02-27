@@ -3,12 +3,14 @@ package br.com.arbo.steamside.collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.arbo.steamside.steamstore.AppNameFactory;
+import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.types.Category;
 import br.com.arbo.steamside.vdf.App;
 import br.com.arbo.steamside.vdf.Apps;
-import br.com.arbo.steamside.vdf.Apps.Visitor;
+import br.com.arbo.steamside.vdf.Apps.AppIdVisitor;
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.SharedconfigVdfLocation;
-import br.com.arbo.steamside.web.AppNameFactory;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
 
@@ -20,7 +22,7 @@ public class CollectionFromVdf {
 		this.namefactory = namefactory;
 	}
 
-	public AppCollectionDTO fetch(final String name) {
+	public AppCollectionDTO fetch(final Category name) {
 
 		final Apps apps = SharedconfigVdfLocation.make().apps();
 		final CollectionFromVdf.Filter filter = new Filter(name, apps,
@@ -32,14 +34,14 @@ public class CollectionFromVdf {
 		return results;
 	}
 
-	static class Filter implements Visitor {
+	static class Filter implements AppIdVisitor {
 
-		private final String name;
+		private final Category name;
 		private final Apps apps;
 		final List<AppDTO> list = new ArrayList<AppDTO>(20);
 		private final AppNameFactory namefactory;
 
-		public Filter(final String name, final Apps appsImpl,
+		public Filter(final Category name, final Apps appsImpl,
 				final AppNameFactory namefactory) {
 			this.name = name;
 			this.apps = appsImpl;
@@ -47,7 +49,7 @@ public class CollectionFromVdf {
 		}
 
 		@Override
-		public void each(final String appid) {
+		public void each(final AppId appid) {
 			final App app = app(appid);
 			if (app.isInCategory(name)) {
 				final AppDTO dto =
@@ -57,7 +59,7 @@ public class CollectionFromVdf {
 			}
 		}
 
-		private App app(final String appid) throws Error {
+		private App app(final AppId appid) throws Error {
 			try {
 				return apps.app(appid);
 			} catch (final NotFound e) {

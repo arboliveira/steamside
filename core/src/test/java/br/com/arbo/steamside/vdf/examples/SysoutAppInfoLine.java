@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.vdf.examples;
 
-import br.com.arbo.steamside.web.AppNameFactory;
+import br.com.arbo.steamside.steamstore.AppNameFactory;
+import br.com.arbo.steamside.types.AppId;
 
 public class SysoutAppInfoLine {
 
@@ -10,11 +11,11 @@ public class SysoutAppInfoLine {
 		this.appnameFactory = appnameFactory;
 	}
 
-	public void sysout(final String app) {
+	public void sysout(final AppId app) {
 		System.out.println(toInfo(app));
 	}
 
-	private String toInfo(final String app) {
+	private String toInfo(final AppId app) {
 		return app + "]" + appnameFactory.nameOf(app).name;
 	}
 

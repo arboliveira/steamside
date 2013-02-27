@@ -5,7 +5,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 
 import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.web.AppNameFactory;
+import br.com.arbo.steamside.steamstore.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
 import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;

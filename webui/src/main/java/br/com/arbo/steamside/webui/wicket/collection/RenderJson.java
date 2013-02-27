@@ -9,13 +9,14 @@ import org.apache.wicket.request.Response;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
+import br.com.arbo.steamside.types.Category;
 
 public class RenderJson {
 
-	private final String name;
+	private final Category name;
 	private final CollectionFromVdf collectionFromVdf;
 
-	public RenderJson(final String name,
+	public RenderJson(final Category name,
 			final CollectionFromVdf collectionFromVdf) {
 		this.name = name;
 		this.collectionFromVdf = collectionFromVdf;

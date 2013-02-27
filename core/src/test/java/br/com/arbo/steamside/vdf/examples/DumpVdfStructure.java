@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
-import br.com.arbo.steamside.steamclient.localfiles.steam.userdata.File_sharedconfig_vdf;
+import br.com.arbo.steamside.steamclient.localfiles.steam.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.RegionImpl;
 import br.com.arbo.steamside.vdf.VdfImpl;

@@ -1,12 +1,13 @@
 package br.com.arbo.steamside.continues;
 
 import br.com.arbo.steamside.collection.CollectionFromVdf;
+import br.com.arbo.steamside.types.Category;
 
 public class Continue {
 
 	public interface Needs {
 
-		String name();
+		Category name();
 
 		CollectionFromVdf collectionFromVdf();
 	}

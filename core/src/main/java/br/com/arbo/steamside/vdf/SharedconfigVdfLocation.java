@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
-import br.com.arbo.steamside.steamclient.localfiles.steam.userdata.File_sharedconfig_vdf;
+import br.com.arbo.steamside.steamclient.localfiles.steam.sharedconfig.File_sharedconfig_vdf;
 
 /**
 
@@ -15,8 +15,6 @@ import br.com.arbo.steamside.steamclient.localfiles.steam.userdata.File_sharedco
 /Steam/config/dialogconfig.vdf
 
 /Steam/config/htmlcache/
-  
-/Steam/appcache/
  
  */
 public class SharedconfigVdfLocation {
