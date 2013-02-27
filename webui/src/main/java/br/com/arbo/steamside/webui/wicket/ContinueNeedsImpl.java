@@ -4,7 +4,7 @@ import org.apache.commons.lang3.SystemUtils;
 
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.continues.Continue;
-import br.com.arbo.steamside.steamstore.AppNameFactory;
+import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.Category;
 
 public class ContinueNeedsImpl implements Continue.Needs {

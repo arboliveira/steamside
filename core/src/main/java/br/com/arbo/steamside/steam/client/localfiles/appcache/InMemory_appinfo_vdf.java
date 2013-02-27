@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steamclient.localfiles.steam.appcache;
+package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
 import java.io.IOException;
 

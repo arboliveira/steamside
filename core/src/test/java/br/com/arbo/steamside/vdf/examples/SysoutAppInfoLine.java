@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.vdf.examples;
 
-import br.com.arbo.steamside.steamstore.AppNameFactory;
+import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
 
 public class SysoutAppInfoLine {

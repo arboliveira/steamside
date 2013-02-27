@@ -1,7 +1,7 @@
-package br.com.arbo.steamside.steamclient.localfiles.steam.appcache;
+package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
-import br.com.arbo.steamside.steamstore.AppName;
-import br.com.arbo.steamside.steamstore.AppNameFactory;
+import br.com.arbo.steamside.steam.store.AppName;
+import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
 
 public final class AppNameFromLocalFiles implements AppNameFactory {

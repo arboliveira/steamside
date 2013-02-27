@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steamstore;
+package br.com.arbo.steamside.steam.store;
 
 import br.com.arbo.steamside.types.AppId;
 

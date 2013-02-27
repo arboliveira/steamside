@@ -3,7 +3,7 @@ package br.com.arbo.steamside.collection;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.arbo.steamside.steamstore.AppNameFactory;
+import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.Category;
 import br.com.arbo.steamside.vdf.App;

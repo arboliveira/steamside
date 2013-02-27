@@ -1,8 +1,8 @@
-package br.com.arbo.steamside.steamclient.localfiles.steam.sharedconfig;
+package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.io.File;
 
-import br.com.arbo.steamside.steamclient.localfiles.steam.SteamDirectory;
+import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
 
 public class UserdataDirectory {
 

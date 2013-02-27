@@ -1,8 +1,8 @@
-package br.com.arbo.steamside.steamclient.localfiles.steam.appcache;
+package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
 import java.io.File;
 
-import br.com.arbo.steamside.steamclient.localfiles.steam.SteamDirectory;
+import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
 
 public class File_appinfo_vdf {
 

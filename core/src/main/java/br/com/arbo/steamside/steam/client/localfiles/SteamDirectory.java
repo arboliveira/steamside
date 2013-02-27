@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steamclient.localfiles.steam;
+package br.com.arbo.steamside.steam.client.localfiles;
 
 import java.io.File;
 

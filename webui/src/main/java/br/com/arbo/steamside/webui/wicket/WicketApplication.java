@@ -3,9 +3,9 @@ package br.com.arbo.steamside.webui.wicket;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
-import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.AppNameFromLocalFiles;
-import br.com.arbo.steamside.steamclient.localfiles.steam.appcache.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.steamstore.AppNameFactory;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
 import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
