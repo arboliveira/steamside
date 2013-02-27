@@ -9,7 +9,7 @@ import java.util.concurrent.Future;
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.vdf.Apps.AppIdVisitor;
-import br.com.arbo.steamside.vdf.SharedconfigVdfLocation;
+import br.com.arbo.steamside.vdf.Factory_sharedconfig_vdf;
 
 public class SharedConfigConsume {
 
@@ -28,7 +28,7 @@ public class SharedConfigConsume {
 		@Override
 		public State call() throws Exception {
 			final State state = new State();
-			SharedconfigVdfLocation.make().apps().accept(state);
+			Factory_sharedconfig_vdf.fromFile().apps().accept(state);
 			return state;
 		}
 

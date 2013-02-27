@@ -26,7 +26,8 @@ public class CategoryChangeTest {
 	public void loadVdfFragment() throws IOException, NotFound {
 		templates = new TemplatePair(name.getMethodName());
 		vdff = new VdfImpl(templates.before);
-		final AppImpl app = new AppImpl(vdff.root().region("42"));
+		final AppCategoryChange app =
+				new AppCategoryChange(vdff.root().region("42"));
 		app.category("Expected");
 	}
 

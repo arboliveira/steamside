@@ -10,7 +10,7 @@ import br.com.arbo.steamside.vdf.App;
 import br.com.arbo.steamside.vdf.Apps;
 import br.com.arbo.steamside.vdf.Apps.AppIdVisitor;
 import br.com.arbo.steamside.vdf.NotFound;
-import br.com.arbo.steamside.vdf.SharedconfigVdfLocation;
+import br.com.arbo.steamside.vdf.Factory_sharedconfig_vdf;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
 
@@ -24,7 +24,7 @@ public class CollectionFromVdf {
 
 	public AppCollectionDTO fetch(final Category name) {
 
-		final Apps apps = SharedconfigVdfLocation.make().apps();
+		final Apps apps = Factory_sharedconfig_vdf.fromFile().apps();
 		final CollectionFromVdf.Filter filter = new Filter(name, apps,
 				namefactory);
 		apps.accept(filter);

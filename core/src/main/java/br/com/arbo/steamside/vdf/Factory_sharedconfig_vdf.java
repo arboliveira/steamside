@@ -17,27 +17,27 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedcon
 /Steam/config/htmlcache/
  
  */
-public class SharedconfigVdfLocation {
+public class Factory_sharedconfig_vdf {
 
-	public static class SharedconfigVdfMissing extends RuntimeException {
+	public static class FileNotFound_sharedconfig_vdf extends RuntimeException {
 
-		public SharedconfigVdfMissing(final Throwable e) {
+		public FileNotFound_sharedconfig_vdf(final Throwable e) {
 			super(e);
 		}
 
 	}
 
-	public static SharedConfig make() {
+	public static Data_sharedconfig_vdf fromFile() {
 		final File from = File_sharedconfig_vdf.sharedconfig_vdf();
 		final String content = readFileToString(from);
-		return new SharedConfigImpl(content);
+		return new Data_sharedconfig_vdf_Impl(content);
 	}
 
 	private static String readFileToString(final File from) {
 		try {
 			return FileUtils.readFileToString(from);
 		} catch (final FileNotFoundException e) {
-			throw new SharedconfigVdfMissing(e);
+			throw new FileNotFound_sharedconfig_vdf(e);
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}

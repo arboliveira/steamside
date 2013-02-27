@@ -7,6 +7,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 
 import br.com.arbo.steamside.steam.client.protocol.RunGameId;
+import br.com.arbo.steamside.types.AppId;
 
 final class ExecLink extends IndicatingAjaxFallbackLink<Object> {
 
@@ -19,7 +20,7 @@ final class ExecLink extends IndicatingAjaxFallbackLink<Object> {
 
 	@Override
 	public void onClick(final AjaxRequestTarget target) {
-		new RunGameId(appid).run();
+		new RunGameId(new AppId(appid)).run();
 	}
 
 }

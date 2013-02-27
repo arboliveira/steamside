@@ -16,7 +16,7 @@ public class SysoutAppInfoLine {
 	}
 
 	private String toInfo(final AppId app) {
-		return app + "]" + appnameFactory.nameOf(app).name;
+		return app.appid + "]" + appnameFactory.nameOf(app).name;
 	}
 
 }

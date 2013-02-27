@@ -4,7 +4,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 
-import br.com.arbo.steamside.vdf.SharedconfigVdfLocation.SharedconfigVdfMissing;
+import br.com.arbo.steamside.vdf.Factory_sharedconfig_vdf.FileNotFound_sharedconfig_vdf;
 
 public class HomePage extends WebPage {
 
@@ -18,7 +18,7 @@ public class HomePage extends WebPage {
 		try {
 			if (false) populateContinue();
 			populateNumbers(config);
-		} catch (final SharedconfigVdfMissing e) {
+		} catch (final FileNotFound_sharedconfig_vdf e) {
 			// TODO Redirect to "Where is your Steam?" configuration page
 			throw e;
 		}

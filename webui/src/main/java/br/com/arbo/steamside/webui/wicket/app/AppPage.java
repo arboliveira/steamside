@@ -4,6 +4,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import br.com.arbo.org.apache.wicket.markup.html.pages.EmptyPage;
 import br.com.arbo.steamside.steam.client.protocol.RunGameId;
+import br.com.arbo.steamside.types.AppId;
 
 public class AppPage extends EmptyPage {
 
@@ -13,7 +14,10 @@ public class AppPage extends EmptyPage {
 	public AppPage(final PageParameters p) {
 		super(p);
 		setStatelessHint(true);
-		final String appid = p.get(PARAM_appid).toString();
+		final AppId appid =
+				new AppId(
+						p.get(PARAM_appid).toString()
+				);
 		final String command = p.get(PARAM_command).toString();
 		if (equalsCommand("run", command)) new RunGameId(appid).run();
 	}

@@ -1,8 +1,8 @@
 package br.com.arbo.steamside.vdf;
 
-public class SharedConfigImpl implements SharedConfig {
+public class Data_sharedconfig_vdf_Impl implements Data_sharedconfig_vdf {
 
-	public SharedConfigImpl(final String content) {
+	public Data_sharedconfig_vdf_Impl(final String content) {
 		this.content = new VdfImpl(content);
 	}
 
