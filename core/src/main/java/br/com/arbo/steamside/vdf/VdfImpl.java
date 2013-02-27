@@ -2,7 +2,7 @@ package br.com.arbo.steamside.vdf;
 
 import br.com.arbo.java.io.PositionalStringReader;
 
-public class VdfImpl implements Vdf {
+public class VdfImpl {
 
 	String content;
 	private final RegionImpl root;

@@ -10,9 +10,12 @@ import br.com.arbo.steamside.types.Category;
 public class ContinueNeedsImpl implements Continue.Needs {
 
 	private final AppNameFactory nameFactory;
+	private final SharedConfigConsume sharedconfig;
 
-	public ContinueNeedsImpl(final AppNameFactory nameFactory) {
+	public ContinueNeedsImpl(final AppNameFactory nameFactory,
+			final SharedConfigConsume sharedconfig) {
 		this.nameFactory = nameFactory;
+		this.sharedconfig = sharedconfig;
 	}
 
 	@Override
@@ -28,7 +31,7 @@ public class ContinueNeedsImpl implements Continue.Needs {
 
 	@Override
 	public CollectionFromVdf collectionFromVdf() {
-		return new CollectionFromVdf(nameFactory);
+		return new CollectionFromVdf(nameFactory, sharedconfig);
 	}
 
 }

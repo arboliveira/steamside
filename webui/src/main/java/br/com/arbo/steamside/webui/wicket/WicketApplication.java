@@ -22,8 +22,15 @@ public class WicketApplication extends WebApplication
 	private final AppNameFactory appNameFactory =
 			new AppNameFromLocalFiles(new InMemory_appinfo_vdf());
 
+	private final SharedConfigConsume sharedconfig =
+			new SharedConfigConsume();
+
 	public AppNameFactory appNameFactory() {
 		return appNameFactory;
+	}
+
+	public SharedConfigConsume sharedconfig() {
+		return sharedconfig;
 	}
 
 	public static WicketApplication get() {
@@ -50,7 +57,7 @@ public class WicketApplication extends WebApplication
 		mountResource("/search.json", new SearchJson());
 		mountResource("/continue.json",
 				new ContinueJson(
-						new ContinueNeedsImpl(appNameFactory)));
+						new ContinueNeedsImpl(appNameFactory, sharedconfig)));
 
 		mountPage("/app" +
 				"/${" + AppPage.PARAM_appid + "}" +

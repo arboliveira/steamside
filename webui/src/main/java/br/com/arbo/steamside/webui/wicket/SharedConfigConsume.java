@@ -7,8 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
-import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.vdf.Apps.AppIdVisitor;
+import br.com.arbo.steamside.vdf.Data_sharedconfig_vdf_Impl;
 import br.com.arbo.steamside.vdf.Factory_sharedconfig_vdf;
 
 public class SharedConfigConsume {
@@ -23,32 +22,16 @@ public class SharedConfigConsume {
 		this.state = this.executor.submit(new Consume());
 	}
 
-	class Consume implements Callable<State> {
+	class Consume implements Callable<Data_sharedconfig_vdf_Impl> {
 
 		@Override
-		public State call() throws Exception {
-			final State state = new State();
-			Factory_sharedconfig_vdf.fromFile().apps().accept(state);
-			return state;
+		public Data_sharedconfig_vdf_Impl call() throws Exception {
+			return Factory_sharedconfig_vdf.fromFile();
 		}
 
 	}
 
-	class State implements AppIdVisitor {
-
-		int number;
-
-		@Override
-		public void each(final AppId app) {
-			number++;
-		}
-	}
-
-	public int number() {
-		return state().number;
-	}
-
-	private State state() {
+	public Data_sharedconfig_vdf_Impl data() {
 		try {
 			return state.get();
 		} catch (final InterruptedException e) {
@@ -62,6 +45,6 @@ public class SharedConfigConsume {
 	}
 
 	private final ExecutorService executor;
-	private Future<State> state;
+	private Future<Data_sharedconfig_vdf_Impl> state;
 
 }

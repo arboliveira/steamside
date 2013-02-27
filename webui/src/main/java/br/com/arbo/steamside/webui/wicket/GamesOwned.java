@@ -2,7 +2,7 @@ package br.com.arbo.steamside.webui.wicket;
 
 public class GamesOwned {
 
-	public GamesOwned(SharedConfigConsume config) {
+	public GamesOwned(final SharedConfigConsume config) {
 		super();
 		this.config = config;
 	}
@@ -10,6 +10,6 @@ public class GamesOwned {
 	SharedConfigConsume config;
 
 	int gamesOwned() {
-		return config.number();
+		return config.data().apps().count();
 	}
 }

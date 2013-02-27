@@ -1,7 +1,6 @@
 package br.com.arbo.steamside.vdf;
 
 import br.com.arbo.java.io.PositionalStringReader;
-import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 
 public class AppCategoryChange {
 

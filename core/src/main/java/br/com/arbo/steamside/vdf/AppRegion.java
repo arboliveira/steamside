@@ -3,20 +3,46 @@ package br.com.arbo.steamside.vdf;
 import br.com.arbo.java.io.PositionalStringReader;
 import br.com.arbo.steamside.types.Category;
 
-public class AppImpl implements App {
+class AppRegion {
 
 	private final RegionImpl content;
 
-	public AppImpl(final RegionImpl content) {
+	AppRegion(final RegionImpl content) {
 		this.content = content;
 	}
 
-	public boolean isFavorite() {
+	public App parse() {
+		final Hydrate hydrate = new Hydrate();
+		content.accept(hydrate);
+		return hydrate.app;
+	}
+
+	static final class Hydrate implements KeyValueVisitor {
+
+		final App app = new App();
+
+		@Override
+		public void onKeyValue(final String k, final String v)
+				throws Finished {
+			if ("LastPlayed".equalsIgnoreCase(k))
+				app.lastPlayed = v;
+			else if ("CloudEnabled".equalsIgnoreCase(k))
+				app.cloudEnabled = v;
+		}
+
+		@Override
+		public void onSubRegion(final String k, final RegionImpl r)
+				throws Finished {
+			if ("tags".equalsIgnoreCase(k))
+				app.categories = new TagsRegion(r).parse();
+		}
+	}
+
+	private boolean isFavorite() {
 		return isInCategory(new Category("favorite"));
 	}
 
-	@Override
-	public boolean isInCategory(final Category name) {
+	private boolean isInCategory(final Category name) {
 		final RegionImpl tags;
 		try {
 			tags = content.region("tags");

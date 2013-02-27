@@ -83,7 +83,8 @@ public class AppCollectionPage extends WebPage {
 							p.get(Params.PARAM_collectionname).toString()
 					);
 			this.collectionFromVdf = new CollectionFromVdf(
-					WicketApplication.get().appNameFactory());
+					WicketApplication.get().appNameFactory(),
+					WicketApplication.get().sharedconfig());
 		}
 
 		@Override
