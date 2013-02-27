@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.protocol;
+package br.com.arbo.steamside.steam.client.protocol;
 
 import java.awt.Desktop;
 import java.io.IOException;

@@ -3,7 +3,7 @@ package br.com.arbo.steamside.webui.wicket.app;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import br.com.arbo.org.apache.wicket.markup.html.pages.EmptyPage;
-import br.com.arbo.steamside.protocol.RunGameId;
+import br.com.arbo.steamside.steam.client.protocol.RunGameId;
 
 public class AppPage extends EmptyPage {
 

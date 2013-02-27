@@ -6,7 +6,7 @@ package br.com.arbo.steamside.webui.wicket;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 
-import br.com.arbo.steamside.protocol.RunGameId;
+import br.com.arbo.steamside.steam.client.protocol.RunGameId;
 
 final class ExecLink extends IndicatingAjaxFallbackLink<Object> {
 
