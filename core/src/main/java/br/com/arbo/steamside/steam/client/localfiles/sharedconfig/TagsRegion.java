@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.RegionImpl;
+import br.com.arbo.steamside.vdf.Region;
 
 class TagsRegion {
 
-	private final RegionImpl content;
+	private final Region content;
 
-	TagsRegion(final RegionImpl content) {
+	TagsRegion(final Region content) {
 		this.content = content;
 	}
 
@@ -30,7 +30,7 @@ class TagsRegion {
 		}
 
 		@Override
-		public void onSubRegion(final String k, final RegionImpl r)
+		public void onSubRegion(final String k, final Region r)
 				throws Finished {
 			// The "tags" region has no sub-regions of itself.
 		}

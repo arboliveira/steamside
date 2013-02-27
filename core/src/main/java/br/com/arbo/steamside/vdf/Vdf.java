@@ -2,21 +2,21 @@ package br.com.arbo.steamside.vdf;
 
 import br.com.arbo.java.io.PositionalStringReader;
 
-public class VdfImpl {
+public class Vdf {
 
 	String content;
-	private final RegionImpl root;
+	private final Region root;
 
-	public VdfImpl(final String content) {
+	public Vdf(final String content) {
 		this.content = content;
-		this.root = new RegionImpl(new RootReaderFactory());
+		this.root = new Region(new RootReaderFactory());
 	}
 
 	public String content() {
 		return content;
 	}
 
-	public RegionImpl root() {
+	public Region root() {
 		return root;
 	}
 
@@ -24,13 +24,13 @@ public class VdfImpl {
 
 		@Override
 		public PositionalStringReader readerPositionedInside() {
-			return VdfImpl.this.readerPositionedInside();
+			return Vdf.this.readerPositionedInside();
 		}
 
 		@Override
 		public void replaceTokenBefore(
 				final String previous, final String newvalue, final int position) {
-			VdfImpl.this.replaceTokenBefore(previous, newvalue, position);
+			Vdf.this.replaceTokenBefore(previous, newvalue, position);
 		}
 
 	}

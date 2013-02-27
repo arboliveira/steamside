@@ -6,18 +6,18 @@ import java.io.StreamTokenizer;
 import br.com.arbo.java.io.PositionalStringReader;
 import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 
-public class RegionImpl {
+public class Region {
 
 	private final ReaderFactory parent;
 
-	RegionImpl(final ReaderFactory rf) {
+	Region(final ReaderFactory rf) {
 		this.parent = rf;
 	}
 
-	public RegionImpl region(final String name) throws NotFound {
+	public Region region(final String name) throws NotFound {
 		class Find implements KeyValueVisitor {
 
-			RegionImpl found;
+			Region found;
 
 			@Override
 			public void onKeyValue(final String k, final String v)
@@ -26,7 +26,7 @@ public class RegionImpl {
 			}
 
 			@Override
-			public void onSubRegion(final String k, final RegionImpl r)
+			public void onSubRegion(final String k, final Region r)
 					throws Finished {
 				if (k.equalsIgnoreCase(name)) {
 					found = r;
@@ -104,7 +104,7 @@ public class RegionImpl {
 		}
 
 		if (tokenizer.ttype == '{') {
-			final RegionImpl sub = new RegionImpl(new RegionReaderFactory(key));
+			final Region sub = new Region(new RegionReaderFactory(key));
 			visitor.onSubRegion(key, sub);
 			skipPastEndOfRegion(tokenizer);
 			return;
@@ -124,7 +124,7 @@ public class RegionImpl {
 			}
 
 			@Override
-			public void onSubRegion(final String k, final RegionImpl r)
+			public void onSubRegion(final String k, final Region r)
 					throws Finished {
 				// 
 			}
@@ -152,7 +152,7 @@ public class RegionImpl {
 				}
 
 				@Override
-				public void onSubRegion(final String k, final RegionImpl r)
+				public void onSubRegion(final String k, final Region r)
 						throws Finished {
 					if (k.equals(name)) throw new Finished();
 				}
@@ -166,7 +166,7 @@ public class RegionImpl {
 		@Override
 		public void replaceTokenBefore(
 				final String previous, final String newvalue, final int position) {
-			RegionImpl.this.replaceTokenBefore(previous, newvalue, position);
+			Region.this.replaceTokenBefore(previous, newvalue, position);
 		}
 
 	}

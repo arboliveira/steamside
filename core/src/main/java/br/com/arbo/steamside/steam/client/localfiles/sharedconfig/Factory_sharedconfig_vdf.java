@@ -26,10 +26,10 @@ public class Factory_sharedconfig_vdf {
 
 	}
 
-	public static Data_sharedconfig_vdf_Impl fromFile() {
+	public static Data_sharedconfig_vdf fromFile() {
 		final File from = File_sharedconfig_vdf.sharedconfig_vdf();
 		final String content = readFileToString(from);
-		final Data_sharedconfig_vdf_Impl parse =
+		final Data_sharedconfig_vdf parse =
 				new Parse_sharedconfig_vdf(content).parse();
 		return parse;
 	}

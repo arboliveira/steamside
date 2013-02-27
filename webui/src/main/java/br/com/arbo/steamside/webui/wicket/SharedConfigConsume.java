@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf_Impl;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
 
 public class SharedConfigConsume {
@@ -22,16 +22,16 @@ public class SharedConfigConsume {
 		this.state = this.executor.submit(new Consume());
 	}
 
-	class Consume implements Callable<Data_sharedconfig_vdf_Impl> {
+	class Consume implements Callable<Data_sharedconfig_vdf> {
 
 		@Override
-		public Data_sharedconfig_vdf_Impl call() throws Exception {
+		public Data_sharedconfig_vdf call() throws Exception {
 			return Factory_sharedconfig_vdf.fromFile();
 		}
 
 	}
 
-	public Data_sharedconfig_vdf_Impl data() {
+	public Data_sharedconfig_vdf data() {
 		try {
 			return state.get();
 		} catch (final InterruptedException e) {
@@ -45,6 +45,6 @@ public class SharedConfigConsume {
 	}
 
 	private final ExecutorService executor;
-	private Future<Data_sharedconfig_vdf_Impl> state;
+	private Future<Data_sharedconfig_vdf> state;
 
 }

@@ -1,35 +1,35 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import br.com.arbo.steamside.vdf.NotFound;
-import br.com.arbo.steamside.vdf.RegionImpl;
-import br.com.arbo.steamside.vdf.VdfImpl;
+import br.com.arbo.steamside.vdf.Region;
+import br.com.arbo.steamside.vdf.Vdf;
 
 public class Parse_sharedconfig_vdf {
 
 	public Parse_sharedconfig_vdf(final String content) {
-		this.content = new VdfImpl(content);
+		this.content = new Vdf(content);
 	}
 
-	public Data_sharedconfig_vdf_Impl parse() {
-		final Data_sharedconfig_vdf_Impl data =
-				new Data_sharedconfig_vdf_Impl();
+	public Data_sharedconfig_vdf parse() {
+		final Data_sharedconfig_vdf data =
+				new Data_sharedconfig_vdf();
 
-		final RegionImpl rUserRoamingConfigStore =
+		final Region rUserRoamingConfigStore =
 				region(content.root(), "UserRoamingConfigStore");
-		final RegionImpl rSoftware =
+		final Region rSoftware =
 				region(rUserRoamingConfigStore, "Software");
-		final RegionImpl rValve =
+		final Region rValve =
 				region(rSoftware, "Valve");
-		final RegionImpl rsteam =
+		final Region rsteam =
 				region(rValve, "Steam");
-		final RegionImpl apps =
+		final Region apps =
 				region(rsteam, "apps");
 
 		data.apps = new AppsRegion(apps).parse();
 		return data;
 	}
 
-	private static RegionImpl region(final RegionImpl r, final String name)
+	private static Region region(final Region r, final String name)
 	{
 		try {
 			return r.region(name);
@@ -38,5 +38,5 @@ public class Parse_sharedconfig_vdf {
 		}
 	}
 
-	private final VdfImpl content;
+	private final Vdf content;
 }

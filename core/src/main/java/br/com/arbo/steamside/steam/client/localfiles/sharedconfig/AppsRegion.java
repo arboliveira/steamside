@@ -5,13 +5,13 @@ import java.util.HashMap;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps.AppVisitor;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.RegionImpl;
+import br.com.arbo.steamside.vdf.Region;
 
 class AppsRegion {
 
-	private final RegionImpl content;
+	private final Region content;
 
-	AppsRegion(final RegionImpl content) {
+	AppsRegion(final Region content) {
 		this.content = content;
 	}
 
@@ -34,7 +34,7 @@ class AppsRegion {
 		class ParseEveryAppSubRegion implements KeyValueVisitor {
 
 			@Override
-			public void onSubRegion(final String k, final RegionImpl r)
+			public void onSubRegion(final String k, final Region r)
 					throws Finished {
 				final AppRegion appRegion = new AppRegion(r);
 				final App app = appRegion.parse();

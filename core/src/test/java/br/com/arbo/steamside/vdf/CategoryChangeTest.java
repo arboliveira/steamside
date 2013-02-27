@@ -22,12 +22,12 @@ public class CategoryChangeTest {
 	@Rule
 	public TestName name = new TestName();
 	private TemplatePair templates;
-	private VdfImpl vdff;
+	private Vdf vdff;
 
 	@Before
 	public void loadVdfFragment() throws IOException, NotFound {
 		templates = new TemplatePair(name.getMethodName());
-		vdff = new VdfImpl(templates.before);
+		vdff = new Vdf(templates.before);
 		final AppCategoryChange app =
 				new AppCategoryChange(vdff.root().region("42"));
 		app.category("Expected");

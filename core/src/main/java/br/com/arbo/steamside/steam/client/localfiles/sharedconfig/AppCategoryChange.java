@@ -3,18 +3,18 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 import br.com.arbo.java.io.PositionalStringReader;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.NotFound;
-import br.com.arbo.steamside.vdf.RegionImpl;
+import br.com.arbo.steamside.vdf.Region;
 
 public class AppCategoryChange {
 
-	private final RegionImpl content;
+	private final Region content;
 
-	public AppCategoryChange(final RegionImpl content) {
+	public AppCategoryChange(final Region content) {
 		this.content = content;
 	}
 
 	public void category(final String newvalue) {
-		final RegionImpl tags;
+		final Region tags;
 		try {
 			tags = content.region("tags");
 		} catch (final NotFound e) {
@@ -34,7 +34,7 @@ public class AppCategoryChange {
 			}
 
 			@Override
-			public void onSubRegion(final String k, final RegionImpl r) {
+			public void onSubRegion(final String k, final Region r) {
 				// do nothing
 			}
 

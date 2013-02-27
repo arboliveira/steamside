@@ -1,13 +1,13 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.RegionImpl;
+import br.com.arbo.steamside.vdf.Region;
 
 class AppRegion {
 
-	private final RegionImpl content;
+	private final Region content;
 
-	AppRegion(final RegionImpl content) {
+	AppRegion(final Region content) {
 		this.content = content;
 	}
 
@@ -28,7 +28,7 @@ class AppRegion {
 		}
 
 		@Override
-		public void onSubRegion(final String k, final RegionImpl r)
+		public void onSubRegion(final String k, final Region r)
 				throws Finished {
 			if ("tags".equalsIgnoreCase(k))
 				app.categories = new TagsRegion(r).parse();

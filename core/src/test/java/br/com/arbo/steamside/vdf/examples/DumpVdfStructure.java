@@ -8,8 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.RegionImpl;
-import br.com.arbo.steamside.vdf.VdfImpl;
+import br.com.arbo.steamside.vdf.Region;
+import br.com.arbo.steamside.vdf.Vdf;
 
 final class DumpVdfStructure implements
 		KeyValueVisitor {
@@ -17,14 +17,14 @@ final class DumpVdfStructure implements
 	public static void main(final String[] args) throws IOException {
 		final File from = File_sharedconfig_vdf.sharedconfig_vdf();
 		final String text = FileUtils.readFileToString(from);
-		final VdfImpl vdfImpl = new VdfImpl(text);
+		final Vdf vdfImpl = new Vdf(text);
 		vdfImpl.root().accept(new DumpVdfStructure());
 	}
 
 	String indent = "";
 
 	@Override
-	public void onSubRegion(final String k, final RegionImpl r) {
+	public void onSubRegion(final String k, final Region r) {
 		System.out.println(indent + "[" + k + "]");
 		indent = indent(indent.length() + 1);
 		r.accept(this);
