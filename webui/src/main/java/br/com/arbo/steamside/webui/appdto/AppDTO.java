@@ -9,10 +9,14 @@ import br.com.arbo.steamside.types.AppId;
 @JsonAutoDetect
 public class AppDTO {
 
-	public AppDTO(final AppId appid, final AppName name) {
+	public AppDTO(
+			final AppId appid, final AppName name, final Size size,
+			final Visible visible) {
 		this.appid = appid.appid;
 		this.link = "/app/" + this.appid + "/run";
 		this.name = name.name;
+		this.size = size.name().toLowerCase();
+		this.visible = visible.name().toLowerCase();
 	}
 
 	@JsonProperty
@@ -21,4 +25,8 @@ public class AppDTO {
 	final String name;
 	@JsonProperty
 	final String link;
+	@JsonProperty
+	final String size;
+	@JsonProperty
+	final String visible;
 }

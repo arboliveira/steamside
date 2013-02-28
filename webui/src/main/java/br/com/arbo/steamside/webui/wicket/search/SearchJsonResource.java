@@ -9,10 +9,10 @@ import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
 import br.com.arbo.steamside.webui.wicket.json.JsonResource;
 
-class SearchJsonResource implements JsonResource.Needs {
+class SearchJsonResource implements JsonResource.Needs<List<AppDTO>> {
 
 	@Override
-	public Object fetchValue(final Attributes a) {
+	public List<AppDTO> fetchValue(final Attributes a) {
 		final String query = a.getParameters().get("query").toString();
 		final AppCollectionDTO results = Search.search(query);
 		final List<AppDTO> value = results.apps;

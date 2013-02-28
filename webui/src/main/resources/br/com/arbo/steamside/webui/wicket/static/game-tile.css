@@ -1,14 +1,16 @@
 .game-tile {
 	display:none;
+	background-color: snow;
 	margin: 0 0 10px 10px; 
 	border-top: 1px solid #999;
 	border-right: 2px solid #555;
 	border-bottom: 2px solid #555;
 	border-left: 1px solid #999;
-	font-family: Voces;
+	font-family: Sintony;
 }
 
 .game-tile a {
+	font-weight: normal;
 	text-decoration: none;	/* hide link underline */
 }
 
@@ -35,4 +37,20 @@
 }
 .game-tile-caption {
 	text-align: center;
+}
+
+.more-button {
+	margin: 0 0 0 40px; 
+	padding: 4px;
+	background-color: snow;
+	border-top: 1px solid #999;
+	border-right: 2px solid #555;
+	border-bottom: 2px solid #555;
+	border-left: 1px solid #999;
+	border-radius: 10px;
+	float: left;
+}
+
+.more-button a {
+	text-decoration: none;	/* hide link underline */
 }

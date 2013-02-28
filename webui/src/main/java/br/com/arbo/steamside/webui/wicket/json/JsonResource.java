@@ -6,11 +6,11 @@ import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 
 public class JsonResource extends AbstractResource {
 
-	private final Needs needs;
+	private final Needs< ? > needs;
 
-	public interface Needs {
+	public interface Needs<T> {
 
-		Object fetchValue(Attributes a);
+		T fetchValue(Attributes a);
 
 	}
 
@@ -33,7 +33,7 @@ public class JsonResource extends AbstractResource {
 		JsonUtils.write(a.getResponse().getOutputStream(), value);
 	}
 
-	public JsonResource(final Needs needs) {
+	public JsonResource(final Needs< ? > needs) {
 		this.needs = needs;
 	}
 }

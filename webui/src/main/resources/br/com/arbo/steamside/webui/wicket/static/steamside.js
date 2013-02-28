@@ -12,24 +12,26 @@ var AppCollectionView = Backbone.View.extend({
     	var vtile = this.gametileEl;
     	var vtilesEl = this.tilesEl;
     	vtilesEl.empty();
-    	var position = 0;
+
+		var hiding = true;
+		var hidden = new Object();    	
+    	
         this.collection.each( function(oneResult) {
-	        var clonedtile = vtile.clone();
-        	position++;
-        	
-        	var sizeclass = position == 1 ? 'large' : 'regular';
-	        clonedtile.addClass('game-tile-' + sizeclass);
-	        
-	        clonedtile.find('.game-name').text(oneResult.get('name'));
-	        
 	        var appid = oneResult.get('appid');
+			var name = oneResult.get('name');
+			var link = oneResult.get('link');
+			var size = oneResult.get('size');
+			var visible = oneResult.get('visible') == 'true';
 	        var img = 
 	        	'http://cdn.steampowered.com/v/gfx/apps/' 
 	        	+ appid + '/header.jpg';
+
+	        var clonedtile = vtile.clone();
+	        clonedtile.find('.game-name').text(name);
+	        clonedtile.addClass('game-tile-' + size);
 	        clonedtile.find('.game-img').attr('src', img);
-	        
 	        var link = clonedtile.find('.game-link');
-	        link.attr('href', oneResult.get('link'));
+	        link.attr('href', link);
 	        link.click(function(e) {
 	        	var jLink = $( this );
 	        	var aUrl = jLink.attr( "href" );
@@ -43,7 +45,27 @@ var AppCollectionView = Backbone.View.extend({
     		});
     		
 	        vtilesEl.append(clonedtile);
-	        clonedtile.fadeIn();
+	        if (visible) 
+	        	clonedtile.fadeIn();
+	        else
+	        	hidden[appid] = clonedtile;
         });
+
+        var button = $('#continue-more-button');
+        var morelink = button.find('.more-button-link');
+        morelink.text(hiding ? 'more...' : 'less...');
+        morelink.click(function(e) {
+        	for (index in hidden) {
+        		if (hiding) 
+        			hidden[index].fadeIn();
+        		else 
+        			hidden[index].fadeOut();
+        	}
+        	hiding = !hiding;
+	        morelink.text(hiding ? 'more...' : 'less...');
+			e.preventDefault();
+   		});
+        vtilesEl.append(button);
+        button.fadeIn();
     }
 });
