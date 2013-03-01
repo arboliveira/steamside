@@ -6,11 +6,12 @@
 	border-right: 2px solid #555;
 	border-bottom: 2px solid #555;
 	border-left: 1px solid #999;
-	font-family: Sintony;
+	font-family: "Karla";
+//	font-family: "Montserrat Alternates";
 }
 
 .game-tile a {
-	font-weight: normal;
+	font-weight: lighter;
 	text-decoration: none;	/* hide link underline */
 }
 

@@ -11,7 +11,7 @@ class AppRegion {
 		this.content = content;
 	}
 
-	public App parse() {
+	public App.Builder parse() {
 		final Hydrate hydrate = new Hydrate();
 		content.accept(hydrate);
 		return hydrate.app;
@@ -19,19 +19,22 @@ class AppRegion {
 
 	static final class Hydrate implements KeyValueVisitor {
 
-		final App app = new App();
+		final App.Builder app = new App.Builder();
 
 		@Override
 		public void onKeyValue(final String k, final String v)
 				throws Finished {
-			app.onKeyValue(k, v);
+			if ("LastPlayed".equalsIgnoreCase(k))
+				app.lastPlayed(v);
+			else if ("CloudEnabled".equalsIgnoreCase(k))
+				app.cloudEnabled(v);
 		}
 
 		@Override
 		public void onSubRegion(final String k, final Region r)
 				throws Finished {
 			if ("tags".equalsIgnoreCase(k))
-				app.categories = new TagsRegion(r).parse();
+				app.categories(new TagsRegion(r).parse());
 		}
 	}
 

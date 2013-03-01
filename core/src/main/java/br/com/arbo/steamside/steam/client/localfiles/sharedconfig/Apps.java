@@ -24,8 +24,8 @@ public class Apps {
 	}
 
 	public void accept(final AppIdVisitor visitor) {
-		for (final String id : apps.keySet())
-			visitor.each(new AppId(id));
+		for (final App app : apps.values())
+			visitor.each(app.appid());
 	}
 
 	public void accept(final AppVisitor visitor) {

@@ -23,6 +23,6 @@ public class Continue {
 
 	public List<AppDTO> fetch() {
 
-		return needs.collectionFromVdf().fetch(needs.name()).apps;
+		return needs.collectionFromVdf().fetchAll().apps;
 	}
 }

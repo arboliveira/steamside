@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.webui.wicket.json;
 
 import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.util.time.Duration;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 
@@ -18,6 +19,7 @@ public class JsonResource extends AbstractResource {
 	protected ResourceResponse newResourceResponse(final Attributes a) {
 		final ResourceResponse r = new ResourceResponse();
 		r.setContentType("application/json;charset=UTF-8");
+		r.setCacheDuration(Duration.NONE);
 		r.setWriteCallback(new WriteCallback() {
 
 			@Override

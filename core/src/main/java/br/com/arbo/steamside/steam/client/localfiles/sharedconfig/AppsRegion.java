@@ -3,7 +3,6 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 import java.util.HashMap;
 
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps.AppVisitor;
-import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 
@@ -22,7 +21,7 @@ class AppsRegion {
 
 			@Override
 			public void each(final App app) {
-				apps.put(app.appid.appid, app);
+				apps.put(app.appid().appid, app);
 			}
 
 		});
@@ -37,9 +36,10 @@ class AppsRegion {
 			public void onSubRegion(final String k, final Region r)
 					throws Finished {
 				final AppRegion appRegion = new AppRegion(r);
-				final App app = appRegion.parse();
-				app.appid = new AppId(k);
-				visitor.each(app);
+				final App.Builder app = appRegion.parse();
+				if (k == null) throw new NullPointerException();
+				app.appid(k);
+				visitor.each(app.make());
 			}
 
 			@Override

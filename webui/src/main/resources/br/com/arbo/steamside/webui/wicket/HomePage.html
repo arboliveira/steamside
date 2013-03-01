@@ -17,7 +17,8 @@ xml:lang="en" lang="en">
 		
 <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
 <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
-<link href="http://fonts.googleapis.com/css?family=Sintony:regular" rel="stylesheet" type="text/css" />
+<link href="http://fonts.googleapis.com/css?family=Montserrat+Alternates:regular" rel="stylesheet" type="text/css" />
+<link href="http://fonts.googleapis.com/css?family=Karla:regular" rel="stylesheet" type="text/css" />
 		
 <style type="text/css">
 
@@ -119,6 +120,7 @@ var SearchTextView = Backbone.View.extend({
 		var c = this.collection;
 		c.value = this.$('#input-id-text-search').val();
 		c.fetch({
+			cache: false,
 			success: function() { if (false) console.log(c.models); },
 			error: function() { console.log(arguments); }
 		});
@@ -143,7 +145,11 @@ $(document).ready(function() {
     	collection: searchresults,
     	gametileEl: gametile    	 
     });
-    recentlyplayed.fetch();
+    recentlyplayed.fetch({
+			cache: false,
+			success: function() { if (false) console.log(c.models); },
+			error: function() { console.log(arguments); }
+		});
 });			
 
 </script>

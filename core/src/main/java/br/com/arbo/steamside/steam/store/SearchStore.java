@@ -42,6 +42,7 @@ public class SearchStore {
 		final String appid = matcher.group(1);
 		final String name = StringEscapeUtils.unescapeHtml4(matcher
 				.group(2));
+		if (appid == null) throw new NullPointerException();
 		final App app = new App(new AppId(appid), new AppName(name));
 		return app;
 	}

@@ -9,6 +9,8 @@ import org.apache.wicket.request.Response;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
+import br.com.arbo.steamside.collection.CollectionFromVdf.Filter;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 import br.com.arbo.steamside.types.Category;
 
 public class RenderJson {
@@ -28,7 +30,8 @@ public class RenderJson {
 				response.getContainerResponse();
 		final ServletOutputStream outputStream = getOutputStream(httpServletResponse);
 		JsonUtils.write(outputStream,
-				this.collectionFromVdf.fetch(this.name).apps);
+				this.collectionFromVdf.fetch(
+						new FilterCategory(this.name)).apps);
 	}
 
 	private static ServletOutputStream getOutputStream(
@@ -38,6 +41,21 @@ public class RenderJson {
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	static class FilterCategory implements Filter {
+
+		private final Category category;
+
+		FilterCategory(final Category category) {
+			this.category = category;
+		}
+
+		@Override
+		public boolean pass(final App app) {
+			return app.isInCategory(category);
+		}
+
 	}
 
 }
