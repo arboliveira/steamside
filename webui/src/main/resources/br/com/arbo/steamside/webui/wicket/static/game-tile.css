@@ -1,13 +1,24 @@
+.game-row {
+	display:none;
+	float: right;
+	clear: both;
+	width: 100%;
+}
+
+.game-cell {
+	display:none;
+	float: left;
+}
+
 .game-tile {
 	display:none;
 	background-color: snow;
-	margin: 0 0 10px 10px; 
+	margin: 5px; 
 	border-top: 1px solid #999;
 	border-right: 2px solid #555;
 	border-bottom: 2px solid #555;
 	border-left: 1px solid #999;
 	font-family: "Karla";
-//	font-family: "Montserrat Alternates";
 }
 
 .game-tile a {
@@ -16,14 +27,12 @@
 }
 
 .game-tile-large {
-	float: left; 
-	width: 38%;
+	/* */
 }
 
 .game-tile-regular {
-	float: right; 
-	width: 28%;
 	font-size: 75%;
+	float: right; 
 }
 
 .game-tile-inner {
@@ -42,14 +51,13 @@
 
 .more-button {
 	margin: 0 0 0 40px; 
-	padding: 4px;
+	padding: 2px;
 	background-color: snow;
-	border-top: 1px solid #999;
-	border-right: 2px solid #555;
-	border-bottom: 2px solid #555;
-	border-left: 1px solid #999;
-	border-radius: 10px;
-	float: left;
+	border: 1px solid #999;
+	border-radius: 5px;
+	float: right;
+	font-family: "Karla";
+	font-size: x-small;
 }
 
 .more-button a {

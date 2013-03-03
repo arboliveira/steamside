@@ -19,12 +19,51 @@ xml:lang="en" lang="en">
 <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
 <link href="http://fonts.googleapis.com/css?family=Montserrat+Alternates:regular" rel="stylesheet" type="text/css" />
 <link href="http://fonts.googleapis.com/css?family=Karla:regular" rel="stylesheet" type="text/css" />
+<link href="http://fonts.googleapis.com/css?family=Jura:regular, bold" rel="stylesheet" type="text/css" />
 		
 <style type="text/css">
 
-
-
 /* ----- */
+
+.page-header {
+	
+}
+
+.page-header-logo {
+//	line-height:40px;
+	float:left;
+}
+
+.page-header-name {
+//	line-height:40px;
+	float:left;
+	margin-left: 10px;
+	margin-right: 10px;
+	font-family: Jura; 
+	font-weight: bold;
+	font-size: 2em;
+	color: darkred;
+	/*
+	text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 20px #fde235;
+	*/
+}
+
+.page-header-navigation-bar ul {
+	display: table;
+	list-style:none;
+	width: 65%;
+	float: right;
+}
+
+.page-header-navigation-bar li {
+	display: table-cell;
+	text-align: center;
+	font-family: Arvo; 
+}
+
+.page-header-separator {
+	clear: both;
+}
 
 .container {
 	margin: 10px auto;
@@ -38,13 +77,14 @@ xml:lang="en" lang="en">
 }
 
 .content-at-left {
-	margin-right: 120px;
+	margin-right: 0px;
 	float: left;
+	width: 85%;
 }
 
 .content-at-right {
 	margin-left: 150px;
-//	float: right;  // this pushes content down somehow :-p
+/*	float: right;  // this pushes content down somehow :-p */
 }
 
 .side-header-at-left {
@@ -62,8 +102,6 @@ xml:lang="en" lang="en">
 
 .side-header-paragraph { 
 	margin: 0 0 0.6em 0; 
-//	-webkit-transform: rotate(-5deg);
-//	-moz-transform: rotate(-5deg);
 }
 
 .side-text { font-family: Arvo; font-size: 28px; font-weight: bold; color: darkred; }
@@ -128,12 +166,16 @@ var SearchTextView = Backbone.View.extend({
 });
 
 $(document).ready(function() {
+	var gamerow = $('#game-row');
+	var gamecell = $('#game-cell');
 	var gametile = $('#game-tile');
 	var recentlyplayed = new RecentlyPlayed();
     var searchresults = new GameCollection();
     new AppCollectionView({ 
     	el: $('#recently-played'), 
     	collection: recentlyplayed,
+    	gamerowEl: gamerow,
+    	gamecellEl: gamecell,
     	gametileEl: gametile    	 
     });
     new SearchTextView({ 
@@ -143,13 +185,16 @@ $(document).ready(function() {
     new AppCollectionView({ 
     	el: $('#div-id-search-results'), 
     	collection: searchresults,
+    	gamerowEl: gamerow,
+    	gamecellEl: gamecell,
     	gametileEl: gametile    	 
     });
     recentlyplayed.fetch({
 			cache: false,
 			success: function() { if (false) console.log(c.models); },
 			error: function() { console.log(arguments); }
-		});
+	});
+	$("#input-id-text-search").focus();	
 });			
 
 </script>
@@ -159,25 +204,36 @@ $(document).ready(function() {
 </head>
 <body>
 <!-- ----------------------------------------------------------------------- -->
+		
 
-<div id="game-tile" class="game-tile">
-	<a class="game-link" href="">
-	<div class="game-tile-inner">
-		<img class="game-img" src="game.jpg" />
-		<div class="game-tile-caption">
-			<big><strong>
-			<span class="game-name">Search result</span>
-			</strong></big>
-		</div>
+<div class="page-header">
+	<div class="page-header-logo">
+		<img src="static/steamside.png" height="45" width="45" />
 	</div>
-	</a>
+	<div class="page-header-name">
+		 SteamSide
+	</div>
+	<div class="page-header-navigation-bar">
+		<ul>
+		<li>
+		My games
+		</li>
+		<li>
+		Steam Store
+		</li>
+		<li>
+		Steam Client
+		</li>
+		<li>
+		About
+		</li>
+		</ul>
+	</div>
 </div>
 
-		
-		
+<div class="page-header-separator">
 
-<!-- -->
-
+</div>
 
 <div class="container">
 
@@ -229,9 +285,10 @@ $(document).ready(function() {
 		<div id="div-id-search-text">
 			<form action="">
 				<input type="text" name="text-search" id="input-id-text-search"
-					style="width: 50%; font-size:24px; "/>
+					style="width: 85%; font-size:24px; "/>
 	        	<input type="submit" value="Search"/>
 	      	</form>
+	      	<span id="search-hint" class="search-hint">Press Enter to continue playing Team Fortress 2</span>
 	    </div>
 	
 	    <div id="div-id-search-results">
@@ -320,6 +377,30 @@ $(document).ready(function() {
 
 <div id="ft">
 </div>
+		
+
+
+<!-- GAME GRID COMPONENTS BEGIN -->		
+		
+<div id="game-row" class="game-row">
+</div>
+<div id="game-cell" class="game-cell">
+</div>
+<div id="game-tile" class="game-tile">
+	<div class="game-tile-inner">
+		<a class="game-link" href="">
+		<img class="game-img" src="game.jpg" />
+		<div class="game-tile-caption">
+			<big><strong>
+			<span class="game-name">Search result</span>
+			</strong></big>
+		</div>
+		</a>
+	</div>
+</div>
+
+<!-- GAME GRID COMPONENTS END -->		
+		
 		
 		
 <!-- ----------------------------------------------------------------------- -->

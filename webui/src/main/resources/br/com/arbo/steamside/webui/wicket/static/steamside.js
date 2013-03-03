@@ -1,20 +1,35 @@
 var AppCollectionView = Backbone.View.extend({
+	gamerowEl: null,
+	gamecellEl: null,
 	gametileEl: null,
 	tilesEl: null,
 
     initialize: function() {
+    	this.gamerowEl = this.options.gamerowEl;
+    	this.gamecellEl = this.options.gamecellEl;
     	this.gametileEl = this.options.gametileEl;
     	this.tilesEl = this.$('.game-tiles');
         this.collection.on('reset', this.render, this);
     },
 
     render: function() {
+    	var xcells = 3;
+    	var largewidth = 40;
+    	var regularwidth = 30;
+    	var fillerwidth = 100 - xcells * regularwidth;
+    
+    	var vrow = this.gamerowEl;
+    	var vcell = this.gamecellEl;
     	var vtile = this.gametileEl;
     	var vtilesEl = this.tilesEl;
     	vtilesEl.empty();
 
 		var hiding = true;
 		var hidden = new Object();    	
+
+		var rown = 0;    	
+    	var celln = 0;
+    	var rowsep = null;
     	
         this.collection.each( function(oneResult) {
 	        var appid = oneResult.get('appid');
@@ -25,6 +40,30 @@ var AppCollectionView = Backbone.View.extend({
 	        var img = 
 	        	'http://cdn.steampowered.com/v/gfx/apps/' 
 	        	+ appid + '/header.jpg';
+
+			var cell = vcell.clone();
+			var cellwidth;
+
+			celln++;
+			if (celln == 1) {
+				rown++;
+				if (rown == 1) { 
+					cellwidth = largewidth;
+				} else {
+					rowsep = vrow.clone();
+					rowsep.show();
+					vtilesEl.append(rowsep);
+					var filler = vcell.clone();
+					filler.html('&nbsp;');
+					filler.width("" + fillerwidth + "%");
+					filler.show();
+					vtilesEl.append(filler);
+					cellwidth = regularwidth;
+				}
+			} else {
+				cellwidth = regularwidth;
+				if (celln == xcells) celln = 0;
+			}
 
 	        var clonedtile = vtile.clone();
 	        clonedtile.find('.game-name').text(name);
@@ -43,8 +82,17 @@ var AppCollectionView = Backbone.View.extend({
 				);
 				e.preventDefault();
     		});
-    		
+
+	if (true) {
+			cell.width("" + cellwidth + "%");
+    		cell.append(clonedtile);
+	        vtilesEl.append(cell);
+			cell.show();
+	    } else {
+			clonedtile.width("" + cellwidth + "%");
 	        vtilesEl.append(clonedtile);
+	    }
+	        
 	        if (visible) 
 	        	clonedtile.fadeIn();
 	        else
