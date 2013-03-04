@@ -5,24 +5,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import br.com.arbo.steamside.types.AppId;
+public class SteamBrowserProtocolLaunch {
 
-public class RunGameId {
-
-	private final AppId appid;
-
-	public RunGameId(final AppId appid) {
-		this.appid = appid;
-	}
-
-	public void run() {
+	public static void launch(final Command command) {
+		final String str = "steam://" + command.command();
 		try {
-			Desktop.getDesktop().browse(
-					new URI("steam://rungameid/" + appid.appid));
+			Desktop.getDesktop().browse(new URI(str));
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		} catch (final URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
+
 	}
 }

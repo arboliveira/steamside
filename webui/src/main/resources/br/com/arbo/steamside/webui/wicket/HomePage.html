@@ -3,9 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" 
 xml:lang="en" lang="en">
-<head>
+<head profile="http://www.w3.org/2005/10/profile">
 <!-- ----------------------------------------------------------------------- -->
 <title>SteamSide</title>
+
+<link rel="icon" 
+      type="image/png" 
+      href="static/steamside.png"/>
 
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 
@@ -63,6 +67,7 @@ xml:lang="en" lang="en">
 
 .page-header-separator {
 	clear: both;
+	border-top: 1px dotted lightgray;
 }
 
 .container {
@@ -166,11 +171,27 @@ var SearchTextView = Backbone.View.extend({
 });
 
 $(document).ready(function() {
+
+	        $('#nav-steam-client').click(function(e) {
+	        	var jLink = $( this );
+	        	var aUrl = jLink.attr( "href" );
+	        	alert(aUrl);
+				$.ajax(
+					{
+						url: aUrl
+					}
+				);
+				e.preventDefault();
+    		});
+	
+	
+	
 	var gamerow = $('#game-row');
 	var gamecell = $('#game-cell');
 	var gametile = $('#game-tile');
 	var recentlyplayed = new RecentlyPlayed();
     var searchresults = new GameCollection();
+    
     new AppCollectionView({ 
     	el: $('#recently-played'), 
     	collection: recentlyplayed,
@@ -178,10 +199,12 @@ $(document).ready(function() {
     	gamecellEl: gamecell,
     	gametileEl: gametile    	 
     });
+    
     new SearchTextView({ 
     	el: $('#div-id-search-text'), 
     	collection: searchresults
     });
+    
     new AppCollectionView({ 
     	el: $('#div-id-search-results'), 
     	collection: searchresults,
@@ -189,11 +212,13 @@ $(document).ready(function() {
     	gamecellEl: gamecell,
     	gametileEl: gametile    	 
     });
+    
     recentlyplayed.fetch({
 			cache: false,
 			success: function() { if (false) console.log(c.models); },
 			error: function() { console.log(arguments); }
 	});
+	
 	$("#input-id-text-search").focus();	
 });			
 
@@ -219,10 +244,10 @@ $(document).ready(function() {
 		My games
 		</li>
 		<li>
-		Steam Store
+		<a href="http://steampowered.com" target="_blank">Steam Store</a>
 		</li>
 		<li>
-		Steam Client
+		<a id="nav-steam-client" href="steamclient/open/main">Steam Client</a>
 		</li>
 		<li>
 		About

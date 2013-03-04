@@ -69,9 +69,9 @@ var AppCollectionView = Backbone.View.extend({
 	        clonedtile.find('.game-name').text(name);
 	        clonedtile.addClass('game-tile-' + size);
 	        clonedtile.find('.game-img').attr('src', img);
-	        var link = clonedtile.find('.game-link');
-	        link.attr('href', link);
-	        link.click(function(e) {
+	        var gamelink = clonedtile.find('.game-link');
+	        gamelink.attr('href', link);
+	        gamelink.click(function(e) {
 	        	var jLink = $( this );
 	        	var aUrl = jLink.attr( "href" );
 	        	alert(aUrl);
