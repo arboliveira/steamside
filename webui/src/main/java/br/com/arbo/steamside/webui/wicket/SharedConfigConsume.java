@@ -12,7 +12,7 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_shared
 
 public class SharedConfigConsume {
 
-	SharedConfigConsume() {
+	public SharedConfigConsume() {
 		this.executor = Executors.newFixedThreadPool(1,
 				new DaemonThreadFactory(this));
 		consume();
