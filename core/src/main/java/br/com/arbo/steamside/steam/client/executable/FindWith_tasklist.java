@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steam.client.kill;
+package br.com.arbo.steamside.steam.client.executable;
 
 import java.io.IOException;
 import java.io.InputStream;

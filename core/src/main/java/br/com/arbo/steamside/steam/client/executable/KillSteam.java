@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steam.client.kill;
+package br.com.arbo.steamside.steam.client.executable;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.jvnet.winp.WinProcess;

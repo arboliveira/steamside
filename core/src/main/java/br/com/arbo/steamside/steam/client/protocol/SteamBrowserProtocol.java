@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import br.com.arbo.steamside.steam.client.kill.KillSteam;
+import br.com.arbo.steamside.steam.client.executable.KillSteam;
 
-public class SteamBrowserProtocolLaunch {
+public class SteamBrowserProtocol {
 
 	public static void launch(final Command command) {
 		killSteamIfAlreadyRunningInADifferentUserSession();

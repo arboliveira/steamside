@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.kill.examples;
 
-import br.com.arbo.steamside.steam.client.kill.KillSteam;
+import br.com.arbo.steamside.steam.client.executable.KillSteam;
 
 public class KillSteamNow {
 
