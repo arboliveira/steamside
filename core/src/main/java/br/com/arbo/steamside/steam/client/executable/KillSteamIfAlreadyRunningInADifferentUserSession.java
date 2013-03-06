@@ -3,9 +3,12 @@ package br.com.arbo.steamside.steam.client.executable;
 import org.apache.commons.lang3.SystemUtils;
 import org.jvnet.winp.WinProcess;
 
-public class KillSteam {
+public class KillSteamIfAlreadyRunningInADifferentUserSession {
 
-	public static void kill() {
+	@SuppressWarnings("static-method")
+	public void confirm() {
+		if (!SystemUtils.IS_OS_WINDOWS) return;
+
 		final String myusername = SystemUtils.USER_NAME;
 
 		WinProcess.enableDebugPrivilege();

@@ -2,9 +2,9 @@ package br.com.arbo.steamside.webui.wicket;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.picocontainer.MutablePicoContainer;
 
-import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
@@ -20,22 +20,20 @@ import br.com.arbo.steamside.webui.wicket.steamclient.SteamClientPage;
 public class WicketApplication extends WebApplication
 {
 
-	private final AppNameFactory appNameFactory =
-			new AppNameFromLocalFiles(new InMemory_appinfo_vdf());
+	public static WicketApplication get() {
+		return (WicketApplication) WebApplication.get();
+	}
 
-	private final SharedConfigConsume sharedconfig =
-			new SharedConfigConsume();
+	public SteamBrowserProtocol getSteamBrowserProtocol() {
+		return this.container.getComponent(SteamBrowserProtocol.class);
+	}
 
 	public AppNameFactory appNameFactory() {
-		return appNameFactory;
+		return this.container.getComponent(AppNameFactory.class);
 	}
 
 	public SharedConfigConsume sharedconfig() {
-		return sharedconfig;
-	}
-
-	public static WicketApplication get() {
-		return (WicketApplication) WebApplication.get();
+		return this.container.getComponent(SharedConfigConsume.class);
 	}
 
 	/**
@@ -57,11 +55,10 @@ public class WicketApplication extends WebApplication
 
 		mountResource(
 				"/search.json",
-				new SearchJson());
+				container.getComponent(SearchJson.class));
 		mountResource(
 				"/continue.json",
-				new ContinueJson(
-						new ContinueNeedsImpl(appNameFactory, sharedconfig)));
+				container.getComponent(ContinueJson.class));
 
 		mountPage(
 				"/app" +
@@ -79,4 +76,11 @@ public class WicketApplication extends WebApplication
 						"/#{" + SteamClientPage.PARAM_argument + "}",
 				SteamClientPage.class);
 	}
+
+	public WicketApplication() {
+		this.container = ContainerFactory.newContainer();
+	}
+
+	private final MutablePicoContainer container;
+
 }

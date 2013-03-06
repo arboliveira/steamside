@@ -8,7 +8,11 @@ public class EmptyTextTemplate extends TextTemplate {
 
 	@Override
 	public String getString() {
-		return "";
+		return
+		"<html>" +
+				"<head><title>SteamSide</title></head>" +
+				"<body><p>SteamSide, your companion on Steam</p></body>" +
+				"</html>";
 	}
 
 	@Override

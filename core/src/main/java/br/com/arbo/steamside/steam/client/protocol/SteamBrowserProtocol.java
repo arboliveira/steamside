@@ -5,27 +5,50 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import br.com.arbo.steamside.steam.client.executable.KillSteam;
+import org.apache.commons.lang3.SystemUtils;
+
+import br.com.arbo.steamside.steam.client.executable.KillSteamIfAlreadyRunningInADifferentUserSession;
 
 public class SteamBrowserProtocol {
 
-	public static void launch(final Command command) {
-		killSteamIfAlreadyRunningInADifferentUserSession();
-		launchSteam(command);
+	private final KillSteamIfAlreadyRunningInADifferentUserSession clearance;
+
+	public SteamBrowserProtocol(
+			final KillSteamIfAlreadyRunningInADifferentUserSession clearance) {
+		this.clearance = clearance;
 	}
 
-	private static void launchSteam(final Command command) {
-		final String str = "steam://" + command.command();
+	public void launch(final Command command) {
+		clearance.confirm();
+		executeURL(command.command());
+	}
+
+	private static void executeURL(final String command) {
+		final String str = "steam://" + command;
 		try {
 			Desktop.getDesktop().browse(new URI(str));
 		} catch (final IOException e) {
-			throw new RuntimeException(e);
+			if (isCandidateForLinuxAlternative(str, e))
+				attemptLinuxAlternative(str);
+			else
+				throw new RuntimeException(e);
 		} catch (final URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private static void killSteamIfAlreadyRunningInADifferentUserSession() {
-		KillSteam.kill();
+	private static boolean isCandidateForLinuxAlternative(
+			final String str, final IOException e) {
+		if (!e.getMessage().equals("Failed to show URI:" + str)) return false;
+		if (!SystemUtils.IS_OS_LINUX) return false;
+		return true;
+	}
+
+	private static void attemptLinuxAlternative(final String str) {
+		try {
+			new ProcessBuilder("xdg-open", str).start();
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

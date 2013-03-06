@@ -4,7 +4,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import br.com.arbo.org.apache.wicket.markup.html.pages.EmptyPage;
 import br.com.arbo.steamside.steam.client.protocol.C_open_main;
-import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
+import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
 public class SteamClientPage extends EmptyPage {
 
@@ -17,7 +17,12 @@ public class SteamClientPage extends EmptyPage {
 		final String command = p.get(PARAM_command).toString();
 		final String argument = p.get(PARAM_argument).toString();
 		if (equalsCommand("open", command) && equalsCommand("main", argument))
-			SteamBrowserProtocol.launch(new C_open_main());
+			c_open_main();
+	}
+
+	private static void c_open_main() {
+		WicketApplication.get().getSteamBrowserProtocol()
+				.launch(new C_open_main());
 	}
 
 	private static boolean equalsCommand(final String string,

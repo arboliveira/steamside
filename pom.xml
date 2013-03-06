@@ -15,6 +15,11 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.picocontainer</groupId>
+				<artifactId>picocontainer</artifactId>
+				<version>2.14.2</version>
+			</dependency>
+			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
 				<version>1.2.13</version>
@@ -54,8 +59,8 @@
 					<artifactId>exec-maven-plugin</artifactId>
 					<version>1.2.1</version>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It 
-					has no influence on the Maven build itself. -->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
