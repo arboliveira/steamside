@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.app.main;
 
+import br.com.arbo.steamside.opersys.username.UsernameFromJava;
+
 public class Main {
 
 	private final ContainerFactory factory;
@@ -9,7 +11,8 @@ public class Main {
 	}
 
 	public static void main(final String[] args) throws Exception {
-		new Main(new ContainerFactory(new JettyCallback())).start();
+		new Main(new ContainerFactory(
+				new UsernameFromJava(), new JettyCallback())).start();
 	}
 
 	public void start() {

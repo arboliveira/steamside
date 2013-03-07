@@ -4,6 +4,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.picocontainer.MutablePicoContainer;
 
+import br.com.arbo.steamside.opersys.username.Username;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
@@ -19,6 +20,8 @@ import br.com.arbo.steamside.webui.wicket.steamclient.SteamClientPage;
  */
 public class WicketApplication extends WebApplication
 {
+
+	public static Username nextUsername;
 
 	public static WicketApplication get() {
 		return (WicketApplication) WebApplication.get();
@@ -78,7 +81,8 @@ public class WicketApplication extends WebApplication
 	}
 
 	public WicketApplication() {
-		this.container = ContainerFactory.newContainer();
+		this.container = ContainerFactory.newContainer(nextUsername);
+		nextUsername = null;
 	}
 
 	private final MutablePicoContainer container;

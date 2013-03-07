@@ -6,6 +6,7 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import br.com.arbo.steamside.continues.Continue;
+import br.com.arbo.steamside.opersys.username.Username;
 import br.com.arbo.steamside.steam.client.executable.KillSteamIfAlreadyRunningInADifferentUserSession;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf;
@@ -17,7 +18,7 @@ import br.com.arbo.steamside.webui.wicket.search.SearchJson;
 
 public class ContainerFactory {
 
-	static MutablePicoContainer newContainer() {
+	static MutablePicoContainer newContainer(final Username username) {
 		final MutablePicoContainer container = new PicoBuilder()
 				.withCaching()
 				.withLifecycle()
@@ -26,6 +27,7 @@ public class ContainerFactory {
 		container.setName("WicketApplication");
 		container.change(CACHE);
 		container
+				.addComponent(Username.class, username)
 				.addComponent(
 						KillSteamIfAlreadyRunningInADifferentUserSession.class)
 				.addComponent(SteamBrowserProtocol.class)

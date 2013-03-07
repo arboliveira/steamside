@@ -14,16 +14,27 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.picocontainer.Startable;
 
+import br.com.arbo.steamside.app.port.Port;
+import br.com.arbo.steamside.opersys.username.Username;
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
 public class Jetty implements Startable {
 
-	public Jetty(final Callback callback) {
+	private final Port port;
+
+	private final Username username;
+
+	public Jetty(final Port port, final Username username,
+			final Callback callback) {
+		this.port = port;
+		this.username = username;
 		this.callback = callback;
 	}
 
 	@Override
 	public void start() {
+		final int portInUse = port.port();
+
 		final Server server = new Server();
 
 		/* Setup server (port, etc.) */
@@ -32,7 +43,7 @@ public class Jetty implements Startable {
 		// Set some timeout options to make debugging easier.
 		connector.setMaxIdleTime(1000 * 60 * 60);
 		connector.setSoLingerTime(-1);
-		connector.setPort(PORT);
+		connector.setPort(portInUse);
 		server.setConnectors(new Connector[] { connector });
 
 		/* END Setup server (port, etc.) */
@@ -41,10 +52,13 @@ public class Jetty implements Startable {
 				ServletContextHandler.SESSIONS);
 
 		final ServletHolder sh = new ServletHolder(WicketServlet.class);
+
+		WicketApplication.nextUsername = username;
 		final Class<WicketApplication> classWicketApplication = WicketApplication.class;
 		sh.setInitParameter(
 				ContextParamWebApplicationFactory.APP_CLASS_PARAM,
 				classWicketApplication.getName());
+
 		sh.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
 		/* Define a variable DEV_MODE and set to false
 		 * if wicket should be used in deployment mode
@@ -68,13 +82,13 @@ public class Jetty implements Startable {
 		server.setHandler(sch);
 
 		Instructions.starting();
-		doStart(server);
+		doStart(server, portInUse);
 	}
 
-	private void doStart(final Server server) {
+	private void doStart(final Server server, final int portInUse) {
 		try {
 			server.start();
-			started();
+			started(portInUse);
 			while (System.in.available() == 0)
 				Thread.sleep(5000);
 			server.stop();
@@ -86,9 +100,9 @@ public class Jetty implements Startable {
 		}
 	}
 
-	private void started() {
-		Instructions.started(PORT);
-		callback.started(PORT);
+	private void started(final int portInUse) {
+		Instructions.started(portInUse);
+		callback.started(portInUse);
 	}
 
 	private static String parent_of_static(
@@ -99,8 +113,6 @@ public class Jetty implements Startable {
 	}
 
 	private final Callback callback;
-
-	private static final int PORT = 42424;
 
 	static boolean DEV_MODE = true;
 
