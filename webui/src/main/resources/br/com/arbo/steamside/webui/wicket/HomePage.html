@@ -30,16 +30,15 @@ xml:lang="en" lang="en">
 /* ----- */
 
 .page-header {
-	
+	margin: 0px auto;
+	padding: 0px;
 }
 
 .page-header-logo {
-//	line-height:40px;
 	float:left;
 }
 
 .page-header-name {
-//	line-height:40px;
 	float:left;
 	margin-left: 10px;
 	margin-right: 10px;
@@ -47,9 +46,6 @@ xml:lang="en" lang="en">
 	font-weight: bold;
 	font-size: 2em;
 	color: darkred;
-	/*
-	text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 20px #fde235;
-	*/
 }
 
 .page-header-navigation-bar ul {
@@ -67,18 +63,31 @@ xml:lang="en" lang="en">
 
 .page-header-separator {
 	clear: both;
-	border-top: 1px dotted lightgray;
+	border: 1px dotted lightgray;
+	height: 0px;
 }
 
 .container {
+	background-color: PaleTurquoise ;
 	margin: 10px auto;
+	border: 1px;
+	border-top: 1px;
+	border-left: 1px;
+	border-style: outset;
+	border-color: navy;
+	border-bottom-color: khaki;
 }
 
 .side-header {
-	width: 90px;
+	width: 80px;
 	margin: 0;
 	padding: 0.8em;
-	border-bottom: 2px solid gray;
+	padding-top: 0.6em;
+	padding-bottom: 0.4em;
+}
+
+.content {
+	padding: 10px;
 }
 
 .content-at-left {
@@ -88,7 +97,9 @@ xml:lang="en" lang="en">
 }
 
 .content-at-right {
-	margin-left: 150px;
+	margin-left: 106px;
+	padding-left: 20px;
+	border-left: 1px solid gray;
 /*	float: right;  // this pushes content down somehow :-p */
 }
 
@@ -104,24 +115,41 @@ xml:lang="en" lang="en">
 	border-left: 1px solid gray;
 }
 
-
 .side-header-paragraph { 
-	margin: 0 0 0.6em 0; 
+	margin: 0 0 0.6em 0;
 }
 
-.side-text { font-family: Arvo; font-size: 14px; font-weight: bold; color: darkred; }
+.side-text { font-family: Arvo; font-size: 20px; font-weight: bold; color: darkred; }
 
 .side-text-at-left  {text-shadow: -0.2em 0.2em 0.2em gray}
 .side-text-at-right {text-shadow: 0.2em 0.2em 0.2em gray}
 
-.footer {
-	clear: both;
-	margin: 0;
-	padding: .3em;
-	border-top: 2px ridge silver;
+.side-links { 
+	font-size: x-small;
+	font-family: sans;
+	margin-top: 1.5em; 
+	margin-bottom: 0em;
+}
+.side-links a {
+	text-decoration: none;	/* hide link underline */
 }
 
+.footer {
+	clear: both;
+	margin: 0px;
+	padding: 0px;
+	height: 0px;
+}
 
+.command-button {
+	font-family: monospace;
+	font-size: x-small;
+}
+
+.command-hint {
+	font-family: sans;
+	font-size: x-small;
+}
 
 
 </style>
@@ -227,7 +255,7 @@ $(document).ready(function() {
 
 <!-- ----------------------------------------------------------------------- -->
 </head>
-<body>
+<body style="background-color: White;">
 <!-- ----------------------------------------------------------------------- -->
 		
 
@@ -254,9 +282,10 @@ $(document).ready(function() {
 		</li>
 		</ul>
 	</div>
+	<div class="page-header-separator">
+
 </div>
 
-<div class="page-header-separator">
 
 </div>
 
@@ -265,12 +294,14 @@ $(document).ready(function() {
 	<div class="side-header side-header-at-left">
 		<p class="side-header-paragraph">
 			<span class="side-text side-text-at-left">
-			Continue<br/>
+			Con<br/>
+			tinue<br/>
 			</span>
 		</p>
+		<p class="side-links"><a href="">Play stats</a></p>
 	</div>
 
-	<div class="content-at-right">
+	<div class="content content-at-right">
 	    <div class="game-collection" id="recently-played">
 	      	<div class="game-tiles" style="float:right">
 			</div>
@@ -280,12 +311,11 @@ $(document).ready(function() {
 				</a>
 			</div>
 	    </div>
+	    <div class="footer">
+	    </div>
 	</div>
 
 	<div class="footer">
-	<!-- 
-		(footer)
-	 -->
 	</div>
 	
 </div>
@@ -299,19 +329,22 @@ $(document).ready(function() {
 		<p class="side-header-paragraph">
 			<span class="side-text side-text-at-right">
 			Search<br/>
+			&amp; do
 			</span>
 		</p>
+		<p class="side-links"><a href="">Advanced</a></p>
 	</div>
 
-	<div class="content-at-left">
+	<div class="content content-at-left">
 
 		<div id="div-id-search-text">
 			<form action="">
 				<input type="text" name="text-search" id="input-id-text-search"
 					style="width: 85%; font-size:24px; "/>
-	        	<input type="submit" value="Search"/>
+				<br/>
+	        	<input class="command-button"  type="submit" value="Enter"/> <span id="command-hint" class="command-hint"> continue Windosill</span>&nbsp;&nbsp;
+	        	<input class="command-button"  type="submit" value="Ctrl+Enter"/> <span id="command-hint" class="command-hint">Windosill community hub</span>
 	      	</form>
-	      	<span id="search-hint" class="search-hint">Press Enter to continue playing Team Fortress 2</span>
 	    </div>
 	
 	    <div id="div-id-search-results">
@@ -322,9 +355,6 @@ $(document).ready(function() {
 	</div>
 
 	<div class="footer">
-	<!-- 
-		(footer)
-	 -->
 	</div>
 	
 </div>
@@ -337,24 +367,20 @@ $(document).ready(function() {
 	<div class="side-header side-header-at-left">
 		<p class="side-header-paragraph">
 			<span class="side-text side-text-at-left">
-			Favorites<br/>
+			Favor<br/>
+			ites<br/>
 			</span>
 		</p>
-		<!-- 
-		<p>more...</p>
-		 -->
+		<p class="side-links"><a href="">Switch...</a></p>
 	</div>
 
-	<div class="content-at-right">
+	<div class="content content-at-right">
 
 		<a href="collection/favorite/">Favorites</a>
 
 	</div>
 
 	<div class="footer">
-	<!-- 
-		(footer)
-	 -->
 	</div>
 	
 </div>
@@ -368,19 +394,18 @@ $(document).ready(function() {
 	<div class="side-header side-header-at-right">
 		<p class="side-header-paragraph">
 			<span class="side-text side-text-at-right">
-			Collections<br/>
+			Collec<br/>
+			tions<br/>
 			</span>
 		</p>
+		<p class="side-links"><a href="">Explore</a></p>
 	</div>
 
-	<div class="content-at-left">
+	<div class="content content-at-left">
 		<p><span wicket:id="number-of-games">101</span> owned</p>
 	</div>
 
 	<div class="footer">
-	<!-- 
-		(footer)
-	 -->
 	</div>
 	
 </div>
@@ -410,7 +435,7 @@ $(document).ready(function() {
 <div id="game-tile" class="game-tile">
 	<div class="game-tile-inner">
 		<a class="game-link" href="">
-		<img class="game-img" src="game.jpg" />
+		<img class="game-img" src="" />
 		<div class="game-tile-caption">
 			<big><strong>
 			<span class="game-name">Search result</span>
