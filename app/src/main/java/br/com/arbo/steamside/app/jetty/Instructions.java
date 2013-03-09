@@ -2,6 +2,8 @@ package br.com.arbo.steamside.app.jetty;
 
 import org.apache.log4j.Logger;
 
+import br.com.arbo.steamside.app.port.Port;
+
 final class Instructions {
 
 	Logger getLogger() {
@@ -15,11 +17,11 @@ final class Instructions {
 
 	private static final Logger instructions = new Instructions().getLogger();
 
-	public static void started(int PORT) {
+	public static void started(final Port PORT) {
 		instructions
 				.info(">>> STARTED EMBEDDED JETTY SERVER, PRESS ENTER TO STOP");
 		instructions.info(">>> TO USE THE WEBSITE, NAVIGATE TO: "
-				+ "http://localhost:" + PORT);
+				+ "http://localhost:" + PORT.port);
 	}
 
 }

@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.app.jetty;
 
+import java.net.BindException;
 import java.net.URL;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,28 +13,24 @@ import org.eclipse.jetty.server.bio.SocketConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.picocontainer.Startable;
 
 import br.com.arbo.steamside.app.port.Port;
+import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 import br.com.arbo.steamside.opersys.username.Username;
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
-public class Jetty implements Startable {
-
-	private final Port port;
+public class Jetty implements LocalWebserver {
 
 	private final Username username;
 
-	public Jetty(final Port port, final Username username,
-			final Callback callback) {
-		this.port = port;
+	public Jetty(final Username username) {
 		this.username = username;
-		this.callback = callback;
 	}
 
 	@Override
-	public void start() {
-		final int portInUse = port.port();
+	public void launch(final int port) throws PortAlreadyInUse {
+		final int portToUse = port;
+		final Port portInUse = new Port(port);
 
 		final Server server = new Server();
 
@@ -43,7 +40,7 @@ public class Jetty implements Startable {
 		// Set some timeout options to make debugging easier.
 		connector.setMaxIdleTime(1000 * 60 * 60);
 		connector.setSoLingerTime(-1);
-		connector.setPort(portInUse);
+		connector.setPort(portToUse);
 		server.setConnectors(new Connector[] { connector });
 
 		/* END Setup server (port, etc.) */
@@ -82,17 +79,22 @@ public class Jetty implements Startable {
 		server.setHandler(sch);
 
 		Instructions.starting();
-		doStart(server, portInUse);
+		doStart(server);
+		xtWaitForUserToPressEnterAndStop(server);
+		Instructions.started(portInUse);
 	}
 
-	private void doStart(final Server server, final int portInUse) {
+	private static void xtWaitForUserToPressEnterAndStop(final Server server) {
+		new Thread(
+				new WaitForUserToPressEnterAndStop(server),
+				"Press Enter to end SteamSide").start();
+	}
+
+	private static void doStart(final Server server) {
 		try {
 			server.start();
-			started(portInUse);
-			while (System.in.available() == 0)
-				Thread.sleep(5000);
-			server.stop();
-			server.join();
+		} catch (final BindException e) {
+			throw new PortAlreadyInUse(e);
 		} catch (final RuntimeException e) {
 			throw e;
 		} catch (final Exception e) {
@@ -100,9 +102,26 @@ public class Jetty implements Startable {
 		}
 	}
 
-	private void started(final int portInUse) {
-		Instructions.started(portInUse);
-		callback.started(portInUse);
+	static class WaitForUserToPressEnterAndStop implements Runnable {
+
+		private final Server server;
+
+		WaitForUserToPressEnterAndStop(final Server server) {
+			this.server = server;
+		}
+
+		@Override
+		public void run() {
+			try {
+				System.in.read();
+				server.stop();
+				server.join();
+			} catch (final RuntimeException e) {
+				throw e;
+			} catch (final Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	private static String parent_of_static(
@@ -112,13 +131,6 @@ public class Jetty implements Startable {
 		return StringUtils.replaceChars(packagename, '.', '/');
 	}
 
-	private final Callback callback;
-
 	static boolean DEV_MODE = true;
-
-	@Override
-	public void stop() {
-		// Nothing to do
-	}
 
 }

@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class Browser {
+public class Browser implements WebBrowser {
 
-	public static void landing(final int port) {
+	@Override
+	public void landing(final int port) {
 		final String root = "http://localhost:" + port;
 		try {
 			final URL url = new URL(root);

@@ -11,6 +11,7 @@ import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
 import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
 import br.com.arbo.steamside.webui.wicket.search.SearchJson;
+import br.com.arbo.steamside.webui.wicket.session.json.SessionJson;
 import br.com.arbo.steamside.webui.wicket.steamclient.SteamClientPage;
 
 /**
@@ -62,6 +63,9 @@ public class WicketApplication extends WebApplication
 		mountResource(
 				"/continue.json",
 				container.getComponent(ContinueJson.class));
+		mountResource(
+				"/session.json",
+				container.getComponent(SessionJson.class));
 
 		mountPage(
 				"/app" +

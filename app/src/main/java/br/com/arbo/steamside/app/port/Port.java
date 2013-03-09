@@ -1,6 +1,10 @@
 package br.com.arbo.steamside.app.port;
 
-public interface Port {
+public class Port {
 
-	int port();
+	public final int port;
+
+	public Port(final int port) {
+		this.port = port;
+	}
 }

@@ -15,6 +15,7 @@ import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
 import br.com.arbo.steamside.webui.wicket.search.SearchJson;
+import br.com.arbo.steamside.webui.wicket.session.json.SessionJson;
 
 public class ContainerFactory {
 
@@ -23,9 +24,9 @@ public class ContainerFactory {
 				.withCaching()
 				.withLifecycle()
 				.build();
+		container.change(CACHE);
 
 		container.setName("WicketApplication");
-		container.change(CACHE);
 		container
 				.addComponent(Username.class, username)
 				.addComponent(
@@ -41,6 +42,7 @@ public class ContainerFactory {
 						Continue.Needs.class,
 						ContinueNeedsImpl.class)
 				.addComponent(SearchJson.class)
+				.addComponent(SessionJson.class)
 		//
 		;
 

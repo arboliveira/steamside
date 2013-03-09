@@ -1,21 +1,20 @@
 package br.com.arbo.steamside.app.main;
 
-import br.com.arbo.steamside.opersys.username.UsernameFromJava;
+import org.picocontainer.MutablePicoContainer;
 
 public class Main {
 
-	private final ContainerFactory factory;
+	private final MutablePicoContainer container;
 
-	public Main(final ContainerFactory factory) {
-		this.factory = factory;
+	public Main(final MutablePicoContainer container) {
+		this.container = container;
 	}
 
 	public static void main(final String[] args) throws Exception {
-		new Main(new ContainerFactory(
-				new UsernameFromJava(), new JettyCallback())).start();
+		new Main(ContainerFactory.newContainer()).start();
 	}
 
 	public void start() {
-		factory.newContainer().start();
+		container.start();
 	}
 }
