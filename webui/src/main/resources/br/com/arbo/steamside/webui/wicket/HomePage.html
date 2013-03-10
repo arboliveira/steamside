@@ -17,7 +17,8 @@ xml:lang="en" lang="en">
 <script src="static/jquery-1.7.2.js"></script>
 <script src="static/underscore.js"></script>
 <script src="static/backbone.js"></script>
-<script src="static/steamside.js"></script>
+<script src="static/gametiles.js"></script>
+<script src="static/session.js"></script>
 		
 <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
 <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
@@ -151,24 +152,43 @@ xml:lang="en" lang="en">
 	font-size: x-small;
 }
 
+.wait {
+    background: url(static/ajaxload.info.gif) no-repeat center center;
+}
+
+.game-tile {
+	position: relative;
+}
+
+.game-tile-inner-blurred {
+    opacity: 0.2;
+    -moz-opacity: 0.2;
+}
+
+.game-tile-inner-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+	text-align: center;
+    z-index: 10;
+    display: none;
+}
 
 </style>
 
 
 <!-- ----------------------------------------------------------------------- -->
 
-<script>
+<script type="application/javascript">
 		
-var Game = Backbone.Model.extend();
-
-var RecentlyPlayed = Backbone.Collection.extend({
+var ContinueGames = Backbone.Collection.extend({
     model: Game,
-    url: function() {
-    	return 'continue.json'; 
-    }
+    url: 'continue.json'
 });
 
-var GameCollection = Backbone.Collection.extend({
+var SearchResults = Backbone.Collection.extend({
     model: Game,
     value: null,
     url: function() {
@@ -198,16 +218,6 @@ var SearchTextView = Backbone.View.extend({
     }
 });
 
-var SessionModel = Backbone.Model.extend({
-    url: "session.json",
-    username : function() {
-    	return this.get('username');
-    },
-    kidsmode: function() {
-    	return this.get('kidsmode');
-    }
-});
-
 var SessionView = Backbone.View.extend({
  initialize: function () {
  		var m = this.model;
@@ -227,6 +237,7 @@ var SessionView = Backbone.View.extend({
 		if (kidsmode) {
 			$("#page-header-navigation-bar").hide();
 			$("#search-segment").hide();
+			$("#favorites-segment").hide();
 			$("#collections-segment").hide();
 		}
     }
@@ -248,18 +259,18 @@ $(document).ready(function() {
 	
 	
 	
-	var gamerow = $('#game-row');
-	var gamecell = $('#game-cell');
-	var gametile = $('#game-tile');
-	var recentlyplayed = new RecentlyPlayed();
-    var searchresults = new GameCollection();
+	var continues = new ContinueGames();
+    var searchresults = new SearchResults();
 
 	var sessionModel = new SessionModel();
 	var sessionView = new SessionView({model: sessionModel});
     
+	var gamerow = $('#game-row');
+	var gamecell = $('#game-cell');
+	var gametile = $('#game-tile');
     new AppCollectionView({ 
     	el: $('#recently-played'), 
-    	collection: recentlyplayed,
+    	collection: continues,
     	session: sessionModel,
     	gamerowEl: gamerow,
     	gamecellEl: gamecell,
@@ -280,9 +291,9 @@ $(document).ready(function() {
     	gametileEl: gametile    	 
     });
     
-    recentlyplayed.fetch({
+    continues.fetch({
 			cache: false,
-			success: function() { if (false) console.log(recentlyplayed); },
+			success: function() { if (false) console.log(continues); },
 			error: function() { console.log(arguments); }
 	});
 
@@ -401,7 +412,7 @@ $(document).ready(function() {
 
 
 
-<div class="container">
+<div id="favorites-segment" class="container">
 
 	<div class="side-header side-header-at-left">
 		<p class="side-header-paragraph">
@@ -481,6 +492,9 @@ $(document).ready(function() {
 			</strong></big>
 		</div>
 		</a>
+	</div>
+	<div class="game-tile-inner-overlay">
+		<img src="static/ajaxload.info.gif"  style="margin: 2.5em" />
 	</div>
 </div>
 
