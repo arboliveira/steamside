@@ -11,7 +11,7 @@ public class SingleInstancePerUser implements Startable {
 
 	public SingleInstancePerUser(
 			final DetectSteamside detect,
-			final RangeSize rangesize,
+			final LimitPossiblePorts rangesize,
 			final LocalWebserver webserver,
 			final WebBrowser browser) {
 		this.webserver = webserver;
@@ -91,7 +91,7 @@ public class SingleInstancePerUser implements Startable {
 	private Integer firstfreefound;
 
 	private final DetectSteamside detect;
-	private final RangeSize rangesize;
+	private final LimitPossiblePorts rangesize;
 	private final WebBrowser browser;
 	private final LocalWebserver webserver;
 

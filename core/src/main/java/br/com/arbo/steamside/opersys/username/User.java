@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.opersys.username;
 
-public interface Username {
+public interface User {
 
 	String username();
 }

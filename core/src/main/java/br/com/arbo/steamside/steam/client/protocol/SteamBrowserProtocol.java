@@ -7,15 +7,16 @@ import java.net.URISyntaxException;
 
 import org.apache.commons.lang3.SystemUtils;
 
+import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.steam.client.executable.KillSteamIfAlreadyRunningInADifferentUserSession;
 
 public class SteamBrowserProtocol {
 
 	private final KillSteamIfAlreadyRunningInADifferentUserSession clearance;
 
-	public SteamBrowserProtocol(
-			final KillSteamIfAlreadyRunningInADifferentUserSession clearance) {
-		this.clearance = clearance;
+	public SteamBrowserProtocol(final User username) {
+		this.clearance =
+				new KillSteamIfAlreadyRunningInADifferentUserSession(username);
 	}
 
 	public void launch(final Command command) {

@@ -16,15 +16,18 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
-import br.com.arbo.steamside.opersys.username.Username;
+import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
 public class Jetty implements LocalWebserver {
 
-	private final Username username;
+	private final User username;
+	private final KidsMode kidsmode;
 
-	public Jetty(final Username username) {
+	public Jetty(final User username, final KidsMode kidsmode) {
 		this.username = username;
+		this.kidsmode = kidsmode;
 	}
 
 	@Override
@@ -51,6 +54,7 @@ public class Jetty implements LocalWebserver {
 		final ServletHolder sh = new ServletHolder(WicketServlet.class);
 
 		WicketApplication.nextUsername = username;
+		WicketApplication.nextKidsMode = kidsmode;
 		final Class<WicketApplication> classWicketApplication = WicketApplication.class;
 		sh.setInitParameter(
 				ContextParamWebApplicationFactory.APP_CLASS_PARAM,

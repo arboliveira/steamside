@@ -6,8 +6,10 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import br.com.arbo.steamside.continues.Continue;
-import br.com.arbo.steamside.opersys.username.Username;
-import br.com.arbo.steamside.steam.client.executable.KillSteamIfAlreadyRunningInADifferentUserSession;
+import br.com.arbo.steamside.kids.FromUsername;
+import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.opersys.username.FromJava;
+import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
@@ -19,7 +21,7 @@ import br.com.arbo.steamside.webui.wicket.session.json.SessionJson;
 
 public class ContainerFactory {
 
-	static MutablePicoContainer newContainer(final Username username) {
+	public static MutablePicoContainer newContainer() {
 		final MutablePicoContainer container = new PicoBuilder()
 				.withCaching()
 				.withLifecycle()
@@ -28,9 +30,8 @@ public class ContainerFactory {
 
 		container.setName("WicketApplication");
 		container
-				.addComponent(Username.class, username)
-				.addComponent(
-						KillSteamIfAlreadyRunningInADifferentUserSession.class)
+				.addComponent(KidsMode.class, FromUsername.class)
+				.addComponent(User.class, FromJava.class)
 				.addComponent(SteamBrowserProtocol.class)
 				.addComponent(AppNameFactory.class, AppNameFromLocalFiles.class)
 				.addComponent(
@@ -38,9 +39,7 @@ public class ContainerFactory {
 						InMemory_appinfo_vdf.class)
 				.addComponent(SharedConfigConsume.class)
 				.addComponent(ContinueJson.class)
-				.addComponent(
-						Continue.Needs.class,
-						ContinueNeedsImpl.class)
+				.addComponent(Continue.class)
 				.addComponent(SearchJson.class)
 				.addComponent(SessionJson.class)
 		//

@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.search;
+package br.com.arbo.steamside.webui.wicket.search;
 
 import java.util.ArrayList;
 import java.util.List;

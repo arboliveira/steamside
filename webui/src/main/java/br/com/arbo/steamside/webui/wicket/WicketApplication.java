@@ -4,7 +4,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.picocontainer.MutablePicoContainer;
 
-import br.com.arbo.steamside.opersys.username.Username;
+import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
@@ -22,7 +24,8 @@ import br.com.arbo.steamside.webui.wicket.steamclient.SteamClientPage;
 public class WicketApplication extends WebApplication
 {
 
-	public static Username nextUsername;
+	public static User nextUsername;
+	public static KidsMode nextKidsMode;
 
 	public static WicketApplication get() {
 		return (WicketApplication) WebApplication.get();
@@ -85,7 +88,11 @@ public class WicketApplication extends WebApplication
 	}
 
 	public WicketApplication() {
-		this.container = ContainerFactory.newContainer(nextUsername);
+		final MutablePicoContainer c = ContainerFactory.newContainer();
+		final MutablePicoContainerX cx = new MutablePicoContainerX(c);
+		cx.replaceComponent(KidsMode.class, nextKidsMode);
+		cx.replaceComponent(User.class, nextUsername);
+		this.container = c;
 		nextUsername = null;
 	}
 

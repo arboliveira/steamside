@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.app.main;
+package br.com.arbo.steamside.app.instance;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -9,11 +9,12 @@ import org.picocontainer.MutablePicoContainer;
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
-import br.com.arbo.steamside.app.instance.RangeSize;
+import br.com.arbo.steamside.app.instance.LimitPossiblePorts;
 import br.com.arbo.steamside.app.instance.SingleInstancePerUser;
 import br.com.arbo.steamside.app.jetty.LocalWebserver;
+import br.com.arbo.steamside.app.main.ContainerFactory;
 
-public class TwiceTest {
+public class SingleInstancePerUserTest {
 
 	@SuppressWarnings("static-method")
 	@Test
@@ -29,7 +30,7 @@ public class TwiceTest {
 			}
 		});
 
-		startSteamside();
+		singleinstance.start();
 
 		m.assertIsSatisfied();
 	}
@@ -44,7 +45,7 @@ public class TwiceTest {
 			}
 		});
 
-		startSteamside();
+		singleinstance.start();
 
 		m.assertIsSatisfied();
 	}
@@ -62,13 +63,9 @@ public class TwiceTest {
 			}
 		});
 
-		startSteamside();
+		singleinstance.start();
 
 		m.assertIsSatisfied();
-	}
-
-	private void startSteamside() {
-		singleinstance.start();
 	}
 
 	private MutablePicoContainer newContainer() {
@@ -76,7 +73,7 @@ public class TwiceTest {
 				ContainerFactory.newContainerEmpty();
 		container
 				.addComponent(SingleInstancePerUser.class)
-				.addComponent(RangeSize.class, new RangeSize(2))
+				.addComponent(LimitPossiblePorts.class, new LimitPossiblePorts(2))
 				.addComponent(DetectSteamside.class, detect)
 				.addComponent(WebBrowser.class, browser)
 				.addComponent(LocalWebserver.class, webserver)

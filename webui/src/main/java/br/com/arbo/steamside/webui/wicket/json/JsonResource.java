@@ -7,13 +7,7 @@ import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 
 public class JsonResource extends AbstractResource {
 
-	private final Needs< ? > needs;
-
-	public interface Needs<T> {
-
-		T fetchValue(Attributes a);
-
-	}
+	private final Factory< ? > factory;
 
 	@Override
 	protected ResourceResponse newResourceResponse(final Attributes a) {
@@ -31,11 +25,11 @@ public class JsonResource extends AbstractResource {
 	}
 
 	final void doWriteCallback_writeData(final Attributes a) {
-		final Object value = needs.fetchValue(a);
+		final Object value = factory.produce(a);
 		JsonUtils.write(a.getResponse().getOutputStream(), value);
 	}
 
-	public JsonResource(final Needs< ? > needs) {
-		this.needs = needs;
+	public JsonResource(final Factory< ? > needs) {
+		this.factory = needs;
 	}
 }

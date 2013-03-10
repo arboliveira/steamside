@@ -6,13 +6,13 @@ import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 
-import br.com.arbo.steamside.opersys.username.Username;
+import br.com.arbo.steamside.opersys.username.User;
 
-public class DetectSteamsideFromURL implements DetectSteamside {
+public class FromURL implements DetectSteamside {
 
-	private final Username username;
+	private final User username;
 
-	public DetectSteamsideFromURL(final Username username) {
+	public FromURL(final User username) {
 		this.username = username;
 	}
 

@@ -3,14 +3,14 @@ package br.com.arbo.steamside.steam.client.executable;
 import org.apache.commons.lang3.SystemUtils;
 import org.jvnet.winp.WinProcess;
 
-import br.com.arbo.steamside.opersys.username.Username;
+import br.com.arbo.steamside.opersys.username.User;
 
 public class KillSteamIfAlreadyRunningInADifferentUserSession {
 
-	private final Username username;
+	private final User username;
 
 	public KillSteamIfAlreadyRunningInADifferentUserSession(
-			final Username username) {
+			final User username) {
 		this.username = username;
 	}
 

@@ -198,6 +198,40 @@ var SearchTextView = Backbone.View.extend({
     }
 });
 
+var SessionModel = Backbone.Model.extend({
+    url: "session.json",
+    username : function() {
+    	return this.get('username');
+    },
+    kidsmode: function() {
+    	return this.get('kidsmode');
+    }
+});
+
+var SessionView = Backbone.View.extend({
+ initialize: function () {
+ 		var m = this.model;
+        m.bind('change',this.render, this);
+        m.fetch({
+			cache: false,
+			success: function() { if (false) console.log(m); },
+			error: function() { console.log(arguments); }
+		});
+    },
+   el : 'body',
+    render: function () {
+    	var m = this.model;
+    	var username = m.username();
+    	var kidsmode = m.kidsmode();
+		
+		if (kidsmode) {
+			$("#page-header-navigation-bar").hide();
+			$("#search-segment").hide();
+			$("#collections-segment").hide();
+		}
+    }
+});
+
 $(document).ready(function() {
 
 	        $('#nav-steam-client').click(function(e) {
@@ -219,10 +253,14 @@ $(document).ready(function() {
 	var gametile = $('#game-tile');
 	var recentlyplayed = new RecentlyPlayed();
     var searchresults = new GameCollection();
+
+	var sessionModel = new SessionModel();
+	var sessionView = new SessionView({model: sessionModel});
     
     new AppCollectionView({ 
     	el: $('#recently-played'), 
     	collection: recentlyplayed,
+    	session: sessionModel,
     	gamerowEl: gamerow,
     	gamecellEl: gamecell,
     	gametileEl: gametile    	 
@@ -232,10 +270,11 @@ $(document).ready(function() {
     	el: $('#div-id-search-text'), 
     	collection: searchresults
     });
-    
+
     new AppCollectionView({ 
     	el: $('#div-id-search-results'), 
     	collection: searchresults,
+    	session: sessionModel,
     	gamerowEl: gamerow,
     	gamecellEl: gamecell,
     	gametileEl: gametile    	 
@@ -243,10 +282,10 @@ $(document).ready(function() {
     
     recentlyplayed.fetch({
 			cache: false,
-			success: function() { if (false) console.log(c.models); },
+			success: function() { if (false) console.log(recentlyplayed); },
 			error: function() { console.log(arguments); }
 	});
-	
+
 	$("#input-id-text-search").focus();	
 });			
 
@@ -266,7 +305,7 @@ $(document).ready(function() {
 	<div class="page-header-name">
 		 SteamSide
 	</div>
-	<div class="page-header-navigation-bar">
+	<div class="page-header-navigation-bar"  id="page-header-navigation-bar">
 		<ul>
 		<li>
 		My games
@@ -323,7 +362,7 @@ $(document).ready(function() {
 
 
 
-<div class="container">
+<div id="search-segment" class="container">
 
 	<div class="side-header side-header-at-right">
 		<p class="side-header-paragraph">
@@ -389,7 +428,7 @@ $(document).ready(function() {
 
 
 
-<div class="container">
+<div id="collections-segment"  class="container">
 
 	<div class="side-header side-header-at-right">
 		<p class="side-header-paragraph">

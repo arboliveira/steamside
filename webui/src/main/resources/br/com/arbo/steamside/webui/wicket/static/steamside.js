@@ -1,10 +1,12 @@
 var AppCollectionView = Backbone.View.extend({
+	session: null,
 	gamerowEl: null,
 	gamecellEl: null,
 	gametileEl: null,
 	tilesEl: null,
 
     initialize: function() {
+    	this.session = this.options.session;
     	this.gamerowEl = this.options.gamerowEl;
     	this.gamecellEl = this.options.gamecellEl;
     	this.gametileEl = this.options.gametileEl;
@@ -31,12 +33,14 @@ var AppCollectionView = Backbone.View.extend({
     	var celln = 0;
     	var rowsep = null;
     	
+    	var vsession = this.session;
+    	
         this.collection.each( function(oneResult) {
 	        var appid = oneResult.get('appid');
 			var name = oneResult.get('name');
 			var link = oneResult.get('link');
 			var size = oneResult.get('size');
-			var visible = oneResult.get('visible') == 'true';
+			var visible = vsession.kidsmode() || oneResult.get('visible') == 'true';
 	        var img = 
 	        	'http://cdn.steampowered.com/v/gfx/apps/' 
 	        	+ appid + '/header.jpg';
@@ -83,15 +87,10 @@ var AppCollectionView = Backbone.View.extend({
 				e.preventDefault();
     		});
 
-	if (true) {
 			cell.width("" + cellwidth + "%");
     		cell.append(clonedtile);
 	        vtilesEl.append(cell);
 			cell.show();
-	    } else {
-			clonedtile.width("" + cellwidth + "%");
-	        vtilesEl.append(clonedtile);
-	    }
 	        
 	        if (visible) 
 	        	clonedtile.fadeIn();

@@ -2,7 +2,7 @@ package br.com.arbo.steamside.opersys.username;
 
 import org.apache.commons.lang3.SystemUtils;
 
-public class UsernameFromJava implements Username {
+public class FromJava implements User {
 
 	@Override
 	public String username() {

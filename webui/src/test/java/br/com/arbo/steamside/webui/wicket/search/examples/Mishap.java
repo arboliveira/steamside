@@ -1,7 +1,7 @@
-package br.com.arbo.steamside.search.examples;
+package br.com.arbo.steamside.webui.wicket.search.examples;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
-import br.com.arbo.steamside.search.Search;
+import br.com.arbo.steamside.webui.wicket.search.Search;
 
 public class Mishap {
 

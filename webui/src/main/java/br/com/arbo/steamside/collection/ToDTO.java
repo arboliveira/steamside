@@ -15,6 +15,8 @@ import br.com.arbo.steamside.webui.appdto.Visible;
 
 final class ToDTO {
 
+	private static final int limit = 27;
+
 	private final AppNameFactory namefactory;
 
 	ToDTO(
@@ -31,7 +33,6 @@ final class ToDTO {
 	}
 
 	private List<AppDTO> convertListAppToListAppDto(final List<App> list) {
-		final int limit = 11;
 		final List<AppDTO> listdto = new ArrayList<AppDTO>(list.size());
 		int i = 0;
 		for (final App app : list) {
