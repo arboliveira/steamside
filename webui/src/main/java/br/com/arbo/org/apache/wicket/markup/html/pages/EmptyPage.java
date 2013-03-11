@@ -11,7 +11,11 @@ import br.com.arbo.org.apache.wicket.util.template.EmptyTextTemplate;
 public class EmptyPage extends WebPage
 		implements IMarkupResourceStreamProvider {
 
-	public EmptyPage(final PageParameters parameters) {
+	protected EmptyPage() {
+		super();
+	}
+
+	protected EmptyPage(final PageParameters parameters) {
 		super(parameters);
 	}
 

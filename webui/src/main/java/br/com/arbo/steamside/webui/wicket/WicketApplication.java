@@ -5,6 +5,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.picocontainer.MutablePicoContainer;
 
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
@@ -15,6 +16,7 @@ import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
 import br.com.arbo.steamside.webui.wicket.search.SearchJson;
 import br.com.arbo.steamside.webui.wicket.session.json.SessionJson;
 import br.com.arbo.steamside.webui.wicket.steamclient.SteamClientPage;
+import br.com.arbo.steamside.webui.wicket.stop.ExitPage;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
@@ -26,10 +28,13 @@ public class WicketApplication extends WebApplication
 
 	public static User nextUsername;
 	public static KidsMode nextKidsMode;
+	public static Exit nextExit;
 
 	public static WicketApplication get() {
 		return (WicketApplication) WebApplication.get();
 	}
+
+	private final Exit exit;
 
 	public SteamBrowserProtocol getSteamBrowserProtocol() {
 		return this.container.getComponent(SteamBrowserProtocol.class);
@@ -41,6 +46,10 @@ public class WicketApplication extends WebApplication
 
 	public SharedConfigConsume sharedconfig() {
 		return this.container.getComponent(SharedConfigConsume.class);
+	}
+
+	public void exit() {
+		this.exit.exit();
 	}
 
 	/**
@@ -85,15 +94,24 @@ public class WicketApplication extends WebApplication
 						"/${" + SteamClientPage.PARAM_command + "}" +
 						"/#{" + SteamClientPage.PARAM_argument + "}",
 				SteamClientPage.class);
+		mountPage(
+				"/exit", ExitPage.class);
 	}
 
 	public WicketApplication() {
+		this.container = newContainer();
+		this.exit = nextExit;
+		nextExit = null;
+	}
+
+	private static MutablePicoContainer newContainer() {
 		final MutablePicoContainer c = ContainerFactory.newContainer();
 		final MutablePicoContainerX cx = new MutablePicoContainerX(c);
 		cx.replaceComponent(KidsMode.class, nextKidsMode);
+		nextKidsMode = null;
 		cx.replaceComponent(User.class, nextUsername);
-		this.container = c;
 		nextUsername = null;
+		return c;
 	}
 
 	private final MutablePicoContainer container;

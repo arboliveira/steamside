@@ -9,4 +9,6 @@ public interface LocalWebserver {
 	 * so the caller can open the web browser pointing to the given port. 
 	 */
 	void launch(int port) throws PortAlreadyInUse;
+
+	void stop();
 }

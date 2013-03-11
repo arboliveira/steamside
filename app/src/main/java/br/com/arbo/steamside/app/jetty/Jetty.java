@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.app.jetty;
 
+import java.io.IOException;
 import java.net.BindException;
 import java.net.URL;
 
@@ -16,26 +17,17 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
+import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
 public class Jetty implements LocalWebserver {
 
-	private final User username;
-	private final KidsMode kidsmode;
-
-	public Jetty(final User username, final KidsMode kidsmode) {
-		this.username = username;
-		this.kidsmode = kidsmode;
-	}
-
 	@Override
 	public void launch(final int port) throws PortAlreadyInUse {
 		final int portToUse = port;
 		final Port portInUse = new Port(port);
-
-		final Server server = new Server();
 
 		/* Setup server (port, etc.) */
 
@@ -55,6 +47,7 @@ public class Jetty implements LocalWebserver {
 
 		WicketApplication.nextUsername = username;
 		WicketApplication.nextKidsMode = kidsmode;
+		WicketApplication.nextExit = exit;
 		final Class<WicketApplication> classWicketApplication = WicketApplication.class;
 		sh.setInitParameter(
 				ContextParamWebApplicationFactory.APP_CLASS_PARAM,
@@ -83,18 +76,24 @@ public class Jetty implements LocalWebserver {
 		server.setHandler(sch);
 
 		Instructions.starting();
-		doStart(server);
-		xtWaitForUserToPressEnterAndStop(server);
+		doStart();
+		xtWaitForUserToPressEnterAndExit();
 		Instructions.started(portInUse);
 	}
 
-	private static void xtWaitForUserToPressEnterAndStop(final Server server) {
-		new Thread(
-				new WaitForUserToPressEnterAndStop(server),
-				"Press Enter to end SteamSide").start();
+	@Override
+	public void stop() {
+		try {
+			server.stop();
+			server.join();
+		} catch (final RuntimeException e) {
+			throw e;
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	private static void doStart(final Server server) {
+	private void doStart() {
 		try {
 			server.start();
 		} catch (final BindException e) {
@@ -106,25 +105,31 @@ public class Jetty implements LocalWebserver {
 		}
 	}
 
-	static class WaitForUserToPressEnterAndStop implements Runnable {
+	private void xtWaitForUserToPressEnterAndExit() {
+		class WaitForUserToPressEnterAndExit implements Runnable {
 
-		private final Server server;
-
-		WaitForUserToPressEnterAndStop(final Server server) {
-			this.server = server;
-		}
-
-		@Override
-		public void run() {
-			try {
-				System.in.read();
-				server.stop();
-				server.join();
-			} catch (final RuntimeException e) {
-				throw e;
-			} catch (final Exception e) {
-				throw new RuntimeException(e);
+			@Override
+			public void run() {
+				waitForUserToPressEnterAndExit();
 			}
+		}
+		final Thread thread = new Thread(
+				new WaitForUserToPressEnterAndExit(),
+				"Press Enter to exit SteamSide");
+		thread.setDaemon(true);
+		thread.start();
+	}
+
+	void waitForUserToPressEnterAndExit() {
+		waitForUserToPressEnter();
+		exit.exit();
+	}
+
+	private static void waitForUserToPressEnter() {
+		try {
+			System.in.read();
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -136,5 +141,17 @@ public class Jetty implements LocalWebserver {
 	}
 
 	static boolean DEV_MODE = true;
+
+	public Jetty(final User username, final KidsMode kidsmode, final Exit exit) {
+		this.username = username;
+		this.kidsmode = kidsmode;
+		this.exit = exit;
+		this.server = new Server();
+	}
+
+	private final User username;
+	private final KidsMode kidsmode;
+	private final Server server;
+	private final Exit exit;
 
 }

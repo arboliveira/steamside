@@ -31,7 +31,7 @@ public class SingleInstancePerUser implements Startable {
 
 	@Override
 	public void stop() {
-		// nothing to do
+		this.webserver.stop();
 	}
 
 	private void attemptRepeatedly() throws SteamsideUpAndRunning {
