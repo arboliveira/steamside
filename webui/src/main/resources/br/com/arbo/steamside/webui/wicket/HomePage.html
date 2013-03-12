@@ -5,7 +5,7 @@ xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
 xml:lang="en" lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
 <!-- ----------------------------------------------------------------------- -->
-<title>SteamSide</title>
+<title>Steamside</title>
 
 <link rel="icon" 
       type="image/png" 
@@ -43,6 +43,8 @@ xml:lang="en" lang="en">
 	float:left;
 	margin-left: 10px;
 	margin-right: 10px;
+}
+.page-header-name-text {
 	font-family: Jura; 
 	font-weight: bold;
 	font-size: 2em;
@@ -126,10 +128,14 @@ xml:lang="en" lang="en">
 .side-text-at-right {text-shadow: 0.2em 0.2em 0.2em gray}
 
 .side-links { 
-	font-size: x-small;
-	font-family: sans;
+	font-size: 0.75em;
+	font-family: Karla;
 	margin-top: 1.5em; 
 	margin-bottom: 0em;
+}
+.side-links ul {
+	padding-left: 0px;
+	list-style:none;
 }
 .side-links a {
 	text-decoration: none;	/* hide link underline */
@@ -313,23 +319,18 @@ $(document).ready(function() {
 	<div class="page-header-logo">
 		<img src="static/steamside.png" height="45" width="45" />
 	</div>
-	<div class="page-header-name">
-		 SteamSide
+	<div class="page-header-name" style="text-align:center;">
+		 <span class="page-header-name-text"  style="line-height: 0.90em">Steamside</span>
+		 <br style="margin:0px;"/>
+		 <span style="font-size: 0.8em;font-family:Arvo">Your <span style="text-color:darkred">companion</span> on Steam</span>
 	</div>
 	<div class="page-header-navigation-bar"  id="page-header-navigation-bar">
 		<ul>
-		<li>
-		My games
-		</li>
-		<li>
-		<a href="http://steampowered.com" target="_blank">Steam Store</a>
-		</li>
-		<li>
-		<a id="nav-steam-client" href="steamclient/open/main">Steam Client</a>
-		</li>
-		<li>
-		About
-		</li>
+		<li>My games</li>
+		<li><a href="http://steampowered.com" target="_blank">Steam Store</a></li>
+		<li><a id="nav-steam-client" href="steamclient/open/main">Steam Client</a></li>
+		<li>Utilities</li>
+		<li>Help</li>
 		</ul>
 	</div>
 	<div class="page-header-separator">
@@ -348,7 +349,13 @@ $(document).ready(function() {
 			tinue<br/>
 			</span>
 		</p>
-		<p class="side-links"><a href="">Play stats</a></p>
+		<div class="side-links">
+			<ul>
+				<li><a href="">History</a></li>
+				<li><a href="">Statistics</a></li>
+				<li><a href="">Kids mode...</a></li>
+			</ul>
+		</div>
 	</div>
 
 	<div class="content content-at-right">
@@ -382,7 +389,7 @@ $(document).ready(function() {
 			&amp; do
 			</span>
 		</p>
-		<p class="side-links"><a href="">Advanced</a></p>
+		<p class="side-links"><a href="">Aliases...</a></p>
 	</div>
 
 	<div class="content content-at-left">
@@ -448,7 +455,7 @@ $(document).ready(function() {
 			tions<br/>
 			</span>
 		</p>
-		<p class="side-links"><a href="">Explore</a></p>
+		<p class="side-links"><a href="">Share...</a></p>
 	</div>
 
 	<div class="content content-at-left">
