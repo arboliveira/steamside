@@ -30,7 +30,7 @@ public class SteamBrowserProtocol {
 			Desktop.getDesktop().browse(new URI(str));
 		} catch (final IOException e) {
 			if (isCandidateForLinuxAlternative(str, e))
-				attemptLinuxAlternative(str);
+				new LinuxAlternative_xdg_open(str).attempt();
 			else
 				throw new RuntimeException(e);
 		} catch (final URISyntaxException e) {
@@ -45,11 +45,4 @@ public class SteamBrowserProtocol {
 		return true;
 	}
 
-	private static void attemptLinuxAlternative(final String str) {
-		try {
-			new ProcessBuilder("xdg-open", str).start();
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
 }
