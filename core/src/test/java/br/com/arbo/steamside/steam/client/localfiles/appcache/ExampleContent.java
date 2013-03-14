@@ -4,12 +4,26 @@ import org.apache.commons.lang3.StringUtils;
 
 public class ExampleContent {
 
+	ExampleContent() {
+		vdf = Content_appinfo_vdf.content();
+	}
+
+	int linenumber = 0;
+	int pairmark1 = 0;
+	int pairmark2;
+
 	public static void main(final String[] args) {
-		final String vdf = Content_appinfo_vdf.content();
-		int linenumber = 0;
-		int pairmark1 = 0;
-		int pairmark2;
+		new ExampleContent().go();
+	}
+
+	private void go() {
+
+		izone += 4; // 0x07564426
+		izone += 4; // enum EUniverse
+
 		while (true) {
+			final String app_id = vdf.substring(izone, izone + 4);
+
 			if (linenumber == 1000) break;
 
 			pairmark2 = vdf.indexOf(PAIR_SEPARATOR, pairmark1);
@@ -32,6 +46,7 @@ public class ExampleContent {
 							10);
 			System.out.println(padded + ":" + k + "=" + v);
 		}
+
 	}
 
 	static private final char BYTE_0 = 0;
@@ -41,4 +56,10 @@ public class ExampleContent {
 			new String(new char[] { BYTE_0, BYTE_8, BYTE_8 });
 	static private final String PAIR_SEPARATOR =
 			new String(new char[] { BYTE_0, BYTE_1 });
+
+	static private final String magicnumber =
+			new String(new char[] { 0x26, 0x44, 0x56, 0x07 });
+	private final String vdf;
+
+	int izone;
 }
