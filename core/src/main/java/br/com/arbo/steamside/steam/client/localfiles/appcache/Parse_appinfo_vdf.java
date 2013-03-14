@@ -70,15 +70,4 @@ class Parse_appinfo_vdf {
 		final char[] headerchars = { BYTE_2, BYTE_0, BYTE_2, BYTE_0 };
 		return new String(headerchars);
 	}
-
-	public static void main(final String[] args) {
-		new Parse_appinfo_vdf(Content_appinfo_vdf.content()).parse(
-				new Visitor() {
-
-					@Override
-					public void each(final String appid, final AppInfo appinfo) {
-						System.out.println(appid + "=" + appinfo);
-					}
-				});
-	}
 }
