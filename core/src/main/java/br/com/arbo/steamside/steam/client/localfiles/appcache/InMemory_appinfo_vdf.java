@@ -1,24 +1,26 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
-import java.io.IOException;
+import java.util.HashMap;
 
-import org.apache.commons.io.FileUtils;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.Parse_appinfo_vdf.Visitor;
 
-public class InMemory_appinfo_vdf implements Content_appinfo_vdf {
+public class InMemory_appinfo_vdf {
 
-	private final String content = read_appinfo_vdf();
+	final HashMap<String, AppInfo> map;
 
-	@Override
-	public String content() {
-		return content;
+	public InMemory_appinfo_vdf() {
+		this.map = new HashMap<String, AppInfo>();
+		new Parse_appinfo_vdf(Content_appinfo_vdf.content()).parse(
+				new Visitor() {
+
+					@Override
+					public void each(final String appid, final AppInfo appinfo) {
+						map.put(appid, appinfo);
+					}
+				});
 	}
 
-	private static String read_appinfo_vdf() {
-		try {
-			return FileUtils.readFileToString(File_appinfo_vdf.appinfo_vdf());
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
+	AppInfo get(final String appid) {
+		return map.get(appid);
 	}
-
 }
