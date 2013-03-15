@@ -1,5 +1,10 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
+import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.KEYVALUES_TOKEN_SIZE;
+import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_NONE;
+import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_NUMTYPES;
+import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_STRING;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -65,14 +70,32 @@ public class ExampleContent {
 			while (true) {
 				final byte section_number = read__uint8_t(); // enum EAppInfoSection
 				if (section_number == 0) break;
+
+				System.out.println("section number>>>>" + section_number);
+
 				buffer.get(); // 0x00
-				buffer.getChar(); // 0x35 0x00
+
+				final String mystery = read__null_terminated_string(); // 0x35 0x00 ..... appid! null terminated string?
+				System.out.println("mystery>>>" + mystery);
 				while (true) {
 					final byte type = buffer.get();
-					if (type == 0) break;
+					if (type == TYPE_NUMTYPES) {
+						buffer.get(); // another 8?!?
+						break;
+					}
 					final String k = read__null_terminated_string();
-					final String v = read__null_terminated_string();
-					System.out.println(k + "=" + v);
+					switch (type) {
+					case TYPE_NONE:
+						////// new KeyValues();
+						break;
+					case TYPE_STRING: {
+						final String v = read__null_terminated_string();
+						System.out.println(k + "=" + v);
+						break;
+					}
+					default:
+						throw new IllegalStateException();
+					}
 				}
 
 				if (false) {
@@ -119,5 +142,6 @@ public class ExampleContent {
 			new String(new char[] { BYTE_0, BYTE_8, BYTE_8 });
 
 	private MappedByteBuffer buffer;
-	private final byte[] stringbuffer = new byte[1000];
+
+	private final byte[] stringbuffer = new byte[KEYVALUES_TOKEN_SIZE];
 }
