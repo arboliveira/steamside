@@ -5,18 +5,18 @@ import br.com.arbo.java.io.PositionalStringReader;
 public class Vdf {
 
 	String content;
-	private final Region root;
+	private final RegionImpl root;
 
 	public Vdf(final String content) {
 		this.content = content;
-		this.root = new Region(new RootReaderFactory());
+		this.root = new RegionImpl(new RootReaderFactory());
 	}
 
 	public String content() {
 		return content;
 	}
 
-	public Region root() {
+	public RegionImpl root() {
 		return root;
 	}
 

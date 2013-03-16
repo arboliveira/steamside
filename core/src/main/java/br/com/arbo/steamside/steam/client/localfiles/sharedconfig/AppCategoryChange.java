@@ -4,17 +4,18 @@ import br.com.arbo.java.io.PositionalStringReader;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.Region;
+import br.com.arbo.steamside.vdf.RegionImpl;
 
 public class AppCategoryChange {
 
-	private final Region content;
+	private final RegionImpl content;
 
-	public AppCategoryChange(final Region content) {
+	public AppCategoryChange(final RegionImpl content) {
 		this.content = content;
 	}
 
 	public void category(final String newvalue) {
-		final Region tags;
+		final RegionImpl tags;
 		try {
 			tags = content.region("tags");
 		} catch (final NotFound e) {

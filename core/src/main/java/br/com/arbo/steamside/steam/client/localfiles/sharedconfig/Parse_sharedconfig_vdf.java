@@ -2,6 +2,7 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.Region;
+import br.com.arbo.steamside.vdf.RegionImpl;
 import br.com.arbo.steamside.vdf.Vdf;
 
 public class Parse_sharedconfig_vdf {
@@ -14,13 +15,13 @@ public class Parse_sharedconfig_vdf {
 		final Data_sharedconfig_vdf data =
 				new Data_sharedconfig_vdf();
 
-		final Region rUserRoamingConfigStore =
+		final RegionImpl rUserRoamingConfigStore =
 				region(content.root(), "UserRoamingConfigStore");
-		final Region rSoftware =
+		final RegionImpl rSoftware =
 				region(rUserRoamingConfigStore, "Software");
-		final Region rValve =
+		final RegionImpl rValve =
 				region(rSoftware, "Valve");
-		final Region rsteam =
+		final RegionImpl rsteam =
 				region(rValve, "Steam");
 		final Region apps =
 				region(rsteam, "apps");
@@ -29,7 +30,7 @@ public class Parse_sharedconfig_vdf {
 		return data;
 	}
 
-	private static Region region(final Region r, final String name)
+	private static RegionImpl region(final RegionImpl r, final String name)
 	{
 		try {
 			return r.region(name);

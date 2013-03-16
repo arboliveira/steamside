@@ -11,7 +11,7 @@ import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 import br.com.arbo.steamside.vdf.Vdf;
 
-final class DumpVdfStructure implements
+public final class DumpVdfStructure implements
 		KeyValueVisitor {
 
 	public static void main(final String[] args) throws IOException {
@@ -33,7 +33,7 @@ final class DumpVdfStructure implements
 
 	@Override
 	public void onKeyValue(final String k, final String v) throws Finished {
-		System.out.println(indent + k + ": " + v);
+		System.out.println(indent + "[" + k + "]'" + v + "'");
 	}
 
 	private static String indent(final int depth) {

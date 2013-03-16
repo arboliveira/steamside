@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.vdf;
 
-
 public interface KeyValueVisitor {
 
 	class Finished extends Throwable {

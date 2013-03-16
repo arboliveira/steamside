@@ -4,16 +4,38 @@ import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
-import org.apache.commons.lang3.StringUtils;
+import br.com.arbo.steamside.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.vdf.examples.DumpVdfStructure;
 
 public class ExampleContent {
 
+	private final Visitor visitor;
+
+	public ExampleContent(
+			final Visitor visitor,
+			final KeyValueVisitor keyvalueVisitor) {
+		this.visitor = visitor;
+		this.keyvalueVisitor = keyvalueVisitor;
+	}
+
 	public static void main(final String[] args) throws IOException {
-		new ExampleContent().go();
+		class AppOut implements Visitor {
+
+			@Override
+			public void onApp(final int app_id) {
+				System.out.println("====" + app_id + "====");
+			}
+
+			@Override
+			public void onSection(final byte section_number) {
+				System.out.println(">>>>" + section_number + ">>>>");
+			}
+
+		}
+		new ExampleContent(new AppOut(), new DumpVdfStructure()).go();
 	}
 
 	private void go() throws IOException {
@@ -34,65 +56,44 @@ public class ExampleContent {
 		go3();
 	}
 
-	private void go3() throws UnsupportedEncodingException {
+	private void go3() {
 		buffer.read__uint32_t(); // 0x07564426
 		buffer.read__uint32_t(); // enum EUniverse
 		while (true) {
 			final int app_id = buffer.read__uint32_t();
-
 			if (app_id == 0) break;
-
-			final int data_size = buffer.read__uint32_t();
-
-			final String padded =
-					StringUtils.leftPad(
-							String.valueOf(app_id),
-							6);
-			System.out.println(padded + ":" + data_size);
-
-			final int p1 = buffer.position();
-
-			buffer.read__uint32_t(); // unknown1
-			buffer.read__uint32_t(); // last_updated
-			buffer.read__uint64_t(); // unknown2;
-			for (int i = 1; i <= 20; i++)
-				buffer.read__uint8_t(); // unknown3[20];
-			buffer.read__uint32_t(); // change_number;
-
-			final int p2 = buffer.position();
-			final int pdif = p2 - p1;
-			final int remaining = data_size - pdif;
-
-			while (true) {
-				final byte section_number = buffer.read__uint8_t(); // enum EAppInfoSection
-				if (section_number == 0) break;
-
-				System.out.println("section number>>>>" + section_number);
-
-				buffer.getUnsignedChar(); // 0x00
-
-				final String mystery = buffer.read__null_terminated_string(); // 0x35 0x00 ..... appid! null terminated string?
-				System.out.println("mystery>>>" + mystery);
-
-				final KeyValues_cpp keyvalues = new KeyValues_cpp();
-				keyvalues.readAsBinary(buffer);
-
-				if (false) {
-					/*
-					final byte[] section_data = new byte[remaining];
-					buffer.get(section_data);
-					final String s = new String(section_data, "Cp1252");
-					System.out.println(s);
-					*/
-				}
-			}
+			go_app_id(app_id);
 		}
 	}
 
-	static private final char BYTE_0 = 0;
-	static private final char BYTE_8 = 8;
-	static private final String ZONE_SEPARATOR =
-			new String(new char[] { BYTE_0, BYTE_8, BYTE_8 });
+	private void go_app_id(final int app_id) {
+		visitor.onApp(app_id);
+
+		buffer.read__uint32_t(); // data_size
+		buffer.read__uint32_t(); // unknown1
+		buffer.read__uint32_t(); // last_updated
+		buffer.read__uint64_t(); // unknown2;
+		for (int i = 1; i <= 20; i++)
+			buffer.read__uint8_t(); // unknown3[20];
+		buffer.read__uint32_t(); // change_number;
+
+		while (true) {
+			final byte section_number = buffer.read__uint8_t(); // enum EAppInfoSection
+			if (section_number == 0) break;
+
+			visitor.onSection(section_number);
+
+			KeyValues_cpp.readAsBinary(buffer, keyvalueVisitor);
+		}
+	}
+
+	interface Visitor {
+
+		void onApp(int app_id);
+
+		void onSection(byte section_number);
+	}
 
 	private ByteBufferX buffer;
+	private final KeyValueVisitor keyvalueVisitor;
 }
