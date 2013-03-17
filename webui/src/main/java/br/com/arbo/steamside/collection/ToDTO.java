@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 import br.com.arbo.steamside.steam.store.AppName;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
@@ -53,7 +54,11 @@ final class ToDTO {
 	}
 
 	AppName nameOf(final AppId appid) {
-		return namefactory.nameOf(appid);
+		try {
+			return namefactory.nameOf(appid);
+		} catch (final NotFound e) {
+			return new AppName(e.getMessage());
+		}
 	}
 
 }

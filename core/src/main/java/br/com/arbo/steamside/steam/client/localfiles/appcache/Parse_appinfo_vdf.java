@@ -1,73 +1,86 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
+import org.apache.commons.lang3.SystemUtils;
+
+import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
+import br.com.arbo.steamside.vdf.Region;
+
 class Parse_appinfo_vdf {
 
-	interface Visitor {
+	interface ParseVisitor {
 
 		void each(String appid, AppInfo appinfo);
 	}
 
-	private final String vdf;
-	int pos1, pos2;
-	String appid;
-	AppInfo app;
+	private final Content_appinfo_vdf vdf;
+	final ParseVisitor parsevisitor;
 
-	Parse_appinfo_vdf(final String vdf) {
+	Parse_appinfo_vdf(final Content_appinfo_vdf vdf,
+			final ParseVisitor visitor) {
 		this.vdf = vdf;
+		this.parsevisitor = visitor;
 	}
 
-	public void parse(final Visitor visitor) {
-		try {
-			while (true)
-				more(visitor);
-		} catch (final Finished e) {
-			// all right!
+	class ContentVisitor implements Content_appinfo_vdf_Visitor {
+
+		private String appid;
+		private AppInfo appinfo;
+		private String path;
+		private String lastseen_executable;
+
+		@Override
+		public void onApp(final int app_id) {
+			appid = String.valueOf(app_id);
+			appinfo = new AppInfo();
+			path = "";
 		}
 
-		if (false) {
-			final String beforeappmarker =
-					vdf.substring(pos1 - 6, pos1 + 6);
-			String hex = " ";
-			for (int i = 1; i <= beforeappmarker.length(); i++) {
-				final char charAt = beforeappmarker.charAt(i - 1);
-				final boolean printable = charAt > 13;
-				hex += (int) charAt + " " + (printable ? charAt : '_') + " ";
-			}
+		@Override
+		public void onSection(final byte section_number) {
+			path = String.valueOf(section_number);
+		}
+
+		@Override
+		public void onSubRegion(final String k, final Region r) throws Finished {
+			final String pathbefore = path;
+			path += "/" + k;
+			r.accept(this);
+			path = pathbefore;
+		}
+
+		@Override
+		public void onKeyValue(final String k, final String v) throws Finished {
+			if (keyMatches("name", "2/" + appid, k))
+				appinfo.name = v;
+			if (keyMatches("executable", "4/" + appid + "/launch", k))
+				this.lastseen_executable = v;
+			if (keyMatches("oslist", "4/" + appid + "/launch", k))
+				if (osMatches(v))
+					appinfo.executable = this.lastseen_executable;
+		}
+
+		boolean keyMatches(final String what, final String pathPrefix,
+				final String k) {
+			return what.equals(k) && path.startsWith(pathPrefix);
+		}
+
+		@Override
+		public void onAppEnd() {
+			parsevisitor.each(appid, appinfo);
 		}
 	}
 
-	private void more(final Visitor visitor) {
-		delimit();
-		appid = next(header, BYTE_0);
-		app = new AppInfo();
-		app.name = next("name" + BYTE_0, BYTE_0);
-		//app.executable =
-		visitor.each(appid, app);
+	void parse() {
+		final Content_appinfo_vdf_Visitor appvisitor = new ContentVisitor();
+		vdf.accept(appvisitor);
 	}
 
-	private void delimit() {
-		// TODO Auto-generated method stub
-
+	static boolean osMatches(final String v) {
+		if ("windows".equals(v)) return SystemUtils.IS_OS_WINDOWS;
+		if ("linux".equals(v)) return SystemUtils.IS_OS_LINUX;
+		if ("macos".equals(v)) return SystemUtils.IS_OS_MAC;
+		if ("macosx".equals(v)) return SystemUtils.IS_OS_MAC_OSX;
+		throw new IllegalArgumentException();
 	}
 
-	private String next(final String begin, final char end) {
-		pos1 = vdf.indexOf(begin, pos1);
-		if (pos1 == -1) throw new Finished();
-		pos1 += begin.length();
-		pos2 = vdf.indexOf(end, pos1);
-		return vdf.substring(pos1, pos2);
-	}
-
-	static class Finished extends RuntimeException {
-		//
-	}
-
-	static private final char BYTE_0 = 0;
-	static private final char BYTE_2 = 2;
-	final static private String header = header();
-
-	private static String header() {
-		final char[] headerchars = { BYTE_2, BYTE_0, BYTE_2, BYTE_0 };
-		return new String(headerchars);
-	}
 }
