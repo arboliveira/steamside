@@ -13,7 +13,7 @@ public class SuperHexagon {
 		final FromJava user = new FromJava();
 		final SteamBrowserProtocol steam = new SteamBrowserProtocol(user);
 		final InMemory_appinfo_vdf appinfo = new InMemory_appinfo_vdf();
-		new RunGame(steam, appinfo, user)
+		new RunGame(steam, appinfo)
 				.askSteamToRunGameAndWaitUntilItsUp(appid);
 	}
 }

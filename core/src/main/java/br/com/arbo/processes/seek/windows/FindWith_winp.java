@@ -5,22 +5,29 @@ import java.util.TreeMap;
 import org.jvnet.winp.WinProcess;
 import org.jvnet.winp.WinpException;
 
+import br.com.arbo.processes.seek.Criteria;
 import br.com.arbo.processes.seek.NotFound;
+import br.com.arbo.processes.seek.UsernameNot;
 
 class FindWith_winp {
 
-	private final String myusername;
-	private final String executable;
+	private final Criteria criteria;
 
-	FindWith_winp(final String executable, final String myusername) {
-		this.executable = executable;
-		this.myusername = myusername;
+	FindWith_winp(final Criteria criteria) {
+		this.criteria = criteria;
 	}
 
 	WinProcess find() throws NotFound {
 		final WinProcess exe = find_exe();
-		if (isMine(exe)) throw new NotFound();
+		filterUsernameNot(exe);
 		return exe;
+	}
+
+	private void filterUsernameNot(final WinProcess exe) throws NotFound {
+		final UsernameNot unwanted = criteria.usernameNot;
+		if (unwanted == null) return;
+		if (usernameOf(exe).equals(unwanted.username))
+			throw new NotFound();
 	}
 
 	private WinProcess find_exe() throws NotFound {
@@ -38,14 +45,13 @@ class FindWith_winp {
 			if (code == 87 || code == 5 || code == 299) return false;
 			throw e;
 		}
-		return commandLine.contains(executable);
+		return commandLine.contains(criteria.executable);
 	}
 
-	boolean isMine(final WinProcess exe) {
+	private static String usernameOf(final WinProcess exe) {
 		final TreeMap<String, String> env =
 				exe.getEnvironmentVariables();
-		final String steamusername = env.get("USERNAME");
-		return steamusername.equals(myusername);
+		return env.get("USERNAME");
 	}
 
 }

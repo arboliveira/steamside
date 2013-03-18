@@ -33,7 +33,7 @@ public class AppPage extends EmptyPage {
 
 	private static void letLoadingAnimationRunForJustALittleLonger() {
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(4000);
 		} catch (final InterruptedException e) {
 			throw new RuntimeException(e);
 		}

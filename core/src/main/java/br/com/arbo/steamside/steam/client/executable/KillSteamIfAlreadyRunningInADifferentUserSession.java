@@ -3,7 +3,9 @@ package br.com.arbo.steamside.steam.client.executable;
 import org.apache.commons.lang3.SystemUtils;
 import org.jvnet.winp.WinProcess;
 
+import br.com.arbo.processes.seek.Criteria;
 import br.com.arbo.processes.seek.NotFound;
+import br.com.arbo.processes.seek.UsernameNot;
 import br.com.arbo.processes.seek.windows.FindProcess;
 import br.com.arbo.steamside.opersys.username.User;
 
@@ -18,24 +20,22 @@ public class KillSteamIfAlreadyRunningInADifferentUserSession {
 
 	@SuppressWarnings("static-method")
 	public void confirm() {
+		final Criteria criteria = new Criteria();
+		criteria.usernameNot =
+				new UsernameNot(username.username());
+
 		if (!SystemUtils.IS_OS_WINDOWS) return;
 
-		final String myusername = username.username();
+		criteria.executable = "steam.exe";
 
 		WinProcess.enableDebugPrivilege();
 		final WinProcess steam_exe;
 		try {
-			steam_exe = find_steam_exe(myusername);
+			steam_exe = FindProcess.seek(criteria);
 		} catch (final NotFound e) {
 			return;
 		}
 		steam_exe.killRecursively();
-	}
-
-	private static WinProcess find_steam_exe(final String myusername)
-			throws NotFound {
-		final String executable = "steam.exe";
-		return FindProcess.seek(executable, myusername);
 	}
 
 }

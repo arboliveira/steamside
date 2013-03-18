@@ -1,18 +1,20 @@
 package br.com.arbo.processes.seek.windows;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import br.com.arbo.processes.ProcessUtils;
+import br.com.arbo.processes.seek.Criteria;
 import br.com.arbo.processes.seek.NotFound;
 
 class FindWith_tasklist {
 
-	private final String myusername;
-	private final String executable;
+	private final Criteria criteria;
 
-	public FindWith_tasklist(final String executable, final String myusername) {
-		this.executable = executable;
-		this.myusername = myusername;
+	public FindWith_tasklist(final Criteria criteria) {
+		this.criteria = criteria;
 	}
 
 	int find() throws NotFound {
@@ -31,9 +33,9 @@ class FindWith_tasklist {
 	}
 
 	private int extract_pid(final String tasklist) throws NotFound {
-		final int exeb = tasklist.indexOf(executable);
+		final int exeb = tasklist.indexOf(criteria.executable);
 		if (exeb == -1) throw new NotFound();
-		final int exee = exeb + executable.length() + 1;
+		final int exee = exeb + criteria.executable.length() + 1;
 		int i = exee;
 		while (tasklist.charAt(i) == ' ')
 			i++;
@@ -47,14 +49,19 @@ class FindWith_tasklist {
 	}
 
 	private String run_tasklist() throws IOException {
-		return ProcessUtils.processout(
-				"tasklist.exe",
-				"/FI",
-				"USERNAME ne " + myusername,
-				"/FI",
-				"IMAGENAME eq " +
-						executable
-				);
+		final List<String> command =
+				new ArrayList<String>(Arrays.asList(
+						"tasklist.exe",
+						"/FI",
+						"IMAGENAME eq " + criteria.executable));
+
+		if (criteria.usernameNot != null)
+			command.addAll(Arrays.asList(
+					"/FI",
+					"USERNAME ne " + criteria.usernameNot.username
+					));
+
+		return ProcessUtils.processout(new ProcessBuilder(command));
 	}
 
 }

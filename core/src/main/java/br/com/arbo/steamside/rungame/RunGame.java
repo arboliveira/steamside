@@ -3,9 +3,9 @@ package br.com.arbo.steamside.rungame;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import br.com.arbo.processes.seek.Criteria;
 import br.com.arbo.processes.seek.ProcessSeeker;
 import br.com.arbo.processes.seek.ProcessSeekerFactory;
-import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
 import br.com.arbo.steamside.steam.client.protocol.C_rungameid;
@@ -16,15 +16,12 @@ public class RunGame {
 
 	private final SteamBrowserProtocol steam;
 	private final InMemory_appinfo_vdf appinfo_vdf;
-	private final User user;
 
 	public RunGame(
 			final SteamBrowserProtocol steam,
-			final InMemory_appinfo_vdf appinfo_vdf,
-			final User user) {
+			final InMemory_appinfo_vdf appinfo_vdf) {
 		this.steam = steam;
 		this.appinfo_vdf = appinfo_vdf;
-		this.user = user;
 	}
 
 	public boolean askSteamToRunGameAndWaitUntilItsUp(
@@ -60,15 +57,18 @@ public class RunGame {
 		}
 	}
 
-	private Thread seekInAnotherThread(
+	private static Thread seekInAnotherThread(
 			final String exe, final Semaphore seeking) {
+
+		final Criteria criteria = new Criteria();
+		criteria.executable = exe;
 
 		class AgainAndAgain implements Runnable {
 
 			@Override
 			public void run() {
 				final boolean found =
-						seekExecutableAgainAndAgain(exe);
+						seekExecutableAgainAndAgain(criteria);
 				if (found) seeking.release();
 			}
 
@@ -80,10 +80,10 @@ public class RunGame {
 		return t;
 	}
 
-	boolean seekExecutableAgainAndAgain(final String exe) {
+	static boolean seekExecutableAgainAndAgain(final Criteria criteria) {
 		final ProcessSeeker seeker = ProcessSeekerFactory.build();
 		while (true) {
-			final boolean found = seeker.seek(exe, user.username());
+			final boolean found = seeker.seek(criteria);
 			if (found) return true;
 			try {
 				Thread.sleep(1000);
