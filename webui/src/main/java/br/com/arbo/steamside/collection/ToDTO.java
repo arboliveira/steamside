@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
-import br.com.arbo.steamside.steam.store.AppName;
-import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.types.AppName;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
 import br.com.arbo.steamside.webui.appdto.Size;
@@ -18,11 +18,11 @@ final class ToDTO {
 
 	private static final int limit = 27;
 
-	private final AppNameFactory namefactory;
+	private final InMemory_appinfo_vdf appinfo;
 
 	ToDTO(
-			final AppNameFactory namefactory) {
-		this.namefactory = namefactory;
+			final InMemory_appinfo_vdf appinfo) {
+		this.appinfo = appinfo;
 	}
 
 	AppCollectionDTO sortLimitConvert(final List<App> list) {
@@ -55,7 +55,7 @@ final class ToDTO {
 
 	AppName nameOf(final AppId appid) {
 		try {
-			return namefactory.nameOf(appid);
+			return appinfo.get(appid.appid).name();
 		} catch (final NotFound e) {
 			return new AppName(e.getMessage());
 		}

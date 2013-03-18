@@ -1,9 +1,9 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
-import br.com.arbo.steamside.steam.store.AppName;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.types.AppName;
 
 public final class AppNameFromLocalFiles implements AppNameFactory {
 
@@ -12,7 +12,7 @@ public final class AppNameFromLocalFiles implements AppNameFactory {
 		final AppInfo appInfo = this.appinfo_vdf.get(appid.appid);
 		if (appInfo == null)
 			throw new NullPointerException();
-		return new AppName(appInfo.name);
+		return appInfo.name;
 	}
 
 	private final InMemory_appinfo_vdf appinfo_vdf;

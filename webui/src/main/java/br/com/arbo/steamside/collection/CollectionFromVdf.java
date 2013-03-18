@@ -3,22 +3,22 @@ package br.com.arbo.steamside.collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps.AppVisitor;
-import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.wicket.SharedConfigConsume;
 
 public class CollectionFromVdf {
 
-	private final AppNameFactory namefactory;
+	private final InMemory_appinfo_vdf appinfo;
 	private final SharedConfigConsume sharedconfig;
 
 	public CollectionFromVdf(
-			final AppNameFactory namefactory,
+			final InMemory_appinfo_vdf appinfo,
 			final SharedConfigConsume sharedconfig) {
-		this.namefactory = namefactory;
+		this.appinfo = appinfo;
 		this.sharedconfig = sharedconfig;
 	}
 
@@ -33,7 +33,7 @@ public class CollectionFromVdf {
 	}
 
 	private AppCollectionDTO toDTO(final List<App> list) {
-		return new ToDTO(namefactory).sortLimitConvert(list);
+		return new ToDTO(appinfo).sortLimitConvert(list);
 	}
 
 	private List<App> populate(final Filter filter) {

@@ -4,6 +4,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import br.com.arbo.org.apache.wicket.markup.html.pages.EmptyPage;
 import br.com.arbo.steamside.steam.client.protocol.C_open_main;
+import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
 public class SteamClientPage extends EmptyPage {
@@ -21,8 +22,10 @@ public class SteamClientPage extends EmptyPage {
 	}
 
 	private static void c_open_main() {
-		WicketApplication.get().getSteamBrowserProtocol()
-				.launch(new C_open_main());
+		final SteamBrowserProtocol steam = WicketApplication.get()
+				.getContainer()
+				.getComponent(SteamBrowserProtocol.class);
+		steam.launch(new C_open_main());
 	}
 
 	private static boolean equalsCommand(final String string,

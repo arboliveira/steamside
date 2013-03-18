@@ -3,13 +3,12 @@ package br.com.arbo.steamside.webui.wicket;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoContainer;
 
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
-import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
-import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
 import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
@@ -36,16 +35,8 @@ public class WicketApplication extends WebApplication
 
 	private final Exit exit;
 
-	public SteamBrowserProtocol getSteamBrowserProtocol() {
-		return this.container.getComponent(SteamBrowserProtocol.class);
-	}
-
-	public AppNameFactory appNameFactory() {
-		return this.container.getComponent(AppNameFactory.class);
-	}
-
-	public SharedConfigConsume sharedconfig() {
-		return this.container.getComponent(SharedConfigConsume.class);
+	public PicoContainer getContainer() {
+		return this.container;
 	}
 
 	public void exit() {

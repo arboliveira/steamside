@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steam.store;
+package br.com.arbo.steamside.types;
 
 public class AppName {
 
@@ -6,5 +6,10 @@ public class AppName {
 
 	public AppName(final String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }

@@ -13,16 +13,7 @@ public class ByteBufferX {
 			if (stringbuffer[i] == 0) break;
 			i++;
 		}
-		final String sname = newString(i);
-		return sname;
-	}
-
-	private String newString(final int i) {
-		try {
-			return new String(stringbuffer, 0, i, "UTF8");
-		} catch (final UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		return newString(i);
 	}
 
 	public byte getUnsignedChar() {
@@ -41,12 +32,12 @@ public class ByteBufferX {
 		return buffer.getLong();
 	}
 
-	public void skip(final int i) {
-		buffer.position(buffer.position() + i);
-	}
-
-	public int position() {
-		return buffer.position();
+	private String newString(final int i) {
+		try {
+			return new String(stringbuffer, 0, i, "UTF8");
+		} catch (final UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public ByteBufferX(final ByteBuffer buffer, final int stringbufferSize) {

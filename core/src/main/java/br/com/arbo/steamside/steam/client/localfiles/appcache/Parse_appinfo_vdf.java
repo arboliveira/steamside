@@ -3,6 +3,7 @@ package br.com.arbo.steamside.steam.client.localfiles.appcache;
 import org.apache.commons.lang3.SystemUtils;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
+import br.com.arbo.steamside.types.AppName;
 import br.com.arbo.steamside.vdf.Region;
 
 class Parse_appinfo_vdf {
@@ -51,7 +52,7 @@ class Parse_appinfo_vdf {
 		@Override
 		public void onKeyValue(final String k, final String v) throws Finished {
 			if (keyMatches("name", "2/" + appid, k))
-				appinfo.name = v;
+				appinfo.name = new AppName(v);
 			if (keyMatches("executable", "4/" + appid + "/launch", k))
 				this.lastseen_executable = v;
 			if (keyMatches("oslist", "4/" + appid + "/launch", k))

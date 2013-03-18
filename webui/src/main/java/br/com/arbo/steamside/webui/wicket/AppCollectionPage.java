@@ -3,8 +3,10 @@ package br.com.arbo.steamside.webui.wicket;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.picocontainer.PicoContainer;
 
 import br.com.arbo.steamside.collection.CollectionFromVdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.types.Category;
 import br.com.arbo.steamside.webui.wicket.AppCollectionPage.State.NotSuper;
 import br.com.arbo.steamside.webui.wicket.collection.Command;
@@ -82,9 +84,11 @@ public class AppCollectionPage extends WebPage {
 					new Category(
 							p.get(Params.PARAM_collectionname).toString()
 					);
+			final PicoContainer container = WicketApplication.get()
+					.getContainer();
 			this.collectionFromVdf = new CollectionFromVdf(
-					WicketApplication.get().appNameFactory(),
-					WicketApplication.get().sharedconfig());
+					container.getComponent(InMemory_appinfo_vdf.class),
+					container.getComponent(SharedConfigConsume.class));
 		}
 
 		@Override

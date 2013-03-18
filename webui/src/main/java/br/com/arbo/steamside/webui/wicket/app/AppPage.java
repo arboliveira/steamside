@@ -3,7 +3,7 @@ package br.com.arbo.steamside.webui.wicket.app;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import br.com.arbo.org.apache.wicket.markup.html.pages.EmptyPage;
-import br.com.arbo.steamside.steam.client.protocol.C_rungameid;
+import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
@@ -24,8 +24,19 @@ public class AppPage extends EmptyPage {
 	}
 
 	private static void c_run(final AppId appid) {
-		WicketApplication.get().getSteamBrowserProtocol()
-				.launch(new C_rungameid(appid));
+		final RunGame rungame = WicketApplication.get().getContainer()
+				.getComponent(RunGame.class);
+		final boolean up = rungame
+				.askSteamToRunGameAndWaitUntilItsUp(appid);
+		if (up) letLoadingAnimationRunForJustALittleLonger();
+	}
+
+	private static void letLoadingAnimationRunForJustALittleLonger() {
+		try {
+			Thread.sleep(3000);
+		} catch (final InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private static boolean equalsCommand(final String string,

@@ -3,8 +3,8 @@ package br.com.arbo.steamside.webui.appdto;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import br.com.arbo.steamside.steam.store.AppName;
 import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.types.AppName;
 
 @JsonAutoDetect
 public class AppDTO {

@@ -1,21 +1,21 @@
-package br.com.arbo.steamside.steam.client.executable;
+package br.com.arbo.processes.seek.windows;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
 
-import org.apache.commons.io.IOUtils;
-import org.jvnet.winp.WinProcess;
+import br.com.arbo.processes.ProcessUtils;
+import br.com.arbo.processes.seek.NotFound;
 
 class FindWith_tasklist {
 
 	private final String myusername;
+	private final String executable;
 
-	public FindWith_tasklist(final String myusername) {
+	public FindWith_tasklist(final String executable, final String myusername) {
+		this.executable = executable;
 		this.myusername = myusername;
 	}
 
-	WinProcess find() {
+	int find() throws NotFound {
 		try {
 			return findOrCry();
 		} catch (final IOException e) {
@@ -23,18 +23,17 @@ class FindWith_tasklist {
 		}
 	}
 
-	private WinProcess findOrCry()
-			throws IOException {
+	private int findOrCry()
+			throws IOException, NotFound {
 		final String tasklist = run_tasklist();
 		final int pid = extract_pid(tasklist);
-		return new WinProcess(pid);
+		return pid;
 	}
 
-	private static int extract_pid(final String tasklist) {
-		final String name = "steam.exe";
-		final int exeb = tasklist.indexOf(name);
+	private int extract_pid(final String tasklist) throws NotFound {
+		final int exeb = tasklist.indexOf(executable);
 		if (exeb == -1) throw new NotFound();
-		final int exee = exeb + name.length() + 1;
+		final int exee = exeb + executable.length() + 1;
 		int i = exee;
 		while (tasklist.charAt(i) == ' ')
 			i++;
@@ -48,17 +47,14 @@ class FindWith_tasklist {
 	}
 
 	private String run_tasklist() throws IOException {
-		final InputStream is = new ProcessBuilder(
+		return ProcessUtils.processout(
 				"tasklist.exe",
 				"/FI",
 				"USERNAME ne " + myusername,
 				"/FI",
-				"IMAGENAME eq steam.exe"
-				).start()
-						.getInputStream();
-		final StringWriter sw = new StringWriter();
-		IOUtils.copy(is, sw);
-		return sw.toString();
+				"IMAGENAME eq " +
+						executable
+				);
 	}
 
 }

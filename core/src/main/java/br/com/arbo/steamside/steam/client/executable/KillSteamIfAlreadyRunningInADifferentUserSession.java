@@ -3,6 +3,8 @@ package br.com.arbo.steamside.steam.client.executable;
 import org.apache.commons.lang3.SystemUtils;
 import org.jvnet.winp.WinProcess;
 
+import br.com.arbo.processes.seek.NotFound;
+import br.com.arbo.processes.seek.windows.FindProcess;
 import br.com.arbo.steamside.opersys.username.User;
 
 public class KillSteamIfAlreadyRunningInADifferentUserSession {
@@ -23,11 +25,17 @@ public class KillSteamIfAlreadyRunningInADifferentUserSession {
 		WinProcess.enableDebugPrivilege();
 		final WinProcess steam_exe;
 		try {
-			steam_exe = FindSteam.find_steam_exe(myusername);
+			steam_exe = find_steam_exe(myusername);
 		} catch (final NotFound e) {
 			return;
 		}
 		steam_exe.killRecursively();
+	}
+
+	private static WinProcess find_steam_exe(final String myusername)
+			throws NotFound {
+		final String executable = "steam.exe";
+		return FindProcess.seek(executable, myusername);
 	}
 
 }

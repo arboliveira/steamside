@@ -1,31 +1,35 @@
-package br.com.arbo.steamside.steam.client.executable;
+package br.com.arbo.processes.seek.windows;
 
 import java.util.TreeMap;
 
 import org.jvnet.winp.WinProcess;
 import org.jvnet.winp.WinpException;
 
+import br.com.arbo.processes.seek.NotFound;
+
 class FindWith_winp {
 
 	private final String myusername;
+	private final String executable;
 
-	public FindWith_winp(final String myusername) {
+	FindWith_winp(final String executable, final String myusername) {
+		this.executable = executable;
 		this.myusername = myusername;
 	}
 
-	WinProcess find() {
-		final WinProcess exe = find_steam_exe();
+	WinProcess find() throws NotFound {
+		final WinProcess exe = find_exe();
 		if (isMine(exe)) throw new NotFound();
 		return exe;
 	}
 
-	private static WinProcess find_steam_exe() {
+	private WinProcess find_exe() throws NotFound {
 		for (final WinProcess p : WinProcess.all())
-			if (isSteam(p)) return p;
+			if (isExe(p)) return p;
 		throw new NotFound();
 	}
 
-	private static boolean isSteam(final WinProcess p) {
+	private boolean isExe(final WinProcess p) {
 		final String commandLine;
 		try {
 			commandLine = p.getCommandLine();
@@ -34,7 +38,7 @@ class FindWith_winp {
 			if (code == 87 || code == 5 || code == 299) return false;
 			throw e;
 		}
-		return commandLine.contains("steam.exe");
+		return commandLine.contains(executable);
 	}
 
 	boolean isMine(final WinProcess exe) {

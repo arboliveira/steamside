@@ -51,8 +51,7 @@ class LinuxAlternative_xdg_open {
 				"xdg-open",
 				str
 				).start();
-		final InputStream is = process
-				.getInputStream();
+		final InputStream is = process.getInputStream();
 		final PrintStream sysout = System.out;
 		IOUtils.copy(is, sysout);
 	}

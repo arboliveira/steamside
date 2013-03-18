@@ -55,10 +55,6 @@ public class Content_appinfo_vdf {
 		visitor.onAppEnd();
 	}
 
-	public ByteBufferX buffer() {
-		return buffer;
-	}
-
 	private static ByteBufferX newBuffer(final FileInputStream f) {
 		final FileChannel ch = f.getChannel();
 		final MappedByteBuffer map;
@@ -68,7 +64,6 @@ public class Content_appinfo_vdf {
 			throw new RuntimeException(e);
 		}
 		return new ByteBufferX(map, KEYVALUES_TOKEN_SIZE);
-
 	}
 
 	private final ByteBufferX buffer;
