@@ -3,6 +3,7 @@ package br.com.arbo.steamside.collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.arbo.steamside.collection.CollectionFromVdf.Filter.Reject;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps;
@@ -39,23 +40,38 @@ public class CollectionFromVdf {
 	private List<App> populate(final Filter filter) {
 		final Apps apps = sharedconfig.data().apps();
 		final List<App> list = new ArrayList<App>(apps.count());
-		filterCategory(apps, list, filter);
+		filter(apps, list, filter);
 		return list;
 	}
 
 	public interface Filter {
 
-		boolean pass(App app);
+		void consider(App app) throws Reject;
+
+		public static final class Reject extends Exception {
+			//
+		}
 	}
 
-	private static void filterCategory(final Apps apps, final List<App> list,
-			final Filter filter) {
-		apps.accept(new AppVisitor() {
+	private static void filter(
+			final Apps apps, final List<App> list, final Filter filter) {
+		class Consider implements AppVisitor {
 
 			@Override
 			public void each(final App app) {
-				if (filter == null || filter.pass(app)) list.add(app);
+				if (consider(app)) list.add(app);
 			}
-		});
+
+			private boolean consider(final App app) {
+				if (filter != null)
+					try {
+						filter.consider(app);
+					} catch (final Reject e) {
+						return false;
+					}
+				return true;
+			}
+		}
+		apps.accept(new Consider());
 	}
 }

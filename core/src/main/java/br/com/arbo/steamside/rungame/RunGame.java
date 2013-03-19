@@ -3,9 +3,12 @@ package br.com.arbo.steamside.rungame;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.Validate;
+
 import br.com.arbo.processes.seek.Criteria;
 import br.com.arbo.processes.seek.ProcessSeeker;
 import br.com.arbo.processes.seek.ProcessSeekerFactory;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.AppInfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
 import br.com.arbo.steamside.steam.client.protocol.C_rungameid;
@@ -27,7 +30,12 @@ public class RunGame {
 	public boolean askSteamToRunGameAndWaitUntilItsUp(
 			final AppId appid) {
 		askSteamToRunGame(appid, steam);
-		final String exe = findExecutableName(appid);
+		final String exe;
+		try {
+			exe = findExecutableName(appid);
+		} catch (final NotAvailableOnThisPlatform e) {
+			return false;
+		}
 		final Semaphore s = new Semaphore(0);
 		final Thread t = seekInAnotherThread(exe, s);
 		return waitUntilItsUp(s, t);
@@ -38,7 +46,8 @@ public class RunGame {
 		steam.launch(new C_rungameid(appid));
 	}
 
-	private String findExecutableName(final AppId appid) {
+	private String findExecutableName(final AppId appid)
+			throws NotAvailableOnThisPlatform {
 		try {
 			return appinfo_vdf.get(appid.appid).executable();
 		} catch (final NotFound e) {
@@ -59,6 +68,7 @@ public class RunGame {
 
 	private static Thread seekInAnotherThread(
 			final String exe, final Semaphore seeking) {
+		Validate.notNull(exe);
 
 		final Criteria criteria = new Criteria();
 		criteria.executable = exe;

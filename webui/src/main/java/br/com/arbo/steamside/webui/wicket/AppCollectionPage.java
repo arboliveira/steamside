@@ -84,8 +84,8 @@ public class AppCollectionPage extends WebPage {
 					new Category(
 							p.get(Params.PARAM_collectionname).toString()
 					);
-			final PicoContainer container = WicketApplication.get()
-					.getContainer();
+			final PicoContainer container =
+					WicketApplication.getContainer();
 			this.collectionFromVdf = new CollectionFromVdf(
 					container.getComponent(InMemory_appinfo_vdf.class),
 					container.getComponent(SharedConfigConsume.class));

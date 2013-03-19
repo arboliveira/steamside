@@ -52,8 +52,8 @@ public class RenderJson {
 		}
 
 		@Override
-		public boolean pass(final App app) {
-			return app.isInCategory(category);
+		public void consider(final App app) throws Reject {
+			if (!app.isInCategory(category)) throw new Reject();
 		}
 
 	}

@@ -35,8 +35,8 @@ public class WicketApplication extends WebApplication
 
 	private final Exit exit;
 
-	public PicoContainer getContainer() {
-		return this.container;
+	public static PicoContainer getContainer() {
+		return get().container;
 	}
 
 	public void exit() {
@@ -49,7 +49,7 @@ public class WicketApplication extends WebApplication
 	@Override
 	public Class< ? extends WebPage> getHomePage()
 	{
-		return HomePage.class;
+		return Steamside.class;
 	}
 
 	/**

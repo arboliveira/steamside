@@ -22,9 +22,9 @@ public class SteamClientPage extends EmptyPage {
 	}
 
 	private static void c_open_main() {
-		final SteamBrowserProtocol steam = WicketApplication.get()
-				.getContainer()
-				.getComponent(SteamBrowserProtocol.class);
+		final SteamBrowserProtocol steam =
+				WicketApplication.getContainer()
+						.getComponent(SteamBrowserProtocol.class);
 		steam.launch(new C_open_main());
 	}
 

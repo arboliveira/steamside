@@ -53,6 +53,9 @@ var AppCollectionView = Backbone.View.extend({
 		
 		var vsession = this.session;
 		
+		// TODO Must receive the 'continue' collection, this could be the 'favorites'
+		var vcontinue = this.collection;
+		
 		this.collection.each( function(oneResult) {
 			var appid = oneResult.appid();
 			var name = oneResult.name();
@@ -109,6 +112,7 @@ var AppCollectionView = Backbone.View.extend({
 						complete: function(){
 							gametile_loading_overlay.hide();
 							gametile_loading_underlay.removeClass('game-tile-inner-blurred');
+							vcontinue.fetch();
 						}						
 				});
 				e.preventDefault();

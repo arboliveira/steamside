@@ -24,7 +24,7 @@ public class AppPage extends EmptyPage {
 	}
 
 	private static void c_run(final AppId appid) {
-		final RunGame rungame = WicketApplication.get().getContainer()
+		final RunGame rungame = WicketApplication.getContainer()
 				.getComponent(RunGame.class);
 		final boolean up = rungame
 				.askSteamToRunGameAndWaitUntilItsUp(appid);

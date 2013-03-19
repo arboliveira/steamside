@@ -7,15 +7,17 @@ import br.com.arbo.steamside.types.AppName;
 
 public class AppInfo {
 
-	AppName name;
-	String executable;
-
 	public AppName name() {
 		return name;
 	}
 
-	public String executable() {
+	public String executable() throws NotAvailableOnThisPlatform {
+		if (executable == null) throw new NotAvailableOnThisPlatform();
 		return executable;
+	}
+
+	public static class NotAvailableOnThisPlatform extends Exception {
+		//
 	}
 
 	@Override
@@ -23,4 +25,8 @@ public class AppInfo {
 		return ToStringBuilder.reflectionToString(this,
 				ToStringStyle.SIMPLE_STYLE);
 	}
+
+	AppName name;
+	String executable;
+
 }
