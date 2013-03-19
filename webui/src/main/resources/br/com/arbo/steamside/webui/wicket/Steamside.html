@@ -168,7 +168,6 @@ xml:lang="en" lang="en">
 
 .game-tile-inner-blurred {
     opacity: 0.2;
-    -moz-opacity: 0.2;
 }
 
 .game-tile-inner-overlay {
@@ -229,6 +228,7 @@ var SessionView = Backbone.View.extend({
  		var m = this.model;
         m.bind('change',this.render, this);
         m.fetch({
+        	mimeType: 'application/json',
 			cache: false,
 			success: function() { if (false) console.log(m); },
 			error: function() { console.log(arguments); }
@@ -298,6 +298,7 @@ $(document).ready(function() {
     });
     
     continues.fetch({
+        	mimeType: 'application/json',
 			cache: false,
 			success: function() { if (false) console.log(continues); },
 			error: function() { console.log(arguments); }
@@ -322,7 +323,7 @@ $(document).ready(function() {
 	<div class="page-header-name" style="text-align:center;">
 		 <span class="page-header-name-text"  style="line-height: 0.90em">Steamside</span>
 		 <br style="margin:0px;"/>
-		 <span style="font-size: 0.8em;font-family:Arvo">Your <span style="text-color:darkred">companion</span> on Steam</span>
+		 <span style="font-size: 0.8em;font-family:Arvo">Your <span style="color:darkred">companion</span> on Steam</span>
 	</div>
 	<div class="page-header-navigation-bar"  id="page-header-navigation-bar">
 		<ul>

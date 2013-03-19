@@ -1,7 +1,7 @@
 [ {
   "appid" : "37600",
   "name" : "Windosill",
-  "link" : "app/37600/run",
+  "link" : "static/app-run.js",
   "size": "large",
   "visible": "true"
 }, {

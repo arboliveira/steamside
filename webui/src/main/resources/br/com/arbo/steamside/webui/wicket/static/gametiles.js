@@ -22,6 +22,8 @@ var AppCollectionView = Backbone.View.extend({
 	gamecellEl: null,
 	gametileEl: null,
 	tilesEl: null,
+	celln: null,
+	hidden: null,
 
 	initialize: function() {		"use strict";
 		this.session = this.options.session;
@@ -33,30 +35,58 @@ var AppCollectionView = Backbone.View.extend({
 	},
 
 	render: function() {		"use strict";
+	
+		this.tilesEl.empty();
+
+		var hiding = true;
+		this.hidden = [];		
+
+		
+		var thisview = this;
+		this.rown = 0;		
+		this.celln = 0;
+		this.collection.each( function(oneResult) {
+						
+			thisview.renderOneCell(oneResult);
+			
+		});
+
+		var button = $('#continue-more-button');
+		var morelink = button.find('.more-button-link');
+		morelink.text(hiding ? 'more...' : 'less...');
+		var thishidden = this.hidden;
+		morelink.click(function(e) {
+			var i;
+			for (i = 0; i < thishidden.length; i += 1) {
+				if (hiding) {
+					thishidden[i].fadeIn();
+				} else { 
+					thishidden[i].fadeOut();
+				}
+			}
+			hiding = !hiding;
+			morelink.text(hiding ? 'more...' : 'less...');
+			e.preventDefault();
+		});
+		this.tilesEl.append(button);
+		button.fadeIn();
+	},
+	
+	renderOneCell: function(
+		oneResult
+		) { "use strict";
+
 		var xcells = 3;
 		var largewidth = 40;
 		var regularwidth = 30;
 		var fillerwidth = 100 - xcells * regularwidth;
-	
-		var vrow = this.gamerowEl;
-		var vcell = this.gamecellEl;
-		var vtile = this.gametileEl;
-		var vtilesEl = this.tilesEl;
-		vtilesEl.empty();
 
-		var hiding = true;
-		var hidden = [];		
-
-		var rown = 0;		
-		var celln = 0;
-		var rowsep = null;
-		
 		var vsession = this.session;
-		
-		// TODO Must receive the 'continue' collection, this could be the 'favorites'
-		var vcontinue = this.collection;
-		
-		this.collection.each( function(oneResult) {
+		var vcell = this.gamecellEl;
+		var vrow = this.gamerowEl;
+		var vtilesEl = this.tilesEl;
+		var vtile = this.gametileEl;
+
 			var appid = oneResult.appid();
 			var name = oneResult.name();
 			var link = oneResult.link();
@@ -69,13 +99,13 @@ var AppCollectionView = Backbone.View.extend({
 			var cell = vcell.clone();
 			var cellwidth;
 
-			celln += 1;
-			if (celln === 1) {
-				rown += 1;
-				if (rown === 1) { 
+			this.celln += 1;
+			if (this.celln === 1) {
+				this.rown += 1;
+				if (this.rown === 1) { 
 					cellwidth = largewidth;
 				} else {
-					rowsep = vrow.clone();
+					var rowsep = vrow.clone();
 					rowsep.show();
 					vtilesEl.append(rowsep);
 					var filler = vcell.clone();
@@ -87,8 +117,8 @@ var AppCollectionView = Backbone.View.extend({
 				}
 			} else {
 				cellwidth = regularwidth;
-				if (celln === xcells) {
-					celln = 0;
+				if (this.celln === xcells) {
+					this.celln = 0;
 				}
 			}
 
@@ -100,21 +130,18 @@ var AppCollectionView = Backbone.View.extend({
 			var gametile_loading_overlay = clonedtile.find('.game-tile-inner-overlay');
 			var gamelink = clonedtile.find('.game-link');
 			gamelink.attr('href', link);
+			var thisview = this;
+
+			// TODO Must receive the 'continue' collection, this could be the 'favorites'
+			var vcontinue = this.collection;
+		
 			gamelink.click(function(e) {
-				var jLink = $( this );
-				var aUrl = jLink.attr( "href" );
-				$.ajax({
-						url: aUrl,
-						beforeSend: function(){
-							gametile_loading_overlay.show();
-							gametile_loading_underlay.addClass('game-tile-inner-blurred');
-						},
-						complete: function(){
-							gametile_loading_overlay.hide();
-							gametile_loading_underlay.removeClass('game-tile-inner-blurred');
-							vcontinue.fetch();
-						}						
-				});
+				thisview.gameClicked(
+					link, 
+					gametile_loading_overlay, 
+					gametile_loading_underlay,
+					vcontinue
+				);
 				e.preventDefault();
 			});
 
@@ -126,27 +153,35 @@ var AppCollectionView = Backbone.View.extend({
 			if (visible) {
 				clonedtile.fadeIn();
 			} else {
-				hidden.push(clonedtile);
+				this.hidden.push(clonedtile);
 			}
-		});
-
-		var button = $('#continue-more-button');
-		var morelink = button.find('.more-button-link');
-		morelink.text(hiding ? 'more...' : 'less...');
-		morelink.click(function(e) {
-			var i;
-			for (i = 0; i < hidden.length; i += 1) {
-				if (hiding) {
-					hidden[i].fadeIn();
-				} else { 
-					hidden[i].fadeOut();
+		
+	},
+	
+	gameClicked: function(
+		aUrl, 
+		gametile_loading_overlay, 
+		gametile_loading_underlay,
+		vcontinue
+		) { "use strict";
+				var vdatatype;
+				if (aUrl.indexOf('.js') === aUrl.length - 3) {
+					vdatatype = 'script'; 
+				} else {
+					vdatatype = 'json';
 				}
-			}
-			hiding = !hiding;
-			morelink.text(hiding ? 'more...' : 'less...');
-			e.preventDefault();
-		});
-		vtilesEl.append(button);
-		button.fadeIn();
+				$.ajax({
+						url: aUrl,
+						dataType: vdatatype,
+						beforeSend: function(){
+							gametile_loading_overlay.show();
+							gametile_loading_underlay.addClass('game-tile-inner-blurred');
+						},
+						complete: function(){
+							gametile_loading_overlay.hide();
+							gametile_loading_underlay.removeClass('game-tile-inner-blurred');
+							vcontinue.fetch();
+						}						
+				});
 	}
 });
