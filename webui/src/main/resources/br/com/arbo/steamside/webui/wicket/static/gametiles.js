@@ -37,21 +37,16 @@ var AppCollectionView = Backbone.View.extend({
 	render: function() {		"use strict";
 	
 		this.tilesEl.empty();
-
-		var hiding = true;
-		this.hidden = [];		
-
-		
-		var thisview = this;
 		this.rown = 0;		
 		this.celln = 0;
+		this.hidden = [];		
+		var thisview = this;
 		this.collection.each( function(oneResult) {
-						
 			thisview.renderOneCell(oneResult);
-			
 		});
 
-		var button = $('#continue-more-button');
+		var hiding = true;
+		var button = $('#continue-more-button').clone();
 		var morelink = button.find('.more-button-link');
 		morelink.text(hiding ? 'more...' : 'less...');
 		var thishidden = this.hidden;
@@ -91,13 +86,21 @@ var AppCollectionView = Backbone.View.extend({
 			var name = oneResult.name();
 			var link = oneResult.link();
 			var size = oneResult.size();
-			var visible = vsession.kidsmode() || oneResult.visible();
+			
+			/*
+				visible will not be part of the result anymore,
+				because we want logic like "first row is visible"
+				and this depends on calculations inside the browser
+			*/
+			var alwaysvisible = vsession.kidsmode();
+			
 			var img = 
 				'http://cdn.steampowered.com/v/gfx/apps/' 
 				+ appid + '/header.jpg';
 
 			var cell = vcell.clone();
 			var cellwidth;
+			var visible = alwaysvisible;
 
 			this.celln += 1;
 			if (this.celln === 1) {
@@ -111,8 +114,12 @@ var AppCollectionView = Backbone.View.extend({
 					var filler = vcell.clone();
 					filler.html('&nbsp;');
 					filler.width(fillerwidth.toString() + "%");
-					filler.show();
 					vtilesEl.append(filler);
+					if (visible) {
+						filler.fadeIn();
+					} else {
+						this.hidden.push(filler);
+					}
 					cellwidth = regularwidth;
 				}
 			} else {
@@ -120,6 +127,10 @@ var AppCollectionView = Backbone.View.extend({
 				if (this.celln === xcells) {
 					this.celln = 0;
 				}
+			}
+
+			if (this.rown === 1) { 
+				visible = true;
 			}
 
 			var clonedtile = vtile.clone();
@@ -147,13 +158,15 @@ var AppCollectionView = Backbone.View.extend({
 
 			cell.width(cellwidth.toString() + "%");
 			cell.append(clonedtile);
+			//cell.show();
 			vtilesEl.append(cell);
-			cell.show();
 			
 			if (visible) {
 				clonedtile.fadeIn();
+				cell.fadeIn();
 			} else {
 				this.hidden.push(clonedtile);
+				this.hidden.push(cell);
 			}
 		
 	},
