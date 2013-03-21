@@ -109,6 +109,51 @@ var GamecardView = Backbone.View.extend({
 	
 });
 
+var MoreButtonView = Backbone.View.extend({
+	hiding: true,
+	hidden: null,
+	
+	initialize: function() {		"use strict";
+		this.hidden = this.options.hidden;
+	},
+
+	render: function() {		"use strict";
+		this.textRefresh();
+		var thisview = this;
+		this.moreLink().click(function(e) {
+			e.preventDefault();
+			thisview.toggle();
+		});
+		this.button().fadeIn();
+	},
+
+	toggle: function() {		"use strict";
+		var thishidden = this.hidden;
+		var i;
+		for (i = 0; i < thishidden.length; i += 1) {
+			if (this.hiding) {
+				thishidden[i].fadeIn();
+			} else { 
+				thishidden[i].fadeOut();
+			}
+		}
+		this.hiding = !this.hiding;
+		this.textRefresh();
+	},
+	
+	textRefresh: function() {		"use strict";
+		this.moreLink().text(this.hiding ? 'more...' : 'less...');
+	},
+
+	button: function() {		"use strict";
+		return $(this.el);
+	},
+	
+	moreLink: function() {		"use strict";
+		return this.button().find('.more-button-link');
+	}
+});
+
 var AppCollectionView = Backbone.View.extend({
 	session: null,
 	gamerowEl: null,
@@ -130,7 +175,6 @@ var AppCollectionView = Backbone.View.extend({
 	},
 
 	render: function() {		"use strict";
-	
 		this.tilesEl.empty();
 		this.rown = 0;		
 		this.celln = 0;
@@ -140,26 +184,14 @@ var AppCollectionView = Backbone.View.extend({
 			thisview.renderOneCell(oneResult);
 		});
 
-		var hiding = true;
-		var button = $('#continue-more-button').clone();
-		var morelink = button.find('.more-button-link');
-		morelink.text(hiding ? 'more...' : 'less...');
-		var thishidden = this.hidden;
-		morelink.click(function(e) {
-			var i;
-			for (i = 0; i < thishidden.length; i += 1) {
-				if (hiding) {
-					thishidden[i].fadeIn();
-				} else { 
-					thishidden[i].fadeOut();
-				}
-			}
-			hiding = !hiding;
-			morelink.text(hiding ? 'more...' : 'less...');
-			e.preventDefault();
-		});
+		var more_button_template = $('#continue-more-button'); 
+		var button = more_button_template.clone();
 		this.first_row.append(button);
-		button.fadeIn();
+		var morebutton = new MoreButtonView({
+			el: button,
+			hidden: this.hidden
+		});
+		morebutton.render();
 	},
 	
 	renderOneCell: function(
@@ -176,73 +208,67 @@ var AppCollectionView = Backbone.View.extend({
 		var vrow = this.gamerowEl;
 		var vtilesEl = this.tilesEl;
 
-			var appid = oneResult.appid();
-			var name = oneResult.name();
-			var link = oneResult.link();
-			var size = oneResult.size();
-			
-			/*
-				visible will not be part of the result anymore,
-				because we want logic like "first row is visible"
-				and this depends on calculations inside the browser
-			*/
-			var alwaysvisible = vsession.kidsmode();
-			
-			var cellwidth;
-			var visible = alwaysvisible;
+		/*
+			visible will not be part of the result anymore,
+			because we want logic like "first row is visible"
+			and this depends on calculations inside the browser
+		*/
+		var alwaysvisible = vsession.kidsmode();
+		
+		var cellwidth;
+		var visible = alwaysvisible;
 
-			this.celln += 1;
-			if (this.celln === 1) {
-				var rowsep = vrow.clone();
-				rowsep.show();
-				vtilesEl.append(rowsep);
-				this.current_row = rowsep;
-				  
-				this.rown += 1;
-				if (this.rown === 1) {
-					cellwidth = largewidth;
-					this.first_row = this.current_row;
-				} else {
-					var filler = vcell.clone();
-					filler.html('&nbsp;');
-					filler.width(fillerwidth.toString() + "%");
-					this.current_row.append(filler);
-					if (visible) {
-						filler.fadeIn();
-					} else {
-						this.hidden.push(filler);
-					}
-					cellwidth = regularwidth;
-				}
+		this.celln += 1;
+		if (this.celln === 1) {
+			var rowsep = vrow.clone();
+			rowsep.show();
+			vtilesEl.append(rowsep);
+			this.current_row = rowsep;
+			  
+			this.rown += 1;
+			if (this.rown === 1) {
+				cellwidth = largewidth;
+				this.first_row = this.current_row;
 			} else {
-				cellwidth = regularwidth;
-				if (this.celln === xcells) {
-					this.celln = 0;
+				var filler = vcell.clone();
+				filler.html('&nbsp;');
+				filler.width(fillerwidth.toString() + "%");
+				this.current_row.append(filler);
+				if (visible) {
+					filler.fadeIn();
+				} else {
+					this.hidden.push(filler);
 				}
+				cellwidth = regularwidth;
 			}
-
-			if (this.rown === 1) { 
-				visible = true;
+		} else {
+			cellwidth = regularwidth;
+			if (this.celln === xcells) {
+				this.celln = 0;
 			}
+		}
 
-			// TODO Must receive the 'continue' collection, this could be the 'favorites'
-			var vcontinue = this.collection;
-			var vtile = this.gametileEl;
+		if (this.rown === 1) { 
+			visible = true;
+		}
 
-			var clonedtile = vtile.clone();
-			
-			var gamecard = new GamecardView({
-				model: oneResult,
-				el: clonedtile,
-				continues: vcontinue,
-				cell_template: this.gamecellEl,
-				cellwidth: cellwidth,
-				current_row: this.current_row,
-				visible: visible,
-				hidden: this.hidden
-			});
-			gamecard.render();
-			
+		// TODO Must receive the 'continue' collection, this could be the 'favorites'
+		var vcontinue = this.collection;
+		var vtile = this.gametileEl;
+
+		var clonedtile = vtile.clone();
+		
+		var gamecard = new GamecardView({
+			model: oneResult,
+			el: clonedtile,
+			continues: vcontinue,
+			cell_template: this.gamecellEl,
+			cellwidth: cellwidth,
+			current_row: this.current_row,
+			visible: visible,
+			hidden: this.hidden
+		});
+		gamecard.render();
 	}
 	
 });
