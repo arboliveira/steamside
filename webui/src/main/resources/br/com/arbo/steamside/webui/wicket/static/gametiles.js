@@ -16,6 +16,99 @@ var Game = Backbone.Model.extend({
     }
 });
 
+var GamecardView = Backbone.View.extend({
+	continues: null,
+	cell_template: null,
+	cellwidth: 0,
+	current_row: null,
+	visible: false,
+	hidden: null,
+	
+	initialize: function() {		"use strict";
+		this.continues = this.options.continues;
+		this.cell_template = this.options.cell_template;
+		this.cellwidth = this.options.cellwidth;
+		this.current_row = this.options.current_row;
+		this.visible = this.options.visible;
+		this.hidden = this.options.hidden;
+	},
+
+	render: function () {		"use strict";
+
+			var oneResult = this.model;
+			var appid = oneResult.appid();
+			var name = oneResult.name();
+			var link = oneResult.link();
+			var size = oneResult.size();
+
+			var img = 
+				'http://cdn.steampowered.com/v/gfx/apps/' 
+				+ appid + '/header.jpg';
+
+			var clonedtile = $(this.el);
+			clonedtile.find('.game-name').text(name);
+			clonedtile.addClass('game-tile-' + size);
+			clonedtile.find('.game-img').attr('src', img);
+			var gametile_loading_underlay = clonedtile.find('.game-tile-inner');
+			var gametile_loading_overlay = clonedtile.find('.game-tile-inner-overlay');
+			var gamelink = clonedtile.find('.game-link');
+			gamelink.attr('href', link);
+			var thisview = this;
+			var vcontinue = this.continues;
+			gamelink.click(function(e) {
+				thisview.gameClicked(
+					link, 
+					gametile_loading_overlay, 
+					gametile_loading_underlay,
+					vcontinue
+				);
+				e.preventDefault();
+			});
+
+			var cell = this.cell_template.clone();
+			cell.width(this.cellwidth.toString() + "%");
+			cell.append(clonedtile);
+			this.current_row.append(cell);
+			
+			if (this.visible) {
+				clonedtile.fadeIn();
+				cell.fadeIn();
+			} else {
+				this.hidden.push(clonedtile);
+				this.hidden.push(cell);
+			}
+		
+	},
+	
+	gameClicked: function(
+		aUrl, 
+		gametile_loading_overlay, 
+		gametile_loading_underlay,
+		vcontinue
+		) { "use strict";
+				var vdatatype;
+				if (aUrl.indexOf('.js') === aUrl.length - 3) {
+					vdatatype = 'script'; 
+				} else {
+					vdatatype = 'json';
+				}
+				$.ajax({
+						url: aUrl,
+						dataType: vdatatype,
+						beforeSend: function(){
+							gametile_loading_overlay.show();
+							gametile_loading_underlay.addClass('game-tile-inner-blurred');
+						},
+						complete: function(){
+							gametile_loading_overlay.hide();
+							gametile_loading_underlay.removeClass('game-tile-inner-blurred');
+							vcontinue.fetch();
+						}						
+				});
+	}
+	
+});
+
 var AppCollectionView = Backbone.View.extend({
 	session: null,
 	gamerowEl: null,
@@ -24,6 +117,8 @@ var AppCollectionView = Backbone.View.extend({
 	tilesEl: null,
 	celln: null,
 	hidden: null,
+	first_row: null,
+	current_row: null,
 
 	initialize: function() {		"use strict";
 		this.session = this.options.session;
@@ -63,7 +158,7 @@ var AppCollectionView = Backbone.View.extend({
 			morelink.text(hiding ? 'more...' : 'less...');
 			e.preventDefault();
 		});
-		this.tilesEl.append(button);
+		this.first_row.append(button);
 		button.fadeIn();
 	},
 	
@@ -80,7 +175,6 @@ var AppCollectionView = Backbone.View.extend({
 		var vcell = this.gamecellEl;
 		var vrow = this.gamerowEl;
 		var vtilesEl = this.tilesEl;
-		var vtile = this.gametileEl;
 
 			var appid = oneResult.appid();
 			var name = oneResult.name();
@@ -94,27 +188,25 @@ var AppCollectionView = Backbone.View.extend({
 			*/
 			var alwaysvisible = vsession.kidsmode();
 			
-			var img = 
-				'http://cdn.steampowered.com/v/gfx/apps/' 
-				+ appid + '/header.jpg';
-
-			var cell = vcell.clone();
 			var cellwidth;
 			var visible = alwaysvisible;
 
 			this.celln += 1;
 			if (this.celln === 1) {
+				var rowsep = vrow.clone();
+				rowsep.show();
+				vtilesEl.append(rowsep);
+				this.current_row = rowsep;
+				  
 				this.rown += 1;
-				if (this.rown === 1) { 
+				if (this.rown === 1) {
 					cellwidth = largewidth;
+					this.first_row = this.current_row;
 				} else {
-					var rowsep = vrow.clone();
-					rowsep.show();
-					vtilesEl.append(rowsep);
 					var filler = vcell.clone();
 					filler.html('&nbsp;');
 					filler.width(fillerwidth.toString() + "%");
-					vtilesEl.append(filler);
+					this.current_row.append(filler);
 					if (visible) {
 						filler.fadeIn();
 					} else {
@@ -133,68 +225,24 @@ var AppCollectionView = Backbone.View.extend({
 				visible = true;
 			}
 
-			var clonedtile = vtile.clone();
-			clonedtile.find('.game-name').text(name);
-			clonedtile.addClass('game-tile-' + size);
-			clonedtile.find('.game-img').attr('src', img);
-			var gametile_loading_underlay = clonedtile.find('.game-tile-inner');
-			var gametile_loading_overlay = clonedtile.find('.game-tile-inner-overlay');
-			var gamelink = clonedtile.find('.game-link');
-			gamelink.attr('href', link);
-			var thisview = this;
-
 			// TODO Must receive the 'continue' collection, this could be the 'favorites'
 			var vcontinue = this.collection;
-		
-			gamelink.click(function(e) {
-				thisview.gameClicked(
-					link, 
-					gametile_loading_overlay, 
-					gametile_loading_underlay,
-					vcontinue
-				);
-				e.preventDefault();
-			});
+			var vtile = this.gametileEl;
 
-			cell.width(cellwidth.toString() + "%");
-			cell.append(clonedtile);
-			//cell.show();
-			vtilesEl.append(cell);
+			var clonedtile = vtile.clone();
 			
-			if (visible) {
-				clonedtile.fadeIn();
-				cell.fadeIn();
-			} else {
-				this.hidden.push(clonedtile);
-				this.hidden.push(cell);
-			}
-		
-	},
-	
-	gameClicked: function(
-		aUrl, 
-		gametile_loading_overlay, 
-		gametile_loading_underlay,
-		vcontinue
-		) { "use strict";
-				var vdatatype;
-				if (aUrl.indexOf('.js') === aUrl.length - 3) {
-					vdatatype = 'script'; 
-				} else {
-					vdatatype = 'json';
-				}
-				$.ajax({
-						url: aUrl,
-						dataType: vdatatype,
-						beforeSend: function(){
-							gametile_loading_overlay.show();
-							gametile_loading_underlay.addClass('game-tile-inner-blurred');
-						},
-						complete: function(){
-							gametile_loading_overlay.hide();
-							gametile_loading_underlay.removeClass('game-tile-inner-blurred');
-							vcontinue.fetch();
-						}						
-				});
+			var gamecard = new GamecardView({
+				model: oneResult,
+				el: clonedtile,
+				continues: vcontinue,
+				cell_template: this.gamecellEl,
+				cellwidth: cellwidth,
+				current_row: this.current_row,
+				visible: visible,
+				hidden: this.hidden
+			});
+			gamecard.render();
+			
 	}
+	
 });

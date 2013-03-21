@@ -28,10 +28,4 @@
   "link" : "app/80300/run",
   "size": "regular",
   "visible": "false"
-}, {
-  "appid" : "29160",
-  "name" : "Blueberry Garden",
-  "link" : "app/29160/run",
-  "size": "regular",
-  "visible": "false"
 } ]
