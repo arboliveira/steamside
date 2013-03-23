@@ -109,6 +109,22 @@ var GamecardView = Backbone.View.extend({
 	
 });
 
+var FillerCellView = Backbone.View.extend({
+	fillerwidth: 0,
+	
+	initialize: function() {		"use strict";
+		this.fillerwidth = this.options.fillerwidth;
+	},
+
+	render: function() {		"use strict";
+		var filler = $(this.el);
+		filler.html('&nbsp;');
+		filler.width(this.fillerwidth.toString() + "%");
+		filler.addClass('game-cell-filler');
+		return this;
+	}
+});
+
 var MoreButtonView = Backbone.View.extend({
 	hiding: true,
 	hidden: null,
@@ -201,7 +217,6 @@ var AppCollectionView = Backbone.View.extend({
 		var xcells = 3;
 		var largewidth = 40;
 		var regularwidth = 30;
-		var fillerwidth = 100 - xcells * regularwidth;
 
 		var vsession = this.session;
 		var vcell = this.gamecellEl;
@@ -230,15 +245,17 @@ var AppCollectionView = Backbone.View.extend({
 				cellwidth = largewidth;
 				this.first_row = this.current_row;
 			} else {
-				var filler = vcell.clone();
-				filler.html('&nbsp;');
-				filler.width(fillerwidth.toString() + "%");
-				this.current_row.append(filler);
+				var fillerel = new FillerCellView({
+					fillerwidth: 100 - xcells * regularwidth	
+				}).render().el;
+				this.current_row.append(fillerel);
+				var filler = $(fillerel);
 				if (visible) {
 					filler.fadeIn();
 				} else {
 					this.hidden.push(filler);
 				}
+				
 				cellwidth = regularwidth;
 			}
 		} else {

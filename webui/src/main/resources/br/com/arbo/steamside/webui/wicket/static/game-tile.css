@@ -10,6 +10,12 @@
 	float: left;
 }
 
+.game-cell-filler {
+	display:none;
+	float: left;
+	background-color: lightgray;
+}
+
 .game-tile {
 	display:none;
 	background-color: snow;
