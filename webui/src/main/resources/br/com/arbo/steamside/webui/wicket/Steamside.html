@@ -252,6 +252,8 @@ var SessionView = Backbone.View.extend({
 $(document).ready(function() {
 
 	        $('#nav-steam-client').click(function(e) {
+				e.preventDefault();
+
 	        	var jLink = $( this );
 	        	var aUrl = jLink.attr( "href" );
 	        	alert(aUrl);
@@ -260,7 +262,6 @@ $(document).ready(function() {
 						url: aUrl
 					}
 				);
-				e.preventDefault();
     		});
 	
 	

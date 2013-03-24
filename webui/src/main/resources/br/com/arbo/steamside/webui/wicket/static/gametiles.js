@@ -16,17 +16,72 @@ var Game = Backbone.Model.extend({
     }
 });
 
+var DeckCell = Backbone.View.extend({
+	view: null,
+	alwaysVisible: false,
+	visible: false,
+	
+	initialize: function() {		"use strict";
+		this.view = this.options.view;
+		this.alwaysVisible = this.options.alwaysVisible;
+		this.visible = this.alwaysVisible;
+	},
+			
+	toggleVisibility: function() {		"use strict";
+		if (this.alwaysVisible) {
+			this.visible = true;
+		} else {
+			this.visible = !this.visible;
+		}
+		this.display();		
+	},
+	
+	display: function() {		"use strict";
+		var el = $(this.view.el);
+		if (this.visible) {
+			el.fadeIn();
+		} else { 
+			el.fadeOut();
+		}
+	}
+});
+
+var Deck = Backbone.Model.extend({
+	deck: [],
+
+	push: function(view, alwaysVisible) {		"use strict";
+		this.deck.push(
+			new DeckCell({
+				view: view,
+				alwaysVisible: alwaysVisible
+			})
+		);
+	},
+	
+	display: function() {		"use strict";
+		var i;
+		for (i = 0; i < this.deck.length; i += 1) {
+			this.deck[i].display();
+		}
+	},
+	
+	toggleVisibility: function() {		"use strict";
+		var i;
+		for (i = 0; i < this.deck.length; i += 1) {
+			this.deck[i].toggleVisibility();
+		}
+	}
+});
+
 var GamecardView = Backbone.View.extend({
 	continues: null,
 	tile_el: null,
 	cellwidth: 0,
-	visible: false,
 	
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.tile_el = this.options.tile_el;
 		this.cellwidth = this.options.cellwidth;
-		this.visible = this.options.visible;
 	},
 
 	render: function () {		"use strict";
@@ -73,28 +128,27 @@ var GamecardView = Backbone.View.extend({
 		gametile_loading_overlay, 
 		gametile_loading_underlay,
 		vcontinue
-		) { "use strict";
-				var vdatatype;
-				if (aUrl.indexOf('.js') === aUrl.length - 3) {
-					vdatatype = 'script'; 
-				} else {
-					vdatatype = 'json';
-				}
-				$.ajax({
-						url: aUrl,
-						dataType: vdatatype,
-						beforeSend: function(){
-							gametile_loading_overlay.show();
-							gametile_loading_underlay.addClass('game-tile-inner-blurred');
-						},
-						complete: function(){
-							gametile_loading_overlay.hide();
-							gametile_loading_underlay.removeClass('game-tile-inner-blurred');
-							vcontinue.fetch();
-						}						
-				});
+	) { "use strict";
+		var vdatatype;
+		if (aUrl.indexOf('.js') === aUrl.length - 3) {
+			vdatatype = 'script'; 
+		} else {
+			vdatatype = 'json';
+		}
+		$.ajax({
+				url: aUrl,
+				dataType: vdatatype,
+				beforeSend: function(){
+					gametile_loading_overlay.show();
+					gametile_loading_underlay.addClass('game-tile-inner-blurred');
+				},
+				complete: function(){
+					gametile_loading_overlay.hide();
+					gametile_loading_underlay.removeClass('game-tile-inner-blurred');
+					vcontinue.fetch();
+				}						
+		});
 	}
-	
 });
 
 var FillerCellView = Backbone.View.extend({
@@ -115,10 +169,10 @@ var FillerCellView = Backbone.View.extend({
 
 var MoreButtonView = Backbone.View.extend({
 	hiding: true,
-	hidden: null,
+	deck: null,
 	
 	initialize: function() {		"use strict";
-		this.hidden = this.options.hidden;
+		this.deck = this.options.deck;
 	},
 
 	render: function() {		"use strict";
@@ -132,15 +186,7 @@ var MoreButtonView = Backbone.View.extend({
 	},
 
 	toggle: function() {		"use strict";
-		var thishidden = this.hidden;
-		var i;
-		for (i = 0; i < thishidden.length; i += 1) {
-			if (this.hiding) {
-				thishidden[i].fadeIn();
-			} else { 
-				thishidden[i].fadeOut();
-			}
-		}
+		this.deck.toggleVisibility();
 		this.hiding = !this.hiding;
 		this.textRefresh();
 	},
@@ -165,7 +211,7 @@ var AppCollectionView = Backbone.View.extend({
 	gametileEl: null,
 	tilesEl: null,
 	celln: null,
-	hidden: null,
+	deck: new Deck(),
 	first_row: null,
 	current_row: null,
 
@@ -182,18 +228,18 @@ var AppCollectionView = Backbone.View.extend({
 		this.tilesEl.empty();
 		this.rown = 0;		
 		this.celln = 0;
-		this.hidden = [];		
 		var thisview = this;
 		this.collection.each( function(oneResult) {
 			thisview.renderOneCell(oneResult);
 		});
+		this.deck.display();
 
 		var more_button_template = $('#continue-more-button'); 
 		var button = more_button_template.clone();
 		this.first_row.append(button);
 		var morebutton = new MoreButtonView({
 			el: button,
-			hidden: this.hidden
+			deck: this.deck
 		});
 		morebutton.render();
 	},
@@ -217,44 +263,41 @@ var AppCollectionView = Backbone.View.extend({
 			and this depends on calculations inside the browser
 		*/
 		var alwaysvisible = vsession.kidsmode();
-		
-		var cellwidth;
-		var visible = alwaysvisible;
 
 		this.celln += 1;
+		if (this.celln === 1) {
+			this.rown += 1;
+		} else {
+			if (this.celln === xcells) {
+				this.celln = 0;
+			}
+		}
+		
 		if (this.celln === 1) {
 			var rowsep = vrow.clone();
 			rowsep.show();
 			vtilesEl.append(rowsep);
 			this.current_row = rowsep;
-			  
-			this.rown += 1;
-			if (this.rown === 1) {
-				cellwidth = largewidth;
-				this.first_row = this.current_row;
-			} else {
-				var fillerel = new FillerCellView({
-					fillerwidth: 100 - xcells * regularwidth	
-				}).render().el;
-				this.current_row.append(fillerel);
-				var filler = $(fillerel);
-				if (visible) {
-					filler.fadeIn();
-				} else {
-					this.hidden.push(filler);
-				}
-				
-				cellwidth = regularwidth;
-			}
-		} else {
-			cellwidth = regularwidth;
-			if (this.celln === xcells) {
-				this.celln = 0;
+			if (this.first_row === null) {
+				this.first_row = rowsep;
 			}
 		}
 
-		if (this.rown === 1) { 
-			visible = true;
+		if (this.celln === 1 && this.rown > 1) {
+			var fillerview = 
+				new FillerCellView({
+					fillerwidth: 100 - xcells * regularwidth	
+				});
+			this.deck.push(fillerview, alwaysvisible);
+			var fillerel = fillerview.render().el;
+			this.current_row.append(fillerel);
+		}
+
+		var cellwidth;
+		if (this.celln === 1 && this.rown === 1) {
+			cellwidth = largewidth;
+		} else {
+			cellwidth = regularwidth;
 		}
 
 		// TODO Must receive the 'continue' collection, this could be the 'favorites'
@@ -263,24 +306,18 @@ var AppCollectionView = Backbone.View.extend({
 
 		var clonedtile = vtile.clone();
 		var clonedcell = this.gamecellEl.clone();
-		
-		var gamecard_el = new GamecardView({
+
+		var gamecardview = new GamecardView({
 			model: oneResult,
 			el: clonedcell,
 			continues: vcontinue,
 			tile_el: clonedtile,
 			cellwidth: cellwidth,
-			current_row: this.current_row,
-			visible: visible,
-			hidden: this.hidden
-		}).render().el;
+			current_row: this.current_row
+		});
+		this.deck.push(gamecardview, alwaysvisible || this.rown === 1);
+		var gamecard_el = gamecardview.render().el;
 		this.current_row.append(gamecard_el);
-		var gamecard = $(gamecard_el); 
-		if (visible) {
-			gamecard.fadeIn();
-		} else {
-			this.hidden.push(gamecard);
-		}
 	}
 	
 });
