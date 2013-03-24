@@ -17,7 +17,6 @@
 }
 
 .game-tile {
-	display:none;
 	background-color: snow;
 	margin: 5px; 
 	border-top: 1px solid #999;
