@@ -158,29 +158,6 @@ xml:lang="en" lang="en">
 	font-size: x-small;
 }
 
-.wait {
-    background: url(static/ajaxload.info.gif) no-repeat center center;
-}
-
-.game-tile {
-	position: relative;
-}
-
-.game-tile-inner-blurred {
-    opacity: 0.2;
-}
-
-.game-tile-inner-overlay {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-	text-align: center;
-    z-index: 10;
-    display: none;
-}
-
 </style>
 
 
@@ -273,14 +250,12 @@ $(document).ready(function() {
 	var sessionView = new SessionView({model: sessionModel});
     
 	var gamerow = $('#game-row');
-	var gamecell = $('#game-cell');
 	var gametile = $('#game-tile');
     new AppCollectionView({ 
     	el: $('#recently-played'), 
     	collection: continues,
     	session: sessionModel,
     	gamerowEl: gamerow,
-    	gamecellEl: gamecell,
     	gametileEl: gametile    	 
     });
     
@@ -294,7 +269,6 @@ $(document).ready(function() {
     	collection: searchresults,
     	session: sessionModel,
     	gamerowEl: gamerow,
-    	gamecellEl: gamecell,
     	gametileEl: gametile    	 
     });
     
@@ -484,15 +458,13 @@ $(document).ready(function() {
 		
 <div id="game-row" class="game-row">
 </div>
-<div id="game-cell" class="game-cell">
-</div>
 <div id="game-tile" class="game-tile">
 	<div class="game-tile-inner">
 		<a class="game-link" href="">
 		<img class="game-img" src="" />
 		<div class="game-tile-caption">
 			<big><strong>
-			<span class="game-name">Search result</span>
+			<span class="game-name">Game card template</span>
 			</strong></big>
 		</div>
 		</a>

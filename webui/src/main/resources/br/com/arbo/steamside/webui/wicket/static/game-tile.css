@@ -5,11 +5,6 @@
 	width: 100%;
 }
 
-.game-cell {
-	display:none;
-	float: left;
-}
-
 .game-cell-filler {
 	display:none;
 	float: left;
@@ -17,6 +12,9 @@
 }
 
 .game-tile {
+	display: none; /* otherwise template will show up when page renders */
+	float: left;
+	position: relative;
 	background-color: snow;
 	margin: 5px; 
 	border-top: 1px solid #999;
@@ -37,12 +35,27 @@
 
 .game-tile-regular {
 	font-size: 75%;
-	float: right; 
 }
 
 .game-tile-inner {
 	padding: 10px;
 }
+
+.game-tile-inner-blurred {
+    opacity: 0.2;
+}
+
+.game-tile-inner-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+	text-align: center;
+    z-index: 10;
+    display: none;
+}
+
 .game-img {
 	border-top: 2px solid #555;
 	border-right: 1px solid #999;
@@ -64,7 +77,6 @@
 	float: right;
 	font-family: "Karla";
 	font-size: x-small;
-	color: yellow;
 }
 
 .more-button a {
