@@ -2,30 +2,25 @@
   "appid" : "37600",
   "name" : "Windosill",
   "link" : "static/app-run.js",
-  "size": "large",
-  "visible": "true"
+  "size": "large"
 }, {
   "appid" : "80300",
   "name" : "Puzzle Bots",
   "link" : "static/app-run.js",
-  "size": "regular",
-  "visible": "true"
+  "size": "regular"
 }, {
   "appid" : "29160",
   "name" : "Blueberry Garden",
   "link" : "static/app-run.js",
-  "size": "regular",
-  "visible": "true"
+  "size": "regular"
 }, {
   "appid" : "37600",
   "name" : "Windosill",
   "link" : "static/app-run.js",
-  "size": "regular",
-  "visible": "false"
+  "size": "regular"
 }, {
   "appid" : "80300",
   "name" : "Puzzle Bots",
   "link" : "static/app-run.js",
-  "size": "regular",
-  "visible": "false"
+  "size": "regular"
 } ]

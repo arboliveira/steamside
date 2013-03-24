@@ -46,8 +46,16 @@ var DeckCell = Backbone.View.extend({
 	}
 });
 
+var DeckRow = Backbone.View.extend({
+	className: 'game-row'
+});
+
 var Deck = Backbone.Model.extend({
-	deck: [],
+	deck: null,
+
+	initialize: function() {		"use strict";
+		this.deck = [];
+	},
 
 	push: function(view, alwaysVisible) {		"use strict";
 		this.deck.push(
@@ -152,8 +160,9 @@ var FillerCellView = Backbone.View.extend({
 var MoreButtonView = Backbone.View.extend({
 	hiding: true,
 	deck: null,
+	
 	events: {
-		"click .more-button-link"         : "moreClicked"
+		"click" : "moreClicked"
 	},
 	
 	initialize: function() {		"use strict";
@@ -184,19 +193,19 @@ var MoreButtonView = Backbone.View.extend({
 
 var AppCollectionView = Backbone.View.extend({
 	session: null,
-	gamerowEl: null,
 	gametileEl: null,
+	morebutton_template: null,
 	tilesEl: null,
 	celln: 0,
 	rown: 0,
-	deck: new Deck(),
+	deck: null,
 	first_row: null,
 	current_row: null,
 
 	initialize: function() {		"use strict";
 		this.session = this.options.session;
-		this.gamerowEl = this.options.gamerowEl;
 		this.gametileEl = this.options.gametileEl;
+		this.morebutton_template = this.options.morebutton_template;
 		this.tilesEl = this.$('.game-tiles');
 		this.collection.on('reset', this.render, this);
 	},
@@ -216,7 +225,7 @@ var AppCollectionView = Backbone.View.extend({
 		this.deck.display();
 
 		var morebutton = new MoreButtonView({
-			el: $('#continue-more-button').clone(),
+			el: this.morebutton_template.clone(),
 			deck: this.deck
 		});
 		this.first_row.append(morebutton.render().el);
@@ -283,12 +292,14 @@ var AppCollectionView = Backbone.View.extend({
 	},
 	
 	startNewRow: function() {        "use strict";
-		var rowsep = this.gamerowEl.clone();
-		rowsep.show();
-		this.tilesEl.append(rowsep);
-		this.current_row = rowsep;
+		var row_view = new DeckRow().render();
+		var row_el = row_view.el;
+		var row = row_view.$el;
+		row.show();
+		this.tilesEl.append(row_el);
+		this.current_row = row;
 		if (this.first_row === null) {
-			this.first_row = rowsep;
+			this.first_row = row;
 		}
 	}
 });

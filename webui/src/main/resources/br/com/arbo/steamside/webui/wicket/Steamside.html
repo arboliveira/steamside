@@ -249,14 +249,14 @@ $(document).ready(function() {
 	var sessionModel = new SessionModel();
 	var sessionView = new SessionView({model: sessionModel});
     
-	var gamerow = $('#game-row');
-	var gametile = $('#game-tile');
+	var gametile_template = $('#game-tile');
+	var morebutton_template = $('#continue-more-button');
     new AppCollectionView({ 
     	el: $('#recently-played'), 
     	collection: continues,
     	session: sessionModel,
-    	gamerowEl: gamerow,
-    	gametileEl: gametile    	 
+    	gametileEl: gametile_template,
+    	morebutton_template: morebutton_template    	 
     });
     
     new SearchTextView({ 
@@ -268,8 +268,8 @@ $(document).ready(function() {
     	el: $('#div-id-search-results'), 
     	collection: searchresults,
     	session: sessionModel,
-    	gamerowEl: gamerow,
-    	gametileEl: gametile    	 
+    	gametileEl: gametile_template,
+    	morebutton_template: morebutton_template
     });
     
     continues.fetch({
@@ -335,7 +335,7 @@ $(document).ready(function() {
 	</div>
 
 	<div class="content content-at-right">
-	    <div class="game-collection" id="recently-played">
+	    <div id="recently-played">
 	      	<div class="game-tiles" style="float:right;">
 			</div>
 	    </div>
@@ -456,8 +456,6 @@ $(document).ready(function() {
 
 <!-- GAME GRID COMPONENTS BEGIN -->		
 		
-<div id="game-row" class="game-row">
-</div>
 <div id="game-tile" class="game-tile">
 	<div class="game-tile-inner">
 		<a class="game-link" href="">
