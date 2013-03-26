@@ -81,6 +81,17 @@ var Deck = Backbone.Model.extend({
 	}
 });
 
+var HtmlTemplates = {
+	gamecard: null,
+	load: function() {			"use strict";
+		var that = this;
+		$.get('gamecard.template.html', function(template) {
+			that.gamecard = $(template).find(".game-tile");
+        });
+	}
+};
+HtmlTemplates.load();
+
 var GamecardView = Backbone.View.extend({
 	continues: null,
 	cellwidth: 0,
@@ -91,6 +102,7 @@ var GamecardView = Backbone.View.extend({
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.cellwidth = this.options.cellwidth;
+		this.setElement(HtmlTemplates.gamecard.clone());
 	},
 	
 	render: function () {		"use strict";
@@ -193,7 +205,6 @@ var MoreButtonView = Backbone.View.extend({
 
 var AppCollectionView = Backbone.View.extend({
 	session: null,
-	gametileEl: null,
 	morebutton_template: null,
 	tilesEl: null,
 	celln: 0,
@@ -204,7 +215,6 @@ var AppCollectionView = Backbone.View.extend({
 
 	initialize: function() {		"use strict";
 		this.session = this.options.session;
-		this.gametileEl = this.options.gametileEl;
 		this.morebutton_template = this.options.morebutton_template;
 		this.tilesEl = this.$('.game-tiles');
 		this.collection.on('reset', this.render, this);
@@ -229,6 +239,7 @@ var AppCollectionView = Backbone.View.extend({
 			deck: this.deck
 		});
 		this.first_row.append(morebutton.render().el);
+		return this;
 	},
 	
 	renderOneCell: function(
@@ -282,7 +293,6 @@ var AppCollectionView = Backbone.View.extend({
 
 		var gamecardview = new GamecardView({
 			model: oneResult,
-			el: this.gametileEl.clone(),
 			continues: vcontinue,
 			cellwidth: cellwidth
 		});

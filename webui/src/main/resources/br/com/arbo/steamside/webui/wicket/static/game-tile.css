@@ -12,7 +12,6 @@
 }
 
 .game-tile {
-	display: none; /* otherwise template will show up when page renders */
 	float: left;
 	position: relative;
 	background-color: snow;

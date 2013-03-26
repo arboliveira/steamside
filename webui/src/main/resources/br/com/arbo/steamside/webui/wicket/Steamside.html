@@ -249,13 +249,11 @@ $(document).ready(function() {
 	var sessionModel = new SessionModel();
 	var sessionView = new SessionView({model: sessionModel});
     
-	var gametile_template = $('#game-tile');
 	var morebutton_template = $('#continue-more-button');
     new AppCollectionView({ 
     	el: $('#recently-played'), 
     	collection: continues,
     	session: sessionModel,
-    	gametileEl: gametile_template,
     	morebutton_template: morebutton_template    	 
     });
     
@@ -268,7 +266,6 @@ $(document).ready(function() {
     	el: $('#div-id-search-results'), 
     	collection: searchresults,
     	session: sessionModel,
-    	gametileEl: gametile_template,
     	morebutton_template: morebutton_template
     });
     
@@ -456,21 +453,6 @@ $(document).ready(function() {
 
 <!-- GAME GRID COMPONENTS BEGIN -->		
 		
-<div id="game-tile" class="game-tile">
-	<div class="game-tile-inner">
-		<a class="game-link" href="">
-		<img class="game-img" src="" />
-		<div class="game-tile-caption">
-			<big><strong>
-			<span class="game-name">Game card template</span>
-			</strong></big>
-		</div>
-		</a>
-	</div>
-	<div class="game-tile-inner-overlay">
-		<img src="static/ajaxload.info.gif"  style="margin: 2.5em" />
-	</div>
-</div>
 <div id="continue-more-button"  class="more-button">
 	<a class='more-button-link' href="">
 		more...
