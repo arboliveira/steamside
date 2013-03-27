@@ -81,16 +81,19 @@ var Deck = Backbone.Model.extend({
 	}
 });
 
-var HtmlTemplates = {
+var Tileset = {
 	gamecard: null,
+	morebutton: null,
 	load: function() {			"use strict";
 		var that = this;
-		$.get('gamecard.template.html', function(template) {
-			that.gamecard = $(template).find(".game-tile");
+		$.get('tileset.html', function(template) {
+			var t = $(template);
+			that.gamecard   = t.find(".game-tile");
+			that.morebutton = t.find(".more-button"); 
         });
 	}
 };
-HtmlTemplates.load();
+Tileset.load();
 
 var GamecardView = Backbone.View.extend({
 	continues: null,
@@ -102,7 +105,7 @@ var GamecardView = Backbone.View.extend({
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.cellwidth = this.options.cellwidth;
-		this.setElement(HtmlTemplates.gamecard.clone());
+		this.setElement(Tileset.gamecard.clone());
 	},
 	
 	render: function () {		"use strict";
@@ -179,6 +182,7 @@ var MoreButtonView = Backbone.View.extend({
 	
 	initialize: function() {		"use strict";
 		this.deck = this.options.deck;
+		this.setElement(Tileset.morebutton.clone());
 	},
 
 	render: function() {		"use strict";
@@ -205,7 +209,6 @@ var MoreButtonView = Backbone.View.extend({
 
 var AppCollectionView = Backbone.View.extend({
 	session: null,
-	morebutton_template: null,
 	tilesEl: null,
 	celln: 0,
 	rown: 0,
@@ -215,7 +218,6 @@ var AppCollectionView = Backbone.View.extend({
 
 	initialize: function() {		"use strict";
 		this.session = this.options.session;
-		this.morebutton_template = this.options.morebutton_template;
 		this.tilesEl = this.$('.game-tiles');
 		this.collection.on('reset', this.render, this);
 	},
@@ -235,7 +237,6 @@ var AppCollectionView = Backbone.View.extend({
 		this.deck.display();
 
 		var morebutton = new MoreButtonView({
-			el: this.morebutton_template.clone(),
 			deck: this.deck
 		});
 		this.first_row.append(morebutton.render().el);

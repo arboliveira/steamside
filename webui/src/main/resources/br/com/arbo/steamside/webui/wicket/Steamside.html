@@ -249,12 +249,10 @@ $(document).ready(function() {
 	var sessionModel = new SessionModel();
 	var sessionView = new SessionView({model: sessionModel});
     
-	var morebutton_template = $('#continue-more-button');
     new AppCollectionView({ 
     	el: $('#recently-played'), 
     	collection: continues,
     	session: sessionModel,
-    	morebutton_template: morebutton_template    	 
     });
     
     new SearchTextView({ 
@@ -266,7 +264,6 @@ $(document).ready(function() {
     	el: $('#div-id-search-results'), 
     	collection: searchresults,
     	session: sessionModel,
-    	morebutton_template: morebutton_template
     });
     
     continues.fetch({
@@ -368,7 +365,7 @@ $(document).ready(function() {
 					style="width: 85%; font-size:24px; "/>
 				<br/>
 	        	<input class="command-button"  type="submit" value="Enter"/> <span id="command-hint" class="command-hint"> continue Windosill</span>&nbsp;&nbsp;
-	        	<input class="command-button"  type="submit" value="Ctrl+Enter"/> <span id="command-hint" class="command-hint">Windosill community hub</span>
+	        	<input class="command-button"  type="submit" value="Ctrl+Enter"/> <span id="command-hint-2" class="command-hint">Windosill community hub</span>
 	      	</form>
 	    </div>
 	
@@ -448,21 +445,8 @@ $(document).ready(function() {
 
 <div id="ft">
 </div>
-		
 
 
-<!-- GAME GRID COMPONENTS BEGIN -->		
-		
-<div id="continue-more-button"  class="more-button">
-	<a class='more-button-link' href="">
-		more...
-	</a>
-</div>
-
-<!-- GAME GRID COMPONENTS END -->		
-		
-		
-		
 <!-- ----------------------------------------------------------------------- -->
 </body>
 </html>
