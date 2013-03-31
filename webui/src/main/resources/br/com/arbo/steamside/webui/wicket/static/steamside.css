@@ -13,11 +13,17 @@ body {
 
 
 .side-header {
-    width: 80px;
     margin: 0;
     padding: 0.8em;
     padding-top: 0.6em;
     padding-bottom: 0.4em;
+}
+
+.side-header-at-left {
+    /*
+    side-header-at-left.width + GAP = content-at-right.margin-left
+    */
+    width: 80px;
 }
 
 .side-header-at-left {
@@ -27,9 +33,20 @@ body {
 }
 
 .side-header-at-right {
+    /*
+     see: content-at-left.width
+    */
+    width: 80px;
+}
+
+.side-header-at-right {
     float: right;
     text-align: right;
-    border-left: 1px solid gray;
+    /*
+    Can't get it right just yet...
+    for now, relying on content-at-left.border-right :-p
+    */
+    /* border-left: 1px solid gray; */
 }
 
 .side-header-paragraph {
@@ -61,16 +78,31 @@ body {
 
 .content-at-left {
     border-right: 1px solid gray;
-    margin-right: 0px;
-    float: left;
+    padding-right: 20px;
+    /* float: left; // this makes the right border finish midways :-p */
+}
+
+.content-at-left {
+    /*
+     TODO Perhaps only JavaScript can make it right?
+     Should be:
+     side-header-at-right.width + GAP = content-at-left.margin-right
+     But it cannot withstand a window resize...
+    */
     width: 85%;
 }
 
 .content-at-right {
     border-left: 1px solid gray;
-    margin-left: 106px;
     padding-left: 20px;
     /*	float: right;  // this pushes content down somehow :-p */
+}
+
+.content-at-right {
+    /*
+    see: .side-header-at-left.width
+    */
+    margin-left: 106px;
 }
 
 .footer {
@@ -80,3 +112,6 @@ body {
     height: 0px;
 }
 
+.search-text-input {
+    width: 100%; font-size:24px;
+}

@@ -293,8 +293,9 @@ $(document).ready(function() {
 			<form action="">
                 <div>
                 <input type="text" name="text-search" id="input-id-text-search"
+                       class="search-text-input"
                        placeholder="game or command"
-					style="width: 85%; font-size:24px; "/>
+					/>
                 <br/>
                 <input class="command-button"  type="submit" value="Enter"/> <span id="command-hint" class="command-hint"> continue Windosill</span>&nbsp;&nbsp;
                 <input class="command-button"  type="submit" value="Ctrl+Enter"/> <span id="command-hint-2" class="command-hint">Windosill community hub</span>
@@ -360,6 +361,8 @@ $(document).ready(function() {
 
 	<div class="content content-at-left">
 		<p><span wicket:id="number-of-games">101</span> owned</p>
+        <div class="footer">
+        </div>
 	</div>
 
 	<div class="footer">
