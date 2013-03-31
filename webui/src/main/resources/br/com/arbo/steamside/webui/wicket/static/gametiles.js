@@ -1,3 +1,12 @@
+function fetch_json(collection) {
+    collection.fetch({
+        mimeType: 'application/json',
+        cache: false,
+        success: function() { if (false) console.log(collection); },
+        error: function() { console.log(arguments); }
+    });
+}
+
 var Game = Backbone.Model.extend({
     appid : function() {		"use strict";
 		return this.get('appid');
@@ -151,7 +160,7 @@ var GameCardView = Backbone.View.extend({
 				complete: function(){
 					loading_overlay.hide();
 					loading_underlay.removeClass('game-tile-inner-blurred');
-					that.continues.fetch();
+					fetch_json(that.continues);
 				}						
 		});
 	}
@@ -214,9 +223,11 @@ var DeckView = Backbone.View.extend({
 	deck: null,
 	first_row: null,
 	current_row: null,
+    continues: null,
 
 	initialize: function() {		"use strict";
 		this.session = this.options.session;
+        this.continues = this.options.continues;
 		this.collection.on('reset', this.render, this);
 	},
 
@@ -288,8 +299,7 @@ var DeckView = Backbone.View.extend({
 			width = widthRegular;
 		}
 
-		// TODO Must receive the 'continue' collection, this could be 'favorites' or 'search results'
-		var that_continue = this.collection;
+		var that_continue = this.continues;
 
 		var card_view = new GameCardView({
 			model: oneResult,

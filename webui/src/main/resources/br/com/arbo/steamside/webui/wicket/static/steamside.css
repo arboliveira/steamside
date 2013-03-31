@@ -78,6 +78,13 @@ body {
     padding: 10px;
 }
 
+.content:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
 .content-at-left {
     border-right: 1px solid gray;
     padding-right: 20px;
