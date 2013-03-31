@@ -82,30 +82,30 @@ var Deck = Backbone.Model.extend({
 });
 
 var Tileset = {
-	gamecard: null,
-	morebutton: null,
+	gameCard: null,
+	moreButton: null,
 	load: function() {			"use strict";
 		var that = this;
 		$.get('tileset.html', function(template) {
 			var t = $(template);
-			that.gamecard   = t.find(".game-tile");
-			that.morebutton = t.find(".more-button"); 
+			that.gameCard   = t.find(".game-tile");
+			that.moreButton = t.find(".more-button");
         });
 	}
 };
 Tileset.load();
 
-var GamecardView = Backbone.View.extend({
+var GameCardView = Backbone.View.extend({
 	continues: null,
-	cellwidth: 0,
+	width: 0,
 	events: {
 		"click .game-link"         : "gameClicked"
 	},
 
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
-		this.cellwidth = this.options.cellwidth;
-		this.setElement(Tileset.gamecard.clone());
+		this.width = this.options.width;
+		this.setElement(Tileset.gameCard.clone());
 	},
 	
 	render: function () {		"use strict";
@@ -119,7 +119,7 @@ var GamecardView = Backbone.View.extend({
 
 		this.$el.hide();
 		this.$el.addClass('game-tile-' + size);
-		this.$el.width(this.cellwidth.toString() + "%");
+		this.$el.width(this.width.toString() + "%");
 		this.$('.game-name').text(name);
 		this.$('.game-img').attr('src', img);
 		this.$('.game-link').attr('href', link);
@@ -131,42 +131,42 @@ var GamecardView = Backbone.View.extend({
 		e.preventDefault();
 
 		var aUrl = this.model.link();
-		var gametile_loading_underlay = this.$el.find('.game-tile-inner');
-		var gametile_loading_overlay = this.$el.find('.game-tile-inner-overlay');
-		var vcontinue = this.continues;
+		var loading_underlay = this.$el.find('.game-tile-inner');
+		var loading_overlay = this.$el.find('.game-tile-inner-overlay');
+		var that = this;
 
-		var vdatatype;
+		var type;
 		if (aUrl.indexOf('.js') === aUrl.length - 3) {
-			vdatatype = 'script'; 
+			type = 'script';
 		} else {
-			vdatatype = 'json';
+			type = 'json';
 		}
 		$.ajax({
 				url: aUrl,
-				dataType: vdatatype,
+				dataType: type,
 				beforeSend: function(){
-					gametile_loading_overlay.show();
-					gametile_loading_underlay.addClass('game-tile-inner-blurred');
+					loading_overlay.show();
+					loading_underlay.addClass('game-tile-inner-blurred');
 				},
 				complete: function(){
-					gametile_loading_overlay.hide();
-					gametile_loading_underlay.removeClass('game-tile-inner-blurred');
-					vcontinue.fetch();
+					loading_overlay.hide();
+					loading_underlay.removeClass('game-tile-inner-blurred');
+					that.continues.fetch();
 				}						
 		});
 	}
 });
 
 var FillerCellView = Backbone.View.extend({
-	fillerwidth: 0,
+	width: 0,
 	
 	initialize: function() {		"use strict";
-		this.fillerwidth = this.options.fillerwidth;
+		this.width = this.options.width;
 	},
 
 	render: function() {		"use strict";
 		this.$el.html('&nbsp;');
-		this.$el.width(this.fillerwidth.toString() + "%");
+		this.$el.width(this.width.toString() + "%");
 		this.$el.addClass('game-cell-filler');
 		return this;
 	}
@@ -182,7 +182,7 @@ var MoreButtonView = Backbone.View.extend({
 	
 	initialize: function() {		"use strict";
 		this.deck = this.options.deck;
-		this.setElement(Tileset.morebutton.clone());
+		this.setElement(Tileset.moreButton.clone());
 	},
 
 	render: function() {		"use strict";
@@ -210,8 +210,8 @@ var MoreButtonView = Backbone.View.extend({
 var AppCollectionView = Backbone.View.extend({
 	session: null,
 	tilesEl: null,
-	celln: 0,
-	rown: 0,
+	xCell: 0,
+	yRow: 0,
 	deck: null,
 	first_row: null,
 	current_row: null,
@@ -224,22 +224,22 @@ var AppCollectionView = Backbone.View.extend({
 
 	render: function() {		"use strict";
 		this.tilesEl.empty();
-		this.celln = 0;
-		this.rown = 0;		
+		this.xCell = 0;
+		this.yRow = 0;
 		this.deck = new Deck();
 		this.first_row = null;
 		this.current_row = null;
 		
-		var thisview = this;
+		var that = this;
 		this.collection.each( function(oneResult) {
-			thisview.renderOneCell(oneResult);
+			that.renderOneCell(oneResult);
 		});
 		this.deck.display();
 
-		var morebutton = new MoreButtonView({
+		var moreButton = new MoreButtonView({
 			deck: this.deck
 		});
-		this.first_row.append(morebutton.render().el);
+		this.first_row.append(moreButton.render().el);
 		return this;
 	},
 	
@@ -247,59 +247,60 @@ var AppCollectionView = Backbone.View.extend({
 		oneResult
 		) { "use strict";
 
-		var xcells = 3;
-		var regularwidth = 30;
-		var largewidth = 100 - 5 - regularwidth * (xcells - 1);
-		var fillerwidth = 100 - 5 - regularwidth * xcells;
+		var cells_in_a_row = 3;
+		var widthRegular = 30;
+		var widthLarge = 100 - 5 - widthRegular * (cells_in_a_row - 1);
+		var widthFiller = 100 - 5 - widthRegular * cells_in_a_row;
 
 		/*
 			visible will not be part of the result anymore,
 			because we want logic like "first row is visible"
 			and this depends on calculations inside the browser
 		*/
-		var alwaysvisible = this.session.kidsmode();
+		var alwaysVisible = this.session.kidsmode();
 
-		this.celln += 1;
-		if (this.celln === 1) {
-			this.rown += 1;
+		this.xCell += 1;
+		if (this.xCell === 1) {
+			this.yRow += 1;
 		} else {
-			if (this.celln === xcells) {
-				this.celln = 0;
+			if (this.xCell === cells_in_a_row) {
+				this.xCell = 0;
 			}
 		}
 		
-		if (this.celln === 1) {
+		if (this.xCell === 1) {
 			this.startNewRow();
 		}
 
-		if (this.celln === 1 && this.rown > 1) {
-			var fillerview = 
+		if (this.xCell === 1 && this.yRow > 1) {
+			var filler_view =
 				new FillerCellView({
-					fillerwidth: fillerwidth	
+					width: widthFiller
 				});
-			this.deck.push(fillerview, alwaysvisible);
-			var fillerel = fillerview.render().el;
-			this.current_row.append(fillerel);
+			this.deck.push(filler_view, alwaysVisible);
+			var filler_el = filler_view.render().el;
+			this.current_row.append(filler_el);
 		}
 
-		var cellwidth;
-		if (this.celln === 1 && this.rown === 1) {
-			cellwidth = largewidth;
+		var width;
+        var topLeftIsLarger = this.xCell === 1 && this.yRow === 1;
+        if (topLeftIsLarger) {
+			width = widthLarge;
 		} else {
-			cellwidth = regularwidth;
+			width = widthRegular;
 		}
 
 		// TODO Must receive the 'continue' collection, this could be 'favorites' or 'search results'
-		var vcontinue = this.collection;
+		var that_continue = this.collection;
 
-		var gamecardview = new GamecardView({
+		var card_view = new GameCardView({
 			model: oneResult,
-			continues: vcontinue,
-			cellwidth: cellwidth
+			continues: that_continue,
+			width: width
 		});
-		this.deck.push(gamecardview, alwaysvisible || this.rown === 1);
-		var gamecard_el = gamecardview.render().el;
-		this.current_row.append(gamecard_el);
+		this.deck.push(card_view, alwaysVisible || this.yRow === 1);
+		var card_el = card_view.render().el;
+		this.current_row.append(card_el);
 	},
 	
 	startNewRow: function() {        "use strict";

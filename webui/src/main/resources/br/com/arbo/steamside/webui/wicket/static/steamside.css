@@ -1,0 +1,81 @@
+body {
+	background-color: White;
+}
+
+.container {
+    background-color: PaleTurquoise ;
+    margin: 10px auto;
+    border: 1px;
+    border-style: outset;
+    border-color: navy;
+    border-bottom-color: khaki;
+}
+
+
+.side-header {
+    width: 80px;
+    margin: 0;
+    padding: 0.8em;
+    padding-top: 0.6em;
+    padding-bottom: 0.4em;
+}
+
+.side-header-at-left {
+    float: left;
+    text-align: right;
+    border-right: 1px solid gray;
+}
+
+.side-header-at-right {
+    float: right;
+    text-align: right;
+    border-left: 1px solid gray;
+}
+
+.side-header-paragraph {
+    margin: 0 0 0.6em 0;
+}
+
+.side-text { font-family: Arvo; font-size: 20px; font-weight: bold; color: darkred; }
+
+.side-text-at-left  {text-shadow: -0.2em 0.2em 0.2em gray}
+.side-text-at-right {text-shadow: 0.2em 0.2em 0.2em gray}
+
+.side-links {
+    font-size: 0.75em;
+    font-family: Karla;
+    margin-top: 1.5em;
+    margin-bottom: 0em;
+}
+.side-links ul {
+    padding-left: 0px;
+    list-style:none;
+}
+.side-links a {
+    text-decoration: none;	/* hide link underline */
+}
+
+.content {
+    padding: 10px;
+}
+
+.content-at-left {
+    margin-right: 0px;
+    float: left;
+    width: 85%;
+}
+
+.content-at-right {
+    margin-left: 106px;
+    padding-left: 20px;
+    border-left: 1px solid gray;
+    /*	float: right;  // this pushes content down somehow :-p */
+}
+
+.footer {
+    clear: both;
+    margin: 0px;
+    padding: 0px;
+    height: 0px;
+}
+
