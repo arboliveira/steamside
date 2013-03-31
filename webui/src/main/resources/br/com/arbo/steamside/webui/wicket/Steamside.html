@@ -2,16 +2,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" 
-xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" 
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
 xml:lang="en" lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
 <!-- ======================================================================= -->
 <title>Steamside</title>
 
 <link href="static/steamside.css" rel="stylesheet" type="text/css" />
-<link rel="icon" 
-      type="image/png" 
+<link rel="icon"
+      type="image/png"
       href="static/steamside.png"/>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 
@@ -22,13 +22,13 @@ xml:lang="en" lang="en">
 <script src="static/backbone.js"></script>
 <script src="static/gametiles.js"></script>
 <script src="static/session.js"></script>
-		
+
 <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
 <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
 <link href="http://fonts.googleapis.com/css?family=Montserrat+Alternates:regular" rel="stylesheet" type="text/css" />
 <link href="http://fonts.googleapis.com/css?family=Karla:regular" rel="stylesheet" type="text/css" />
 <link href="http://fonts.googleapis.com/css?family=Jura:regular, bold" rel="stylesheet" type="text/css" />
-		
+
 <style type="text/css">
 
 /* ----- */
@@ -48,7 +48,7 @@ xml:lang="en" lang="en">
 	margin-right: 10px;
 }
 .page-header-name-text {
-	font-family: Jura; 
+	font-family: Jura;
 	font-weight: bold;
 	font-size: 2em;
 	color: darkred;
@@ -64,7 +64,7 @@ xml:lang="en" lang="en">
 .page-header-navigation-bar li {
 	display: table-cell;
 	text-align: center;
-	font-family: Arvo; 
+	font-family: Arvo;
 }
 
 .page-header-separator {
@@ -89,7 +89,7 @@ xml:lang="en" lang="en">
 <!-- ======================================================================= -->
 
 <script type="application/javascript">
-		
+
 var ContinueGames = Backbone.Collection.extend({
     model: Game,
     url: 'continue.json'
@@ -109,7 +109,7 @@ var SearchTextView = Backbone.View.extend({
     },
 
     initialize: function() {
-        
+
     },
 
     submitSearch: function(e) {
@@ -141,7 +141,7 @@ var SessionView = Backbone.View.extend({
     	var m = this.model;
     	var username = m.username();
     	var kidsMode = m.kidsmode();
-		
+
 		if (kidsMode) {
 			$("#page-header-navigation-bar").hide();
 			$("#search-segment").hide();
@@ -165,32 +165,40 @@ $(document).ready(function() {
 					}
 				);
     		});
-	
-	
-	
+
+
+
 	var continues = new ContinueGames();
     var searchResults = new SearchResults();
 
 	var sessionModel = new SessionModel();
 	var sessionView = new SessionView({model: sessionModel});
-    
-    new AppCollectionView({ 
-    	el: $('#recently-played'), 
+
+    new AppCollectionView({
+    	el: $('#continues-deck'),
     	collection: continues,
     	session: sessionModel
     });
-    
-    new SearchTextView({ 
-    	el: $('#div-id-search-text'), 
+
+    new SearchTextView({
+    	el: $('#div-id-search-text'),
     	collection: searchResults
     });
 
-    new AppCollectionView({ 
-    	el: $('#div-id-search-results'), 
+    new AppCollectionView({
+    	el: $('#search-results-deck'),
     	collection: searchResults,
     	session: sessionModel
     });
-    
+
+    /*
+    new AppCollectionView({
+        el: $('#favorites-deck'),
+        collection: favorites,
+        session: sessionModel
+    });
+    */
+
     continues.fetch({
         	mimeType: 'application/json',
 			cache: false,
@@ -198,8 +206,8 @@ $(document).ready(function() {
 			error: function() { console.log(arguments); }
 	});
 
-	$("#input-id-text-search").focus();	
-});			
+	$("#input-id-text-search").focus();
+});
 
 </script>
 
@@ -208,7 +216,7 @@ $(document).ready(function() {
 </head>
 <body>
 <!-- ======================================================================= -->
-		
+
 
 <div class="page-header">
 	<div class="page-header-logo">
@@ -217,7 +225,7 @@ $(document).ready(function() {
 	<div class="page-header-name" style="text-align:center;">
 		 <span class="page-header-name-text"  style="line-height: 0.90em">Steamside</span>
 		 <br style="margin:0px;"/>
-		 <span style="font-size: 0.8em;font-family:Arvo">Your <span style="color:darkred">companion</span> on Steam</span>
+		 <span style="font-size: 0.8em;font-family:Arvo">Your <span style="color:DarkRed">companion</span> on Steam</span>
 	</div>
 	<div class="page-header-navigation-bar"  id="page-header-navigation-bar">
 		<ul>
@@ -254,7 +262,7 @@ $(document).ready(function() {
 	</div>
 
 	<div class="content content-at-right">
-	    <div id="recently-played">
+	    <div id="continues-deck">
 	      	<div class="game-tiles" style="float:right;">
 			</div>
 	    </div>
@@ -262,9 +270,6 @@ $(document).ready(function() {
 	    </div>
 	</div>
 
-	<div class="footer">
-	</div>
-	
 </div>
 
 
@@ -286,24 +291,29 @@ $(document).ready(function() {
 
 		<div id="div-id-search-text">
 			<form action="">
-				<input type="text" name="text-search" id="input-id-text-search"
+                <div>
+                <input type="text" name="text-search" id="input-id-text-search"
+                       placeholder="game or command"
 					style="width: 85%; font-size:24px; "/>
-				<br/>
-	        	<input class="command-button"  type="submit" value="Enter"/> <span id="command-hint" class="command-hint"> continue Windosill</span>&nbsp;&nbsp;
-	        	<input class="command-button"  type="submit" value="Ctrl+Enter"/> <span id="command-hint-2" class="command-hint">Windosill community hub</span>
-	      	</form>
+                <br/>
+                <input class="command-button"  type="submit" value="Enter"/> <span id="command-hint" class="command-hint"> continue Windosill</span>&nbsp;&nbsp;
+                <input class="command-button"  type="submit" value="Ctrl+Enter"/> <span id="command-hint-2" class="command-hint">Windosill community hub</span>
+                </div>
+            </form>
 	    </div>
-	
-	    <div id="div-id-search-results">
+
+	    <div id="search-results-deck">
 	      	<div class="game-tiles">
 			</div>
 	    </div>
 
+        <div class="footer">
+        </div>
 	</div>
 
 	<div class="footer">
 	</div>
-	
+
 </div>
 
 
@@ -329,7 +339,7 @@ $(document).ready(function() {
 
 	<div class="footer">
 	</div>
-	
+
 </div>
 
 
@@ -354,11 +364,11 @@ $(document).ready(function() {
 
 	<div class="footer">
 	</div>
-	
+
 </div>
 
 
-		
+
 <div id="bd" style="display:none;">
 	<p>
 		Wicket version:

@@ -60,15 +60,16 @@ body {
 }
 
 .content-at-left {
+    border-right: 1px solid gray;
     margin-right: 0px;
     float: left;
     width: 85%;
 }
 
 .content-at-right {
+    border-left: 1px solid gray;
     margin-left: 106px;
     padding-left: 20px;
-    border-left: 1px solid gray;
     /*	float: right;  // this pushes content down somehow :-p */
 }
 
