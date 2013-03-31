@@ -3,6 +3,9 @@ body {
 }
 
 .container {
+    clear: both;
+    overflow: auto;
+    padding: 0;
     background-color: PaleTurquoise ;
     margin: 10px auto;
     border: 1px;
@@ -10,7 +13,6 @@ body {
     border-color: navy;
     border-bottom-color: khaki;
 }
-
 
 .side-header {
     margin: 0;

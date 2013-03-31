@@ -207,9 +207,8 @@ var MoreButtonView = Backbone.View.extend({
 	}
 });
 
-var AppCollectionView = Backbone.View.extend({
+var DeckView = Backbone.View.extend({
 	session: null,
-	tilesEl: null,
 	xCell: 0,
 	yRow: 0,
 	deck: null,
@@ -218,12 +217,11 @@ var AppCollectionView = Backbone.View.extend({
 
 	initialize: function() {		"use strict";
 		this.session = this.options.session;
-		this.tilesEl = this.$('.game-tiles');
 		this.collection.on('reset', this.render, this);
 	},
 
 	render: function() {		"use strict";
-		this.tilesEl.empty();
+		this.$el.empty();
 		this.xCell = 0;
 		this.yRow = 0;
 		this.deck = new Deck();
@@ -308,7 +306,7 @@ var AppCollectionView = Backbone.View.extend({
 		var row_el = row_view.el;
 		var row = row_view.$el;
 		row.show();
-		this.tilesEl.append(row_el);
+		this.$el.append(row_el);
 		this.current_row = row;
 		if (this.first_row === null) {
 			this.first_row = row;
