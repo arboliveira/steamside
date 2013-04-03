@@ -1,17 +1,17 @@
-package br.com.arbo.steamside.vdf.examples;
+package br.com.arbo.steamside.vdf;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.web.AppNameFromSteamStore;
 
-class PrintAppNamesFromSharedconfigVdf {
+class ExamplePrintAppNamesFromSharedconfigVdf {
 
 	static final boolean web = false;
 
 	public static void main(final String[] args) {
 		final AppNameFactory appnameFactory =
-				PrintAppNamesFromSharedconfigVdf.newAppNameFactory();
+				ExamplePrintAppNamesFromSharedconfigVdf.newAppNameFactory();
 		final SysoutAppInfoLine dump =
 				new SysoutAppInfoLine(appnameFactory);
 		new DumpSharedconfigVdfApps(dump).dump();

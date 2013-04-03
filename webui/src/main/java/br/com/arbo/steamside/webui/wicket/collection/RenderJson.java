@@ -9,7 +9,7 @@ import org.apache.wicket.request.Response;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
-import br.com.arbo.steamside.collection.CollectionFromVdf.Filter;
+import br.com.arbo.steamside.collection.Filter;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 import br.com.arbo.steamside.types.Category;
 

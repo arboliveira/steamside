@@ -3,7 +3,7 @@ package br.com.arbo.steamside.collection;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.arbo.steamside.collection.CollectionFromVdf.Filter.Reject;
+import br.com.arbo.steamside.collection.Filter.Reject;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps;
@@ -29,6 +29,7 @@ public class CollectionFromVdf {
 	}
 
 	public AppCollectionDTO fetch(final Filter filter) {
+		// TODO Prioritize games launched by current user
 		final List<App> list = populate(filter);
 		return toDTO(list);
 	}
@@ -42,15 +43,6 @@ public class CollectionFromVdf {
 		final List<App> list = new ArrayList<App>(apps.count());
 		filter(apps, list, filter);
 		return list;
-	}
-
-	public interface Filter {
-
-		void consider(App app) throws Reject;
-
-		public static final class Reject extends Exception {
-			//
-		}
 	}
 
 	private static void filter(

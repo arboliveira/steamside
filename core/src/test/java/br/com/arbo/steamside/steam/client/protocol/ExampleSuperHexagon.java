@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steam.client.protocol.examples;
+package br.com.arbo.steamside.steam.client.protocol;
 
 import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.rungame.RunGame;
@@ -6,7 +6,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_v
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.types.AppId;
 
-public class SuperHexagon {
+public class ExampleSuperHexagon {
 
 	public static void main(final String[] args) {
 		final AppId appid = new AppId("221640");

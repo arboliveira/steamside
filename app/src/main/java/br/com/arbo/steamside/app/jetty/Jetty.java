@@ -61,17 +61,9 @@ public class Jetty implements LocalWebserver {
 			sh.setInitParameter("wicket.configuration", "deployment");
 
 		// Static resources
-		final URL resource = classWicketApplication.getClassLoader()
-				.getResource(
-						parent_of_static(classWicketApplication) + "/static/");
-		final String staticPath = resource.toExternalForm();
-		final ServletHolder resourceServlet = new ServletHolder(
-				DefaultServlet.class);
-		resourceServlet.setInitParameter("dirAllowed", "true");
-		resourceServlet.setInitParameter("resourceBase", staticPath);
-		resourceServlet.setInitParameter("pathInfoOnly", "true");
-
-		sch.addServlet(resourceServlet, "/static/*");
+		final String root_of_resources = root_of_resources(classWicketApplication);
+		buildStaticServlet(
+				classWicketApplication, root_of_resources, sch);
 		sch.addServlet(sh, "/*");
 		server.setHandler(sch);
 
@@ -79,6 +71,21 @@ public class Jetty implements LocalWebserver {
 		doStart();
 		xtWaitForUserToPressEnterAndExit();
 		Instructions.started(portInUse);
+	}
+
+	private static void buildStaticServlet(
+			final Class<WicketApplication> classWicketApplication,
+			final String root_of_resources, final ServletContextHandler sch) {
+		final URL resource = classWicketApplication.getClassLoader()
+				.getResource(
+						root_of_resources + "/static/");
+		final String path = resource.toExternalForm();
+		final ServletHolder servlet = new ServletHolder(
+				DefaultServlet.class);
+		servlet.setInitParameter("dirAllowed", "true");
+		servlet.setInitParameter("resourceBase", path);
+		servlet.setInitParameter("pathInfoOnly", "true");
+		sch.addServlet(servlet, "/static/*");
 	}
 
 	@Override
@@ -133,7 +140,7 @@ public class Jetty implements LocalWebserver {
 		}
 	}
 
-	private static String parent_of_static(
+	private static String root_of_resources(
 			final Class<WicketApplication> classWicketApplication) {
 		final String packagename = classWicketApplication.getPackage()
 				.getName();

@@ -147,9 +147,9 @@ var SessionView = Backbone.View.extend({
     }
 });
 
-$(document).ready(function() {
+function render_page() {
 
-	        $('#nav-steam-client').click(function(e) {
+    $('#nav-steam-client').click(function(e) {
 				e.preventDefault();
 
 	        	var jLink = $( this );
@@ -161,8 +161,6 @@ $(document).ready(function() {
 					}
 				);
     		});
-
-
 
     var sessionModel = new SessionModel();
     var continues = new ContinueGames();
@@ -201,7 +199,16 @@ $(document).ready(function() {
     fetch_json(favorites);
 
 	$("#input-id-text-search").focus();
+}
+
+
+$(document).ready(function() {
+
+    var callback = render_page;
+    Tileset.load(callback);
+
 });
+
 
 </script>
 

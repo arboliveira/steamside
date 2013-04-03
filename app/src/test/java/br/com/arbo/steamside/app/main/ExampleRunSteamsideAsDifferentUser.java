@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.app.main.examples;
+package br.com.arbo.steamside.app.main;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -10,7 +10,7 @@ import br.com.arbo.steamside.app.main.ContainerFactory;
 import br.com.arbo.steamside.app.main.Main;
 import br.com.arbo.steamside.opersys.username.User;
 
-public class RunSteamsideAsDifferentUser {
+class ExampleRunSteamsideAsDifferentUser {
 
 	public static void main(final String[] args) {
 		final Mockery m = new JUnit4Mockery();

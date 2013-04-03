@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.vdf.examples;
+package br.com.arbo.steamside.vdf;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,18 +7,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
-import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.Region;
-import br.com.arbo.steamside.vdf.Vdf;
 
-public final class DumpVdfStructure implements
+public final class ExampleDumpVdfStructure implements
 		KeyValueVisitor {
 
 	public static void main(final String[] args) throws IOException {
 		final File from = File_sharedconfig_vdf.sharedconfig_vdf();
 		final String text = FileUtils.readFileToString(from);
 		final Vdf vdfImpl = new Vdf(text);
-		vdfImpl.root().accept(new DumpVdfStructure());
+		vdfImpl.root().accept(new ExampleDumpVdfStructure());
 	}
 
 	String indent = "";

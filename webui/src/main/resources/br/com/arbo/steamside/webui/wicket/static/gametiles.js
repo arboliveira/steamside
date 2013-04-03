@@ -2,7 +2,7 @@ function fetch_json(collection) {
     collection.fetch({
         mimeType: 'application/json',
         cache: false,
-        success: function() { if (false) console.log(collection); },
+        success: function() { /* console.log(collection); */ },
         error: function() { console.log(arguments); }
     });
 }
@@ -90,19 +90,30 @@ var Deck = Backbone.Model.extend({
 	}
 });
 
-var Tileset = {
-	gameCard: null,
-	moreButton: null,
-	load: function() {			"use strict";
-		var that = this;
-		$.get('tileset.html', function(template) {
-			var t = $(template);
-			that.gameCard   = t.find(".game-tile");
-			that.moreButton = t.find(".more-button");
-        });
-	}
+var Tileset;
+Tileset = {
+    _gameCard: null,
+    _moreButton: null,
+    gameCard: function () {
+        "use strict";
+        return this._gameCard;
+    },
+    moreButton: function () {
+        "use strict";
+        return this._moreButton;
+    },
+    load: function (callback) {
+        "use strict";
+        var path = 'static/tileset.html';
+        var that = this;
+        $.ajax({url:path, success: function(template) {
+            var t = $(template);
+            that._gameCard   = t.find(".game-tile");
+            that._moreButton = t.find(".more-button");
+            callback();
+        }, dataType: 'xml'});
+    }
 };
-Tileset.load();
 
 var GameCardView = Backbone.View.extend({
 	continues: null,
@@ -114,7 +125,7 @@ var GameCardView = Backbone.View.extend({
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.width = this.options.width;
-		this.setElement(Tileset.gameCard.clone());
+		this.setElement(Tileset.gameCard().clone());
 	},
 	
 	render: function () {		"use strict";
@@ -191,7 +202,7 @@ var MoreButtonView = Backbone.View.extend({
 	
 	initialize: function() {		"use strict";
 		this.deck = this.options.deck;
-		this.setElement(Tileset.moreButton.clone());
+		this.setElement(Tileset.moreButton().clone());
 	},
 
 	render: function() {		"use strict";

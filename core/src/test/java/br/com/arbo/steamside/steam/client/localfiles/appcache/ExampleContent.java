@@ -4,11 +4,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
+import br.com.arbo.steamside.vdf.ExampleDumpVdfStructure;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
-import br.com.arbo.steamside.vdf.examples.DumpVdfStructure;
 
-public class ExampleContent {
+class ExampleContent {
 
 	public static void main(final String[] args) throws IOException {
 		final FileInputStream f =
@@ -42,7 +42,7 @@ public class ExampleContent {
 			keyvalueVisitor.onSubRegion(k, r);
 		}
 
-		private final KeyValueVisitor keyvalueVisitor = new DumpVdfStructure();
+		private final KeyValueVisitor keyvalueVisitor = new ExampleDumpVdfStructure();
 
 		@Override
 		public void onAppEnd() {

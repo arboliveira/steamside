@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.vdf.examples;
+package br.com.arbo.steamside.vdf;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +9,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFi
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.types.AppId;
 
-public class PrintAppNamesGivenIds {
+class ExamplePrintAppNamesGivenIds {
 
 	@SuppressWarnings("null")
 	public static void main(final String[] args) {

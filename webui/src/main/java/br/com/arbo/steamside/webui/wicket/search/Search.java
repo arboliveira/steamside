@@ -11,9 +11,9 @@ import br.com.arbo.steamside.webui.appdto.AppDTO;
 import br.com.arbo.steamside.webui.appdto.Size;
 import br.com.arbo.steamside.webui.appdto.Visible;
 
-public class Search {
+class Search {
 
-	public static AppCollectionDTO search(final String query) {
+	static AppCollectionDTO search(final String query) {
 		final List<AppDTO> list = new ArrayList<AppDTO>(20);
 		SearchStore.search(query, new SearchResultVisitor() {
 
