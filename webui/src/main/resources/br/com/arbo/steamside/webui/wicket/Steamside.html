@@ -15,13 +15,22 @@ xml:lang="en" lang="en">
       href="static/steamside.png"/>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 
-<link href="static/game-tile.css" rel="stylesheet" type="text/css" />
+    <link href="static/game-tile.css" rel="stylesheet" type="text/css" />
+    <link href="static/collection-pick.css" rel="stylesheet" type="text/css" />
 
-<script src="static/jquery-1.7.2.js"></script>
-<script src="static/underscore.js"></script>
-<script src="static/backbone.js"></script>
-<script src="static/gametiles.js"></script>
-<script src="static/session.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <script src="static/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="static/jquery-ui.js" type="text/javascript"></script>
+
+
+
+    <script src="static/underscore.js"></script>
+    <script src="static/backbone.js"></script>
+
+    <script src="static/tileset.js"></script>
+    <script src="static/gametiles.js"></script>
+    <script src="static/session.js"></script>
+    <script src="static/Steamside.html.js"></script>
 
 <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
 <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
@@ -90,125 +99,10 @@ xml:lang="en" lang="en">
 
 <script type="application/javascript">
 
-var ContinueGames = Backbone.Collection.extend({
-    model: Game,
-    url: 'continue.json'
-});
-
-var SearchResults = Backbone.Collection.extend({
-    model: Game,
-    value: null,
-    url: function() {
-    	return "search.json?query=" + this.value;
-    }
-});
-
-var FavoritesCollection = Backbone.Collection.extend({
-    model: Game,
-    url: 'favorites.json'
-});
-
-var SearchTextView = Backbone.View.extend({
-    events: {
-        'submit form': 'submitSearch'
-    },
-
-    initialize: function() {
-
-    },
-
-    submitSearch: function(e) {
-        e.preventDefault();
-
-		var c = this.collection;
-		c.value = this.$('#input-id-text-search').val();
-		fetch_json(c);
-    }
-});
-
-var SessionView = Backbone.View.extend({
- initialize: function () {
- 		var m = this.model;
-        m.bind('change',this.render, this);
-        fetch_json(m);
-    },
-   el : 'body',
-    render: function () {
-    	var m = this.model;
-    	var username = m.username();
-    	var kidsMode = m.kidsmode();
-
-		if (kidsMode) {
-			$("#page-header-navigation-bar").hide();
-			$("#search-segment").hide();
-			$("#favorites-segment").hide();
-			$("#collections-segment").hide();
-		}
-    }
-});
-
-function render_page() {
-
-    $('#nav-steam-client').click(function(e) {
-				e.preventDefault();
-
-	        	var jLink = $( this );
-	        	var aUrl = jLink.attr( "href" );
-	        	alert(aUrl);
-				$.ajax(
-					{
-						url: aUrl
-					}
-				);
-    		});
-
-    var sessionModel = new SessionModel();
-    var continues = new ContinueGames();
-    var searchResults = new SearchResults();
-    var favorites = new FavoritesCollection();
-
-    new SessionView({model: sessionModel});
-
-    new DeckView({
-    	el: $('#continues-deck'),
-    	collection: continues,
-    	session: sessionModel,
-        continues: continues
-    });
-
-    new SearchTextView({
-    	el: $('#div-id-search-text'),
-    	collection: searchResults
-    });
-
-    new DeckView({
-    	el: $('#search-results-deck'),
-    	collection: searchResults,
-    	session: sessionModel,
-        continues: continues
-    });
-
-    new DeckView({
-        el: $('#favorites-deck'),
-        collection: favorites,
-        session: sessionModel,
-        continues: continues
-    });
-
-    fetch_json(continues);
-    fetch_json(favorites);
-
-	$("#input-id-text-search").focus();
-}
-
-
 $(document).ready(function() {
-
     var callback = render_page;
     Tileset.load(callback);
-
 });
-
 
 </script>
 
@@ -318,7 +212,7 @@ $(document).ready(function() {
 			ites<br/>
 			</span>
 		</p>
-		<p class="side-links"><a href="FavoritesSwitch.html">Switch...</a></p>
+		<p class="side-links"><a id="switch-link" href="FavoritesSwitch.html">Switch...</a></p>
 	</div>
 
 	<div class="content content-at-right">

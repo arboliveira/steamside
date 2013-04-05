@@ -90,31 +90,6 @@ var Deck = Backbone.Model.extend({
 	}
 });
 
-var Tileset;
-Tileset = {
-    _gameCard: null,
-    _moreButton: null,
-    gameCard: function () {
-        "use strict";
-        return this._gameCard;
-    },
-    moreButton: function () {
-        "use strict";
-        return this._moreButton;
-    },
-    load: function (callback) {
-        "use strict";
-        var path = 'static/tileset.html';
-        var that = this;
-        $.ajax({url:path, success: function(template) {
-            var t = $(template);
-            that._gameCard   = t.find(".game-tile");
-            that._moreButton = t.find(".more-button");
-            callback();
-        }, dataType: 'xml'});
-    }
-};
-
 var GameCardView = Backbone.View.extend({
 	continues: null,
 	width: 0,
