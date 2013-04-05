@@ -43,28 +43,18 @@ public class Jetty implements LocalWebserver {
 		final ServletContextHandler sch = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
 
-		final ServletHolder sh = new ServletHolder(WicketServlet.class);
-
 		WicketApplication.nextUsername = username;
 		WicketApplication.nextKidsMode = kidsmode;
 		WicketApplication.nextExit = exit;
 		final Class<WicketApplication> classWicketApplication = WicketApplication.class;
-		sh.setInitParameter(
-				ContextParamWebApplicationFactory.APP_CLASS_PARAM,
-				classWicketApplication.getName());
-
-		sh.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
-		/* Define a variable DEV_MODE and set to false
-		 * if wicket should be used in deployment mode
-		 */
-		if (!DEV_MODE)
-			sh.setInitParameter("wicket.configuration", "deployment");
 
 		// Static resources
 		final String root_of_resources = root_of_resources(classWicketApplication);
-		buildStaticServlet(
+		addServlet_static(
 				classWicketApplication, root_of_resources, sch);
-		sch.addServlet(sh, "/*");
+		addServlet_html(
+				classWicketApplication, root_of_resources, sch);
+		addServlet_Wicket(sch, classWicketApplication);
 		server.setHandler(sch);
 
 		Instructions.starting();
@@ -73,19 +63,79 @@ public class Jetty implements LocalWebserver {
 		Instructions.started(portInUse);
 	}
 
-	private static void buildStaticServlet(
+	private static void addServlet_Wicket(final ServletContextHandler sch,
+			final Class<WicketApplication> classWicketApplication) {
+		final ServletHolder sh = new ServletHolder(WicketServlet.class);
+		sh.setInitParameter(
+				ContextParamWebApplicationFactory.APP_CLASS_PARAM,
+				classWicketApplication.getName());
+		sh.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
+		/* Define a variable DEV_MODE and set to false
+		 * if wicket should be used in deployment mode
+		 */
+		if (!DEV_MODE)
+			sh.setInitParameter("wicket.configuration", "deployment");
+
+		sch.addServlet(sh, "/"); //"/*");
+	}
+
+	private static void addServlet_static(
 			final Class<WicketApplication> classWicketApplication,
 			final String root_of_resources, final ServletContextHandler sch) {
-		final URL resource = classWicketApplication.getClassLoader()
-				.getResource(
-						root_of_resources + "/static/");
-		final String path = resource.toExternalForm();
+		final String suffix = "static/";
+		final String pathSpec = "/static/*";
+		class Static implements ServletHolderSetup {
+
+			@Override
+			public void setup(final ServletHolder servlet) {
+				servlet.setInitParameter("dirAllowed", "true");
+				servlet.setInitParameter("pathInfoOnly", "true");
+
+			}
+
+		}
+		final ServletHolderSetup setup = new Static();
+		addServlet(classWicketApplication, root_of_resources, sch, suffix,
+				pathSpec, setup);
+	}
+
+	private static void addServlet_html(
+			final Class<WicketApplication> classWicketApplication,
+			final String root_of_resources, final ServletContextHandler sch) {
+		final String suffix = "";
+		final String pathSpec = "*.html";
+		final ServletHolderSetup setup = null;
+		addServlet(classWicketApplication, root_of_resources, sch, suffix,
+				pathSpec, setup);
+	}
+
+	private static void addServlet(
+			final Class<WicketApplication> classWicketApplication,
+			final String root_of_resources, final ServletContextHandler sch,
+			final String suffix, final String pathSpec,
+			final ServletHolderSetup setup) {
+		final String path = toExternalForm(classWicketApplication,
+				root_of_resources, suffix);
 		final ServletHolder servlet = new ServletHolder(
 				DefaultServlet.class);
-		servlet.setInitParameter("dirAllowed", "true");
 		servlet.setInitParameter("resourceBase", path);
-		servlet.setInitParameter("pathInfoOnly", "true");
-		sch.addServlet(servlet, "/static/*");
+		if (setup != null) setup.setup(servlet);
+		sch.addServlet(servlet, pathSpec);
+	}
+
+	interface ServletHolderSetup {
+
+		void setup(ServletHolder servlet);
+	}
+
+	private static String toExternalForm(
+			final Class<WicketApplication> classWicketApplication,
+			final String root_of_resources, final String suffix) {
+		final URL resource = classWicketApplication.getClassLoader()
+				.getResource(
+						root_of_resources + "/" + suffix);
+		final String path = resource.toExternalForm();
+		return path;
 	}
 
 	@Override

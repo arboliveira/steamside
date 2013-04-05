@@ -17,7 +17,7 @@ var Tileset = {
     },
     load: function (callback) {
         "use strict";
-        var path = 'static/tileset.html';
+        var path = 'tileset.html';
         var that = this;
         $.ajax({url:path, success: function(template) {
             var t = $(template);
