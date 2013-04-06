@@ -67,17 +67,10 @@
 }
 
 .more-button {
-	margin: 0 0 0 40px; 
-	padding: 2px;
-	background-color: brown;
-	border: 1px solid #999;
-	border-radius: 5px;
-	float: right;
-	font-family: "Karla";
-	font-size: x-small;
+    float: right;
 }
 
-.more-button a {
-	text-decoration: none;	/* hide link underline */
-	color: yellow;
+.more-button-text {
+    font-family: monospace !important;
+    font-size: small !important;
 }

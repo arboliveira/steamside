@@ -198,7 +198,7 @@ var MoreButtonView = Backbone.View.extend({
 	},
 	
 	textRefresh: function() {		"use strict";
-		this.$('.more-button-link').text(this.hiding ? 'more...' : 'less...');
+		this.$('.more-button-text').text(this.hiding ? 'more...' : 'less...');
 	}
 });
 
