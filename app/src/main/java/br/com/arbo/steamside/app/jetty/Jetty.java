@@ -76,51 +76,46 @@ public class Jetty implements LocalWebserver {
 		if (!DEV_MODE)
 			sh.setInitParameter("wicket.configuration", "deployment");
 
-		sch.addServlet(sh, "/"); //"/*");
+		// don't use "/*" or Jetty will not process file extension mappings
+		sch.addServlet(sh, "/");
 	}
 
 	private static void addServlet_static(
 			final Class<WicketApplication> classWicketApplication,
 			final String root_of_resources, final ServletContextHandler sch) {
-		final String suffix = "static/";
+		final String fromRoot = "static/";
 		final String pathSpec = "/static/*";
-		class Static implements ServletHolderSetup {
-
-			@Override
-			public void setup(final ServletHolder servlet) {
-				servlet.setInitParameter("dirAllowed", "true");
-				servlet.setInitParameter("pathInfoOnly", "true");
-
-			}
-
-		}
-		final ServletHolderSetup setup = new Static();
-		addServlet(classWicketApplication, root_of_resources, sch, suffix,
-				pathSpec, setup);
+		final ServletHolder servlet = newServlet(classWicketApplication,
+				root_of_resources, fromRoot);
+		servlet.setInitParameter("dirAllowed", "true");
+		servlet.setInitParameter("pathInfoOnly", "true");
+		addServlet(sch, servlet, pathSpec);
 	}
 
 	private static void addServlet_html(
 			final Class<WicketApplication> classWicketApplication,
 			final String root_of_resources, final ServletContextHandler sch) {
-		final String suffix = "";
-		final String pathSpec = "*.html";
-		final ServletHolderSetup setup = null;
-		addServlet(classWicketApplication, root_of_resources, sch, suffix,
-				pathSpec, setup);
+		final String fromRoot = "";
+		final ServletHolder servlet = newServlet(classWicketApplication,
+				root_of_resources, fromRoot);
+		addServlet(sch, servlet, "*.html", "*.css", "*.js", "*.gif", "*.png");
 	}
 
-	private static void addServlet(
+	private static void addServlet(final ServletContextHandler sch,
+			final ServletHolder servlet, final String... pathSpecs) {
+		for (final String pathSpec : pathSpecs)
+			sch.addServlet(servlet, pathSpec);
+	}
+
+	private static ServletHolder newServlet(
 			final Class<WicketApplication> classWicketApplication,
-			final String root_of_resources, final ServletContextHandler sch,
-			final String suffix, final String pathSpec,
-			final ServletHolderSetup setup) {
+			final String root_of_resources, final String suffix) {
 		final String path = toExternalForm(classWicketApplication,
 				root_of_resources, suffix);
 		final ServletHolder servlet = new ServletHolder(
 				DefaultServlet.class);
 		servlet.setInitParameter("resourceBase", path);
-		if (setup != null) setup.setup(servlet);
-		sch.addServlet(servlet, pathSpec);
+		return servlet;
 	}
 
 	interface ServletHolderSetup {
@@ -134,8 +129,7 @@ public class Jetty implements LocalWebserver {
 		final URL resource = classWicketApplication.getClassLoader()
 				.getResource(
 						root_of_resources + "/" + suffix);
-		final String path = resource.toExternalForm();
-		return path;
+		return resource.toExternalForm();
 	}
 
 	@Override
