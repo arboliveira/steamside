@@ -1,21 +1,21 @@
 [ {
   "appid" : "12800",
   "name" : "FUEL™",
-  "link" : "static/app-run.js"
+  "link" : "app-run.js"
 }, {
   "appid" : "80300",
   "name" : "Puzzle Bots",
-  "link" : "static/app-run.js"
+  "link" : "app-run.js"
 }, {
   "appid" : "29160",
   "name" : "Blueberry Garden",
-  "link" : "static/app-run.js"
+  "link" : "app-run.js"
 }, {
   "appid" : "37600",
   "name" : "Windosill",
-  "link" : "static/app-run.js"
+  "link" : "app-run.js"
 }, {
   "appid" : "80300",
   "name" : "Puzzle Bots",
-  "link" : "static/app-run.js"
+  "link" : "app-run.js"
 } ]

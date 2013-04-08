@@ -1,9 +1,9 @@
 [ {
   "appid" : "72850",
   "name" : "Skyrim",
-  "link" : "static/app-run.js"
+  "link" : "app-run.js"
 }, {
   "appid" : "47500",
   "name" : "Mishap",
-  "link" : "static/app-run.js"
+  "link" : "app-run.js"
 } ]
