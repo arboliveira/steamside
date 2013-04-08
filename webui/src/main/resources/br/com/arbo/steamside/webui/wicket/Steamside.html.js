@@ -59,17 +59,46 @@ var SessionView = Backbone.View.extend({
 });
 
 var SwitchFavoritesView = Backbone.View.extend({
+    container: null,
+    one_el: null,
+
     initialize: function() {		"use strict";
-        this.continues = this.options.continues;
-        this.width = this.options.width;
         this.setElement(Tileset.collectionPick().clone());
     },
 
     render: function () {
+        this.one_el = this.$(".collection-pick-steam-category");
+        this.container = this.$("#collection-pick-steam-categories-list");
+        this.container.empty();
+
+        var that = this;
+        this.collection.each( function(one) {
+            that.renderOneSteamCategory(one);
+        });
         return this;
+    },
+
+    renderOneSteamCategory: function(one) { "use strict";
+        var clone_el = this.one_el.clone();
+        var button_el = clone_el.find(".collection-pick-steam-category-button");
+        button_el.text(one.name());
+        button_el.button();
+        var icon_el = button_el.next();
+        icon_el.button({
+                text: false,
+                icons: {
+                    primary: "ui-icon-help"
+                }
+        });
+        button_el.parent().buttonset();
+        this.container.append(clone_el);
     }
 });
 
+var SteamCategoryCollection = Backbone.Collection.extend({
+    model: SteamCategory,
+    url: 'steam-categories.json'
+});
 
 function render_page(tileset) {
 
@@ -88,10 +117,14 @@ function render_page(tileset) {
     $('#switch-link').click(function(e) {
         e.preventDefault();
 
-        var r = new SwitchFavoritesView().render().$el;
-        var rh = $('<div></div>');
-        rh.html(r.html());
-        rh.dialog({title:'Switch Favorites to...', modal:true});
+        var collection = new SteamCategoryCollection();
+        fetch_json(collection, function() {
+            var view = new SwitchFavoritesView({collection: collection});
+            view.render();
+            var xml2html = $('<div></div>');
+            xml2html.html(view.$el.html());
+            xml2html.dialog({title:'Switch Favorites to...', modal:true});
+        });
     });
 
     var sessionModel = new SessionModel();

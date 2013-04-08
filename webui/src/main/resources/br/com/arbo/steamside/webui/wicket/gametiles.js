@@ -1,8 +1,12 @@
 function fetch_json(collection) {
+    fetch_json(collection, function() { /* console.log(collection); */ });
+}
+
+function fetch_json(collection, success) {
     collection.fetch({
         mimeType: 'application/json',
         cache: false,
-        success: function() { /* console.log(collection); */ },
+        success: success,
         error: function() { console.log(arguments); }
     });
 }

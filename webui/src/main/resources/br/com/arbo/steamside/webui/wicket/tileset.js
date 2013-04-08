@@ -21,10 +21,17 @@ var Tileset = {
         var that = this;
         $.ajax({url:path, success: function(template) {
             var t = $(template);
-            that._gameCard   = t.find(".game-tile");
-            that._moreButton = t.find(".more-button");
-            that._collectionPick = t.find(".collection-pick");
+            that._gameCard   = that.xml2html(t, ".game-tile");
+            that._moreButton = that.xml2html(t, ".more-button");
+            that._collectionPick = that.xml2html(t, ".collection-pick");
             callback(that);
         }, dataType: 'xml'});
+    },
+    xml2html: function(xml, selector) {
+        var element = xml.find(selector);
+        if (false) return element;
+        var full = element.wrap('<div></div>').parent().html();
+        var html = $(full);
+        return html;
     }
 };
