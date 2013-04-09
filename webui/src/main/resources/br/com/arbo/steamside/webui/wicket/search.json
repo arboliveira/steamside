@@ -1,9 +1,9 @@
 [ {
   "appid" : "72850",
   "name" : "Skyrim",
-  "link" : "app-run.js"
+  "link" : "server-action-placeholder.js"
 }, {
   "appid" : "47500",
   "name" : "Mishap",
-  "link" : "app-run.js"
+  "link" : "server-action-placeholder.js"
 } ]

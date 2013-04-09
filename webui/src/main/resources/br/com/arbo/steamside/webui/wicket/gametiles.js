@@ -11,6 +11,11 @@ function fetch_json(collection, success) {
     });
 }
 
+function dataTypeOf(aUrl) {
+    if (aUrl.indexOf('.js') === aUrl.length - 3) return 'script';
+    return 'json';
+}
+
 var Game = Backbone.Model.extend({
     appid : function() {		"use strict";
 		return this.get('appid');
@@ -134,13 +139,8 @@ var GameCardView = Backbone.View.extend({
 		var loading_overlay = this.$el.find('.game-tile-inner-overlay');
 		var that = this;
 
-		var type;
-		if (aUrl.indexOf('.js') === aUrl.length - 3) {
-			type = 'script';
-		} else {
-			type = 'json';
-		}
-		$.ajax({
+        var type = dataTypeOf(aUrl);
+        $.ajax({
 				url: aUrl,
 				dataType: type,
 				beforeSend: function(){
@@ -150,10 +150,14 @@ var GameCardView = Backbone.View.extend({
 				complete: function(){
 					loading_overlay.hide();
 					loading_underlay.removeClass('game-tile-inner-blurred');
-					fetch_json(that.continues);
-				}						
+                    that.redisplay_continues();
+				}
 		});
-	}
+	},
+
+    redisplay_continues: function () {		"use strict";
+        fetch_json(this.continues);
+    }
 });
 
 var FillerCellView = Backbone.View.extend({

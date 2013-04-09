@@ -1,21 +1,21 @@
 [ {
   "appid" : "37600",
   "name" : "Windosill",
-  "link" : "app-run.js"
+  "link" : "server-action-placeholder.js"
 }, {
   "appid" : "80300",
   "name" : "Puzzle Bots",
-  "link" : "app-run.js"
+  "link" : "server-action-placeholder.js"
 }, {
   "appid" : "29160",
   "name" : "Blueberry Garden",
-  "link" : "app-run.js"
+  "link" : "server-action-placeholder.js"
 }, {
   "appid" : "37600",
   "name" : "Windosill",
-  "link" : "app-run.js"
+  "link" : "server-action-placeholder.js"
 }, {
   "appid" : "80300",
   "name" : "Puzzle Bots",
-  "link" : "app-run.js"
+  "link" : "server-action-placeholder.js"
 } ]
