@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.util.Map;
+import java.util.Set;
 
 import br.com.arbo.steamside.types.AppId;
 
@@ -44,6 +45,7 @@ public class Apps {
 	}
 
 	public Map<String, App> apps;
+	public Set<String> categories;
 
 	public int count() {
 		return apps.size();

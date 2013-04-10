@@ -7,4 +7,9 @@ public class Category {
 	public Category(final String category) {
 		this.category = category;
 	}
+
+	public interface Visitor {
+
+		void visit(Category each);
+	}
 }

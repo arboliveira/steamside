@@ -50,8 +50,6 @@ public class Jetty implements LocalWebserver {
 
 		// Static resources
 		final String root_of_resources = root_of_resources(classWicketApplication);
-		addServlet_static(
-				classWicketApplication, root_of_resources, sch);
 		addServlet_html(
 				classWicketApplication, root_of_resources, sch);
 		addServlet_Wicket(sch, classWicketApplication);
@@ -78,18 +76,6 @@ public class Jetty implements LocalWebserver {
 
 		// don't use "/*" or Jetty will not process file extension mappings
 		sch.addServlet(sh, "/");
-	}
-
-	private static void addServlet_static(
-			final Class<WicketApplication> classWicketApplication,
-			final String root_of_resources, final ServletContextHandler sch) {
-		final String fromRoot = "static/";
-		final String pathSpec = "/static/*";
-		final ServletHolder servlet = newServlet(classWicketApplication,
-				root_of_resources, fromRoot);
-		servlet.setInitParameter("dirAllowed", "true");
-		servlet.setInitParameter("pathInfoOnly", "true");
-		addServlet(sch, servlet, pathSpec);
 	}
 
 	private static void addServlet_html(

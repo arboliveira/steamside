@@ -2,8 +2,6 @@ package br.com.arbo.steamside.webui.wicket;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoContainer;
 
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.exit.Exit;
@@ -15,6 +13,7 @@ import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
 import br.com.arbo.steamside.webui.wicket.favorites.json.FavoritesJson;
 import br.com.arbo.steamside.webui.wicket.search.SearchJson;
 import br.com.arbo.steamside.webui.wicket.session.json.SessionJson;
+import br.com.arbo.steamside.webui.wicket.steamcategories.json.SteamCategoriesJson;
 import br.com.arbo.steamside.webui.wicket.steamclient.SteamClientPage;
 import br.com.arbo.steamside.webui.wicket.stop.ExitPage;
 
@@ -36,7 +35,7 @@ public class WicketApplication extends WebApplication
 
 	private final Exit exit;
 
-	public static PicoContainer getContainer() {
+	public static MutablePicoContainerX getContainer() {
 		return get().container;
 	}
 
@@ -73,6 +72,9 @@ public class WicketApplication extends WebApplication
 		mountResource(
 				"/favorites.json",
 				container.getComponent(FavoritesJson.class));
+		mountResource(
+				"/steam-categories.json",
+				container.getComponent(SteamCategoriesJson.class));
 
 		mountPage(
 				"/app" +
@@ -99,16 +101,15 @@ public class WicketApplication extends WebApplication
 		nextExit = null;
 	}
 
-	private static MutablePicoContainer newContainer() {
-		final MutablePicoContainer c = ContainerFactory.newContainer();
-		final MutablePicoContainerX cx = new MutablePicoContainerX(c);
+	private static MutablePicoContainerX newContainer() {
+		final MutablePicoContainerX cx = ContainerFactory.newContainer();
 		cx.replaceComponent(KidsMode.class, nextKidsMode);
 		nextKidsMode = null;
 		cx.replaceComponent(User.class, nextUsername);
 		nextUsername = null;
-		return c;
+		return cx;
 	}
 
-	private final MutablePicoContainer container;
+	private final MutablePicoContainerX container;
 
 }

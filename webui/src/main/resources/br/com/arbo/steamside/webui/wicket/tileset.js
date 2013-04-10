@@ -29,8 +29,8 @@ var Tileset = {
     },
     xml2html: function(xml, selector) {
         var element = xml.find(selector);
-        if (false) return element;
-        var full = element.wrap('<div></div>').parent().html();
+       	var outer = $('<div>').append(element.clone()).remove();
+        var full = outer.html();
         var html = $(full);
         return html;
     }

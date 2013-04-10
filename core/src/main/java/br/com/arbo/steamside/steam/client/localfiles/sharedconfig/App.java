@@ -45,7 +45,6 @@ public class App {
 
 		public void cloudEnabled(final String v) {
 			this.cloudEnabled = v;
-
 		}
 
 		public void categories(final Collection<String> v) {
@@ -94,6 +93,13 @@ public class App {
 	}
 
 	private final String cloudEnabled;
+
+	@Nullable
 	private final Collection<String> categories;
 
+	public void accept(final Category.Visitor visitor) {
+		if (categories == null) return;
+		for (final String one : categories)
+			visitor.visit(new Category(one));
+	}
 }

@@ -1,5 +1,6 @@
 package br.com.arbo.org.picocontainer;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.picocontainer.MutablePicoContainer;
 
 public class MutablePicoContainerX {
@@ -15,6 +16,15 @@ public class MutablePicoContainerX {
 	}
 
 	private final MutablePicoContainer pico;
+
+	@NonNull
+	public <T> T getComponent(final Class<T> componentType) {
+		final T component = pico.getComponent(componentType);
+		if (component == null)
+			throw new NullPointerException(
+					"Forgot to register: " + componentType);
+		return component;
+	}
 
 	public MutablePicoContainerX(final MutablePicoContainer pico) {
 		this.pico = pico;

@@ -5,6 +5,7 @@ import static org.picocontainer.Characteristics.CACHE;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
+import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.continues.Continue;
 import br.com.arbo.steamside.favorites.Favorites;
@@ -23,10 +24,11 @@ import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
 import br.com.arbo.steamside.webui.wicket.favorites.json.FavoritesJson;
 import br.com.arbo.steamside.webui.wicket.search.SearchJson;
 import br.com.arbo.steamside.webui.wicket.session.json.SessionJson;
+import br.com.arbo.steamside.webui.wicket.steamcategories.json.SteamCategoriesJson;
 
 public class ContainerFactory {
 
-	public static MutablePicoContainer newContainer() {
+	public static MutablePicoContainerX newContainer() {
 		final MutablePicoContainer container = new PicoBuilder()
 				.withCaching()
 				.withLifecycle()
@@ -50,10 +52,12 @@ public class ContainerFactory {
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
 				.addComponent(SearchJson.class)
 				.addComponent(SessionJson.class)
+				.addComponent(SteamCategoriesJson.class)
 		//
 		;
 
-		return container;
+		final MutablePicoContainerX cx = new MutablePicoContainerX(container);
+		return cx;
 	}
 
 }
