@@ -77,66 +77,70 @@ var SteamCategoryCollection = Backbone.Collection.extend({
     url: 'steam-categories.json'
 });
 
-function render_page(tileset) {
+var Steamside_html = {
 
-    $('#nav-steam-client').click(function(e) {
-        e.preventDefault();
+    render_page: function (tileset) {
 
-        var jLink = $( this );
-        var aUrl = jLink.attr( "href" );
-        $.ajax(
-            {
-                url: aUrl
-            }
-        );
-    });
+        $('#nav-steam-client').click(function(e) {
+            e.preventDefault();
 
-    $('#switch-link').click(function(e) {
-        e.preventDefault();
-
-        var categories = new SteamCategoryCollection();
-        fetch_json(categories, function() {
-            var view = new SwitchFavoritesView({collection: categories});
-            view.render();
-            view.$el.dialog({title:'Switch Favorites to...', modal:true});
+            var jLink = $( this );
+            var aUrl = jLink.attr( "href" );
+            $.ajax(
+                {
+                    url: aUrl
+                }
+            );
         });
-    });
 
-    var sessionModel = new SessionModel();
-    var continues = new ContinueGames();
-    var searchResults = new SearchResults();
-    var favorites = new FavoritesCollection();
+        $('#switch-link').click(function(e) {
+            e.preventDefault();
 
-    new SessionView({model: sessionModel});
+            var categories = new SteamCategoryCollection();
+            fetch_json(categories, function() {
+                var view = new SwitchFavoritesView({collection: categories});
+                view.render();
+                view.$el.dialog({title:'Switch Favorites to...', modal:true});
+            });
+        });
 
-    new DeckView({
-        el: $('#continues-deck'),
-        collection: continues,
-        session: sessionModel,
-        continues: continues
-    });
+        var sessionModel = new SessionModel();
+        var continues = new ContinueGames();
+        var searchResults = new SearchResults();
+        var favorites = new FavoritesCollection();
 
-    new SearchTextView({
-        el: $('#div-id-search-text'),
-        collection: searchResults
-    });
+        new SessionView({model: sessionModel});
 
-    new DeckView({
-        el: $('#search-results-deck'),
-        collection: searchResults,
-        session: sessionModel,
-        continues: continues
-    });
+        new DeckView({
+            el: $('#continues-deck'),
+            collection: continues,
+            session: sessionModel,
+            continues: continues
+        });
 
-    new DeckView({
-        el: $('#favorites-deck'),
-        collection: favorites,
-        session: sessionModel,
-        continues: continues
-    });
+        new SearchTextView({
+            el: $('#div-id-search-text'),
+            collection: searchResults
+        });
 
-    fetch_json(continues);
-    fetch_json(favorites);
+        new DeckView({
+            el: $('#search-results-deck'),
+            collection: searchResults,
+            session: sessionModel,
+            continues: continues
+        });
 
-    $("#input-id-text-search").focus();
+        new DeckView({
+            el: $('#favorites-deck'),
+            collection: favorites,
+            session: sessionModel,
+            continues: continues
+        });
+
+        fetch_json(continues);
+        fetch_json(favorites);
+
+        $("#input-id-text-search").focus();
+    }
+
 }
