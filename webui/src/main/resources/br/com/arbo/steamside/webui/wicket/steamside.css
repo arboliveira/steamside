@@ -124,3 +124,7 @@ body {
 .search-text-input {
     width: 100%; font-size:24px;
 }
+
+.instructions-and-explanations {
+    font-family: Arvo;
+}

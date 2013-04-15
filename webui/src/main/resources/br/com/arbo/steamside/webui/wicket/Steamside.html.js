@@ -100,7 +100,11 @@ var Steamside_html = {
             fetch_json(categories, function() {
                 var view = new SwitchFavoritesView({collection: categories});
                 view.render();
-                view.$el.dialog({title:'Switch Favorites to...', modal:true});
+                view.$el.dialog({
+                    title:'Switch Favorites to...',
+                    width: 600,
+                    modal:true
+                });
             });
         });
 

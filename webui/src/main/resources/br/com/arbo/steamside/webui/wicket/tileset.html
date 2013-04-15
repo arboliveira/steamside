@@ -6,6 +6,8 @@ xml:lang="en" lang="en">
     <!-- ======================================================================= -->
     <title>Steamside tileset</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
+    <link href="steamside.css" rel="stylesheet" type="text/css" />
     <link href="collection-pick.css" rel="stylesheet" type="text/css" />
     <link href="game-tile.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -48,17 +50,49 @@ xml:lang="en" lang="en">
 <h2>Collection Pick</h2>
 <div class="collection-pick">
 
-    <p>
-        Steam Categories
-    </p>
+    <p class="instructions-and-explanations" style="width: 400px;">Pick a Collection to be used as your Favorites.</p>
 
-    <div id="collection-pick-steam-categories-list">
-        <div class="collection-pick-steam-category">
-            <button class="collection-pick-steam-category-button">Steam Category</button>
-            <button>What's in this category?</button>
+    <div id="collection-pick-collections-segment" class="container">
+
+        <div class="side-header side-header-at-left">
+            <p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+			Collec<br/>
+			tions<br/>
+			</span>
+            </p>
+            <p class="side-links"><!--<a id="switch-link" href="FavoritesSwitch.html">Switch...</a>--></p>
         </div>
+
+        <div class="content content-at-right">
+            <p class="instructions-and-explanations">You haven't created any collections yet. <a href="#">Build a new one</a></p>
+        </div>
+
     </div>
 
+
+    <div id="collection-pick-categories-segment"  class="container">
+
+        <div class="side-header side-header-at-right">
+            <p class="side-header-paragraph">
+			<span class="side-text side-text-at-right">
+			Steam<br/>
+			Cate<br/>
+			gories<br/>
+			</span>
+            </p>
+            <p class="side-links"><!--<a href="">Share...</a>--></p>
+        </div>
+
+        <div class="content content-at-left">
+            <div id="collection-pick-steam-categories-list">
+                <div class="collection-pick-steam-category">
+                    <button class="collection-pick-steam-category-button">Steam Category</button>
+                    <button>What's in this category?</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <!-- ======================================================================= -->
