@@ -3,6 +3,9 @@ body {
 }
 
 .container {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
     clear: both;
     overflow: auto;
     padding: 0;
@@ -26,6 +29,7 @@ body {
     side-header-at-left.width + GAP = content-at-right.margin-left
     */
     width: 80px;
+    display: table-cell;
 }
 
 .side-header-at-left {
@@ -36,9 +40,10 @@ body {
 
 .side-header-at-right {
     /*
-     see: content-at-left.width
+     side-header-at-right.width + GAP = content-at-left.margin-right
     */
     width: 80px;
+    display: table-cell;
 }
 
 .side-header-at-right {
@@ -93,12 +98,9 @@ body {
 
 .content-at-left {
     /*
-     TODO Perhaps only JavaScript can make it right?
-     Should be:
-     side-header-at-right.width + GAP = content-at-left.margin-right
-     But it cannot withstand a window resize...
+    see: .side-header-at-right.width
     */
-    width: 85%;
+    margin-right: 106px;
 }
 
 .content-at-right {
