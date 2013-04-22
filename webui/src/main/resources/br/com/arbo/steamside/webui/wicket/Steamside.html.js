@@ -21,11 +21,11 @@ var SearchTextView = Backbone.View.extend({
         'submit form': 'submitSearch'
     },
 
-    initialize: function() {
+    initialize: function() {                           "use strict";
 
     },
 
-    submitSearch: function(e) {
+    submitSearch: function(e) {     "use strict";
         e.preventDefault();
 
         var c = this.collection;
@@ -43,7 +43,7 @@ var SessionView = Backbone.View.extend({
         fetch_json(m);
     },
 
-    render: function () {
+    render: function () {                "use strict";
         var m = this.model;
         var username = m.username();
         var kidsMode = m.kidsmode();
@@ -59,14 +59,18 @@ var SessionView = Backbone.View.extend({
 });
 
 var SwitchFavoritesView = Backbone.View.extend({
+    on_category_change: null,
+
     initialize: function() {		"use strict";
         this.setElement(Tileset.collectionPick().clone());
+        this.on_category_change = this.options.on_category_change;
     },
 
-    render: function () {
+    render: function () {  "use strict";
         new SteamCategoriesView({
             el: this.$("#collection-pick-steam-categories-list"),
-            collection: this.collection
+            collection: this.collection,
+            on_category_change: this.on_category_change
         }).render();
         return this;
     }
@@ -77,9 +81,49 @@ var SteamCategoryCollection = Backbone.Collection.extend({
     url: 'steam-categories.json'
 });
 
+var SteamsideRouter = Backbone.Router.extend({
+    routes: {
+        "": "home",
+        "favorites/switch": "switch_favorites"
+    },
+
+    home: function() {      "use strict";
+        $('#secondary-view').hide();
+        $('#primary-view').show();
+    },
+
+    switch_favorites: function() {   "use strict";
+        var that = this;
+        var on_category_change = function() {
+            that.navigate("", {trigger: true});
+            // TODO Refresh favorites
+        };
+
+        var categories = new SteamCategoryCollection();
+        var view = new SwitchFavoritesView({
+            collection: categories,
+            on_category_change: on_category_change
+        });
+
+        fetch_json(categories, function () {
+            view.render();
+            var s_el = $('#secondary-view');
+            s_el.empty();
+            s_el.append(view.el);
+            s_el.show();
+            $('#primary-view').hide();
+        });
+    }
+
+});
+
 var Steamside_html = {
 
-    render_page: function (tileset) {
+    render_page: function (tileset) {     "use strict";
+
+        var router = new SteamsideRouter();
+        // Start Backbone history a necessary step for bookmarkable URL's
+        Backbone.history.start();
 
         $('#nav-steam-client').click(function(e) {
             e.preventDefault();
@@ -91,21 +135,6 @@ var Steamside_html = {
                     url: aUrl
                 }
             );
-        });
-
-        $('#switch-link').click(function(e) {
-            e.preventDefault();
-
-            var categories = new SteamCategoryCollection();
-            fetch_json(categories, function() {
-                var view = new SwitchFavoritesView({collection: categories});
-                view.render();
-                view.$el.dialog({
-                    title:'Switch Favorites to...',
-                    width: 600,
-                    modal:true
-                });
-            });
         });
 
         var sessionModel = new SessionModel();

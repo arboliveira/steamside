@@ -120,12 +120,14 @@ $(function() {
 	<div class="page-header-logo">
 		<img src="steamside.png" height="45" width="45" />
 	</div>
-	<div class="page-header-name" style="text-align:center;">
+
+    <div class="page-header-name" style="text-align:center;">
 		 <span class="page-header-name-text"  style="line-height: 0.90em">Steamside</span>
 		 <br style="margin:0px;"/>
 		 <span style="font-size: 0.8em;font-family:Arvo">Your <span style="color:DarkRed">companion</span> on Steam</span>
 	</div>
-	<div class="page-header-navigation-bar"  id="page-header-navigation-bar">
+
+    <div class="page-header-navigation-bar"  id="page-header-navigation-bar">
 		<ul>
 		<li>My games</li>
 		<li><a href="http://steampowered.com" target="_blank">Steam Store</a></li>
@@ -134,12 +136,12 @@ $(function() {
 		<li>Help</li>
 		</ul>
 	</div>
-	<div class="page-header-separator">
 
+    <div class="page-header-separator">
+    </div>
 </div>
 
-
-</div>
+<div id="primary-view">
 
 <div id="continues-segment" class="container">
 
@@ -215,7 +217,12 @@ $(function() {
 			ites<br/>
 			</span>
 		</p>
-		<p class="side-links"><a id="switch-link" href="FavoritesSwitch.html">Switch...</a></p>
+		<p class="side-links">
+            <a id="switch-link" href="#/favorites/switch">Switch...</a>
+            <!--
+             href="FavoritesSwitch.html"
+            -->
+        </p>
 	</div>
 
 	<div class="content content-at-right">
@@ -259,9 +266,11 @@ $(function() {
 	</p>
 </div>
 
-<div id="ft">
 </div>
 
+<div id="secondary-view">
+
+</div>
 
 <!-- ======================================================================= -->
 </body>
