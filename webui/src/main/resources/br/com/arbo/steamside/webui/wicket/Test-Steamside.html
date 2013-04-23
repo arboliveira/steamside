@@ -31,7 +31,7 @@
                 var whenMoreButtonAppears = function () {
                     var b = segment.find('.more-button-text');
                     if (!b.is(':visible')) {
-                        setTimeout(whenMoreButtonAppears, 300);
+                        setTimeout(whenMoreButtonAppears, 40);
                         return;
                     }
 
@@ -53,16 +53,17 @@
                 var whenGamesAppear = function() {
                     var games = segment.find('.game-tile');
                     if (games.length == 0) {
-                        setTimeout(whenGamesAppear, 300);
+                        setTimeout(whenGamesAppear, 40);
                         return;
                     }
                     equal(games.length, 2, 'search results');
+
                     start();
                 };
                 whenGamesAppear();
             },
 
-            testFavorites: function () {
+            testFavorites_moreButton: function () {
                 var segment = $('#favorites-segment');
 
                 var whenMoreButtonAppears = function () {
@@ -76,33 +77,41 @@
                     b.click();
                     equal(visibleGames(segment), 5, 'visible games after more');
 
-                    var l = segment.find("#switch-link");
-                    l.click();
-
-                    var whenDialogAppears = function() {
-                        var dialog = $(":ui-dialog");
-                        if (dialog.length == 0) {
-                            setTimeout(whenDialogAppears, 300);
-                            return;
-                        }
-
-                        var buttons = dialog.find(".collection-pick-steam-category-button");
-                        equal(buttons.length, 3, 'category buttons');
-
-                        dialog.dialog('destroy');
-
-                        start();
-                    };
-                    whenDialogAppears();
+                    start();
                 };
                 whenMoreButtonAppears();
+            },
+
+            testFavorites_switch: function () {
+                var segment = $('#favorites-segment');
+
+                var l = segment.find("#switch-link").get(0);
+                l.click();
+
+                var whenDialogAppears = function() {
+                    var dialog = $(".collection-pick");
+                    if (dialog.length == 0) {
+                        setTimeout(whenDialogAppears, 300);
+                        return;
+                    }
+
+                    var buttons = dialog.find(".collection-pick-steam-category-button");
+                    equal(buttons.length, 3, 'category buttons');
+
+                    var bMaybeLater = dialog.find(".back-button");
+                    bMaybeLater.click();
+
+                    start();
+                };
+                whenDialogAppears();
             },
 
             runTests: function () {
                 var that = this;
                 asyncTest("Continues Segment", function(){that.testContinues()});
                 asyncTest("Search Segment", function(){that.testSearch()});
-                asyncTest("Favorites Segment", function(){that.testFavorites()});
+                asyncTest("Favorites Segment - more button", function(){that.testFavorites_moreButton()});
+                asyncTest("Favorites Segment - switch", function(){that.testFavorites_switch()});
             },
 
             loadPageToTest: function () {

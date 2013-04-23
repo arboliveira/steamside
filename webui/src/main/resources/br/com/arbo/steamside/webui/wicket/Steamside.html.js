@@ -61,6 +61,10 @@ var SessionView = Backbone.View.extend({
 var SwitchFavoritesView = Backbone.View.extend({
     on_category_change: null,
 
+    events: {
+        "click .back-button"         : "backButtonClicked"
+    },
+
     initialize: function() {		"use strict";
         this.setElement(Tileset.collectionPick().clone());
         this.on_category_change = this.options.on_category_change;
@@ -73,6 +77,11 @@ var SwitchFavoritesView = Backbone.View.extend({
             on_category_change: this.on_category_change
         }).render();
         return this;
+    },
+
+    backButtonClicked: function (e) {  "use strict";
+        e.preventDefault();
+        history.back();
     }
 });
 
