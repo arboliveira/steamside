@@ -12,7 +12,9 @@ import br.com.arbo.steamside.types.Category;
 public class App {
 
 	public boolean isInCategory(final Category category) {
-		return categories != null && categories.contains(category.category);
+		final Collection<String> c = categories;
+		if (c == null) return false;
+		return c.contains(category.category);
 	}
 
 	public AppId appid() {
@@ -98,8 +100,9 @@ public class App {
 	private final Collection<String> categories;
 
 	public void accept(final Category.Visitor visitor) {
-		if (categories == null) return;
-		for (final String one : categories)
+		final Collection<String> c = categories;
+		if (c == null) return;
+		for (final String one : c)
 			visitor.visit(new Category(one));
 	}
 }

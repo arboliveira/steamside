@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+<!-- ======================================================================= -->
+		<title>Steamside :: New Collection</title>
+
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link rel="icon" 
+      type="image/png" 
+      href="steamside.png"/>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+	</head>
+
+	<body>
+
+
+<div>
+	<h2>
+	Create new...
+	</h2>
+	<h3>
+	... from scratch
+	</h3>
+	<form action="">
+        <div>
+		<input type="text" name="name" value="Favorites" placeholder="Collection name" />
+            <input type="submit" value="Create and pick some games..."/>
+        </div>
+    </form>
+	<h3>
+		... from existing collection
+	</h3>
+	<h3>
+		... from Steam Category
+	</h3>
+</div>
+
+
+
+
+
+<div class="collection-new">
+
+    <p class="instructions-and-explanations">How to begin your new collection? <button class="back-button" style="margin-left:20px">Maybe later</button></p>
+
+    <div id="collection-new-empty-segment" class="container">
+
+        <div class="side-header side-header-at-left">
+            <p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+			Empty<br/>
+			from<br/>
+			scratch<br/>
+			</span>
+            </p>
+            <p class="side-links"><!--<a id="switch-link" href="FavoritesSwitch.html">Switch...</a>--></p>
+        </div>
+
+        <div class="content content-at-right">
+
+            <div id="div-empty-name-form">
+                <form action="">
+                    <div>
+                        <input type="text" name="empty-name" id="input-empty-name"
+                               class="search-text-input"
+                               placeholder="Name for empty collection"
+                                />
+                        <br/>
+                        <input class="command-button"  type="submit" value="Enter"/> <span id="empty-command-hint" class="command-hint"> Create it!</span>&nbsp;&nbsp;
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="collection-copy-category-segment"  class="container">
+
+        <div class="side-header side-header-at-right">
+            <p class="side-header-paragraph">
+			<span class="side-text side-text-at-right">
+			Copy<br/>
+			Steam<br/>
+			Category<br/>
+			</span>
+            </p>
+            <p class="side-links"><!--<a href="">Share...</a>--></p>
+        </div>
+
+        <div class="content content-at-left">
+
+            <div id="div-copy-steam-category-form">
+                <form action="">
+                    <div>
+                        <input type="text" name="copy-steam-category-name" id="input-copy-steam-category-name"
+                               class="search-text-input"
+                               placeholder="Name for copied collection"
+                                />
+                        <br/>
+                        <input class="command-button"  type="submit" value="Enter"/> <span id="copy-steam-category-command-hint" class="command-hint"> Pick Steam Category...</span>&nbsp;&nbsp;
+                    </div>
+                </form>
+            </div>
+
+            <div>
+                <button class="copy-all-button">Copy all your Steam Categories to Collections with same names</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+	</body>
+</html>
