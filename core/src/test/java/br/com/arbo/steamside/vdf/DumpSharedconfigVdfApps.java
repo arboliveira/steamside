@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.vdf;
 
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps.AppIdVisitor;
+import br.com.arbo.steamside.apps.Apps;
+import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
 import br.com.arbo.steamside.types.AppId;
 

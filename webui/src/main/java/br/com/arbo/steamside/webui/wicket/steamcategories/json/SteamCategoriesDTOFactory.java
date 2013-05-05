@@ -2,7 +2,6 @@ package br.com.arbo.steamside.webui.wicket.steamcategories.json;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.wicket.request.resource.IResource.Attributes;
 
@@ -21,11 +20,16 @@ class SteamCategoriesDTOFactory implements Factory<List<SteamCategoryDTO>> {
 
 	@Override
 	public List<SteamCategoryDTO> produce(final Attributes a) {
-		final Set<String> c = sharedconfig.data().apps().categories;
 		final List<SteamCategoryDTO> dto =
-				new ArrayList<SteamCategoryDTO>(c.size());
-		for (final String one : c)
-			dto.add(new SteamCategoryDTO(new Category(one)));
+				new ArrayList<SteamCategoryDTO>();
+		sharedconfig.data().apps()
+				.accept(new Category.Visitor() {
+
+					@Override
+					public void visit(final Category each) {
+						dto.add(new SteamCategoryDTO(each));
+					}
+				});
 		return dto;
 	}
 }

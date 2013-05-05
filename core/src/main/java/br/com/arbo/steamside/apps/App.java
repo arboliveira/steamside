@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
+package br.com.arbo.steamside.apps;
 
 import java.util.Collection;
 import java.util.Comparator;

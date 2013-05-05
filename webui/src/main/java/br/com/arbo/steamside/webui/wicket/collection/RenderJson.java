@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.request.Response;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.collection.Filter;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 import br.com.arbo.steamside.types.Category;
 
 public class RenderJson {

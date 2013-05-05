@@ -1,10 +1,10 @@
 package br.com.arbo.steamside.favorites;
 
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.collection.Filter;
 import br.com.arbo.steamside.collection.FilterPlatform;
 import br.com.arbo.steamside.favorites.FavoritesOfUser.NotSet;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 import br.com.arbo.steamside.types.Category;
 
 public class Favorites implements Filter {

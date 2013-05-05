@@ -1,10 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Apps.AppVisitor;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.Apps;
+import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 
@@ -18,25 +16,14 @@ class AppsRegion {
 
 	public Apps parse() {
 		final Apps a = new Apps();
-		final HashMap<String, App> apps = new HashMap<String, App>();
-		final HashSet<String> categories = new HashSet<String>();
 		this.accept(new AppVisitor() {
 
 			@Override
 			public void each(final App app) {
-				apps.put(app.appid().appid, app);
-				app.accept(new Category.Visitor() {
-
-					@Override
-					public void visit(final Category each) {
-						categories.add(each.category);
-					}
-				});
+				a.add(app);
 			}
 
 		});
-		a.apps = apps;
-		a.categories = categories;
 		return a;
 	}
 

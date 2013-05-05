@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.collection;
 
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
+import br.com.arbo.steamside.apps.App;
 
 public interface Filter {
 

@@ -1,9 +1,9 @@
 package br.com.arbo.steamside.collection;
 
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppInfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 
 public class FilterPlatform implements Filter {
 

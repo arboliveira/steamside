@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 

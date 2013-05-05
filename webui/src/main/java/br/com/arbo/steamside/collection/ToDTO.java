@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.App;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
