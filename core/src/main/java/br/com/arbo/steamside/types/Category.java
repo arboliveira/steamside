@@ -12,4 +12,9 @@ public class Category {
 
 		void visit(Category each);
 	}
+
+	@Override
+	public String toString() {
+		return category;
+	}
 }

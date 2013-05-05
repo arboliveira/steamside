@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 
@@ -18,22 +17,19 @@ public final class ExampleDumpVdfStructure implements
 		vdfImpl.root().accept(new ExampleDumpVdfStructure());
 	}
 
-	String indent = "";
+	Indent indent = new Indent();
 
 	@Override
 	public void onSubRegion(final String k, final Region r) {
-		System.out.println(indent + "[" + k + "]");
-		indent = indent(indent.length() + 1);
+		System.out.println(indent.on("[" + k + "]"));
+		indent.increase();
 		r.accept(this);
-		indent = indent(indent.length() - 1);
+		indent.decrease();
 	}
 
 	@Override
 	public void onKeyValue(final String k, final String v) throws Finished {
-		System.out.println(indent + "[" + k + "]'" + v + "'");
+		System.out.println(indent.on("[" + k + "]'" + v + "'"));
 	}
 
-	private static String indent(final int depth) {
-		return StringUtils.repeat(' ', depth);
-	}
 }

@@ -8,7 +8,7 @@ import br.com.arbo.steamside.types.Category;
 
 import com.google.common.collect.ArrayListMultimap;
 
-public class Apps {
+public class Apps implements AppsHome {
 
 	public void add(final App app) {
 		apps.put(app.appid().appid, app);
@@ -41,9 +41,18 @@ public class Apps {
 			visitor.each(app);
 	}
 
-	public void accept(final Category.Visitor visitor) {
-		for (final String each : categories.keySet())
-			visitor.visit(new Category(each));
+	public interface CategoryWithAppsVisitor {
+
+		void visit(Category each, AppsHome itsApps);
+	}
+
+	public void accept(final CategoryWithAppsVisitor visitor) {
+		for (final String each : categories.keySet()) {
+			final AppsHome itsApps =
+					AppsHome.Utils.adapt(categories.get(each));
+
+			visitor.visit(new Category(each), itsApps);
+		}
 	}
 
 	public static class NotFound extends Exception {
@@ -70,5 +79,11 @@ public class Apps {
 	private final Map<String, App> apps = new HashMap<String, App>();
 	final ArrayListMultimap<String, App> categories =
 			ArrayListMultimap.<String, App> create();
+
+	@Override
+	public void accept(final AppsHome.Visitor visitor) {
+		for (final App each : apps.values())
+			visitor.visit(each);
+	}
 
 }

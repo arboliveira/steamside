@@ -29,7 +29,7 @@ public class JsonResource extends AbstractResource {
 		JsonUtils.write(a.getResponse().getOutputStream(), value);
 	}
 
-	public JsonResource(final Factory< ? > needs) {
-		this.factory = needs;
+	public JsonResource(final Factory< ? > factory) {
+		this.factory = factory;
 	}
 }

@@ -22,7 +22,7 @@ class DumpSharedconfigVdfApps {
 
 		@Override
 		public void each(final AppId app) {
-			dump.sysout(app);
+			System.out.println(dump.toInfo(app));
 		}
 	}
 

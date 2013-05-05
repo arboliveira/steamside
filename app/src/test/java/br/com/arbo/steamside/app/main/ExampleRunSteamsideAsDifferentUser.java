@@ -6,13 +6,18 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.picocontainer.MutablePicoContainer;
 
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
-import br.com.arbo.steamside.app.main.ContainerFactory;
-import br.com.arbo.steamside.app.main.Main;
 import br.com.arbo.steamside.opersys.username.User;
 
 class ExampleRunSteamsideAsDifferentUser {
 
 	public static void main(final String[] args) {
+		final MutablePicoContainer c = ContainerFactory.newContainer();
+		new MutablePicoContainerX(c)
+				.replaceComponent(User.class, mockDifferentUser());
+		new Main(c).start();
+	}
+
+	private static User mockDifferentUser() {
 		final Mockery m = new JUnit4Mockery();
 		final User user = m.mock(User.class);
 		m.checking(/* @formatter:off */new Expectations() { {	/* @formatter:on */
@@ -20,11 +25,6 @@ class ExampleRunSteamsideAsDifferentUser {
 				will(returnValue("kid"));
 			}
 		});
-
-		final MutablePicoContainer c = ContainerFactory.newContainer();
-		final MutablePicoContainerX cx = new MutablePicoContainerX(c);
-		cx.replaceComponent(User.class, user);
-
-		new Main(c).start();
+		return user;
 	}
 }

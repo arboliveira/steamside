@@ -105,4 +105,9 @@ public class App {
 		for (final String one : c)
 			visitor.visit(new Category(one));
 	}
+
+	@Override
+	public String toString() {
+		return appid.toString();
+	}
 }

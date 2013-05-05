@@ -20,6 +20,6 @@ class ExamplePrintAppNamesGivenIds {
 				"22000", "9050", "12800", "10150", "35460");
 		for (@NonNull
 		final String appid : ids)
-			dump.sysout(new AppId(appid));
+			System.out.println(dump.toInfo(new AppId(appid)));
 	}
 }

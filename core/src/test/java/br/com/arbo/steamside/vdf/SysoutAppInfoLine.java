@@ -12,11 +12,7 @@ class SysoutAppInfoLine {
 		this.appnameFactory = appnameFactory;
 	}
 
-	void sysout(final AppId app) {
-		System.out.println(toInfo(app));
-	}
-
-	private String toInfo(final AppId app) {
+	public String toInfo(final AppId app) {
 		return app.appid + "]" + appname(app);
 	}
 
