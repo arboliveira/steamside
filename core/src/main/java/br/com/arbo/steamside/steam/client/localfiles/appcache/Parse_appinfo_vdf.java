@@ -53,7 +53,7 @@ class Parse_appinfo_vdf {
 		public void onKeyValue(final String k, final String v) throws Finished {
 			if (keyMatches("name", "2/" + appid, k))
 				appinfo.name = new AppName(v);
-			if (keyMatches("executable", "4/" + appid + "/launch", k))
+			if (keyMatches("executable", "4/" + appid + "/launch/0", k))
 				this.lastseen_executable = v;
 			if (keyMatches("oslist", "4/" + appid + "/launch", k))
 				if (osMatches(v))
@@ -67,6 +67,9 @@ class Parse_appinfo_vdf {
 
 		@Override
 		public void onAppEnd() {
+			if (appinfo.executable == null && this.lastseen_executable != null
+					&& SystemUtils.IS_OS_WINDOWS)
+				appinfo.executable = this.lastseen_executable;
 			parsevisitor.each(appid, appinfo);
 		}
 	}
