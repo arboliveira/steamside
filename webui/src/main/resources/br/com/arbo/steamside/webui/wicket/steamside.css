@@ -130,3 +130,26 @@ body {
 .instructions-and-explanations {
     font-family: Arvo;
 }
+
+.command-button {
+    font-family: monospace;
+    font-size: small;
+    font-weight: bold;
+    border-radius: 1px;
+}
+
+.command-hint {
+    font-family: sans;
+    font-size: x-small;
+    border-width: 1pt;
+}
+
+a.target-button {
+    border-radius: 10px;
+    border-color: LightSteelBlue;
+    border-style: solid;
+    background: LightYellow;
+    padding: 8px;	/* distance from text to border */
+    text-decoration: none;	/* hide link underline */
+    outline: none; /* hide dotted outline in Firefox */
+}

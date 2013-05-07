@@ -5,11 +5,11 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-public class ExtractUsernameTest extends ExtractUsername {
+public class ExtractUsernameTest {
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void happyday() {
+	public void happyDay() {
 		final String json = "{\n" +
 				"  \"username\" : \"kid\"\n" +
 				"}";
