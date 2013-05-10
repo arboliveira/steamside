@@ -85,6 +85,32 @@ var SwitchFavoritesView = Backbone.View.extend({
     }
 });
 
+var SteamClientView = Backbone.View.extend({
+
+    events: {
+        "click #button-open-steam-client": "buttonOpenSteamClientClicked"
+    },
+
+    initialize: function() {		"use strict";
+        this.setElement(Tileset.tileSteamClient().clone());
+    },
+
+    render: function () {  "use strict";
+        return this;
+    },
+
+    buttonOpenSteamClientClicked: function (e) {  "use strict";
+        e.preventDefault();
+        var jLink = $( this );
+        var aUrl = jLink.attr( "href" );
+        $.ajax(
+            {
+                url: aUrl
+            }
+        );
+    }
+});
+
 var SteamCategoryCollection = Backbone.Collection.extend({
     model: SteamCategory,
     url: 'steam-categories.json'
@@ -93,7 +119,8 @@ var SteamCategoryCollection = Backbone.Collection.extend({
 var SteamsideRouter = Backbone.Router.extend({
     routes: {
         "": "home",
-        "favorites/switch": "switch_favorites"
+        "favorites/switch": "switch_favorites",
+        "steamclient": "steam_client"
     },
 
     home: function() {      "use strict";
@@ -115,36 +142,36 @@ var SteamsideRouter = Backbone.Router.extend({
         });
 
         fetch_json(categories, function () {
-            view.render();
-            var s_el = $('#secondary-view');
-            s_el.empty();
-            s_el.append(view.el);
-            s_el.show();
-            $('#primary-view').hide();
+            that.setSecondaryView(view);
         });
-    }
+    },
 
+    steam_client:  function() {   "use strict";
+        var that = this;
+
+        var view = new SteamClientView({
+        });
+
+        that.setSecondaryView(view);
+    },
+
+    setSecondaryView:  function(view) {   "use strict";
+        view.render();
+        var s_el = $('#secondary-view');
+        s_el.empty();
+        s_el.append(view.el);
+        s_el.show();
+        $('#primary-view').hide();
+    }
 });
 
 var Steamside_html = {
 
     render_page: function (tileset) {     "use strict";
 
-        var router = new SteamsideRouter();
+        new SteamsideRouter();
         // Start Backbone history a necessary step for bookmarkable URL's
         Backbone.history.start();
-
-        $('#nav-steam-client').click(function(e) {
-            e.preventDefault();
-
-            var jLink = $( this );
-            var aUrl = jLink.attr( "href" );
-            $.ajax(
-                {
-                    url: aUrl
-                }
-            );
-        });
 
         var sessionModel = new SessionModel();
         var continues = new ContinueGames();
@@ -185,4 +212,4 @@ var Steamside_html = {
         $("#input-id-text-search").focus();
     }
 
-}
+};
