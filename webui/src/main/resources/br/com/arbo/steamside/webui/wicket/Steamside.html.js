@@ -91,10 +91,6 @@ var SteamClientView = Backbone.View.extend({
         "click #button-open-steam-client": "buttonOpenSteamClientClicked"
     },
 
-    initialize: function() {		"use strict";
-        this.setElement(Tileset.tileSteamClient().clone());
-    },
-
     render: function () {  "use strict";
         return this;
     },
@@ -149,10 +145,14 @@ var SteamsideRouter = Backbone.Router.extend({
     steam_client:  function() {   "use strict";
         var that = this;
 
-        var view = new SteamClientView({
-        });
+    	var callback = function(tile) {
+			var view = new SteamClientView({
+				el: tile.clone()
+			});
+			that.setSecondaryView(view);
+        };
 
-        that.setSecondaryView(view);
+		Tileset.tileSteamClient(callback);
     },
 
     setSecondaryView:  function(view) {   "use strict";

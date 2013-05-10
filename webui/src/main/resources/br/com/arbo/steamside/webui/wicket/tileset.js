@@ -16,9 +16,15 @@ var Tileset = {
         "use strict";
         return this._collectionPick;
     },
-    tileSteamClient: function () {
+    tileSteamClient: function (callback) {
         "use strict";
-        return this._tileSteamClient;
+		if (this._tileSteamClient != null) callback(this._tileSteamClient);
+		var that = this;
+		$.ajax({url:'SteamClient.html', success: function(html) {
+			var tile = $(html);
+			that._tileSteamClient = that.xml2html(tile, ".steam-client");
+			callback(that._tileSteamClient);
+		}, dataType: 'xml'});
     },
     load: function (callback) {
         "use strict";
@@ -29,11 +35,7 @@ var Tileset = {
             that._gameCard   = that.xml2html(t, ".game-tile");
             that._moreButton = that.xml2html(t, ".more-button");
             that._collectionPick = that.xml2html(t, ".collection-pick");
-            $.ajax({url:'SteamClient.html', success: function(tSteamClient) {
-                var jSteamClient = $(tSteamClient);
-                that._tileSteamClient = that.xml2html(jSteamClient, ".steam-client");
-                callback(that);
-            }, dataType: 'xml'});
+			callback(that);
         }, dataType: 'xml'});
     },
     xml2html: function(xml, selector) {
