@@ -145,10 +145,12 @@ body {
 }
 
 a.target-button {
+    display: inline-block;
     border-radius: 10px;
     border-color: LightSteelBlue;
     border-style: solid;
     background: LightYellow;
+    margin: 1px;
     padding: 8px;	/* distance from text to border */
     text-decoration: none;	/* hide link underline */
     outline: none; /* hide dotted outline in Firefox */
