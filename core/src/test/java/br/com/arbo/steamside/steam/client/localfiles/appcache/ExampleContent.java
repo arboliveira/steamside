@@ -3,6 +3,8 @@ package br.com.arbo.steamside.steam.client.localfiles.appcache;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.apache.commons.lang3.StringUtils;
+
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
 import br.com.arbo.steamside.vdf.ExampleDumpVdfStructure;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
@@ -22,9 +24,13 @@ class ExampleContent {
 
 	static class AppOut implements Content_appinfo_vdf_Visitor {
 
+		private int underway;
+
 		@Override
 		public void onApp(final int app_id) {
-			System.out.println("====" + app_id + "====");
+			this.underway = app_id;
+			System.out.println(
+					StringUtils.center(String.valueOf(app_id), 30, '='));
 		}
 
 		@Override
@@ -46,7 +52,9 @@ class ExampleContent {
 
 		@Override
 		public void onAppEnd() {
-			System.out.println("---------------------------");
+			System.out.println(
+					StringUtils.center(
+							"(end " + String.valueOf(underway) + ")", 30, '-'));
 		}
 	}
 

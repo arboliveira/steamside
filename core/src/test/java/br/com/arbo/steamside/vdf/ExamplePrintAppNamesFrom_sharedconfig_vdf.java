@@ -5,16 +5,16 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_v
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.web.AppNameFromSteamStore;
 
-class ExamplePrintAppNamesFromSharedconfigVdf {
+class ExamplePrintAppNamesFrom_sharedconfig_vdf {
 
 	static final boolean web = false;
 
 	public static void main(final String[] args) {
 		final AppNameFactory appnameFactory =
-				ExamplePrintAppNamesFromSharedconfigVdf.newAppNameFactory();
+				ExamplePrintAppNamesFrom_sharedconfig_vdf.newAppNameFactory();
 		final SysoutAppInfoLine dump =
 				new SysoutAppInfoLine(appnameFactory);
-		new DumpSharedconfigVdfApps(dump).dump();
+		new Dump_sharedconfig_vdf_Apps(dump).dump();
 	}
 
 	private static AppNameFactory newAppNameFactory() {

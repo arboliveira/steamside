@@ -26,7 +26,7 @@ class Parse_appinfo_vdf {
 
 		private String appid;
 		private AppInfo appinfo;
-		private String path;
+		String path;
 		private String lastseen_executable;
 
 		@Override
@@ -51,18 +51,56 @@ class Parse_appinfo_vdf {
 
 		@Override
 		public void onKeyValue(final String k, final String v) throws Finished {
-			if (keyMatches("name", "2/" + appid, k))
+			final Candidate key = new Candidate(k);
+			if (key.named("name")
+					.under("2/" + appid).matches())
 				appinfo.name = new AppName(v);
-			if (keyMatches("executable", "4/" + appid + "/launch/0", k))
+			if (key.named("executable")
+					.under("4/" + appid + "/launch/0").matches())
 				this.lastseen_executable = v;
-			if (keyMatches("oslist", "4/" + appid + "/launch", k))
+			if (key.named("oslist")
+					.underDeep("4/" + appid + "/launch").matches())
 				if (osMatches(v))
 					appinfo.executable = this.lastseen_executable;
 		}
 
-		boolean keyMatches(final String what, final String pathPrefix,
-				final String k) {
-			return what.equals(k) && path.startsWith(pathPrefix);
+		class Candidate {
+
+			private final String incoming;
+			private String wanted;
+			private String under;
+			private String underDeep;
+
+			Candidate(final String incoming) {
+				this.incoming = incoming;
+			}
+
+			Candidate named(final String wanted) {
+				this.wanted = wanted;
+				this.under = null;
+				this.underDeep = null;
+				return this;
+			}
+
+			Candidate under(final String path) {
+				this.under = path;
+				return this;
+			}
+
+			Candidate underDeep(final String pathPrefix) {
+				this.underDeep = pathPrefix;
+				return this;
+			}
+
+			public boolean matches() {
+				if (!wanted.equals(incoming))
+					return false;
+				if (under != null && !path.equals(under))
+					return false;
+				if (underDeep != null && !path.startsWith(underDeep))
+					return false;
+				return true;
+			}
 		}
 
 		@Override

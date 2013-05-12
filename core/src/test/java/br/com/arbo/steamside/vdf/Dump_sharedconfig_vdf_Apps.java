@@ -5,11 +5,11 @@ import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
 import br.com.arbo.steamside.types.AppId;
 
-class DumpSharedconfigVdfApps {
+class Dump_sharedconfig_vdf_Apps {
 
 	final SysoutAppInfoLine dump;
 
-	DumpSharedconfigVdfApps(final SysoutAppInfoLine dump) {
+	Dump_sharedconfig_vdf_Apps(final SysoutAppInfoLine dump) {
 		this.dump = dump;
 	}
 
