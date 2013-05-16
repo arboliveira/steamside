@@ -2,6 +2,7 @@ var SteamsideRouter = Backbone.Router.extend({
     routes: {
         "": "home",
         "favorites/switch": "switch_favorites",
+        "collections/new": "collections_new",
         "steamclient": "steam_client"
     },
 
@@ -26,6 +27,19 @@ var SteamsideRouter = Backbone.Router.extend({
         fetch_json(categories, function () {
             that.setSecondaryView(view);
         });
+    },
+
+    collections_new: function() {   "use strict";
+        var that = this;
+
+        var callback = function(tile) {
+            var view = new CollectionNewEmptyView({
+                el: tile.clone()
+            });
+            that.setSecondaryView(view);
+        };
+
+        Tileset.tileCollectionNew(callback);
     },
 
     steam_client:  function() {   "use strict";

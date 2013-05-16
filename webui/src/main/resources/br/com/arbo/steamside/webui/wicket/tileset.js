@@ -3,6 +3,7 @@ var Tileset = {
     _moreButton: null,
     _collectionPick: null,
     _tileSteamClient: null,
+    _tileCollectionNew: null,
 
     gameCard: function () {
         "use strict";
@@ -16,6 +17,7 @@ var Tileset = {
         "use strict";
         return this._collectionPick;
     },
+
     tileSteamClient: function (callback) {
         "use strict";
 		if (this._tileSteamClient != null) callback(this._tileSteamClient);
@@ -26,6 +28,18 @@ var Tileset = {
 			callback(that._tileSteamClient);
 		}, dataType: 'xml'});
     },
+
+    tileCollectionNew: function (callback) {
+        "use strict";
+        if (this._tileCollectionNew != null) callback(this._tileCollectionNew);
+        var that = this;
+        $.ajax({url:'CollectionNew.html', success: function(html) {
+            var tile = $(html);
+            that._tileCollectionNew = that.xml2html(tile, ".collection-new");
+            callback(that._tileCollectionNew);
+        }, dataType: 'xml'});
+    },
+
     load: function (callback) {
         "use strict";
         var path = 'tileset.html';
