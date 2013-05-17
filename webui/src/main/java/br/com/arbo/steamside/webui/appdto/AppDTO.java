@@ -10,13 +10,17 @@ import br.com.arbo.steamside.types.AppName;
 public class AppDTO {
 
 	public AppDTO(
-			final AppId appid, final AppName name, final Size size,
-			final Visible visible) {
-		this.appid = appid.appid;
-		this.link = "/app/" + this.appid + "/run";
-		this.name = name.name;
-		this.size = size.name().toLowerCase();
-		this.visible = visible.name().toLowerCase();
+			final AppId appid, final AppName name,
+            final Size size, final Visible visible) {
+        final String s_id = appid.appid;
+        this.appid = s_id;
+        this.name = name.name;
+        this.link = "/app/" + s_id + "/run";
+        this.image = "http://cdn.steampowered.com/v/gfx/apps/"
+                + s_id + "/header.jpg";
+        this.store = "http://store.steampowered.com/app/" + s_id;
+        this.size = size.name().toLowerCase();
+        this.visible = visible.name().toLowerCase();
 	}
 
 	@JsonProperty
@@ -25,6 +29,10 @@ public class AppDTO {
 	final String name;
 	@JsonProperty
 	final String link;
+    @JsonProperty
+    final String image;
+    @JsonProperty
+    final String store;
 	@JsonProperty
 	final String size;
 	@JsonProperty

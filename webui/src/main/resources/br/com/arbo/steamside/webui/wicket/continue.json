@@ -1,21 +1,33 @@
-[ {
-  "appid" : "37600",
-  "name" : "Windosill",
-  "link" : "server-action-placeholder.js"
-}, {
-  "appid" : "80300",
-  "name" : "Puzzle Bots",
-  "link" : "server-action-placeholder.js"
-}, {
-  "appid" : "29160",
-  "name" : "Blueberry Garden",
-  "link" : "server-action-placeholder.js"
-}, {
-  "appid" : "37600",
-  "name" : "Windosill",
-  "link" : "server-action-placeholder.js"
-}, {
-  "appid" : "80300",
-  "name" : "Puzzle Bots",
-  "link" : "server-action-placeholder.js"
-} ]
+[
+    {
+        "appid": "37600",
+        "name": "Windosill",
+        "link": "server-action-placeholder.js",
+        "image": "http://cdn.steampowered.com/v/gfx/apps/37600/header.jpg",
+        "store": "http://store.steampowered.com/app/37600/"
+    },
+    {
+        "appid": "80300",
+        "name": "Puzzle Bots",
+        "link": "server-action-placeholder.js",
+        "image": "http://cdn.steampowered.com/v/gfx/apps/80300/header.jpg",
+        "store": "http://store.steampowered.com/app/80300/"
+    },
+    {
+        "appid": "29160",
+        "name": "Blueberry Garden",
+        "link": "server-action-placeholder.js",
+        "image": "http://cdn.steampowered.com/v/gfx/apps/29160/header.jpg",
+        "store": "http://store.steampowered.com/app/29160/"
+    },
+    {
+        "appid": "37600",
+        "name": "Windosill",
+        "link": "server-action-placeholder.js"
+    },
+    {
+        "appid": "80300",
+        "name": "Puzzle Bots",
+        "link": "server-action-placeholder.js"
+    }
+]

@@ -1,21 +1,3 @@
-function fetch_json(collection) {
-    fetch_json(collection, function() { /* console.log(collection); */ });
-}
-
-function fetch_json(collection, success) {
-    collection.fetch({
-        mimeType: 'application/json',
-        cache: false,
-        success: success,
-        error: function() { console.log(arguments); }
-    });
-}
-
-function dataTypeOf(aUrl) {
-    if (aUrl.indexOf('.js') === aUrl.length - 3) return 'script';
-    return 'json';
-}
-
 var Game = Backbone.Model.extend({
     appid : function() {		"use strict";
 		return this.get('appid');
@@ -25,6 +7,12 @@ var Game = Backbone.Model.extend({
     },
     link: function() {		"use strict";
 		return this.get('link');
+    },
+    image: function() {		"use strict";
+        return this.get('image');
+    },
+    store: function() {		"use strict";
+        return this.get('store');
     },
     size: function() {		"use strict";
 		return this.get('size');
@@ -117,9 +105,8 @@ var GameCardView = Backbone.View.extend({
 		var name = this.model.name();
 		var link = this.model.link();
 		var size = this.model.size();
-		var img = 
-			'http://cdn.steampowered.com/v/gfx/apps/' 
-			+ appid + '/header.jpg';
+		var img = this.model.image();
+        var store = this.model.store();
 
 		this.$el.hide();
 		this.$el.addClass('game-tile-' + size);
@@ -127,6 +114,7 @@ var GameCardView = Backbone.View.extend({
 		this.$('.game-name').text(name);
 		this.$('.game-img').attr('src', img);
 		this.$('.game-link').attr('href', link);
+        this.$('.game-tile-store').attr('href', store);
 
 		return this;		
 	},
@@ -317,3 +305,22 @@ var DeckView = Backbone.View.extend({
 		}
 	}
 });
+
+function fetch_json(collection) {
+    fetch_json(collection, function() { /* console.log(collection); */ });
+}
+
+function fetch_json(collection, success) {
+    collection.fetch({
+        mimeType: 'application/json',
+        cache: false,
+        success: success,
+        error: function() { console.log(arguments); }
+    });
+}
+
+function dataTypeOf(aUrl) {
+    if (aUrl.indexOf('.js') === aUrl.length - 3) return 'script';
+    return 'json';
+}
+

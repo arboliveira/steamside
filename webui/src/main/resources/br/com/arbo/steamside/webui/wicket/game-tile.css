@@ -65,6 +65,11 @@
 .game-tile-caption {
 	text-align: center;
 }
+.game-tile-command-bar {
+    font-size: small;
+    margin-top: 10px;
+    border-top: dotted black 1px;
+}
 
 .more-button {
     float: right;

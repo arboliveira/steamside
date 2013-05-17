@@ -27,21 +27,21 @@ final class ToDTO {
 
 	AppCollectionDTO sortLimitConvert(final List<App> list) {
 		Collections.sort(list, new App.LastPlayedDescending());
-		final List<AppDTO> listdto = convertListAppToListAppDto(list);
+		final List<AppDTO> dto = convertListAppToListAppDto(list);
 		final AppCollectionDTO results = new AppCollectionDTO();
-		results.apps = listdto;
+		results.apps = dto;
 		return results;
 	}
 
 	private List<AppDTO> convertListAppToListAppDto(final List<App> list) {
-		final List<AppDTO> listdto = new ArrayList<AppDTO>(list.size());
+		final List<AppDTO> dto = new ArrayList<AppDTO>(list.size());
 		int i = 0;
 		for (final App app : list) {
 			i++;
 			if (i > limit) break;
-			listdto.add(toDto(app, i));
+			dto.add(toDto(app, i));
 		}
-		return listdto;
+		return dto;
 	}
 
 	private AppDTO toDto(final App app, final int i) {
