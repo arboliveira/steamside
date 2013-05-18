@@ -123,8 +123,8 @@ var GameCardView = Backbone.View.extend({
 		e.preventDefault();
 
 		var aUrl = this.model.link();
-		var loading_underlay = this.$el.find('.game-tile-inner');
-		var loading_overlay = this.$el.find('.game-tile-inner-overlay');
+		var loading_underlay = this.$('.game-tile-inner');
+		var loading_overlay = this.$('.game-tile-inner-loading-overlay');
 		var that = this;
 
         var type = dataTypeOf(aUrl);

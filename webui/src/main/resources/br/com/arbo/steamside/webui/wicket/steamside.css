@@ -131,6 +131,12 @@ body {
     font-family: Arvo;
 }
 
+.purpose-of-this-page {
+    font-family: Arvo;
+    font-size: x-large;
+    color: coral;
+}
+
 .command-button {
     font-family: monospace;
     font-size: small;

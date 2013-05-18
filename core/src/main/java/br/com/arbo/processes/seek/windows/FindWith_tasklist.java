@@ -8,6 +8,7 @@ import java.util.List;
 import br.com.arbo.processes.ProcessUtils;
 import br.com.arbo.processes.seek.Criteria;
 import br.com.arbo.processes.seek.NotFound;
+import org.apache.commons.lang3.StringUtils;
 
 class FindWith_tasklist {
 
@@ -33,7 +34,7 @@ class FindWith_tasklist {
 	}
 
 	private int extract_pid(final String tasklist) throws NotFound {
-		final int exeb = tasklist.indexOf(criteria.executable);
+		final int exeb = StringUtils.indexOfIgnoreCase(tasklist, criteria.executable);
 		if (exeb == -1) throw new NotFound();
 		final int exee = exeb + criteria.executable.length() + 1;
 		int i = exee;

@@ -2,8 +2,9 @@ var Tileset = {
     _gameCard: null,
     _moreButton: null,
     _collectionPick: null,
-    _tileSteamClient: null,
-    _tileCollectionNew: null,
+    _tileSteamClient: new Object,
+    _tileCollectionNew: new Object,
+	_tileCollectionEdit: new Object,
 
     gameCard: function () {
         "use strict";
@@ -18,29 +19,44 @@ var Tileset = {
         return this._collectionPick;
     },
 
-    tileSteamClient: function (callback) {
-        "use strict";
-		if (this._tileSteamClient != null) callback(this._tileSteamClient);
+    tileSteamClient: function (callback) {        "use strict";
+		this.ajaxTile(
+			'SteamClient.html', "#steam-client",
+			this._tileSteamClient, callback);
+    },
+
+    tileCollectionNew: function (callback) {        "use strict";
+		this.ajaxTile(
+			'CollectionNew.html', "#collection-new",
+			this._tileCollectionNew, callback);
+    },
+
+	tileCollectionEdit: function (callback) {		"use strict";
+		this.ajaxTile(
+			'CollectionEdit.html', "#collection-edit",
+			this._tileCollectionEdit, callback);
+	},
+
+	ajaxTile: function (url, selector, holder, callback) {
+		var had = holder.tile;
+		if (had != null) {
+			callback(had);
+			return;
+		}
 		var that = this;
-		$.ajax({url:'SteamClient.html', success: function(html) {
-			var tile = $(html);
-			that._tileSteamClient = that.xml2html(tile, ".steam-client");
-			callback(that._tileSteamClient);
+		$.ajax({url: url, success: function (content) {
+			that.storeTile(content, selector, holder, callback);
 		}, dataType: 'xml'});
-    },
+	},
 
-    tileCollectionNew: function (callback) {
-        "use strict";
-        if (this._tileCollectionNew != null) callback(this._tileCollectionNew);
-        var that = this;
-        $.ajax({url:'CollectionNew.html', success: function(html) {
-            var tile = $(html);
-            that._tileCollectionNew = that.xml2html(tile, ".collection-new");
-            callback(that._tileCollectionNew);
-        }, dataType: 'xml'});
-    },
+	storeTile: function(content, selector, holder, callback) { "use strict";
+		var xml = $(content);
+		var put = this.xml2html(xml, selector);
+		holder.tile = put;
+		callback(put);
+	},
 
-    load: function (callback) {
+	load: function (callback) {
         "use strict";
         var path = 'tileset.html';
         var that = this;
