@@ -109,7 +109,6 @@ var Steamside_html = {
         new DeckView({
             el: $('#continues-deck'),
             collection: continues,
-            session: sessionModel,
             continues: continues
         });
 
@@ -121,14 +120,12 @@ var Steamside_html = {
         new DeckView({
             el: $('#search-results-deck'),
             collection: searchResults,
-            session: sessionModel,
             continues: continues
         });
 
         new DeckView({
             el: $('#favorites-deck'),
             collection: favorites,
-            session: sessionModel,
             continues: continues
         });
 

@@ -13,12 +13,6 @@ var Game = Backbone.Model.extend({
     },
     store: function() {		"use strict";
         return this.get('store');
-    },
-    size: function() {		"use strict";
-		return this.get('size');
-    },
-    visible: function() {		"use strict";
-		return this.get('visible') === 'true';
     }
 });
 
@@ -89,28 +83,30 @@ var Deck = Backbone.Model.extend({
 
 var GameCardView = Backbone.View.extend({
 	continues: null,
+    enormity: null,
 	width: 0,
 	events: {
-		"click .game-link"         : "gameClicked"
+		"mouseenter .game-link": "mouseenter_hot_zone",
+        "mouseleave .game-link": "mouseleave_hot_zone",
+        "click .game-link": "gameClicked",
+        "click .game-tile-play": "gameClicked"
 	},
 
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
-		this.width = this.options.width;
+		this.enormity = this.options.enormity;
 		this.setElement(Tileset.gameCard().clone());
 	},
 	
 	render: function () {		"use strict";
-		var appid = this.model.appid();
 		var name = this.model.name();
 		var link = this.model.link();
-		var size = this.model.size();
 		var img = this.model.image();
         var store = this.model.store();
 
 		this.$el.hide();
-		this.$el.addClass('game-tile-' + size);
-		this.$el.width(this.width.toString() + "%");
+		this.$el.addClass(this.enormity.styleClass);
+		this.$el.width(this.enormity.width.toString() + "%");
 		this.$('.game-name').text(name);
 		this.$('.game-img').attr('src', img);
 		this.$('.game-link').attr('href', link);
@@ -118,30 +114,59 @@ var GameCardView = Backbone.View.extend({
 
 		return this;		
 	},
-	
-	gameClicked: function(e) {				"use strict";
-		e.preventDefault();
 
-		var aUrl = this.model.link();
-		var loading_underlay = this.$('.game-tile-inner');
-		var loading_overlay = this.$('.game-tile-inner-loading-overlay');
-		var that = this;
+    mouseenter_hot_zone: function(e) {
+        e.preventDefault();
+		var whatWillHappen = this.$('.game-tile-play');
+		whatWillHappen.addClass('what-will-happen');
+//        this.showOverlay('Play');
+    },
+
+    mouseleave_hot_zone: function(e) {
+        e.preventDefault();
+		var whatWillHappen = this.$('.game-tile-play');
+		whatWillHappen.removeClass('what-will-happen');
+//        this.hideOverlay();
+    },
+
+    gameClicked: function(e) {				"use strict";
+		e.preventDefault();
+        this.play();
+	},
+
+    play: function() {
+        var aUrl = this.model.link();
+        var that = this;
 
         var type = dataTypeOf(aUrl);
         $.ajax({
-				url: aUrl,
-				dataType: type,
-				beforeSend: function(){
-					loading_overlay.show();
-					loading_underlay.addClass('game-tile-inner-blurred');
-				},
-				complete: function(){
-					loading_overlay.hide();
-					loading_underlay.removeClass('game-tile-inner-blurred');
-                    that.redisplay_continues();
-				}
-		});
-	},
+            url: aUrl,
+            dataType: type,
+            beforeSend: function(){
+                that.showOverlay('Now playing');
+            },
+            complete: function(){
+                that.hideOverlay();
+                that.redisplay_continues();
+            }
+        });
+    },
+
+    showOverlay: function(text) {
+        var overlay = this.$('.game-tile-inner-loading-overlay');
+		var overlay_text = this.$('game-tile-hot-zone-overlay-text');
+        var underlay = this.$('.game-tile-inner');
+        overlay_text.text(text);
+        overlay.show();
+        underlay.addClass('game-tile-inner-blurred');
+    },
+
+    hideOverlay: function() {
+        var loading_overlay = this.$('.game-tile-inner-loading-overlay');
+        var loading_underlay = this.$('.game-tile-inner');
+        loading_overlay.hide();
+        loading_underlay.removeClass('game-tile-inner-blurred');
+    },
 
     redisplay_continues: function () {		"use strict";
         fetch_json(this.continues);
@@ -199,7 +224,7 @@ var MoreButtonView = Backbone.View.extend({
 });
 
 var DeckView = Backbone.View.extend({
-	session: null,
+    alwaysVisible: false,
 	xCell: 0,
 	yRow: 0,
 	deck: null,
@@ -208,7 +233,12 @@ var DeckView = Backbone.View.extend({
     continues: null,
 
 	initialize: function() {		"use strict";
-		this.session = this.options.session;
+        /*
+         visible will not be part of the result anymore,
+         because we want logic like "first row is visible"
+         and this depends on calculations inside the browser
+         */
+		this.alwaysVisible = this.options.alwaysVisible === true;
         this.continues = this.options.continues;
 		this.collection.on('reset', this.render, this);
 	},
@@ -239,16 +269,17 @@ var DeckView = Backbone.View.extend({
 		) { "use strict";
 
 		var cells_in_a_row = 3;
-		var widthRegular = 30;
-		var widthLarge = 100 - 5 - widthRegular * (cells_in_a_row - 1);
-		var widthFiller = 100 - 5 - widthRegular * cells_in_a_row;
 
-		/*
-			visible will not be part of the result anymore,
-			because we want logic like "first row is visible"
-			and this depends on calculations inside the browser
-		*/
-		var alwaysVisible = this.session.kidsmode();
+        var enormityRegular = {
+            styleClass: 'game-tile-regular',
+            width: 30
+        };
+        var enormityLarge = {
+            styleClass: 'game-tile-large',
+            width: 100 - 5 - enormityRegular.width * (cells_in_a_row - 1)
+        };
+
+		var widthFiller = 100 - 5 - enormityRegular.width * cells_in_a_row;
 
 		this.xCell += 1;
 		if (this.xCell === 1) {
@@ -268,17 +299,17 @@ var DeckView = Backbone.View.extend({
 				new FillerCellView({
 					width: widthFiller
 				});
-			this.deck.push(filler_view, alwaysVisible);
+			this.deck.push(filler_view, this.alwaysVisible);
 			var filler_el = filler_view.render().el;
 			this.current_row.append(filler_el);
 		}
 
-		var width;
+		var enormity;
         var topLeftIsLarger = this.xCell === 1 && this.yRow === 1;
         if (topLeftIsLarger) {
-			width = widthLarge;
+			enormity = enormityLarge;
 		} else {
-			width = widthRegular;
+			enormity = enormityRegular;
 		}
 
 		var that_continue = this.continues;
@@ -286,9 +317,9 @@ var DeckView = Backbone.View.extend({
 		var card_view = new GameCardView({
 			model: oneResult,
 			continues: that_continue,
-			width: width
+			enormity: enormity
 		});
-		this.deck.push(card_view, alwaysVisible || this.yRow === 1);
+		this.deck.push(card_view, this.alwaysVisible || this.yRow === 1);
 		var card_el = card_view.render().el;
 		this.current_row.append(card_el);
 	},

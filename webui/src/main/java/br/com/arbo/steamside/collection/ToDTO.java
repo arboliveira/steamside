@@ -11,8 +11,6 @@ import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
-import br.com.arbo.steamside.webui.appdto.Size;
-import br.com.arbo.steamside.webui.appdto.Visible;
 
 final class ToDTO {
 
@@ -39,17 +37,15 @@ final class ToDTO {
 		for (final App app : list) {
 			i++;
 			if (i > limit) break;
-			dto.add(toDto(app, i));
+			dto.add(toDto(app));
 		}
 		return dto;
 	}
 
-	private AppDTO toDto(final App app, final int i) {
+	private AppDTO toDto(final App app) {
 		final AppId appid = app.appid();
 		final AppName appname = nameOf(appid);
-		final Size size = i == 1 ? Size.Large : Size.Regular;
-		final Visible visible = i <= 3 ? Visible.True : Visible.False;
-		final AppDTO dto = new AppDTO(appid, appname, size, visible);
+		final AppDTO dto = new AppDTO(appid, appname);
 		return dto;
 	}
 

@@ -8,8 +8,6 @@ import br.com.arbo.steamside.steam.store.SearchStore;
 import br.com.arbo.steamside.steam.store.SearchStore.SearchResultVisitor;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
-import br.com.arbo.steamside.webui.appdto.Size;
-import br.com.arbo.steamside.webui.appdto.Visible;
 
 class Search {
 
@@ -20,7 +18,7 @@ class Search {
 			@Override
 			public void each(final App app) {
 				list.add(new AppDTO(
-						app.appid, app.name, Size.Large, Visible.True));
+						app.appid, app.name));
 			}
 
 		});
