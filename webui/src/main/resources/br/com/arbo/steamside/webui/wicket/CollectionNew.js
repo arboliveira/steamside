@@ -5,14 +5,6 @@ var CollectionNewEmptyView = Backbone.View.extend({
         "change #input-empty-name": "on_input_keyup"
     },
 
-    initialize: function() {		"use strict";
-
-    },
-
-    render: function() { "use strict";
-        return this;
-    },
-
     on_input_keyup: function (e) {  "use strict";
         e.preventDefault();
         var val = $(e.target).val();
@@ -24,5 +16,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
         }
         var el_hint = this.$("#empty-command-hint");
         el_hint.text(full);
+        var form = this.$("#form-empty");
+        form.attr("action", "#/collections/" + val + "/edit");
     }
 });

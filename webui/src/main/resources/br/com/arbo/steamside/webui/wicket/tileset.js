@@ -44,9 +44,15 @@ var Tileset = {
 			return;
 		}
 		var that = this;
-		$.ajax({url: url, success: function (content) {
-			that.storeTile(content, selector, holder, callback);
-		}, dataType: 'xml'});
+		$.ajax({
+            url: url,
+            success: function (content) {
+			    that.storeTile(content, selector, holder, callback);
+		    },
+            error: function() {
+                console.log(arguments);
+            },
+            dataType: 'xml'});
 	},
 
 	storeTile: function(content, selector, holder, callback) { "use strict";

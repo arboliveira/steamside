@@ -3,6 +3,7 @@ var SteamsideRouter = Backbone.Router.extend({
         "": "home",
         "favorites/switch": "switch_favorites",
         "collections/new": "collections_new",
+        "collections/:name/edit": "collections_edit",
         "steamclient": "steam_client"
     },
 
@@ -40,6 +41,24 @@ var SteamsideRouter = Backbone.Router.extend({
         };
 
         Tileset.tileCollectionNew(callback);
+    },
+
+    collections_edit: function(name) {   "use strict";
+        var that = this;
+
+        var apps = new SteamsideCollectionApps();
+
+        var callback = function(tile) {
+            var elTile = tile.clone();
+            var view = new CollectionEditView({
+                el: elTile,
+                collection: apps
+            });
+            that.setSecondaryView(view);
+            fetch_json(apps);
+        };
+
+        Tileset.tileCollectionEdit(callback);
     },
 
     steam_client:  function() {   "use strict";

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" 
-xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" 
-xml:lang="en" lang="en">
-<head profile="http://www.w3.org/2005/10/profile">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
 <!-- ======================================================================= -->
 <title>Collection</title>
 
@@ -15,95 +13,81 @@ xml:lang="en" lang="en">
       href="steamside.png"/>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 
-<link href="game-tile.css" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
+    <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
 
-<script src="static/jquery-1.7.2.js"></script>
-<script src="underscore.js"></script>
-<script src="backbone.js"></script>
-<script src="gametiles.js"></script>
-		
-<link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
-<link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
-		
-<!-- ----------------------------------------------------------------------- -->
+    <link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
+
+    <script src="jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="underscore.js" type="text/javascript"></script>
+    <script src="backbone.js" type="text/javascript"></script>
+    <script src="GameCardDeck.js" type="text/javascript"></script>
+
+<!-- ======================================================================= -->
 
 
-<!-- ----------------------------------------------------------------------- -->
+<!-- ======================================================================= -->
 </head>
 <body>
-<!-- ----------------------------------------------------------------------- -->
+<!-- ======================================================================= -->
 
 <div id="collection-edit">
 
-    <p class="instructions-and-explanations">
+    <p class="purpose-of-this-page">
         <span id="display-collection-name">This is the collection name</span>
     </p>
 
     <div id="collection-segment" class="container">
 
-    <div class="side-header side-header-at-left">
-        <p class="side-header-paragraph">
-			<span class="side-text side-text-at-left">
-			In<br/>
-			Collec<br/>
-			tion<br/>
-			</span>
-        </p>
-        <div class="side-links">
-            <ul>
-                <li><a href="">Clear...</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="content content-at-right">
-        <div id="games-in-collection">
-            <div class="game-tiles">
+        <div class="side-header side-header-at-left">
+            <p class="side-header-paragraph">
+                <span class="side-text side-text-at-left">
+                In<br/>
+                Collec<br/>
+                tion<br/>
+                </span>
+            </p>
+            <div class="side-links">
+                <ul>
+                    <li><a href="">Clear...</a></li>
+                </ul>
             </div>
         </div>
-        <div class="footer">
-        </div>
-    </div>
 
-    <div class="footer">
-    </div>
-
-</div>
-
-<div id="not-collection-segment" class="container">
-
-    <div class="side-header side-header-at-right">
-        <p class="side-header-paragraph">
-			<span class="side-text side-text-at-right">
-			Out of<br/>
-			Collec<br/>
-			tion<br/>
-			</span>
-        </p>
-        <div class="side-links">
-            <ul>
-                <li><a href="">Add all...</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="content content-at-left">
-        <div id="games-out-collection">
-            <div class="game-tiles">
+        <div class="content content-at-right">
+            <div id="games-in-collection-deck">
             </div>
         </div>
-        <div class="footer">
+
+    </div>
+
+    <div id="not-collection-segment" class="container">
+
+        <div class="side-header side-header-at-right">
+            <p class="side-header-paragraph">
+                <span class="side-text side-text-at-right">
+                Out of<br/>
+                Collec<br/>
+                tion<br/>
+                </span>
+            </p>
+            <div class="side-links">
+                <ul>
+                    <li><a href="">Add all...</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
 
-    <div class="footer">
+        <div class="content content-at-left">
+            <div id="games-out-collection-deck">
+            </div>
+        </div>
+
     </div>
 
 </div>
 
-</div>
 
-
-<!-- ----------------------------------------------------------------------- -->
+<!-- ======================================================================= -->
 </body>
 </html>
