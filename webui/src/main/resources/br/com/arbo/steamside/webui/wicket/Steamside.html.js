@@ -38,9 +38,7 @@ var SessionView = Backbone.View.extend({
     el : 'body',
 
     initialize: function () {
-        var m = this.model;
-        m.bind('change',this.render, this);
-        fetch_json(m);
+		this.model.bind('change', this.render, this);
     },
 
     render: function () {                "use strict";
@@ -91,6 +89,51 @@ var SteamCategoryCollection = Backbone.Collection.extend({
 });
 
 
+var SteamsideView = Backbone.View.extend({
+
+	el: "body",
+
+	render: function () {  "use strict";
+		var sessionModel = new SessionModel();
+		var continues = new ContinueGames();
+		var searchResults = new SearchResults();
+		var favorites = new FavoritesCollection();
+
+		new SessionView({model: sessionModel});
+
+		new DeckView({
+			el: $('#continues-deck'),
+			collection: continues,
+			continues: continues
+		});
+
+		new SearchTextView({
+			el: $('#div-id-search-text'),
+			collection: searchResults
+		});
+
+		new DeckView({
+			el: $('#search-results-deck'),
+			collection: searchResults,
+			continues: continues
+		});
+
+		new DeckView({
+			el: $('#favorites-deck'),
+			collection: favorites,
+			continues: continues
+		});
+
+		fetch_json(sessionModel);
+		fetch_json(continues);
+		fetch_json(favorites);
+
+		$("#input-id-text-search").focus();
+
+		return this;
+	}
+});
+
 var Steamside_html = {
 
     render_page: function (tileset) {     "use strict";
@@ -99,40 +142,7 @@ var Steamside_html = {
         // Start Backbone history a necessary step for bookmarkable URL's
         Backbone.history.start();
 
-        var sessionModel = new SessionModel();
-        var continues = new ContinueGames();
-        var searchResults = new SearchResults();
-        var favorites = new FavoritesCollection();
-
-        new SessionView({model: sessionModel});
-
-        new DeckView({
-            el: $('#continues-deck'),
-            collection: continues,
-            continues: continues
-        });
-
-        new SearchTextView({
-            el: $('#div-id-search-text'),
-            collection: searchResults
-        });
-
-        new DeckView({
-            el: $('#search-results-deck'),
-            collection: searchResults,
-            continues: continues
-        });
-
-        new DeckView({
-            el: $('#favorites-deck'),
-            collection: favorites,
-            continues: continues
-        });
-
-        fetch_json(continues);
-        fetch_json(favorites);
-
-        $("#input-id-text-search").focus();
+		new SteamsideView().render();
     }
 
 };
