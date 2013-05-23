@@ -88,6 +88,27 @@ var SteamCategoryCollection = Backbone.Collection.extend({
     url: 'steam-categories.json'
 });
 
+function sideshow(element) {
+	var segments = element.find('.segment');
+	var left = true;
+	segments.each(function(){
+		var segment = $(this);
+		var header = segment.find('.side-header');
+		header.removeClass('side-header-at-left');
+		header.removeClass('side-header-at-right');
+		var content = segment.find('.content');
+		content.removeClass('content-at-right');
+		content.removeClass('content-at-left');
+		left = !left;
+		if (left) {
+			header.addClass('side-header-at-left');
+			content.addClass('content-at-right');
+		} else {
+			header.addClass('side-header-at-right');
+			content.addClass('content-at-left');
+		}
+	});
+}
 
 var SteamsideView = Backbone.View.extend({
 
@@ -98,6 +119,8 @@ var SteamsideView = Backbone.View.extend({
 		var continues = new ContinueGames();
 		var searchResults = new SearchResults();
 		var favorites = new FavoritesCollection();
+
+		sideshow(this.$el);
 
 		new SessionView({model: sessionModel});
 
