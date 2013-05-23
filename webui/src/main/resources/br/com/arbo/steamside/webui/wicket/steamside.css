@@ -123,10 +123,6 @@ body {
     height: 0px;
 }
 
-.search-text-input {
-    width: 100%; font-size:24px;
-}
-
 .instructions-and-explanations {
     font-family: Arvo;
 }
@@ -135,19 +131,6 @@ body {
     font-family: Arvo;
     font-size: x-large;
     color: coral;
-}
-
-.command-button {
-    font-family: monospace;
-    font-size: small;
-    font-weight: bold;
-    border-radius: 1px;
-}
-
-.command-hint {
-    font-family: sans;
-    font-size: x-small;
-    border-width: 1pt;
 }
 
 a.target-button {

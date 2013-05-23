@@ -5,6 +5,7 @@ var Tileset = {
     _tileSteamClient: new Object,
     _tileCollectionNew: new Object,
 	_tileCollectionEdit: new Object,
+	_tileCommandBox: new Object,
 
     gameCard: function () {
         "use strict";
@@ -35,6 +36,12 @@ var Tileset = {
 		this.ajaxTile(
 			'CollectionEdit.html', "#collection-edit",
 			this._tileCollectionEdit, callback);
+	},
+
+	tileCommandBox: function (callback) {		"use strict";
+		this.ajaxTile(
+			'CommandBox.html', "#command-box",
+			this._tileCommandBox, callback);
 	},
 
 	ajaxTile: function (url, selector, holder, callback) {

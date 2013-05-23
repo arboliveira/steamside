@@ -17,19 +17,33 @@ var FavoritesCollection = Backbone.Collection.extend({
 });
 
 var SearchTextView = Backbone.View.extend({
-    events: {
-        'submit form': 'submitSearch'
-    },
 
-    initialize: function() {                           "use strict";
+	render: function() {
+		this.$el.empty();
 
-    },
+		var that = this;
 
-    submitSearch: function(e) {     "use strict";
-        e.preventDefault();
+		var on_command = function(input) {
+			that.doSearch(input);
+		}
 
+		Tileset.tileCommandBox(
+			function(tile) {
+				var view = new CommandBoxView({
+					el: tile.clone(),
+					on_command: on_command,
+					placeholder_text: 'game or command'
+				});
+				that.$el.append(view.render().el);
+			}
+		);
+
+		return this;
+	},
+
+    doSearch: function(input) {     "use strict";
         var c = this.collection;
-        c.value = this.$('#input-id-text-search').val();
+        c.value = input;
         fetch_json(c);
     }
 });
@@ -133,7 +147,7 @@ var SteamsideView = Backbone.View.extend({
 		new SearchTextView({
 			el: $('#div-id-search-text'),
 			collection: searchResults
-		});
+		}).render();
 
 		new DeckView({
 			el: $('#search-results-deck'),

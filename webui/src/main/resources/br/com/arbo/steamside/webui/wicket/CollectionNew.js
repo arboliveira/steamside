@@ -1,22 +1,50 @@
 var CollectionNewEmptyView = Backbone.View.extend({
 
-    events: {
-        "keyup #input-empty-name": "on_input_keyup",
-        "change #input-empty-name": "on_input_keyup"
-    },
+	render: function() {
+		var targetEl = this.$('#div-empty-name-form');
+		targetEl.empty();
 
-    on_input_keyup: function (e) {  "use strict";
-        e.preventDefault();
-        var val = $(e.target).val();
-        var full;
-        if (val === '') {
-            full = "Create collection";
-        } else {
-            full = "Create " + val + " collection and start adding games";
-        }
-        var el_hint = this.$("#empty-command-hint");
-        el_hint.text(full);
-        var form = this.$("#form-empty");
-        form.attr("action", "#/collections/" + val + "/edit");
+		var that = this;
+
+		var on_command =
+
+		Tileset.tileCommandBox(
+			function(tile) {
+				var view = new CommandBoxView({
+					el: tile.clone(),
+					placeholder_text: 'Name for empty collection',
+					on_command: function(input) { that.doCommand(input); },
+					on_change_input: function(input) { that.doChangeInput(input); }
+				});
+				targetEl.append(view.render().el);
+				that.doChangeInput("");
+			}
+		);
+
+		return this;
+	},
+
+	doCommand: function(input) {     "use strict";
+		var form = this.$("#form-empty");
+		form.attr("action", "#/collections/" + input + "/edit");
+		/*
+		var c = this.collection;
+		c.value = input;
+		fetch_json(c);
+		*/
+	},
+
+    doChangeInput: function (input) {  "use strict";
+		var c_hint = this.$("#command-hint");
+		var c_hint_alternate = this.$("#command-hint-alternate");
+		if (input === '') {
+			var same = '(waiting for input...)'
+			c_hint.text(same);
+			c_hint_alternate.text(same);
+		} else {
+			var full = "Create " + input + " collection";
+			c_hint.text(full + " and start adding games");
+			c_hint_alternate.text(full + " and stay here");
+		}
     }
 });

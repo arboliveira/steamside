@@ -75,10 +75,9 @@ var SteamsideRouter = Backbone.Router.extend({
     },
 
     setSecondaryView:  function(view) {   "use strict";
-        view.render();
         var s_el = $('#secondary-view');
         s_el.empty();
-        s_el.append(view.el);
+        s_el.append(view.render().el);
         s_el.show();
         $('#primary-view').hide();
     }

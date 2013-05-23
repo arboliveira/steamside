@@ -5,10 +5,6 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 
 var CollectionEditView = Backbone.View.extend({
 
-    initialize: function() {		"use strict";
-
-    },
-
     render: function() {		"use strict";
         new DeckView({
             el: this.$('#games-in-collection-deck'),
