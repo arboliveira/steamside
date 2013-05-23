@@ -2,7 +2,7 @@ body {
 	background-color: White;
 }
 
-.container {
+.segment {
     display: table;
     table-layout: fixed;
     width: 100%;
