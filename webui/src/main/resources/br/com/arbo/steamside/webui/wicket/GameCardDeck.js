@@ -95,7 +95,7 @@ var GameCardView = Backbone.View.extend({
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.enormity = this.options.enormity;
-		this.setElement(Tileset.gameCard().clone());
+		this.setElement(SteamsideTileset.gameCard().clone());
 	},
 	
 	render: function () {		"use strict";
@@ -198,7 +198,7 @@ var MoreButtonView = Backbone.View.extend({
 	
 	initialize: function() {		"use strict";
 		this.deck = this.options.deck;
-		this.setElement(Tileset.moreButton().clone());
+		this.setElement(SteamsideTileset.moreButton().clone());
 	},
 
 	render: function() {		"use strict";

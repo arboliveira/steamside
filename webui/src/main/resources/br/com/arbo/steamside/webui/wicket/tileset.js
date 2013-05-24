@@ -39,7 +39,7 @@ var Tile = Backbone.Model.extend({
 	}
 });
 
-var Tileset = {
+var SteamsideTileset = {
 	_gameCard: new Tile({selector: ".game-tile"}),
 	_moreButton: new Tile({selector: ".more-button"}),
 	_collectionPick: new Tile({selector: ".collection-pick"}),

@@ -40,7 +40,7 @@ var SteamsideRouter = Backbone.Router.extend({
             that.setSecondaryView(view);
         };
 
-        Tileset.tileCollectionNew(callback);
+        SteamsideTileset.tileCollectionNew(callback);
     },
 
     collections_edit: function(name) {   "use strict";
@@ -58,7 +58,7 @@ var SteamsideRouter = Backbone.Router.extend({
             fetch_json(apps);
         };
 
-        Tileset.tileCollectionEdit(callback);
+        SteamsideTileset.tileCollectionEdit(callback);
     },
 
     steam_client:  function() {   "use strict";
@@ -71,7 +71,7 @@ var SteamsideRouter = Backbone.Router.extend({
             that.setSecondaryView(view);
         };
 
-        Tileset.tileSteamClient(callback);
+        SteamsideTileset.tileSteamClient(callback);
     },
 
     setSecondaryView:  function(view) {   "use strict";

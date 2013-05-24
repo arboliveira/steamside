@@ -27,7 +27,7 @@ var SearchTextView = Backbone.View.extend({
 			that.doSearch(input);
 		}
 
-		Tileset.tileCommandBox(
+		SteamsideTileset.tileCommandBox(
 			function(tile) {
 				var view = new CommandBoxView({
 					el: tile.clone(),
@@ -78,7 +78,7 @@ var SwitchFavoritesView = Backbone.View.extend({
     },
 
     initialize: function() {		"use strict";
-        this.setElement(Tileset.collectionPick().clone());
+        this.setElement(SteamsideTileset.collectionPick().clone());
         this.on_category_change = this.options.on_category_change;
     },
 
