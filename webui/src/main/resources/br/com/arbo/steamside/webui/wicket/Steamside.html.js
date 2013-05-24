@@ -27,7 +27,7 @@ var SearchTextView = Backbone.View.extend({
 			that.doSearch(input);
 		}
 
-		SteamsideTileset.tileCommandBox(
+		CommandBoxTile.tileCommandBox(
 			function(tile) {
 				var view = new CommandBoxView({
 					el: tile.clone(),

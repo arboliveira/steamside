@@ -8,7 +8,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 
 		var on_command =
 
-		SteamsideTileset.tileCommandBox(
+		CommandBoxTile.tileCommandBox(
 			function(tile) {
 				var view = new CommandBoxView({
 					el: tile.clone(),

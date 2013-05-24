@@ -1,3 +1,13 @@
+var CommandBoxTile = {
+	_tileCommandBox: new Tile({selector: "#command-box"}),
+
+	tileCommandBox: function (callback) {		"use strict";
+		this._tileCommandBox.ajaxTile(
+			'CommandBox.html',
+			callback);
+	}
+};
+
 var CommandBoxView = Backbone.View.extend({
 
 	events: {

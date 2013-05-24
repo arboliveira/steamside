@@ -46,7 +46,6 @@ var SteamsideTileset = {
 	_tileSteamClient: new Tile({selector: "#steam-client"}),
 	_tileCollectionNew: new Tile({selector: "#collection-new"}),
 	_tileCollectionEdit: new Tile({selector: "#collection-edit"}),
-	_tileCommandBox: new Tile({selector: "#command-box"}),
 
     gameCard: function () {
         "use strict";
@@ -76,12 +75,6 @@ var SteamsideTileset = {
 	tileCollectionEdit: function (callback) {		"use strict";
 		this._tileCollectionEdit.ajaxTile(
 			'CollectionEdit.html',
-			callback);
-	},
-
-	tileCommandBox: function (callback) {		"use strict";
-		this._tileCommandBox.ajaxTile(
-			'CommandBox.html',
 			callback);
 	},
 
