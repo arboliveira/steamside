@@ -173,7 +173,7 @@ var SteamsideView = Backbone.View.extend({
 
 var Steamside_html = {
 
-    render_page: function (tileset) {     "use strict";
+    render_page: function () {     "use strict";
 
         new SteamsideRouter();
         // Start Backbone history a necessary step for bookmarkable URL's
