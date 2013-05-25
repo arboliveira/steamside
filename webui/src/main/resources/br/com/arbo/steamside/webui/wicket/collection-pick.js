@@ -1,3 +1,10 @@
+var CollectionPickTile = {
+
+	ajaxTile: function (callback) {
+		SteamsideTileset.ajaxCollectionPick(callback);
+	}
+};
+
 var SteamCategory = Backbone.Model.extend({
 	name: function() {		"use strict";
 		return this.get('name');
@@ -44,16 +51,9 @@ var SteamCategoryView = Backbone.View.extend({
 			url: aUrl,
 			dataType: type,
 			beforeSend: function(){
-				/*
-				loading_overlay.show();
-				loading_underlay.addClass('game-tile-inner-blurred');
-				*/
+				// loading...
 			},
 			complete: function(){
-				/*
-				loading_overlay.hide();
-				loading_underlay.removeClass('game-tile-inner-blurred');
-				 */
 				that.category_changed();
 			}
 		});

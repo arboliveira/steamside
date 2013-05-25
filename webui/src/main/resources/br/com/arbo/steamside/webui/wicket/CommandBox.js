@@ -1,9 +1,9 @@
 var CommandBoxTile = {
-	_tileCommandBox: new Tile(
+	tile: new Tile(
 		{url: 'CommandBox.html', selector: "#command-box"}),
 
-	tileCommandBox: function (callback) {		"use strict";
-		this._tileCommandBox.ajaxTile(callback);
+	ajaxTile: function (callback) {
+		this.tile.ajaxTile(callback);
 	}
 };
 

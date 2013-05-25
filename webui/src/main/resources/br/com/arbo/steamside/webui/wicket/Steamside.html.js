@@ -27,7 +27,7 @@ var SearchTextView = Backbone.View.extend({
 			that.doSearch(input);
 		}
 
-		CommandBoxTile.tileCommandBox(
+		CommandBoxTile.ajaxTile(
 			function(tile) {
 				var view = new CommandBoxView({
 					el: tile.clone(),
@@ -78,7 +78,6 @@ var SwitchFavoritesView = Backbone.View.extend({
     },
 
     initialize: function() {		"use strict";
-        this.setElement(SteamsideTileset.collectionPick().clone());
         this.on_category_change = this.options.on_category_change;
     },
 
@@ -179,7 +178,17 @@ var Steamside_html = {
         // Start Backbone history a necessary step for bookmarkable URL's
         Backbone.history.start();
 
-		new SteamsideView().render();
+		/*
+		Load the entire tileset before you try to render anything.
+		If you don't, something funny happens:
+		Multiple ajax requests pile up simultaneously
+		because the "loaded" flag of SteamsideTileset
+		has not been set yet.
+		That makes tiles be rendered randomly.
+		 */
+		SteamsideTileset.ajaxTileset(function(){
+			new SteamsideView().render();
+		});
     }
 
 };

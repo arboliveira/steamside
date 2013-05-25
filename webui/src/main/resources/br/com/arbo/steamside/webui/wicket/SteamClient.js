@@ -1,3 +1,12 @@
+var SteamClientTile = {
+	tile: new Tile(
+		{url: 'SteamClient.html', selector: "#steam-client"}),
+
+	ajaxTile: function (callback) {
+		this.tile.ajaxTile(callback);
+	}
+}
+
 var SteamClientView = Backbone.View.extend({
 
     events: {

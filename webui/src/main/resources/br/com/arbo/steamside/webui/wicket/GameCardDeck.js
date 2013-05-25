@@ -95,7 +95,6 @@ var GameCardView = Backbone.View.extend({
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.enormity = this.options.enormity;
-		this.setElement(SteamsideTileset.gameCard().clone());
 	},
 	
 	render: function () {		"use strict";
@@ -198,7 +197,6 @@ var MoreButtonView = Backbone.View.extend({
 	
 	initialize: function() {		"use strict";
 		this.deck = this.options.deck;
-		this.setElement(SteamsideTileset.moreButton().clone());
 	},
 
 	render: function() {		"use strict";
@@ -257,10 +255,14 @@ var DeckView = Backbone.View.extend({
 		});
 		this.deck.display();
 
-		var moreButton = new MoreButtonView({
-			deck: this.deck
+		SteamsideTileset.ajaxMoreButton(function(tile) {
+			var moreButton = new MoreButtonView({
+				el: tile.clone(),
+				deck: that.deck
+			});
+			that.first_row.append(moreButton.render().el);
 		});
-		this.first_row.append(moreButton.render().el);
+
 		return this;
 	},
 	
@@ -312,16 +314,18 @@ var DeckView = Backbone.View.extend({
 			enormity = enormityRegular;
 		}
 
-		var that_continue = this.continues;
-
-		var card_view = new GameCardView({
-			model: oneResult,
-			continues: that_continue,
-			enormity: enormity
+		var that = this;
+		SteamsideTileset.ajaxGameCard(function(tile) {
+			var card_view = new GameCardView({
+				el: tile.clone(),
+				model: oneResult,
+				continues: that.continues,
+				enormity: enormity
+			});
+			that.deck.push(card_view, that.alwaysVisible || that.yRow === 1);
+			var card_el = card_view.render().el;
+			that.current_row.append(card_el);
 		});
-		this.deck.push(card_view, this.alwaysVisible || this.yRow === 1);
-		var card_el = card_view.render().el;
-		this.current_row.append(card_el);
 	},
 	
 	startNewRow: function() {        "use strict";

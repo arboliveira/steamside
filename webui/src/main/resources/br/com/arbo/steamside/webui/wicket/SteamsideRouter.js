@@ -20,45 +20,41 @@ var SteamsideRouter = Backbone.Router.extend({
         };
 
         var categories = new SteamCategoryCollection();
-        var view = new SwitchFavoritesView({
-            collection: categories,
-            on_category_change: on_category_change
-        });
-
-        fetch_json(categories, function () {
-            that.setSecondaryView(view);
-        });
+		CollectionPickTile.ajaxTile(
+			function(tile) {
+				var view = new SwitchFavoritesView({
+					el: tile.clone(),
+					collection: categories,
+					on_category_change: on_category_change
+				});
+				fetch_json(categories, function () {
+					that.setSecondaryView(view);
+				});
+			}
+		);
     },
 
     collections_new: function() {   "use strict";
         var that = this;
-
-        var callback = function(tile) {
+		CollectionNewTile.ajaxTile(function(tile) {
             var view = new CollectionNewEmptyView({
                 el: tile.clone()
             });
             that.setSecondaryView(view);
-        };
-
-        SteamsideTileset.tileCollectionNew(callback);
+        });
     },
 
     collections_edit: function(name) {   "use strict";
         var that = this;
-
         var apps = new SteamsideCollectionApps();
-
-        var callback = function(tile) {
-            var elTile = tile.clone();
-            var view = new CollectionEditView({
-                el: elTile,
+		CollectionEditTile.ajaxTile(function(tile) {
+			var view = new CollectionEditView({
+                el: tile.clone(),
                 collection: apps
             });
             that.setSecondaryView(view);
             fetch_json(apps);
-        };
-
-        SteamsideTileset.tileCollectionEdit(callback);
+        });
     },
 
     steam_client:  function() {   "use strict";
@@ -71,7 +67,7 @@ var SteamsideRouter = Backbone.Router.extend({
             that.setSecondaryView(view);
         };
 
-        SteamsideTileset.tileSteamClient(callback);
+		SteamClientTile.ajaxTile(callback);
     },
 
     setSecondaryView:  function(view) {   "use strict";

@@ -1,3 +1,12 @@
+var CollectionNewTile = {
+	tile: new Tile(
+		{url: 'CollectionNew.html', selector: "#collection-new"}),
+
+	ajaxTile: function (callback) {
+		this.tile.ajaxTile(callback);
+	}
+}
+
 var CollectionNewEmptyView = Backbone.View.extend({
 
 	render: function() {
@@ -8,7 +17,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 
 		var on_command =
 
-		CommandBoxTile.tileCommandBox(
+		CommandBoxTile.ajaxTile(
 			function(tile) {
 				var view = new CommandBoxView({
 					el: tile.clone(),
