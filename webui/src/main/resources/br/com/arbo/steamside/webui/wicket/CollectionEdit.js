@@ -5,7 +5,7 @@ var CollectionEditTile = {
 	ajaxTile: function (callback) {
 		this.tile.ajaxTile(callback);
 	}
-}
+};
 
 var SteamsideCollectionApps = Backbone.Collection.extend({
     model: Game,
@@ -15,10 +15,22 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 var CollectionEditView = Backbone.View.extend({
 
     render: function() {		"use strict";
-        new DeckView({
+
+		var collectionEditSearchResults = new SearchResults();
+
+		new SearchView({
+			el: $('#collection-edit-search-command-box'),
+			collection: collectionEditSearchResults
+		}).render();
+
+		var inCollection = new SteamsideCollectionApps();
+
+		new DeckView({
             el: this.$('#games-in-collection-deck'),
-            collection: this.collection
+            collection: inCollection
         });
+
+		fetch_json(inCollection);
 
         return this;
     }

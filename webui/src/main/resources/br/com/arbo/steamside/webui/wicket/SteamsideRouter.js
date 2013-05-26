@@ -46,14 +46,11 @@ var SteamsideRouter = Backbone.Router.extend({
 
     collections_edit: function(name) {   "use strict";
         var that = this;
-        var apps = new SteamsideCollectionApps();
 		CollectionEditTile.ajaxTile(function(tile) {
 			var view = new CollectionEditView({
-                el: tile.clone(),
-                collection: apps
+                el: tile.clone()
             });
             that.setSecondaryView(view);
-            fetch_json(apps);
         });
     },
 

@@ -34,8 +34,21 @@ var CollectionNewEmptyView = Backbone.View.extend({
 	},
 
 	doCommand: function(input) {     "use strict";
-		var form = this.$("#form-empty");
-		form.attr("action", "#/collections/" + input + "/edit");
+		var aUrl = "/collection/" + input + "/create";
+		var after = "#/collections/" + input + "/edit";
+
+		$.ajax({
+			url: aUrl,
+			dataType: dataTypeOf(aUrl),
+			beforeSend: function(){
+				//that.showOverlay('Now playing');
+			},
+			complete: function(){
+				Backbone.history.navigate(after, {trigger: true});
+			}
+		});
+
+
 		/*
 		var c = this.collection;
 		c.value = input;

@@ -1,6 +1,6 @@
 var CommandBoxTile = {
 	tile: new Tile(
-		{url: 'CommandBox.html', selector: "#command-box"}),
+		{url: 'CommandBox.html', selector: "#tile-command-box"}),
 
 	ajaxTile: function (callback) {
 		this.tile.ajaxTile(callback);

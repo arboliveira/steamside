@@ -137,10 +137,9 @@ var GameCardView = Backbone.View.extend({
         var aUrl = this.model.link();
         var that = this;
 
-        var type = dataTypeOf(aUrl);
-        $.ajax({
+		$.ajax({
             url: aUrl,
-            dataType: type,
+            dataType: dataTypeOf(aUrl),
             beforeSend: function(){
                 that.showOverlay('Now playing');
             },

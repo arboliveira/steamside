@@ -45,11 +45,10 @@ var SteamCategoryView = Backbone.View.extend({
 	categoryClicked: function(e) {		"use strict";
 		e.preventDefault();
 		var aUrl = this.model.link();
-		var type = dataTypeOf(aUrl);
 		var that = this;
 		$.ajax({
 			url: aUrl,
-			dataType: type,
+			dataType: dataTypeOf(aUrl),
 			beforeSend: function(){
 				// loading...
 			},

@@ -3,49 +3,9 @@ var ContinueGames = Backbone.Collection.extend({
     url: 'continue.json'
 });
 
-var SearchResults = Backbone.Collection.extend({
-    model: Game,
-    value: null,
-    url: function() {
-        return "search.json?query=" + this.value;
-    }
-});
-
 var FavoritesCollection = Backbone.Collection.extend({
     model: Game,
     url: 'favorites.json'
-});
-
-var SearchTextView = Backbone.View.extend({
-
-	render: function() {
-		this.$el.empty();
-
-		var that = this;
-
-		var on_command = function(input) {
-			that.doSearch(input);
-		}
-
-		CommandBoxTile.ajaxTile(
-			function(tile) {
-				var view = new CommandBoxView({
-					el: tile.clone(),
-					on_command: on_command,
-					placeholder_text: 'game or command'
-				});
-				that.$el.append(view.render().el);
-			}
-		);
-
-		return this;
-	},
-
-    doSearch: function(input) {     "use strict";
-        var c = this.collection;
-        c.value = input;
-        fetch_json(c);
-    }
 });
 
 var SessionView = Backbone.View.extend({
@@ -143,8 +103,8 @@ var SteamsideView = Backbone.View.extend({
 			continues: continues
 		});
 
-		new SearchTextView({
-			el: $('#div-id-search-text'),
+		new SearchView({
+			el: $('#search-command-box'),
 			collection: searchResults
 		}).render();
 
