@@ -20,7 +20,6 @@ import br.com.arbo.steamside.webui.wicket.json.JsonResource;
 public class FavoritesJson extends ResourceReference {
 
 	private final Factory<List<AppDTO>> factory;
-	private final InMemory_appinfo_vdf appinfo;
 
 	public FavoritesJson(
 			@NonNull final Favorites favorites,
@@ -28,12 +27,11 @@ public class FavoritesJson extends ResourceReference {
 			final CollectionFromVdf from) {
 		super(FavoritesJson.class, "favorites-json");
 
-		this.appinfo = appinfo;
 		this.factory = new Factory<List<AppDTO>>() {
 
 			@Override
 			public List<AppDTO> produce(final Attributes a) {
-				return fetch(favorites, from);
+				return fetch(favorites, from, appinfo);
 			}
 		};
 	}
@@ -43,11 +41,11 @@ public class FavoritesJson extends ResourceReference {
 		return new JsonResource(factory);
 	}
 
-	List<AppDTO> fetch(
+	static List<AppDTO> fetch(
 			@NonNull final Favorites favorites,
-			final CollectionFromVdf from) {
+			final CollectionFromVdf from, final InMemory_appinfo_vdf appinfo) {
 		final List<App> list = from.query(favorites);
-		final AppCollectionDTO query = new ToDTO(this.appinfo).convert(list);
-		return query.apps;
+		final AppCollectionDTO dto = new ToDTO(appinfo).convert(list);
+		return dto.apps;
 	}
 }

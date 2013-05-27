@@ -18,23 +18,25 @@ public class SearchJson extends ResourceReference {
 	public SearchJson() {
 		super(SearchJson.class, "search-json");
 
-		class SearchJsonResource implements Factory<List<AppDTO>> {
+		this.factory = new Factory<List<AppDTO>>() {
 
 			@Override
 			public List<AppDTO> produce(final Attributes a) {
-				final String query =
-						a.getParameters()
-								.get(Params.PARAM_query).toString();
-				final AppCollectionDTO results = Search.search(query);
-				return results.apps;
+				return fetch(a);
 			}
-		}
-
-		this.factory = new SearchJsonResource();
+		};
 	}
 
 	@Override
 	public IResource getResource() {
 		return new JsonResource(factory);
+	}
+
+	static List<AppDTO> fetch(final Attributes a) {
+		final String query =
+				a.getParameters()
+						.get(Params.PARAM_query).toString();
+		final AppCollectionDTO dto = Search.search(query);
+		return dto.apps;
 	}
 }

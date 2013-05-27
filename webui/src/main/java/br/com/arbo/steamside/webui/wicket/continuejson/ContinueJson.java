@@ -21,7 +21,6 @@ import br.com.arbo.steamside.webui.wicket.json.JsonResource;
 public class ContinueJson extends ResourceReference {
 
 	private final Factory<List<AppDTO>> factory;
-	private final InMemory_appinfo_vdf appinfo;
 
 	public ContinueJson(
 			@NonNull final Continue continues,
@@ -29,12 +28,11 @@ public class ContinueJson extends ResourceReference {
 			final CollectionFromVdf from) {
 		super(ContinueJson.class, "continue-json");
 
-		this.appinfo = appinfo;
 		this.factory = new Factory<List<AppDTO>>() {
 
 			@Override
 			public List<AppDTO> produce(final Attributes a) {
-				return fetch(continues, from);
+				return fetch(continues, from, appinfo);
 			}
 		};
 	}
@@ -44,11 +42,11 @@ public class ContinueJson extends ResourceReference {
 		return new JsonResource(factory);
 	}
 
-	List<AppDTO> fetch(@NonNull final Continue continues,
-			final CollectionFromVdf from) {
+	static List<AppDTO> fetch(@NonNull final Continue continues,
+			final CollectionFromVdf from, final InMemory_appinfo_vdf appinfo) {
 		final List<App> list = from.query(continues);
 		sort(list);
-		final AppCollectionDTO dto = new ToDTO(this.appinfo).convert(list);
+		final AppCollectionDTO dto = new ToDTO(appinfo).convert(list);
 		return dto.apps;
 	}
 

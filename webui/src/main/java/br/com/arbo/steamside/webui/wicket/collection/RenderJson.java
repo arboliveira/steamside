@@ -10,7 +10,7 @@ import org.apache.wicket.request.Response;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.Filter;
+import br.com.arbo.steamside.apps.FilterCategory;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.collection.ToDTO;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
@@ -52,21 +52,6 @@ public class RenderJson {
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	static class FilterCategory implements Filter {
-
-		private final Category category;
-
-		FilterCategory(final Category category) {
-			this.category = category;
-		}
-
-		@Override
-		public void consider(final App app) throws Reject {
-			if (!app.isInCategory(category)) throw new Reject();
-		}
-
 	}
 
 }

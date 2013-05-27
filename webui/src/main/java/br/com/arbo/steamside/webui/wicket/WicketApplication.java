@@ -67,11 +67,11 @@ public class WicketApplication extends WebApplication
 				"/continue.json",
 				container.getComponent(ContinueJson.class));
 		mountResource(
-				"/session.json",
-				container.getComponent(SessionJson.class));
-		mountResource(
 				"/favorites.json",
 				container.getComponent(FavoritesJson.class));
+		mountResource(
+				"/session.json",
+				container.getComponent(SessionJson.class));
 		mountResource(
 				"/steam-categories.json",
 				container.getComponent(SteamCategoriesJson.class));
