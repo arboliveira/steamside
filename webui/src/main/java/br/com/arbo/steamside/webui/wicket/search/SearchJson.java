@@ -22,7 +22,9 @@ public class SearchJson extends ResourceReference {
 
 			@Override
 			public List<AppDTO> produce(final Attributes a) {
-				final String query = a.getParameters().get("query").toString();
+				final String query =
+						a.getParameters()
+								.get(Params.PARAM_query).toString();
 				final AppCollectionDTO results = Search.search(query);
 				return results.apps;
 			}

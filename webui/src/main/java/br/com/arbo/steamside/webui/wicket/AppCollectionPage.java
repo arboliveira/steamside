@@ -76,6 +76,7 @@ public class AppCollectionPage extends WebPage {
 		private final Category name;
 		private final WebPage page;
 		private final CollectionFromVdf collectionFromVdf;
+		private final InMemory_appinfo_vdf appinfo;
 
 		public JsonState(final PageParameters p,
 				final WebPage page) {
@@ -86,8 +87,8 @@ public class AppCollectionPage extends WebPage {
 					);
 			final MutablePicoContainerX container =
 					WicketApplication.getContainer();
+			this.appinfo = container.getComponent(InMemory_appinfo_vdf.class);
 			this.collectionFromVdf = new CollectionFromVdf(
-					container.getComponent(InMemory_appinfo_vdf.class),
 					container.getComponent(SharedConfigConsume.class));
 		}
 
@@ -98,7 +99,8 @@ public class AppCollectionPage extends WebPage {
 
 		@Override
 		public void onRender() {
-			new RenderJson(this.name, collectionFromVdf)
+			new RenderJson(
+					this.name, appinfo, collectionFromVdf)
 					.render(page.getResponse());
 			throw new NotSuper();
 		}

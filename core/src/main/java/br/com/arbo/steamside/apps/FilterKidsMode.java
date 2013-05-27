@@ -1,6 +1,5 @@
-package br.com.arbo.steamside.collection;
+package br.com.arbo.steamside.apps;
 
-import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.types.Category;
 

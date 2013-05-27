@@ -3,6 +3,9 @@ package br.com.arbo.steamside.apps;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import br.com.arbo.steamside.apps.Filter.Reject;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.Category;
 
@@ -39,6 +42,22 @@ public class Apps implements AppsHome {
 	public void accept(final AppVisitor visitor) {
 		for (final App app : apps.values())
 			visitor.each(app);
+	}
+
+	public void accept(
+			@NonNull final Filter filter, final AppVisitor visitor) {
+		for (final App app : apps.values())
+			consider(app, filter, visitor);
+	}
+
+	private static void consider(
+			final App app, final Filter filter, final AppVisitor visitor) {
+		try {
+			filter.consider(app);
+		} catch (final Reject e) {
+			return;
+		}
+		visitor.each(app);
 	}
 
 	public interface CategoryWithAppsVisitor {

@@ -1,6 +1,4 @@
-package br.com.arbo.steamside.collection;
-
-import br.com.arbo.steamside.apps.App;
+package br.com.arbo.steamside.apps;
 
 public interface Filter {
 

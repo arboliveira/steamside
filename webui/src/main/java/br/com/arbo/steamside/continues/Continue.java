@@ -1,9 +1,9 @@
 package br.com.arbo.steamside.continues;
 
 import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.collection.Filter;
-import br.com.arbo.steamside.collection.FilterKidsMode;
-import br.com.arbo.steamside.collection.FilterPlatform;
+import br.com.arbo.steamside.apps.Filter;
+import br.com.arbo.steamside.apps.FilterKidsMode;
+import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 

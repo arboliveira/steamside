@@ -1,6 +1,6 @@
 var CollectionEditTile = {
 	tile: new Tile(
-		{url: 'CollectionEdit.html', selector: "#collection-edit"}),
+		{url: 'CollectionEdit.html', selector: "#tile-collection-edit"}),
 
 	ajaxTile: function (callback) {
 		this.tile.ajaxTile(callback);
@@ -9,7 +9,10 @@ var CollectionEditTile = {
 
 var SteamsideCollectionApps = Backbone.Collection.extend({
     model: Game,
-    url: 'apps.json'
+	collection_name: null,
+	url: function() {
+		return "apps.json?collection_name=" + this.collection_name;
+	}
 });
 
 var CollectionEditView = Backbone.View.extend({
@@ -19,7 +22,7 @@ var CollectionEditView = Backbone.View.extend({
 		var collectionEditSearchResults = new SearchResults();
 
 		new SearchView({
-			el: $('#collection-edit-search-command-box'),
+			el: this.$('#collection-edit-search-command-box'),
 			collection: collectionEditSearchResults
 		}).render();
 

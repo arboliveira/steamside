@@ -1,7 +1,6 @@
 package br.com.arbo.steamside.collection;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import br.com.arbo.steamside.apps.App;
@@ -12,19 +11,18 @@ import br.com.arbo.steamside.types.AppName;
 import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
 import br.com.arbo.steamside.webui.appdto.AppDTO;
 
-final class ToDTO {
+public final class ToDTO {
 
 	private static final int limit = 27;
 
 	private final InMemory_appinfo_vdf appinfo;
 
-	ToDTO(
+	public ToDTO(
 			final InMemory_appinfo_vdf appinfo) {
 		this.appinfo = appinfo;
 	}
 
-	AppCollectionDTO sortLimitConvert(final List<App> list) {
-		Collections.sort(list, new App.LastPlayedDescending());
+	public AppCollectionDTO convert(final List<App> list) {
 		final List<AppDTO> dto = convertListAppToListAppDto(list);
 		final AppCollectionDTO results = new AppCollectionDTO();
 		results.apps = dto;

@@ -1,8 +1,8 @@
 var SearchResults = Backbone.Collection.extend({
 	model: Game,
-	value: null,
+	query: null,
 	url: function() {
-		return "search.json?query=" + this.value;
+		return "search.json?query=" + this.query;
 	}
 });
 
@@ -24,7 +24,8 @@ var SearchView = Backbone.View.extend({
 					on_command: on_command,
 					placeholder_text: 'game or command'
 				});
-				that.$el.append(view.render().el);
+				var view_el = view.render().el;
+				that.$el.append(view_el);
 			}
 		);
 
@@ -33,7 +34,7 @@ var SearchView = Backbone.View.extend({
 
 	doSearch: function(input) {     "use strict";
 		var c = this.collection;
-		c.value = input;
+		c.query = input;
 		fetch_json(c);
 	}
 });
