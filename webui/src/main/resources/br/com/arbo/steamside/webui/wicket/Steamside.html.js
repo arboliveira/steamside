@@ -87,11 +87,28 @@ var SteamsideView = Backbone.View.extend({
 
 	el: "body",
 
+	continues: null,
+
 	render: function () {  "use strict";
 		var sessionModel = new SessionModel();
 		var continues = new ContinueGames();
 		var searchResults = new SearchResults();
 		var favorites = new FavoritesCollection();
+
+		var tileSearchCommandHint = this.$('#search-command-hint');
+		tileSearchCommandHint.remove();
+		this.tileSearchHintContinueA = tileSearchCommandHint.clone();
+		this.tileSearchHintContinueB = tileSearchCommandHint.clone();
+		this.tileSearchHintSearchA = tileSearchCommandHint.clone();
+		this.tileSearchHintSearchB = tileSearchCommandHint.clone();
+		var selectorVerb = '#search-command-hint-verb';
+		this.tileSearchHintSearchA.find(selectorVerb).text("search");
+		this.tileSearchHintSearchB.find(selectorVerb).text("play first result for");
+
+		this.continues = continues;
+		this.continues.on('reset', this.continues_reset, this);
+
+		var that = this;
 
 		sideshow(this.$el);
 
@@ -105,7 +122,12 @@ var SteamsideView = Backbone.View.extend({
 
 		new SearchView({
 			el: $('#search-command-box'),
-			collection: searchResults
+			collection: searchResults,
+			continues: continues,
+			tileHint: this.tileSearchHintContinueA,
+			tileHintAlternate: this.tileSearchHintContinueB,
+			on_CommandBox_rendered: function(viewCommandBox) { that.on_search_CommandBox_rendered(viewCommandBox) },
+			on_input_changed: function(input) { that.on_search_input_changed(input) }
 		}).render();
 
 		new DeckView({
@@ -124,9 +146,41 @@ var SteamsideView = Backbone.View.extend({
 		fetch_json(continues);
 		fetch_json(favorites);
 
-		$("#input-id-text-search").focus();
-
 		return this;
+	},
+
+	continues_reset: function() {
+		var gameA = this.continues.at(0);
+		var gameB = this.continues.at(1);
+		var selector = '#search-command-hint-subject';
+		this.tileSearchHintContinueA.find(selector).text(gameA.name());
+		this.tileSearchHintContinueB.find(selector).text(gameB.name());
+	},
+
+	on_search_CommandBox_rendered: function(viewCommandBox) {
+		viewCommandBox.emptyCommandHints();
+		viewCommandBox.appendCommandHint(this.tileSearchHintContinueA);
+		viewCommandBox.appendCommandHint(this.tileSearchHintSearchA);
+		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintContinueB);
+		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintSearchB);
+		viewCommandBox.focusInput();
+	},
+
+	on_search_input_changed: function(input) {
+		if (input == '') {
+			this.tileSearchHintContinueA.show();
+			this.tileSearchHintContinueB.show();
+			this.tileSearchHintSearchA.hide();
+			this.tileSearchHintSearchB.hide();
+		} else {
+			this.tileSearchHintContinueA.hide();
+			this.tileSearchHintContinueB.hide();
+			this.tileSearchHintSearchA.show();
+			this.tileSearchHintSearchB.show();
+			var selector = '#search-command-hint-subject';
+			this.tileSearchHintSearchA.find(selector).text(input);
+			this.tileSearchHintSearchB.find(selector).text(input);
+		}
 	}
 });
 

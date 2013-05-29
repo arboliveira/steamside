@@ -185,6 +185,11 @@ $(function() {
 
 	<div class="content content-at-left">
 
+			<span id="search-command-hint" class="command-hint">
+				<span id="search-command-hint-verb">continue</span>
+				<span id="search-command-hint-subject" class="command-hint-special">Windosill</span>
+			</span>
+
 		<div id="search-command-box">
 			<form action="">
                 <div>
@@ -193,8 +198,10 @@ $(function() {
                        placeholder="game or command"
 					/>
                 <br/>
-                <input class="command-button"  type="submit" value="Enter"/> <span id="command-hint" class="command-hint"> continue Windosill</span>&nbsp;&nbsp;
-                <input class="command-button"  type="submit" value="Ctrl+Enter"/> <span id="command-hint-2" class="command-hint">Windosill community hub</span>
+                <input class="command-button"  type="submit" value="Enter"/>
+					&nbsp;&nbsp;
+                <input class="command-button"  type="submit" value="Ctrl+Enter"/>
+					<span id="search-command-hint-2" class="command-hint">Windosill community hub</span>
                 </div>
             </form>
 	    </div>
