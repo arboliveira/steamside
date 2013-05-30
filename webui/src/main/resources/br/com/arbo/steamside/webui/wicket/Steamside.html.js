@@ -92,6 +92,8 @@ var SteamsideView = Backbone.View.extend({
 
 	render: function () {  "use strict";
 		var sessionModel = new SessionModel();
+		this.sessionModel = sessionModel;
+
 		var continues = new ContinueGames();
 		var searchResults = new SearchResults();
 		var favorites = new FavoritesCollection();
@@ -117,12 +119,6 @@ var SteamsideView = Backbone.View.extend({
 
 		new SessionView({model: sessionModel});
 
-		new DeckView({
-			el: $('#continues-deck'),
-			collection: continues,
-			continues: continues
-		});
-
 		new SearchView({
 			el: $('#search-command-box'),
 			collection: searchResults,
@@ -144,9 +140,16 @@ var SteamsideView = Backbone.View.extend({
 			continues: continues
 		});
 
-		fetch_json(sessionModel);
-		fetch_json(continues);
-		fetch_json(favorites);
+		fetch_json(sessionModel, function() {
+			new DeckView({
+				el: $('#continues-deck'),
+				collection: continues,
+				continues: continues,
+				kidsMode: sessionModel.kidsmode()
+			});
+			fetch_json(continues);
+			fetch_json(favorites);
+		});
 
 		return this;
 	},

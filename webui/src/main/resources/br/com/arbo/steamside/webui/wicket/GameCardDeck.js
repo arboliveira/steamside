@@ -102,6 +102,8 @@ var GameCardView = Backbone.View.extend({
 	continues: null,
     enormity: null,
 	width: 0,
+	kidsMode: false,
+
 	events: {
 		"mouseenter .game-link": "mouseenter_hot_zone",
         "mouseleave .game-link": "mouseleave_hot_zone",
@@ -112,10 +114,11 @@ var GameCardView = Backbone.View.extend({
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.enormity = this.options.enormity;
+		this.kidsMode = this.options.kidsMode;
 		this.model.on('game:play:beforeSend', this.game_play_beforeSend, this);
 		this.model.on('game:play:complete', this.game_play_complete, this);
 	},
-	
+
 	render: function () {		"use strict";
 		var name = this.model.name();
 		var link = this.model.link();
@@ -130,10 +133,17 @@ var GameCardView = Backbone.View.extend({
 		this.$('.game-link').attr('href', link);
         this.$('.game-tile-store').attr('href', store);
 
+		if (this.kidsMode) this.hideAllCommandsButPlay();
+
 		return this;		
 	},
 
-    mouseenter_hot_zone: function(e) {
+	hideAllCommandsButPlay: function () {
+		this.$(".game-tile-command").hide();
+		this.$(".game-tile-play").show();
+	},
+
+	mouseenter_hot_zone: function(e) {
         e.preventDefault();
 		var whatWillHappen = this.$('.game-tile-play');
 		whatWillHappen.addClass('what-will-happen');
@@ -235,6 +245,7 @@ var DeckView = Backbone.View.extend({
 	first_row: null,
 	current_row: null,
     continues: null,
+	kidsMode: false,
 
 	initialize: function() {		"use strict";
         /*
@@ -242,13 +253,15 @@ var DeckView = Backbone.View.extend({
          because we want logic like "first row is visible"
          and this depends on calculations inside the browser
          */
-		this.alwaysVisible = this.options.alwaysVisible === true;
-        this.continues = this.options.continues;
+		this.kidsMode = this.options.kidsMode === true;
+		this.alwaysVisible = this.kidsMode;
+		this.continues = this.options.continues;
 		this.collection.on('reset', this.render, this);
 	},
 
 	renderMoreButton: function () {
 		if (this.yRow == 1) return;
+		if (this.alwaysVisible) return;
 
 		var that = this;
 		SteamsideTileset.ajaxMoreButton(function (tile) {
@@ -328,6 +341,7 @@ var DeckView = Backbone.View.extend({
 			var card_view = new GameCardView({
 				el: tile.clone(),
 				model: oneResult,
+				kidsMode: that.kidsMode,
 				continues: that.continues,
 				enormity: enormity
 			});
