@@ -17,7 +17,7 @@ var SessionView = Backbone.View.extend({
 
     render: function () {                "use strict";
         var m = this.model;
-        var username = m.username();
+        // TODO var username = m.username();
         var kidsMode = m.kidsmode();
 
         if (kidsMode) {

@@ -60,7 +60,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 		var c_hint = this.$("#command-hint");
 		var c_hint_alternate = this.$("#command-hint-alternate");
 		if (input === '') {
-			var same = '(waiting for input...)'
+			var same = '(waiting for input...)';
 			c_hint.text(same);
 			c_hint_alternate.text(same);
 		} else {

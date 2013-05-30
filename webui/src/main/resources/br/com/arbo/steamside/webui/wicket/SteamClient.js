@@ -5,7 +5,7 @@ var SteamClientTile = {
 	ajaxTile: function (callback) {
 		this.tile.ajaxTile(callback);
 	}
-}
+};
 
 var SteamClientView = Backbone.View.extend({
 

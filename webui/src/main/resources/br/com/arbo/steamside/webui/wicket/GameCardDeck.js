@@ -247,6 +247,19 @@ var DeckView = Backbone.View.extend({
 		this.collection.on('reset', this.render, this);
 	},
 
+	renderMoreButton: function () {
+		if (this.yRow == 1) return;
+
+		var that = this;
+		SteamsideTileset.ajaxMoreButton(function (tile) {
+			var moreButton = new MoreButtonView({
+				el: tile.clone(),
+				deck: that.deck
+			});
+			that.first_row.append(moreButton.render().el);
+		});
+	},
+
 	render: function() {		"use strict";
 		this.$el.empty();
 		this.xCell = 0;
@@ -260,21 +273,11 @@ var DeckView = Backbone.View.extend({
 			that.renderOneCell(oneResult);
 		});
 		this.deck.display();
-
-		SteamsideTileset.ajaxMoreButton(function(tile) {
-			var moreButton = new MoreButtonView({
-				el: tile.clone(),
-				deck: that.deck
-			});
-			that.first_row.append(moreButton.render().el);
-		});
-
+		this.renderMoreButton();
 		return this;
 	},
 	
-	renderOneCell: function(
-		oneResult
-		) { "use strict";
+	renderOneCell: function(oneResult) { "use strict";
 
 		var cells_in_a_row = 3;
 
@@ -346,10 +349,6 @@ var DeckView = Backbone.View.extend({
 		}
 	}
 });
-
-function fetch_json(collection) {
-    fetch_json(collection, function() { /* console.log(collection); */ });
-}
 
 function fetch_json(collection, success) {
     collection.fetch({
