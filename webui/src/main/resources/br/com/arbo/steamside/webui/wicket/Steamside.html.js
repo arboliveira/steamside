@@ -88,6 +88,7 @@ var SteamsideView = Backbone.View.extend({
 	el: "body",
 
 	continues: null,
+	searchResults: null,
 
 	render: function () {  "use strict";
 		var sessionModel = new SessionModel();
@@ -108,6 +109,8 @@ var SteamsideView = Backbone.View.extend({
 		this.continues = continues;
 		this.continues.on('reset', this.continues_reset, this);
 
+		this.searchResults = searchResults;
+
 		var that = this;
 
 		sideshow(this.$el);
@@ -123,11 +126,10 @@ var SteamsideView = Backbone.View.extend({
 		new SearchView({
 			el: $('#search-command-box'),
 			collection: searchResults,
-			continues: continues,
-			tileHint: this.tileSearchHintContinueA,
-			tileHintAlternate: this.tileSearchHintContinueB,
 			on_CommandBox_rendered: function(viewCommandBox) { that.on_search_CommandBox_rendered(viewCommandBox) },
-			on_input_changed: function(input) { that.on_search_input_changed(input) }
+			on_change_input: function(input) { that.on_search_input_changed(input) },
+			on_command: function(input) { that.on_search_command(input) },
+			on_command_alternate: function(input) { that.on_search_command_alternate(input) }
 		}).render();
 
 		new DeckView({
@@ -180,6 +182,26 @@ var SteamsideView = Backbone.View.extend({
 			var selector = '#search-command-hint-subject';
 			this.tileSearchHintSearchA.find(selector).text(input);
 			this.tileSearchHintSearchB.find(selector).text(input);
+		}
+	},
+
+	on_search_command: function(input) {
+		if (input == '') {
+			alert("play most recently played game");
+		} else {
+			this.searchResults.query = input;
+			fetch_json(this.searchResults);
+		}
+	},
+
+	on_search_command_alternate: function(input) {
+		if (input == '') {
+			alert("play second most recently played game");
+		} else {
+			this.searchResults.query = input;
+			fetch_json(this.searchResults, function() {
+			   alert("play the game");
+			});
 		}
 	}
 });

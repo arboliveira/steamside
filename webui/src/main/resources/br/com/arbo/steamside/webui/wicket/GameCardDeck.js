@@ -118,7 +118,6 @@ var GameCardView = Backbone.View.extend({
         e.preventDefault();
 		var whatWillHappen = this.$('.game-tile-play');
 		whatWillHappen.addClass('what-will-happen');
-//        this.showOverlay('Play');
     },
 
     mouseleave_hot_zone: function(e) {

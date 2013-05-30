@@ -22,7 +22,7 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	inputEl: function() {
-		return this.$('#input-id-text-search');
+		return this.$('#input-text-command-box');
 	},
 
 	focusInput: function() {
