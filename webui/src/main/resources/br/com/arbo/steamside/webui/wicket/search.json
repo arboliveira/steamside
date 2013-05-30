@@ -1,9 +1,16 @@
-[ {
+[
+	{
   "appid" : "72850",
   "name" : "Skyrim",
-  "link" : "server-action-placeholder.js"
-}, {
+  "link" : "server-action-placeholder.js",
+		"image": "http://cdn.steampowered.com/v/gfx/apps/72850/header.jpg",
+		"store": "http://store.steampowered.com/app/72850/"
+},
+	{
   "appid" : "47500",
   "name" : "Mishap",
-  "link" : "server-action-placeholder.js"
-} ]
+  "link" : "server-action-placeholder.js",
+		"image": "http://cdn.steampowered.com/v/gfx/apps/47500/header.jpg",
+		"store": "http://store.steampowered.com/app/47500/"
+}
+]

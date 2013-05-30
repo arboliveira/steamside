@@ -13,7 +13,24 @@ var Game = Backbone.Model.extend({
     },
     store: function() {		"use strict";
         return this.get('store');
-    }
+    },
+
+	play: function() {
+		var aUrl = this.link();
+		var that = this;
+
+		$.ajax({
+			url: aUrl,
+			dataType: dataTypeOf(aUrl),
+			beforeSend: function(){
+				that.trigger('game:play:beforeSend');
+			},
+			complete: function(){
+				that.trigger('game:play:complete');
+			}
+		});
+	}
+
 });
 
 var DeckCell = Backbone.View.extend({
@@ -95,6 +112,8 @@ var GameCardView = Backbone.View.extend({
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.enormity = this.options.enormity;
+		this.model.on('game:play:beforeSend', this.game_play_beforeSend, this);
+		this.model.on('game:play:complete', this.game_play_complete, this);
 	},
 	
 	render: function () {		"use strict";
@@ -124,36 +143,25 @@ var GameCardView = Backbone.View.extend({
         e.preventDefault();
 		var whatWillHappen = this.$('.game-tile-play');
 		whatWillHappen.removeClass('what-will-happen');
-//        this.hideOverlay();
     },
 
     gameClicked: function(e) {				"use strict";
 		e.preventDefault();
-        this.play();
+        this.model.play();
 	},
 
-    play: function() {
-        var aUrl = this.model.link();
-        var that = this;
+	game_play_beforeSend: function () {
+		this.showOverlay();
+	},
 
-		$.ajax({
-            url: aUrl,
-            dataType: dataTypeOf(aUrl),
-            beforeSend: function(){
-                that.showOverlay('Now playing');
-            },
-            complete: function(){
-                that.hideOverlay();
-                that.redisplay_continues();
-            }
-        });
-    },
+	game_play_complete: function () {
+		this.hideOverlay();
+		this.redisplay_continues();
+	},
 
-    showOverlay: function(text) {
+    showOverlay: function() {
         var overlay = this.$('.game-tile-inner-loading-overlay');
-		var overlay_text = this.$('game-tile-hot-zone-overlay-text');
         var underlay = this.$('.game-tile-inner');
-        overlay_text.text(text);
         overlay.show();
         underlay.addClass('game-tile-inner-blurred');
     },

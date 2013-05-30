@@ -56,7 +56,7 @@ class Parse_appinfo_vdf {
 					.under("2/" + appid).matches())
 				appinfo.name = new AppName(v);
 			if (key.named("executable")
-					.under("4/" + appid + "/launch/0").matches())
+					.underDeep("4/" + appid + "/launch").matches())
 				this.lastseen_executable = v;
 			if (key.named("oslist")
 					.underDeep("4/" + appid + "/launch").matches())

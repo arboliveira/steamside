@@ -187,7 +187,8 @@ var SteamsideView = Backbone.View.extend({
 
 	on_search_command: function(input) {
 		if (input == '') {
-			alert("play most recently played game");
+			var gameA = this.continues.at(0);
+			gameA.play();
 		} else {
 			this.searchResults.query = input;
 			fetch_json(this.searchResults);
@@ -196,11 +197,14 @@ var SteamsideView = Backbone.View.extend({
 
 	on_search_command_alternate: function(input) {
 		if (input == '') {
-			alert("play second most recently played game");
+			var gameB = this.continues.at(1);
+			gameB.play();
 		} else {
-			this.searchResults.query = input;
-			fetch_json(this.searchResults, function() {
-			   alert("play the game");
+			var searchResults = this.searchResults;
+			searchResults.query = input;
+			fetch_json(searchResults, function() {
+				var first = searchResults.at(0);
+				first.play();
 			});
 		}
 	}

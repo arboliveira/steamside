@@ -12,7 +12,9 @@ var CommandBoxView = Backbone.View.extend({
 	events: {
 		'keydown #input-text-command-box': 'event_keydown_input',
 		"keyup #input-text-command-box": "event_change_input",
-		"change #input-text-command-box": "event_change_input"
+		"change #input-text-command-box": "event_change_input",
+		"click #command-button": "doCommand",
+		"click #command-button-alternate": "doCommandAlternate"
 	},
 
 	render: function() {		"use strict";
@@ -42,14 +44,21 @@ var CommandBoxView = Backbone.View.extend({
 		this.$("#command-hint-alternate").append(elHint);
 	},
 
+	doCommand: function () {
+		this.options.on_command(this.inputEl().val());
+	},
+
+	doCommandAlternate: function () {
+		this.options.on_command_alternate(this.inputEl().val());
+	},
+
 	event_keydown_input: function(e) {
 		if (e.keyCode === 13) {
 			e.preventDefault();
-			var val = this.inputEl().val();
 			if (!e.ctrlKey) {
-				this.options.on_command(val);
+				this.doCommand();
 			} else {
-				this.options.on_command_alternate(val);
+				this.doCommandAlternate();
 			}
 		}
 	},
