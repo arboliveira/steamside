@@ -45,7 +45,14 @@
 
         <div class="content content-at-right">
 
-            <div id="div-empty-name-form">
+			<span id="empty-command-hint" class="command-hint">
+				Create
+				<span id="empty-command-hint-subject" class="command-hint-special">Favorites</span>
+				collection and
+				<span id="empty-command-hint-afterwards">add games</span>
+			</span>
+
+			<div id="div-empty-name-form">
                 <form method="post" action="#/collections/Foo/edit" id="form-empty">
                     <div>
                         <input type="text" name="empty-name" id="input-empty-name"
@@ -53,8 +60,6 @@
                                placeholder="Name for empty collection"
                                 />
                         <br/>
-                        <input class="command-button"  type="submit" value="Enter"/>
-                        <span id="empty-command-hint" class="command-hint"> Create it!</span>&nbsp;&nbsp;
                     </div>
                 </form>
             </div>
