@@ -17,7 +17,7 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 
 var CollectionEditView = Backbone.View.extend({
 
-    render: function() {		"use strict";
+	render: function() {		"use strict";
 
 		var that = this;
 
@@ -33,7 +33,8 @@ var CollectionEditView = Backbone.View.extend({
 		new DeckView({
 			el: this.$('#collection-edit-search-results-deck'),
 			collection: collectionEditSearchResults,
-			continues: continues
+			continues: continues,
+			on_GameCard_render: function(viewGameCard) { that.on_SearchResults_GameCard_render(viewGameCard) }
 		});
 
 		var inCollection = new SteamsideCollectionApps();
@@ -126,5 +127,20 @@ var CollectionEditView = Backbone.View.extend({
 			});
 		}
 		*/
+	},
+
+	on_SearchResults_GameCard_render: function (viewGameCard) {
+		var bar = viewGameCard.$el.find('.game-tile-command-bar');
+		var play = bar.find('.game-tile-play');
+		var add = play.clone();
+		add.text('add');
+		add.removeClass('game-tile-play');
+		add.insertBefore(play);
+		var that = this;
+		add.click(function(e) {e.preventDefault(); that.on_add_click(); viewGameCard.$el.slideUp(); });
+	},
+
+	on_add_click: function() {
+
 	}
 });

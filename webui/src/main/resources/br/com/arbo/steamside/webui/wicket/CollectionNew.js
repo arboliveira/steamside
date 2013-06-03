@@ -21,35 +21,33 @@ var CollectionNewEmptyView = Backbone.View.extend({
 		this.tileEmptyCommandHintA.find(selectorAfterwards).text("add games");
 		this.tileEmptyCommandHintB.find(selectorAfterwards).text("stay here");
 
-		var targetEl = this.$('#div-empty-name-form');
-		targetEl.empty();
-
 		var that = this;
-
-		CommandBoxTile.ajaxTile(
-			function(tile) {
-				var view = new CommandBoxView({
-					el: tile.clone(),
-					placeholder_text: 'Name for empty collection',
-					on_command: function(input) { that.on_empty_command(input) },
-					on_command_alternate: function(input) { that.on_empty_command_alternate(input) },
-					on_change_input: function(input) { that.on_empty_change_input(input); }
-				});
-				targetEl.append(view.render().el);
-
-				that.on_empty_CommandBox_rendered(view);
-
-				that.updateWithInputValue("");
-			}
-		);
+		CommandBoxTile.ajaxTile(function(tile) {
+			that.on_empty_CommandBox_rendered(tile);
+		});
 
 		return this;
 	},
 
-	on_empty_CommandBox_rendered: function(viewCommandBox) {
+	on_empty_CommandBox_rendered: function(tile) {
+		var that = this;
+		var viewCommandBox = new CommandBoxView({
+			el: tile.clone(),
+			placeholder_text: 'Name for empty collection',
+			on_command: function(input) { that.on_empty_command(input) },
+			on_command_alternate: function(input) { that.on_empty_command_alternate(input) },
+			on_change_input: function(input) { that.on_empty_change_input(input); }
+		});
+
+		var targetEl = this.$('#div-empty-name-form');
+		targetEl.empty();
+		targetEl.append(viewCommandBox.render().el);
+
 		viewCommandBox.emptyCommandHints();
 		viewCommandBox.appendCommandHint(this.tileEmptyCommandHintA);
 		viewCommandBox.appendCommandHintAlternate(this.tileEmptyCommandHintB);
+
+		this.updateWithInputValue("");
 		viewCommandBox.input_query_focus();
 	},
 

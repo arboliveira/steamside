@@ -103,18 +103,20 @@ var GameCardView = Backbone.View.extend({
     enormity: null,
 	width: 0,
 	kidsMode: false,
+	on_render: null,
 
 	events: {
 		"mouseenter .game-link": "mouseenter_hot_zone",
         "mouseleave .game-link": "mouseleave_hot_zone",
         "click .game-link": "gameClicked",
-        "click .game-tile-play": "gameClicked"
+        "click .game-tile-play": "playClicked"
 	},
 
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.enormity = this.options.enormity;
 		this.kidsMode = this.options.kidsMode;
+		this.on_render = this.options.on_render;
 		this.model.on('game:play:beforeSend', this.game_play_beforeSend, this);
 		this.model.on('game:play:complete', this.game_play_complete, this);
 	},
@@ -135,6 +137,8 @@ var GameCardView = Backbone.View.extend({
 
 		if (this.kidsMode) this.hideAllCommandsButPlay();
 
+		if (this.on_render != null) this.on_render(this);
+
 		return this;		
 	},
 
@@ -143,21 +147,31 @@ var GameCardView = Backbone.View.extend({
 		this.$(".game-tile-play").show();
 	},
 
+	whatWillHappen: function () {
+		return this.$('.game-tile-command').first();
+	},
+
 	mouseenter_hot_zone: function(e) {
         e.preventDefault();
-		var whatWillHappen = this.$('.game-tile-play');
+		var whatWillHappen = this.whatWillHappen();
 		whatWillHappen.addClass('what-will-happen');
     },
 
     mouseleave_hot_zone: function(e) {
         e.preventDefault();
-		var whatWillHappen = this.$('.game-tile-play');
+		var whatWillHappen = this.whatWillHappen();
 		whatWillHappen.removeClass('what-will-happen');
     },
 
     gameClicked: function(e) {				"use strict";
 		e.preventDefault();
-        this.model.play();
+		var w = this.whatWillHappen();
+		w.click();
+	},
+
+	playClicked: function(e) {				"use strict";
+		e.preventDefault();
+		this.model.play();
 	},
 
 	game_play_beforeSend: function () {
@@ -246,6 +260,7 @@ var DeckView = Backbone.View.extend({
 	current_row: null,
     continues: null,
 	kidsMode: false,
+	on_GameCard_render: null,
 
 	initialize: function() {		"use strict";
         /*
@@ -256,6 +271,7 @@ var DeckView = Backbone.View.extend({
 		this.kidsMode = this.options.kidsMode === true;
 		this.alwaysVisible = this.kidsMode;
 		this.continues = this.options.continues;
+		this.on_GameCard_render = this.options.on_GameCard_render;
 		this.collection.on('reset', this.render, this);
 	},
 
@@ -338,17 +354,22 @@ var DeckView = Backbone.View.extend({
 
 		var that = this;
 		SteamsideTileset.ajaxGameCard(function(tile) {
-			var card_view = new GameCardView({
-				el: tile.clone(),
-				model: oneResult,
-				kidsMode: that.kidsMode,
-				continues: that.continues,
-				enormity: enormity
-			});
-			that.deck.push(card_view, that.alwaysVisible || that.yRow === 1);
-			var card_el = card_view.render().el;
-			that.current_row.append(card_el);
+			that.renderGameCard(tile, oneResult, enormity);
 		});
+	},
+
+	renderGameCard: function(tile, oneResult, enormity) {
+		var card_view = new GameCardView({
+			el: tile.clone(),
+			model: oneResult,
+			enormity: enormity,
+			kidsMode: this.kidsMode,
+			continues: this.continues,
+			on_render: this.on_GameCard_render
+		});
+		this.deck.push(card_view, this.alwaysVisible || this.yRow === 1);
+		var card_el = card_view.render().el;
+		this.current_row.append(card_el);
 	},
 	
 	startNewRow: function() {        "use strict";
