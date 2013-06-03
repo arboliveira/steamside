@@ -18,17 +18,17 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	render: function() {		"use strict";
-		this.inputEl().attr('placeholder', this.options.placeholder_text);
+		this.input_query_el().attr('placeholder', this.options.placeholder_text);
 		this.change_input();
 		return this;
 	},
 
-	inputEl: function() {
+	input_query_el: function() {
 		return this.$('#input-text-command-box');
 	},
 
-	focusInput: function() {
-		this.inputEl().focus();
+	input_query_focus: function() {
+		this.input_query_el().focus();
 	},
 
 	emptyCommandHints: function() {
@@ -44,12 +44,16 @@ var CommandBoxView = Backbone.View.extend({
 		this.$("#command-hint-alternate").append(elHint);
 	},
 
+	input_query_val: function () {
+		return this.input_query_el().val();
+	},
+
 	doCommand: function () {
-		this.options.on_command(this.inputEl().val());
+		this.options.on_command(this);
 	},
 
 	doCommandAlternate: function () {
-		this.options.on_command_alternate(this.inputEl().val());
+		this.options.on_command_alternate(this);
 	},
 
 	event_keydown_input: function(e) {
@@ -64,7 +68,7 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	change_input: function () {
-		this.options.on_change_input(this.inputEl().val());
+		this.options.on_change_input(this);
 	},
 
 	event_change_input: function(e) {     "use strict";

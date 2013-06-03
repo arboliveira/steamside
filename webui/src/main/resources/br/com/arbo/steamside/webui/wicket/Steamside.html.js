@@ -92,7 +92,6 @@ var SteamsideView = Backbone.View.extend({
 
 	render: function () {  "use strict";
 		var sessionModel = new SessionModel();
-		this.sessionModel = sessionModel;
 
 		var continues = new ContinueGames();
 		var searchResults = new SearchResults();
@@ -119,14 +118,9 @@ var SteamsideView = Backbone.View.extend({
 
 		new SessionView({model: sessionModel});
 
-		new SearchView({
-			el: $('#search-command-box'),
-			collection: searchResults,
-			on_CommandBox_rendered: function(viewCommandBox) { that.on_search_CommandBox_rendered(viewCommandBox) },
-			on_change_input: function(input) { that.on_search_input_changed(input) },
-			on_command: function(input) { that.on_search_command(input) },
-			on_command_alternate: function(input) { that.on_search_command_alternate(input) }
-		}).render();
+		CommandBoxTile.ajaxTile(function(tile) {
+			that.render_search_CommandBox(tile);
+		});
 
 		new DeckView({
 			el: $('#search-results-deck'),
@@ -162,16 +156,30 @@ var SteamsideView = Backbone.View.extend({
 		this.tileSearchHintContinueB.find(selector).text(gameB.name());
 	},
 
-	on_search_CommandBox_rendered: function(viewCommandBox) {
+	render_search_CommandBox: function(tile) {
+		var that = this;
+		var viewCommandBox = new CommandBoxView({
+			el: tile.clone(),
+			placeholder_text: 'game or command',
+			on_change_input: function(input) { that.on_search_input_changed(input) },
+			on_command: function(input) { that.on_search_command(input) },
+			on_command_alternate: function(input) { that.on_search_command_alternate(input) }
+		});
+		var viewCommandBox_el = viewCommandBox.render().el;
 		viewCommandBox.emptyCommandHints();
 		viewCommandBox.appendCommandHint(this.tileSearchHintContinueA);
 		viewCommandBox.appendCommandHint(this.tileSearchHintSearchA);
 		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintContinueB);
 		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintSearchB);
-		viewCommandBox.focusInput();
+
+		var searchEl = $('#search-command-box');
+		searchEl.empty();
+		searchEl.append(viewCommandBox_el);
+		viewCommandBox.input_query_focus();
 	},
 
-	on_search_input_changed: function(input) {
+	on_search_input_changed: function(view) {
+		var input = view.input_query_val();
 		if (input == '') {
 			this.tileSearchHintContinueA.show();
 			this.tileSearchHintContinueB.show();
@@ -188,17 +196,20 @@ var SteamsideView = Backbone.View.extend({
 		}
 	},
 
-	on_search_command: function(input) {
+	on_search_command: function(view) {
+		var input = view.input_query_val();
 		if (input == '') {
 			var gameA = this.continues.at(0);
 			gameA.play();
 		} else {
-			this.searchResults.query = input;
-			fetch_json(this.searchResults);
+			var searchResults = this.searchResults;
+			searchResults.query = input;
+			fetch_json(searchResults);
 		}
 	},
 
-	on_search_command_alternate: function(input) {
+	on_search_command_alternate: function(view) {
+		var input = view.input_query_val();
 		if (input == '') {
 			var gameB = this.continues.at(1);
 			gameB.play();

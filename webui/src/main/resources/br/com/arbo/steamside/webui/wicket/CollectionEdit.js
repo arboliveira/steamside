@@ -22,15 +22,19 @@ var CollectionEditView = Backbone.View.extend({
 		var that = this;
 
 		var collectionEditSearchResults = new SearchResults();
+		this.collectionEditSearchResults = collectionEditSearchResults;
 
-		new SearchView({
-			el: this.$('#collection-edit-search-command-box'),
+		CommandBoxTile.ajaxTile(function(tile) {
+			that.render_search_CommandBox(tile);
+		});
+
+		// TODO Reuse same continues collection as front page?
+		var continues = new ContinueGames();
+		new DeckView({
+			el: this.$('#collection-edit-search-results-deck'),
 			collection: collectionEditSearchResults,
-			on_CommandBox_rendered: function(viewCommandBox) { that.on_search_CommandBox_rendered(viewCommandBox) },
-			on_change_input: function(input) { that.on_search_input_changed(input) },
-			on_command: function(input) { that.on_search_command(input) },
-			on_command_alternate: function(input) { that.on_search_command_alternate(input) }
-		}).render();
+			continues: continues
+		});
 
 		var inCollection = new SteamsideCollectionApps();
 
@@ -39,24 +43,43 @@ var CollectionEditView = Backbone.View.extend({
             collection: inCollection
         });
 
+		collectionEditSearchResults.queryString = "recent=true";
+		fetch_json(collectionEditSearchResults);
 		fetch_json(inCollection);
 
         return this;
     },
 
-	on_search_CommandBox_rendered: function(viewCommandBox) {
+	render_search_CommandBox: function(tile) {
+		var that = this;
+		var viewCommandBox = new CommandBoxView({
+			el: tile.clone(),
+			placeholder_text: 'search for games',
+			on_change_input: function(input) { that.on_search_input_changed(input) },
+			on_command: function(input) { that.on_search_command(input) },
+			on_command_alternate: function(input) { that.on_search_command_alternate(input) }
+		});
+		var view_el = viewCommandBox.render().el;
+		var searchEl = this.$('#collection-edit-search-command-box');
+		searchEl.empty();
+		searchEl.append(view_el);
+		var recent = this.$('#input-recent');
+		recent.remove();
+		var form = this.$("#form-command-box");
+		form.append(recent);
 		/*
 		viewCommandBox.emptyCommandHints();
 		viewCommandBox.appendCommandHint(this.tileSearchHintContinueA);
 		viewCommandBox.appendCommandHint(this.tileSearchHintSearchA);
 		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintContinueB);
 		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintSearchB);
-		viewCommandBox.focusInput();
 		*/
+		viewCommandBox.input_query_focus();
 	},
 
-	on_search_input_changed: function(input) {
+	on_search_input_changed: function(view) {
 		/*
+		 var input = view.input_query_val();
 		if (input == '') {
 			this.tileSearchHintContinueA.show();
 			this.tileSearchHintContinueB.show();
@@ -74,20 +97,23 @@ var CollectionEditView = Backbone.View.extend({
 		*/
 	},
 
-	on_search_command: function(input) {
-		/*
+	on_search_command: function(view) {
+		var input = view.input_query_val();
 		if (input == '') {
-			var gameA = this.continues.at(0);
-			gameA.play();
+			var recent = this.$('#input-recent');
+			recent.attr('value', 'true');
+			var form = this.$("#form-command-box");
+			var q = form.serialize();
+			this.collectionEditSearchResults.queryString = q;
 		} else {
-			this.searchResults.query = input;
-			fetch_json(this.searchResults);
+			this.collectionEditSearchResults.query = input;
 		}
-		*/
+		fetch_json(this.collectionEditSearchResults);
 	},
 
-	on_search_command_alternate: function(input) {
+	on_search_command_alternate: function(view) {
 		/*
+		 var input = view.input_query_val();
 		if (input == '') {
 			var gameB = this.continues.at(1);
 			gameB.play();

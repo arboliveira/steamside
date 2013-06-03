@@ -39,7 +39,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 
 				that.on_empty_CommandBox_rendered(view);
 
-				that.on_empty_change_input("");
+				that.updateWithInputValue("");
 			}
 		);
 
@@ -50,7 +50,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 		viewCommandBox.emptyCommandHints();
 		viewCommandBox.appendCommandHint(this.tileEmptyCommandHintA);
 		viewCommandBox.appendCommandHintAlternate(this.tileEmptyCommandHintB);
-		viewCommandBox.focusInput();
+		viewCommandBox.input_query_focus();
 	},
 
 	nameForCollection: function(input) {
@@ -58,11 +58,13 @@ var CollectionNewEmptyView = Backbone.View.extend({
 		return input;
 	},
 
-	on_empty_command: function(input) {
+	on_empty_command: function(view) {
+		var input = view.input_query_val();
 		this.createEmpty({name: input, stay: false});
 	},
 
-	on_empty_command_alternate: function(input) {
+	on_empty_command_alternate: function(view) {
+		var input = view.input_query_val();
 		this.createEmpty({name: input, stay: false});
 	},
 
@@ -92,10 +94,15 @@ var CollectionNewEmptyView = Backbone.View.extend({
 		});
 	},
 
-	on_empty_change_input: function (input) {  "use strict";
+	updateWithInputValue: function (input) {
 		var name = this.nameForCollection(input);
 		var selector = '#empty-command-hint-subject';
 		this.tileEmptyCommandHintA.find(selector).text(name);
 		this.tileEmptyCommandHintB.find(selector).text(name);
-    }
+	},
+
+	on_empty_change_input: function (view) {  "use strict";
+		var input = view.input_query_val();
+		this.updateWithInputValue(input);
+	}
 });
