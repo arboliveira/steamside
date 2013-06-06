@@ -14,10 +14,13 @@ import org.eclipse.jetty.server.bio.SocketConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 import br.com.arbo.steamside.exit.Exit;
+import br.com.arbo.steamside.html.spring.WebConfig;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
@@ -40,7 +43,7 @@ public class Jetty implements LocalWebserver {
 
 		/* END Setup server (port, etc.) */
 
-		final ServletContextHandler sch = new ServletContextHandler(
+		final ServletContextHandler context = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
 
 		WicketApplication.nextUsername = username;
@@ -48,17 +51,31 @@ public class Jetty implements LocalWebserver {
 		WicketApplication.nextExit = exit;
 		final Class<WicketApplication> classWicketApplication = WicketApplication.class;
 
+		// REST api
+		addServlet_api(context);
+
 		// Static resources
 		final String root_of_resources = root_of_resources(classWicketApplication);
 		addServlet_html(
-				classWicketApplication, root_of_resources, sch);
-		addServlet_Wicket(sch, classWicketApplication);
-		server.setHandler(sch);
+				classWicketApplication, root_of_resources, context);
+		addServlet_Wicket(context, classWicketApplication);
+		server.setHandler(context);
 
 		Instructions.starting();
 		doStart();
 		xtWaitForUserToPressEnterAndExit();
 		Instructions.started(portInUse);
+	}
+
+	private static void addServlet_api(final ServletContextHandler context) {
+		final AnnotationConfigWebApplicationContext applicationContext =
+				new AnnotationConfigWebApplicationContext();
+		applicationContext.register(WebConfig.class);
+
+		final ServletHolder servletHolder =
+				new ServletHolder(
+						new DispatcherServlet(applicationContext));
+		context.addServlet(servletHolder, "/api/*");
 	}
 
 	private static void addServlet_Wicket(final ServletContextHandler sch,
