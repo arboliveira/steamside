@@ -117,10 +117,17 @@ body {
 }
 
 .footer {
-    clear: both;
-    margin: 0px;
-    padding: 0px;
-    height: 0px;
+    font-family: Karla;
+    font-size: xx-small;
+    text-align: left;
+    padding: 1em;
+}
+
+.footer a {
+    text-decoration: none;	/* hide link underline */
+    background: aquamarine;
+    border-radius: 4px;
+    padding: 3px;	/* distance from text to border */
 }
 
 .instructions-and-explanations {

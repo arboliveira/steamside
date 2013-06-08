@@ -4,7 +4,8 @@ var SteamsideRouter = Backbone.Router.extend({
         "favorites/switch": "switch_favorites",
         "collections/new": "collections_new",
         "collections/:name/edit": "collections_edit",
-        "steamclient": "steam_client"
+        "steamclient": "steam_client",
+        "exit": "exit"
     },
 
     home: function() {      "use strict";
@@ -44,7 +45,7 @@ var SteamsideRouter = Backbone.Router.extend({
         });
     },
 
-    collections_edit: function(name) {   "use strict";
+    collections_edit: function(name) {
         var that = this;
 		CollectionEditTile.ajaxTile(function(tile) {
 			var view = new CollectionEditView({
@@ -54,17 +55,22 @@ var SteamsideRouter = Backbone.Router.extend({
         });
     },
 
-    steam_client:  function() {   "use strict";
+    steam_client:  function() {
         var that = this;
-
-        var callback = function(tile) {
-            var view = new SteamClientView({
+        SteamClientTile.ajaxTile(function(tile) {
+            that.setSecondaryView(new SteamClientView({
                 el: tile.clone()
-            });
-            that.setSecondaryView(view);
-        };
+            }));
+        });
+    },
 
-		SteamClientTile.ajaxTile(callback);
+    exit:  function() {
+        var that = this;
+        ExitTile.ajaxTile(function(tile) {
+            that.setSecondaryView(new ExitView({
+                el: tile.clone()
+            }));
+        });
     },
 
     setSecondaryView:  function(view) {   "use strict";

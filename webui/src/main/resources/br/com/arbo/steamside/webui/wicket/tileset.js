@@ -1,17 +1,21 @@
 var Tileset = Backbone.Model.extend({
 	url: null,
+    loaded: false,
 
-	initialize: function() {
+    initialize: function() {
 		this.url = this.attributes.url;
 	},
 
-	ajaxTileset: function (callback) {
+	ajaxTileset: function (options) {
+        if (this.loaded) { options.on_always(); return; }
 		var that = this;
 		$.ajax({
 			url: that.url,
 			success: function(template) {
-				var xml = $(template);
-				callback(xml);
+                that.loaded = true;
+				var $xml = $(template);
+				options.on_load($xml);
+                options.on_always();
 			},
 			error: function() {
 				console.log(arguments);
@@ -21,36 +25,34 @@ var Tileset = Backbone.Model.extend({
 });
 
 var Tile = Backbone.Model.extend({
-	url: null,
+    selector: null,
 	tileset: null,
-	selector: null,
 	tile: null,
 
 	initialize: function() {
-		this.url = this.attributes.url;
-		if (this.url != null)
-			this.tileset = new Tileset({url: this.url});
-		this.selector = this.attributes.selector;
+        this.selector = this.attributes.selector;
+        if (this.attributes.tileset != null) {
+            this.tileset = this.attributes.tileset;
+        } else if (this.attributes.url != null) {
+            this.tileset = new Tileset({url: this.attributes.url});
+        }
 	},
 
 	ajaxTile: function (callback) {
-		var had = this.tile;
-		if (had != null) {
-			callback(had);
-			return;
-		}
 		var that = this;
-
-		this.tileset.ajaxTileset(function(xml) {
-			var put = that.chomp(xml);
-			callback(put);
-		});
+		this.tileset.ajaxTileset({
+            on_load: function($xml) {
+		    	that.chomp($xml);
+		    },
+            on_always: function() {
+                callback(that.tile);
+            }
+        });
 	},
 
-	chomp: function(xml) {
-		var element = xml.find(this.selector);
+	chomp: function($xml) {
+		var element = $xml.find(this.selector);
 		this.tile = this.xml2html(element);
-		return this.tile;
 	},
 
 	xml2html: function(element) {
@@ -63,9 +65,7 @@ var Tile = Backbone.Model.extend({
 var SteamsideTileset = {
 	loaded: false,
 
-	_gameCard: new Tile({selector: ".game-tile"}),
-	_moreButton: new Tile({selector: ".more-button"}),
-	_collectionPick: new Tile({selector: ".collection-pick"}),
+    tileset: new Tileset({url: 'tileset.html'}),
 
     ajaxGameCard: function (callback) {
 		var that = this;
@@ -92,16 +92,24 @@ var SteamsideTileset = {
 		);
     },
 
-	ajaxTileset: function (callback) {
-		if (this.loaded) { callback(); return; }
-		var that = this;
-		var tileset = new Tileset({url: 'tileset.html'});
-		tileset.ajaxTileset(function(t) {
-			that._gameCard.chomp(t);
-			that._moreButton.chomp(t);
-			that._collectionPick.chomp(t);
-			that.loaded = true;
-			callback();
-		});
+    ajaxTileset: function (callback) {
+        var that = this;
+        this.tileset.ajaxTileset({
+            on_load: function($xml) {
+                that.on_load($xml);
+            },
+            on_always: function() {
+                callback();
+            }
+        });
+    },
+
+    on_load: function ($xml) {
+        this._gameCard = new Tile({selector: ".game-tile"});
+        this._moreButton = new Tile({selector: ".more-button"});
+        this._collectionPick = new Tile({selector: ".collection-pick"});
+        this._gameCard.chomp($xml);
+        this._moreButton.chomp($xml);
+        this._collectionPick.chomp($xml);
     }
 };

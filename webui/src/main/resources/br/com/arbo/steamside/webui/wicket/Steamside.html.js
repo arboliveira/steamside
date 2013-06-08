@@ -17,6 +17,10 @@ var SessionView = Backbone.View.extend({
 
     render: function () {                "use strict";
         var m = this.model;
+
+        this.$('#userName').text(m.userName());
+        this.$('#version').text(m.versionOfSteamside());
+
         // TODO var username = m.username();
         var kidsMode = m.kidsmode();
 

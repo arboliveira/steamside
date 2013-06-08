@@ -40,6 +40,7 @@ xml:lang="en" lang="en">
     <script src="SteamClient.js" type="text/javascript"></script>
     <script src="CollectionNew.js" type="text/javascript"></script>
     <script src="CollectionEdit.js" type="text/javascript"></script>
+    <script src="Exit.js" type="text/javascript"></script>
     <script src="SteamsideRouter.js" type="text/javascript"></script>
     <script src="Steamside.html.js" type="text/javascript"></script>
 
@@ -85,6 +86,10 @@ xml:lang="en" lang="en">
 	display: table-cell;
 	text-align: center;
 	font-family: Arvo;
+}
+
+.page-header-navigation-bar li a {
+    text-decoration: none;	/* hide link underline */
 }
 
 .page-header-separator {
@@ -277,8 +282,18 @@ $(function() {
 </div>
 
 <div id="secondary-view">
-
+    <!-- This view shows up when primary view is hidden -->
 </div>
+
+<div class="page-header-separator">
+    <div class="footer">
+        <a href="#/system">User <span id="userName">(user)</span>, version <span id="version">(version)</span></a>
+        &nbsp; <a href="http://arbo.com.br/steamside">Steamside on the web</a>
+        &nbsp; <a href="#/exit">Exit</a>
+    </div>
+</div>
+
+
 
 <!-- ======================================================================= -->
 </body>

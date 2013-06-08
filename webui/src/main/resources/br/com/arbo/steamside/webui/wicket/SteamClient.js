@@ -13,7 +13,7 @@ var SteamClientView = Backbone.View.extend({
         "click .button-steam-browser-protocol": "buttonSteamBrowserProtocolClicked"
     },
 
-    render: function () {  "use strict";
+    render: function () {
         return this;
     },
 

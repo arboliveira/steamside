@@ -14,15 +14,14 @@ import org.eclipse.jetty.server.bio.SocketConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.html.spring.WebConfig;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
+import br.com.arbo.steamside.spring.SteamsideApplicationContext;
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
 public class Jetty implements LocalWebserver {
@@ -67,14 +66,12 @@ public class Jetty implements LocalWebserver {
 		Instructions.started(portInUse);
 	}
 
-	private static void addServlet_api(final ServletContextHandler context) {
-		final AnnotationConfigWebApplicationContext applicationContext =
-				new AnnotationConfigWebApplicationContext();
-		applicationContext.register(WebConfig.class);
-
+	private void addServlet_api(final ServletContextHandler context) {
 		final ServletHolder servletHolder =
 				new ServletHolder(
-						new DispatcherServlet(applicationContext));
+						new DispatcherServlet(
+								new SteamsideApplicationContext(
+										this.exit)));
 		context.addServlet(servletHolder, "/api/*");
 	}
 
