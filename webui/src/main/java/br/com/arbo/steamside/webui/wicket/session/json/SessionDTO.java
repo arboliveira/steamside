@@ -16,6 +16,7 @@ public class SessionDTO {
 	public SessionDTO(final User username, final KidsMode kidsmode) {
 		this.username = username.username();
 		this.kidsmode = kidsmode.isKidsModeOn();
+		this.versionOfSteamside = new MavenBuild().readVersion();
 	}
 
 	@JsonProperty
@@ -23,4 +24,6 @@ public class SessionDTO {
 
 	@JsonProperty
 	public boolean kidsmode;
+
+	public String versionOfSteamside;
 }
