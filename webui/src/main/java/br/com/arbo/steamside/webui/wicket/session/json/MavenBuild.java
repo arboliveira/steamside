@@ -9,7 +9,8 @@ class MavenBuild {
 	String readVersion() {
 		final Properties p = new Properties();
 		load(p);
-		return p.getProperty("maven.build.timestamp");
+		return p.getProperty("project.version") + " " +
+				p.getProperty("maven.build.timestamp");
 	}
 
 	private void load(final Properties p) {

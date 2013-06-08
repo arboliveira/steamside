@@ -70,7 +70,7 @@
 	<properties>
 		<wicket.version>6.4.0</wicket.version>
         <maven.build.timestamp.format>yyyy/MM/dd_HH:mm:ssZ</maven.build.timestamp.format>
-        <build.timestamp>${maven.build.timestamp}</build.timestamp>
+        <maven.build.timestamp.workaround>${maven.build.timestamp}</maven.build.timestamp.workaround>
     </properties>
 	<build>
 		<resources>
