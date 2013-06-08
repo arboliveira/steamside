@@ -15,7 +15,6 @@ import br.com.arbo.steamside.webui.wicket.search.SearchJson;
 import br.com.arbo.steamside.webui.wicket.session.json.SessionJson;
 import br.com.arbo.steamside.webui.wicket.steamcategories.json.SteamCategoriesJson;
 import br.com.arbo.steamside.webui.wicket.steamclient.SteamClientPage;
-import br.com.arbo.steamside.webui.wicket.stop.ExitPage;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
@@ -91,8 +90,6 @@ public class WicketApplication extends WebApplication
 						"/${" + SteamClientPage.PARAM_command + "}" +
 						"/#{" + SteamClientPage.PARAM_argument + "}",
 				SteamClientPage.class);
-		mountPage(
-				"/exit", ExitPage.class);
 	}
 
 	public WicketApplication() {

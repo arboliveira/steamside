@@ -29,13 +29,13 @@ public class ExitController implements ApplicationContextAware {
 
 			@Override
 			public void run() {
-				sleep1Second();
+				sleepBriefly();
 				exitInvokedFromAnotherThread();
 			}
 
-			private void sleep1Second() {
+			private void sleepBriefly() {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 				} catch (final InterruptedException e) {
 					throw new RuntimeException(e);
 				}
