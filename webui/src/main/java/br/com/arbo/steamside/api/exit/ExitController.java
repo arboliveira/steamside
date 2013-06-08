@@ -15,38 +15,11 @@ import br.com.arbo.steamside.spring.SteamsideApplicationContext;
 @RequestMapping("exit")
 public class ExitController implements ApplicationContextAware {
 
-	private Exit exit;
-
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public String exit() {
-		giveTheUserAChanceToSeeTheResultBeforeWeWreakHavocOnJetty();
+		exitInAnotherThread();
 		return "SteamSide, your companion on Steam";
-	}
-
-	private void giveTheUserAChanceToSeeTheResultBeforeWeWreakHavocOnJetty() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				sleepBriefly();
-				exitInvokedFromAnotherThread();
-			}
-
-			private void sleepBriefly() {
-				try {
-					Thread.sleep(2000);
-				} catch (final InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-			}
-
-		}, "Exit SteamSide").start();
-
-	}
-
-	void exitInvokedFromAnotherThread() {
-		exit.exit();
 	}
 
 	@Override
@@ -57,5 +30,36 @@ public class ExitController implements ApplicationContextAware {
 				((SteamsideApplicationContext) applicationContext)
 						.getExit();
 	}
+
+	private void exitInAnotherThread() {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				giveTheUserAChanceToSeeTheResultBeforeWeWreakHavocOnJetty();
+			}
+
+		}, "Exit SteamSide").start();
+
+	}
+
+	void giveTheUserAChanceToSeeTheResultBeforeWeWreakHavocOnJetty() {
+		sleepBriefly();
+		exitThenAfterTheSleep();
+	}
+
+	private static void sleepBriefly() {
+		try {
+			Thread.sleep(2000);
+		} catch (final InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void exitThenAfterTheSleep() {
+		exit.exit();
+	}
+
+	private Exit exit;
 
 }
