@@ -7,7 +7,6 @@ import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
-import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
 import br.com.arbo.steamside.webui.wicket.favorites.json.FavoritesJson;
 import br.com.arbo.steamside.webui.wicket.search.SearchJson;
 import br.com.arbo.steamside.webui.wicket.steamcategories.json.SteamCategoriesJson;
@@ -54,9 +53,6 @@ public class WicketApplication extends WebApplication {
 		mountResource(
 				"/search.json",
 				container.getComponent(SearchJson.class));
-		mountResource(
-				"/continue.json",
-				container.getComponent(ContinueJson.class));
 		mountResource(
 				"/favorites.json",
 				container.getComponent(FavoritesJson.class));

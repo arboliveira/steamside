@@ -20,7 +20,6 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFi
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
-import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
 import br.com.arbo.steamside.webui.wicket.favorites.json.FavoritesJson;
 import br.com.arbo.steamside.webui.wicket.search.SearchJson;
 import br.com.arbo.steamside.webui.wicket.steamcategories.json.SteamCategoriesJson;
@@ -44,7 +43,6 @@ public class ContainerFactory {
 				.addComponent(RunGame.class)
 				.addComponent(SharedConfigConsume.class)
 				.addComponent(CollectionFromVdf.class)
-				.addComponent(ContinueJson.class)
 				.addComponent(FavoritesJson.class)
 				.addComponent(Continue.class)
 				.addComponent(Favorites.class)

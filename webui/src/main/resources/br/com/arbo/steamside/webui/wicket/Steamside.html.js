@@ -1,6 +1,6 @@
 var ContinueGames = Backbone.Collection.extend({
     model: Game,
-    url: 'continue.json'
+    url: 'api/continues/continues.json'
 });
 
 var FavoritesCollection = Backbone.Collection.extend({
