@@ -52,7 +52,7 @@ public class ExitController implements ApplicationContextAware {
 
 	private static void sleepBriefly() {
 		try {
-			Thread.sleep(4000);
+			Thread.sleep(5000);
 		} catch (final InterruptedException e) {
 			throw new RuntimeException(e);
 		}
