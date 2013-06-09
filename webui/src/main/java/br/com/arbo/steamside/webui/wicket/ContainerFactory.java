@@ -23,7 +23,6 @@ import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.continuejson.ContinueJson;
 import br.com.arbo.steamside.webui.wicket.favorites.json.FavoritesJson;
 import br.com.arbo.steamside.webui.wicket.search.SearchJson;
-import br.com.arbo.steamside.webui.wicket.session.json.SessionJson;
 import br.com.arbo.steamside.webui.wicket.steamcategories.json.SteamCategoriesJson;
 
 public class ContainerFactory {
@@ -51,7 +50,6 @@ public class ContainerFactory {
 				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
 				.addComponent(SearchJson.class)
-				.addComponent(SessionJson.class)
 				.addComponent(SteamCategoriesJson.class)
 		//
 		;

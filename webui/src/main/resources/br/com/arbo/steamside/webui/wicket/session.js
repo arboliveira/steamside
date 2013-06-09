@@ -1,5 +1,5 @@
 var SessionModel = Backbone.Model.extend({
-	url: "session.json",
+	url: "api/session/session.json",
     versionOfSteamside: function() {
         return this.get("versionOfSteamside");
     },

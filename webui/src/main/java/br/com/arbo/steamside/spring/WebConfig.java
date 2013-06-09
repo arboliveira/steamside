@@ -4,13 +4,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import br.com.arbo.steamside.api.collection.CollectionController;
-import br.com.arbo.steamside.api.exit.ExitController;
+import br.com.arbo.steamside.api.Api;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackageClasses = {
-		CollectionController.class, ExitController.class })
+@ComponentScan(basePackageClasses = { Api.class })
 public class WebConfig {
 	//
 }

@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.webui.wicket.session.json;
+package br.com.arbo.steamside.api.session;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;

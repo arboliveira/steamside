@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.app.instance;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
-import br.com.arbo.steamside.webui.wicket.session.json.SessionDTO;
+import br.com.arbo.steamside.api.session.SessionDTO;
 
 class ExtractUsername {
 

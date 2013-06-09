@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
 
@@ -18,7 +19,7 @@ public class ExitController implements ApplicationContextAware {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public String exit() {
-		exitInAnotherThread();
+		xtExit();
 		return "SteamSide, your companion on Steam";
 	}
 
@@ -26,12 +27,13 @@ public class ExitController implements ApplicationContextAware {
 	public void setApplicationContext(
 			final ApplicationContext applicationContext)
 			throws BeansException {
-		this.exit =
+		final MutablePicoContainerX container =
 				((SteamsideApplicationContext) applicationContext)
-						.getExit();
+						.getContainer();
+		this.exit = container.getComponent(Exit.class);
 	}
 
-	private void exitInAnotherThread() {
+	private void xtExit() {
 		new Thread(new Runnable() {
 
 			@Override
@@ -50,7 +52,7 @@ public class ExitController implements ApplicationContextAware {
 
 	private static void sleepBriefly() {
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(4000);
 		} catch (final InterruptedException e) {
 			throw new RuntimeException(e);
 		}

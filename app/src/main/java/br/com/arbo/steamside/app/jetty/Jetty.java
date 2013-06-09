@@ -16,12 +16,14 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
+import br.com.arbo.steamside.webui.wicket.ContainerFactory;
 import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
 public class Jetty implements LocalWebserver {
@@ -45,13 +47,13 @@ public class Jetty implements LocalWebserver {
 		final ServletContextHandler context = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
 
-		WicketApplication.nextUsername = username;
-		WicketApplication.nextKidsMode = kidsmode;
-		WicketApplication.nextExit = exit;
+		final MutablePicoContainerX container = newContainer();
+		WicketApplication.nextContainer = container;
+
 		final Class<WicketApplication> classWicketApplication = WicketApplication.class;
 
 		// REST api
-		addServlet_api(context);
+		addServlet_api(context, container);
 
 		// Static resources
 		final String root_of_resources = root_of_resources(classWicketApplication);
@@ -66,12 +68,22 @@ public class Jetty implements LocalWebserver {
 		Instructions.started(portInUse);
 	}
 
-	private void addServlet_api(final ServletContextHandler context) {
+	private MutablePicoContainerX newContainer() {
+		final MutablePicoContainerX cx = ContainerFactory.newContainer();
+		cx.replaceComponent(KidsMode.class, this.kidsmode);
+		cx.replaceComponent(User.class, this.username);
+		cx.replaceComponent(Exit.class, this.exit);
+		return cx;
+	}
+
+	private static void addServlet_api(
+			final ServletContextHandler context,
+			final MutablePicoContainerX container) {
 		final ServletHolder servletHolder =
 				new ServletHolder(
 						new DispatcherServlet(
 								new SteamsideApplicationContext(
-										this.exit)));
+										container)));
 		context.addServlet(servletHolder, "/api/*");
 	}
 
@@ -202,7 +214,7 @@ public class Jetty implements LocalWebserver {
 
 	private final User username;
 	private final KidsMode kidsmode;
-	private final Server server;
 	private final Exit exit;
+	private final Server server;
 
 }
