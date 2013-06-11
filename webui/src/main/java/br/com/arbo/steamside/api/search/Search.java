@@ -3,11 +3,11 @@ package br.com.arbo.steamside.api.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.arbo.steamside.json.app.AppDTO;
+import br.com.arbo.steamside.json.appcollection.AppCollectionDTO;
 import br.com.arbo.steamside.steam.store.App;
 import br.com.arbo.steamside.steam.store.SearchStore;
 import br.com.arbo.steamside.steam.store.SearchStore.SearchResultVisitor;
-import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
-import br.com.arbo.steamside.webui.appdto.AppDTO;
 
 class Search {
 

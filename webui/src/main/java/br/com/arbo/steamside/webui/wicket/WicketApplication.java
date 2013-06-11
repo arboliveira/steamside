@@ -5,7 +5,6 @@ import org.apache.wicket.protocol.http.WebApplication;
 
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
 
 /**
@@ -46,11 +45,6 @@ public class WicketApplication extends WebApplication {
 	{
 		super.init();
 
-		mountPage(
-				"/app" +
-						"/${" + AppPage.PARAM_appid + "}" +
-						"/#{" + AppPage.PARAM_command + "}",
-				AppPage.class);
 		mountPage(
 				"/collection" +
 						"/${" + Params.PARAM_collectionname + "}" +

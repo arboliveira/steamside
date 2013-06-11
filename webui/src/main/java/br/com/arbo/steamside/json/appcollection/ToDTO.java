@@ -1,15 +1,14 @@
-package br.com.arbo.steamside.collection;
+package br.com.arbo.steamside.json.appcollection;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
-import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
-import br.com.arbo.steamside.webui.appdto.AppDTO;
 
 public final class ToDTO {
 

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
-import br.com.arbo.steamside.webui.appdto.AppDTO;
+import br.com.arbo.steamside.json.app.AppDTO;
+import br.com.arbo.steamside.json.appcollection.AppCollectionDTO;
 
 @Controller
 @RequestMapping("search")

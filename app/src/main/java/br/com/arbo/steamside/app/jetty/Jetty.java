@@ -84,7 +84,10 @@ public class Jetty implements LocalWebserver {
 						new DispatcherServlet(
 								new SteamsideApplicationContext(
 										container)));
-		context.addServlet(servletHolder, "/api/*");
+		context.addServlet(servletHolder,
+				String.format(
+						"/%s/*",
+						br.com.arbo.steamside.mapping.Api.api));
 	}
 
 	private static void addServlet_Wicket(final ServletContextHandler sch,

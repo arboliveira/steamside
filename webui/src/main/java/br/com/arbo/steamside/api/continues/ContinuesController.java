@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
-import br.com.arbo.steamside.collection.ToDTO;
 import br.com.arbo.steamside.continues.Continue;
+import br.com.arbo.steamside.json.app.AppDTO;
+import br.com.arbo.steamside.json.appcollection.AppCollectionDTO;
+import br.com.arbo.steamside.json.appcollection.ToDTO;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.webui.appdto.AppCollectionDTO;
-import br.com.arbo.steamside.webui.appdto.AppDTO;
 
 @Controller
 @RequestMapping("continues")

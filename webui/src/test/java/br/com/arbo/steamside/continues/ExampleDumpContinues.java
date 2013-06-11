@@ -6,8 +6,8 @@ import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.api.continues.ContinuesController;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
+import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.webui.appdto.AppDTO;
 import br.com.arbo.steamside.webui.wicket.ContainerFactory;
 
 public class ExampleDumpContinues {
