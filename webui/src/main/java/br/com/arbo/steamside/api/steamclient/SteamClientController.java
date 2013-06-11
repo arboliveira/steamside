@@ -16,16 +16,16 @@ import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 @RequestMapping("steamclient")
 public class SteamClientController implements ApplicationContextAware {
 
-	@RequestMapping("{command}")
-	public void launch(@PathVariable final String command) {
-		launchCommand(command);
-	}
-
 	@RequestMapping("{command}/{argument}")
 	public void launch(
 			@PathVariable final String command,
 			@PathVariable final String argument) {
 		launchCommand(command + "/" + argument);
+	}
+
+	@RequestMapping("{command}")
+	public void launch(@PathVariable final String command) {
+		launchCommand(command);
 	}
 
 	@Override

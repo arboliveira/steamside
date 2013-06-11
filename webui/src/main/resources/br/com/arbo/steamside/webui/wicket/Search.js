@@ -3,7 +3,7 @@ var SearchResults = Backbone.Collection.extend({
 	query: null,
 	queryString: null,
 	url: function() {
-		var base = "search.json?";
+		var base = "api/search/search.json?";
 		if (this.queryString != null) return base + this.queryString;
 		return base + "query=" + this.query;
 	}

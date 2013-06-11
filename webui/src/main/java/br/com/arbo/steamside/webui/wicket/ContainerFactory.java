@@ -21,7 +21,6 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_v
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.webui.wicket.favorites.json.FavoritesJson;
-import br.com.arbo.steamside.webui.wicket.search.SearchJson;
 import br.com.arbo.steamside.webui.wicket.steamcategories.json.SteamCategoriesJson;
 
 public class ContainerFactory {
@@ -47,7 +46,6 @@ public class ContainerFactory {
 				.addComponent(Continue.class)
 				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
-				.addComponent(SearchJson.class)
 				.addComponent(SteamCategoriesJson.class)
 		//
 		;
