@@ -8,7 +8,6 @@ import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
 import br.com.arbo.steamside.webui.wicket.favorites.json.FavoritesJson;
-import br.com.arbo.steamside.webui.wicket.steamcategories.json.SteamCategoriesJson;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
@@ -51,9 +50,6 @@ public class WicketApplication extends WebApplication {
 		mountResource(
 				"/favorites.json",
 				container.getComponent(FavoritesJson.class));
-		mountResource(
-				"/steam-categories.json",
-				container.getComponent(SteamCategoriesJson.class));
 
 		mountPage(
 				"/app" +

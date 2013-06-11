@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.webui.wicket.steamcategories.json;
+package br.com.arbo.steamside.api.steamcategories;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;

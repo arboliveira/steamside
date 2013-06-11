@@ -14,6 +14,11 @@ var SteamCategory = Backbone.Model.extend({
 	}
 });
 
+var SteamCategoryCollection = Backbone.Collection.extend({
+    model: SteamCategory,
+    url: 'api/steam-categories/steam-categories.json'
+});
+
 var SteamCategoryView = Backbone.View.extend({
 	on_category_change: null,
 

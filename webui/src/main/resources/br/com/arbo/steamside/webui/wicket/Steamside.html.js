@@ -60,11 +60,6 @@ var SwitchFavoritesView = Backbone.View.extend({
     }
 });
 
-var SteamCategoryCollection = Backbone.Collection.extend({
-    model: SteamCategory,
-    url: 'steam-categories.json'
-});
-
 function sideshow(element) {
 	var segments = element.find('.segment');
 	var left = true;
