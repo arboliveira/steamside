@@ -1,13 +1,3 @@
-var ContinueGames = Backbone.Collection.extend({
-    model: Game,
-    url: 'api/continues/continues.json'
-});
-
-var FavoritesCollection = Backbone.Collection.extend({
-    model: Game,
-    url: 'favorites.json'
-});
-
 var SessionView = Backbone.View.extend({
     el : 'body',
 

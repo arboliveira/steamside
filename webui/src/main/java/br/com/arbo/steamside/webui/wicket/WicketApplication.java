@@ -7,7 +7,6 @@ import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.webui.wicket.app.AppPage;
 import br.com.arbo.steamside.webui.wicket.collection.Params;
-import br.com.arbo.steamside.webui.wicket.favorites.json.FavoritesJson;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
@@ -46,10 +45,6 @@ public class WicketApplication extends WebApplication {
 	public void init()
 	{
 		super.init();
-
-		mountResource(
-				"/favorites.json",
-				container.getComponent(FavoritesJson.class));
 
 		mountPage(
 				"/app" +

@@ -33,6 +33,16 @@ var Game = Backbone.Model.extend({
 
 });
 
+var ContinueGames = Backbone.Collection.extend({
+    model: Game,
+    url: 'api/continues/continues.json'
+});
+
+var FavoritesCollection = Backbone.Collection.extend({
+    model: Game,
+    url: 'api/favorites/favorites.json'
+});
+
 var DeckCell = Backbone.View.extend({
 	view: null,
 	alwaysVisible: false,
