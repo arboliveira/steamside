@@ -9,7 +9,7 @@ import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.apps.Filter;
-import br.com.arbo.steamside.webui.wicket.SharedConfigConsume;
+import br.com.arbo.steamside.container.SharedConfigConsume;
 
 public class CollectionFromVdf {
 

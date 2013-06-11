@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.container.SharedConfigConsume;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
-import br.com.arbo.steamside.webui.wicket.SharedConfigConsume;
 
 @Controller
 @RequestMapping("session")

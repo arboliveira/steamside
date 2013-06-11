@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.apps.AppsHome;
+import br.com.arbo.steamside.container.SharedConfigConsume;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
 import br.com.arbo.steamside.types.Category;
-import br.com.arbo.steamside.webui.wicket.SharedConfigConsume;
 
 @Controller
 @RequestMapping("steam-categories")

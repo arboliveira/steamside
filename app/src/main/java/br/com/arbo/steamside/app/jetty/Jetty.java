@@ -4,10 +4,6 @@ import java.io.IOException;
 import java.net.BindException;
 import java.net.URL;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.wicket.protocol.http.ContextParamWebApplicationFactory;
-import org.apache.wicket.protocol.http.WicketFilter;
-import org.apache.wicket.protocol.http.WicketServlet;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.bio.SocketConnector;
@@ -19,12 +15,11 @@ import org.springframework.web.servlet.DispatcherServlet;
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
+import br.com.arbo.steamside.container.ContainerFactory;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
-import br.com.arbo.steamside.webui.wicket.ContainerFactory;
-import br.com.arbo.steamside.webui.wicket.WicketApplication;
 
 public class Jetty implements LocalWebserver {
 
@@ -49,22 +44,49 @@ public class Jetty implements LocalWebserver {
 
 		final MutablePicoContainerX container = newContainer();
 
-		final Class<WicketApplication> classWicketApplication = WicketApplication.class;
-
 		// REST api
 		addServlet_api(context, container);
 
 		// Static resources
-		final String root_of_resources = root_of_resources(classWicketApplication);
+		final String root_of_resources = root_of_resources();
 		addServlet_html(
-				classWicketApplication, root_of_resources, context);
-		addServlet_Wicket(context, classWicketApplication);
+				root_of_resources, context);
 		server.setHandler(context);
 
 		Instructions.starting();
 		doStart();
 		xtWaitForUserToPressEnterAndExit();
 		Instructions.started(portInUse);
+	}
+
+	private void addServlet_html(
+			final String root_of_resources, final ServletContextHandler sch) {
+		sch.setWelcomeFiles(new String[] { "Steamside.html" });
+
+		final String fromRoot = "";
+		final ServletHolder servlet = newServlet(
+				root_of_resources, fromRoot);
+
+		// don't use "/*" or Jetty will not process file extension mappings
+		sch.addServlet(servlet, "/");
+	}
+
+	private ServletHolder newServlet(
+			final String root_of_resources, final String suffix) {
+		final String path = toExternalForm(
+				root_of_resources, suffix);
+		final ServletHolder servlet = new ServletHolder(
+				DefaultServlet.class);
+		servlet.setInitParameter("resourceBase", path);
+		return servlet;
+	}
+
+	private String toExternalForm(
+			final String root_of_resources, final String suffix) {
+		final URL resource = this.getClass().getClassLoader()
+				.getResource(
+						root_of_resources + "/" + suffix);
+		return resource.toExternalForm();
 	}
 
 	private MutablePicoContainerX newContainer() {
@@ -89,61 +111,9 @@ public class Jetty implements LocalWebserver {
 						br.com.arbo.steamside.mapping.Api.api));
 	}
 
-	private static void addServlet_Wicket(final ServletContextHandler sch,
-			final Class<WicketApplication> classWicketApplication) {
-		final ServletHolder sh = new ServletHolder(WicketServlet.class);
-		sh.setInitParameter(
-				ContextParamWebApplicationFactory.APP_CLASS_PARAM,
-				classWicketApplication.getName());
-		sh.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
-		/* Define a variable DEV_MODE and set to false
-		 * if wicket should be used in deployment mode
-		 */
-		if (!DEV_MODE)
-			sh.setInitParameter("wicket.configuration", "deployment");
-
-		// don't use "/*" or Jetty will not process file extension mappings
-		sch.addServlet(sh, "/");
-	}
-
-	private static void addServlet_html(
-			final Class< ? > classWicketApplication,
-			final String root_of_resources, final ServletContextHandler sch) {
-		final String fromRoot = "";
-		final ServletHolder servlet = newServlet(classWicketApplication,
-				root_of_resources, fromRoot);
-		addServlet(sch, servlet, "*.html", "*.css", "*.js", "*.gif", "*.png");
-	}
-
-	private static void addServlet(final ServletContextHandler sch,
-			final ServletHolder servlet, final String... pathSpecs) {
-		for (final String pathSpec : pathSpecs)
-			sch.addServlet(servlet, pathSpec);
-	}
-
-	private static ServletHolder newServlet(
-			final Class< ? > classWicketApplication,
-			final String root_of_resources, final String suffix) {
-		final String path = toExternalForm(classWicketApplication,
-				root_of_resources, suffix);
-		final ServletHolder servlet = new ServletHolder(
-				DefaultServlet.class);
-		servlet.setInitParameter("resourceBase", path);
-		return servlet;
-	}
-
 	interface ServletHolderSetup {
 
 		void setup(ServletHolder servlet);
-	}
-
-	private static String toExternalForm(
-			final Class< ? > classWicketApplication,
-			final String root_of_resources, final String suffix) {
-		final URL resource = classWicketApplication.getClassLoader()
-				.getResource(
-						root_of_resources + "/" + suffix);
-		return resource.toExternalForm();
 	}
 
 	@Override
@@ -198,11 +168,8 @@ public class Jetty implements LocalWebserver {
 		}
 	}
 
-	private static String root_of_resources(
-			final Class< ? > classWicketApplication) {
-		final String packagename = classWicketApplication.getPackage()
-				.getName();
-		return StringUtils.replaceChars(packagename, '.', '/');
+	private static String root_of_resources() {
+		return "br/com/arbo/steamside/webui/wicket";
 	}
 
 	static boolean DEV_MODE = true;

@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.webui.wicket;
+package br.com.arbo.steamside.container;
 
 import static org.picocontainer.Characteristics.CACHE;
 
