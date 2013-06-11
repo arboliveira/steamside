@@ -48,7 +48,6 @@ public class Jetty implements LocalWebserver {
 				ServletContextHandler.SESSIONS);
 
 		final MutablePicoContainerX container = newContainer();
-		WicketApplication.nextContainer = container;
 
 		final Class<WicketApplication> classWicketApplication = WicketApplication.class;
 
@@ -108,7 +107,7 @@ public class Jetty implements LocalWebserver {
 	}
 
 	private static void addServlet_html(
-			final Class<WicketApplication> classWicketApplication,
+			final Class< ? > classWicketApplication,
 			final String root_of_resources, final ServletContextHandler sch) {
 		final String fromRoot = "";
 		final ServletHolder servlet = newServlet(classWicketApplication,
@@ -123,7 +122,7 @@ public class Jetty implements LocalWebserver {
 	}
 
 	private static ServletHolder newServlet(
-			final Class<WicketApplication> classWicketApplication,
+			final Class< ? > classWicketApplication,
 			final String root_of_resources, final String suffix) {
 		final String path = toExternalForm(classWicketApplication,
 				root_of_resources, suffix);
@@ -139,7 +138,7 @@ public class Jetty implements LocalWebserver {
 	}
 
 	private static String toExternalForm(
-			final Class<WicketApplication> classWicketApplication,
+			final Class< ? > classWicketApplication,
 			final String root_of_resources, final String suffix) {
 		final URL resource = classWicketApplication.getClassLoader()
 				.getResource(
@@ -200,7 +199,7 @@ public class Jetty implements LocalWebserver {
 	}
 
 	private static String root_of_resources(
-			final Class<WicketApplication> classWicketApplication) {
+			final Class< ? > classWicketApplication) {
 		final String packagename = classWicketApplication.getPackage()
 				.getName();
 		return StringUtils.replaceChars(packagename, '.', '/');

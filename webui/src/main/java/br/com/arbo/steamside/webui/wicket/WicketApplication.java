@@ -3,29 +3,12 @@ package br.com.arbo.steamside.webui.wicket;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
-import br.com.arbo.steamside.exit.Exit;
-
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
  * 
  * @see br.com.arbo.steamside.Start#main(String[])
  */
 public class WicketApplication extends WebApplication {
-
-	public static MutablePicoContainerX nextContainer;
-
-	public static WicketApplication get() {
-		return (WicketApplication) WebApplication.get();
-	}
-
-	public static MutablePicoContainerX getContainer() {
-		return get().container;
-	}
-
-	public void exit() {
-		this.container.getComponent(Exit.class).exit();
-	}
 
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
@@ -46,10 +29,6 @@ public class WicketApplication extends WebApplication {
 	}
 
 	public WicketApplication() {
-		this.container = nextContainer;
-		nextContainer = null;
+		super();
 	}
-
-	private final MutablePicoContainerX container;
-
 }

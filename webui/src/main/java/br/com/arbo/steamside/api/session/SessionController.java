@@ -11,6 +11,7 @@ import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
+import br.com.arbo.steamside.webui.wicket.SharedConfigConsume;
 
 @Controller
 @RequestMapping("session")
@@ -19,7 +20,10 @@ public class SessionController implements ApplicationContextAware {
 	@RequestMapping("session.json")
 	@ResponseBody
 	public SessionDTO session() {
-		return new SessionDTO(username, kidsmode);
+		final int gamesOwned = config.data().apps().count();
+		return new SessionDTO(
+				username, kidsmode,
+				String.valueOf(gamesOwned));
 	}
 
 	@Override
@@ -31,8 +35,12 @@ public class SessionController implements ApplicationContextAware {
 						.getContainer();
 		this.username = container.getComponent(User.class);
 		this.kidsmode = container.getComponent(KidsMode.class);
+		this.config =
+				container
+						.getComponent(SharedConfigConsume.class);
 	}
 
 	private User username;
 	private KidsMode kidsmode;
+	private SharedConfigConsume config;
 }

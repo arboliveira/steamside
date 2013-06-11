@@ -30,7 +30,7 @@ public class ContainerFactory {
 				.build();
 		container.change(CACHE);
 
-		container.setName("WicketApplication");
+		container.setName("Steamside");
 		container
 				.addComponent(KidsMode.class, FromUsername.class)
 				.addComponent(User.class, FromJava.class)

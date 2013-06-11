@@ -10,6 +10,7 @@ var SessionView = Backbone.View.extend({
 
         this.$('#userName').text(m.userName());
         this.$('#version').text(m.versionOfSteamside());
+        this.$('#number-of-games').text(m.gamesOwned());
 
         // TODO var username = m.username();
         var kidsMode = m.kidsmode();
