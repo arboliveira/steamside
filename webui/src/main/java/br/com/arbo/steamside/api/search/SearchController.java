@@ -15,7 +15,7 @@ import br.com.arbo.steamside.json.appcollection.AppCollectionDTO;
 public class SearchController {
 
 	@SuppressWarnings("static-method")
-	@RequestMapping(value = "search.json", params = Params.PARAM_query)
+	@RequestMapping(value = "search.json", params = "query")
 	@ResponseBody
 	public List<AppDTO> search(@RequestParam final String query) {
 		final AppCollectionDTO dto = Search.search(query);

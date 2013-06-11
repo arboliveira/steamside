@@ -5,7 +5,6 @@ import org.apache.wicket.protocol.http.WebApplication;
 
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.webui.wicket.collection.Params;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
@@ -44,12 +43,6 @@ public class WicketApplication extends WebApplication {
 	public void init()
 	{
 		super.init();
-
-		mountPage(
-				"/collection" +
-						"/${" + Params.PARAM_collectionname + "}" +
-						"/#{" + Params.PARAM_command + "}",
-				AppCollectionPage.class);
 	}
 
 	public WicketApplication() {

@@ -68,7 +68,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 
 	createEmpty: function(args) {     "use strict";
 		var name = this.nameForCollection(args.name);
-		var aUrl = "/collection/" + name + "/create";
+		var aUrl = "api/collection/" + name + "/create";
 		var that = this;
 
 		$.ajax({

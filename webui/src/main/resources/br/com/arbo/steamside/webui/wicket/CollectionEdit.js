@@ -11,7 +11,7 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
     model: Game,
 	collection_name: null,
 	url: function() {
-		return "apps.json?collection_name=" + this.collection_name;
+		return "api/collection/collection.json?name=" + this.collection_name;
 	}
 });
 
