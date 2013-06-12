@@ -11,13 +11,14 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
 
 public class SearchStore {
 
-	public static void search(final String query,
+	public static void search(@NonNull final String query,
 			final SearchResultVisitor visitor) {
 		final String content = storeSearchResults(query);
 		accept(content, visitor);
@@ -64,7 +65,7 @@ public class SearchStore {
 		return pattern;
 	}
 
-	private static String storeSearchResults(final String query) {
+	private static String storeSearchResults(final @NonNull String query) {
 		final URL store = storeSearch(query);
 		try {
 			final InputStream stream = store.openStream();
@@ -78,7 +79,7 @@ public class SearchStore {
 		}
 	}
 
-	private static URL storeSearch(final String query)
+	private static URL storeSearch(final @NonNull String query)
 	{
 		try {
 			return new URI("http", "store.steampowered.com", "/search/",

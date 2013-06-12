@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
-import br.com.arbo.steamside.api.continues.ContinuesController;
+import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.container.ContainerFactory;
 import br.com.arbo.steamside.json.app.AppDTO;
@@ -19,8 +19,8 @@ public class ExampleDumpContinues {
 		final InMemory_appinfo_vdf appinfo =
 				c.getComponent(InMemory_appinfo_vdf.class);
 
-		final ContinuesController controller =
-				new ContinuesController(continues, appinfo, from);
+		final Continues controller =
+				new Continues(continues, appinfo, from);
 		final List<AppDTO> apps = controller.continues();
 		System.out.println(JsonUtils.asString(apps));
 	}
