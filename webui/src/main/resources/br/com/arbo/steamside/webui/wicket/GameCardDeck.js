@@ -288,6 +288,7 @@ var DeckView = Backbone.View.extend({
 	renderMoreButton: function () {
 		if (this.yRow == 1) return;
 		if (this.alwaysVisible) return;
+        if (this.first_row == null) /* zero games */ return;
 
 		var that = this;
 		SteamsideTileset.ajaxMoreButton(function (tile) {

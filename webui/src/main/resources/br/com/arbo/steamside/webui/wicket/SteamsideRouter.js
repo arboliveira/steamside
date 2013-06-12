@@ -49,7 +49,8 @@ var SteamsideRouter = Backbone.Router.extend({
         var that = this;
 		CollectionEditTile.ajaxTile(function(tile) {
 			var view = new CollectionEditView({
-                el: tile.clone()
+                el: tile.clone(),
+                collection_name: name
             });
             that.setSecondaryView(view);
         });

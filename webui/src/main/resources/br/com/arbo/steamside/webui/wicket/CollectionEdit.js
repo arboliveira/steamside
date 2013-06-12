@@ -38,6 +38,7 @@ var CollectionEditView = Backbone.View.extend({
 		});
 
 		var inCollection = new SteamsideCollectionApps();
+        inCollection.collection_name = that.options.collection_name;
 
 		new DeckView({
             el: this.$('#games-in-collection-deck'),
