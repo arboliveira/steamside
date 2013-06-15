@@ -6,7 +6,7 @@ import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class CollectionData {
+public class CollectionHome {
 
 	public interface OnCollection {
 

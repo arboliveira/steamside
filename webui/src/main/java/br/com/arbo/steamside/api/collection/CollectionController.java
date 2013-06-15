@@ -19,7 +19,7 @@ import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.apps.Filter;
 import br.com.arbo.steamside.apps.FilterCategory;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
-import br.com.arbo.steamside.data.collections.CollectionData;
+import br.com.arbo.steamside.data.collections.CollectionHome;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.AppCollectionDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTO;
@@ -35,7 +35,7 @@ public class CollectionController implements ApplicationContextAware {
 
 	private CollectionFromVdf from;
 	private InMemory_appinfo_vdf appinfo;
-	private CollectionData data;
+	private CollectionHome data;
 
 	@RequestMapping(value = "collection.json", params = "name")
 	@ResponseBody
@@ -67,6 +67,7 @@ public class CollectionController implements ApplicationContextAware {
 	}
 
 	@RequestMapping(value = "{name}/add/{appid}")
+	@ResponseBody
 	public void add(@PathVariable final String name,
 			@PathVariable final @NonNull String appid) {
 		data.add(new CollectionName(name), new AppId(appid));
@@ -81,7 +82,7 @@ public class CollectionController implements ApplicationContextAware {
 						.getContainer();
 		this.appinfo = container.getComponent(InMemory_appinfo_vdf.class);
 		this.from = container.getComponent(CollectionFromVdf.class);
-		this.data = container.getComponent(CollectionData.class);
+		this.data = container.getComponent(CollectionHome.class);
 	}
 
 }
