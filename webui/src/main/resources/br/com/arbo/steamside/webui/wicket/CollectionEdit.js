@@ -37,9 +37,12 @@ var CollectionEditView = Backbone.View.extend({
 			on_GameCard_render: function(viewGameCard) { that.on_SearchResults_GameCard_render(viewGameCard) }
 		});
 
-		var inCollection = new SteamsideCollectionApps();
-        inCollection.collection_name = that.options.collection_name;
+        var name = that.options.collection_name;
+        this.$("#display-collection-name").text(name);
 
+		var inCollection = new SteamsideCollectionApps();
+        this.inCollection = inCollection;
+        inCollection.collection_name = name;
 		new DeckView({
             el: this.$('#games-in-collection-deck'),
             collection: inCollection
@@ -137,11 +140,29 @@ var CollectionEditView = Backbone.View.extend({
 		add.text('add');
 		add.removeClass('game-tile-play');
 		add.insertBefore(play);
+
 		var that = this;
-		add.click(function(e) {e.preventDefault(); that.on_add_click(); viewGameCard.$el.slideUp(); });
+		add.click(function(e) {
+            e.preventDefault();
+            that.on_add_click(viewGameCard.model.appid());
+            viewGameCard.$el.slideUp();
+        });
 	},
 
-	on_add_click: function() {
+	on_add_click: function(appid) {
+        var name = this.options.collection_name;
+        var aUrl = "api/collection/" + name + "/add/" + appid;
 
+        var that = this;
+        $.ajax({
+            url: aUrl,
+            dataType: dataTypeOf(aUrl),
+            beforeSend: function(){
+                // TODO display 'creating...'
+            },
+            complete: function(){
+                fetch_json(that.inCollection);
+            }
+        });
 	}
 });
