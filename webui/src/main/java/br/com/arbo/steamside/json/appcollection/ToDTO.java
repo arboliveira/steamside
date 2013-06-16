@@ -21,6 +21,12 @@ public final class ToDTO {
 		this.appinfo = appinfo;
 	}
 
+	public AppDTO toDTO(final AppId appid) {
+		final AppName appname = nameOf(appid);
+		final AppDTO dto = new AppDTO(appid, appname);
+		return dto;
+	}
+
 	public AppCollectionDTO convert(final List<App> list) {
 		final List<AppDTO> dto = convertListAppToListAppDto(list);
 		final AppCollectionDTO results = new AppCollectionDTO();
@@ -41,9 +47,7 @@ public final class ToDTO {
 
 	private AppDTO toDto(final App app) {
 		final AppId appid = app.appid();
-		final AppName appname = nameOf(appid);
-		final AppDTO dto = new AppDTO(appid, appname);
-		return dto;
+		return toDTO(appid);
 	}
 
 	AppName nameOf(final AppId appid) {

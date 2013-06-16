@@ -22,6 +22,12 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_v
 @RequestMapping("search")
 public class SearchController implements ApplicationContextAware {
 
+	@RequestMapping(value = "search.json", params = { "query", "recent=true" })
+	@ResponseBody
+	public List<AppDTO> recent() {
+		return this.continues.continues();
+	}
+
 	@SuppressWarnings("static-method")
 	@RequestMapping(value = "search.json", params = "query")
 	@ResponseBody
@@ -29,12 +35,6 @@ public class SearchController implements ApplicationContextAware {
 			@RequestParam final String query) {
 		if (query == null) throw new NullPointerException();
 		return Search.search(query);
-	}
-
-	@RequestMapping(value = "search.json", params = "recent=true")
-	@ResponseBody
-	public List<AppDTO> recent() {
-		return this.continues.continues();
 	}
 
 	@Override

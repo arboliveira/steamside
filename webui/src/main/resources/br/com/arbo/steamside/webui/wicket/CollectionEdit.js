@@ -17,7 +17,7 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 
 var CollectionEditView = Backbone.View.extend({
 
-	render: function() {		"use strict";
+    render: function() {		"use strict";
 
 		var that = this;
 
@@ -48,8 +48,6 @@ var CollectionEditView = Backbone.View.extend({
             collection: inCollection
         });
 
-		collectionEditSearchResults.queryString = "recent=true";
-		fetch_json(collectionEditSearchResults);
 		fetch_json(inCollection);
 
         return this;
@@ -72,25 +70,32 @@ var CollectionEditView = Backbone.View.extend({
 		recent.remove();
 		var form = this.$("#form-command-box");
 		form.append(recent);
-		/*
 		viewCommandBox.emptyCommandHints();
+        /*
 		viewCommandBox.appendCommandHint(this.tileSearchHintContinueA);
 		viewCommandBox.appendCommandHint(this.tileSearchHintSearchA);
 		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintContinueB);
 		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintSearchB);
 		*/
 		viewCommandBox.input_query_focus();
+
+        this.prepareSearchRecent();
+        fetch_json(this.collectionEditSearchResults);
 	},
 
 	on_search_input_changed: function(view) {
-		/*
-		 var input = view.input_query_val();
+		var input = view.input_query_val();
 		if (input == '') {
+            this.$('.command-hint').text('recently played');
+            /*
 			this.tileSearchHintContinueA.show();
 			this.tileSearchHintContinueB.show();
 			this.tileSearchHintSearchA.hide();
 			this.tileSearchHintSearchB.hide();
+             */
 		} else {
+            this.$('.command-hint').text('search ' + input);
+             /*
 			this.tileSearchHintContinueA.hide();
 			this.tileSearchHintContinueB.hide();
 			this.tileSearchHintSearchA.show();
@@ -98,25 +103,29 @@ var CollectionEditView = Backbone.View.extend({
 			var selector = '#search-command-hint-subject';
 			this.tileSearchHintSearchA.find(selector).text(input);
 			this.tileSearchHintSearchB.find(selector).text(input);
+             */
 		}
-		*/
 	},
 
 	on_search_command: function(view) {
 		var input = view.input_query_val();
 		if (input == '') {
-			var recent = this.$('#input-recent');
-			recent.attr('value', 'true');
-			var form = this.$("#form-command-box");
-			var q = form.serialize();
-			this.collectionEditSearchResults.queryString = q;
+            this.prepareSearchRecent();
 		} else {
-			this.collectionEditSearchResults.query = input;
+			this.collectionEditSearchResults.setQuery(input);
 		}
 		fetch_json(this.collectionEditSearchResults);
 	},
 
-	on_search_command_alternate: function(view) {
+    prepareSearchRecent: function () {
+        var recent = this.$('#input-recent');
+        recent.attr('value', 'true');
+        var form = this.$("#form-command-box");
+        var q = form.serialize();
+        this.collectionEditSearchResults.setQueryString(q);
+    },
+
+    on_search_command_alternate: function(view) {
 		/*
 		 var input = view.input_query_val();
 		if (input == '') {

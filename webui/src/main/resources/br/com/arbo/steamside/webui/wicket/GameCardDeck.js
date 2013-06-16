@@ -302,6 +302,8 @@ var DeckView = Backbone.View.extend({
 
 	render: function() {		"use strict";
 		this.$el.empty();
+        this.$el.addClass('game-deck');
+
 		this.xCell = 0;
 		this.yRow = 0;
 		this.deck = new Deck();

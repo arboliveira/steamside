@@ -1,3 +1,7 @@
+.game-deck {
+    float: left; /* otherwise game deck refuses to coexist horizontally with side header  */
+}
+
 .game-row {
 	display:none;
 	float: right;
@@ -95,4 +99,22 @@
 .more-button-text {
 	font-family: monospace !important;
 	font-size: small !important;
+}
+
+.collection-name {
+    font-family: "Arvo";
+    font-size: large;
+    font-weight: bolder;
+    color: crimson;
+    padding: 0.25em;
+    margin: 0em;
+    text-align: center;
+    background-color: white;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+
+    border-top: 1px solid #999;
+    border-right: 2px solid #555;
+    border-bottom: 2px solid #555;
+    border-left: 1px solid #999;
 }

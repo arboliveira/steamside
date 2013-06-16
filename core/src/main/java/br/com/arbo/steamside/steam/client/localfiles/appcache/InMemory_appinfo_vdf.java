@@ -17,7 +17,7 @@ public class InMemory_appinfo_vdf {
 	public static class NotFound extends Exception {
 
 		public static NotFound appid(final String appid) {
-			return new NotFound("No app with id: " + appid);
+			return new NotFound("appinfo.vdf missing: " + appid);
 		}
 
 		private NotFound(final String message) {
