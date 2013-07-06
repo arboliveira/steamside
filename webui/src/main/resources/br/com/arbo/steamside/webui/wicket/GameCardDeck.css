@@ -15,11 +15,25 @@
 	background-color: lightgray;
 }
 
+.collection-tile {
+    background-color: navajowhite;
+    border-style: double;
+    border-top: 1px solid #999;
+    border-left: 1px solid #999;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right: 3px double #555;
+    border-bottom: 3px double #555;
+    padding: 5px;
+    float: left;
+    font-family: "Karla";
+}
+
 .game-tile {
 	float: left;
 	position: relative;
-	background-color: snow;
-	margin: 5px; 
+    margin: 5px;
+    background-color: snow;
 	border-top: 1px solid #999;
 	border-right: 2px solid #555;
 	border-bottom: 2px solid #555;

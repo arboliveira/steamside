@@ -5,11 +5,78 @@ var CollectionPickTile = {
 	}
 };
 
+var SteamsideCollectionInfo = Backbone.Model.extend({
+    name: function() {
+        return this.get('name');
+    }
+});
+
+var SteamsideCollectionInfoCollection = Backbone.Collection.extend({
+    model: SteamsideCollectionInfo,
+    url: 'api/collection/collections.json'
+});
+
+var SteamsideCollectionInfoView = Backbone.View.extend({
+    on_collection_change: null,
+
+    events: {
+        "click .collection-pick-one-name": "collectionClicked"
+    },
+
+    render: function() {
+        var that = this;
+        var choose_el = this.$el.find(".collection-pick-one-name");
+        choose_el.text(this.model.name());
+        return this;
+    },
+
+    collectionClicked: function(e) {
+        e.preventDefault();
+        var aUrl = this.model.link();
+        var that = this;
+        $.ajax({
+            url: aUrl,
+            dataType: dataTypeOf(aUrl),
+            beforeSend: function(){
+                // loading...
+            },
+            complete: function(){
+                that.category_changed();
+            }
+        });
+    },
+
+    category_changed: function() {
+        this.on_category_change();
+    }
+});
+
+var SteamsideCollectionInfoListView = Backbone.View.extend({
+
+    render: function() {
+        var container = this.$el;
+
+        var one_el = this.$(".collection-tile");
+        container.empty();
+
+        var that = this;
+        this.collection.each( function(one) {
+            var view = new SteamsideCollectionInfoView({
+                model: one,
+                el: one_el.clone(),
+                on_collection_change: that.options.on_collection_change
+            });
+            container.append(view.render().el);
+        });
+        return this;
+    }
+});
+
 var SteamCategory = Backbone.Model.extend({
-	name: function() {		"use strict";
+	name: function() {
 		return this.get('name');
 	},
-	link: function() {		"use strict";
+	link: function() {
 		return this.get('link');
 	}
 });
@@ -22,11 +89,11 @@ var SteamCategoryCollection = Backbone.Collection.extend({
 var SteamCategoryView = Backbone.View.extend({
 	on_category_change: null,
 
-	initialize: function() {		"use strict";
+	initialize: function() {
 		this.on_category_change = this.options.on_category_change;
 	},
 
-	render: function() { "use strict";
+	render: function() {
 		var that = this;
 		var button_el = this.$el.find(".collection-pick-steam-category-button");
 		button_el.text(this.model.name());
@@ -47,7 +114,7 @@ var SteamCategoryView = Backbone.View.extend({
 		return this;
 	},
 
-	categoryClicked: function(e) {		"use strict";
+	categoryClicked: function(e) {
 		e.preventDefault();
 		var aUrl = this.model.link();
 		var that = this;
@@ -71,11 +138,11 @@ var SteamCategoryView = Backbone.View.extend({
 var SteamCategoriesView = Backbone.View.extend({
 	on_category_change: null,
 
-	initialize: function() {		"use strict";
+	initialize: function() {
 		this.on_category_change = this.options.on_category_change;
 	},
 
-	render: function() { "use strict";
+	render: function() {
 		var container = this.$el;
 
 		var one_el = this.$(".collection-pick-steam-category");
