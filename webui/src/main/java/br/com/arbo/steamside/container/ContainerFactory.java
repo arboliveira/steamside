@@ -8,7 +8,6 @@ import org.picocontainer.PicoBuilder;
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.continues.Continue;
-import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
@@ -44,7 +43,6 @@ public class ContainerFactory {
 				.addComponent(Continue.class)
 				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
-				.addComponent(CollectionHomeXmlFile.class)
 		//
 		;
 

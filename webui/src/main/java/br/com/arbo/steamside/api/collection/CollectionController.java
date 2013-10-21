@@ -3,6 +3,8 @@ package br.com.arbo.steamside.api.collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -29,6 +31,8 @@ import br.com.arbo.steamside.types.CollectionName;
 public class CollectionController implements ApplicationContextAware {
 
 	private InMemory_appinfo_vdf appinfo;
+
+	@Inject
 	private CollectionHomeXmlFile data;
 
 	@RequestMapping(value = "collection.json", params = "name")
@@ -67,7 +71,6 @@ public class CollectionController implements ApplicationContextAware {
 				((SteamsideApplicationContext) applicationContext)
 						.getContainer();
 		this.appinfo = container.getComponent(InMemory_appinfo_vdf.class);
-		this.data = container.getComponent(CollectionHomeXmlFile.class);
 	}
 
 }

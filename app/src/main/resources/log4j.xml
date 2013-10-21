@@ -20,7 +20,11 @@
 		<level value="debug" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
-	<logger name="org.apache.wicket">
+	<logger name="org.springframework.web.context.support.StandardServletEnvironment">
+		<level value="debug" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="org.springframework.web.servlet">
 		<level value="debug" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
