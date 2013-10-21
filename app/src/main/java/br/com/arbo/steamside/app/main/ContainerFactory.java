@@ -5,6 +5,7 @@ import static org.picocontainer.Characteristics.CACHE;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
+import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.app.browser.LetJavaOpen;
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside;
@@ -21,7 +22,7 @@ import br.com.arbo.steamside.opersys.username.User;
 
 public class ContainerFactory {
 
-	public static MutablePicoContainer newContainer() {
+	public static MutablePicoContainerX newContainer() {
 		final MutablePicoContainer container = new PicoBuilder()
 				.withCaching()
 				.withLifecycle()
@@ -51,7 +52,7 @@ public class ContainerFactory {
 		//
 		;
 
-		return container;
+		return new MutablePicoContainerX(container);
 	}
 
 }

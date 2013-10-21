@@ -29,4 +29,8 @@ public class MutablePicoContainerX {
 	public MutablePicoContainerX(final MutablePicoContainer pico) {
 		this.pico = pico;
 	}
+
+	public void start() {
+		this.pico.start();
+	}
 }

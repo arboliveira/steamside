@@ -3,8 +3,6 @@ package br.com.arbo.steamside.app.main;
 import java.util.Arrays;
 import java.util.List;
 
-import org.picocontainer.MutablePicoContainer;
-
 import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 
 public class ExampleRunSteamsideMixAndMatch {
@@ -17,12 +15,11 @@ public class ExampleRunSteamsideMixAndMatch {
 				null
 				);
 
-		final MutablePicoContainer c = ContainerFactory.newContainer();
-		final MutablePicoContainerX cx = new MutablePicoContainerX(c);
+		final MutablePicoContainerX cx = ContainerFactory.newContainer();
 		for (final Part part : parts)
 			if (part != null) part.apply(cx);
 
-		new Main(c).start();
+		new Main(cx).start();
 	}
 
 }

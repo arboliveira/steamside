@@ -48,8 +48,7 @@ public class ContainerFactory {
 		//
 		;
 
-		final MutablePicoContainerX cx = new MutablePicoContainerX(container);
-		return cx;
+		return new MutablePicoContainerX(container);
 	}
 
 }
