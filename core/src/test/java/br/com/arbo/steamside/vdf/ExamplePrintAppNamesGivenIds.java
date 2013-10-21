@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.types.AppId;
 
 class ExamplePrintAppNamesGivenIds {

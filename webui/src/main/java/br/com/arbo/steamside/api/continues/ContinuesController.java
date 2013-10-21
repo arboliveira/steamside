@@ -14,7 +14,7 @@ import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.continues.Continue;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 
 @Controller
 @RequestMapping("continues")

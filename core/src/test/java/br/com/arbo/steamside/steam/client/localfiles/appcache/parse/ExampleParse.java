@@ -1,9 +1,11 @@
-package br.com.arbo.steamside.steam.client.localfiles.appcache;
+package br.com.arbo.steamside.steam.client.localfiles.appcache.parse;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import br.com.arbo.steamside.steam.client.localfiles.appcache.Parse_appinfo_vdf.ParseVisitor;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 
 public class ExampleParse {
 

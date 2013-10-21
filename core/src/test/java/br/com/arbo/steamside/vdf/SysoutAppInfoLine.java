@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.vdf;
 
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
 

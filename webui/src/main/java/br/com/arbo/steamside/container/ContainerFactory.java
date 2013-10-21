@@ -18,7 +18,7 @@ import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 

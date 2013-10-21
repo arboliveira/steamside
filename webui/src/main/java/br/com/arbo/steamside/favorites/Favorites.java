@@ -4,7 +4,7 @@ import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.Filter;
 import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.favorites.FavoritesOfUser.NotSet;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.types.Category;
 
 public class Favorites implements Filter {

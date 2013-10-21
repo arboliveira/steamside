@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steam.client.localfiles.appcache;
+package br.com.arbo.steamside.steam.client.localfiles.appcache.parse;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -12,7 +12,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.arbo.steamside.steam.client.localfiles.appcache.Parse_appinfo_vdf.ParseVisitor;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 
 public class Parse_appinfo_vdfTest {
 
@@ -41,7 +43,7 @@ public class Parse_appinfo_vdfTest {
 							final AppInfo appinfo) {
 						final String nameKnown = id_vs_name.get(appid);
 						if (nameKnown != null)
-							assertThat(appinfo.name.name, equalTo(nameKnown));
+							assertThat(appinfo.name().name, equalTo(nameKnown));
 					}
 				}).parse();
 	}

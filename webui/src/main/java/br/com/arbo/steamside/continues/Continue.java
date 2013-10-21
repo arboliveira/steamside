@@ -5,7 +5,7 @@ import br.com.arbo.steamside.apps.Filter;
 import br.com.arbo.steamside.apps.FilterKidsMode;
 import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.kids.KidsMode;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 
 public class Continue implements Filter {
 

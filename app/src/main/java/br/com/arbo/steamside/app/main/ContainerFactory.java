@@ -22,7 +22,12 @@ import br.com.arbo.steamside.opersys.username.User;
 public class ContainerFactory {
 
 	public static MutablePicoContainer newContainer() {
-		final MutablePicoContainer container = newContainerEmpty();
+		final MutablePicoContainer container = new PicoBuilder()
+				.withCaching()
+				.withLifecycle()
+				.build();
+		container.change(CACHE);
+
 		container.setName("Launch");
 
 		class ContainerStop implements Exit {
@@ -46,15 +51,6 @@ public class ContainerFactory {
 		//
 		;
 
-		return container;
-	}
-
-	public static MutablePicoContainer newContainerEmpty() {
-		final MutablePicoContainer container = new PicoBuilder()
-				.withCaching()
-				.withLifecycle()
-				.build();
-		container.change(CACHE);
 		return container;
 	}
 

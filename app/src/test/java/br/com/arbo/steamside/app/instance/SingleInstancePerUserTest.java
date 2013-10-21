@@ -4,15 +4,12 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.picocontainer.MutablePicoContainer;
 
 import br.com.arbo.steamside.app.browser.WebBrowser;
-import br.com.arbo.steamside.app.instance.DetectSteamside;
+import br.com.arbo.steamside.app.injection.Container;
+import br.com.arbo.steamside.app.injection.Containers;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
-import br.com.arbo.steamside.app.instance.LimitPossiblePorts;
-import br.com.arbo.steamside.app.instance.SingleInstancePerUser;
 import br.com.arbo.steamside.app.jetty.LocalWebserver;
-import br.com.arbo.steamside.app.main.ContainerFactory;
 
 public class SingleInstancePerUserTest {
 
@@ -68,12 +65,13 @@ public class SingleInstancePerUserTest {
 		m.assertIsSatisfied();
 	}
 
-	private MutablePicoContainer newContainer() {
-		final MutablePicoContainer container =
-				ContainerFactory.newContainerEmpty();
+	private Container newContainer() {
+		final Container container =
+				Containers.newContainer();
 		container
 				.addComponent(SingleInstancePerUser.class)
-				.addComponent(LimitPossiblePorts.class, new LimitPossiblePorts(2))
+				.addComponent(LimitPossiblePorts.class,
+						new LimitPossiblePorts(2))
 				.addComponent(DetectSteamside.class, detect)
 				.addComponent(WebBrowser.class, browser)
 				.addComponent(LocalWebserver.class, webserver)

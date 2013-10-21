@@ -8,7 +8,7 @@ import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.container.ContainerFactory;
 import br.com.arbo.steamside.json.app.AppDTO;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 
 public class ExampleDumpContinues {
 

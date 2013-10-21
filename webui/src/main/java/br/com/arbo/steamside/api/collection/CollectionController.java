@@ -20,7 +20,7 @@ import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTO;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 

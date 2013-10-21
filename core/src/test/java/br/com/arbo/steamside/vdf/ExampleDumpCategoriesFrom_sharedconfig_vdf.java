@@ -5,7 +5,7 @@ import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.Category;

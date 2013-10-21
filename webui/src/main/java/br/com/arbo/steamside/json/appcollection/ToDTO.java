@@ -5,8 +5,8 @@ import java.util.List;
 
 import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.json.app.AppDTO;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf.NotFound;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
 

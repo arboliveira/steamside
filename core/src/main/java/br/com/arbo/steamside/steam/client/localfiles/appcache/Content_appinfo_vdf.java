@@ -12,7 +12,7 @@ import br.com.arbo.steamside.vdf.KeyValueVisitor;
 
 public class Content_appinfo_vdf {
 
-	interface Content_appinfo_vdf_Visitor extends KeyValueVisitor {
+	public interface Content_appinfo_vdf_Visitor extends KeyValueVisitor {
 
 		void onApp(int app_id);
 

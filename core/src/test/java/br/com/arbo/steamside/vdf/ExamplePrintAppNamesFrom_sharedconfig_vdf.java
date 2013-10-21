@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.vdf;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.web.AppNameFromSteamStore;
 

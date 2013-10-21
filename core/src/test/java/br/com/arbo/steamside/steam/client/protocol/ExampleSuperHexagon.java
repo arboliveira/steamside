@@ -2,7 +2,7 @@ package br.com.arbo.steamside.steam.client.protocol;
 
 import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.rungame.RunGame;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.types.AppId;
 

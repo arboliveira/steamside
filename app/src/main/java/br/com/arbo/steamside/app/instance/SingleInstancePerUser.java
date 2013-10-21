@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.app.instance;
 
+import javax.inject.Inject;
+
 import org.picocontainer.Startable;
 
 import br.com.arbo.steamside.app.browser.WebBrowser;
@@ -9,6 +11,7 @@ import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 
 public class SingleInstancePerUser implements Startable {
 
+	@Inject
 	public SingleInstancePerUser(
 			final DetectSteamside detect,
 			final LimitPossiblePorts rangesize,
@@ -54,16 +57,16 @@ public class SingleInstancePerUser implements Startable {
 	private void consider(final int p) throws SteamsideUpAndRunning {
 		final Situation situation = detect.detect(p);
 		switch (situation) {
-		case NotHere:
-			freefound(p);
-			return;
-		case AlreadyRunningForThisUser:
-			this.browser.landing(p);
-			throw new SteamsideUpAndRunning();
-		case RunningOnDifferentUser:
-			return;
-		default:
-			throw new IllegalStateException();
+			case NotHere:
+				freefound(p);
+				return;
+			case AlreadyRunningForThisUser:
+				this.browser.landing(p);
+				throw new SteamsideUpAndRunning();
+			case RunningOnDifferentUser:
+				return;
+			default:
+				throw new IllegalStateException();
 		}
 	}
 
