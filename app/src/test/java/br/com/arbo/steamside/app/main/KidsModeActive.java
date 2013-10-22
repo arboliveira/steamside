@@ -4,7 +4,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.Container;
 import br.com.arbo.steamside.kids.KidsMode;
 
 class KidsModeActive implements Part {
@@ -23,7 +23,7 @@ class KidsModeActive implements Part {
 	}
 
 	@Override
-	public void apply(final MutablePicoContainerX c) {
+	public void apply(final Container c) {
 		c.replaceComponent(KidsMode.class, mockKidsMode());
 	}
 

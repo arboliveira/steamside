@@ -2,14 +2,14 @@ package br.com.arbo.steamside.app.instance;
 
 import javax.inject.Inject;
 
-import org.picocontainer.Startable;
+import org.springframework.context.Lifecycle;
 
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
 import br.com.arbo.steamside.app.jetty.LocalWebserver;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 
-public class SingleInstancePerUser implements Startable {
+public class SingleInstancePerUser implements Lifecycle {
 
 	@Inject
 	public SingleInstancePerUser(
@@ -30,11 +30,18 @@ public class SingleInstancePerUser implements Startable {
 		} catch (final SteamsideUpAndRunning e) {
 			// all right!
 		}
+		this.running = true;
 	}
 
 	@Override
 	public void stop() {
 		this.webserver.stop();
+		this.running = false;
+	}
+
+	@Override
+	public boolean isRunning() {
+		return running;
 	}
 
 	private void attemptRepeatedly() throws SteamsideUpAndRunning {
@@ -91,6 +98,7 @@ public class SingleInstancePerUser implements Startable {
 			this.firstfreefound = Integer.valueOf(p);
 	}
 
+	private boolean running;
 	private Integer firstfreefound;
 
 	private final DetectSteamside detect;

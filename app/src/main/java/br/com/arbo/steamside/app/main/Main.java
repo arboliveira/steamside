@@ -1,12 +1,12 @@
 package br.com.arbo.steamside.app.main;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.Container;
 
 public class Main {
 
-	private final MutablePicoContainerX container;
+	private final Container container;
 
-	public Main(final MutablePicoContainerX container) {
+	public Main(final Container container) {
 		this.container = container;
 	}
 

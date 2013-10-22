@@ -1,13 +1,9 @@
 package br.com.arbo.steamside.app.main;
 
-import static org.picocontainer.Characteristics.CACHE;
-
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoBuilder;
-
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
 import br.com.arbo.steamside.app.browser.LetJavaOpen;
 import br.com.arbo.steamside.app.browser.WebBrowser;
+import br.com.arbo.steamside.app.injection.Container;
+import br.com.arbo.steamside.app.injection.Containers;
 import br.com.arbo.steamside.app.instance.DetectSteamside;
 import br.com.arbo.steamside.app.instance.FromURL;
 import br.com.arbo.steamside.app.instance.LimitPossiblePorts;
@@ -22,14 +18,8 @@ import br.com.arbo.steamside.opersys.username.User;
 
 public class ContainerFactory {
 
-	public static MutablePicoContainerX newContainer() {
-		final MutablePicoContainer container = new PicoBuilder()
-				.withCaching()
-				.withLifecycle()
-				.build();
-		container.change(CACHE);
-
-		container.setName("Launch");
+	public static Container newContainer() {
+		final Container container = Containers.newContainer();
 
 		class ContainerStop implements Exit {
 
@@ -52,7 +42,7 @@ public class ContainerFactory {
 		//
 		;
 
-		return new MutablePicoContainerX(container);
+		return container;
 	}
 
 }

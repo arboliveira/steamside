@@ -3,7 +3,7 @@ package br.com.arbo.steamside.app.main;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.Container;
 
 public class ExampleRunSteamsideMixAndMatch {
 
@@ -15,7 +15,7 @@ public class ExampleRunSteamsideMixAndMatch {
 				null
 				);
 
-		final MutablePicoContainerX cx = ContainerFactory.newContainer();
+		final Container cx = ContainerFactory.newContainer();
 		for (final Part part : parts)
 			if (part != null) part.apply(cx);
 

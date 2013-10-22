@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.BindException;
 import java.net.URL;
 
+import javax.inject.Inject;
+
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.bio.SocketConnector;
@@ -57,6 +59,18 @@ public class Jetty implements LocalWebserver {
 		doStart();
 		xtWaitForUserToPressEnterAndExit();
 		Instructions.started(portInUse);
+	}
+
+	@Override
+	public void stop() {
+		try {
+			server.stop();
+			server.join();
+		} catch (final RuntimeException e) {
+			throw e;
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void addServlet_html(
@@ -116,18 +130,6 @@ public class Jetty implements LocalWebserver {
 		void setup(ServletHolder servlet);
 	}
 
-	@Override
-	public void stop() {
-		try {
-			server.stop();
-			server.join();
-		} catch (final RuntimeException e) {
-			throw e;
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	private void doStart() {
 		try {
 			server.start();
@@ -174,6 +176,7 @@ public class Jetty implements LocalWebserver {
 
 	static boolean DEV_MODE = true;
 
+	@Inject
 	public Jetty(final User username, final KidsMode kidsmode, final Exit exit) {
 		this.username = username;
 		this.kidsmode = kidsmode;

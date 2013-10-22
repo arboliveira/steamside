@@ -1,11 +1,11 @@
 package br.com.arbo.steamside.app.main;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.Container;
 
 public class NoCollections implements Part {
 
 	@Override
-	public void apply(final MutablePicoContainerX c) {
+	public void apply(final Container c) {
 		// TODO Auto-generated method stub
 
 	}

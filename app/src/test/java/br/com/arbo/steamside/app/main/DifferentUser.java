@@ -4,13 +4,13 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.Container;
 import br.com.arbo.steamside.opersys.username.User;
 
 class DifferentUser implements Part {
 
 	@Override
-	public void apply(final MutablePicoContainerX c) {
+	public void apply(final Container c) {
 		c.replaceComponent(User.class, mockDifferentUser());
 	}
 

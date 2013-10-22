@@ -1,8 +1,8 @@
 package br.com.arbo.steamside.app.main;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.Container;
 
 public interface Part {
 
-	void apply(MutablePicoContainerX c);
+	void apply(Container c);
 }

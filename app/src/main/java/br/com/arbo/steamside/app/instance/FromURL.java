@@ -4,14 +4,15 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.IOUtils;
 
 import br.com.arbo.steamside.opersys.username.User;
 
 public class FromURL implements DetectSteamside {
 
-	private final User username;
-
+	@Inject
 	public FromURL(final User username) {
 		this.username = username;
 	}
@@ -55,5 +56,7 @@ public class FromURL implements DetectSteamside {
 			throw new RuntimeException(e1);
 		}
 	}
+
+	private final User username;
 
 }
