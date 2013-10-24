@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -28,13 +29,17 @@ public class InMemory_appinfo_vdf {
 	}
 
 	private void populate() throws IOException {
-		final FileInputStream f =
-				new FileInputStream(File_appinfo_vdf.appinfo_vdf());
+		final FileInputStream f = open_File_appinfo_vdf();
 		try {
 			populateFrom(new Content_appinfo_vdf(f));
 		} finally {
 			f.close();
 		}
+	}
+
+	private FileInputStream open_File_appinfo_vdf()
+			throws FileNotFoundException {
+		return new FileInputStream(File_appinfo_vdf.appinfo_vdf());
 	}
 
 	private void populateFrom(final Content_appinfo_vdf content) {
