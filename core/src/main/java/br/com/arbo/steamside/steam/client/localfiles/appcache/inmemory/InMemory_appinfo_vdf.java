@@ -37,9 +37,12 @@ public class InMemory_appinfo_vdf {
 		}
 	}
 
-	private FileInputStream open_File_appinfo_vdf()
-			throws FileNotFoundException {
-		return new FileInputStream(File_appinfo_vdf.appinfo_vdf());
+	private static FileInputStream open_File_appinfo_vdf() {
+		try {
+			return new FileInputStream(File_appinfo_vdf.appinfo_vdf());
+		} catch (final FileNotFoundException e) {
+			throw new SteamNotInstalled(e);
+		}
 	}
 
 	private void populateFrom(final Content_appinfo_vdf content) {
