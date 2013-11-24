@@ -1,9 +1,10 @@
 package br.com.arbo.steamside.app.main;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import br.com.arbo.steamside.app.browser.LetJavaOpen;
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.injection.Container;
-import br.com.arbo.steamside.app.injection.Containers;
 import br.com.arbo.steamside.app.instance.DetectSteamside;
 import br.com.arbo.steamside.app.instance.FromURL;
 import br.com.arbo.steamside.app.instance.LimitPossiblePorts;
@@ -19,16 +20,8 @@ import br.com.arbo.steamside.opersys.username.User;
 public class ContainerFactory {
 
 	public static Container newContainer() {
-		final Container container = Containers.newContainer();
-
-		class ContainerStop implements Exit {
-
-			@Override
-			public void exit() {
-				container.stop();
-			}
-
-		}
+		final Container container = new Container(
+				new AnnotationConfigApplicationContext());
 
 		container
 				.addComponent(SingleInstancePerUser.class)
@@ -37,8 +30,10 @@ public class ContainerFactory {
 				.addComponent(LocalWebserver.class, Jetty.class)
 				.addComponent(WebBrowser.class, LetJavaOpen.class)
 				.addComponent(KidsMode.class, FromUsername.class)
-				.addComponent(User.class, FromJava.class)
-				.addComponent(Exit.class, new ContainerStop())
+				.addComponent(User.class, FromJava.class);
+		final ContainerStop instance = new ContainerStop(container);
+		container
+				.addComponent(Exit.class, instance)
 		//
 		;
 

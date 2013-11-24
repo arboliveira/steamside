@@ -4,10 +4,10 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.injection.Container;
-import br.com.arbo.steamside.app.injection.Containers;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
 import br.com.arbo.steamside.app.jetty.LocalWebserver;
 
@@ -67,7 +67,7 @@ public class SingleInstancePerUserTest {
 
 	private Container newContainer() {
 		final Container container =
-				Containers.newContainer();
+				new Container(new AnnotationConfigApplicationContext());
 		container
 				.addComponent(SingleInstancePerUser.class)
 				.addComponent(LimitPossiblePorts.class,

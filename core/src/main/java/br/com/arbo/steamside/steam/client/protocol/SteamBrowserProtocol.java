@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.SystemUtils;
 
 import br.com.arbo.steamside.opersys.username.User;
@@ -12,8 +14,7 @@ import br.com.arbo.steamside.steam.client.executable.KillSteamIfAlreadyRunningIn
 
 public class SteamBrowserProtocol {
 
-	private final KillSteamIfAlreadyRunningInADifferentUserSession clearance;
-
+	@Inject
 	public SteamBrowserProtocol(final User username) {
 		this.clearance =
 				new KillSteamIfAlreadyRunningInADifferentUserSession(username);
@@ -44,5 +45,7 @@ public class SteamBrowserProtocol {
 		if (!SystemUtils.IS_OS_LINUX) return false;
 		return true;
 	}
+
+	private final KillSteamIfAlreadyRunningInADifferentUserSession clearance;
 
 }

@@ -12,12 +12,12 @@ import org.eclipse.jetty.server.bio.SocketConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
-import br.com.arbo.steamside.container.ContainerFactory;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
@@ -44,10 +44,8 @@ public class Jetty implements LocalWebserver {
 		final ServletContextHandler context = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
 
-		final MutablePicoContainerX container = newContainer();
-
 		// REST api
-		addServlet_api(context, container);
+		addServlet_api(context);
 
 		// Static resources
 		final String root_of_resources = root_of_resources();
@@ -103,26 +101,36 @@ public class Jetty implements LocalWebserver {
 		return resource.toExternalForm();
 	}
 
-	private MutablePicoContainerX newContainer() {
-		final MutablePicoContainerX cx = ContainerFactory.newContainer();
-		cx.replaceComponent(KidsMode.class, this.kidsmode);
-		cx.replaceComponent(User.class, this.username);
-		cx.replaceComponent(Exit.class, this.exit);
-		return cx;
+	private void finishContainer(final ContainerWeb cx) {
+		DirtyHackForSpringWeb.KidsModeExistingInstance.instance = this.kidsmode;
+		DirtyHackForSpringWeb.UserExistingInstance.instance = this.username;
+		DirtyHackForSpringWeb.ExitExistingInstance.instance = this.exit;
+		cx.replaceComponent(KidsMode.class,
+				DirtyHackForSpringWeb.KidsModeExistingInstance.class);
+		cx.replaceComponent(User.class,
+				DirtyHackForSpringWeb.UserExistingInstance.class);
+		cx.addComponent(Exit.class,
+				DirtyHackForSpringWeb.ExitExistingInstance.class);
+		cx.flush();
 	}
 
-	private static void addServlet_api(
-			final ServletContextHandler context,
-			final MutablePicoContainerX container) {
+	private void addServlet_api(
+			final ServletContextHandler context) {
+		final WebApplicationContext springContext = newSpringContext();
 		final ServletHolder servletHolder =
-				new ServletHolder(
-						new DispatcherServlet(
-								new SteamsideApplicationContext(
-										container)));
+				new ServletHolder(new DispatcherServlet(springContext));
 		context.addServlet(servletHolder,
 				String.format(
 						"/%s/*",
 						br.com.arbo.steamside.mapping.Api.api));
+	}
+
+	private WebApplicationContext newSpringContext() {
+		final SteamsideApplicationContext springContext =
+				new SteamsideApplicationContext();
+		final ContainerWeb container = springContext.getContainer();
+		finishContainer(container);
+		return springContext;
 	}
 
 	interface ServletHolderSetup {

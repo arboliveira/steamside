@@ -1,11 +1,8 @@
 package br.com.arbo.steamside.container;
 
-import static org.picocontainer.Characteristics.CACHE;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoBuilder;
-
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.continues.Continue;
 import br.com.arbo.steamside.favorites.Favorites;
@@ -23,14 +20,15 @@ import br.com.arbo.steamside.steam.store.AppNameFactory;
 
 public class ContainerFactory {
 
-	public static MutablePicoContainerX newContainer() {
-		final MutablePicoContainer container = new PicoBuilder()
-				.withCaching()
-				.withLifecycle()
-				.build();
-		container.change(CACHE);
+	public static ContainerWeb newContainer(
+			final AnnotationConfigWebApplicationContext ctx
+			) {
+		final ContainerWeb c = new ContainerWeb(ctx);
+		addComponents(c);
+		return c;
+	}
 
-		container.setName("Steamside");
+	private static void addComponents(final ContainerWeb container) {
 		container
 				.addComponent(KidsMode.class, FromUsername.class)
 				.addComponent(User.class, FromJava.class)
@@ -45,8 +43,6 @@ public class ContainerFactory {
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
 		//
 		;
-
-		return new MutablePicoContainerX(container);
 	}
 
 }

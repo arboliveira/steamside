@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
+import javax.inject.Inject;
+
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
@@ -19,6 +21,7 @@ public final class AppNameFromLocalFiles implements AppNameFactory {
 
 	private final InMemory_appinfo_vdf appinfo_vdf;
 
+	@Inject
 	public AppNameFromLocalFiles(final InMemory_appinfo_vdf appinfo_vdf) {
 		this.appinfo_vdf = appinfo_vdf;
 	}

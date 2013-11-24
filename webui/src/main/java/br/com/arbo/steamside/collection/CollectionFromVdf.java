@@ -3,6 +3,8 @@ package br.com.arbo.steamside.collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.apps.App;
@@ -12,13 +14,6 @@ import br.com.arbo.steamside.apps.Filter;
 import br.com.arbo.steamside.container.SharedConfigConsume;
 
 public class CollectionFromVdf {
-
-	private final SharedConfigConsume sharedconfig;
-
-	public CollectionFromVdf(
-			final SharedConfigConsume sharedconfig) {
-		this.sharedconfig = sharedconfig;
-	}
 
 	public List<App> query(@NonNull final Filter filter) {
 		final Apps apps = sharedconfig.data().apps();
@@ -37,4 +32,13 @@ public class CollectionFromVdf {
 
 		return list;
 	}
+
+	private final SharedConfigConsume sharedconfig;
+
+	@Inject
+	public CollectionFromVdf(
+			final SharedConfigConsume sharedconfig) {
+		this.sharedconfig = sharedconfig;
+	}
+
 }

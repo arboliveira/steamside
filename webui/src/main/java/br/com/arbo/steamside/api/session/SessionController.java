@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.container.SharedConfigConsume;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
@@ -30,7 +30,7 @@ public class SessionController implements ApplicationContextAware {
 	public void setApplicationContext(
 			final ApplicationContext applicationContext)
 			throws BeansException {
-		final MutablePicoContainerX container =
+		final ContainerWeb container =
 				((SteamsideApplicationContext) applicationContext)
 						.getContainer();
 		this.username = container.getComponent(User.class);

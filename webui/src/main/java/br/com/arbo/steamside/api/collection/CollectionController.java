@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.data.collections.NotFound;
@@ -67,7 +67,7 @@ public class CollectionController implements ApplicationContextAware {
 	public void setApplicationContext(
 			final ApplicationContext applicationContext)
 			throws BeansException {
-		final MutablePicoContainerX container =
+		final ContainerWeb container =
 				((SteamsideApplicationContext) applicationContext)
 						.getContainer();
 		this.appinfo = container.getComponent(InMemory_appinfo_vdf.class);

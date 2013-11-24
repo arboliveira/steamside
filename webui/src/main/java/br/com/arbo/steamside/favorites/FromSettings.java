@@ -1,15 +1,11 @@
 package br.com.arbo.steamside.favorites;
 
+import javax.inject.Inject;
+
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.types.Category;
 
 public class FromSettings implements FavoritesOfUser {
-
-	private final User user;
-
-	public FromSettings(final User user) {
-		this.user = user;
-	}
 
 	@Override
 	public Category favorites() throws NotSet {
@@ -17,4 +13,12 @@ public class FromSettings implements FavoritesOfUser {
 			return new Category("+Favorites");
 		throw new NotSet();
 	}
+
+	private final User user;
+
+	@Inject
+	public FromSettings(final User user) {
+		this.user = user;
+	}
+
 }

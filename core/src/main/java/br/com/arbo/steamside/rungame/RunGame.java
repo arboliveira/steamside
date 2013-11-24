@@ -3,6 +3,8 @@ package br.com.arbo.steamside.rungame;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.Validate;
 
 import br.com.arbo.processes.seek.Criteria;
@@ -17,9 +19,7 @@ import br.com.arbo.steamside.types.AppId;
 
 public class RunGame {
 
-	private final SteamBrowserProtocol steam;
-	private final InMemory_appinfo_vdf appinfo_vdf;
-
+	@Inject
 	public RunGame(
 			final SteamBrowserProtocol steam,
 			final InMemory_appinfo_vdf appinfo_vdf) {
@@ -102,5 +102,8 @@ public class RunGame {
 			}
 		}
 	}
+
+	private final SteamBrowserProtocol steam;
+	private final InMemory_appinfo_vdf appinfo_vdf;
 
 }

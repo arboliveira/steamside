@@ -20,6 +20,18 @@
 		<level value="debug" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
+	<logger name="org.springframework.core.env.StandardEnvironment">
+		<level value="debug" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="org.springframework.context">
+		<level value="debug" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="org.springframework.beans.factory">
+		<level value="debug" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
 	<logger name="org.springframework.web.context.support.StandardServletEnvironment">
 		<level value="debug" />
 		<appender-ref ref="CONSOLE" />

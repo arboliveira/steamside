@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.spring.SteamsideApplicationContext;
 import br.com.arbo.steamside.types.AppId;
@@ -32,7 +32,7 @@ public class AppController implements ApplicationContextAware {
 	public void setApplicationContext(
 			final ApplicationContext applicationContext)
 			throws BeansException {
-		final MutablePicoContainerX container =
+		final ContainerWeb container =
 				((SteamsideApplicationContext) applicationContext)
 						.getContainer();
 		this.rungame = container.getComponent(RunGame.class);

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.container.SharedConfigConsume;
@@ -42,7 +42,7 @@ public class SteamCategoriesController implements ApplicationContextAware {
 	public void setApplicationContext(
 			final ApplicationContext applicationContext)
 			throws BeansException {
-		final MutablePicoContainerX container =
+		final ContainerWeb container =
 				((SteamsideApplicationContext) applicationContext)
 						.getContainer();
 		this.sharedconfig = container.getComponent(SharedConfigConsume.class);

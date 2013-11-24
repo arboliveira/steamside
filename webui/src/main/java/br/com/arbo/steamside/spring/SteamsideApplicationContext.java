@@ -1,29 +1,23 @@
 package br.com.arbo.steamside.spring;
 
-import java.util.ArrayList;
-
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import br.com.arbo.org.picocontainer.MutablePicoContainerX;
+import br.com.arbo.steamside.app.injection.ContainerWeb;
+import br.com.arbo.steamside.container.ContainerFactory;
 import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 
 public class SteamsideApplicationContext
 		extends AnnotationConfigWebApplicationContext {
 
-	private final MutablePicoContainerX container;
+	private final ContainerWeb container;
 
-	public SteamsideApplicationContext(final MutablePicoContainerX container) {
-		this.container = container;
-		final ArrayList<Class< ? >> annotatedClasses =
-				new ArrayList<Class< ? >>(2);
-		annotatedClasses.add(WebConfig.class);
-		annotatedClasses.add(CollectionHomeXmlFile.class);
-		final Class< ? >[] array = annotatedClasses.toArray(
-				new Class< ? >[] {});
-		this.register(array);
+	public SteamsideApplicationContext() {
+		this.container = ContainerFactory.newContainer(this);
+		this.container.addComponent(WebConfig.class);
+		this.container.addComponent(CollectionHomeXmlFile.class);
 	}
 
-	public MutablePicoContainerX getContainer() {
+	public ContainerWeb getContainer() {
 		return container;
 	}
 }
