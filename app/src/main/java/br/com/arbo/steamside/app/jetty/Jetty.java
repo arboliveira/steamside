@@ -13,15 +13,18 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
+import br.com.arbo.steamside.container.ContainerFactory;
+import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
-import br.com.arbo.steamside.spring.SteamsideApplicationContext;
+import br.com.arbo.steamside.spring.WebConfig;
 
 public class Jetty implements LocalWebserver {
 
@@ -126,9 +129,12 @@ public class Jetty implements LocalWebserver {
 	}
 
 	private WebApplicationContext newSpringContext() {
-		final SteamsideApplicationContext springContext =
-				new SteamsideApplicationContext();
-		final ContainerWeb container = springContext.getContainer();
+		final AnnotationConfigWebApplicationContext springContext =
+				new AnnotationConfigWebApplicationContext();
+		final ContainerWeb container =
+				ContainerFactory.newContainer(springContext);
+		container.addComponent(WebConfig.class);
+		container.addComponent(CollectionHomeXmlFile.class);
 		finishContainer(container);
 		return springContext;
 	}

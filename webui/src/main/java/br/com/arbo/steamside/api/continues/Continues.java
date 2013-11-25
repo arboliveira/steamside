@@ -3,6 +3,8 @@ package br.com.arbo.steamside.api.continues;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.apps.App;
@@ -28,6 +30,7 @@ public class Continues {
 		// TODO Prioritize games launched by current user
 	}
 
+	@Inject
 	public Continues(
 			@NonNull final Continue continues,
 			final InMemory_appinfo_vdf appinfo,

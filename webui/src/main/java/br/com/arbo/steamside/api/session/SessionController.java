@@ -1,21 +1,18 @@
 package br.com.arbo.steamside.api.session;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.container.SharedConfigConsume;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
-import br.com.arbo.steamside.spring.SteamsideApplicationContext;
 
 @Controller
 @RequestMapping("session")
-public class SessionController implements ApplicationContextAware {
+public class SessionController {
 
 	@RequestMapping("session.json")
 	@ResponseBody
@@ -26,21 +23,10 @@ public class SessionController implements ApplicationContextAware {
 				String.valueOf(gamesOwned));
 	}
 
-	@Override
-	public void setApplicationContext(
-			final ApplicationContext applicationContext)
-			throws BeansException {
-		final ContainerWeb container =
-				((SteamsideApplicationContext) applicationContext)
-						.getContainer();
-		this.username = container.getComponent(User.class);
-		this.kidsmode = container.getComponent(KidsMode.class);
-		this.config =
-				container
-						.getComponent(SharedConfigConsume.class);
-	}
-
+	@Inject
 	private User username;
+	@Inject
 	private KidsMode kidsmode;
+	@Inject
 	private SharedConfigConsume config;
 }

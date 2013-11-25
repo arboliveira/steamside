@@ -6,34 +6,24 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTO;
-import br.com.arbo.steamside.spring.SteamsideApplicationContext;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 @Controller
 @RequestMapping("collection")
-public class CollectionController implements ApplicationContextAware {
-
-	private InMemory_appinfo_vdf appinfo;
-
-	@Inject
-	private CollectionHomeXmlFile data;
+public class CollectionController {
 
 	@RequestMapping(value = "collection.json", params = "name")
 	@ResponseBody
@@ -63,14 +53,10 @@ public class CollectionController implements ApplicationContextAware {
 		data.add(new CollectionName(name), new AppId(appid));
 	}
 
-	@Override
-	public void setApplicationContext(
-			final ApplicationContext applicationContext)
-			throws BeansException {
-		final ContainerWeb container =
-				((SteamsideApplicationContext) applicationContext)
-						.getContainer();
-		this.appinfo = container.getComponent(InMemory_appinfo_vdf.class);
-	}
+	@Inject
+	private InMemory_appinfo_vdf appinfo;
+
+	@Inject
+	private CollectionHomeXmlFile data;
 
 }

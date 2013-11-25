@@ -3,23 +3,20 @@ package br.com.arbo.steamside.api.steamcategories;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.container.SharedConfigConsume;
-import br.com.arbo.steamside.spring.SteamsideApplicationContext;
 import br.com.arbo.steamside.types.Category;
 
 @Controller
 @RequestMapping("steam-categories")
-public class SteamCategoriesController implements ApplicationContextAware {
+public class SteamCategoriesController {
 
 	@RequestMapping("steam-categories.json")
 	@ResponseBody
@@ -38,16 +35,7 @@ public class SteamCategoriesController implements ApplicationContextAware {
 		return dto;
 	}
 
-	@Override
-	public void setApplicationContext(
-			final ApplicationContext applicationContext)
-			throws BeansException {
-		final ContainerWeb container =
-				((SteamsideApplicationContext) applicationContext)
-						.getContainer();
-		this.sharedconfig = container.getComponent(SharedConfigConsume.class);
-	}
-
+	@Inject
 	private SharedConfigConsume sharedconfig;
 
 }

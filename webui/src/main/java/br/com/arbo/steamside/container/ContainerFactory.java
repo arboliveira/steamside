@@ -2,6 +2,7 @@ package br.com.arbo.steamside.container;
 
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
+import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.continues.Continue;
@@ -39,6 +40,7 @@ public class ContainerFactory {
 				.addComponent(SharedConfigConsume.class)
 				.addComponent(CollectionFromVdf.class)
 				.addComponent(Continue.class)
+				.addComponent(Continues.class)
 				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
 		//
