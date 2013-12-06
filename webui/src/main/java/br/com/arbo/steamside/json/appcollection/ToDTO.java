@@ -36,13 +36,19 @@ public final class ToDTO {
 
 	private List<AppDTO> convertListAppToListAppDto(final List<App> list) {
 		final List<AppDTO> dto = new ArrayList<AppDTO>(list.size());
-		int i = 0;
-		for (final App app : list) {
-			i++;
-			if (i > limit) break;
-			dto.add(toDto(app));
-		}
+		populate(list, dto);
 		return dto;
+	}
+
+	private void populate(final List<App> list, final List<AppDTO> dto) {
+		for (final App app : list) {
+			if (dto.size() > limit) return;
+			try {
+				dto.add(toDto(app));
+			} catch (final NotFound ex) {
+				// do nothing
+			}
+		}
 	}
 
 	private AppDTO toDto(final App app) {
@@ -51,11 +57,7 @@ public final class ToDTO {
 	}
 
 	AppName nameOf(final AppId appid) {
-		try {
-			return appinfo.get(appid.appid).name();
-		} catch (final NotFound e) {
-			return new AppName(e.getMessage());
-		}
+		return appinfo.get(appid.appid).name();
 	}
 
 }

@@ -12,7 +12,6 @@ import br.com.arbo.processes.seek.ProcessSeeker;
 import br.com.arbo.processes.seek.ProcessSeekerFactory;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.steam.client.protocol.C_rungameid;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.types.AppId;
@@ -47,12 +46,8 @@ public class RunGame {
 	}
 
 	private String findExecutableName(final AppId appid)
-			throws NotAvailableOnThisPlatform {
-		try {
-			return appinfo_vdf.get(appid.appid).executable();
-		} catch (final NotFound e) {
-			throw new RuntimeException(e);
-		}
+	{
+		return appinfo_vdf.get(appid.appid).executable();
 	}
 
 	private static boolean waitUntilItsUp(final Semaphore s, final Thread t) {

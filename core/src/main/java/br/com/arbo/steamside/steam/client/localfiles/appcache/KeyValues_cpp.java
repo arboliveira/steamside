@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
+import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_INT;
 import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_NONE;
 import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_NUMTYPES;
 import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_STRING;
@@ -7,7 +8,12 @@ import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 import br.com.arbo.steamside.vdf.Region;
 
+/**
+https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/tier1/KeyValues.cpp
+ */
 public class KeyValues_cpp {
+
+	public static final int KEYVALUES_TOKEN_SIZE = 4096;
 
 	public static void readAsBinary(
 			final ByteBufferX buffer,
@@ -41,11 +47,15 @@ public class KeyValues_cpp {
 				visitor.onSubRegion(name, new RegionImpl());
 				break;
 			case TYPE_STRING:
-				final String value = buffer.read__null_terminated_string();
-				visitor.onKeyValue(name, value);
+				final String string = buffer.read__null_terminated_string();
+				visitor.onKeyValue(name, string);
+				break;
+			case TYPE_INT:
+				final int int32 = buffer.read__uint32_t();
+				visitor.onKeyValue(name, String.valueOf(int32));
 				break;
 			default:
-				throw new IllegalStateException(String.valueOf(type));
+				throw new UnexpectedType(type, name);
 		}
 	}
 }

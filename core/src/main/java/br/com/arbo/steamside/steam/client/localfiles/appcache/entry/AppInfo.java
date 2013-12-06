@@ -21,7 +21,7 @@ public class AppInfo {
 		this.executable = executable;
 	}
 
-	public String executable() throws NotAvailableOnThisPlatform {
+	public String executable() {
 		if (executable == null) throw new NotAvailableOnThisPlatform();
 		return executable;
 	}

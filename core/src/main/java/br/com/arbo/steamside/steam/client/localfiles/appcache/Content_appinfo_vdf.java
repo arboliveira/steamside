@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
-import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.KEYVALUES_TOKEN_SIZE;
+import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_cpp.KEYVALUES_TOKEN_SIZE;
 
 import java.io.FileInputStream;
 import java.io.IOException;

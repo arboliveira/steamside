@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
@@ -12,7 +11,7 @@ import br.com.arbo.steamside.types.AppName;
 public final class AppNameFromLocalFiles implements AppNameFactory {
 
 	@Override
-	public AppName nameOf(final AppId appid) throws NotFound {
+	public AppName nameOf(final AppId appid) {
 		final AppInfo appInfo = this.appinfo_vdf.get(appid.appid);
 		if (appInfo == null)
 			throw new NullPointerException();

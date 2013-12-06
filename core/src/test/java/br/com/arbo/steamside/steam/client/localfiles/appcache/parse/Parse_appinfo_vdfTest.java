@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,23 +43,44 @@ public class Parse_appinfo_vdfTest {
 	@Test
 	public void idKnown_nameKnown() {
 		final HashMap<String, String> id_vs_name = id_vs_name();
+		assertThat(id_vs_name.size(), is(not(0)));
 		new Parse_appinfo_vdf(vdf,
 				new ParseVisitor() {
 
 					@Override
 					public void each(final String appid,
 							final AppInfo appinfo) {
-						final String nameKnown = id_vs_name.get(appid);
-						if (nameKnown != null)
-							assertThat(appinfo.name().name, equalTo(nameKnown));
+						assert_app_id(id_vs_name, appid, appinfo);
 					}
 				}).parse();
+		if (id_vs_name.size() != 0)
+			fail("Missing from appinfo.vdf: " + id_vs_name);
+	}
+
+	static void assert_app_id(final HashMap<String, String> id_vs_name,
+			final String appid, final AppInfo appinfo) {
+		if (appid.equals("221640")) {
+			assertSuperHexagon(appinfo);
+			return;
+		}
+
+		final String nameKnown = id_vs_name.remove(appid);
+		if (nameKnown == null) return;
+		assertThat(appinfo.name().name, equalTo(nameKnown));
+	}
+
+	private static void assertSuperHexagon(final AppInfo appinfo)
+	{
+		assertThat(appinfo.name().name, equalTo("Super Hexagon"));
+		final String expected_executable =
+				SystemUtils.IS_OS_WINDOWS ?
+						"superhexagon.exe" : "./SuperHexagon";
+		assertThat(appinfo.executable(), equalTo(expected_executable));
 	}
 
 	private HashMap<String, String> id_vs_name() {
 		final HashMap<String, String> m = new HashMap<String, String>();
 		load_id_vs_name(m);
-		assertThat(m.size(), is(not(0)));
 		return m;
 	}
 

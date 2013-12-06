@@ -13,7 +13,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.Parse_appinf
 
 public class InMemory_appinfo_vdf {
 
-	public AppInfo get(final String appid) throws NotFound {
+	public AppInfo get(final String appid) {
 		final AppInfo appInfo = map.get(appid);
 		if (appInfo == null) throw NotFound.appid(appid);
 		return appInfo;

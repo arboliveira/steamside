@@ -42,26 +42,48 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	@Override
 	public void onKeyValue(final String k, final String v) throws Finished {
 		final Candidate key = new Candidate(k, this.path);
-		if (key.named("name")
-				.under("2/" + appid).matches())
+		if (is_key_name(key))
 			builder.name(new AppName(v));
-		if (key.named("name")
-				.under("2/" + "common").matches())
-			builder.name(new AppName(v));
-		if (key.named("executable")
-				.underDeep("4/" + appid + "/launch").matches())
+		if (is_key_executable(key))
 			this.lastseen_executable = v;
-		if (key.named("oslist")
-				.underDeep("4/" + appid + "/launch").matches())
+		if (is_key_oslist(key))
 			if (osMatches(v))
 				builder.executable(this.lastseen_executable);
 	}
 
+	private boolean is_key_oslist(final Candidate key) {
+		if (key.named("oslist")
+				.underDeep("4/" + appid + "/launch").matches()) return true;
+		if (key.named("oslist")
+				.underDeep("4/config/launch").matches()) return true;
+		return false;
+	}
+
+	private boolean is_key_executable(final Candidate key) {
+		if (key.named("executable")
+				.underDeep("4/" + appid + "/launch").matches()) return true;
+		if (key.named("executable")
+				.underDeep("4/config/launch").matches()) return true;
+		return false;
+	}
+
+	private boolean is_key_name(final Candidate key) {
+		if (key.named("name")
+				.under("2/" + appid).matches()) return true;
+		if (key.named("name")
+				.under("2/common").matches()) return true;
+		return false;
+	}
+
 	@Override
 	public void onAppEnd() {
+		final boolean noSectionsWereVisited = path.isEmpty();
+		if (noSectionsWereVisited) return;
+
 		if (builder.executable_missing() && this.lastseen_executable != null
 				&& SystemUtils.IS_OS_WINDOWS)
 			builder.executable(this.lastseen_executable);
+
 		parsevisitor.each(appid, builder.build());
 	}
 

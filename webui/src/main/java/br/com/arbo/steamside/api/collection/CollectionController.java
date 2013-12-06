@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
-import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTO;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -27,14 +27,25 @@ public class CollectionController {
 
 	@RequestMapping(value = "collection.json", params = "name")
 	@ResponseBody
-	public List<AppDTO> json(@RequestParam final String name) throws NotFound {
+	public List<AppDTO> json(@RequestParam final String name)
+			throws
+			br.com.arbo.steamside.data.collections.NotFound
+	{
 		final ToDTO toDTO = new ToDTO(this.appinfo);
 		final List<AppDTO> result = new LinkedList<AppDTO>();
 		data.on(new CollectionName(name)).accept(new AppIdVisitor() {
 
 			@Override
 			public void each(final AppId appid) {
-				result.add(toDTO.toDTO(appid));
+				try {
+					result.add(toDTO(appid));
+				} catch (final NotFound e) {
+					return;
+				}
+			}
+
+			private AppDTO toDTO(final AppId appid) {
+				return toDTO.toDTO(appid);
 			}
 		});
 		return result;
@@ -49,7 +60,10 @@ public class CollectionController {
 	@RequestMapping(value = "{name}/add/{appid}")
 	@ResponseBody
 	public void add(@PathVariable final @NonNull String name,
-			@PathVariable final @NonNull String appid) throws NotFound {
+			@PathVariable final @NonNull String appid)
+			throws
+			br.com.arbo.steamside.data.collections.NotFound
+	{
 		data.add(new CollectionName(name), new AppId(appid));
 	}
 
