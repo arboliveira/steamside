@@ -11,8 +11,9 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.ParseVisitor;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.Parse_appinfo_vdf;
 
-public class InMemory_appinfo_vdf {
+public class InMemory_appinfo_vdf implements I_appinfo_vdf {
 
+	@Override
 	public AppInfo get(final String appid) {
 		final AppInfo appInfo = map.get(appid);
 		if (appInfo == null) throw NotFound.appid(appid);
