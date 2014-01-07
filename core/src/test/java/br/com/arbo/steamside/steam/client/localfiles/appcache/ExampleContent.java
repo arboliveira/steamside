@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
-import br.com.arbo.steamside.vdf.ExampleDumpVdfStructure;
+import br.com.arbo.steamside.vdf.DumpVdfStructure;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 
@@ -48,7 +48,7 @@ class ExampleContent {
 			keyvalueVisitor.onSubRegion(k, r);
 		}
 
-		private final KeyValueVisitor keyvalueVisitor = new ExampleDumpVdfStructure();
+		private final KeyValueVisitor keyvalueVisitor = new DumpVdfStructure();
 
 		@Override
 		public void onAppEnd() {
