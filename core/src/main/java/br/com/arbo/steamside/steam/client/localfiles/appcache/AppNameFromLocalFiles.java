@@ -12,7 +12,7 @@ public final class AppNameFromLocalFiles implements AppNameFactory {
 
 	@Override
 	public AppName nameOf(final AppId appid) {
-		final AppInfo appInfo = this.appinfo_vdf.get(appid.appid);
+		final AppInfo appInfo = this.appinfo_vdf.get(appid);
 		if (appInfo == null)
 			throw new NullPointerException();
 		return appInfo.name();

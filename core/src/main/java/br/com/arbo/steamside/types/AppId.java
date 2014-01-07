@@ -4,6 +4,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 public class AppId {
 
+	@NonNull
 	public final String appid;
 
 	public AppId(@NonNull final String appid) {
@@ -13,5 +14,15 @@ public class AppId {
 	@Override
 	public String toString() {
 		return appid;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		return obj instanceof AppId && ((AppId) obj).appid.equals(this.appid);
+	}
+
+	@Override
+	public int hashCode() {
+		return appid.hashCode();
 	}
 }

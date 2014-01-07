@@ -1,7 +1,6 @@
 package br.com.arbo.steamside.apps;
 
 import java.util.Collection;
-import java.util.Comparator;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -41,8 +40,9 @@ public class App {
 		private String lastPlayed;
 		private String cloudEnabled;
 
-		public void lastPlayed(final String v) {
+		public Builder lastPlayed(final String v) {
 			this.lastPlayed = v;
+			return this;
 		}
 
 		public void cloudEnabled(final String v) {
@@ -53,21 +53,9 @@ public class App {
 			this.categories = v;
 		}
 
-		public void appid(@NonNull final String k) {
+		public Builder appid(@NonNull final String k) {
 			this.appid = new AppId(k);
-		}
-	}
-
-	public static final class LastPlayedDescending implements
-			Comparator<App> {
-
-		@Override
-		public int compare(final App a1, final App a2) {
-			final String l1 = a1.lastPlayed();
-			final String l2 = a2.lastPlayed();
-			if (l1 == null) return l2 == null ? 0 : 1;
-			if (l2 == null) return -1;
-			return Long.valueOf(l2).compareTo(Long.valueOf(l1));
+			return this;
 		}
 	}
 
@@ -88,6 +76,13 @@ public class App {
 	@Nullable
 	public String lastPlayed() {
 		return lastPlayed;
+	}
+
+	@NonNull
+	public String lastPlayedOrCry() {
+		final String v = lastPlayed;
+		if (v == null) throw new NeverPlayed();
+		return v;
 	}
 
 	public String cloudEnabled() {

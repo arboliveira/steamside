@@ -45,13 +45,14 @@ public class Apps implements AppsHome {
 	}
 
 	public void accept(
-			@NonNull final Filter filter, final AppVisitor visitor) {
+			@NonNull final Filter filter, @NonNull final AppVisitor visitor) {
 		for (final App app : apps.values())
 			consider(app, filter, visitor);
 	}
 
 	private static void consider(
-			final App app, final Filter filter, final AppVisitor visitor) {
+			final App app, final Filter filter,
+			final @NonNull AppVisitor visitor) {
 		try {
 			filter.consider(app);
 		} catch (final Reject e) {

@@ -1,29 +1,36 @@
 package br.com.arbo.steamside.continues;
 
-import java.util.List;
-
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import br.com.arbo.org.codehaus.jackson.map.JsonUtils;
-import br.com.arbo.steamside.api.continues.Continues;
-import br.com.arbo.steamside.app.injection.Container;
+import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
-import br.com.arbo.steamside.json.app.AppDTO;
+import br.com.arbo.steamside.container.SharedConfigConsume;
+import br.com.arbo.steamside.kids.FromUsername;
+import br.com.arbo.steamside.opersys.username.FromJava;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.types.AppId;
 
 public class ExampleDumpContinues {
 
 	public static void main(final String[] args) {
-		final Container c = new Container(
-				new AnnotationConfigApplicationContext());
-		final Continue continues = c.getComponent(Continue.class);
-		final CollectionFromVdf from = c.getComponent(CollectionFromVdf.class);
 		final InMemory_appinfo_vdf appinfo =
-				c.getComponent(InMemory_appinfo_vdf.class);
+				new InMemory_appinfo_vdf();
+		final FilterContinues continues =
+				new FilterContinues(appinfo, new FromUsername(new FromJava()));
+		final CollectionFromVdf from =
+				new CollectionFromVdf(new SharedConfigConsume());
 
-		final Continues controller =
-				new Continues(continues, appinfo, from);
-		final List<AppDTO> apps = controller.continues();
-		System.out.println(JsonUtils.asString(apps));
+		new ContinuesQuery(from, continues).accept(/* @formatter:off */new AppVisitor() { 
+					@Override
+					public void each /* @formatter:on */
+							(final App app) {
+						final AppId appid = app.appid();
+						final AppInfo info = appinfo.get(appid);
+						System.out.println(
+								app.lastPlayed()
+										+ " :: " + info.name()
+										+ " :: " + appid);
+					}
+				});
 	}
 }

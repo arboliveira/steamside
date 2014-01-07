@@ -10,12 +10,13 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.ParseVisitor;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.Parse_appinfo_vdf;
+import br.com.arbo.steamside.types.AppId;
 
 public class InMemory_appinfo_vdf implements I_appinfo_vdf {
 
 	@Override
-	public AppInfo get(final String appid) {
-		final AppInfo appInfo = map.get(appid);
+	public AppInfo get(final AppId appid) {
+		final AppInfo appInfo = map.get(appid.appid);
 		if (appInfo == null) throw NotFound.appid(appid);
 		return appInfo;
 	}

@@ -3,11 +3,22 @@ package br.com.arbo.steamside.json.app;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.I_appinfo_vdf;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
 
 @JsonAutoDetect
 public class AppDTO {
+
+	public static AppDTO valueOf(final AppId appid, final I_appinfo_vdf appinfo) {
+		final AppName appname = nameOf(appid, appinfo);
+		final AppDTO dto = new AppDTO(appid, appname);
+		return dto;
+	}
+
+	private static AppName nameOf(final AppId appid, final I_appinfo_vdf appinfo) {
+		return appinfo.get(appid).name();
+	}
 
 	public AppDTO(
 			final AppId appid, final AppName name) {

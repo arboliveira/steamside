@@ -47,7 +47,7 @@ public class RunGame {
 
 	private String findExecutableName(final AppId appid)
 	{
-		return appinfo_vdf.get(appid.appid).executable();
+		return appinfo_vdf.get(appid).executable();
 	}
 
 	private static boolean waitUntilItsUp(final Semaphore s, final Thread t) {

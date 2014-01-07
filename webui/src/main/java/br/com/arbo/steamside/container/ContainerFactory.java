@@ -5,7 +5,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
-import br.com.arbo.steamside.continues.Continue;
+import br.com.arbo.steamside.continues.FilterContinues;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
@@ -39,7 +39,7 @@ public class ContainerFactory {
 				.addComponent(RunGame.class)
 				.addComponent(SharedConfigConsume.class)
 				.addComponent(CollectionFromVdf.class)
-				.addComponent(Continue.class)
+				.addComponent(FilterContinues.class)
 				.addComponent(Continues.class)
 				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class)

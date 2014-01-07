@@ -1,38 +1,35 @@
 package br.com.arbo.steamside.api.continues;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
-import br.com.arbo.steamside.continues.Continue;
+import br.com.arbo.steamside.continues.ContinuesQuery;
+import br.com.arbo.steamside.continues.FilterContinues;
 import br.com.arbo.steamside.json.app.AppDTO;
-import br.com.arbo.steamside.json.appcollection.AppCollectionDTO;
-import br.com.arbo.steamside.json.appcollection.ToDTO;
+import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor;
+import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor.Full;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 
 public class Continues {
 
 	public List<AppDTO> continues() {
-		@SuppressWarnings("null")
-		final List<App> list = from.query(continues);
-		sort(list);
-		final AppCollectionDTO dto = new ToDTO(appinfo).convert(list);
-		return dto.apps;
-	}
-
-	private static void sort(final List<App> list) {
-		Collections.sort(list, new App.LastPlayedDescending());
-		// TODO Prioritize games launched by current user
+		final ToDTOAppVisitor visitor = new ToDTOAppVisitor(appinfo);
+		try {
+			new ContinuesQuery(from, continues).accept(visitor);
+		} catch (final Full full) {
+			// All right!
+		}
+		return new ArrayList<AppDTO>(visitor.dto);
 	}
 
 	@Inject
 	public Continues(
-			@NonNull final Continue continues,
+			@NonNull final FilterContinues continues,
 			final InMemory_appinfo_vdf appinfo,
 			final CollectionFromVdf from) {
 		super();
@@ -41,7 +38,7 @@ public class Continues {
 		this.from = from;
 	}
 
-	private final Continue continues;
+	private final FilterContinues continues;
 	private final InMemory_appinfo_vdf appinfo;
 	private final CollectionFromVdf from;
 }
