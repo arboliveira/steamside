@@ -38,6 +38,7 @@ public class Continues {
 		this.from = from;
 	}
 
+	@NonNull
 	private final FilterContinues continues;
 	private final InMemory_appinfo_vdf appinfo;
 	private final CollectionFromVdf from;

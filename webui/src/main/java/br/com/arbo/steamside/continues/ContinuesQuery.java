@@ -45,7 +45,7 @@ public class ContinuesQuery {
 	}
 
 	public ContinuesQuery(final CollectionFromVdf from,
-			final FilterContinues continues) {
+			final @NonNull FilterContinues continues) {
 		this.from = from;
 		this.continues = continues;
 	}
