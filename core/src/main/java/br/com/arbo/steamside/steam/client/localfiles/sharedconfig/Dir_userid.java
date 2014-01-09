@@ -2,10 +2,19 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 public class Dir_userid {
 
-	public static File userid() {
-		final File userdata = Dir_userdata.userdata();
+	@Inject
+	public Dir_userid(final Dir_userdata dir_userdata) {
+		this.dir_userdata = dir_userdata;
+	}
+
+	private final Dir_userdata dir_userdata;
+
+	public File userid() {
+		final File userdata = dir_userdata.userdata();
 		return detect_userid(userdata);
 	}
 

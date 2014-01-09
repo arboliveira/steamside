@@ -7,7 +7,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.apps.Filter;
-import br.com.arbo.steamside.container.SharedConfigConsume;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sharedconfig_vdf;
 
 public class CollectionFromVdf {
 
@@ -17,11 +17,11 @@ public class CollectionFromVdf {
 		apps.accept(filter, what);
 	}
 
-	private final SharedConfigConsume sharedconfig;
+	private final DataFactory_sharedconfig_vdf sharedconfig;
 
 	@Inject
 	public CollectionFromVdf(
-			final SharedConfigConsume sharedconfig) {
+			final DataFactory_sharedconfig_vdf sharedconfig) {
 		this.sharedconfig = sharedconfig;
 	}
 

@@ -14,6 +14,8 @@ import br.com.arbo.steamside.types.AppId;
 
 public class InMemory_appinfo_vdf implements I_appinfo_vdf {
 
+	private final File_appinfo_vdf file_appinfo_vdf;
+
 	@Override
 	public AppInfo get(final AppId appid) {
 		final AppInfo appInfo = map.get(appid.appid);
@@ -21,7 +23,8 @@ public class InMemory_appinfo_vdf implements I_appinfo_vdf {
 		return appInfo;
 	}
 
-	public InMemory_appinfo_vdf() {
+	public InMemory_appinfo_vdf(final File_appinfo_vdf file_appinfo_vdf) {
+		this.file_appinfo_vdf = file_appinfo_vdf;
 		this.map = new HashMap<String, AppInfo>();
 		try {
 			populate();
@@ -39,9 +42,9 @@ public class InMemory_appinfo_vdf implements I_appinfo_vdf {
 		}
 	}
 
-	private static FileInputStream open_File_appinfo_vdf() {
+	private FileInputStream open_File_appinfo_vdf() {
 		try {
-			return new FileInputStream(File_appinfo_vdf.appinfo_vdf());
+			return new FileInputStream(file_appinfo_vdf.appinfo_vdf());
 		} catch (final FileNotFoundException e) {
 			throw new SteamNotInstalled(e);
 		}

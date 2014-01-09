@@ -4,13 +4,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.FileUtils;
 
-public class Factory_sharedconfig_vdf {
+public class Factory_sharedconfig_vdf implements DataFactory_sharedconfig_vdf {
 
-	public static Data_sharedconfig_vdf fromFile() {
+	private final File_sharedconfig_vdf file_sharedconfig_vdf;
+
+	@Inject
+	public Factory_sharedconfig_vdf(File_sharedconfig_vdf file_sharedconfig_vdf) {
+		this.file_sharedconfig_vdf = file_sharedconfig_vdf;
+	}
+
+	@Override
+	public Data_sharedconfig_vdf data() {
 		final String content =
-				readFileToString(File_sharedconfig_vdf.sharedconfig_vdf());
+				readFileToString(file_sharedconfig_vdf.sharedconfig_vdf());
 		final Data_sharedconfig_vdf parse =
 				new Parse_sharedconfig_vdf(content).parse();
 		return parse;

@@ -8,13 +8,16 @@ import br.com.arbo.steamside.types.AppId;
 class Dump_sharedconfig_vdf_Apps {
 
 	final SysoutAppInfoLine dump;
+	private final Factory_sharedconfig_vdf factory_sharedconfig_vdf;
 
-	Dump_sharedconfig_vdf_Apps(final SysoutAppInfoLine dump) {
+	Dump_sharedconfig_vdf_Apps(final SysoutAppInfoLine dump,
+			final Factory_sharedconfig_vdf factory_sharedconfig_vdf) {
 		this.dump = dump;
+		this.factory_sharedconfig_vdf = factory_sharedconfig_vdf;
 	}
 
 	void dump() {
-		final Apps apps = Factory_sharedconfig_vdf.fromFile().apps();
+		final Apps apps = factory_sharedconfig_vdf.data().apps();
 		apps.accept(new DumpOneAppVisitor());
 	}
 

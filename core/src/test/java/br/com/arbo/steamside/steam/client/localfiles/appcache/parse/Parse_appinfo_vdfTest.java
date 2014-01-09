@@ -20,6 +20,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.arbo.org.apache.commons.lang3.FromSystemUtils;
+import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
@@ -31,7 +33,8 @@ public class Parse_appinfo_vdfTest {
 
 	@Before
 	public void open_appinfo_vdf() throws FileNotFoundException {
-		file = new FileInputStream(File_appinfo_vdf.appinfo_vdf());
+		file = new FileInputStream(new File_appinfo_vdf(new SteamDirectory(
+				new FromSystemUtils())).appinfo_vdf());
 		vdf = new Content_appinfo_vdf(file);
 	}
 
@@ -73,9 +76,18 @@ public class Parse_appinfo_vdfTest {
 	{
 		assertThat(appinfo.name().name, equalTo("Super Hexagon"));
 		final String expected_executable =
-				SystemUtils.IS_OS_WINDOWS ?
-						"superhexagon.exe" : "./SuperHexagon";
+				executableSuperHexagon();
 		assertThat(appinfo.executable(), equalTo(expected_executable));
+	}
+
+	private static String executableSuperHexagon() {
+		if (SystemUtils.IS_OS_WINDOWS)
+			return "superhexagon.exe";
+		if (SystemUtils.IS_OS_LINUX)
+			return "./SuperHexagon";
+		if (SystemUtils.IS_OS_MAC_OSX)
+			return "Super Hexagon.app";
+		throw new IllegalStateException();
 	}
 
 	private HashMap<String, String> id_vs_name() {

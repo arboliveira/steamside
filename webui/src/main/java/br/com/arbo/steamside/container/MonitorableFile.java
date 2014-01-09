@@ -6,6 +6,6 @@ public interface MonitorableFile<T> {
 
 	File file();
 
-	T data();
+	T read();
 
 }

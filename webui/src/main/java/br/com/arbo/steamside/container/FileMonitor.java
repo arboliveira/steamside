@@ -82,7 +82,7 @@ public class FileMonitor<T> {
 	}
 
 	T consume() {
-		return monitorable.data();
+		return monitorable.read();
 	}
 
 	private final MonitorableFile<T> monitorable;

@@ -1,23 +1,35 @@
 package br.com.arbo.steamside.vdf;
 
+import br.com.arbo.org.apache.commons.lang3.FromSystemUtils;
 import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.apps.AppsHome;
+import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.Category;
 
 public class ExampleDumpCategoriesFrom_sharedconfig_vdf {
+
+	private static final SteamDirectory steamDirectory = new SteamDirectory(
+			new FromSystemUtils());
 
 	public static void main(final String[] args) {
 		new ExampleDumpCategoriesFrom_sharedconfig_vdf().execute();
 	}
 
 	private void execute() {
-		final Apps apps = Factory_sharedconfig_vdf.fromFile().apps();
+		final Apps apps = new Factory_sharedconfig_vdf(
+				new File_sharedconfig_vdf(new Dir_userid(new Dir_userdata(
+						steamDirectory))))
+				.data().apps();
 		apps.accept(new CategoryWithAppsVisitor() {
 
 			@Override
@@ -43,7 +55,8 @@ public class ExampleDumpCategoriesFrom_sharedconfig_vdf {
 	final Indent indent = new Indent();
 	final AppNameFactory appnameFactory =
 			new AppNameFromLocalFiles(
-					new InMemory_appinfo_vdf());
+					new InMemory_appinfo_vdf(new File_appinfo_vdf(
+							steamDirectory)));
 	final SysoutAppInfoLine dump =
 			new SysoutAppInfoLine(appnameFactory);
 

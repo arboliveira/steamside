@@ -2,12 +2,21 @@ package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
 
 public class File_appinfo_vdf {
 
-	public static File appinfo_vdf() {
-		final File appcache = new File(SteamDirectory.steam(), "appcache");
+	private final SteamDirectory steamDirectory;
+
+	@Inject
+	public File_appinfo_vdf(SteamDirectory steamDirectory) {
+		this.steamDirectory = steamDirectory;
+	}
+
+	public File appinfo_vdf() {
+		final File appcache = new File(steamDirectory.steam(), "appcache");
 		return new File(appcache, "appinfo.vdf");
 	}
 }
