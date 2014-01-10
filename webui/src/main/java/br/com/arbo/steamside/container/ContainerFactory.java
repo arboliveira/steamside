@@ -4,6 +4,8 @@ import org.apache.commons.lang3.SystemUtils;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import br.com.arbo.org.apache.commons.lang3.FromSystemUtils;
+import br.com.arbo.org.apache.commons.lang3.FromWindowsUtils;
+import br.com.arbo.org.apache.commons.lang3.ProgramFiles;
 import br.com.arbo.org.apache.commons.lang3.UserHome;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
@@ -69,14 +71,28 @@ public class ContainerFactory {
 		//
 		;
 
-		container.addComponent(UserHome.class, FromSystemUtils.class);
-		container.addComponent(SteamLocation.class, classSteamLocation());
+		registerSteamLocation(container);
 	}
 
-	private static Class< ? extends SteamLocation> classSteamLocation() {
-		if (SystemUtils.IS_OS_LINUX) return Linux.class;
-		if (SystemUtils.IS_OS_WINDOWS) return Windows.class;
-		if (SystemUtils.IS_OS_MAC_OSX) return MacOSX.class;
+	private static void registerSteamLocation(final ContainerWeb container) {
+		if (SystemUtils.IS_OS_WINDOWS) {
+			container.addComponent(SteamLocation.class, Windows.class);
+			container.addComponent(ProgramFiles.class, FromWindowsUtils.class);
+			return;
+		}
+
+		if (SystemUtils.IS_OS_LINUX) {
+			container.addComponent(SteamLocation.class, Linux.class);
+			container.addComponent(UserHome.class, FromSystemUtils.class);
+			return;
+		}
+
+		if (SystemUtils.IS_OS_MAC_OSX) {
+			container.addComponent(SteamLocation.class, MacOSX.class);
+			container.addComponent(UserHome.class, FromSystemUtils.class);
+			return;
+		}
+
 		throw new UnsupportedOperationException();
 	}
 

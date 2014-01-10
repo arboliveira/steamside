@@ -2,20 +2,25 @@ package br.com.arbo.steamside.steam.client.localfiles.steamlocation;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
+import br.com.arbo.org.apache.commons.lang3.ProgramFiles;
+
 public class Windows implements SteamLocation {
+
+	private final ProgramFiles _ProgramFiles;
+
+	@Inject
+	public Windows(ProgramFiles _ProgramFiles) {
+		this._ProgramFiles = _ProgramFiles;
+	}
 
 	@Override
 	public File steam() {
 		return new File(parent(), "Steam");
 	}
 
-	private static File parent() {
-		return new File(envProgramFiles());
-	}
-
-	private static String envProgramFiles() {
-		final String x86 = System.getenv("ProgramFiles(x86)");
-		if (x86 != null) return x86;
-		return System.getenv("ProgramFiles");
+	private File parent() {
+		return _ProgramFiles.getProgramFiles();
 	}
 }

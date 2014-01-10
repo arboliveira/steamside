@@ -18,9 +18,13 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_
 public class Continues {
 
 	public List<AppDTO> continues() {
+		@SuppressWarnings("null")
+		@NonNull
+		final FilterContinues _continues = continues;
+
 		final ToDTOAppVisitor visitor = new ToDTOAppVisitor(appinfo);
 		try {
-			new ContinuesQuery(from, continues).accept(visitor);
+			new ContinuesQuery(from, _continues).accept(visitor);
 		} catch (final Full full) {
 			// All right!
 		}
