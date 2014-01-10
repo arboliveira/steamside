@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.apps.AppsHome;
-import br.com.arbo.steamside.container.SharedConfigConsume;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sharedconfig_vdf;
 import br.com.arbo.steamside.types.Category;
 
 @Controller
@@ -36,6 +36,6 @@ public class SteamCategoriesController {
 	}
 
 	@Inject
-	private SharedConfigConsume sharedconfig;
+	private DataFactory_sharedconfig_vdf sharedconfig;
 
 }

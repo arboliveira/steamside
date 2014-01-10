@@ -6,9 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.container.SharedConfigConsume;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sharedconfig_vdf;
 
 @Controller
 @RequestMapping("session")
@@ -28,5 +28,5 @@ public class SessionController {
 	@Inject
 	private KidsMode kidsmode;
 	@Inject
-	private SharedConfigConsume config;
+	private DataFactory_sharedconfig_vdf config;
 }

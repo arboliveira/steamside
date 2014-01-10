@@ -13,18 +13,13 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
-import br.com.arbo.steamside.container.ContainerFactory;
-import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
-import br.com.arbo.steamside.spring.WebConfig;
 
 public class Jetty implements LocalWebserver {
 
@@ -104,39 +99,16 @@ public class Jetty implements LocalWebserver {
 		return resource.toExternalForm();
 	}
 
-	private void finishContainer(final ContainerWeb cx) {
-		DirtyHackForSpringWeb.KidsModeExistingInstance.instance = this.kidsmode;
-		DirtyHackForSpringWeb.UserExistingInstance.instance = this.username;
-		DirtyHackForSpringWeb.ExitExistingInstance.instance = this.exit;
-		cx.replaceComponent(KidsMode.class,
-				DirtyHackForSpringWeb.KidsModeExistingInstance.class);
-		cx.replaceComponent(User.class,
-				DirtyHackForSpringWeb.UserExistingInstance.class);
-		cx.addComponent(Exit.class,
-				DirtyHackForSpringWeb.ExitExistingInstance.class);
-		cx.flush();
-	}
-
 	private void addServlet_api(
 			final ServletContextHandler context) {
-		final WebApplicationContext springContext = newSpringContext();
+		final WebApplicationContext springContext = webApplicationContextBuilder
+				.newSpringContext();
 		final ServletHolder servletHolder =
 				new ServletHolder(new DispatcherServlet(springContext));
 		context.addServlet(servletHolder,
 				String.format(
 						"/%s/*",
 						br.com.arbo.steamside.mapping.Api.api));
-	}
-
-	private WebApplicationContext newSpringContext() {
-		final AnnotationConfigWebApplicationContext springContext =
-				new AnnotationConfigWebApplicationContext();
-		final ContainerWeb container =
-				ContainerFactory.newContainer(springContext);
-		container.addComponent(WebConfig.class);
-		container.addComponent(CollectionHomeXmlFile.class);
-		finishContainer(container);
-		return springContext;
 	}
 
 	interface ServletHolderSetup {
@@ -192,15 +164,15 @@ public class Jetty implements LocalWebserver {
 
 	@Inject
 	public Jetty(final User username, final KidsMode kidsmode, final Exit exit) {
-		this.username = username;
-		this.kidsmode = kidsmode;
+		this.webApplicationContextBuilder = new WebApplicationContextBuilder(
+				username, kidsmode, exit);
 		this.exit = exit;
 		this.server = new Server();
 	}
 
-	private final User username;
-	private final KidsMode kidsmode;
 	private final Exit exit;
 	private final Server server;
+
+	private final WebApplicationContextBuilder webApplicationContextBuilder;
 
 }

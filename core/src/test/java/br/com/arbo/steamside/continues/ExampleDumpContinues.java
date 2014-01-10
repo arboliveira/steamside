@@ -10,10 +10,7 @@ import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf_ForExamples;
 import br.com.arbo.steamside.types.AppId;
 
 public class ExampleDumpContinues {
@@ -24,13 +21,10 @@ public class ExampleDumpContinues {
 						new SteamDirectory(new FromSystemUtils())));
 		final FilterContinues continues =
 				new FilterContinues(appinfo, new FromUsername(new FromJava()));
-		final File_sharedconfig_vdf file_sharedconfig_vdf = new File_sharedconfig_vdf(
-				new Dir_userid(
-						new Dir_userdata(new SteamDirectory(
-								new FromSystemUtils()))));
 		final CollectionFromVdf from =
-				new CollectionFromVdf(new Factory_sharedconfig_vdf(
-						file_sharedconfig_vdf));
+				new CollectionFromVdf(
+						Factory_sharedconfig_vdf_ForExamples
+								.fromSteamPhysicalFiles());
 
 		new ContinuesQuery(from, continues).accept(/* @formatter:off */new AppVisitor() { 
 					@Override

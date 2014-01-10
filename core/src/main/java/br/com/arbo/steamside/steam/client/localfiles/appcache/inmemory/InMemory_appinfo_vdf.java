@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
+import javax.inject.Inject;
+
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
@@ -23,6 +25,7 @@ public class InMemory_appinfo_vdf implements I_appinfo_vdf {
 		return appInfo;
 	}
 
+	@Inject
 	public InMemory_appinfo_vdf(final File_appinfo_vdf file_appinfo_vdf) {
 		this.file_appinfo_vdf = file_appinfo_vdf;
 		this.map = new HashMap<String, AppInfo>();
