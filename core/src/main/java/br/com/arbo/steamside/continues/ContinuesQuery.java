@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.apps.App;
@@ -44,6 +46,7 @@ public class ContinuesQuery {
 		// TODO Prioritize games launched by current user
 	}
 
+	@Inject
 	public ContinuesQuery(final CollectionFromVdf from,
 			final @NonNull FilterContinues continues) {
 		this.from = from;

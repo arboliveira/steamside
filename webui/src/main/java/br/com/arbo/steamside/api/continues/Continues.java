@@ -7,9 +7,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.continues.ContinuesQuery;
-import br.com.arbo.steamside.continues.FilterContinues;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor.Full;
@@ -18,13 +16,9 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_
 public class Continues {
 
 	public List<AppDTO> continues() {
-		@SuppressWarnings("null")
-		@NonNull
-		final FilterContinues _continues = continues;
-
 		final ToDTOAppVisitor visitor = new ToDTOAppVisitor(appinfo);
 		try {
-			new ContinuesQuery(from, _continues).accept(visitor);
+			continues.accept(visitor);
 		} catch (final Full full) {
 			// All right!
 		}
@@ -33,17 +27,14 @@ public class Continues {
 
 	@Inject
 	public Continues(
-			@NonNull final FilterContinues continues,
-			final InMemory_appinfo_vdf appinfo,
-			final CollectionFromVdf from) {
+			@NonNull final ContinuesQuery continues,
+			final InMemory_appinfo_vdf appinfo) {
 		super();
 		this.continues = continues;
 		this.appinfo = appinfo;
-		this.from = from;
 	}
 
 	@NonNull
-	private final FilterContinues continues;
+	private final ContinuesQuery continues;
 	private final InMemory_appinfo_vdf appinfo;
-	private final CollectionFromVdf from;
 }

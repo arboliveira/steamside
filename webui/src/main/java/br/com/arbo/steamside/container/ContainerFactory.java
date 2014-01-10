@@ -10,6 +10,7 @@ import br.com.arbo.org.apache.commons.lang3.UserHome;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
+import br.com.arbo.steamside.continues.ContinuesQuery;
 import br.com.arbo.steamside.continues.FilterContinues;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
@@ -66,6 +67,7 @@ public class ContainerFactory {
 				.addComponent(Save.class)
 				.addComponent(FilterContinues.class)
 				.addComponent(Continues.class)
+				.addComponent(ContinuesQuery.class)
 				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
 		//

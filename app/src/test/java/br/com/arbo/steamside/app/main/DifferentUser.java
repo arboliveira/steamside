@@ -2,7 +2,6 @@ package br.com.arbo.steamside.app.main;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
 
 import br.com.arbo.steamside.app.injection.Container;
 import br.com.arbo.steamside.opersys.username.User;
@@ -15,7 +14,7 @@ class DifferentUser implements Part {
 	}
 
 	private static User mockDifferentUser() {
-		final Mockery m = new JUnit4Mockery();
+		final Mockery m = JUnit4Mockeries.threadsafe();
 		final User user = m.mock(User.class);
 		m.checking(/* @formatter:off */new Expectations() { {	/* @formatter:on */
 				allowing(user).username();
