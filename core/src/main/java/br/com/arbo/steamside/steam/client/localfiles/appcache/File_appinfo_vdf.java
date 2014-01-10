@@ -4,14 +4,14 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
+import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocation;
 
 public class File_appinfo_vdf {
 
-	private final SteamDirectory steamDirectory;
+	private final SteamLocation steamDirectory;
 
 	@Inject
-	public File_appinfo_vdf(SteamDirectory steamDirectory) {
+	public File_appinfo_vdf(SteamLocation steamDirectory) {
 		this.steamDirectory = steamDirectory;
 	}
 

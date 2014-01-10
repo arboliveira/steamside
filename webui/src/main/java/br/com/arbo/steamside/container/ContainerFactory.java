@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.container;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import br.com.arbo.org.apache.commons.lang3.FromSystemUtils;
@@ -19,7 +20,6 @@ import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.settings.file.File_steamside_xml;
 import br.com.arbo.steamside.settings.file.Load;
 import br.com.arbo.steamside.settings.file.Save;
-import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
@@ -27,6 +27,10 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sh
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.steamlocation.Linux;
+import br.com.arbo.steamside.steam.client.localfiles.steamlocation.MacOSX;
+import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocation;
+import br.com.arbo.steamside.steam.client.localfiles.steamlocation.Windows;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 
@@ -53,8 +57,6 @@ public class ContainerFactory {
 				.addComponent(CollectionFromVdf.class)
 				.addComponent(File_sharedconfig_vdf.class)
 				.addComponent(File_appinfo_vdf.class)
-				.addComponent(SteamDirectory.class)
-				.addComponent(UserHome.class, FromSystemUtils.class)
 				.addComponent(Dir_userid.class)
 				.addComponent(Dir_userdata.class)
 				.addComponent(Load.class)
@@ -66,6 +68,16 @@ public class ContainerFactory {
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
 		//
 		;
+
+		container.addComponent(UserHome.class, FromSystemUtils.class);
+		container.addComponent(SteamLocation.class, classSteamLocation());
+	}
+
+	private static Class< ? extends SteamLocation> classSteamLocation() {
+		if (SystemUtils.IS_OS_LINUX) return Linux.class;
+		if (SystemUtils.IS_OS_WINDOWS) return Windows.class;
+		if (SystemUtils.IS_OS_MAC_OSX) return MacOSX.class;
+		throw new UnsupportedOperationException();
 	}
 
 }

@@ -5,8 +5,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.org.apache.commons.lang3.FromSystemUtils;
-import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
+import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
@@ -18,8 +17,9 @@ class ExamplePrintAppNamesGivenIds {
 	public static void main(final String[] args) {
 		final AppNameFromLocalFiles appnameFactory =
 				new AppNameFromLocalFiles(new InMemory_appinfo_vdf(
-						new File_appinfo_vdf(new SteamDirectory(
-								new FromSystemUtils()))));
+						new File_appinfo_vdf(
+								SteamDirectory_ForExamples
+										.fromSteamPhysicalFiles())));
 		final SysoutAppInfoLine dump = new SysoutAppInfoLine(appnameFactory);
 		final List<String> ids = Arrays.asList(
 				"22000", "9050", "12800", "10150", "35460");

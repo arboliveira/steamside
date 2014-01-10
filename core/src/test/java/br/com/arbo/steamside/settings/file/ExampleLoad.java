@@ -1,10 +1,9 @@
 package br.com.arbo.steamside.settings.file;
 
-import br.com.arbo.org.apache.commons.lang3.FromSystemUtils;
 import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.data.collections.OnCollection;
-import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory;
+import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
 import br.com.arbo.steamside.types.AppId;
@@ -15,8 +14,9 @@ public class ExampleLoad {
 
 	public static void main(final String[] args) throws NotFound {
 		final SteamsideXml xml = new Load(new File_steamside_xml(
-				new Dir_userid(new Dir_userdata(new SteamDirectory(
-						new FromSystemUtils()))))).load();
+				new Dir_userid(new Dir_userdata(
+						SteamDirectory_ForExamples.fromSteamPhysicalFiles()))))
+				.load();
 		final OnCollection on = xml.on(new CollectionName("Arbo"));
 		on.accept(new AppIdVisitor() {
 
