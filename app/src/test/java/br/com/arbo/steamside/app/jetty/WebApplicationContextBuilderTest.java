@@ -8,6 +8,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
+import br.com.arbo.steamside.app.main.NoTweak;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.FromUsername;
 import br.com.arbo.steamside.opersys.username.FromJava;
@@ -27,7 +28,8 @@ public class WebApplicationContextBuilderTest {
 					public void exit() {
 						// Do nothing
 					}
-				}).newSpringContext();
+				},
+				new NoTweak()).newSpringContext();
 		context.setServletContext(sctx);
 		context.refresh();
 		context.getBean(RunGame.class);

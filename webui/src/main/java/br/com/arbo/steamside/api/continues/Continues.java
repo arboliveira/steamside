@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
+import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor.Full;
@@ -22,12 +22,12 @@ public class Continues {
 		} catch (final Full full) {
 			// All right!
 		}
-		return new ArrayList<AppDTO>(visitor.dto);
+		return new ArrayList<AppDTO>(visitor.collection);
 	}
 
 	@Inject
 	public Continues(
-			@NonNull final ContinuesFromSteamClientLocalfiles continues,
+			@NonNull final ContinuesRooster continues,
 			final InMemory_appinfo_vdf appinfo) {
 		super();
 		this.continues = continues;
@@ -35,6 +35,6 @@ public class Continues {
 	}
 
 	@NonNull
-	private final ContinuesFromSteamClientLocalfiles continues;
+	private final ContinuesRooster continues;
 	private final InMemory_appinfo_vdf appinfo;
 }

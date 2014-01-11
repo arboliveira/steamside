@@ -163,9 +163,11 @@ public class Jetty implements LocalWebserver {
 	static boolean DEV_MODE = true;
 
 	@Inject
-	public Jetty(final User username, final KidsMode kidsmode, final Exit exit) {
+	public Jetty(
+			User username, KidsMode kidsmode, Exit exit,
+			WebApplicationContextTweak tweak) {
 		this.webApplicationContextBuilder = new WebApplicationContextBuilder(
-				username, kidsmode, exit);
+				username, kidsmode, exit, tweak);
 		this.exit = exit;
 		this.server = new Server();
 	}

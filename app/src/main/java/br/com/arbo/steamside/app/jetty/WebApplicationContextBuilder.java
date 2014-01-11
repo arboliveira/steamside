@@ -15,12 +15,15 @@ class WebApplicationContextBuilder {
 	private final Exit exit;
 	private final User username;
 	private final KidsMode kidsmode;
+	private WebApplicationContextTweak tweak;
 
-	public WebApplicationContextBuilder(final User username,
-			final KidsMode kidsmode, final Exit exit) {
+	public WebApplicationContextBuilder(User username,
+			KidsMode kidsmode, Exit exit,
+			WebApplicationContextTweak tweak) {
 		this.username = username;
 		this.kidsmode = kidsmode;
 		this.exit = exit;
+		this.tweak = tweak;
 	}
 
 	AnnotationConfigWebApplicationContext newSpringContext() {
@@ -44,6 +47,9 @@ class WebApplicationContextBuilder {
 				DirtyHackForSpringWeb.UserExistingInstance.class);
 		cx.addComponent(Exit.class,
 				DirtyHackForSpringWeb.ExitExistingInstance.class);
+
+		tweak.tweak(cx);
+
 		cx.flush();
 	}
 

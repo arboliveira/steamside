@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.json.appcollection;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.Apps.AppVisitor;
@@ -14,7 +14,7 @@ public class ToDTOAppVisitor implements AppVisitor {
 
 	private static final int limit = 27;
 
-	public final Collection<AppDTO> dto = new ArrayBlockingQueue<AppDTO>(limit);
+	public final Collection<AppDTO> collection = new ArrayList<AppDTO>(limit);
 
 	public static class Full extends RuntimeException {
 		//
@@ -28,16 +28,17 @@ public class ToDTOAppVisitor implements AppVisitor {
 
 	@Override
 	public void each(final App app) {
+		final AppDTO dto;
 		try {
-			dto.add(toDTO(app.appid()));
+			dto = toDTO(app.appid());
 		} catch (final NotFound toDTOFailed) {
-			// do nothing
-		} catch (final IllegalStateException addFailed) {
-			throw new Full();
+			return;
 		}
+		collection.add(dto);
+		if (collection.size() == limit) throw new Full();
 	}
 
-	private AppDTO toDTO(final AppId appid) {
+	private AppDTO toDTO(final AppId appid) throws NotFound {
 		return AppDTO.valueOf(appid, appinfo);
 	}
 }

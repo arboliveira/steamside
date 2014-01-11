@@ -11,6 +11,7 @@ import br.com.arbo.steamside.app.instance.LimitPossiblePorts;
 import br.com.arbo.steamside.app.instance.SingleInstancePerUser;
 import br.com.arbo.steamside.app.jetty.Jetty;
 import br.com.arbo.steamside.app.jetty.LocalWebserver;
+import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.kids.FromUsername;
 import br.com.arbo.steamside.kids.KidsMode;
@@ -30,7 +31,9 @@ public class ContainerFactory {
 				.addComponent(LocalWebserver.class, Jetty.class)
 				.addComponent(WebBrowser.class, LetJavaOpen.class)
 				.addComponent(KidsMode.class, FromUsername.class)
-				.addComponent(User.class, FromJava.class);
+				.addComponent(User.class, FromJava.class)
+				.addComponent(WebApplicationContextTweak.class, NoTweak.class);
+
 		final ContainerStop instance = new ContainerStop(container);
 		container
 				.addComponent(Exit.class, instance)

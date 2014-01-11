@@ -31,7 +31,7 @@ public class FavoritesController {
 		} catch (final Full full) {
 			// All right!
 		}
-		return new ArrayList<AppDTO>(visitor.dto);
+		return new ArrayList<AppDTO>(visitor.collection);
 	}
 
 	@SuppressWarnings("null")

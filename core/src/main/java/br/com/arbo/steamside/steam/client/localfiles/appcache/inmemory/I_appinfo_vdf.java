@@ -5,6 +5,6 @@ import br.com.arbo.steamside.types.AppId;
 
 public interface I_appinfo_vdf {
 
-	AppInfo get(final AppId appid);
+	AppInfo get(final AppId appid) throws NotFound;
 
 }

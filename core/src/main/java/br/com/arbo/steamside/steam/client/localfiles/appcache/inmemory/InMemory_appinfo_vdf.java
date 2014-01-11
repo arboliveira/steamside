@@ -19,7 +19,7 @@ public class InMemory_appinfo_vdf implements I_appinfo_vdf {
 	private final File_appinfo_vdf file_appinfo_vdf;
 
 	@Override
-	public AppInfo get(final AppId appid) {
+	public AppInfo get(final AppId appid) throws NotFound {
 		final AppInfo appInfo = map.get(appid.appid);
 		if (appInfo == null) throw NotFound.appid(appid);
 		return appInfo;
