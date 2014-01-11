@@ -10,7 +10,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 
 import br.com.arbo.steamside.app.main.NoTweak;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.kids.FromUsername;
 import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.rungame.RunGame;
 
@@ -21,7 +20,7 @@ public class WebApplicationContextBuilderTest {
 	public void instantiation__wiringShouldBeComplete() {
 		final FromJava user = new FromJava();
 		final AnnotationConfigWebApplicationContext context = new WebApplicationContextBuilder(
-				user, new FromUsername(user),
+				user,
 				new Exit() {
 
 					@Override

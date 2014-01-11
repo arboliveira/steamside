@@ -1,36 +1,24 @@
 package br.com.arbo.steamside.app.main;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-
-import br.com.arbo.steamside.app.injection.Container;
+import br.com.arbo.steamside.app.injection.ContainerWeb;
+import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
 import br.com.arbo.steamside.kids.KidsMode;
 
-class KidsModeActive implements Part {
+class KidsModeActive implements WebApplicationContextTweak, KidsMode {
 
-	private static KidsMode mockKidsMode() {
-		final Mockery m = JUnit4Mockeries.threadsafe();
-		final KidsMode on = m.mock(KidsMode.class);
-		m.checking(/* @formatter:off */new Expectations() { {	/* @formatter:on */
-				allowing(on).isKidsModeOn();
-				will(returnValue(true));
-				allowing(on).getCategoryAllowedToBeSeen();
-				will(returnValue("+a-Ongoing"));
-			}
-		});
-		return on;
+	@Override
+	public void tweak(ContainerWeb cx) {
+		cx.replaceComponent(KidsMode.class, KidsModeActive.class);
 	}
 
 	@Override
-	public void apply(final Container c) {
-		c.replaceComponent(KidsMode.class, mockKidsMode());
+	public boolean isKidsModeOn() {
+		return true;
 	}
 
-	public static Part on() {
-		return new KidsModeActive();
+	@Override
+	public String getCategoryAllowedToBeSeen() {
+		return "+a-Ongoing";
 	}
 
-	public static Part off() {
-		return null;
-	}
 }

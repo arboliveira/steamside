@@ -9,7 +9,6 @@ public class ExampleRunSteamsideMixAndMatch {
 
 	public static void main(final String[] args) {
 		final List<Part> parts = Arrays.asList(
-				KidsModeActive.off(),
 				DifferentUser.off(),
 				NoCollections.on(),
 				null

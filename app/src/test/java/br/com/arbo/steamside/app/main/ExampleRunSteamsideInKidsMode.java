@@ -1,12 +1,15 @@
 package br.com.arbo.steamside.app.main;
 
 import br.com.arbo.steamside.app.injection.Container;
+import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
 
 class ExampleRunSteamsideInKidsMode {
 
 	public static void main(final String[] args) {
 		final Container c = ContainerFactory.newContainer();
-		new KidsModeActive().apply(c);
+		c.replaceComponent(
+				WebApplicationContextTweak.class,
+				new KidsModeActive());
 		new Main(c).start();
 	}
 }

@@ -18,7 +18,6 @@ import org.springframework.web.servlet.DispatcherServlet;
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
 
 public class Jetty implements LocalWebserver {
@@ -164,10 +163,11 @@ public class Jetty implements LocalWebserver {
 
 	@Inject
 	public Jetty(
-			User username, KidsMode kidsmode, Exit exit,
+			User username,
+			Exit exit,
 			WebApplicationContextTweak tweak) {
 		this.webApplicationContextBuilder = new WebApplicationContextBuilder(
-				username, kidsmode, exit, tweak);
+				username, exit, tweak);
 		this.exit = exit;
 		this.server = new Server();
 	}

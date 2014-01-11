@@ -6,7 +6,6 @@ import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.container.ContainerFactory;
 import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.spring.WebConfig;
 
@@ -14,14 +13,13 @@ class WebApplicationContextBuilder {
 
 	private final Exit exit;
 	private final User username;
-	private final KidsMode kidsmode;
 	private WebApplicationContextTweak tweak;
 
-	public WebApplicationContextBuilder(User username,
-			KidsMode kidsmode, Exit exit,
+	public WebApplicationContextBuilder(
+			User username,
+			Exit exit,
 			WebApplicationContextTweak tweak) {
 		this.username = username;
-		this.kidsmode = kidsmode;
 		this.exit = exit;
 		this.tweak = tweak;
 	}
@@ -38,11 +36,8 @@ class WebApplicationContextBuilder {
 	}
 
 	private void finishContainer(final ContainerWeb cx) {
-		DirtyHackForSpringWeb.KidsModeExistingInstance.instance = this.kidsmode;
 		DirtyHackForSpringWeb.UserExistingInstance.instance = this.username;
 		DirtyHackForSpringWeb.ExitExistingInstance.instance = this.exit;
-		cx.replaceComponent(KidsMode.class,
-				DirtyHackForSpringWeb.KidsModeExistingInstance.class);
 		cx.replaceComponent(User.class,
 				DirtyHackForSpringWeb.UserExistingInstance.class);
 		cx.addComponent(Exit.class,
