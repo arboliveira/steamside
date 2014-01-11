@@ -25,7 +25,7 @@ public class ExampleDumpContinues {
 						Factory_sharedconfig_vdf_ForExamples
 								.fromSteamPhysicalFiles());
 
-		new ContinuesQuery(from, continues).accept(/* @formatter:off */new AppVisitor() { 
+		new ContinuesFromSteamClientLocalfiles(from, continues).accept(/* @formatter:off */new AppVisitor() { 
 					@Override
 					public void each /* @formatter:on */
 							(final App app) {

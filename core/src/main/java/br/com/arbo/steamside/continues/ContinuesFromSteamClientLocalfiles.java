@@ -13,12 +13,13 @@ import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.apps.LastPlayedDescending;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
 
-public class ContinuesQuery {
+public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 
 	private final CollectionFromVdf from;
 	@NonNull
 	private final FilterContinues continues;
 
+	@Override
 	public void accept(final AppVisitor visitor) {
 		final List<App> list = queryApps();
 		sort(list);
@@ -47,7 +48,7 @@ public class ContinuesQuery {
 	}
 
 	@Inject
-	public ContinuesQuery(final CollectionFromVdf from,
+	public ContinuesFromSteamClientLocalfiles(final CollectionFromVdf from,
 			final @NonNull FilterContinues continues) {
 		this.from = from;
 		this.continues = continues;

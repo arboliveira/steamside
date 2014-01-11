@@ -10,7 +10,8 @@ import br.com.arbo.org.apache.commons.lang3.UserHome;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.collection.CollectionFromVdf;
-import br.com.arbo.steamside.continues.ContinuesQuery;
+import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
+import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.continues.FilterContinues;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
@@ -55,7 +56,8 @@ public class ContainerFactory {
 				.addComponent(AppNameFactory.class, AppNameFromLocalFiles.class)
 				.addComponent(InMemory_appinfo_vdf.class)
 				.addComponent(RunGame.class)
-				.addComponent(DataFactory_sharedconfig_vdf.class,
+				.addComponent(
+						DataFactory_sharedconfig_vdf.class,
 						AutoreloadingDataFactory_sharedconfig_vdf.class)
 				.addComponent(CollectionFromVdf.class)
 				.addComponent(File_sharedconfig_vdf.class)
@@ -67,7 +69,9 @@ public class ContainerFactory {
 				.addComponent(Save.class)
 				.addComponent(FilterContinues.class)
 				.addComponent(Continues.class)
-				.addComponent(ContinuesQuery.class)
+				.addComponent(
+						ContinuesRooster.class,
+						ContinuesFromSteamClientLocalfiles.class)
 				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
 		//
