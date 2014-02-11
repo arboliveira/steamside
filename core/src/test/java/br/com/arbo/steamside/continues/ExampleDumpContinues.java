@@ -2,13 +2,13 @@ package br.com.arbo.steamside.continues;
 
 import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.Apps.AppVisitor;
-import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.kids.FromUsername;
 import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf_ForExamples;
 import br.com.arbo.steamside.types.AppId;
 
@@ -20,12 +20,10 @@ public class ExampleDumpContinues {
 						SteamDirectory_ForExamples.fromSteamPhysicalFiles()));
 		final FilterContinues continues =
 				new FilterContinues(appinfo, new FromUsername(new FromJava()));
-		final CollectionFromVdf from =
-				new CollectionFromVdf(
-						Factory_sharedconfig_vdf_ForExamples
-								.fromSteamPhysicalFiles());
+		final Factory_sharedconfig_vdf sharedconf = Factory_sharedconfig_vdf_ForExamples
+				.fromSteamPhysicalFiles();
 
-		new ContinuesFromSteamClientLocalfiles(from, continues).accept(/* @formatter:off */new AppVisitor() { 
+		new ContinuesFromSteamClientLocalfiles(continues, sharedconf).accept(/* @formatter:off */new AppVisitor() { 
 					@Override
 					public void each /* @formatter:on */
 							(final App app) {
