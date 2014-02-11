@@ -2,7 +2,6 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 
-
 public class Factory_sharedconfig_vdf_ForExamples {
 
 	public static Factory_sharedconfig_vdf fromSteamPhysicalFiles() {

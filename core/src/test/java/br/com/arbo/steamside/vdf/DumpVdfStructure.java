@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.vdf;
 
+import br.com.arbo.steamside.indent.Indent;
+
 public class DumpVdfStructure implements
 		KeyValueVisitor {
 

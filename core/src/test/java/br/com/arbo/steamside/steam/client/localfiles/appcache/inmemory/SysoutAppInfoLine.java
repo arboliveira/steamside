@@ -1,14 +1,13 @@
-package br.com.arbo.steamside.vdf;
+package br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory;
 
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
 
-class SysoutAppInfoLine {
+public class SysoutAppInfoLine {
 
 	private final AppNameFactory appnameFactory;
 
-	SysoutAppInfoLine(final AppNameFactory appnameFactory) {
+	public SysoutAppInfoLine(final AppNameFactory appnameFactory) {
 		this.appnameFactory = appnameFactory;
 	}
 
