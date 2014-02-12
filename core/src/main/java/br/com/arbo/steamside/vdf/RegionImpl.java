@@ -164,17 +164,5 @@ public class RegionImpl implements Region {
 			return reader;
 		}
 
-		@Override
-		public void replaceTokenBefore(
-				final String previous, final String newvalue, final int position) {
-			RegionImpl.this.replaceTokenBefore(previous, newvalue, position);
-		}
-
-	}
-
-	public void replaceTokenBefore(final String previous,
-			final String newvalue,
-			final int position) {
-		parent.replaceTokenBefore(previous, newvalue, position);
 	}
 }

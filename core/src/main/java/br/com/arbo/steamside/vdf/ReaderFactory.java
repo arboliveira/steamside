@@ -6,6 +6,4 @@ public interface ReaderFactory {
 
 	PositionalStringReader readerPositionedInside();
 
-	void replaceTokenBefore(String previous, String newvalue, int position);
-
 }
