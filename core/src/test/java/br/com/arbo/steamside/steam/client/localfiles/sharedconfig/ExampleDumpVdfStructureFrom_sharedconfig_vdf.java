@@ -9,7 +9,6 @@ import br.com.arbo.steamside.vdf.DumpVdfStructure;
 public final class ExampleDumpVdfStructureFrom_sharedconfig_vdf {
 
 	public static void main(final String[] args) throws IOException {
-		@SuppressWarnings("unused")
 		final File from = from_sharedconfig_vdf();
 		DumpVdfStructure.dump(from);
 	}

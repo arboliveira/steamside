@@ -1,9 +1,9 @@
 package br.com.arbo.steamside.vdf;
 
-import br.com.arbo.java.io.PositionalStringReader;
+import java.io.Reader;
 
 public interface ReaderFactory {
 
-	PositionalStringReader readerPositionedInside();
+	Reader readerPositionedInside();
 
 }

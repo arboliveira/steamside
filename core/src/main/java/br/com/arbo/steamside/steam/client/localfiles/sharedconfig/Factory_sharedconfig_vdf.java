@@ -1,12 +1,9 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.inject.Inject;
-
-import org.apache.commons.io.FileUtils;
 
 public class Factory_sharedconfig_vdf
 		implements DataFactory_sharedconfig_vdf {
@@ -21,18 +18,26 @@ public class Factory_sharedconfig_vdf
 
 	@Override
 	public R_apps apps() {
-		final String content =
-				readFileToString(file_sharedconfig_vdf.sharedconfig_vdf());
-		return new Parse_sharedconfig_vdf(content).apps();
+		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
+		final Parse_sharedconfig_vdf parser = newParse_sharedconfig_vdf(file);
+		return parser.apps();
+	}
+
+	private static Parse_sharedconfig_vdf newParse_sharedconfig_vdf(
+			final File file)
+	{
+		try {
+			return new Parse_sharedconfig_vdf(file);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public Data_sharedconfig_vdf data() {
-		final String content =
-				readFileToString(file_sharedconfig_vdf.sharedconfig_vdf());
-		final Data_sharedconfig_vdf parse =
-				new Parse_sharedconfig_vdf(content).parse();
-		return parse;
+		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
+		final Parse_sharedconfig_vdf parser = newParse_sharedconfig_vdf(file);
+		return parser.parse();
 	}
 
 	public static class FileNotFound_sharedconfig_vdf extends RuntimeException {
@@ -41,15 +46,5 @@ public class Factory_sharedconfig_vdf
 			super(e);
 		}
 
-	}
-
-	private static String readFileToString(final File from) {
-		try {
-			return FileUtils.readFileToString(from);
-		} catch (final FileNotFoundException e) {
-			throw new FileNotFound_sharedconfig_vdf(e);
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 }

@@ -1,9 +1,9 @@
 package br.com.arbo.steamside.vdf;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StreamTokenizer;
 
-import br.com.arbo.java.io.PositionalStringReader;
 import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 
 public class RegionImpl implements Region {
@@ -47,12 +47,12 @@ public class RegionImpl implements Region {
 		accept(visitor, reader());
 	}
 
-	public PositionalStringReader reader() {
+	public Reader reader() {
 		return parent.readerPositionedInside();
 	}
 
-	public void accept(final KeyValueVisitor visitor,
-			final PositionalStringReader reader) {
+	void accept(final KeyValueVisitor visitor,
+			final Reader reader) {
 		final StreamTokenizer tokenizer = StreamTokenizerBuilder.build(reader);
 		accept(visitor, tokenizer);
 	}
@@ -143,7 +143,7 @@ public class RegionImpl implements Region {
 		}
 
 		@Override
-		public PositionalStringReader readerPositionedInside() {
+		public Reader readerPositionedInside() {
 			class SkipToName implements KeyValueVisitor {
 
 				@Override
@@ -159,7 +159,7 @@ public class RegionImpl implements Region {
 				}
 
 			}
-			final PositionalStringReader reader = reader();
+			final Reader reader = reader();
 			accept(new SkipToName(), reader);
 			return reader;
 		}
