@@ -9,7 +9,6 @@ import br.com.arbo.org.apache.commons.lang3.ProgramFiles;
 import br.com.arbo.org.apache.commons.lang3.UserHome;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
-import br.com.arbo.steamside.collection.CollectionFromVdf;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.continues.FilterContinues;
@@ -59,7 +58,6 @@ public class ContainerFactory {
 				.addComponent(
 						DataFactory_sharedconfig_vdf.class,
 						AutoreloadingDataFactory_sharedconfig_vdf.class)
-				.addComponent(CollectionFromVdf.class)
 				.addComponent(File_sharedconfig_vdf.class)
 				.addComponent(File_appinfo_vdf.class)
 				.addComponent(Dir_userid.class)
