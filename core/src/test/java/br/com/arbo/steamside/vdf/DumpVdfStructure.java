@@ -1,5 +1,10 @@
 package br.com.arbo.steamside.vdf;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+
 import br.com.arbo.steamside.indent.Indent;
 
 public class DumpVdfStructure implements
@@ -18,6 +23,12 @@ public class DumpVdfStructure implements
 	@Override
 	public void onKeyValue(final String k, final String v) throws Finished {
 		System.out.println(indent.on("[" + k + "]'" + v + "'"));
+	}
+
+	public static void dump(final File file) throws IOException {
+		final String text = FileUtils.readFileToString(file);
+		final Vdf vdfImpl = new Vdf(text);
+		vdfImpl.root().accept(new DumpVdfStructure());
 	}
 
 }

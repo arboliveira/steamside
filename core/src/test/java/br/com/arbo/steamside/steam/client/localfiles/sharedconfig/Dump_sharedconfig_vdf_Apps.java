@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
 import br.com.arbo.steamside.types.AppId;
@@ -17,7 +16,7 @@ class Dump_sharedconfig_vdf_Apps {
 	}
 
 	void dump() {
-		final Apps apps = factory_sharedconfig_vdf.data().apps();
+		final R_apps apps = factory_sharedconfig_vdf.apps();
 		apps.accept(new DumpOneAppVisitor());
 	}
 

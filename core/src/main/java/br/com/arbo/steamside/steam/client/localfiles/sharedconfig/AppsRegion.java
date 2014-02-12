@@ -2,16 +2,39 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.Apps;
+import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.apps.Apps.AppVisitor;
+import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 
-class AppsRegion {
+class AppsRegion implements R_apps {
 
 	private final Region content;
 
 	AppsRegion(final Region content) {
 		this.content = content;
+	}
+
+	@Override
+	public void accept(final AppIdVisitor visitor) {
+		class ParseEveryAppSubRegion implements KeyValueVisitor {
+
+			@Override
+			public void onSubRegion(final String k, final Region r)
+					throws Finished {
+				if (k == null) throw new NullPointerException();
+				visitor.each(new AppId(k));
+			}
+
+			@Override
+			public void onKeyValue(final String k, final String v)
+					throws Finished {
+				// The "apps" region has no key/value pairs of itself.
+			}
+		}
+
+		content.accept(new ParseEveryAppSubRegion());
 	}
 
 	public Apps parse() {

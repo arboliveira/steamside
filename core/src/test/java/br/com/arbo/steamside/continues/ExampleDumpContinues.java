@@ -8,7 +8,7 @@ import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf_ForExamples;
 import br.com.arbo.steamside.types.AppId;
 
@@ -20,7 +20,7 @@ public class ExampleDumpContinues {
 						SteamDirectory_ForExamples.fromSteamPhysicalFiles()));
 		final FilterContinues continues =
 				new FilterContinues(appinfo, new FromUsername(new FromJava()));
-		final Factory_sharedconfig_vdf sharedconf = Factory_sharedconfig_vdf_ForExamples
+		final DataFactory_sharedconfig_vdf sharedconf = Factory_sharedconfig_vdf_ForExamples
 				.fromSteamPhysicalFiles();
 
 		new ContinuesFromSteamClientLocalfiles(continues, sharedconf).accept(/* @formatter:off */new AppVisitor() { 

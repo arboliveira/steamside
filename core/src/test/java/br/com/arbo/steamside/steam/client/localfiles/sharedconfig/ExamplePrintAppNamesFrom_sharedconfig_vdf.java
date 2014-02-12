@@ -13,10 +13,8 @@ class ExamplePrintAppNamesFrom_sharedconfig_vdf {
 	static final boolean web = false;
 
 	public static void main(final String[] args) {
-		final AppNameFactory appnameFactory =
-				ExamplePrintAppNamesFrom_sharedconfig_vdf.newAppNameFactory();
-		final SysoutAppInfoLine dump =
-				new SysoutAppInfoLine(appnameFactory);
+		final AppNameFactory appnameFactory = newAppNameFactory();
+		final SysoutAppInfoLine dump = new SysoutAppInfoLine(appnameFactory);
 		new Dump_sharedconfig_vdf_Apps(dump,
 				Factory_sharedconfig_vdf_ForExamples.fromSteamPhysicalFiles())
 				.dump();
