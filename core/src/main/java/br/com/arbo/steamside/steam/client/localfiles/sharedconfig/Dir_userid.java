@@ -21,6 +21,8 @@ public class Dir_userid {
 	private static File detect_userid(final File userdata) {
 		final File[] files = userdata.listFiles();
 		if (files.length == 1) return files[0];
+		for (File file : files)
+			if (file.getName().equals("STEAM_USERID_DETECTED")) return file;
 		throw new RuntimeException("More than 1 user: to be implemented");
 	}
 }
