@@ -16,13 +16,6 @@ public class Factory_sharedconfig_vdf
 		this.file_sharedconfig_vdf = file_sharedconfig_vdf;
 	}
 
-	@Override
-	public R_apps apps() {
-		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
-		final Parse_sharedconfig_vdf parser = newParse_sharedconfig_vdf(file);
-		return parser.apps();
-	}
-
 	private static Parse_sharedconfig_vdf newParse_sharedconfig_vdf(
 			final File file)
 	{

@@ -8,16 +8,10 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sh
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.R_apps;
 
 public class AutoreloadingDataFactory_sharedconfig_vdf implements
 		DataFactory_sharedconfig_vdf,
 		MonitorableFile<Data_sharedconfig_vdf> {
-
-	@Override
-	public R_apps apps() {
-		return factory_sharedconfig_vdf.apps();
-	}
 
 	@Inject
 	public AutoreloadingDataFactory_sharedconfig_vdf(

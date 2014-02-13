@@ -6,5 +6,4 @@ public interface R_apps {
 
 	void accept(final AppIdVisitor visitor);
 
-	int count();
 }

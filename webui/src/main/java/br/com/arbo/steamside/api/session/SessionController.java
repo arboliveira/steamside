@@ -17,7 +17,7 @@ public class SessionController {
 	@RequestMapping("session.json")
 	@ResponseBody
 	public SessionDTO session() {
-		final int gamesOwned = config.apps().count();
+		final int gamesOwned = config.data().apps().count();
 		return new SessionDTO(
 				username, kidsmode,
 				String.valueOf(gamesOwned));

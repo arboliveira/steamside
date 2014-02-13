@@ -26,6 +26,7 @@ import br.com.arbo.steamside.settings.file.Save;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
@@ -59,6 +60,7 @@ public class ContainerFactory {
 						DataFactory_sharedconfig_vdf.class,
 						AutoreloadingDataFactory_sharedconfig_vdf.class)
 				.addComponent(File_sharedconfig_vdf.class)
+				.addComponent(File_localconfig_vdf.class)
 				.addComponent(File_appinfo_vdf.class)
 				.addComponent(Dir_userid.class)
 				.addComponent(Dir_userdata.class)

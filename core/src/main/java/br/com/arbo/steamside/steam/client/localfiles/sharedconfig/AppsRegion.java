@@ -38,30 +38,6 @@ class AppsRegion implements R_apps {
 		content.accept(new ParseEveryAppSubRegion());
 	}
 
-	@Override
-	public int count() {
-		class Counter implements KeyValueVisitor {
-
-			int count;
-
-			@Override
-			public void onSubRegion(final String k, final Region r)
-					throws Finished {
-				count++;
-			}
-
-			@Override
-			public void onKeyValue(final String k, final String v)
-					throws Finished {
-				// The "apps" region has no key/value pairs of itself.
-			}
-		}
-
-		Counter counter = new Counter();
-		content.accept(counter);
-		return counter.count;
-	}
-
 	public Apps parse() {
 		final Apps a = new Apps();
 		this.accept(new AppVisitor() {

@@ -16,7 +16,7 @@ class Dump_sharedconfig_vdf_Apps {
 	}
 
 	void dump() {
-		final R_apps apps = factory_sharedconfig_vdf.apps();
+		final R_apps apps = factory_sharedconfig_vdf.data().r_apps();
 		apps.accept(new DumpOneAppVisitor());
 	}
 

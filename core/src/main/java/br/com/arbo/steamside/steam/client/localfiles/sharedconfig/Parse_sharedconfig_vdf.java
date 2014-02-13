@@ -15,10 +15,6 @@ public class Parse_sharedconfig_vdf implements Closeable {
 		this.content = new Vdf(file);
 	}
 
-	public R_apps apps() {
-		return newAppsRegion();
-	}
-
 	public Data_sharedconfig_vdf parse() {
 		final AppsRegion apps_region = newAppsRegion();
 		final Data_sharedconfig_vdf data =
