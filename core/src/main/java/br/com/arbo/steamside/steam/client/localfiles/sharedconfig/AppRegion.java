@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.AppImpl;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 
@@ -12,7 +12,7 @@ class AppRegion {
 		this.content = content;
 	}
 
-	public App.Builder parse() {
+	public AppImpl.Builder parse() {
 		final Hydrate hydrate = new Hydrate();
 		content.accept(hydrate);
 		return hydrate.app;
@@ -20,7 +20,7 @@ class AppRegion {
 
 	static final class Hydrate implements KeyValueVisitor {
 
-		final App.Builder app = new App.Builder();
+		final AppImpl.Builder app = new AppImpl.Builder();
 
 		@Override
 		public void onKeyValue(final String k, final String v)

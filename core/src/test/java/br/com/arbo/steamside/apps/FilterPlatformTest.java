@@ -5,7 +5,7 @@ import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
 
-import br.com.arbo.steamside.apps.App.Builder;
+import br.com.arbo.steamside.apps.AppImpl.Builder;
 import br.com.arbo.steamside.apps.Filter.Reject;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.I_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
@@ -15,7 +15,7 @@ public class FilterPlatformTest {
 
 	@Test
 	public void notFoundIn_appinfo_vdf__mustBeAccepted() throws Reject {
-		final Builder builder = new App.Builder();
+		final Builder builder = new AppImpl.Builder();
 		builder.appid("142857");
 		final App app = builder.make();
 

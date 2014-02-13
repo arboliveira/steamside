@@ -5,7 +5,7 @@ import java.util.List;
 
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
-import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.AppImpl;
 import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 
@@ -32,7 +32,7 @@ public class MockContinues implements
 					"220", // Half-Life 2
 					"215690" // Zeno Clash 2
 			);
-			final App.Builder b = new App.Builder();
+			final AppImpl.Builder b = new AppImpl.Builder();
 			for (final String id : ids)
 				visitor.each(b.appid(id).make());
 		}

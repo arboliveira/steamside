@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.AppImpl;
 import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.apps.Apps.AppVisitor;
@@ -81,7 +82,7 @@ class AppsRegion implements R_apps {
 			public void onSubRegion(final String k, final Region r)
 					throws Finished {
 				final AppRegion appRegion = new AppRegion(r);
-				final App.Builder app = appRegion.parse();
+				final AppImpl.Builder app = appRegion.parse();
 				if (k == null) throw new NullPointerException();
 				app.appid(k);
 				visitor.each(app.make());
