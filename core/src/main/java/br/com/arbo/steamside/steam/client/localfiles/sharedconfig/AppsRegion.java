@@ -38,7 +38,7 @@ class AppsRegion implements R_apps {
 		content.accept(new ParseEveryAppSubRegion());
 	}
 
-	public Apps parse() {
+	Apps parse() {
 		final Apps a = new Apps();
 		this.accept(new AppVisitor() {
 

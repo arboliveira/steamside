@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import br.com.arbo.steamside.apps.Apps;
+
 public class Factory_sharedconfig_vdf
 		implements DataFactory_sharedconfig_vdf {
 
@@ -30,7 +32,12 @@ public class Factory_sharedconfig_vdf
 	public Data_sharedconfig_vdf data() {
 		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
 		final Parse_sharedconfig_vdf parser = newParse_sharedconfig_vdf(file);
-		return parser.parse();
+		Apps parse_apps_region = parser.parse();
+		final Data_sharedconfig_vdf data =
+				new Data_sharedconfig_vdf();
+		data.apps = parse_apps_region;
+		return data;
+
 	}
 
 	public static class FileNotFound_sharedconfig_vdf extends RuntimeException {

@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 
+import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.Region;
 import br.com.arbo.steamside.vdf.RegionImpl;
@@ -15,12 +16,10 @@ public class Parse_sharedconfig_vdf implements Closeable {
 		this.content = new Vdf(file);
 	}
 
-	public Data_sharedconfig_vdf parse() {
+	Apps parse() {
 		final AppsRegion apps_region = newAppsRegion();
-		final Data_sharedconfig_vdf data =
-				new Data_sharedconfig_vdf();
-		data.apps = apps_region.parse();
-		return data;
+		final Apps parse_apps_region = apps_region.parse();
+		return parse_apps_region;
 	}
 
 	private AppsRegion newAppsRegion() {

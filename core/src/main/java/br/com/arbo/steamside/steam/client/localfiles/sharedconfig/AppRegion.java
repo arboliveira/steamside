@@ -12,7 +12,7 @@ class AppRegion {
 		this.content = content;
 	}
 
-	public AppImpl.Builder parse() {
+	AppImpl.Builder parse() {
 		final Hydrate hydrate = new Hydrate();
 		content.accept(hydrate);
 		return hydrate.app;
