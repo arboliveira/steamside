@@ -17,6 +17,8 @@ import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
 import br.com.arbo.steamside.kids.FromUsername;
 import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.library.LibraryImpl;
 import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.rungame.RunGame;
@@ -50,6 +52,7 @@ public class ContainerFactory {
 
 	private static void addComponents(final ContainerWeb container) {
 		container
+				.addComponent(Library.class, LibraryImpl.class)
 				.addComponent(KidsMode.class, FromUsername.class)
 				.addComponent(User.class, FromJava.class)
 				.addComponent(SteamBrowserProtocol.class)

@@ -9,16 +9,15 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.apps.LastPlayedDescending;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sharedconfig_vdf;
+import br.com.arbo.steamside.library.Library;
 
 public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 
 	@NonNull
 	private final FilterContinues continues;
-	private DataFactory_sharedconfig_vdf sharedconfig;
+	private final Library library;
 
 	@Override
 	public void accept(final AppVisitor visitor) {
@@ -40,8 +39,7 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 
 	@SuppressWarnings("null")
 	private void from_accept(final AppVisitor add) {
-		final Apps apps = sharedconfig.data().apps();
-		apps.accept(continues, add);
+		library.accept(continues, add);
 	}
 
 	private static void sort(final List<App> list) {
@@ -52,8 +50,8 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 	@Inject
 	public ContinuesFromSteamClientLocalfiles(
 			final @NonNull FilterContinues continues,
-			final DataFactory_sharedconfig_vdf sharedconfig) {
-		this.sharedconfig = sharedconfig;
+			final Library library) {
+		this.library = library;
 		this.continues = continues;
 	}
 

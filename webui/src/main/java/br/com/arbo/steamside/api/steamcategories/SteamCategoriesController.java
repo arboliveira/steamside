@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.apps.AppsHome;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sharedconfig_vdf;
+import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.Category;
 
 @Controller
@@ -23,19 +23,18 @@ public class SteamCategoriesController {
 	public List<SteamCategoryDTO> steamCategories() {
 		final List<SteamCategoryDTO> dto =
 				new ArrayList<SteamCategoryDTO>();
-		sharedconfig.data().apps()
-				.accept(new CategoryWithAppsVisitor() {
+		library.accept(new CategoryWithAppsVisitor() {
 
-					@Override
-					public void visit(final Category each,
-							final AppsHome itsApps) {
-						dto.add(new SteamCategoryDTO(each));
-					}
-				});
+			@Override
+			public void visit(final Category each,
+					final AppsHome itsApps) {
+				dto.add(new SteamCategoryDTO(each));
+			}
+		});
 		return dto;
 	}
 
 	@Inject
-	private DataFactory_sharedconfig_vdf sharedconfig;
+	private Library library;
 
 }
