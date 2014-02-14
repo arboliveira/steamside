@@ -1,10 +1,11 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.indent.Indent;
+import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.library.Library_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
@@ -13,17 +14,15 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutApp
 import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.Category;
 
-public class ExampleDumpCategoriesFrom_sharedconfig_vdf {
+public class ExampleDumpCategoriesFrom_Library {
 
 	public static void main(final String[] args) {
-		new ExampleDumpCategoriesFrom_sharedconfig_vdf().execute();
+		new ExampleDumpCategoriesFrom_Library().execute();
 	}
 
 	private void execute() {
-		final Apps apps = Factory_sharedconfig_vdf_ForExamples
-				.fromSteamPhysicalFiles()
-				.data().apps();
-		apps.accept(new CategoryWithAppsVisitor() {
+		final Library library = Library_ForExamples.fromSteamPhysicalFiles();
+		library.accept(new CategoryWithAppsVisitor() {
 
 			@Override
 			public void visit(final Category category, final AppsHome itsApps) {
