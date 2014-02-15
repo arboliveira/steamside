@@ -90,4 +90,7 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<properties>
+        <spring.version>3.1.4.RELEASE</spring.version>
+	</properties>
 </project>
