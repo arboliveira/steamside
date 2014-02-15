@@ -1,12 +1,10 @@
 package br.com.arbo.steamside.vdf;
 
 import java.io.File;
-import java.io.IOException;
 
 import br.com.arbo.steamside.indent.Indent;
 
-public class DumpVdfStructure implements
-		KeyValueVisitor {
+public class DumpVdfStructure implements KeyValueVisitor {
 
 	Indent indent = new Indent();
 
@@ -23,13 +21,8 @@ public class DumpVdfStructure implements
 		System.out.println(indent.on("[" + k + "]'" + v + "'"));
 	}
 
-	public static void dump(final File file) throws IOException {
-		final Vdf vdf = new Vdf(file);
-		try {
-			vdf.root().accept(new DumpVdfStructure());
-		} finally {
-			vdf.close();
-		}
+	public static void dump(final File file) {
+		new Vdf(file).root().accept(new DumpVdfStructure());
 	}
 
 }

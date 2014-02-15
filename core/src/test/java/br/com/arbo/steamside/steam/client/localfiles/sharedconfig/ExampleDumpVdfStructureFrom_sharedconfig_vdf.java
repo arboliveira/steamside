@@ -1,14 +1,13 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.io.File;
-import java.io.IOException;
 
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.vdf.DumpVdfStructure;
 
 public final class ExampleDumpVdfStructureFrom_sharedconfig_vdf {
 
-	public static void main(final String[] args) throws IOException {
+	public static void main(final String[] args) {
 		final File from = from_sharedconfig_vdf();
 		DumpVdfStructure.dump(from);
 	}

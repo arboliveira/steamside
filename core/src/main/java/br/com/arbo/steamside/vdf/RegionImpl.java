@@ -44,15 +44,27 @@ public class RegionImpl implements Region {
 
 	@Override
 	public void accept(final KeyValueVisitor visitor) {
-		accept(visitor, reader());
+		try {
+			acceptX(visitor);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	public Reader reader() {
-		return parent.readerPositionedInside();
+	private void acceptX(final KeyValueVisitor visitor) throws IOException {
+		final Reader r = newReaderFromParent();
+		try {
+			accept(visitor, r);
+		} finally {
+			r.close();
+		}
 	}
 
-	void accept(final KeyValueVisitor visitor,
-			final Reader reader) {
+	Reader newReaderFromParent() {
+		return parent.newReaderPositionedInside();
+	}
+
+	void accept(final KeyValueVisitor visitor, final Reader reader) {
 		final StreamTokenizer tokenizer = StreamTokenizerBuilder.build(reader);
 		accept(visitor, tokenizer);
 	}
@@ -143,7 +155,7 @@ public class RegionImpl implements Region {
 		}
 
 		@Override
-		public Reader readerPositionedInside() {
+		public Reader newReaderPositionedInside() {
 			class SkipToName implements KeyValueVisitor {
 
 				@Override
@@ -159,7 +171,7 @@ public class RegionImpl implements Region {
 				}
 
 			}
-			final Reader reader = reader();
+			final Reader reader = newReaderFromParent();
 			accept(new SkipToName(), reader);
 			return reader;
 		}

@@ -1,23 +1,20 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
-import java.io.Closeable;
 import java.io.File;
-import java.io.IOException;
 
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.Region;
 import br.com.arbo.steamside.vdf.RegionImpl;
 import br.com.arbo.steamside.vdf.Vdf;
 
-public class Parse_localconfig_vdf implements Closeable {
+public class Parse_localconfig_vdf {
 
-	public Parse_localconfig_vdf(final File file) throws IOException {
+	public Parse_localconfig_vdf(final File file) {
 		this.content = new Vdf(file);
 	}
 
 	public Data_localconfig_vdf parse() {
-		final Data_localconfig_vdf data =
-				new Data_localconfig_vdf();
+		final Data_localconfig_vdf data = new Data_localconfig_vdf();
 
 		final RegionImpl rUserRoamingConfigStore =
 				region(content.root(), "UserLocalConfigStore");
@@ -44,9 +41,4 @@ public class Parse_localconfig_vdf implements Closeable {
 	}
 
 	private final Vdf content;
-
-	@Override
-	public void close() throws IOException {
-		content.close();
-	}
 }

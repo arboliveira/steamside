@@ -1,27 +1,36 @@
 package br.com.arbo.steamside.steam.client.localfiles.monitoring;
 
-import java.util.concurrent.Semaphore;
+import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.inject.Inject;
 
 import org.springframework.context.Lifecycle;
+
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedconfig_vdf;
 
 public class SteamClientLocalFilesDigester
 		implements Lifecycle, SteamClientLocalFilesChangeListener {
 
-	public SteamClientLocalFilesDigester() {
-		on = true;
+	private final File_sharedconfig_vdf file_sharedconfig_vdf;
+
+	@Inject
+	public SteamClientLocalFilesDigester(
+			File_sharedconfig_vdf file_sharedconfig_vdf) {
+		this.file_sharedconfig_vdf = file_sharedconfig_vdf;
 	}
 
 	@Override
 	public void start() {
-		on = true;
 		digestInParallel();
-		beginThreads();
 	}
 
 	@Override
 	public void stop() {
-		endThreads();
-		on = false;
+		executor.shutdown();
 	}
 
 	@Override
@@ -31,48 +40,31 @@ public class SteamClientLocalFilesDigester
 
 	@Override
 	public void fileChanged() {
-		canDigest.release();
+		digestInParallel();
 	}
 
 	private void digestInParallel() {
-
-	}
-
-	private void beginThreads() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void endThreads() {
-		// TODO Auto-generated method stub
-
+		executor.execute(new Digest());
 	}
 
 	class Digest implements Runnable {
 
 		@Override
 		public void run() {
-			try {
-				digestForeverXT();
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
+			digestXT();
 		}
 	}
 
-	private final Semaphore canDigest = new Semaphore(1);
-	private boolean on;
+	private final ExecutorService executor = Executors
+			.newSingleThreadExecutor();
 
-	void digestForeverXT() throws InterruptedException {
-		while (on) {
-			canDigest.acquire();
-			canDigest.drainPermits();
-			digest();
-		}
+	void digestXT() {
+		digest();
 	}
 
 	private void digest() {
-		// TODO Auto-generated method stub
-
+		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
+		final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(file);
+		Data_sharedconfig_vdf data = parser.parse();
 	}
 }

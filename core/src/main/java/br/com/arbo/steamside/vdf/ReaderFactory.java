@@ -4,6 +4,6 @@ import java.io.Reader;
 
 public interface ReaderFactory {
 
-	Reader readerPositionedInside();
+	Reader newReaderPositionedInside();
 
 }

@@ -1,8 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import java.io.Closeable;
 import java.io.File;
-import java.io.IOException;
 
 import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.vdf.NotFound;
@@ -10,16 +8,18 @@ import br.com.arbo.steamside.vdf.Region;
 import br.com.arbo.steamside.vdf.RegionImpl;
 import br.com.arbo.steamside.vdf.Vdf;
 
-public class Parse_sharedconfig_vdf implements Closeable {
+public class Parse_sharedconfig_vdf {
 
-	public Parse_sharedconfig_vdf(File file) throws IOException {
+	public Parse_sharedconfig_vdf(File file) {
 		this.content = new Vdf(file);
 	}
 
-	Apps parse() {
+	public Data_sharedconfig_vdf parse() {
 		final AppsRegion apps_region = newAppsRegion();
 		final Apps parse_apps_region = apps_region.parse();
-		return parse_apps_region;
+		final Data_sharedconfig_vdf data = new Data_sharedconfig_vdf();
+		data.apps = parse_apps_region;
+		return data;
 	}
 
 	private AppsRegion newAppsRegion() {
@@ -48,9 +48,4 @@ public class Parse_sharedconfig_vdf implements Closeable {
 	}
 
 	private final Vdf content;
-
-	@Override
-	public void close() throws IOException {
-		content.close();
-	}
 }
