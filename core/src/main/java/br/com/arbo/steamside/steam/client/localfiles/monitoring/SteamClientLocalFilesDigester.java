@@ -6,16 +6,17 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
-import org.springframework.context.Lifecycle;
+import org.springframework.context.SmartLifecycle;
 
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedconfig_vdf;
 
 public class SteamClientLocalFilesDigester
-		implements Lifecycle, SteamClientLocalFilesChangeListener {
+		implements SmartLifecycle, SteamClientLocalFilesChangeListener {
 
 	private final File_sharedconfig_vdf file_sharedconfig_vdf;
+	private boolean running;
 
 	@Inject
 	public SteamClientLocalFilesDigester(
@@ -26,16 +27,18 @@ public class SteamClientLocalFilesDigester
 	@Override
 	public void start() {
 		digestInParallel();
+		running = true;
 	}
 
 	@Override
 	public void stop() {
+		running = false;
 		executor.shutdown();
 	}
 
 	@Override
 	public boolean isRunning() {
-		return false;
+		return running;
 	}
 
 	@Override
@@ -66,5 +69,22 @@ public class SteamClientLocalFilesDigester
 		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
 		final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(file);
 		Data_sharedconfig_vdf data = parser.parse();
+		System.out.println(data);
+	}
+
+	@Override
+	public int getPhase() {
+		return 1;
+	}
+
+	@Override
+	public boolean isAutoStartup() {
+		return true;
+	}
+
+	@Override
+	public void stop(Runnable callback) {
+		stop();
+		callback.run();
 	}
 }
