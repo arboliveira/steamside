@@ -27,6 +27,7 @@ import br.com.arbo.steamside.settings.file.Load;
 import br.com.arbo.steamside.settings.file.Save;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Digester;
@@ -58,7 +59,9 @@ public class ContainerFactory {
 				.addComponent(User.class, FromJava.class)
 				.addComponent(SteamBrowserProtocol.class)
 				.addComponent(AppNameFactory.class, AppNameFromLocalFiles.class)
-				.addComponent(InMemory_appinfo_vdf.class)
+				.addComponent(
+						Data_appinfo_vdf.class,
+						InMemory_appinfo_vdf.class)
 				.addComponent(RunGame.class)
 				.addComponent(
 						DataFactory_sharedconfig_vdf.class,

@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import br.com.arbo.steamside.apps.AppImpl.Builder;
 import br.com.arbo.steamside.apps.Filter.Reject;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.I_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 
@@ -32,5 +32,5 @@ public class FilterPlatformTest {
 	@Rule
 	public JUnitRuleMockery context = new JUnitRuleMockery();
 
-	final I_appinfo_vdf appinfo = context.mock(I_appinfo_vdf.class);
+	final Data_appinfo_vdf appinfo = context.mock(Data_appinfo_vdf.class);
 }

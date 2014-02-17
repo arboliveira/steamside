@@ -14,7 +14,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.ParseVisitor
 import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.Parse_appinfo_vdf;
 import br.com.arbo.steamside.types.AppId;
 
-public class InMemory_appinfo_vdf implements I_appinfo_vdf {
+public class InMemory_appinfo_vdf implements Data_appinfo_vdf {
 
 	private final File_appinfo_vdf file_appinfo_vdf;
 

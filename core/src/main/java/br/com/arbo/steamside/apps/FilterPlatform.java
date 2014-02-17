@@ -2,7 +2,7 @@ package br.com.arbo.steamside.apps;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.I_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 
@@ -24,10 +24,10 @@ public class FilterPlatform implements Filter {
 		}
 	}
 
-	public FilterPlatform(final I_appinfo_vdf appinfo) {
+	public FilterPlatform(final Data_appinfo_vdf appinfo) {
 		this.appinfo = appinfo;
 	}
 
-	private final I_appinfo_vdf appinfo;
+	private final Data_appinfo_vdf appinfo;
 
 }

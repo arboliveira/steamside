@@ -6,7 +6,7 @@ import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.Filter;
 import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.favorites.FavoritesOfUser.NotSet;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.types.Category;
 
 public class Favorites implements Filter {
@@ -26,12 +26,12 @@ public class Favorites implements Filter {
 		}
 	}
 
-	private final InMemory_appinfo_vdf appinfo;
+	private final Data_appinfo_vdf appinfo;
 	private final FavoritesOfUser ofUser;
 
 	@Inject
 	public Favorites(final FavoritesOfUser ofUser,
-			final InMemory_appinfo_vdf appinfo) {
+			final Data_appinfo_vdf appinfo) {
 		this.ofUser = ofUser;
 		this.appinfo = appinfo;
 	}

@@ -11,6 +11,9 @@ import javax.inject.Inject;
 
 import org.springframework.context.SmartLifecycle;
 
+import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedconfig_vdf;
@@ -18,14 +21,12 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedco
 public class Digester
 		implements SmartLifecycle, ChangeListener {
 
-	private final File_sharedconfig_vdf file_sharedconfig_vdf;
-	private boolean running;
-
 	@Inject
-	public Digester(
-			File_sharedconfig_vdf file_sharedconfig_vdf) {
-		this.file_sharedconfig_vdf = file_sharedconfig_vdf;
-	}
+	private File_sharedconfig_vdf file_sharedconfig_vdf;
+	@Inject
+	private File_appinfo_vdf file_appinfo_vdf;
+
+	private boolean running;
 
 	@Override
 	public void start() {
@@ -86,11 +87,25 @@ public class Digester
 
 	}
 
+	class Digest_appinfo_vdf implements Callable<Data_appinfo_vdf> {
+
+		@Override
+		public Data_appinfo_vdf call() throws Exception {
+			return digest_appinfo_vdf();
+		}
+
+	}
+
 	Data_sharedconfig_vdf digest_sharedconfig_vdf() {
 		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
 		final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(
 				file);
 		Data_sharedconfig_vdf data = parser.parse();
+		return data;
+	}
+
+	Data_appinfo_vdf digest_appinfo_vdf() {
+		Data_appinfo_vdf data = new InMemory_appinfo_vdf(file_appinfo_vdf);
 		return data;
 	}
 

@@ -11,7 +11,7 @@ import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor.Full;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 
 public class Continues {
 
@@ -28,7 +28,7 @@ public class Continues {
 	@Inject
 	public Continues(
 			@NonNull final ContinuesRooster continues,
-			final InMemory_appinfo_vdf appinfo) {
+			final Data_appinfo_vdf appinfo) {
 		super();
 		this.continues = continues;
 		this.appinfo = appinfo;
@@ -36,5 +36,5 @@ public class Continues {
 
 	@NonNull
 	private final ContinuesRooster continues;
-	private final InMemory_appinfo_vdf appinfo;
+	private final Data_appinfo_vdf appinfo;
 }

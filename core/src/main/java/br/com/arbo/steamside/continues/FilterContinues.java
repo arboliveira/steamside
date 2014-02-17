@@ -8,7 +8,7 @@ import br.com.arbo.steamside.apps.FilterKidsMode;
 import br.com.arbo.steamside.apps.FilterNeverPlayed;
 import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.kids.KidsMode;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.I_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 
 public class FilterContinues implements Filter {
 
@@ -27,11 +27,11 @@ public class FilterContinues implements Filter {
 	}
 
 	private final KidsMode kidsmode;
-	private final I_appinfo_vdf appinfo;
+	private final Data_appinfo_vdf appinfo;
 
 	@Inject
 	public FilterContinues(
-			final I_appinfo_vdf appinfo,
+			final Data_appinfo_vdf appinfo,
 			final KidsMode kidsmode) {
 		this.appinfo = appinfo;
 		this.kidsmode = kidsmode;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.json.app.AppDTO;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.I_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
@@ -30,7 +30,7 @@ public class CollectionController {
 			throws
 			br.com.arbo.steamside.data.collections.NotFound
 	{
-		final I_appinfo_vdf _appinfo = this.appinfo;
+		final Data_appinfo_vdf _appinfo = this.appinfo;
 		final List<AppDTO> result = new LinkedList<AppDTO>();
 		data.on(new CollectionName(name)).accept(new AppIdVisitor() {
 
@@ -67,7 +67,7 @@ public class CollectionController {
 	}
 
 	@Inject
-	private I_appinfo_vdf appinfo;
+	private Data_appinfo_vdf appinfo;
 
 	@Inject
 	private CollectionHomeXmlFile data;

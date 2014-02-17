@@ -11,7 +11,7 @@ import br.com.arbo.processes.seek.Criteria;
 import br.com.arbo.processes.seek.ProcessSeeker;
 import br.com.arbo.processes.seek.ProcessSeekerFactory;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.protocol.C_rungameid;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.types.AppId;
@@ -21,7 +21,7 @@ public class RunGame {
 	@Inject
 	public RunGame(
 			final SteamBrowserProtocol steam,
-			final InMemory_appinfo_vdf appinfo_vdf) {
+			final Data_appinfo_vdf appinfo_vdf) {
 		this.steam = steam;
 		this.appinfo_vdf = appinfo_vdf;
 	}
@@ -99,6 +99,6 @@ public class RunGame {
 	}
 
 	private final SteamBrowserProtocol steam;
-	private final InMemory_appinfo_vdf appinfo_vdf;
+	private final Data_appinfo_vdf appinfo_vdf;
 
 }
