@@ -29,7 +29,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFi
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.monitoring.SteamClientLocalFilesDigester;
+import br.com.arbo.steamside.steam.client.localfiles.monitoring.Digester;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
@@ -78,7 +78,7 @@ public class ContainerFactory {
 						ContinuesFromSteamClientLocalfiles.class)
 				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
-				.addComponent(SteamClientLocalFilesDigester.class)
+				.addComponent(Digester.class)
 		//
 		;
 

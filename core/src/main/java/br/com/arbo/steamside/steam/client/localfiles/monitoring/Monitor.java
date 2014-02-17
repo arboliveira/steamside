@@ -15,13 +15,13 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 
-public class SteamClientLocalFilesMonitor implements Lifecycle {
+public class Monitor implements Lifecycle {
 
-	public SteamClientLocalFilesMonitor(
+	public Monitor(
 			File_localconfig_vdf localconfig_vdf,
 			File_sharedconfig_vdf sharedconfig_vdf,
 			File_appinfo_vdf appinfo_vdf,
-			SteamClientLocalFilesChangeListener listener) {
+			ChangeListener listener) {
 		this.sharedconfig_vdf =
 				toFileObject(sharedconfig_vdf.sharedconfig_vdf());
 		this.localconfig_vdf =
@@ -86,6 +86,6 @@ public class SteamClientLocalFilesMonitor implements Lifecycle {
 	private final FileObject sharedconfig_vdf;
 	private final FileObject localconfig_vdf;
 	private final FileObject appinfo_vdf;
-	private final SteamClientLocalFilesChangeListener listener;
+	private final ChangeListener listener;
 
 }

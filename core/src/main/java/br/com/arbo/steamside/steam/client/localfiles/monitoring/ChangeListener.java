@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.monitoring;
 
-public interface SteamClientLocalFilesChangeListener {
+public interface ChangeListener {
 
 	void fileChanged();
 }
