@@ -11,34 +11,44 @@ import javax.inject.Inject;
 
 import org.springframework.context.SmartLifecycle;
 
+import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.Data_localconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.localconfig.Parse_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedconfig_vdf;
 
 public class Digester
-		implements SmartLifecycle, ChangeListener {
+		implements SmartLifecycle {
 
 	@Inject
-	private File_sharedconfig_vdf file_sharedconfig_vdf;
-	@Inject
-	private File_appinfo_vdf file_appinfo_vdf;
+	public Digester(
+			File_appinfo_vdf file_appinfo_vdf,
+			File_localconfig_vdf file_localconfig_vdf,
+			File_sharedconfig_vdf file_sharedconfig_vdf) {
+		this.file_appinfo_vdf = file_appinfo_vdf;
+		this.file_localconfig_vdf = file_localconfig_vdf;
+		this.file_sharedconfig_vdf = file_sharedconfig_vdf;
+	}
+
+	private final File_localconfig_vdf file_localconfig_vdf;
+	private final File_sharedconfig_vdf file_sharedconfig_vdf;
+	private final File_appinfo_vdf file_appinfo_vdf;
 
 	private boolean running;
 
 	@Override
 	public void start() {
-		digestInParallel();
 		running = true;
 	}
 
 	@Override
 	public void stop() {
 		running = false;
-		digestExec.shutdown();
 		partsExec.shutdown();
 	}
 
@@ -47,37 +57,8 @@ public class Digester
 		return running;
 	}
 
-	@Override
-	public void fileChanged() {
-		digestInParallel();
-	}
-
-	private void digestInParallel() {
-		digestExec.execute(new Digest());
-	}
-
-	class Digest implements Runnable {
-
-		@Override
-		public void run() {
-			digestXT();
-		}
-	}
-
-	private final ExecutorService digestExec = Executors
-			.newSingleThreadExecutor();
 	private final ExecutorService partsExec = Executors
 			.newFixedThreadPool(3);
-
-	void digestXT() {
-		try {
-			digest();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		} catch (ExecutionException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	class Digest_sharedconfig_vdf implements Callable<Data_sharedconfig_vdf> {
 
@@ -108,9 +89,15 @@ public class Digester
 
 	Data_sharedconfig_vdf digest_sharedconfig_vdf() {
 		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
-		final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(
-				file);
+		final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(file);
 		Data_sharedconfig_vdf data = parser.parse();
+		return data;
+	}
+
+	Data_localconfig_vdf digest_localconfig_vdf() {
+		final File file = file_localconfig_vdf.localconfig_vdf();
+		final Parse_localconfig_vdf parser = new Parse_localconfig_vdf(file);
+		Data_localconfig_vdf data = parser.parse();
 		return data;
 	}
 
@@ -119,7 +106,21 @@ public class Digester
 		return data;
 	}
 
-	private void digest() throws InterruptedException, ExecutionException {
+	public AppsHome digest() {
+		try {
+			return digestOn();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private AppsHome digestOn() throws InterruptedException, ExecutionException {
+		Future<Data_localconfig_vdf> f_localconfig =
+				partsExec.submit(new Digest_localconfig_vdf());
+		Data_localconfig_vdf d_localconfig = f_localconfig.get();
+
 		Future<Data_sharedconfig_vdf> f_sharedconfig =
 				partsExec.submit(new Digest_sharedconfig_vdf());
 		Data_sharedconfig_vdf d_sharedconfig = f_sharedconfig.get();
@@ -128,7 +129,7 @@ public class Digester
 				partsExec.submit(new Digest_appinfo_vdf());
 		Data_appinfo_vdf d_appinfo = f_appinfo.get();
 
-		System.out.println(data.apps().count());
+		return new Combine(d_appinfo, d_localconfig, d_sharedconfig).combine();
 	}
 
 	@Override

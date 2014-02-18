@@ -13,7 +13,7 @@ class AppsRegion {
 	}
 
 	public Data_localconfig_vdf parse() {
-		final Data_localconfig_vdf data = new Data_localconfig_vdf();
+		final InMemory_localconfig_vdf data = new InMemory_localconfig_vdf();
 
 		class ParseEveryAppSubRegion implements KeyValueVisitor {
 

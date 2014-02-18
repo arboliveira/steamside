@@ -5,8 +5,8 @@ import java.util.List;
 
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.AppImpl;
-import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 
 public class MockContinues implements
@@ -20,7 +20,7 @@ public class MockContinues implements
 	static class Mock implements ContinuesRooster {
 
 		@Override
-		public void accept(final AppVisitor visitor) {
+		public void accept(final App.Visitor visitor) {
 			final List<String> ids = Arrays.asList(
 					"400", // Portal
 					"70", // Half-Life

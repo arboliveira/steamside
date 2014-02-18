@@ -25,4 +25,16 @@ public class AppId {
 	public int hashCode() {
 		return appid.hashCode();
 	}
+
+	@SuppressWarnings("null")
+	@NonNull
+	public String appid() {
+		return appid;
+	}
+
+	public interface Visitor {
+
+		void each(AppId appid);
+	}
+
 }

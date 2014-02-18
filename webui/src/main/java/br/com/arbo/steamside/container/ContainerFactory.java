@@ -9,6 +9,8 @@ import br.com.arbo.org.apache.commons.lang3.ProgramFiles;
 import br.com.arbo.org.apache.commons.lang3.UserHome;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
+import br.com.arbo.steamside.apps.AppsHomeBox;
+import br.com.arbo.steamside.apps.AppsHomeFactory;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.continues.FilterContinues;
@@ -25,13 +27,14 @@ import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.settings.file.File_steamside_xml;
 import br.com.arbo.steamside.settings.file.Load;
 import br.com.arbo.steamside.settings.file.Save;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.monitoring.ChangeListener;
+import br.com.arbo.steamside.steam.client.localfiles.monitoring.DigestOnChange;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Digester;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.DataFactory_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.monitoring.Monitor;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
@@ -40,7 +43,6 @@ import br.com.arbo.steamside.steam.client.localfiles.steamlocation.MacOSX;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocation;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.Windows;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
-import br.com.arbo.steamside.steam.store.AppNameFactory;
 
 public class ContainerFactory {
 
@@ -55,17 +57,18 @@ public class ContainerFactory {
 	private static void addComponents(final ContainerWeb container) {
 		container
 				.addComponent(Library.class, LibraryImpl.class)
+				.addComponent(AppsHomeFactory.class, AppsHomeBox.class)
 				.addComponent(KidsMode.class, FromUsername.class)
 				.addComponent(User.class, FromJava.class)
 				.addComponent(SteamBrowserProtocol.class)
-				.addComponent(AppNameFactory.class, AppNameFromLocalFiles.class)
+				//				.addComponent(AppNameFactory.class, AppNameFromLocalFiles.class)
 				.addComponent(
 						Data_appinfo_vdf.class,
 						InMemory_appinfo_vdf.class)
 				.addComponent(RunGame.class)
-				.addComponent(
-						DataFactory_sharedconfig_vdf.class,
-						AutoreloadingDataFactory_sharedconfig_vdf.class)
+				//				.addComponent(
+				//						DataFactory_sharedconfig_vdf.class,
+				//						AutoreloadingDataFactory_sharedconfig_vdf.class)
 				.addComponent(File_sharedconfig_vdf.class)
 				.addComponent(File_localconfig_vdf.class)
 				.addComponent(File_appinfo_vdf.class)
@@ -82,6 +85,8 @@ public class ContainerFactory {
 				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class)
 				.addComponent(Digester.class)
+				.addComponent(Monitor.class)
+				.addComponent(ChangeListener.class, DigestOnChange.class)
 		//
 		;
 

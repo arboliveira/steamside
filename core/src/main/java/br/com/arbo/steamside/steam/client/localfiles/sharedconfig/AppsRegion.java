@@ -1,15 +1,10 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.AppImpl;
-import br.com.arbo.steamside.apps.Apps;
-import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
-import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 
-class AppsRegion implements R_apps {
+class AppsRegion {
 
 	private final Region content;
 
@@ -17,8 +12,7 @@ class AppsRegion implements R_apps {
 		this.content = content;
 	}
 
-	@Override
-	public void accept(final AppIdVisitor visitor) {
+	public void accept(final AppId.Visitor visitor) {
 		class ParseEveryAppSubRegion implements KeyValueVisitor {
 
 			@Override
@@ -38,12 +32,12 @@ class AppsRegion implements R_apps {
 		content.accept(new ParseEveryAppSubRegion());
 	}
 
-	Apps parse() {
-		final Apps a = new Apps();
-		this.accept(new AppVisitor() {
+	Data_sharedconfig_vdf parse() {
+		final InMemory_sharedconfig_vdf a = new InMemory_sharedconfig_vdf();
+		this.accept(new Entry_app.Visitor() {
 
 			@Override
-			public void each(final App app) {
+			public void each(final Entry_app app) {
 				a.add(app);
 			}
 
@@ -51,17 +45,17 @@ class AppsRegion implements R_apps {
 		return a;
 	}
 
-	private void accept(final AppVisitor visitor) {
+	private void accept(final Entry_app.Visitor visitor) {
 		class ParseEveryAppSubRegion implements KeyValueVisitor {
 
 			@Override
 			public void onSubRegion(final String k, final Region r)
 					throws Finished {
 				final AppRegion appRegion = new AppRegion(r);
-				final AppImpl.Builder app = appRegion.parse();
+				final Entry_app app = appRegion.parse();
 				if (k == null) throw new NullPointerException();
-				app.appid(k);
-				visitor.each(app.make());
+				app.id = k;
+				visitor.each(app);
 			}
 
 			@Override

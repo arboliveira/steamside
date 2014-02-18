@@ -11,7 +11,7 @@ import br.com.arbo.steamside.types.Category;
 
 import com.google.common.collect.ArrayListMultimap;
 
-public class Apps implements AppsHome {
+public class InMemoryAppsHome implements AppsHome {
 
 	public void add(final App app) {
 		apps.put(app.appid().appid, app);
@@ -24,35 +24,39 @@ public class Apps implements AppsHome {
 		});
 	}
 
+	@Override
 	public App app(final AppId appid) throws NotFound {
 		final App app = apps.get(appid.appid);
 		if (app != null) return app;
 		throw NotFound.appid(appid.appid);
 	}
 
+	@Override
 	public int count() {
 		return apps.size();
 	}
 
-	public void accept(final AppIdVisitor visitor) {
+	public void accept(final AppId.Visitor visitor) {
 		for (final App app : apps.values())
 			visitor.each(app.appid());
 	}
 
-	public void accept(final AppVisitor visitor) {
+	@Override
+	public void accept(final App.Visitor visitor) {
 		for (final App app : apps.values())
 			visitor.each(app);
 	}
 
+	@Override
 	public void accept(
-			@NonNull final Filter filter, @NonNull final AppVisitor visitor) {
+			@NonNull final Filter filter, @NonNull final App.Visitor visitor) {
 		for (final App app : apps.values())
 			consider(app, filter, visitor);
 	}
 
 	private static void consider(
 			final App app, final Filter filter,
-			final @NonNull AppVisitor visitor) {
+			final @NonNull App.Visitor visitor) {
 		try {
 			filter.consider(app);
 		} catch (final Reject e) {
@@ -61,49 +65,18 @@ public class Apps implements AppsHome {
 		visitor.each(app);
 	}
 
-	public interface CategoryWithAppsVisitor {
-
-		void visit(Category each, AppsHome itsApps);
-	}
-
+	@Override
 	public void accept(final CategoryWithAppsVisitor visitor) {
 		for (final String each : categories.keySet()) {
-			final AppsHome itsApps =
-					AppsHome.Utils.adapt(categories.get(each));
+			final AppsCollection itsApps =
+					AppsCollection.Utils.adapt(categories.get(each));
 
 			visitor.visit(new Category(each), itsApps);
 		}
 	}
 
-	public static class NotFound extends Exception {
-
-		public static NotFound appid(final String appid) {
-			return new NotFound("No app with id: " + appid);
-		}
-
-		private NotFound(final String message) {
-			super(message);
-		}
-	}
-
-	public interface AppIdVisitor {
-
-		void each(AppId appid);
-	}
-
-	public interface AppVisitor {
-
-		void each(App app);
-	}
-
 	private final Map<String, App> apps = new HashMap<String, App>();
 	final ArrayListMultimap<String, App> categories =
 			ArrayListMultimap.<String, App> create();
-
-	@Override
-	public void accept(final AppsHome.Visitor visitor) {
-		for (final App each : apps.values())
-			visitor.visit(each);
-	}
 
 }

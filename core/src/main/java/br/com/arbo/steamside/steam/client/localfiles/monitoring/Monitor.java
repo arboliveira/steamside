@@ -3,6 +3,8 @@ package br.com.arbo.steamside.steam.client.localfiles.monitoring;
 import java.io.File;
 import java.util.Arrays;
 
+import javax.inject.Inject;
+
 import org.apache.commons.vfs2.FileChangeEvent;
 import org.apache.commons.vfs2.FileListener;
 import org.apache.commons.vfs2.FileObject;
@@ -17,6 +19,7 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedcon
 
 public class Monitor implements Lifecycle {
 
+	@Inject
 	public Monitor(
 			File_localconfig_vdf localconfig_vdf,
 			File_sharedconfig_vdf sharedconfig_vdf,

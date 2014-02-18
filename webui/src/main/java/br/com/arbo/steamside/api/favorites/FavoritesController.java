@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.apps.Apps.AppVisitor;
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor;
@@ -35,7 +35,7 @@ public class FavoritesController {
 	}
 
 	@SuppressWarnings("null")
-	private void from_accept(@NonNull final AppVisitor visitor) {
+	private void from_accept(@NonNull final App.Visitor visitor) {
 		@NonNull
 		final Favorites filter = favorites;
 		library.accept(filter, visitor);

@@ -1,25 +1,11 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import br.com.arbo.steamside.apps.Apps;
-import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
+import br.com.arbo.steamside.types.AppId;
 
-public class Data_sharedconfig_vdf {
+public interface Data_sharedconfig_vdf {
 
-	public R_apps r_apps() {
-		return r_apps;
-	}
+	R_apps apps();
 
-	public Apps apps() {
-		return apps;
-	}
+	Entry_app get(AppId appid);
 
-	Apps apps;
-
-	R_apps r_apps = new R_apps() {
-
-		@Override
-		public void accept(AppIdVisitor visitor) {
-			apps.accept(visitor);
-		}
-	};
 }

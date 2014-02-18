@@ -1,11 +1,14 @@
 package br.com.arbo.steamside.apps;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.types.AppName;
 import br.com.arbo.steamside.types.Category;
 
 public class AppImpl implements App {
@@ -17,18 +20,20 @@ public class AppImpl implements App {
 		return c.contains(category.category);
 	}
 
+	@SuppressWarnings("null")
 	@Override
+	@NonNull
 	public AppId appid() {
 		return appid;
 	}
 
 	public static class Builder {
 
-		private Collection<String> categories;
+		private final Collection<String> categories = new HashSet<String>();
 
-		public App make() {
-			return new AppImpl(newAppId(), this.categories,
-					this.lastPlayed, this.cloudEnabled);
+		public AppImpl make() {
+			return new AppImpl(newAppId(), this.name, this.executable,
+					this.categories, this.lastPlayed, this.cloudEnabled);
 		}
 
 		@NonNull
@@ -41,6 +46,8 @@ public class AppImpl implements App {
 		private AppId appid;
 		private String lastPlayed;
 		private String cloudEnabled;
+		private AppName name;
+		private String executable;
 
 		public Builder lastPlayed(final String v) {
 			this.lastPlayed = v;
@@ -51,29 +58,40 @@ public class AppImpl implements App {
 			this.cloudEnabled = v;
 		}
 
-		public void categories(final Collection<String> v) {
-			this.categories = v;
-		}
-
 		public Builder appid(@NonNull final String k) {
 			this.appid = new AppId(k);
 			return this;
+		}
+
+		public Builder name(AppName name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder executable(String executable) {
+			this.executable = executable;
+			return this;
+		}
+
+		public void addCategory(String category) {
+			this.categories.add(category);
 		}
 	}
 
 	AppImpl(
 			@NonNull final AppId appId,
+			@Nullable AppName name,
+			@Nullable String executable,
 			@Nullable final Collection<String> categories,
 			@Nullable final String lastPlayed,
 			@Nullable final String cloudEnabled) {
 		this.appid = appId;
+		this.name = name;
+		this.executable = executable;
 		this.categories = categories;
 		this.lastPlayed = lastPlayed;
 		this.cloudEnabled = cloudEnabled;
 	}
-
-	private final AppId appid;
-	private final String lastPlayed;
 
 	@Override
 	@Nullable
@@ -93,11 +111,6 @@ public class AppImpl implements App {
 		return cloudEnabled;
 	}
 
-	private final String cloudEnabled;
-
-	@Nullable
-	private final Collection<String> categories;
-
 	@Override
 	public void accept(final Category.Visitor visitor) {
 		final Collection<String> c = categories;
@@ -110,4 +123,38 @@ public class AppImpl implements App {
 	public String toString() {
 		return appid.toString();
 	}
+
+	@NonNull
+	private final AppName name;
+
+	@Nullable
+	private final String executable;
+
+	@Nullable
+	private final String cloudEnabled;
+
+	@Nullable
+	private final Collection<String> categories;
+
+	@NonNull
+	private final AppId appid;
+
+	@Nullable
+	private final String lastPlayed;
+
+	@SuppressWarnings("null")
+	@Override
+	@NonNull
+	public AppName name() {
+		return name;
+	}
+
+	@SuppressWarnings("null")
+	@Override
+	@NonNull
+	public String executable() throws NotAvailableOnThisPlatform {
+		if (executable == null) throw new NotAvailableOnThisPlatform();
+		return executable;
+	}
+
 }

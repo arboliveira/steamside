@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.apps.LastPlayedDescending;
 import br.com.arbo.steamside.library.Library;
 
@@ -20,7 +19,7 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 	private final Library library;
 
 	@Override
-	public void accept(final AppVisitor visitor) {
+	public void accept(final App.Visitor visitor) {
 		final List<App> list = queryApps();
 		sort(list);
 		for (final App app : list)
@@ -29,7 +28,7 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 
 	private List<App> queryApps() {
 		final List<App> list = new ArrayList<App>();
-		from_accept(new AppVisitor()/* @formatter:off */ {	@Override public void each(final App app) /* @formatter:on */
+		from_accept(new App.Visitor()/* @formatter:off */ {	@Override public void each(final App app) /* @formatter:on */
 			{
 				list.add(app);
 			}
@@ -38,7 +37,7 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 	}
 
 	@SuppressWarnings("null")
-	private void from_accept(final AppVisitor add) {
+	private void from_accept(final App.Visitor add) {
 		library.accept(continues, add);
 	}
 

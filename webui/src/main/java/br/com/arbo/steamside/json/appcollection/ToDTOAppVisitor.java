@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.Apps.AppVisitor;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 
-public class ToDTOAppVisitor implements AppVisitor {
+public class ToDTOAppVisitor implements App.Visitor {
 
 	private static final int limit = 27;
 

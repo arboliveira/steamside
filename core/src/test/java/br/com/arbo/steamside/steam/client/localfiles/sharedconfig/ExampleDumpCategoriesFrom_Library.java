@@ -1,8 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
-import br.com.arbo.steamside.apps.AppsHome;
+import br.com.arbo.steamside.apps.AppsCollection;
+import br.com.arbo.steamside.apps.AppsHome.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.indent.Indent;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.library.Library_ForExamples;
@@ -25,19 +25,20 @@ public class ExampleDumpCategoriesFrom_Library {
 		library.accept(new CategoryWithAppsVisitor() {
 
 			@Override
-			public void visit(final Category category, final AppsHome itsApps) {
+			public void visit(final Category category,
+					final AppsCollection itsApps) {
 				printCategory(category, itsApps);
 			}
 		});
 	}
 
-	void printCategory(final Category category, final AppsHome itsApps) {
+	void printCategory(final Category category, final AppsCollection itsApps) {
 		System.out.println(indent.on(category));
 		indent.increase();
-		itsApps.accept(new AppsHome.Visitor() {
+		itsApps.accept(new App.Visitor() {
 
 			@Override
-			public void visit(final App app) {
+			public void each(final App app) {
 				System.out.println(indent.on(dump.toInfo(app.appid())));
 			}
 		});

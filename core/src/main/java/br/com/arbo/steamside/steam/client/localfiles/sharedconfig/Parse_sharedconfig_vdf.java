@@ -2,7 +2,6 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.io.File;
 
-import br.com.arbo.steamside.apps.Apps;
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.Region;
 import br.com.arbo.steamside.vdf.RegionImpl;
@@ -16,9 +15,7 @@ public class Parse_sharedconfig_vdf {
 
 	public Data_sharedconfig_vdf parse() {
 		final AppsRegion apps_region = newAppsRegion();
-		final Apps parse_apps_region = apps_region.parse();
-		final Data_sharedconfig_vdf data = new Data_sharedconfig_vdf();
-		data.apps = parse_apps_region;
+		final Data_sharedconfig_vdf data = apps_region.parse();
 		return data;
 	}
 

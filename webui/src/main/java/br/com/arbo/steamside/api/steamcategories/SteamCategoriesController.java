@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.apps.Apps.CategoryWithAppsVisitor;
-import br.com.arbo.steamside.apps.AppsHome;
+import br.com.arbo.steamside.apps.AppsCollection;
+import br.com.arbo.steamside.apps.AppsHome.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.Category;
 
@@ -27,7 +27,7 @@ public class SteamCategoriesController {
 
 			@Override
 			public void visit(final Category each,
-					final AppsHome itsApps) {
+					final AppsCollection itsApps) {
 				dto.add(new SteamCategoryDTO(each));
 			}
 		});

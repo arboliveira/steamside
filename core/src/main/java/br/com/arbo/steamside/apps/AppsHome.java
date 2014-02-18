@@ -1,27 +1,22 @@
 package br.com.arbo.steamside.apps;
 
-import java.util.List;
+import org.eclipse.jdt.annotation.NonNull;
 
-public interface AppsHome {
+import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.types.Category;
 
-	interface Visitor {
+public interface AppsHome extends AppsCollection {
 
-		void visit(App each);
+	App app(AppId appid) throws NotFound;
+
+	void accept(
+			@NonNull final Filter filter, @NonNull final App.Visitor visitor);
+
+	void accept(CategoryWithAppsVisitor visitor);
+
+	public interface CategoryWithAppsVisitor {
+
+		void visit(Category each, AppsCollection itsApps);
 	}
 
-	void accept(AppsHome.Visitor visitor);
-
-	public static class Utils {
-
-		public static AppsHome adapt(final List<App> list) {
-			return new AppsHome() {
-
-				@Override
-				public void accept(final AppsHome.Visitor visitor) {
-					for (final App app : list)
-						visitor.visit(app);
-				}
-			};
-		}
-	}
 }

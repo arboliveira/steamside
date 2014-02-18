@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import br.com.arbo.steamside.apps.AppImpl;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 
@@ -12,7 +11,7 @@ class AppRegion {
 		this.content = content;
 	}
 
-	AppImpl.Builder parse() {
+	Entry_app parse() {
 		final Hydrate hydrate = new Hydrate();
 		content.accept(hydrate);
 		return hydrate.app;
@@ -20,22 +19,22 @@ class AppRegion {
 
 	static final class Hydrate implements KeyValueVisitor {
 
-		final AppImpl.Builder app = new AppImpl.Builder();
+		final Entry_app app = new Entry_app();
 
 		@Override
 		public void onKeyValue(final String k, final String v)
 				throws Finished {
 			if ("LastPlayed".equalsIgnoreCase(k))
-				app.lastPlayed(v);
+				app.sLastPlayed = v;
 			else if ("CloudEnabled".equalsIgnoreCase(k))
-				app.cloudEnabled(v);
+				app.sCloudEnabled = v;
 		}
 
 		@Override
 		public void onSubRegion(final String k, final Region r)
 				throws Finished {
 			if ("tags".equalsIgnoreCase(k))
-				app.categories(new TagsRegion(r).parse());
+				app.tags = new TagsRegion(r).parse();
 		}
 	}
 
