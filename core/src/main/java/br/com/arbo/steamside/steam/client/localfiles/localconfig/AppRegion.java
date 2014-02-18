@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
-import br.com.arbo.steamside.apps.AppImpl;
+import br.com.arbo.steamside.types.LastPlayed;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 
@@ -12,7 +12,7 @@ class AppRegion {
 		this.content = content;
 	}
 
-	public AppImpl.Builder parse() {
+	KV_app_Impl parse() {
 		final Hydrate hydrate = new Hydrate();
 		content.accept(hydrate);
 		return hydrate.app;
@@ -20,13 +20,13 @@ class AppRegion {
 
 	static final class Hydrate implements KeyValueVisitor {
 
-		final AppImpl.Builder app = new AppImpl.Builder();
+		final KV_app_Impl app = new KV_app_Impl();
 
 		@Override
 		public void onKeyValue(final String k, final String v)
 				throws Finished {
 			if ("LastPlayed".equalsIgnoreCase(k))
-				app.lastPlayed(v);
+				app.lastPlayed = new LastPlayed(v);
 		}
 
 		@Override

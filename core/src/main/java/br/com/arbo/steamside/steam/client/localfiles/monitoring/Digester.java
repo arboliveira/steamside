@@ -14,6 +14,7 @@ import org.springframework.context.SmartLifecycle;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.localconfig.Data_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedconfig_vdf;
@@ -96,6 +97,15 @@ public class Digester
 
 	}
 
+	class Digest_localconfig_vdf implements Callable<Data_localconfig_vdf> {
+
+		@Override
+		public Data_localconfig_vdf call() throws Exception {
+			return digest_localconfig_vdf();
+		}
+
+	}
+
 	Data_sharedconfig_vdf digest_sharedconfig_vdf() {
 		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
 		final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(
@@ -110,9 +120,14 @@ public class Digester
 	}
 
 	private void digest() throws InterruptedException, ExecutionException {
-		Future<Data_sharedconfig_vdf> f_sharedConfig =
+		Future<Data_sharedconfig_vdf> f_sharedconfig =
 				partsExec.submit(new Digest_sharedconfig_vdf());
-		Data_sharedconfig_vdf data = f_sharedConfig.get();
+		Data_sharedconfig_vdf d_sharedconfig = f_sharedconfig.get();
+
+		Future<Data_appinfo_vdf> f_appinfo =
+				partsExec.submit(new Digest_appinfo_vdf());
+		Data_appinfo_vdf d_appinfo = f_appinfo.get();
+
 		System.out.println(data.apps().count());
 	}
 

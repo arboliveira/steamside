@@ -18,7 +18,7 @@ public class CollectionsXml {
 			find(name);
 		} catch (final NotFound e) {
 			final CollectionXml anew = new CollectionXml();
-			anew.name = name.name;
+			anew.name = name.value;
 			collection.add(anew);
 		}
 	}
@@ -36,7 +36,7 @@ public class CollectionsXml {
 
 	private CollectionXml find(final CollectionName name) throws NotFound {
 		for (final CollectionXml collectionXml : collection)
-			if (name.name.equals(collectionXml.name))
+			if (name.value.equals(collectionXml.name))
 				return collectionXml;
 		throw new NotFound();
 	}

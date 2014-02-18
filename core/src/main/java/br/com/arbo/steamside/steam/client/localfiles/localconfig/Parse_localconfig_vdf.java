@@ -14,8 +14,12 @@ public class Parse_localconfig_vdf {
 	}
 
 	public Data_localconfig_vdf parse() {
-		final Data_localconfig_vdf data = new Data_localconfig_vdf();
+		Region apps = findRegion_apps();
+		Data_localconfig_vdf data = new AppsRegion(apps).parse();
+		return data;
+	}
 
+	private Region findRegion_apps() {
 		final RegionImpl rUserRoamingConfigStore =
 				region(content.root(), "UserLocalConfigStore");
 		final RegionImpl rSoftware =
@@ -26,9 +30,7 @@ public class Parse_localconfig_vdf {
 				region(rValve, "Steam");
 		final Region apps =
 				region(rsteam, "apps");
-
-		data.apps = new AppsRegion(apps).parse();
-		return data;
+		return apps;
 	}
 
 	private static RegionImpl region(final RegionImpl r, final String name)
