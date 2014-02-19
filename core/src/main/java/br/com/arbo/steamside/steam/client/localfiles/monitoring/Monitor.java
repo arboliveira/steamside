@@ -11,13 +11,12 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.impl.DefaultFileMonitor;
-import org.springframework.context.Lifecycle;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 
-public class Monitor implements Lifecycle {
+public class Monitor {
 
 	@Inject
 	public Monitor(
@@ -39,19 +38,12 @@ public class Monitor implements Lifecycle {
 			monitor.addFile(file);
 	}
 
-	@Override
 	public void start() {
 		monitor.start();
 	}
 
-	@Override
 	public void stop() {
 		monitor.stop();
-	}
-
-	@Override
-	public boolean isRunning() {
-		return false;
 	}
 
 	class FileChanged implements FileListener {

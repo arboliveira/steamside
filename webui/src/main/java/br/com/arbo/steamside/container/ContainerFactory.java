@@ -9,7 +9,6 @@ import br.com.arbo.org.apache.commons.lang3.ProgramFiles;
 import br.com.arbo.org.apache.commons.lang3.UserHome;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
-import br.com.arbo.steamside.apps.AppsHomeBox;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
@@ -31,6 +30,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.monitoring.AutoreloadingAppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.ChangeListener;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.DigestOnChange;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Digester;
@@ -57,7 +57,7 @@ public class ContainerFactory {
 	private static void addComponents(final ContainerWeb container) {
 		container
 				.addComponent(Library.class, LibraryImpl.class)
-				.addComponent(AppsHomeFactory.class, AppsHomeBox.class)
+				.addComponent(AppsHomeFactory.class, AutoreloadingAppsHomeFactory.class)
 				.addComponent(KidsMode.class, FromUsername.class)
 				.addComponent(User.class, FromJava.class)
 				.addComponent(SteamBrowserProtocol.class)

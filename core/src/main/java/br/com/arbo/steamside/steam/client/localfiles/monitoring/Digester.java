@@ -5,12 +5,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
-import org.springframework.context.SmartLifecycle;
-
+import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
@@ -22,8 +20,7 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedcon
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedconfig_vdf;
 
-public class Digester
-		implements SmartLifecycle {
+public class Digester {
 
 	@Inject
 	public Digester(
@@ -33,32 +30,14 @@ public class Digester
 		this.file_appinfo_vdf = file_appinfo_vdf;
 		this.file_localconfig_vdf = file_localconfig_vdf;
 		this.file_sharedconfig_vdf = file_sharedconfig_vdf;
+		this.executor = newThreeDaemonThreads();
 	}
 
 	private final File_localconfig_vdf file_localconfig_vdf;
 	private final File_sharedconfig_vdf file_sharedconfig_vdf;
 	private final File_appinfo_vdf file_appinfo_vdf;
 
-	private boolean running;
-
-	@Override
-	public void start() {
-		running = true;
-	}
-
-	@Override
-	public void stop() {
-		running = false;
-		partsExec.shutdown();
-	}
-
-	@Override
-	public boolean isRunning() {
-		return running;
-	}
-
-	private final ExecutorService partsExec = Executors
-			.newFixedThreadPool(3);
+	private final ExecutorService executor;
 
 	class Digest_sharedconfig_vdf implements Callable<Data_sharedconfig_vdf> {
 
@@ -117,34 +96,21 @@ public class Digester
 	}
 
 	private AppsHome digestOn() throws InterruptedException, ExecutionException {
-		Future<Data_localconfig_vdf> f_localconfig =
-				partsExec.submit(new Digest_localconfig_vdf());
-		Data_localconfig_vdf d_localconfig = f_localconfig.get();
+		Data_localconfig_vdf d_localconfig =
+				executor.submit(new Digest_localconfig_vdf()).get();
 
-		Future<Data_sharedconfig_vdf> f_sharedconfig =
-				partsExec.submit(new Digest_sharedconfig_vdf());
-		Data_sharedconfig_vdf d_sharedconfig = f_sharedconfig.get();
+		Data_sharedconfig_vdf d_sharedconfig =
+				executor.submit(new Digest_sharedconfig_vdf()).get();
 
-		Future<Data_appinfo_vdf> f_appinfo =
-				partsExec.submit(new Digest_appinfo_vdf());
-		Data_appinfo_vdf d_appinfo = f_appinfo.get();
+		Data_appinfo_vdf d_appinfo =
+				executor.submit(new Digest_appinfo_vdf()).get();
 
 		return new Combine(d_appinfo, d_localconfig, d_sharedconfig).combine();
 	}
 
-	@Override
-	public int getPhase() {
-		return 1;
+	private ExecutorService newThreeDaemonThreads() {
+		return Executors
+				.newFixedThreadPool(3, new DaemonThreadFactory(this));
 	}
 
-	@Override
-	public boolean isAutoStartup() {
-		return true;
-	}
-
-	@Override
-	public void stop(Runnable callback) {
-		stop();
-		callback.run();
-	}
 }

@@ -1,11 +1,10 @@
 package br.com.arbo.steamside.library;
 
 import static br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf_ForExamples.from_Dir_userid;
-import br.com.arbo.steamside.apps.AppsHome;
-import br.com.arbo.steamside.apps.AppsHomeBox;
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.monitoring.AutoreloadingAppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Digester;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
@@ -25,15 +24,12 @@ public class Library_ForExamples {
 
 		Digester digester = new Digester(appinfo, localconfig, sharedconfig);
 
-		final AppsHome home;
-		try {
-			home = digester.digest();
-		} finally {
-			digester.stop();
-		}
-		final AppsHomeBox box = new AppsHomeBox();
-		box.set(home);
-		return new LibraryImpl(box);
+		AutoreloadingAppsHomeFactory auto =
+				new AutoreloadingAppsHomeFactory(digester);
+
+		final Library library = new LibraryImpl(auto);
+
+		return library;
 	}
 
 }

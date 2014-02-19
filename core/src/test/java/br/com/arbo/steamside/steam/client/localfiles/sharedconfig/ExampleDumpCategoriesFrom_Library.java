@@ -21,7 +21,8 @@ public class ExampleDumpCategoriesFrom_Library {
 	}
 
 	private void execute() {
-		final Library library = Library_ForExamples.fromSteamPhysicalFiles();
+		Library library = Library_ForExamples.fromSteamPhysicalFiles();
+
 		library.accept(new CategoryWithAppsVisitor() {
 
 			@Override
@@ -30,6 +31,7 @@ public class ExampleDumpCategoriesFrom_Library {
 				printCategory(category, itsApps);
 			}
 		});
+
 	}
 
 	void printCategory(final Category category, final AppsCollection itsApps) {

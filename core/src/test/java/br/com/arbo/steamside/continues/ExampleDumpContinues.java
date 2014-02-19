@@ -12,7 +12,7 @@ public class ExampleDumpContinues {
 		final FilterContinues continues =
 				new FilterContinues(new FromUsername(new FromJava()));
 
-		final Library library = Library_ForExamples.fromSteamPhysicalFiles();
+		Library library = Library_ForExamples.fromSteamPhysicalFiles();
 
 		new ContinuesFromSteamClientLocalfiles(continues, library)
 				.accept(/* @formatter:off */new App.Visitor() { 
@@ -25,5 +25,6 @@ public class ExampleDumpContinues {
 										+ " :: " + app.appid());
 					}
 				});
+
 	}
 }
