@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
+import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -32,13 +31,13 @@ public class CollectionController {
 	{
 		final Data_appinfo_vdf _appinfo = this.appinfo;
 		final List<AppDTO> result = new LinkedList<AppDTO>();
-		data.on(new CollectionName(name)).accept(new AppIdVisitor() {
+		data.on(new CollectionName(name)).accept(new AppId.Visitor() {
 
 			@Override
 			public void each(final AppId appid) {
 				try {
 					result.add(toDTO(appid));
-				} catch (final NotFound e) {
+				} catch (final MissingFrom_appinfo_vdf e) {
 					return;
 				}
 			}

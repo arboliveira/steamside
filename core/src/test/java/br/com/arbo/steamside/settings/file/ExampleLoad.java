@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.settings.file;
 
-import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.data.collections.OnCollection;
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
@@ -18,7 +17,7 @@ public class ExampleLoad {
 						SteamDirectory_ForExamples.fromSteamPhysicalFiles()))))
 				.load();
 		final OnCollection on = xml.on(new CollectionName("Arbo"));
-		on.accept(new AppIdVisitor() {
+		on.accept(new AppId.Visitor() {
 
 			@Override
 			public void each(final AppId appid) {

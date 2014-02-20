@@ -1,8 +1,8 @@
 package br.com.arbo.steamside.data.collections;
 
-import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
+import br.com.arbo.steamside.types.AppId;
 
 public interface OnCollection {
 
-	void accept(AppIdVisitor visitor);
+	void accept(AppId.Visitor visitor);
 }

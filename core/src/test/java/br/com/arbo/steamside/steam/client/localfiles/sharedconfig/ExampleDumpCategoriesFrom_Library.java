@@ -7,11 +7,10 @@ import br.com.arbo.steamside.indent.Indent;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.library.Library_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.AppNameFromLocalFiles;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
-import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.Category;
 
 public class ExampleDumpCategoriesFrom_Library {
@@ -48,12 +47,11 @@ public class ExampleDumpCategoriesFrom_Library {
 	}
 
 	final Indent indent = new Indent();
-	final AppNameFactory appnameFactory =
-			new AppNameFromLocalFiles(
-					new InMemory_appinfo_vdf(new File_appinfo_vdf(
-							SteamDirectory_ForExamples
-									.fromSteamPhysicalFiles())));
+	final Data_appinfo_vdf appinfo =
+			new InMemory_appinfo_vdf(new File_appinfo_vdf(
+					SteamDirectory_ForExamples
+							.fromSteamPhysicalFiles()));
 	final SysoutAppInfoLine dump =
-			new SysoutAppInfoLine(appnameFactory);
+			new SysoutAppInfoLine(appinfo);
 
 }

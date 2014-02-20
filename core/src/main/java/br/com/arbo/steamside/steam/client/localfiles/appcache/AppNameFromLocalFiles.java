@@ -8,6 +8,7 @@ import br.com.arbo.steamside.steam.store.AppNameFactory;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
 
+@Deprecated
 public final class AppNameFromLocalFiles implements AppNameFactory {
 
 	@Override

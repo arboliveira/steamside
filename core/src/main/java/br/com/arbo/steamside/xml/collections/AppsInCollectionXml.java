@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.apps.Apps.AppIdVisitor;
 import br.com.arbo.steamside.types.AppId;
 
 public class AppsInCollectionXml {
@@ -29,7 +28,7 @@ public class AppsInCollectionXml {
 	}
 
 	@SuppressWarnings("null")
-	public void accept(final AppIdVisitor visitor) {
+	public void accept(final AppId.Visitor visitor) {
 		for (final AppInCollectionXml each : app)
 			visitor.each(new AppId(each.appid));
 	}

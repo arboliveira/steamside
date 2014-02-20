@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
@@ -19,9 +20,9 @@ public class InMemory_appinfo_vdf implements Data_appinfo_vdf {
 	private final File_appinfo_vdf file_appinfo_vdf;
 
 	@Override
-	public AppInfo get(final AppId appid) throws NotFound {
+	public AppInfo get(final AppId appid) throws MissingFrom_appinfo_vdf {
 		final AppInfo appInfo = map.get(appid.appid);
-		if (appInfo == null) throw NotFound.appid(appid);
+		if (appInfo == null) throw MissingFrom_appinfo_vdf.appid(appid);
 		return appInfo;
 	}
 
