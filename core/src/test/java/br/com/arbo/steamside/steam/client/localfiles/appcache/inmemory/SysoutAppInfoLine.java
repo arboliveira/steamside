@@ -1,7 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory;
 
+import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.store.AppNameFactory;
-import br.com.arbo.steamside.types.AppId;
 
 public class SysoutAppInfoLine {
 
@@ -11,14 +12,14 @@ public class SysoutAppInfoLine {
 		this.appnameFactory = appnameFactory;
 	}
 
-	public String toInfo(final AppId app) {
-		return app.appid + "]" + appname(app);
+	public String toInfo(final App app) {
+		return app.appid() + "]" + appname(app);
 	}
 
-	private String appname(final AppId app) {
+	private String appname(final App app) {
 		try {
-			return appnameFactory.nameOf(app).name;
-		} catch (final NotFound e) {
+			return app.name();
+		} catch (final MissingFrom_appinfo_vdf e) {
 			return ">>>>" + e.getMessage() + "<<<<";
 		}
 	}

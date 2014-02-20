@@ -14,7 +14,7 @@ public interface App {
 	AppId appid();
 
 	@NonNull
-	AppName name();
+	AppName name() throws MissingFrom_appinfo_vdf;
 
 	@NonNull
 	String executable() throws NotAvailableOnThisPlatform;

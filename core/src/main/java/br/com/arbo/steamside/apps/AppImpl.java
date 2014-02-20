@@ -48,6 +48,8 @@ public class AppImpl implements App {
 		private String cloudEnabled;
 		private AppName name;
 		private String executable;
+		private boolean missingFrom_appinfo_vdf;
+		private boolean notAvailableOnThisPlatform;
 
 		public Builder lastPlayed(final String v) {
 			this.lastPlayed = v;
@@ -75,6 +77,14 @@ public class AppImpl implements App {
 
 		public void addCategory(String category) {
 			this.categories.add(category);
+		}
+
+		public void missingFrom_appinfo_vdf() {
+			this.missingFrom_appinfo_vdf = true;
+		}
+
+		public void notAvailableOnThisPlatform() {
+			this.notAvailableOnThisPlatform = true;
 		}
 	}
 

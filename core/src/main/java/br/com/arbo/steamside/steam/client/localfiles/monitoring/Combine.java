@@ -9,6 +9,7 @@ import br.com.arbo.steamside.apps.InMemoryAppsHome;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.Data_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_app;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
@@ -50,14 +51,13 @@ class Combine {
 	void eachApp(Entry_app each) {
 		@NonNull
 		AppId appid = each.appid();
-		AppInfo appInfo = d_appinfo.get(appid);
+
 		@Nullable
 		KV_app applocal = d_localconfig.get(appid);
 
 		final AppImpl.Builder b =
 				new AppImpl.Builder()
-						.appid(appid.appid())
-						.name(appInfo.name());
+						.appid(appid.appid());
 
 		if (applocal != null) {
 			@Nullable
@@ -66,11 +66,7 @@ class Combine {
 				b.lastPlayed(lastPlayed.value);
 		}
 
-		try {
-			b.executable(appInfo.executable());
-		} catch (NotAvailableOnThisPlatform ex) {
-			// fine, then
-		}
+		from_appinfo(appid, b);
 
 		each.accept(new TagVisitor() {
 
@@ -81,6 +77,29 @@ class Combine {
 		});
 
 		home.add(b.make());
+	}
+
+	private void from_appinfo(AppId appid, final AppImpl.Builder b) {
+		AppInfo appInfo;
+		try {
+			appInfo = d_appinfo.get(appid);
+		} catch (NotFound e) {
+			b.missingFrom_appinfo_vdf();
+			return;
+		}
+		b.name(appInfo.name());
+		executable(b, appInfo);
+	}
+
+	private static void executable(final AppImpl.Builder b, AppInfo appInfo) {
+		final String executable;
+		try {
+			executable = appInfo.executable();
+		} catch (NotAvailableOnThisPlatform ex) {
+			b.notAvailableOnThisPlatform();
+			return;
+		}
+		b.executable(executable);
 	}
 
 }
