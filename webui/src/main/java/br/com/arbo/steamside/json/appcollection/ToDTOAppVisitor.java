@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 
 public class ToDTOAppVisitor implements App.Visitor {
@@ -30,14 +30,14 @@ public class ToDTOAppVisitor implements App.Visitor {
 		final AppDTO dto;
 		try {
 			dto = toDTO(app.appid());
-		} catch (final NotFound toDTOFailed) {
+		} catch (MissingFrom_appinfo_vdf toDTOFailed) {
 			return;
 		}
 		collection.add(dto);
 		if (collection.size() == limit) throw new Full();
 	}
 
-	private AppDTO toDTO(final AppId appid) throws NotFound {
+	private AppDTO toDTO(final AppId appid) throws MissingFrom_appinfo_vdf {
 		return AppDTO.valueOf(appid, appinfo);
 	}
 }

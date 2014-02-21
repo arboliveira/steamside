@@ -9,7 +9,6 @@ import org.junit.Test;
 import br.com.arbo.steamside.apps.AppImpl.Builder;
 import br.com.arbo.steamside.apps.Filter.Reject;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 
 public class FilterPlatformTest {
@@ -24,7 +23,7 @@ public class FilterPlatformTest {
 		context.checking(new Expectations()/*@formatter:off*/{{/*@formatter:on*/
 				final AppId appid = new AppId("142857");
 				oneOf(appinfo).get(appid);
-				will(throwException(NotFound.appid(appid)));
+				will(throwException(MissingFrom_appinfo_vdf.appid(appid)));
 			}
 		});
 

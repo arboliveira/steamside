@@ -6,10 +6,10 @@ import org.eclipse.jdt.annotation.Nullable;
 import br.com.arbo.steamside.apps.AppImpl;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.apps.InMemoryAppsHome;
+import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.Data_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_app;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
@@ -83,8 +83,8 @@ class Combine {
 		AppInfo appInfo;
 		try {
 			appInfo = d_appinfo.get(appid);
-		} catch (NotFound e) {
-			b.missingFrom_appinfo_vdf();
+		} catch (MissingFrom_appinfo_vdf e) {
+			b.missingFrom_appinfo_vdf(e);
 			return;
 		}
 		b.name(appInfo.name());
@@ -96,7 +96,7 @@ class Combine {
 		try {
 			executable = appInfo.executable();
 		} catch (NotAvailableOnThisPlatform ex) {
-			b.notAvailableOnThisPlatform();
+			b.notAvailableOnThisPlatform(ex);
 			return;
 		}
 		b.executable(executable);

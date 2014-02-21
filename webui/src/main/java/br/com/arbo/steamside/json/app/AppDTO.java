@@ -3,8 +3,8 @@ package br.com.arbo.steamside.json.app;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.NotFound;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
 
@@ -13,7 +13,7 @@ public class AppDTO {
 
 	public static AppDTO valueOf(
 			final AppId appid, final Data_appinfo_vdf appinfo)
-			throws NotFound {
+			throws MissingFrom_appinfo_vdf {
 		final AppName appname = nameOf(appid, appinfo);
 		final AppDTO dto = new AppDTO(appid, appname);
 		return dto;
@@ -21,7 +21,7 @@ public class AppDTO {
 
 	private static AppName nameOf(
 			final AppId appid, final Data_appinfo_vdf appinfo)
-			throws NotFound {
+			throws MissingFrom_appinfo_vdf {
 		return appinfo.get(appid).name();
 	}
 
