@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
+import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.json.app.AppDTO;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
+import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -29,7 +30,7 @@ public class CollectionController {
 			throws
 			br.com.arbo.steamside.data.collections.NotFound
 	{
-		final Data_appinfo_vdf _appinfo = this.appinfo;
+		final Library _library = this.library;
 		final List<AppDTO> result = new LinkedList<AppDTO>();
 		data.on(new CollectionName(name)).accept(new AppId.Visitor() {
 
@@ -39,11 +40,14 @@ public class CollectionController {
 					result.add(toDTO(appid));
 				} catch (final MissingFrom_appinfo_vdf e) {
 					return;
+				} catch (NotFound e) {
+					return;
 				}
 			}
 
-			private AppDTO toDTO(final AppId appid) {
-				return AppDTO.valueOf(appid, _appinfo);
+			private AppDTO toDTO(final AppId appid)
+					throws MissingFrom_appinfo_vdf, NotFound {
+				return AppDTO.valueOf(appid, _library);
 			}
 		});
 		return result;
@@ -66,7 +70,7 @@ public class CollectionController {
 	}
 
 	@Inject
-	private Data_appinfo_vdf appinfo;
+	private Library library;
 
 	@Inject
 	private CollectionHomeXmlFile data;

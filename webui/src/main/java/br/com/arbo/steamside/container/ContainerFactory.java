@@ -27,8 +27,6 @@ import br.com.arbo.steamside.settings.file.File_steamside_xml;
 import br.com.arbo.steamside.settings.file.Load;
 import br.com.arbo.steamside.settings.file.Save;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.AutoreloadingAppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.ChangeListener;
@@ -57,14 +55,14 @@ public class ContainerFactory {
 	private static void addComponents(final ContainerWeb container) {
 		container
 				.addComponent(Library.class, LibraryImpl.class)
-				.addComponent(AppsHomeFactory.class, AutoreloadingAppsHomeFactory.class)
+				.addComponent(AppsHomeFactory.class,
+						AutoreloadingAppsHomeFactory.class)
 				.addComponent(KidsMode.class, FromUsername.class)
 				.addComponent(User.class, FromJava.class)
 				.addComponent(SteamBrowserProtocol.class)
-				//				.addComponent(AppNameFactory.class, AppNameFromLocalFiles.class)
-				.addComponent(
-						Data_appinfo_vdf.class,
-						InMemory_appinfo_vdf.class)
+				//.addComponent(
+				//		Data_appinfo_vdf.class,
+				//		InMemory_appinfo_vdf.class)
 				.addComponent(RunGame.class)
 				//				.addComponent(
 				//						DataFactory_sharedconfig_vdf.class,

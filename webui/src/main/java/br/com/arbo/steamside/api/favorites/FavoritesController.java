@@ -16,7 +16,6 @@ import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor.Full;
 import br.com.arbo.steamside.library.Library;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 
 @Controller
 @RequestMapping("favorites")
@@ -25,7 +24,7 @@ public class FavoritesController {
 	@RequestMapping("favorites.json")
 	@ResponseBody
 	public List<AppDTO> favorites() {
-		final ToDTOAppVisitor visitor = new ToDTOAppVisitor(appinfo);
+		final ToDTOAppVisitor visitor = new ToDTOAppVisitor(library);
 		try {
 			from_accept(visitor);
 		} catch (final Full full) {
@@ -44,8 +43,6 @@ public class FavoritesController {
 	@Inject
 	@NonNull
 	private Favorites favorites;
-	@Inject
-	private Data_appinfo_vdf appinfo;
 	@Inject
 	private Library library;
 }

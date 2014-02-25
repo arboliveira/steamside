@@ -13,17 +13,22 @@ public class AppInfo {
 		this.name = appName;
 	}
 
+	@NonNull
 	public AppName name() {
-		return name;
+		final AppName _name = name;
+		if (_name == null) throw new NullPointerException();
+		return _name;
 	}
 
 	public void executable(@NonNull final String executable) {
 		this.executable = executable;
 	}
 
+	@NonNull
 	public String executable() {
-		if (executable == null) throw new NotAvailableOnThisPlatform();
-		return executable;
+		final String _executable = executable;
+		if (_executable == null) throw new NotAvailableOnThisPlatform();
+		return _executable;
 	}
 
 	@Override

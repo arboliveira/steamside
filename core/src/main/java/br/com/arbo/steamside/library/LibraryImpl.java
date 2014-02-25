@@ -8,6 +8,8 @@ import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
 import br.com.arbo.steamside.apps.Filter;
+import br.com.arbo.steamside.apps.NotFound;
+import br.com.arbo.steamside.types.AppId;
 
 public class LibraryImpl implements Library {
 
@@ -21,6 +23,11 @@ public class LibraryImpl implements Library {
 	@Override
 	public int count() {
 		return apps().count();
+	}
+
+	@Override
+	public App app(AppId appid) throws NotFound {
+		return apps().app(appid);
 	}
 
 	@Override

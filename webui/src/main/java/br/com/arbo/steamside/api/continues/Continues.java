@@ -11,12 +11,12 @@ import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor;
 import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor.Full;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
+import br.com.arbo.steamside.library.Library;
 
 public class Continues {
 
 	public List<AppDTO> continues() {
-		final ToDTOAppVisitor visitor = new ToDTOAppVisitor(appinfo);
+		final ToDTOAppVisitor visitor = new ToDTOAppVisitor(library);
 		try {
 			continues.accept(visitor);
 		} catch (final Full full) {
@@ -28,13 +28,12 @@ public class Continues {
 	@Inject
 	public Continues(
 			@NonNull final ContinuesRooster continues,
-			final Data_appinfo_vdf appinfo) {
-		super();
+			final Library library) {
 		this.continues = continues;
-		this.appinfo = appinfo;
+		this.library = library;
 	}
 
 	@NonNull
 	private final ContinuesRooster continues;
-	private final Data_appinfo_vdf appinfo;
+	private final Library library;
 }

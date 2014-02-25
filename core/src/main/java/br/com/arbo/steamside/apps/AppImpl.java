@@ -14,6 +14,56 @@ import br.com.arbo.steamside.types.Category;
 public class AppImpl implements App {
 
 	@Override
+	@NonNull
+	public AppName name() throws MissingFrom_appinfo_vdf {
+		if (missingFrom_appinfo_vdf != null) throw missingFrom_appinfo_vdf;
+		final AppName _name = name;
+		if (_name == null) throw new NullPointerException();
+		return _name;
+	}
+
+	@SuppressWarnings("null")
+	@Override
+	@NonNull
+	public String executable() throws NotAvailableOnThisPlatform {
+		if (notAvailableOnThisPlatform != null)
+			throw notAvailableOnThisPlatform;
+		if (executable == null) throw new NullPointerException();
+		return executable;
+	}
+
+	@Override
+	@Nullable
+	public String lastPlayed() {
+		return lastPlayed;
+	}
+
+	@Override
+	@NonNull
+	public String lastPlayedOrCry() throws NeverPlayed {
+		final String v = lastPlayed;
+		if (v == null) throw new NeverPlayed();
+		return v;
+	}
+
+	public String cloudEnabled() {
+		return cloudEnabled;
+	}
+
+	@Override
+	public void accept(final Category.Visitor visitor) {
+		final Collection<String> c = categories;
+		if (c == null) return;
+		for (final String one : c)
+			visitor.visit(new Category(one));
+	}
+
+	@Override
+	public String toString() {
+		return appid.toString();
+	}
+
+	@Override
 	public boolean isInCategory(final Category category) {
 		final Collection<String> c = categories;
 		if (c == null) return false;
@@ -33,7 +83,9 @@ public class AppImpl implements App {
 
 		public AppImpl make() {
 			return new AppImpl(newAppId(), this.name, this.executable,
-					this.categories, this.lastPlayed, this.cloudEnabled);
+					this.categories, this.lastPlayed, this.cloudEnabled,
+					this.notAvailableOnThisPlatform,
+					this.missingFrom_appinfo_vdf);
 		}
 
 		@NonNull
@@ -94,47 +146,20 @@ public class AppImpl implements App {
 			@Nullable String executable,
 			@Nullable final Collection<String> categories,
 			@Nullable final String lastPlayed,
-			@Nullable final String cloudEnabled) {
+			@Nullable final String cloudEnabled,
+			@Nullable NotAvailableOnThisPlatform notAvailableOnThisPlatform,
+			@Nullable MissingFrom_appinfo_vdf missingFrom_appinfo_vdf) {
 		this.appid = appId;
 		this.name = name;
 		this.executable = executable;
 		this.categories = categories;
 		this.lastPlayed = lastPlayed;
 		this.cloudEnabled = cloudEnabled;
+		this.notAvailableOnThisPlatform = notAvailableOnThisPlatform;
+		this.missingFrom_appinfo_vdf = missingFrom_appinfo_vdf;
 	}
 
-	@Override
 	@Nullable
-	public String lastPlayed() {
-		return lastPlayed;
-	}
-
-	@Override
-	@NonNull
-	public String lastPlayedOrCry() throws NeverPlayed {
-		final String v = lastPlayed;
-		if (v == null) throw new NeverPlayed();
-		return v;
-	}
-
-	public String cloudEnabled() {
-		return cloudEnabled;
-	}
-
-	@Override
-	public void accept(final Category.Visitor visitor) {
-		final Collection<String> c = categories;
-		if (c == null) return;
-		for (final String one : c)
-			visitor.visit(new Category(one));
-	}
-
-	@Override
-	public String toString() {
-		return appid.toString();
-	}
-
-	@NonNull
 	private final AppName name;
 
 	@Nullable
@@ -152,19 +177,10 @@ public class AppImpl implements App {
 	@Nullable
 	private final String lastPlayed;
 
-	@SuppressWarnings("null")
-	@Override
-	@NonNull
-	public AppName name() {
-		return name;
-	}
+	@Nullable
+	private final NotAvailableOnThisPlatform notAvailableOnThisPlatform;
 
-	@SuppressWarnings("null")
-	@Override
-	@NonNull
-	public String executable() throws NotAvailableOnThisPlatform {
-		if (executable == null) throw new NotAvailableOnThisPlatform();
-		return executable;
-	}
+	@Nullable
+	private final MissingFrom_appinfo_vdf missingFrom_appinfo_vdf;
 
 }

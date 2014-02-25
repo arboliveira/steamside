@@ -10,8 +10,9 @@ import org.apache.commons.lang3.Validate;
 import br.com.arbo.processes.seek.Criteria;
 import br.com.arbo.processes.seek.ProcessSeeker;
 import br.com.arbo.processes.seek.ProcessSeekerFactory;
+import br.com.arbo.steamside.apps.NotFound;
+import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.protocol.C_rungameid;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.types.AppId;
@@ -21,9 +22,9 @@ public class RunGame {
 	@Inject
 	public RunGame(
 			final SteamBrowserProtocol steam,
-			final Data_appinfo_vdf appinfo_vdf) {
+			final Library library) {
 		this.steam = steam;
-		this.appinfo_vdf = appinfo_vdf;
+		this.library = library;
 	}
 
 	public boolean askSteamToRunGameAndWaitUntilItsUp(
@@ -32,7 +33,9 @@ public class RunGame {
 		final String exe;
 		try {
 			exe = findExecutableName(appid);
-		} catch (final NotAvailableOnThisPlatform e) {
+		} catch (NotAvailableOnThisPlatform e) {
+			return false;
+		} catch (NotFound e) {
 			return false;
 		}
 		final Semaphore s = new Semaphore(0);
@@ -46,8 +49,9 @@ public class RunGame {
 	}
 
 	private String findExecutableName(final AppId appid)
+			throws NotAvailableOnThisPlatform, NotFound
 	{
-		return appinfo_vdf.get(appid).executable();
+		return library.app(appid).executable();
 	}
 
 	private static boolean waitUntilItsUp(final Semaphore s, final Thread t) {
@@ -99,6 +103,6 @@ public class RunGame {
 	}
 
 	private final SteamBrowserProtocol steam;
-	private final Data_appinfo_vdf appinfo_vdf;
+	private final Library library;
 
 }
