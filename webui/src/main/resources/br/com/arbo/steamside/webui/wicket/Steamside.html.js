@@ -115,13 +115,15 @@ var SteamsideView = Backbone.View.extend({
 		new DeckView({
 			el: $('#search-results-deck'),
 			collection: searchResults,
-			continues: continues
+			continues: continues,
+			ownerSideshow: that
 		});
 
 		new DeckView({
 			el: $('#favorites-deck'),
 			collection: favorites,
-			continues: continues
+			continues: continues,
+			ownerSideshow: that
 		});
 
 		fetch_json(sessionModel, function() {
@@ -129,7 +131,8 @@ var SteamsideView = Backbone.View.extend({
 				el: $('#continues-deck'),
 				collection: continues,
 				continues: continues,
-				kidsMode: sessionModel.kidsmode()
+				kidsMode: sessionModel.kidsmode(),
+				ownerSideshow: that
 			});
 			fetch_json(continues);
 			fetch_json(favorites);
@@ -211,6 +214,12 @@ var SteamsideView = Backbone.View.extend({
 				first.play();
 			});
 		}
+	},
+
+	showNewTagSegment: function() {
+		var segment = $("#collections-segment");
+		var clone = segment.clone();
+		segment.parent().append(clone);
 	}
 });
 

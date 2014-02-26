@@ -114,12 +114,14 @@ var GameCardView = Backbone.View.extend({
 	width: 0,
 	kidsMode: false,
 	on_render: null,
+	ownerSideshow: null,
 
 	events: {
 		"mouseenter .game-link": "mouseenter_hot_zone",
         "mouseleave .game-link": "mouseleave_hot_zone",
         "click .game-link": "gameClicked",
-        "click .game-tile-play": "playClicked"
+        "click .game-tile-play": "playClicked",
+        "click .game-tile-tag": "tagClicked"
 	},
 
 	initialize: function() {		"use strict";
@@ -127,6 +129,7 @@ var GameCardView = Backbone.View.extend({
 		this.enormity = this.options.enormity;
 		this.kidsMode = this.options.kidsMode;
 		this.on_render = this.options.on_render;
+		this.ownerSideshow = this.options.ownerSideshow;
 		this.model.on('game:play:beforeSend', this.game_play_beforeSend, this);
 		this.model.on('game:play:complete', this.game_play_complete, this);
 	},
@@ -182,6 +185,12 @@ var GameCardView = Backbone.View.extend({
 	playClicked: function(e) {				"use strict";
 		e.preventDefault();
 		this.model.play();
+	},
+
+	tagClicked: function(e) {				"use strict";
+		e.preventDefault();
+		this.ownerSideshow.showNewTagSegment();
+		//this.model.tag();
 	},
 
 	game_play_beforeSend: function () {
@@ -271,6 +280,7 @@ var DeckView = Backbone.View.extend({
     continues: null,
 	kidsMode: false,
 	on_GameCard_render: null,
+	ownerSideshow: null,
 
 	initialize: function() {		"use strict";
         /*
@@ -282,6 +292,7 @@ var DeckView = Backbone.View.extend({
 		this.alwaysVisible = this.kidsMode;
 		this.continues = this.options.continues;
 		this.on_GameCard_render = this.options.on_GameCard_render;
+		this.ownerSideshow = this.options.ownerSideshow;
 		this.collection.on('reset', this.render, this);
 	},
 
@@ -378,7 +389,8 @@ var DeckView = Backbone.View.extend({
 			enormity: enormity,
 			kidsMode: this.kidsMode,
 			continues: this.continues,
-			on_render: this.on_GameCard_render
+			on_render: this.on_GameCard_render,
+			ownerSideshow: this.ownerSideshow
 		});
 		this.deck.push(card_view, this.alwaysVisible || this.yRow === 1);
 		var card_el = card_view.render().el;
