@@ -114,7 +114,7 @@ var GameCardView = Backbone.View.extend({
 	width: 0,
 	kidsMode: false,
 	on_render: null,
-	ownerSideshow: null,
+	on_tag: null,
 
 	events: {
 		"mouseenter .game-link": "mouseenter_hot_zone",
@@ -129,7 +129,7 @@ var GameCardView = Backbone.View.extend({
 		this.enormity = this.options.enormity;
 		this.kidsMode = this.options.kidsMode;
 		this.on_render = this.options.on_render;
-		this.ownerSideshow = this.options.ownerSideshow;
+		this.on_tag = this.options.on_tag;
 		this.model.on('game:play:beforeSend', this.game_play_beforeSend, this);
 		this.model.on('game:play:complete', this.game_play_complete, this);
 	},
@@ -189,8 +189,7 @@ var GameCardView = Backbone.View.extend({
 
 	tagClicked: function(e) {				"use strict";
 		e.preventDefault();
-		this.ownerSideshow.showNewTagSegment();
-		//this.model.tag();
+		if (this.on_tag != null) this.on_tag(this.model);
 	},
 
 	game_play_beforeSend: function () {
@@ -280,7 +279,7 @@ var DeckView = Backbone.View.extend({
     continues: null,
 	kidsMode: false,
 	on_GameCard_render: null,
-	ownerSideshow: null,
+	on_tag: null,
 
 	initialize: function() {		"use strict";
         /*
@@ -292,7 +291,7 @@ var DeckView = Backbone.View.extend({
 		this.alwaysVisible = this.kidsMode;
 		this.continues = this.options.continues;
 		this.on_GameCard_render = this.options.on_GameCard_render;
-		this.ownerSideshow = this.options.ownerSideshow;
+		this.on_tag = this.options.on_tag;
 		this.collection.on('reset', this.render, this);
 	},
 
@@ -383,6 +382,10 @@ var DeckView = Backbone.View.extend({
 	},
 
 	renderGameCard: function(tile, oneResult, enormity) {
+		var that = this;
+		var on_tag_deck = function(game) {
+			that.on_tag_deck(game);
+		}
 		var card_view = new GameCardView({
 			el: tile.clone(),
 			model: oneResult,
@@ -390,7 +393,7 @@ var DeckView = Backbone.View.extend({
 			kidsMode: this.kidsMode,
 			continues: this.continues,
 			on_render: this.on_GameCard_render,
-			ownerSideshow: this.ownerSideshow
+			on_tag: on_tag_deck
 		});
 		this.deck.push(card_view, this.alwaysVisible || this.yRow === 1);
 		var card_el = card_view.render().el;
@@ -407,6 +410,11 @@ var DeckView = Backbone.View.extend({
 		if (this.first_row === null) {
 			this.first_row = row;
 		}
+	},
+
+	on_tag_deck: function(game) {
+		var segment = this.$el.parent().parent();
+		if (this.on_tag != null) this.on_tag(game, segment);
 	}
 });
 

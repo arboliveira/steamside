@@ -116,14 +116,14 @@ var SteamsideView = Backbone.View.extend({
 			el: $('#search-results-deck'),
 			collection: searchResults,
 			continues: continues,
-			ownerSideshow: that
+			on_tag: that.on_tag
 		});
 
 		new DeckView({
 			el: $('#favorites-deck'),
 			collection: favorites,
 			continues: continues,
-			ownerSideshow: that
+			on_tag: that.on_tag
 		});
 
 		fetch_json(sessionModel, function() {
@@ -132,7 +132,7 @@ var SteamsideView = Backbone.View.extend({
 				collection: continues,
 				continues: continues,
 				kidsMode: sessionModel.kidsmode(),
-				ownerSideshow: that
+				on_tag: that.on_tag
 			});
 			fetch_json(continues);
 			fetch_json(favorites);
@@ -216,10 +216,13 @@ var SteamsideView = Backbone.View.extend({
 		}
 	},
 
-	showNewTagSegment: function() {
-		var segment = $("#collections-segment");
+	on_tag: function(game, segmentWithGameCard) {
+		var segment = $("#tag-segment");
 		var clone = segment.clone();
-		segment.parent().append(clone);
+		clone.find(".game-name").text(game.name());
+		segmentWithGameCard.after(clone);
+		clone.hide();
+		clone.slideDown();
 	}
 });
 

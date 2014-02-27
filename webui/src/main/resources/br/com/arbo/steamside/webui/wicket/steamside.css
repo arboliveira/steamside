@@ -152,3 +152,7 @@ a.target-button {
     text-decoration: none;	/* hide link underline */
     outline: none; /* hide dotted outline in Firefox */
 }
+
+#tag-segment {
+    display: none;
+}
