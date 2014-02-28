@@ -41,6 +41,7 @@ xml:lang="en" lang="en">
     <script src="CollectionNew.js" type="text/javascript"></script>
     <script src="CollectionEdit.js" type="text/javascript"></script>
     <script src="Exit.js" type="text/javascript"></script>
+	<script src="Tag.js" type="text/javascript"></script>
     <script src="SteamsideRouter.js" type="text/javascript"></script>
     <script src="Steamside.html.js" type="text/javascript"></script>
 
@@ -276,7 +277,10 @@ $(function() {
 		</div>
 
 		<div class="content content-at-right">
-			<p><span class="game-name">The name of the game</span> New tag: </p>
+			<p><span class="game-name">The name of the game</span></p>
+			<form id="form-tag">
+				New tag: <input class="input-tag" />
+			</form>
 			<p class="tag-suggestions"><span class="tag-suggestion">[Tag 1]</span></p>
 		</div>
 	</div>
