@@ -15,6 +15,8 @@ var TagView = Backbone.View.extend({
 		this.$el.hide();
 		this.$el.slideDown();
 
+		this.$(".input-tag").focus();
+
 		return this;
 	},
 
@@ -22,7 +24,7 @@ var TagView = Backbone.View.extend({
 
 		e.preventDefault();
 
-		alert(this.$('.input-tag').val());
+		alert(this.game.name() + ' ==> ' + this.$('.input-tag').val());
 
 	}
 

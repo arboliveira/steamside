@@ -78,29 +78,14 @@ var SteamsideView = Backbone.View.extend({
 	el: "body",
 
 	continues: null,
-	searchResults: null,
 
 	render: function () {  "use strict";
 		var sessionModel = new SessionModel();
 
 		var continues = new ContinueGames();
-		var searchResults = new SearchResults();
 		var favorites = new FavoritesCollection();
 
-		var tileSearchCommandHint = this.$('#search-command-hint');
-		tileSearchCommandHint.remove();
-		this.tileSearchHintContinueA = tileSearchCommandHint.clone();
-		this.tileSearchHintContinueB = tileSearchCommandHint.clone();
-		this.tileSearchHintSearchA = tileSearchCommandHint.clone();
-		this.tileSearchHintSearchB = tileSearchCommandHint.clone();
-		var selectorVerb = '#search-command-hint-verb';
-		this.tileSearchHintSearchA.find(selectorVerb).text("search");
-		this.tileSearchHintSearchB.find(selectorVerb).text("play first result for");
-
 		this.continues = continues;
-		this.continues.on('reset', this.continues_reset, this);
-
-		this.searchResults = searchResults;
 
 		var that = this;
 
@@ -108,23 +93,18 @@ var SteamsideView = Backbone.View.extend({
 
 		new SessionView({model: sessionModel});
 
-		CommandBoxTile.ajaxTile(function(tile) {
-			that.render_search_CommandBox(tile);
-		});
-
-		new DeckView({
-			el: $('#search-results-deck'),
-			collection: searchResults,
-			continues: continues,
-			on_tag: that.on_tag
-		});
-
 		new DeckView({
 			el: $('#favorites-deck'),
 			collection: favorites,
 			continues: continues,
 			on_tag: that.on_tag
 		});
+
+		new SearchView({
+			el: $('#search-segment'),
+			continues: continues,
+			on_tag: that.on_tag
+		}).render();
 
 		fetch_json(sessionModel, function() {
 			new DeckView({
@@ -139,81 +119,6 @@ var SteamsideView = Backbone.View.extend({
 		});
 
 		return this;
-	},
-
-	continues_reset: function() {
-		var gameA = this.continues.at(0);
-		var gameB = this.continues.at(1);
-		var selector = '#search-command-hint-subject';
-		this.tileSearchHintContinueA.find(selector).text(gameA.name());
-		this.tileSearchHintContinueB.find(selector).text(gameB.name());
-	},
-
-	render_search_CommandBox: function(tile) {
-		var that = this;
-		var viewCommandBox = new CommandBoxView({
-			el: tile.clone(),
-			placeholder_text: 'game or command',
-			on_change_input: function(input) { that.on_search_input_changed(input) },
-			on_command: function(input) { that.on_search_command(input) },
-			on_command_alternate: function(input) { that.on_search_command_alternate(input) }
-		});
-		var viewCommandBox_el = viewCommandBox.render().el;
-		viewCommandBox.emptyCommandHints();
-		viewCommandBox.appendCommandHint(this.tileSearchHintContinueA);
-		viewCommandBox.appendCommandHint(this.tileSearchHintSearchA);
-		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintContinueB);
-		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintSearchB);
-
-		var searchEl = $('#search-command-box');
-		searchEl.empty();
-		searchEl.append(viewCommandBox_el);
-		viewCommandBox.input_query_focus();
-	},
-
-	on_search_input_changed: function(view) {
-		var input = view.input_query_val();
-		if (input == '') {
-			this.tileSearchHintContinueA.show();
-			this.tileSearchHintContinueB.show();
-			this.tileSearchHintSearchA.hide();
-			this.tileSearchHintSearchB.hide();
-		} else {
-			this.tileSearchHintContinueA.hide();
-			this.tileSearchHintContinueB.hide();
-			this.tileSearchHintSearchA.show();
-			this.tileSearchHintSearchB.show();
-			var selector = '#search-command-hint-subject';
-			this.tileSearchHintSearchA.find(selector).text(input);
-			this.tileSearchHintSearchB.find(selector).text(input);
-		}
-	},
-
-	on_search_command: function(view) {
-		var input = view.input_query_val();
-		if (input == '') {
-			var gameA = this.continues.at(0);
-			gameA.play();
-		} else {
-			var searchResults = this.searchResults;
-			searchResults.query = input;
-			fetch_json(searchResults);
-		}
-	},
-
-	on_search_command_alternate: function(view) {
-		var input = view.input_query_val();
-		if (input == '') {
-			var gameB = this.continues.at(1);
-			gameB.play();
-		} else {
-			var searchResults = this.searchResults;
-			searchResults.query = input;
-			fetch_json(searchResults, function() {
-				var first = searchResults.at(0);
-				first.play();
-			});
-		}
 	},
 
 	on_tag: function(game, segmentWithGameCard) {
