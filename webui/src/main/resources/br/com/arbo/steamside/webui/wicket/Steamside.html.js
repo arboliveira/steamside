@@ -145,13 +145,8 @@ var Steamside_html = {
 
 		/*
 		Load the entire tileset before you try to render anything.
-		If you don't, something funny happens:
-		Multiple ajax requests pile up simultaneously
-		because the "loaded" flag of SteamsideTileset
-		has not been set yet.
-		That makes tiles be rendered randomly.
 		 */
-		SteamsideTileset.ajaxTileset(function(){
+		SteamsideTileset.loadTileset().done(function(){
 			new SteamsideView().render();
 		});
     }
