@@ -7,20 +7,15 @@ var TagView = Backbone.View.extend({
 	},
 
 	render: function() {
-		var tileEmptyCommandHint = this.$('#empty-command-hint');
-		tileEmptyCommandHint.remove();
-		this.tileEmptyCommandHintA = tileEmptyCommandHint.clone();
-		this.tileEmptyCommandHintB = tileEmptyCommandHint.clone();
-		var selectorBegin = '#empty-command-hint-begin';
-		this.tileEmptyCommandHintA.find(selectorBegin).text("Search tags for");
-		this.tileEmptyCommandHintB.find(selectorBegin).text("Tag as");
+		this.$(".game-name").text(this.game.name());
+
+		this.renderCommandHints();
 
 		var that = this;
-		CommandBoxTile.ajaxTile(function(tile) {
-			that.on_empty_CommandBox_rendered(tile);
+		CommandBoxTile.whenLoaded(function(tile) {
+			that.on_CommandBox_TileLoaded(tile);
 		});
 
-		this.$(".game-name").text(this.game.name());
 		this.$el.hide();
 		this.$el.slideDown();
 
@@ -29,25 +24,43 @@ var TagView = Backbone.View.extend({
 		return this;
 	},
 
-	on_empty_CommandBox_rendered: function(tile) {
+	renderCommandHints: function () {
+		var template = this.$('#empty-command-hint');
+		template.remove();
+
+		this.elCommandHintA =
+			this.renderCommandHint(template, "Search collections for");
+		this.elCommandHintB =
+			this.renderCommandHint(template, "Tag as");
+	},
+
+	renderCommandHint: function (template, begin) {
+		var el = template.clone();
+		el.find('#empty-command-hint-begin').text(begin);
+		return el;
+	},
+
+	on_CommandBox_TileLoaded: function(tile) {
 		var that = this;
 		var viewCommandBox = new CommandBoxView({
 			el: tile.clone(),
-			placeholder_text: 'Name for empty collection',
+			placeholder_text: 'Collection for ' + this.game.name(),
 			on_command: function(input) { that.on_empty_command(input) },
 			on_command_alternate: function(input) { that.on_empty_command_alternate(input) },
 			on_change_input: function(input) { that.on_empty_change_input(input); }
 		});
 
-		var targetEl = this.$('#div-empty-name-form');
+		var targetEl = this.$('#div-command-box');
 		targetEl.empty();
 		targetEl.append(viewCommandBox.render().el);
 
 		viewCommandBox.emptyCommandHints();
-		viewCommandBox.appendCommandHint(this.tileEmptyCommandHintA);
-		viewCommandBox.appendCommandHintAlternate(this.tileEmptyCommandHintB);
+		viewCommandBox.appendCommandHint(this.elCommandHintA);
+		viewCommandBox.appendCommandHintAlternate(this.elCommandHintB);
 
+		// TODO Favorites or most recently used
 		this.updateWithInputValue("");
+
 		viewCommandBox.input_query_focus();
 	},
 
@@ -66,40 +79,44 @@ var TagView = Backbone.View.extend({
 		this.createEmpty({name: input, stay: false});
 	},
 
-	createEmpty: function(args) {     "use strict";
+	createEmpty: function(args) {
 		var name = this.nameForCollection(args.name);
 		var aUrl = "api/collection/" + name + "/create";
 		var that = this;
 
+		// TODO display 'creating...'
+		/*
+		beforeSend: function(){
+		},
+		*/
+
 		$.ajax({
 			url: aUrl,
-			dataType: dataTypeOf(aUrl),
-			beforeSend: function(){
-				// TODO display 'creating...'
-			},
-			complete: function(){
-				if (args.stay) {
-					var input_el = that.$('#input-text-command-box');
-					input_el.val('');
-					input_el.focus();
-					that.on_empty_change_input('');
-				} else {
-					Backbone.history.navigate(
-						"#/collections/" + name + "/edit",
-						{trigger: true});
-				}
+			dataType: dataTypeOf(aUrl)
+		}).done(function(){
+			if (args.stay) {
+				var input_el = that.$('#input-text-command-box');
+				input_el.val('');
+				input_el.focus();
+				that.on_empty_change_input('');
+			} else {
+				Backbone.history.navigate(
+					"#/collections/" + name + "/edit",
+					{trigger: true});
 			}
+		}).fail(function(error){
+			that.elCommandHintA.text(error.status + ' ' + error.statusText);
 		});
 	},
 
 	updateWithInputValue: function (input) {
 		var name = this.nameForCollection(input);
 		var selector = '#empty-command-hint-subject';
-		this.tileEmptyCommandHintA.find(selector).text(name);
-		this.tileEmptyCommandHintB.find(selector).text(name);
+		this.elCommandHintA.find(selector).text(name);
+		this.elCommandHintB.find(selector).text(name);
 	},
 
-	on_empty_change_input: function (view) {  "use strict";
+	on_empty_change_input: function (view) {
 		var input = view.input_query_val();
 		this.updateWithInputValue(input);
 	}

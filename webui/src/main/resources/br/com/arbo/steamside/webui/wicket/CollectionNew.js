@@ -9,20 +9,20 @@ var CollectionNewTile = {
 
 var CollectionNewEmptyView = Backbone.View.extend({
 
-	tileEmptyCommandHintA: null,
-	tileEmptyCommandHintB: null,
+	elCommandHintA: null,
+	elCommandHintB: null,
 
 	render: function() {
 		var tileEmptyCommandHint = this.$('#empty-command-hint');
 		tileEmptyCommandHint.remove();
-		this.tileEmptyCommandHintA = tileEmptyCommandHint.clone();
-		this.tileEmptyCommandHintB = tileEmptyCommandHint.clone();
+		this.elCommandHintA = tileEmptyCommandHint.clone();
+		this.elCommandHintB = tileEmptyCommandHint.clone();
 		var selectorAfterwards = '#empty-command-hint-afterwards';
-		this.tileEmptyCommandHintA.find(selectorAfterwards).text("add games");
-		this.tileEmptyCommandHintB.find(selectorAfterwards).text("stay here");
+		this.elCommandHintA.find(selectorAfterwards).text("add games");
+		this.elCommandHintB.find(selectorAfterwards).text("stay here");
 
 		var that = this;
-		CommandBoxTile.ajaxTile(function(tile) {
+		CommandBoxTile.whenLoaded(function(tile) {
 			that.on_empty_CommandBox_rendered(tile);
 		});
 
@@ -44,8 +44,8 @@ var CollectionNewEmptyView = Backbone.View.extend({
 		targetEl.append(viewCommandBox.render().el);
 
 		viewCommandBox.emptyCommandHints();
-		viewCommandBox.appendCommandHint(this.tileEmptyCommandHintA);
-		viewCommandBox.appendCommandHintAlternate(this.tileEmptyCommandHintB);
+		viewCommandBox.appendCommandHint(this.elCommandHintA);
+		viewCommandBox.appendCommandHintAlternate(this.elCommandHintB);
 
 		this.updateWithInputValue("");
 		viewCommandBox.input_query_focus();
@@ -95,8 +95,8 @@ var CollectionNewEmptyView = Backbone.View.extend({
 	updateWithInputValue: function (input) {
 		var name = this.nameForCollection(input);
 		var selector = '#empty-command-hint-subject';
-		this.tileEmptyCommandHintA.find(selector).text(name);
-		this.tileEmptyCommandHintB.find(selector).text(name);
+		this.elCommandHintA.find(selector).text(name);
+		this.elCommandHintB.find(selector).text(name);
 	},
 
 	on_empty_change_input: function (view) {  "use strict";

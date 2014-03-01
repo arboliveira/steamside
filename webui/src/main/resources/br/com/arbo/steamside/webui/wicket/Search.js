@@ -59,7 +59,7 @@ var SearchView = Backbone.View.extend({
 		this.tileSearchHintSearchB.find(selectorVerb).text("play first result for");
 
 		var that = this;
-		CommandBoxTile.ajaxTile(function(tile) {
+		CommandBoxTile.whenLoaded(function(tile) {
 			that.render_search_CommandBox(tile);
 		});
 
