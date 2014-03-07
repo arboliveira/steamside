@@ -10,6 +10,8 @@ public class FilterPlatform implements Filter {
 			app.executable();
 		} catch (final NotAvailableOnThisPlatform e) {
 			throw new Reject();
+		} catch (final MissingFrom_appinfo_vdf e) {
+			throw new Reject();
 		}
 	}
 

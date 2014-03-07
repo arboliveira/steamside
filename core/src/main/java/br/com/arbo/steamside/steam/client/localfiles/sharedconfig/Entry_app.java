@@ -3,6 +3,7 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.types.AppId;
 
@@ -25,10 +26,12 @@ public class Entry_app {
 	String sLastPlayed;
 
 	public void accept(TagVisitor visitor) {
+		if (tags == null) return;
 		for (String tag : tags)
 			visitor.each(tag);
 	}
 
+	@Nullable
 	Collection<String> tags;
 
 	String sCloudEnabled;

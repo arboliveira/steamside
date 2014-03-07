@@ -19,24 +19,24 @@ var TagView = Backbone.View.extend({
 		this.$el.hide();
 		this.$el.slideDown();
 
-		this.$(".input-tag").focus();
+		this.on_tag_done();
 
 		return this;
 	},
 
 	renderCommandHints: function () {
-		var template = this.$('#empty-command-hint');
+		var template = this.$('#tag-command-hint');
 		template.remove();
 
 		this.elCommandHintA =
-			this.renderCommandHint(template, "Search collections for");
-		this.elCommandHintB =
 			this.renderCommandHint(template, "Tag as");
+		this.elCommandHintB =
+			this.renderCommandHint(template, "Search collections for");
 	},
 
 	renderCommandHint: function (template, begin) {
 		var el = template.clone();
-		el.find('#empty-command-hint-begin').text(begin);
+		el.find('#tag-command-hint-begin').text(begin);
 		return el;
 	},
 
@@ -45,9 +45,9 @@ var TagView = Backbone.View.extend({
 		var viewCommandBox = new CommandBoxView({
 			el: tile.clone(),
 			placeholder_text: 'Collection for ' + this.game.name(),
-			on_command: function(input) { that.on_empty_command(input) },
-			on_command_alternate: function(input) { that.on_empty_command_alternate(input) },
-			on_change_input: function(input) { that.on_empty_change_input(input); }
+			on_command: function(input) { that.on_tag_command(input) },
+			on_command_alternate: function(input) { that.on_tag_command_alternate(input) },
+			on_change_input: function(input) { that.on_tag_change_input(input); }
 		});
 
 		var targetEl = this.$('#div-command-box');
@@ -64,61 +64,56 @@ var TagView = Backbone.View.extend({
 		viewCommandBox.input_query_focus();
 	},
 
-	nameForCollection: function(input) {
-		if (input == '') return "Favorites";
-		return input;
-	},
-
-	on_empty_command: function(view) {
+	on_tag_command: function(view) {
 		var input = view.input_query_val();
-		this.createEmpty({name: input, stay: false});
-	},
 
-	on_empty_command_alternate: function(view) {
-		var input = view.input_query_val();
-		this.createEmpty({name: input, stay: false});
-	},
-
-	createEmpty: function(args) {
-		var name = this.nameForCollection(args.name);
-		var aUrl = "api/collection/" + name + "/create";
+		var appid = this.game.appid();
+		var collection = this.nameForCollection(input);
+		var aUrl = "api/app/" + appid + "/tag/" + collection;
 		var that = this;
 
 		// TODO display 'creating...'
 		/*
-		beforeSend: function(){
-		},
-		*/
+		 beforeSend: function(){
+		 },
+		 */
 
 		$.ajax({
 			url: aUrl,
 			dataType: dataTypeOf(aUrl)
 		}).done(function(){
-			if (args.stay) {
-				var input_el = that.$('#input-text-command-box');
-				input_el.val('');
-				input_el.focus();
-				that.on_empty_change_input('');
-			} else {
-				Backbone.history.navigate(
-					"#/collections/" + name + "/edit",
-					{trigger: true});
-			}
+			that.on_tag_done();
 		}).fail(function(error){
-			that.elCommandHintA.text(error.status + ' ' + error.statusText);
+			view.trouble(error);
 		});
+	},
+
+	on_tag_command_alternate: function(view) {
+
+	},
+
+	on_tag_done: function() {
+		var input_el = this.$('#input-text-command-box');
+		input_el.val('');
+		input_el.focus();
+		this.on_tag_change_input('');
+	},
+
+	nameForCollection: function(input) {
+		if (input == '') return "Favorites";
+		return input;
+	},
+
+	on_tag_change_input: function (view) {
+		var input = view.input_query_val();
+		this.updateWithInputValue(input);
 	},
 
 	updateWithInputValue: function (input) {
 		var name = this.nameForCollection(input);
-		var selector = '#empty-command-hint-subject';
+		var selector = '#tag-command-hint-subject';
 		this.elCommandHintA.find(selector).text(name);
 		this.elCommandHintB.find(selector).text(name);
-	},
-
-	on_empty_change_input: function (view) {
-		var input = view.input_query_val();
-		this.updateWithInputValue(input);
 	}
 
 });

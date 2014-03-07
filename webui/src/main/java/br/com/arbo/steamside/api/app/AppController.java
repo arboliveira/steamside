@@ -15,6 +15,14 @@ import br.com.arbo.steamside.types.AppId;
 public class AppController {
 
 	@SuppressWarnings("static-method")
+	@RequestMapping("{appid}/tag/{collection}")
+	public void tag(
+			@NonNull @PathVariable final String appid,
+			@NonNull @PathVariable final String collection) {
+		System.out.println(appid + " --> " + collection);
+	}
+
+	@SuppressWarnings("static-method")
 	@RequestMapping("{appid}/"
 			+ br.com.arbo.steamside.mapping.App.run)
 	public void run(

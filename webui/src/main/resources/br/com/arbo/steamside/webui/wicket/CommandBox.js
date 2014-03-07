@@ -74,8 +74,13 @@ var CommandBoxView = Backbone.View.extend({
 	event_change_input: function(e) {     "use strict";
 		e.preventDefault();
 		this.change_input();
-	}
+	},
 
+	trouble: function (error) {
+		var span = this.$("#command-trouble");
+		span.text(error.status + ' ' + error.statusText);
+		span.show();
+	}
 
 });
 

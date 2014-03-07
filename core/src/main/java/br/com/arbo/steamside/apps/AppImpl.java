@@ -16,20 +16,31 @@ public class AppImpl implements App {
 	@Override
 	@NonNull
 	public AppName name() throws MissingFrom_appinfo_vdf {
-		if (missingFrom_appinfo_vdf != null) throw missingFrom_appinfo_vdf;
+		guard_missingFrom_appinfo_vdf();
 		final AppName _name = name;
 		if (_name == null) throw new NullPointerException();
 		return _name;
 	}
 
+	private void guard_missingFrom_appinfo_vdf() {
+		if (missingFrom_appinfo_vdf != null) throw missingFrom_appinfo_vdf;
+	}
+
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public String executable() throws NotAvailableOnThisPlatform {
+	public String executable()
+			throws NotAvailableOnThisPlatform, MissingFrom_appinfo_vdf {
+		guard_notAvailableOnThisPlatform();
+		guard_missingFrom_appinfo_vdf();
+		if (executable == null)
+			throw new NullPointerException();
+		return executable;
+	}
+
+	private void guard_notAvailableOnThisPlatform() {
 		if (notAvailableOnThisPlatform != null)
 			throw notAvailableOnThisPlatform;
-		if (executable == null) throw new NullPointerException();
-		return executable;
 	}
 
 	@Override
