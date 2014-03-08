@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.xml.collections;
 
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -28,8 +29,7 @@ public class AppsInCollectionXml {
 	}
 
 	@SuppressWarnings("null")
-	public void accept(final AppId.Visitor visitor) {
-		for (final AppInCollectionXml each : app)
-			visitor.each(new AppId(each.appid));
+	public void forEach(final Consumer<AppId> visitor) {
+		app.stream().map(each -> new AppId(each.appid)).forEach(visitor);
 	}
 }

@@ -29,9 +29,4 @@ public interface App {
 
 	void accept(final Category.Visitor visitor);
 
-	interface Visitor {
-
-		void each(App each);
-	}
-
 }

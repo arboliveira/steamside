@@ -36,14 +36,8 @@ class Combine {
 
 	AppsHome combine() {
 
-		d_sharedconfig.apps().accept(new Entry_app.Visitor() {
-
-			@Override
-			public void each(Entry_app each) {
-				eachApp(each);
-			}
-
-		});
+		d_sharedconfig.apps().forEachEntry_app(
+				each -> eachApp(each));
 
 		return home;
 	}

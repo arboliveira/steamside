@@ -23,7 +23,8 @@ public class AppImpl implements App {
 	}
 
 	private void guard_missingFrom_appinfo_vdf() {
-		if (missingFrom_appinfo_vdf != null) throw missingFrom_appinfo_vdf;
+		final MissingFrom_appinfo_vdf m = missingFrom_appinfo_vdf;
+		if (m != null) throw m;
 	}
 
 	@SuppressWarnings("null")
@@ -33,14 +34,14 @@ public class AppImpl implements App {
 			throws NotAvailableOnThisPlatform, MissingFrom_appinfo_vdf {
 		guard_notAvailableOnThisPlatform();
 		guard_missingFrom_appinfo_vdf();
-		if (executable == null)
-			throw new NullPointerException();
-		return executable;
+		final String e = executable;
+		if (e == null) throw new NullPointerException();
+		return e;
 	}
 
 	private void guard_notAvailableOnThisPlatform() {
-		if (notAvailableOnThisPlatform != null)
-			throw notAvailableOnThisPlatform;
+		final NotAvailableOnThisPlatform n = notAvailableOnThisPlatform;
+		if (n != null) throw n;
 	}
 
 	@Override

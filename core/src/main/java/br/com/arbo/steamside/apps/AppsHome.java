@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.apps;
 
+import java.util.function.Consumer;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.types.AppId;
@@ -10,7 +12,7 @@ public interface AppsHome extends AppsCollection {
 	App app(AppId appid) throws NotFound;
 
 	void accept(
-			@NonNull final Filter filter, @NonNull final App.Visitor visitor);
+			@NonNull final Filter filter, @NonNull final Consumer<App> visitor);
 
 	void accept(CategoryWithAppsVisitor visitor);
 

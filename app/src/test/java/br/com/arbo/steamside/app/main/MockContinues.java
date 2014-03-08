@@ -2,6 +2,7 @@ package br.com.arbo.steamside.app.main;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
@@ -20,7 +21,7 @@ public class MockContinues implements
 	static class Mock implements ContinuesRooster {
 
 		@Override
-		public void accept(final App.Visitor visitor) {
+		public void accept(final Consumer<App> visitor) {
 			final List<String> ids = Arrays.asList(
 					"400", // Portal
 					"70", // Half-Life
@@ -33,8 +34,7 @@ public class MockContinues implements
 					"215690" // Zeno Clash 2
 			);
 			final AppImpl.Builder b = new AppImpl.Builder();
-			for (final String id : ids)
-				visitor.each(b.appid(id).make());
+			ids.stream().map(id -> b.appid(id).make()).forEach(visitor);
 		}
 	}
 

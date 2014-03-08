@@ -1,9 +1,9 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import br.com.arbo.steamside.types.AppId;
 
@@ -19,17 +19,13 @@ public class InMemory_sharedconfig_vdf
 
 	@SuppressWarnings("null")
 	@Override
-	public void accept(AppId.Visitor visitor) {
-		Set<String> keys = map.keySet();
-		for (String key : keys)
-			visitor.each(new AppId(key));
+	public void forEachAppId(Consumer<AppId> visitor) {
+		map.keySet().stream().map(key -> new AppId(key)).forEach(visitor);
 	}
 
 	@Override
-	public void accept(Entry_app.Visitor visitor) {
-		Collection<Entry_app> values = map.values();
-		for (Entry_app app : values)
-			visitor.each(app);
+	public void forEachEntry_app(Consumer<Entry_app> visitor) {
+		map.values().forEach(visitor);
 	}
 
 	public void add(Entry_app app) {
@@ -39,5 +35,10 @@ public class InMemory_sharedconfig_vdf
 	@Override
 	public Entry_app get(AppId appid) {
 		return map.get(appid.appid);
+	}
+
+	@Override
+	public Stream<AppId> streamAppId() {
+		return map.keySet().stream().map(key -> new AppId(key));
 	}
 }

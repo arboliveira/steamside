@@ -30,27 +30,26 @@ public class CollectionController {
 			throws
 			br.com.arbo.steamside.data.collections.NotFound
 	{
-		final Library _library = this.library;
 		final List<AppDTO> result = new LinkedList<AppDTO>();
-		data.on(new CollectionName(name)).accept(new AppId.Visitor() {
-
-			@Override
-			public void each(final AppId appid) {
-				try {
-					result.add(toDTO(appid));
-				} catch (final MissingFrom_appinfo_vdf e) {
-					return;
-				} catch (NotFound e) {
-					return;
-				}
-			}
-
-			private AppDTO toDTO(final AppId appid)
-					throws MissingFrom_appinfo_vdf, NotFound {
-				return AppDTO.valueOf(appid, _library);
-			}
-		});
+		data.on(new CollectionName(name)).forEach(
+				appid -> add(result, appid)
+				);
 		return result;
+	}
+
+	void add(final List<AppDTO> result, final AppId appid) {
+		try {
+			result.add(toDTO(appid));
+		} catch (final MissingFrom_appinfo_vdf e) {
+			return;
+		} catch (NotFound e) {
+			return;
+		}
+	}
+
+	private AppDTO toDTO(final AppId appid)
+			throws MissingFrom_appinfo_vdf, NotFound {
+		return AppDTO.valueOf(appid, this.library);
 	}
 
 	@RequestMapping(value = "{name}/create")

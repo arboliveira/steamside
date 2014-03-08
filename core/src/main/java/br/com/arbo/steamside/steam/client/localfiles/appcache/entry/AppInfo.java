@@ -15,9 +15,7 @@ public class AppInfo {
 
 	@NonNull
 	public AppName name() {
-		final AppName _name = name;
-		if (_name == null) throw new NullPointerException();
-		return _name;
+		return name;
 	}
 
 	public void executable(@NonNull final String executable) {

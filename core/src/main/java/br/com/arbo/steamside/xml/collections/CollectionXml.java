@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.xml.collections;
 
+import java.util.function.Consumer;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.data.collections.OnCollection;
@@ -17,8 +19,8 @@ public class CollectionXml implements OnCollection {
 
 	@Override
 	@SuppressWarnings("null")
-	public void accept(final AppId.Visitor visitor) {
-		apps.accept(visitor);
+	public void forEach(final Consumer<AppId> visitor) {
+		apps.forEach(visitor);
 	}
 
 }

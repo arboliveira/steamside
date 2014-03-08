@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.xml.collections;
 
 import java.util.LinkedList;
+import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -35,9 +36,11 @@ public class CollectionsXml {
 	}
 
 	private CollectionXml find(final CollectionName name) throws NotFound {
-		for (final CollectionXml collectionXml : collection)
-			if (name.value.equals(collectionXml.name))
-				return collectionXml;
+		Optional<CollectionXml> optional =
+				collection.stream().filter(
+						collectionXml -> name.value.equals(collectionXml.name)
+						).findFirst();
+		if (optional != null) return optional.get();
 		throw new NotFound();
 	}
 

@@ -60,9 +60,6 @@ public class ContainerFactory {
 				.addComponent(KidsMode.class, FromUsername.class)
 				.addComponent(User.class, FromJava.class)
 				.addComponent(SteamBrowserProtocol.class)
-				//.addComponent(
-				//		Data_appinfo_vdf.class,
-				//		InMemory_appinfo_vdf.class)
 				.addComponent(RunGame.class)
 				//				.addComponent(
 				//						DataFactory_sharedconfig_vdf.class,

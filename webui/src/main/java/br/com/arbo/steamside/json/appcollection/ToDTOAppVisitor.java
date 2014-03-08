@@ -2,6 +2,7 @@ package br.com.arbo.steamside.json.appcollection;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
@@ -10,7 +11,7 @@ import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.AppId;
 
-public class ToDTOAppVisitor implements App.Visitor {
+public class ToDTOAppVisitor implements Consumer<App> {
 
 	private static final int limit = 27;
 
@@ -27,7 +28,7 @@ public class ToDTOAppVisitor implements App.Visitor {
 	}
 
 	@Override
-	public void each(final App app) {
+	public void accept(final App app) {
 		final AppDTO dto;
 		try {
 			dto = toDTO(app.appid());

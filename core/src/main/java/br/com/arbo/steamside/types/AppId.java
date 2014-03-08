@@ -32,9 +32,4 @@ public class AppId {
 		return appid;
 	}
 
-	public interface Visitor {
-
-		void each(AppId appid);
-	}
-
 }

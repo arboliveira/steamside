@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.library;
 
+import java.util.function.Consumer;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.apps.App;
@@ -14,7 +16,7 @@ public interface Library {
 
 	App app(AppId appid) throws NotFound;
 
-	void accept(@NonNull Filter filter, @NonNull App.Visitor visitor);
+	void accept(@NonNull Filter filter, @NonNull Consumer<App> visitor);
 
 	void accept(final CategoryWithAppsVisitor visitor);
 

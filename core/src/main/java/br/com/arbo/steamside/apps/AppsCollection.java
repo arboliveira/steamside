@@ -1,10 +1,14 @@
 package br.com.arbo.steamside.apps;
 
 import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public interface AppsCollection {
 
-	void accept(App.Visitor visitor);
+	Stream<App> stream();
+
+	void forEach(Consumer<App> visitor);
 
 	int count();
 
@@ -14,14 +18,18 @@ public interface AppsCollection {
 			return new AppsCollection() {
 
 				@Override
-				public void accept(final App.Visitor visitor) {
-					for (final App app : adapted)
-						visitor.each(app);
+				public void forEach(final Consumer<App> visitor) {
+					adapted.forEach(visitor);
 				}
 
 				@Override
 				public int count() {
 					return adapted.size();
+				}
+
+				@Override
+				public Stream<App> stream() {
+					return adapted.stream();
 				}
 			};
 		}

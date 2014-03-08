@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.AppsCollection;
 import br.com.arbo.steamside.apps.AppsHome.CategoryWithAppsVisitor;
 import br.com.arbo.steamside.indent.Indent;
@@ -36,13 +35,12 @@ public class ExampleDumpCategoriesFrom_Library {
 	void printCategory(final Category category, final AppsCollection itsApps) {
 		System.out.println(indent.on(category));
 		indent.increase();
-		itsApps.accept(new App.Visitor() {
 
-			@Override
-			public void each(final App app) {
-				System.out.println(indent.on(dump.toInfo(app.appid())));
-			}
-		});
+		itsApps.stream().map(
+				app -> indent.on(dump.toInfo(app.appid()))
+				).forEach(
+						System.out::println);
+
 		indent.decrease();
 	}
 

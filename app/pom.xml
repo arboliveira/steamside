@@ -32,6 +32,12 @@
 			<artifactId>jmock-junit4</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-mock</artifactId>
+			<version>2.0-rc2</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<properties>
 		<jetty.version>8.1.7.v20120910</jetty.version>

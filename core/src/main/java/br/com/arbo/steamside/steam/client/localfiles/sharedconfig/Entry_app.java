@@ -9,11 +9,6 @@ import br.com.arbo.steamside.types.AppId;
 
 public class Entry_app {
 
-	public interface Visitor {
-
-		void each(Entry_app each);
-	}
-
 	String id;
 
 	@NonNull
@@ -26,8 +21,9 @@ public class Entry_app {
 	String sLastPlayed;
 
 	public void accept(TagVisitor visitor) {
-		if (tags == null) return;
-		for (String tag : tags)
+		final Collection<String> t = tags;
+		if (t == null) return;
+		for (String tag : t)
 			visitor.each(tag);
 	}
 

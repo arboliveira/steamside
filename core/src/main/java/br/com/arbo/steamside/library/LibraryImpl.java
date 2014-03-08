@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.library;
 
+import java.util.function.Consumer;
+
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -31,7 +33,7 @@ public class LibraryImpl implements Library {
 	}
 
 	@Override
-	public void accept(@NonNull Filter filter, @NonNull App.Visitor visitor) {
+	public void accept(@NonNull Filter filter, @NonNull Consumer<App> visitor) {
 		apps().accept(filter, visitor);
 	}
 

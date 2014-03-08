@@ -2,6 +2,7 @@ package br.com.arbo.steamside.api.favorites;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -34,7 +35,7 @@ public class FavoritesController {
 	}
 
 	@SuppressWarnings("null")
-	private void from_accept(@NonNull final App.Visitor visitor) {
+	private void from_accept(@NonNull final Consumer<App> visitor) {
 		@NonNull
 		final Favorites filter = favorites;
 		library.accept(filter, visitor);

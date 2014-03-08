@@ -10,10 +10,18 @@ class ExamplePrintAppNamesFrom_sharedconfig_vdf {
 
 	public static void main(final String[] args) {
 		final Data_appinfo_vdf appnameFactory = newAppNameFactory();
+
 		final SysoutAppInfoLine dump = new SysoutAppInfoLine(appnameFactory);
-		new Dump_sharedconfig_vdf_Apps(dump,
-				Factory_sharedconfig_vdf_ForExamples.fromSteamPhysicalFiles())
-				.dump();
+
+		final DataFactory_sharedconfig_vdf vdf =
+				Factory_sharedconfig_vdf_ForExamples
+						.fromSteamPhysicalFiles();
+
+		vdf.data().apps().streamAppId().map(
+				appid -> dump.toInfo(appid)
+				).forEach(
+						System.out::println
+				);
 	}
 
 	private static Data_appinfo_vdf newAppNameFactory() {

@@ -3,6 +3,7 @@ package br.com.arbo.steamside.continues;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -19,25 +20,20 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 	private final Library library;
 
 	@Override
-	public void accept(final App.Visitor visitor) {
+	public void accept(final Consumer<App> visitor) {
 		final List<App> list = queryApps();
 		sort(list);
-		for (final App app : list)
-			visitor.each(app);
+		list.forEach(visitor);
 	}
 
 	private List<App> queryApps() {
 		final List<App> list = new ArrayList<App>();
-		from_accept(new App.Visitor()/* @formatter:off */ {	@Override public void each(final App app) /* @formatter:on */
-			{
-				list.add(app);
-			}
-		});
+		from_accept(list::add);
 		return list;
 	}
 
 	@SuppressWarnings("null")
-	private void from_accept(final App.Visitor add) {
+	private void from_accept(final Consumer<App> add) {
 		library.accept(continues, add);
 	}
 
