@@ -2,6 +2,7 @@ package br.com.arbo.steamside.apps;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -63,11 +64,10 @@ public class AppImpl implements App {
 	}
 
 	@Override
-	public void accept(final Category.Visitor visitor) {
+	public void forEachCategory(final Consumer<Category> visitor) {
 		final Collection<String> c = categories;
 		if (c == null) return;
-		for (final String one : c)
-			visitor.visit(new Category(one));
+		c.stream().map(one -> new Category(one)).forEach(visitor);
 	}
 
 	@Override

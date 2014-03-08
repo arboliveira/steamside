@@ -2,6 +2,7 @@ package br.com.arbo.steamside.app.main;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import br.com.arbo.steamside.app.injection.Container;
 
@@ -15,8 +16,8 @@ public class ExampleRunSteamsideMixAndMatch {
 				);
 
 		final Container cx = ContainerFactory.newContainer();
-		for (final Part part : parts)
-			if (part != null) part.apply(cx);
+
+		parts.stream().filter(Objects::nonNull).forEach(part -> part.apply(cx));
 
 		new Main(cx).start();
 	}

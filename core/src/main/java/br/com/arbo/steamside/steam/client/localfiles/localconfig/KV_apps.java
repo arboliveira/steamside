@@ -1,6 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
+import java.util.function.Consumer;
+
 public interface KV_apps {
 
-	void accept(KV_app.Visitor each);
+	void forEach(Consumer<KV_app> each);
 }

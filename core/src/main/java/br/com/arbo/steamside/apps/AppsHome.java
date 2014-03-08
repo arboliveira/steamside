@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.apps;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -12,7 +13,8 @@ public interface AppsHome extends AppsCollection {
 	App app(AppId appid) throws NotFound;
 
 	void accept(
-			@NonNull final Filter filter, @NonNull final Consumer<App> visitor);
+			@NonNull final Predicate<App> filter,
+			@NonNull final Consumer<App> visitor);
 
 	void accept(CategoryWithAppsVisitor visitor);
 

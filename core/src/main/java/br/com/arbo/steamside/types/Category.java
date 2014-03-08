@@ -8,12 +8,6 @@ public class Category {
 		this.category = category;
 	}
 
-	@FunctionalInterface
-	public interface Visitor {
-
-		void visit(Category each);
-	}
-
 	@Override
 	public String toString() {
 		return category;

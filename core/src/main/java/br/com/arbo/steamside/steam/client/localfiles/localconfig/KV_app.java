@@ -14,8 +14,4 @@ public interface KV_app {
 	@Nullable
 	LastPlayed lastPlayed();
 
-	public interface Visitor {
-
-		void each(KV_app each);
-	}
 }

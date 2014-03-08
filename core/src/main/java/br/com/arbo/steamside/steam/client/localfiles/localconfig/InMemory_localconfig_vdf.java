@@ -2,8 +2,8 @@ package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
-import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_app.Visitor;
 import br.com.arbo.steamside.types.AppId;
 
 public class InMemory_localconfig_vdf
@@ -15,9 +15,8 @@ public class InMemory_localconfig_vdf
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
-		for (KV_app_Impl app : map.values())
-			visitor.each(app);
+	public void forEach(Consumer<KV_app> visitor) {
+		map.values().forEach(visitor);
 	}
 
 	public void add(KV_app_Impl app) {

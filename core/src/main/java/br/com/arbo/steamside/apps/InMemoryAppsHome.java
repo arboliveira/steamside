@@ -3,11 +3,11 @@ package br.com.arbo.steamside.apps;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.apps.Filter.Reject;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.Category;
 
@@ -17,7 +17,7 @@ public class InMemoryAppsHome implements AppsHome {
 
 	public void add(final App app) {
 		apps.put(app.appid().appid, app);
-		app.accept(each -> categories.put(each.category, app));
+		app.forEachCategory(each -> categories.put(each.category, app));
 	}
 
 	@Override
@@ -43,20 +43,9 @@ public class InMemoryAppsHome implements AppsHome {
 
 	@Override
 	public void accept(
-			@NonNull final Filter filter, @NonNull final Consumer<App> visitor) {
-		for (final App app : apps.values())
-			consider(app, filter, visitor);
-	}
-
-	private static void consider(
-			final App app, final Filter filter,
-			final @NonNull Consumer<App> visitor) {
-		try {
-			filter.consider(app);
-		} catch (final Reject e) {
-			return;
-		}
-		visitor.accept(app);
+			@NonNull final Predicate<App> filter,
+			@NonNull final Consumer<App> visitor) {
+		apps.values().stream().filter(filter).forEach(visitor);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.apps;
 
+import java.util.function.Consumer;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -27,6 +29,6 @@ public interface App {
 
 	boolean isInCategory(final Category category);
 
-	void accept(final Category.Visitor visitor);
+	void forEachCategory(final Consumer<Category> visitor);
 
 }
