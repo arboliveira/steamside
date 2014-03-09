@@ -8,7 +8,8 @@ import br.com.arbo.steamside.types.AppId;
 
 public class ExampleSuperHexagon {
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args)
+			throws Exception {
 		final AppId appid = new AppId("221640");
 		final FromJava user = new FromJava();
 		final SteamBrowserProtocol steam = new SteamBrowserProtocol(user);

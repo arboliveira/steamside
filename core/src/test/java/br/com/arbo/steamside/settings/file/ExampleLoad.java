@@ -16,6 +16,6 @@ public class ExampleLoad {
 						SteamDirectory_ForExamples.fromSteamPhysicalFiles()))))
 				.load();
 		final OnCollection on = xml.on(new CollectionName("Arbo"));
-		on.forEach(appid -> System.out.println(xml));
+		on.forEach(System.out::println);
 	}
 }

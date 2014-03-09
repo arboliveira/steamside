@@ -27,20 +27,13 @@ public class RunGame {
 		this.library = library;
 	}
 
-	public boolean askSteamToRunGameAndWaitUntilItsUp(
-			final AppId appid) {
+	public void askSteamToRunGameAndWaitUntilItsUp(final AppId appid)
+			throws NotAvailableOnThisPlatform, NotFound, Timeout {
 		askSteamToRunGame(appid, steam);
-		final String exe;
-		try {
-			exe = findExecutableName(appid);
-		} catch (NotAvailableOnThisPlatform e) {
-			return false;
-		} catch (NotFound e) {
-			return false;
-		}
+		final String exe = findExecutableName(appid);
 		final Semaphore s = new Semaphore(0);
 		final Thread t = seekInAnotherThread(exe, s);
-		return waitUntilItsUp(s, t);
+		waitUntilItsUp(s, t);
 	}
 
 	private static void askSteamToRunGame(final AppId appid,
@@ -54,10 +47,10 @@ public class RunGame {
 		return library.app(appid).executable();
 	}
 
-	private static boolean waitUntilItsUp(final Semaphore s, final Thread t) {
+	private static void waitUntilItsUp(final Semaphore s, final Thread t)
+			throws Timeout {
 		try {
-			final boolean found = s.tryAcquire(2, TimeUnit.MINUTES);
-			return found;
+			if (!s.tryAcquire(2, TimeUnit.MINUTES)) throw new Timeout();
 		} catch (final InterruptedException e) {
 			throw new RuntimeException(e);
 		} finally {
