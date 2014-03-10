@@ -1,8 +1,6 @@
 package br.com.arbo.steamside.steam.client.protocol;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
 
 import org.apache.commons.io.IOUtils;
 
@@ -23,20 +21,7 @@ STEAM_RUNTIME is enabled automatically
 class LinuxAlternative_xdg_open {
 
 	void attempt() {
-		class XT_xdg_open implements Runnable {
-
-			@Override
-			public void run() {
-				try {
-					run_xdg_open();
-				} catch (final IOException e) {
-					throw new RuntimeException(e);
-				}
-			}
-
-		}
-
-		final Thread xt = new Thread(new XT_xdg_open(), "xdg-open " + str);
+		final Thread xt = new Thread(this::xt_xdg_open, "xdg-open " + str);
 		xt.setDaemon(true);
 		xt.start();
 		try {
@@ -46,14 +31,20 @@ class LinuxAlternative_xdg_open {
 		}
 	}
 
-	void run_xdg_open() throws IOException {
+	void xt_xdg_open() {
+		try {
+			run_xdg_open();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void run_xdg_open() throws IOException {
 		final Process process = new ProcessBuilder(
 				"xdg-open",
 				str
 				).start();
-		final InputStream is = process.getInputStream();
-		final PrintStream sysout = System.out;
-		IOUtils.copy(is, sysout);
+		IOUtils.copy(process.getInputStream(), System.out);
 	}
 
 	LinuxAlternative_xdg_open(final String str) {

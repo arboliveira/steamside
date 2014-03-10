@@ -16,20 +16,10 @@ public class ExitController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public String exit() {
-		xtExit();
+		new Thread(
+				this::giveTheUserAChanceToSeeTheResultBeforeWeWreakHavocOnJetty,
+				"Exit SteamSide").start();
 		return "SteamSide, your companion on Steam";
-	}
-
-	private void xtExit() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				giveTheUserAChanceToSeeTheResultBeforeWeWreakHavocOnJetty();
-			}
-
-		}, "Exit SteamSide").start();
-
 	}
 
 	void giveTheUserAChanceToSeeTheResultBeforeWeWreakHavocOnJetty() {

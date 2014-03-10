@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.app.jetty;
 
-import java.io.IOException;
 import java.net.BindException;
 import java.net.URL;
 
@@ -100,6 +99,7 @@ public class Jetty implements LocalWebserver {
 
 	private void addServlet_api(
 			final ServletContextHandler context) {
+		@SuppressWarnings("resource")
 		final WebApplicationContext springContext = webApplicationContextBuilder
 				.newSpringContext();
 		final ServletHolder servletHolder =
@@ -128,31 +128,11 @@ public class Jetty implements LocalWebserver {
 	}
 
 	private void xtWaitForUserToPressEnterAndExit() {
-		class WaitForUserToPressEnterAndExit implements Runnable {
-
-			@Override
-			public void run() {
-				waitForUserToPressEnterAndExit();
-			}
-		}
 		final Thread thread = new Thread(
-				new WaitForUserToPressEnterAndExit(),
+				new WaitForUserToPressEnterThenExit(exit),
 				"Press Enter to exit SteamSide");
 		thread.setDaemon(true);
 		thread.start();
-	}
-
-	void waitForUserToPressEnterAndExit() {
-		waitForUserToPressEnter();
-		exit.exit();
-	}
-
-	private static void waitForUserToPressEnter() {
-		try {
-			System.in.read();
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	private static String root_of_resources() {
