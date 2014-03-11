@@ -18,7 +18,7 @@ public class AppId {
 
 	@Override
 	public boolean equals(final Object obj) {
-		return obj instanceof AppId && ((AppId) obj).appid.equals(this.appid);
+		return obj instanceof AppId && equalsAppId((AppId) obj);
 	}
 
 	@Override
@@ -30,6 +30,10 @@ public class AppId {
 	@NonNull
 	public String appid() {
 		return appid;
+	}
+
+	public boolean equalsAppId(final AppId other) {
+		return other.appid.equals(this.appid);
 	}
 
 }

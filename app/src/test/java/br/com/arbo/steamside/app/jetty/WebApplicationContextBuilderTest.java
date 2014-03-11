@@ -15,16 +15,19 @@ public class WebApplicationContextBuilderTest {
 	@Test
 	public void instantiation__wiringShouldBeComplete() {
 		final FromJava user = new FromJava();
-		final AnnotationConfigWebApplicationContext context = new WebApplicationContextBuilder(
-				user,
-				new Exit() {
+		@SuppressWarnings("resource")
+		final AnnotationConfigWebApplicationContext context =
+				new WebApplicationContextBuilder(
+						user,
+						new Exit() {
 
-					@Override
-					public void exit() {
-						// Do nothing
-					}
-				},
-				new NoTweak()).newSpringContext();
+							@Override
+							public void exit() {
+								// Do nothing
+							}
+						},
+						new NoTweak()
+				).newSpringContext();
 		context.setServletContext(new MockServletContext());
 		context.refresh();
 		context.getBean(RunGame.class);

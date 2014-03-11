@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.apps.NotFound;
-import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
+import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.AppId;
@@ -31,8 +31,8 @@ public class CollectionController {
 			br.com.arbo.steamside.data.collections.NotFound
 	{
 		final List<AppDTO> result = new LinkedList<AppDTO>();
-		data.on(new CollectionName(name)).forEach(
-				appid -> add(result, appid)
+		data.find(new CollectionName(name)).apps().forEach(
+				app -> add(result, app.appid())
 				);
 		return result;
 	}
@@ -72,6 +72,6 @@ public class CollectionController {
 	private Library library;
 
 	@Inject
-	private CollectionHomeXmlFile data;
+	private InMemoryCollectionsHome data;
 
 }

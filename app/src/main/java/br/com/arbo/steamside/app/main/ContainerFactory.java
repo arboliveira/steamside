@@ -18,9 +18,11 @@ import br.com.arbo.steamside.opersys.username.User;
 
 public class ContainerFactory {
 
+	@SuppressWarnings("resource")
 	public static Container newContainer() {
-		final Container container = new Container(
-				new AnnotationConfigApplicationContext());
+		final AnnotationConfigApplicationContext ctx =
+				new AnnotationConfigApplicationContext();
+		final Container container = new Container(ctx);
 
 		container
 				.addComponent(SingleInstancePerUser.class)
@@ -32,10 +34,7 @@ public class ContainerFactory {
 				.addComponent(WebApplicationContextTweak.class, NoTweak.class);
 
 		final ContainerStop instance = new ContainerStop(container);
-		container
-				.addComponent(Exit.class, instance)
-		//
-		;
+		container.addComponent(Exit.class, instance);
 
 		return container;
 	}

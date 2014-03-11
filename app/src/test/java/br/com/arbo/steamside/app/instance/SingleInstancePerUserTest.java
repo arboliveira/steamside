@@ -65,9 +65,11 @@ public class SingleInstancePerUserTest {
 		m.assertIsSatisfied();
 	}
 
+	@SuppressWarnings("resource")
 	private Container newContainer() {
-		final Container container =
-				new Container(new AnnotationConfigApplicationContext());
+		final AnnotationConfigApplicationContext ctx =
+				new AnnotationConfigApplicationContext();
+		final Container container = new Container(ctx);
 		container
 				.addComponent(SingleInstancePerUser.class)
 				.addComponent(LimitPossiblePorts.class,

@@ -13,4 +13,8 @@ public class CollectionName {
 		return value;
 	}
 
+	public boolean equalsCollectionName(CollectionName name) {
+		return value.equals(name.value);
+	}
+
 }

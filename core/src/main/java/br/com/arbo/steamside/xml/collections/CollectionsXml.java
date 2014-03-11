@@ -1,47 +1,51 @@
 package br.com.arbo.steamside.xml.collections;
 
 import java.util.LinkedList;
-import java.util.Optional;
 
-import org.eclipse.jdt.annotation.NonNull;
-
+import br.com.arbo.steamside.collections.CollectionsHome;
+import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.data.collections.NotFound;
-import br.com.arbo.steamside.data.collections.OnCollection;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class CollectionsXml {
 
-	public final LinkedList<CollectionXml> collection = new LinkedList<CollectionXml>();
+	public static CollectionsXml valueOf(CollectionsHome collections) {
+		CollectionsXml xml = new CollectionsXml();
 
-	public void create(final CollectionName name) {
+		collections.all().forEach(
+				collection ->
+				xml.collection.add(
+						CollectionXml.valueOf(collection)
+						)
+				);
+
+		return xml;
+	}
+
+	public CollectionsHome toCollectionsHome() {
+		InMemoryCollectionsHome home = new InMemoryCollectionsHome();
+		collection.stream().forEach(c -> addCollection(c, home));
+		return null;
+	}
+
+	private static void addCollection(
+			CollectionXml c, InMemoryCollectionsHome home) {
+		final CollectionName name = new CollectionName(c.name);
+		home.create(name);
+		c.apps.app.stream().forEach(in -> addApp(home, name, in));
+	}
+
+	private static void addApp(InMemoryCollectionsHome home,
+			final CollectionName name, AppInCollectionXml in)
+	{
 		try {
-			find(name);
-		} catch (final NotFound e) {
-			final CollectionXml anew = new CollectionXml();
-			anew.name = name.value;
-			collection.add(anew);
+			home.add(name, new AppId(in.appid));
+		} catch (NotFound e) {
+			throw new RuntimeException("Never happens", e);
 		}
 	}
 
-	public void add(
-			@NonNull final CollectionName name,
-			@NonNull final AppId appid) throws NotFound {
-		final CollectionXml collectionXml = find(name);
-		collectionXml.add(appid);
-	}
-
-	public OnCollection on(final CollectionName name) throws NotFound {
-		return find(name);
-	}
-
-	private CollectionXml find(final CollectionName name) throws NotFound {
-		Optional<CollectionXml> optional =
-				collection.stream().filter(
-						collectionXml -> name.value.equals(collectionXml.name)
-						).findFirst();
-		if (optional != null) return optional.get();
-		throw new NotFound();
-	}
+	public final LinkedList<CollectionXml> collection = new LinkedList<CollectionXml>();
 
 }

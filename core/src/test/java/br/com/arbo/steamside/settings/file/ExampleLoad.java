@@ -1,7 +1,8 @@
 package br.com.arbo.steamside.settings.file;
 
+import br.com.arbo.steamside.collections.CollectionOfApps;
+import br.com.arbo.steamside.collections.CollectionsHome;
 import br.com.arbo.steamside.data.collections.NotFound;
-import br.com.arbo.steamside.data.collections.OnCollection;
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
@@ -15,7 +16,11 @@ public class ExampleLoad {
 				new Dir_userid(new Dir_userdata(
 						SteamDirectory_ForExamples.fromSteamPhysicalFiles()))))
 				.load();
-		final OnCollection on = xml.on(new CollectionName("Arbo"));
-		on.forEach(System.out::println);
+		final CollectionsHome home =
+				xml.collections.toCollectionsHome();
+
+		CollectionOfApps collection =
+				home.find(new CollectionName("Arbo"));
+		collection.apps().forEach(System.out::println);
 	}
 }

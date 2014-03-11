@@ -10,6 +10,8 @@ import br.com.arbo.org.apache.commons.lang3.UserHome;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
+import br.com.arbo.steamside.collections.CollectionsHome;
+import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.continues.FilterContinues;
@@ -82,6 +84,8 @@ public class ContainerFactory {
 				.addComponent(Digester.class)
 				.addComponent(Monitor.class)
 				.addComponent(ChangeListener.class, DigestOnChange.class)
+				.addComponent(
+						CollectionsHome.class, InMemoryCollectionsHome.class)
 		//
 		;
 
