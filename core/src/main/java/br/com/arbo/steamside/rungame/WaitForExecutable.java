@@ -1,10 +1,14 @@
 package br.com.arbo.steamside.rungame;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.Validate;
 
+import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
 import br.com.arbo.processes.seek.Criteria;
 import br.com.arbo.processes.seek.ProcessSeeker;
 import br.com.arbo.processes.seek.ProcessSeekerFactory;
@@ -12,26 +16,14 @@ import br.com.arbo.processes.seek.ProcessSeekerFactory;
 class WaitForExecutable {
 
 	void waitFor() {
-		final Thread t = seekInAnotherThread();
-		try {
-			waitUntilItsUp();
-		} finally {
-			t.interrupt();
-		}
+		goSeekInAnotherThread();
+		waitUntilItsUp();
+		stopSeeking();
 	}
 
-	private Thread seekInAnotherThread() {
-		final Thread t = new Thread(
-				this::againAndAgain,
-				"Seek executable: " + exe);
-		t.setDaemon(true);
-		t.start();
-		return t;
-	}
-
-	private void againAndAgain() {
-		final boolean found = seekExecutableAgainAndAgain(criteria);
-		if (found) seeking.release();
+	private void goSeekInAnotherThread() {
+		this.future = executor.scheduleWithFixedDelay(
+				this::seek, 0, 1, TimeUnit.SECONDS);
 	}
 
 	private void waitUntilItsUp() throws Timeout {
@@ -42,27 +34,28 @@ class WaitForExecutable {
 		}
 	}
 
-	private static boolean seekExecutableAgainAndAgain(final Criteria criteria) {
-		final ProcessSeeker seeker = ProcessSeekerFactory.build();
-		while (true) {
-			final boolean found = seeker.seek(criteria);
-			if (found) return true;
-			try {
-				Thread.sleep(1000);
-			} catch (final InterruptedException e) {
-				return false;
-			}
-		}
+	private void stopSeeking() {
+		executor.shutdown();
+	}
+
+	private void seek() {
+		if (!seeker.seek(criteria)) return;
+		seeking.release();
+		future.cancel(false);
 	}
 
 	WaitForExecutable(final String exe) {
 		Validate.notNull(exe);
-		this.exe = exe;
 		criteria = new Criteria();
 		criteria.executable = exe;
+		executor = Executors.newScheduledThreadPool(
+				1, DaemonThreadFactory.withPrefix("Seek executable: " + exe));
 	}
 
-	private final String exe;
-	private final Semaphore seeking = new Semaphore(0);
+	private final ProcessSeeker seeker = ProcessSeekerFactory.build();
 	private final Criteria criteria;
+	private final Semaphore seeking = new Semaphore(0);
+	private final ScheduledExecutorService executor;
+	private ScheduledFuture< ? > future;
+
 }

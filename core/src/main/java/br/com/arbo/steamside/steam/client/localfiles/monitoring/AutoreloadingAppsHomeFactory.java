@@ -43,8 +43,8 @@ public class AutoreloadingAppsHomeFactory implements AppsHomeFactory {
 	}
 
 	private ExecutorService newSingleDaemonThread() {
-		return Executors
-				.newFixedThreadPool(1, new DaemonThreadFactory(this));
+		return Executors.newFixedThreadPool(
+				1, DaemonThreadFactory.forClass(this.getClass()));
 	}
 
 	private Future<AppsHome> state;

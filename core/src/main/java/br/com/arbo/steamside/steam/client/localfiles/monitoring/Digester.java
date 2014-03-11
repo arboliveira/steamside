@@ -109,8 +109,7 @@ public class Digester {
 	}
 
 	private ExecutorService newThreeDaemonThreads() {
-		return Executors
-				.newFixedThreadPool(3, new DaemonThreadFactory(this));
+		return Executors.newFixedThreadPool(
+				3, DaemonThreadFactory.forClass(this.getClass()));
 	}
-
 }

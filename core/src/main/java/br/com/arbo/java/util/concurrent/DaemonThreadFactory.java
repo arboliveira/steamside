@@ -1,26 +1,31 @@
 package br.com.arbo.java.util.concurrent;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 public class DaemonThreadFactory implements ThreadFactory {
 
-	final ThreadFactory defaultFactory =
-			Executors.defaultThreadFactory();
-	private final Object namer;
+	public static DaemonThreadFactory forClass(Class< ? > aClass) {
+		return withPrefix(aClass.getClass().getSimpleName());
+	}
 
-	public DaemonThreadFactory(final Object namer) {
-		this.namer = namer;
+	public static DaemonThreadFactory withPrefix(String namer) {
+		return new DaemonThreadFactory(namer);
+	}
+
+	private DaemonThreadFactory(final String prefix) {
+		this.wrappedFactory =
+				new BasicThreadFactory.Builder()
+						.daemon(true)
+						.namingPattern(prefix + "-%d")
+						.build();
 	}
 
 	@Override
 	public Thread newThread(final Runnable r) {
-		final Thread thread =
-				defaultFactory.newThread(r);
-		thread.setName(namer.getClass().getSimpleName() +
-				"-"
-				+ thread.getName());
-		thread.setDaemon(true);
-		return thread;
+		return wrappedFactory.newThread(r);
 	}
+
+	private final ThreadFactory wrappedFactory;
 }
