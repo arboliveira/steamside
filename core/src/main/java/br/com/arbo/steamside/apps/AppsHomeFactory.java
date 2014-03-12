@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.apps;
 
-public interface AppsHomeFactory {
+import java.util.function.Supplier;
 
-	AppsHome get();
+public interface AppsHomeFactory extends Supplier<AppsHome> {
+	//
 }
