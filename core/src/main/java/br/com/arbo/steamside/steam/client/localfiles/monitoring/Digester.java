@@ -5,6 +5,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -30,14 +31,11 @@ public class Digester {
 		this.file_appinfo_vdf = file_appinfo_vdf;
 		this.file_localconfig_vdf = file_localconfig_vdf;
 		this.file_sharedconfig_vdf = file_sharedconfig_vdf;
-		this.executor = newThreeDaemonThreads();
 	}
 
 	private final File_localconfig_vdf file_localconfig_vdf;
 	private final File_sharedconfig_vdf file_sharedconfig_vdf;
 	private final File_appinfo_vdf file_appinfo_vdf;
-
-	private final ExecutorService executor;
 
 	class Digest_sharedconfig_vdf implements Callable<Data_sharedconfig_vdf> {
 
@@ -86,26 +84,28 @@ public class Digester {
 	}
 
 	public AppsHome digest() {
+		return combine().reduce();
+	}
+
+	private Combine combine() {
+		ExecutorService executor = newThreeDaemonThreads();
 		try {
-			return digestOn();
+			Future<Data_localconfig_vdf> f_localconfig = executor
+					.submit(new Digest_localconfig_vdf());
+			Future<Data_sharedconfig_vdf> f_sharedconfig = executor
+					.submit(new Digest_sharedconfig_vdf());
+			Future<Data_appinfo_vdf> f_appinfo = executor
+					.submit(new Digest_appinfo_vdf());
+			Spread spread = new Spread(
+					f_appinfo, f_localconfig, f_sharedconfig);
+			return spread.converge();
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		} catch (ExecutionException e) {
 			throw new RuntimeException(e);
+		} finally {
+			executor.shutdown();
 		}
-	}
-
-	private AppsHome digestOn() throws InterruptedException, ExecutionException {
-		Data_localconfig_vdf d_localconfig =
-				executor.submit(new Digest_localconfig_vdf()).get();
-
-		Data_sharedconfig_vdf d_sharedconfig =
-				executor.submit(new Digest_sharedconfig_vdf()).get();
-
-		Data_appinfo_vdf d_appinfo =
-				executor.submit(new Digest_appinfo_vdf()).get();
-
-		return new Combine(d_appinfo, d_localconfig, d_sharedconfig).combine();
 	}
 
 	private ExecutorService newThreeDaemonThreads() {

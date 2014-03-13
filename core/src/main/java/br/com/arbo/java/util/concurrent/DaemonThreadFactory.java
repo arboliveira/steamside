@@ -7,7 +7,7 @@ import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 public class DaemonThreadFactory implements ThreadFactory {
 
 	public static DaemonThreadFactory forClass(Class< ? > aClass) {
-		return withPrefix(aClass.getClass().getSimpleName());
+		return withPrefix(aClass.getSimpleName());
 	}
 
 	public static DaemonThreadFactory withPrefix(String namer) {

@@ -34,7 +34,7 @@ class Combine {
 		this.d_sharedconfig = d_sharedconfig;
 	}
 
-	AppsHome combine() {
+	AppsHome reduce() {
 
 		d_sharedconfig.apps().forEachEntry_app(
 				each -> eachApp(each));

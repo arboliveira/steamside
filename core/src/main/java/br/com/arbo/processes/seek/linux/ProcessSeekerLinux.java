@@ -8,6 +8,12 @@ import br.com.arbo.processes.seek.ProcessSeeker;
 
 public class ProcessSeekerLinux implements ProcessSeeker {
 
+	public static ProcessSeeker withNoHeaders() {
+		ProcessSeekerLinux ps = new ProcessSeekerLinux();
+		ps.noHeaders = true;
+		return ps;
+	}
+
 	@Override
 	public boolean seek(final Criteria criteria) {
 		final String exe = criteria.executable;
@@ -17,16 +23,22 @@ public class ProcessSeekerLinux implements ProcessSeeker {
 		return !psout.isEmpty();
 	}
 
-	private static String psgrep(final String grepregex) {
+	private String psgrep(final String grepregex) {
+		String cmdline =
+				"ps -o args "
+						+ (noHeaders ? "--no-headers" : "")
+						+ " -e | grep " + grepregex;
 		try {
 			return ProcessUtils.processout(
 					"/bin/sh",
 					"-c",
-					"ps -o args --no-headers -e | grep " + grepregex
+					cmdline
 					);
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
+
+	private boolean noHeaders;
 
 }
