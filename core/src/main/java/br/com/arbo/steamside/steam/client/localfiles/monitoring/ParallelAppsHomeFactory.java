@@ -6,11 +6,11 @@ import br.com.arbo.java.util.concurrent.Parallel;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
 
-public class AutoreloadingAppsHomeFactory extends Parallel<AppsHome>
+public class ParallelAppsHomeFactory extends Parallel<AppsHome>
 		implements AppsHomeFactory {
 
 	@Inject
-	public AutoreloadingAppsHomeFactory(Digester digester) {
+	public ParallelAppsHomeFactory(Digester digester) {
 		super(digester);
 	}
 

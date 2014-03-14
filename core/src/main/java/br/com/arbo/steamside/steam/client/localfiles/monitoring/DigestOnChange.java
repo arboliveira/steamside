@@ -5,7 +5,7 @@ import javax.inject.Inject;
 public class DigestOnChange implements ChangeListener {
 
 	@Inject
-	private AutoreloadingAppsHomeFactory appsHome;
+	private ParallelAppsHomeFactory appsHome;
 
 	@Override
 	public void fileChanged() {

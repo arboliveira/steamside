@@ -30,7 +30,7 @@ import br.com.arbo.steamside.settings.file.Load;
 import br.com.arbo.steamside.settings.file.Save;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.monitoring.AutoreloadingAppsHomeFactory;
+import br.com.arbo.steamside.steam.client.localfiles.monitoring.ParallelAppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.ChangeListener;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.DigestOnChange;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Digester;
@@ -58,7 +58,7 @@ public class ContainerFactory {
 		container
 				.addComponent(Library.class, LibraryImpl.class)
 				.addComponent(AppsHomeFactory.class,
-						AutoreloadingAppsHomeFactory.class)
+						ParallelAppsHomeFactory.class)
 				.addComponent(KidsMode.class, FromUsername.class)
 				.addComponent(User.class, FromJava.class)
 				.addComponent(SteamBrowserProtocol.class)
