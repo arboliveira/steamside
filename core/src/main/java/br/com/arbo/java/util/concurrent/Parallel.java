@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
 
-public class Autoreloading<T> implements Supplier<T> {
+public class Parallel<T> implements Supplier<T> {
 
 	private final Supplier<T> loader;
 
@@ -14,13 +14,13 @@ public class Autoreloading<T> implements Supplier<T> {
 		return FutureUtils.get(state);
 	}
 
-	public Autoreloading(Supplier<T> loader) {
+	public Parallel(Supplier<T> loader) {
 		this.loader = loader;
 		this.executor = newSingleDaemonThread();
-		reload();
+		submit();
 	}
 
-	public void reload() {
+	public void submit() {
 		this.state = this.executor.submit(loader::get);
 	}
 

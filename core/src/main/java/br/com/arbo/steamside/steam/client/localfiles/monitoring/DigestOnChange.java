@@ -9,7 +9,7 @@ public class DigestOnChange implements ChangeListener {
 
 	@Override
 	public void fileChanged() {
-		appsHome.reload();
+		appsHome.submit();
 	}
 
 }
