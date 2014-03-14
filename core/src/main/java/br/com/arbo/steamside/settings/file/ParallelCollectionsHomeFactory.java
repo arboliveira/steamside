@@ -4,11 +4,11 @@ import br.com.arbo.java.util.concurrent.Parallel;
 import br.com.arbo.steamside.collections.CollectionsHome;
 import br.com.arbo.steamside.collections.CollectionsHomeFactory;
 
-public class AutoreloadingCollectionsHomeFactory
+public class ParallelCollectionsHomeFactory
 		extends Parallel<CollectionsHome>
 		implements CollectionsHomeFactory {
 
-	public AutoreloadingCollectionsHomeFactory() {
+	public ParallelCollectionsHomeFactory() {
 		super(null);
 	}
 }
