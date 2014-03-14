@@ -11,7 +11,7 @@ public class AutoreloadingAppsHomeFactory extends Autoreloading<AppsHome>
 
 	@Inject
 	public AutoreloadingAppsHomeFactory(Digester digester) {
-		super(digester::digest);
+		super(digester);
 	}
 
 }

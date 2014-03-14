@@ -4,32 +4,26 @@ import static br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.monitoring.AutoreloadingAppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Digester;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocation;
 
 public class Library_ForExamples {
 
 	public static Library fromSteamPhysicalFiles() {
-		File_appinfo_vdf appinfo =
-				new File_appinfo_vdf(
-						SteamDirectory_ForExamples.fromSteamPhysicalFiles());
+		SteamLocation steamDir =
+				SteamDirectory_ForExamples.fromSteamPhysicalFiles();
 
 		Dir_userid dir_userid = from_Dir_userid();
-		File_sharedconfig_vdf sharedconfig =
-				new File_sharedconfig_vdf(dir_userid);
-		File_localconfig_vdf localconfig =
-				new File_localconfig_vdf(dir_userid);
 
-		Digester digester = new Digester(appinfo, localconfig, sharedconfig);
+		Digester digester = new Digester(
+				new File_appinfo_vdf(steamDir),
+				new File_localconfig_vdf(dir_userid),
+				new File_sharedconfig_vdf(dir_userid)
+				);
 
-		AutoreloadingAppsHomeFactory auto =
-				new AutoreloadingAppsHomeFactory(digester);
-
-		final Library library = new LibraryImpl(auto);
-
-		return library;
+		return new LibraryImpl(digester::get);
 	}
 
 }

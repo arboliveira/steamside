@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -21,7 +22,7 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedcon
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedconfig_vdf;
 
-public class Digester {
+public class Digester implements Supplier<AppsHome> {
 
 	@Inject
 	public Digester(
@@ -83,7 +84,8 @@ public class Digester {
 		return data;
 	}
 
-	public AppsHome digest() {
+	@Override
+	public AppsHome get() {
 		return combine().reduce();
 	}
 
