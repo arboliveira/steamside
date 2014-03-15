@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steam.client.localfiles.monitoring;
+package br.com.arbo.steamside.steam.client.localfiles.digest;
 
 import java.io.File;
 import java.util.concurrent.Callable;

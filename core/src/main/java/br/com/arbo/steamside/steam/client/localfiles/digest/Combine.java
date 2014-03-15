@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.steam.client.localfiles.monitoring;
+package br.com.arbo.steamside.steam.client.localfiles.digest;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
