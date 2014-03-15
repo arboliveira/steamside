@@ -23,7 +23,7 @@ public class AppDTO {
 	private static AppName nameOf(
 			final AppId appid, final Library library)
 			throws MissingFrom_appinfo_vdf, NotFound {
-		return library.app(appid).name();
+		return library.find(appid).name();
 	}
 
 	public AppDTO(

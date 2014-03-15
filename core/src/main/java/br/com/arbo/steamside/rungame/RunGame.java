@@ -34,7 +34,7 @@ public class RunGame {
 	private String findExecutableName(final AppId appid)
 			throws NotAvailableOnThisPlatform, NotFound
 	{
-		return library.app(appid).executable();
+		return library.find(appid).executable();
 	}
 
 	private final SteamBrowserProtocol steam;

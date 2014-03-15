@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -22,7 +21,7 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedcon
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedconfig_vdf;
 
-public class Digester implements Supplier<AppsHome> {
+public class Digester {
 
 	@Inject
 	public Digester(
@@ -34,41 +33,12 @@ public class Digester implements Supplier<AppsHome> {
 		this.file_sharedconfig_vdf = file_sharedconfig_vdf;
 	}
 
-	private final File_localconfig_vdf file_localconfig_vdf;
-	private final File_sharedconfig_vdf file_sharedconfig_vdf;
-	private final File_appinfo_vdf file_appinfo_vdf;
-
-	class Digest_sharedconfig_vdf implements Callable<Data_sharedconfig_vdf> {
-
-		@Override
-		public Data_sharedconfig_vdf call() throws Exception {
-			return digest_sharedconfig_vdf();
-		}
-
+	public AppsHome digest() {
+		return combine().reduce();
 	}
 
-	class Digest_appinfo_vdf implements Callable<Data_appinfo_vdf> {
-
-		@Override
-		public Data_appinfo_vdf call() throws Exception {
-			return digest_appinfo_vdf();
-		}
-
-	}
-
-	class Digest_localconfig_vdf implements Callable<Data_localconfig_vdf> {
-
-		@Override
-		public Data_localconfig_vdf call() throws Exception {
-			return digest_localconfig_vdf();
-		}
-
-	}
-
-	Data_sharedconfig_vdf digest_sharedconfig_vdf() {
-		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
-		final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(file);
-		Data_sharedconfig_vdf data = parser.parse();
+	Data_appinfo_vdf digest_appinfo_vdf() {
+		Data_appinfo_vdf data = new InMemory_appinfo_vdf(file_appinfo_vdf);
 		return data;
 	}
 
@@ -79,14 +49,11 @@ public class Digester implements Supplier<AppsHome> {
 		return data;
 	}
 
-	Data_appinfo_vdf digest_appinfo_vdf() {
-		Data_appinfo_vdf data = new InMemory_appinfo_vdf(file_appinfo_vdf);
+	Data_sharedconfig_vdf digest_sharedconfig_vdf() {
+		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
+		final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(file);
+		Data_sharedconfig_vdf data = parser.parse();
 		return data;
-	}
-
-	@Override
-	public AppsHome get() {
-		return combine().reduce();
 	}
 
 	private Combine combine() {
@@ -114,4 +81,37 @@ public class Digester implements Supplier<AppsHome> {
 		return Executors.newFixedThreadPool(
 				3, DaemonThreadFactory.forClass(this.getClass()));
 	}
+
+	class Digest_appinfo_vdf implements Callable<Data_appinfo_vdf> {
+
+		@Override
+		public Data_appinfo_vdf call() throws Exception {
+			return digest_appinfo_vdf();
+		}
+
+	}
+
+	class Digest_localconfig_vdf implements Callable<Data_localconfig_vdf> {
+
+		@Override
+		public Data_localconfig_vdf call() throws Exception {
+			return digest_localconfig_vdf();
+		}
+
+	}
+
+	class Digest_sharedconfig_vdf implements Callable<Data_sharedconfig_vdf> {
+
+		@Override
+		public Data_sharedconfig_vdf call() throws Exception {
+			return digest_sharedconfig_vdf();
+		}
+
+	}
+
+	private final File_appinfo_vdf file_appinfo_vdf;
+
+	private final File_localconfig_vdf file_localconfig_vdf;
+
+	private final File_sharedconfig_vdf file_sharedconfig_vdf;
 }

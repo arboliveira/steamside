@@ -14,7 +14,7 @@ public interface Library {
 
 	int count();
 
-	App app(AppId appid) throws NotFound;
+	App find(AppId appid) throws NotFound;
 
 	void accept(
 			@NonNull Predicate<App> filter,

@@ -20,10 +20,16 @@ import br.com.arbo.steamside.types.LastPlayed;
 
 class Combine {
 
-	private final Data_appinfo_vdf d_appinfo;
-	private final Data_localconfig_vdf d_localconfig;
-	private final Data_sharedconfig_vdf d_sharedconfig;
-	private final InMemoryAppsHome home = new InMemoryAppsHome();
+	private static void executable(final AppImpl.Builder b, AppInfo appInfo) {
+		final String executable;
+		try {
+			executable = appInfo.executable();
+		} catch (NotAvailableOnThisPlatform ex) {
+			b.notAvailableOnThisPlatform(ex);
+			return;
+		}
+		b.executable(executable);
+	}
 
 	Combine(
 			Data_appinfo_vdf d_appinfo,
@@ -32,14 +38,6 @@ class Combine {
 		this.d_appinfo = d_appinfo;
 		this.d_localconfig = d_localconfig;
 		this.d_sharedconfig = d_sharedconfig;
-	}
-
-	AppsHome reduce() {
-
-		d_sharedconfig.apps().forEachEntry_app(
-				each -> eachApp(each));
-
-		return home;
 	}
 
 	void eachApp(Entry_app each) {
@@ -73,6 +71,12 @@ class Combine {
 		home.add(b.make());
 	}
 
+	AppsHome reduce() {
+		d_sharedconfig.apps().forEachEntry_app(this::eachApp);
+
+		return home;
+	}
+
 	private void from_appinfo(AppId appid, final AppImpl.Builder b) {
 		AppInfo appInfo;
 		try {
@@ -85,15 +89,12 @@ class Combine {
 		executable(b, appInfo);
 	}
 
-	private static void executable(final AppImpl.Builder b, AppInfo appInfo) {
-		final String executable;
-		try {
-			executable = appInfo.executable();
-		} catch (NotAvailableOnThisPlatform ex) {
-			b.notAvailableOnThisPlatform(ex);
-			return;
-		}
-		b.executable(executable);
-	}
+	private final Data_appinfo_vdf d_appinfo;
+
+	private final Data_localconfig_vdf d_localconfig;
+
+	private final Data_sharedconfig_vdf d_sharedconfig;
+
+	private final InMemoryAppsHome home = new InMemoryAppsHome();
 
 }

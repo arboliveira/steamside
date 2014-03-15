@@ -10,7 +10,7 @@ import br.com.arbo.steamside.types.Category;
 
 public interface AppsHome extends AppsCollection {
 
-	App app(AppId appid) throws NotFound;
+	App find(AppId appid) throws NotFound;
 
 	void accept(
 			@NonNull final Predicate<App> filter,

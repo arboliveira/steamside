@@ -12,7 +12,7 @@ public class ParallelAppsHomeFactory extends Parallel<AppsHome>
 
 	@Inject
 	public ParallelAppsHomeFactory(Digester digester) {
-		super(digester);
+		super(digester::digest);
 	}
 
 }

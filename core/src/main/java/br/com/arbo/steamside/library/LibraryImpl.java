@@ -28,8 +28,8 @@ public class LibraryImpl implements Library {
 	}
 
 	@Override
-	public App app(AppId appid) throws NotFound {
-		return apps().app(appid);
+	public App find(AppId appid) throws NotFound {
+		return apps().find(appid);
 	}
 
 	@Override

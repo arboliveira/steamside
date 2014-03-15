@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.library;
 
 import static br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Factory_sharedconfig_vdf_ForExamples.from_Dir_userid;
+import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.digest.Digester;
@@ -23,7 +24,8 @@ public class Library_ForExamples {
 				new File_sharedconfig_vdf(dir_userid)
 				);
 
-		return new LibraryImpl(digester::get);
+		final AppsHome appsHome = digester.digest();
+		return new LibraryImpl(() -> appsHome);
 	}
 
 }

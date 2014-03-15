@@ -21,7 +21,7 @@ public class InMemoryAppsHome implements AppsHome {
 	}
 
 	@Override
-	public App app(final AppId appid) throws NotFound {
+	public App find(final AppId appid) throws NotFound {
 		final App app = apps.get(appid.appid);
 		if (app != null) return app;
 		throw NotFound.appid(appid.appid);

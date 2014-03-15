@@ -51,7 +51,7 @@ public class InMemoryCollectionsHome implements CollectionsHome {
 
 	private void guardDuplicate(CollectionName name) throws Duplicate {
 		Optional<CollectionImpl> maybe = findMaybe(name);
-		if (maybe != null) throw new Duplicate();
+		if (maybe.isPresent()) throw new Duplicate();
 	}
 
 	private final LinkedList<CollectionImpl> collections =
