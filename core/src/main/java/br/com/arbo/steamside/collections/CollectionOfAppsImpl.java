@@ -10,15 +10,13 @@ import br.com.arbo.steamside.types.CollectionName;
 
 public class CollectionOfAppsImpl implements CollectionOfApps {
 
-	private final CollectionName name;
+	public static CollectionOfAppsImpl clone(CollectionOfApps in) {
+		final CollectionOfAppsImpl clone = new CollectionOfAppsImpl(in.name());
+		return clone;
+	}
 
 	public CollectionOfAppsImpl(CollectionName name) {
 		this.name = name;
-	}
-
-	@Override
-	public CollectionName name() {
-		return name;
 	}
 
 	@Override
@@ -26,7 +24,12 @@ public class CollectionOfAppsImpl implements CollectionOfApps {
 		return apps.stream();
 	}
 
-	public void add(@NonNull final AppId appid) {
+	@Override
+	public CollectionName name() {
+		return name;
+	}
+
+	public void tag(@NonNull final AppId appid) {
 		for (final AppInCollection each : apps)
 			if (each.appid().equalsAppId(appid)) return;
 		final AppInCollectionImpl anew = new AppInCollectionImpl(appid);
@@ -35,4 +38,5 @@ public class CollectionOfAppsImpl implements CollectionOfApps {
 
 	private final LinkedList<AppInCollection> apps = new LinkedList<>();
 
+	private final CollectionName name;
 }

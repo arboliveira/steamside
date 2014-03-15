@@ -1,6 +1,8 @@
 package br.com.arbo.steamside.xml.collections;
 
 import br.com.arbo.steamside.collections.CollectionOfApps;
+import br.com.arbo.steamside.collections.CollectionOfAppsImpl;
+import br.com.arbo.steamside.types.CollectionName;
 
 public class CollectionXml {
 
@@ -11,8 +13,13 @@ public class CollectionXml {
 		return xml;
 	}
 
-	public String name;
+	public CollectionOfAppsImpl toCollection() {
+		final CollectionName name = new CollectionName(this.name);
+		return new CollectionOfAppsImpl(name);
+	}
 
 	public final AppsInCollectionXml apps = new AppsInCollectionXml();
+
+	public String name;
 
 }
