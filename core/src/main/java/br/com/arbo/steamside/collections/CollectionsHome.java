@@ -9,8 +9,8 @@ import br.com.arbo.steamside.types.CollectionName;
 
 public interface CollectionsHome {
 
-	Stream< ? extends CollectionOfApps> all();
+	Stream< ? extends CollectionI> all();
 
 	@NonNull
-	CollectionOfApps find(CollectionName name) throws NotFound;
+	CollectionI find(CollectionName name) throws NotFound;
 }

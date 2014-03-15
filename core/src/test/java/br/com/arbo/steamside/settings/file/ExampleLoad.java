@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.settings.file;
 
-import br.com.arbo.steamside.collections.CollectionOfApps;
+import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsHome;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.localfiles.SteamDirectory_ForExamples;
@@ -19,7 +19,7 @@ public class ExampleLoad {
 		final CollectionsHome home =
 				xml.collections.toCollectionsHome();
 
-		CollectionOfApps collection =
+		CollectionI collection =
 				home.find(new CollectionName("Arbo"));
 		collection.apps().forEach(System.out::println);
 	}

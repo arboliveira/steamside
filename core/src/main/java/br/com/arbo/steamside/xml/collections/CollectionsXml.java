@@ -2,7 +2,7 @@ package br.com.arbo.steamside.xml.collections;
 
 import java.util.LinkedList;
 
-import br.com.arbo.steamside.collections.CollectionOfAppsImpl;
+import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsHome;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.data.collections.Duplicate;
@@ -32,9 +32,9 @@ public class CollectionsXml {
 		}
 
 		private void addCollection(CollectionXml cxml) throws Duplicate {
-			final CollectionOfAppsImpl c = cxml.toCollection();
+			final CollectionImpl c = cxml.toCollection();
 			home.add(c);
-			cxml.apps.app.stream()
+			cxml.tags.tag.stream()
 					.map(appxml -> new AppId(appxml.appid))
 					.forEach(appid -> home.tag(c, appid));
 		}

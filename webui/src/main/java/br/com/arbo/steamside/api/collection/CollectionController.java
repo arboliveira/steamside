@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.apps.NotFound;
-import br.com.arbo.steamside.collections.CollectionOfAppsImpl;
+import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.library.Library;
@@ -56,7 +56,7 @@ public class CollectionController {
 	@RequestMapping(value = "{name}/create")
 	@ResponseBody
 	public void create(@PathVariable final @NonNull String name) {
-		data.add(new CollectionOfAppsImpl(new CollectionName(name)));
+		data.add(new CollectionImpl(new CollectionName(name)));
 	}
 
 	@RequestMapping(value = "{name}/add/{appid}")

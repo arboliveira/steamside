@@ -8,19 +8,19 @@ import org.eclipse.jdt.annotation.NonNull;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class CollectionOfAppsImpl implements CollectionOfApps {
+public class CollectionImpl implements CollectionI {
 
-	public static CollectionOfAppsImpl clone(CollectionOfApps in) {
-		final CollectionOfAppsImpl clone = new CollectionOfAppsImpl(in.name());
+	public static CollectionImpl clone(CollectionI in) {
+		final CollectionImpl clone = new CollectionImpl(in.name());
 		return clone;
 	}
 
-	public CollectionOfAppsImpl(CollectionName name) {
+	public CollectionImpl(CollectionName name) {
 		this.name = name;
 	}
 
 	@Override
-	public Stream<AppInCollection> apps() {
+	public Stream<Tag> apps() {
 		return apps.stream();
 	}
 
@@ -30,13 +30,13 @@ public class CollectionOfAppsImpl implements CollectionOfApps {
 	}
 
 	public void tag(@NonNull final AppId appid) {
-		for (final AppInCollection each : apps)
+		for (final Tag each : apps)
 			if (each.appid().equalsAppId(appid)) return;
-		final AppInCollectionImpl anew = new AppInCollectionImpl(appid);
+		final TagImpl anew = new TagImpl(appid);
 		apps.add(anew);
 	}
 
-	private final LinkedList<AppInCollection> apps = new LinkedList<>();
+	private final LinkedList<Tag> apps = new LinkedList<>();
 
 	private final CollectionName name;
 }

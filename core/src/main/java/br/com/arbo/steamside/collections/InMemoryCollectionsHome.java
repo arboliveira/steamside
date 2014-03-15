@@ -13,48 +13,48 @@ import br.com.arbo.steamside.types.CollectionName;
 
 public class InMemoryCollectionsHome implements CollectionsHome {
 
-	public void add(@NonNull CollectionOfApps in) throws Duplicate {
+	public void add(@NonNull CollectionI in) throws Duplicate {
 		CollectionName name = in.name();
 		guardDuplicate(name);
-		collections.add(CollectionOfAppsImpl.clone(in));
+		collections.add(CollectionImpl.clone(in));
 	}
 
 	@Override
-	public Stream< ? extends CollectionOfApps> all() {
+	public Stream< ? extends CollectionI> all() {
 		return collections.stream();
 	}
 
 	@Override
-	public CollectionOfApps find(CollectionName name) throws NotFound {
+	public CollectionI find(CollectionName name) throws NotFound {
 		return findOrCry(name);
 	}
 
 	public void tag(
-			@NonNull final CollectionOfApps c,
+			@NonNull final CollectionI c,
 			@NonNull final AppId appid) throws NotFound {
 		findOrCry(c.name()).tag(appid);
 	}
 
-	private Optional<CollectionOfAppsImpl> findMaybe(CollectionName name)
+	private Optional<CollectionImpl> findMaybe(CollectionName name)
 	{
 		return collections.stream()
 				.filter(c -> c.name().equalsCollectionName(name))
 				.findAny();
 	}
 
-	private CollectionOfAppsImpl findOrCry(CollectionName name)
+	private CollectionImpl findOrCry(CollectionName name)
 			throws NotFound {
-		Optional<CollectionOfAppsImpl> maybe = findMaybe(name);
+		Optional<CollectionImpl> maybe = findMaybe(name);
 		if (maybe != null) return maybe.get();
 		throw new NotFound();
 	}
 
 	private void guardDuplicate(CollectionName name) throws Duplicate {
-		Optional<CollectionOfAppsImpl> maybe = findMaybe(name);
+		Optional<CollectionImpl> maybe = findMaybe(name);
 		if (maybe != null) throw new Duplicate();
 	}
 
-	private final LinkedList<CollectionOfAppsImpl> collections =
+	private final LinkedList<CollectionImpl> collections =
 			new LinkedList<>();
 
 }

@@ -1,15 +1,15 @@
 package br.com.arbo.steamside.collections;
 
+import java.util.Optional;
+
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.types.AppId;
 
-public interface AppInCollection {
+public interface Tag {
 
 	@NonNull
 	AppId appid();
 
-	@Nullable
-	Notes notes();
+	Optional<Notes> notes();
 }
