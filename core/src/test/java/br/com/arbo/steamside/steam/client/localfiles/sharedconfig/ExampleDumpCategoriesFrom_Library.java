@@ -1,7 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
-import br.com.arbo.steamside.apps.AppsCollection;
-import br.com.arbo.steamside.apps.AppsHome.CategoryWithAppsVisitor;
+import java.util.stream.Stream;
+
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.indent.Indent;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.library.Library_ForExamples;
@@ -18,38 +19,31 @@ public class ExampleDumpCategoriesFrom_Library {
 		new ExampleDumpCategoriesFrom_Library().execute();
 	}
 
-	private void execute() {
-		Library library = Library_ForExamples.fromSteamPhysicalFiles();
-
-		library.accept(new CategoryWithAppsVisitor() {
-
-			@Override
-			public void visit(final Category category,
-					final AppsCollection itsApps) {
-				printCategory(category, itsApps);
-			}
-		});
-
-	}
-
-	void printCategory(final Category category, final AppsCollection itsApps) {
-		System.out.println(indent.on(category));
-		indent.increase();
-
-		itsApps.stream().map(
-				app -> indent.on(dump.toInfo(app.appid()))
-				).forEach(
-						System.out::println);
-
-		indent.decrease();
-	}
-
-	final Indent indent = new Indent();
 	final Data_appinfo_vdf appinfo =
 			new InMemory_appinfo_vdf(new File_appinfo_vdf(
 					SteamDirectory_ForExamples
 							.fromSteamPhysicalFiles()));
+
 	final SysoutAppInfoLine dump =
 			new SysoutAppInfoLine(appinfo);
 
+	final Indent indent = new Indent();
+
+	Library library = Library_ForExamples.fromSteamPhysicalFiles();
+
+	void execute() {
+		library.allSteamCategories().forEach(this::printCategory);
+	}
+
+	void printApp(App app) {
+		System.out.println(indent.on(dump.toInfo(app.appid())));
+	}
+
+	void printCategory(final Category category) {
+		System.out.println(indent.on(category));
+		indent.increase();
+		Stream<App> apps = library.findIn(category);
+		apps.forEach(this::printApp);
+		indent.decrease();
+	}
 }
