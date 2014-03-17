@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.collections.CollectionImpl;
-import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
+import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.AppId;
@@ -73,6 +73,6 @@ public class CollectionController {
 	private Library library;
 
 	@Inject
-	private InMemoryCollectionsHome data;
+	private CollectionsData data;
 
 }

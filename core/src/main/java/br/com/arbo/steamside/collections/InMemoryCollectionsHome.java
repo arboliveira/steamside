@@ -11,8 +11,9 @@ import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class InMemoryCollectionsHome implements CollectionsHome {
+public class InMemoryCollectionsHome implements CollectionsData {
 
+	@Override
 	public void add(@NonNull CollectionI in) throws Duplicate {
 		CollectionName name = in.name();
 		guardDuplicate(name);
@@ -29,6 +30,7 @@ public class InMemoryCollectionsHome implements CollectionsHome {
 		return findOrCry(name);
 	}
 
+	@Override
 	public void tag(
 			@NonNull final CollectionI c,
 			@NonNull final AppId appid) throws NotFound {
