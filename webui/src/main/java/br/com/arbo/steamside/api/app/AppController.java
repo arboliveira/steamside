@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.arbo.steamside.apps.NotFound;
-import br.com.arbo.steamside.dontpad.Dontpad;
+import br.com.arbo.steamside.cloud.Dontpad;
 import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.rungame.Timeout;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
