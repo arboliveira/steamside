@@ -7,17 +7,14 @@ import java.util.function.Supplier;
 
 public class Parallel<T> implements Supplier<T> {
 
-	private final Supplier<T> loader;
+	public Parallel(Supplier<T> loader) {
+		this.loader = loader;
+		this.executor = newSingleDaemonThread();
+	}
 
 	@Override
 	public T get() {
 		return FutureUtils.get(state);
-	}
-
-	public Parallel(Supplier<T> loader) {
-		this.loader = loader;
-		this.executor = newSingleDaemonThread();
-		submit();
 	}
 
 	public void submit() {
@@ -29,7 +26,9 @@ public class Parallel<T> implements Supplier<T> {
 				1, DaemonThreadFactory.forClass(this.getClass()));
 	}
 
-	private Future<T> state;
-
 	private final ExecutorService executor;
+
+	private final Supplier<T> loader;
+
+	private Future<T> state;
 }

@@ -15,4 +15,8 @@ public class ParallelAppsHomeFactory extends Parallel<AppsHome>
 		super(digester::digest);
 	}
 
+	public void start() {
+		this.submit();
+	}
+
 }

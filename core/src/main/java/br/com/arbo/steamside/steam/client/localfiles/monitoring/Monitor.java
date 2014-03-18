@@ -18,6 +18,33 @@ import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedcon
 
 public class Monitor {
 
+	class FileChanged implements FileListener {
+
+		@Override
+		public void fileChanged(final FileChangeEvent event) {
+			onFileChanged(event.getFile());
+		}
+
+		@Override
+		public void fileCreated(final FileChangeEvent event) {
+			// never happens
+		}
+
+		@Override
+		public void fileDeleted(final FileChangeEvent event) {
+			// never happens
+		}
+
+	}
+
+	private static FileObject toFileObject(final File file) {
+		try {
+			return VFS.getManager().toFileObject(file);
+		} catch (final FileSystemException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	@Inject
 	public Monitor(
 			File_localconfig_vdf localconfig_vdf,
@@ -46,41 +73,14 @@ public class Monitor {
 		monitor.stop();
 	}
 
-	class FileChanged implements FileListener {
-
-		@Override
-		public void fileCreated(final FileChangeEvent event) {
-			// never happens
-		}
-
-		@Override
-		public void fileDeleted(final FileChangeEvent event) {
-			// never happens
-		}
-
-		@Override
-		public void fileChanged(final FileChangeEvent event) {
-			onFileChanged(event.getFile());
-		}
-
-	}
-
 	void onFileChanged(@SuppressWarnings("unused") FileObject file) {
 		listener.fileChanged();
 	}
 
-	private static FileObject toFileObject(final File file) {
-		try {
-			return VFS.getManager().toFileObject(file);
-		} catch (final FileSystemException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private final DefaultFileMonitor monitor;
-	private final FileObject sharedconfig_vdf;
-	private final FileObject localconfig_vdf;
 	private final FileObject appinfo_vdf;
 	private final ChangeListener listener;
+	private final FileObject localconfig_vdf;
+	private final DefaultFileMonitor monitor;
+	private final FileObject sharedconfig_vdf;
 
 }

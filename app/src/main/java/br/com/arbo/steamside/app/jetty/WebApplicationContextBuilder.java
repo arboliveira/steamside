@@ -27,11 +27,19 @@ class WebApplicationContextBuilder {
 	AnnotationConfigWebApplicationContext newSpringContext() {
 		final AnnotationConfigWebApplicationContext springContext =
 				new AnnotationConfigWebApplicationContext();
+
 		final ContainerWeb container =
 				ContainerFactory.newContainer(springContext);
+
 		container.addComponent(WebConfig.class);
 		container.addComponent(CollectionHomeXmlFile.class);
+
 		finishContainer(container);
+
+		container.addComponent(AutoStartup.class);
+
+		container.flush();
+
 		return springContext;
 	}
 
@@ -44,8 +52,6 @@ class WebApplicationContextBuilder {
 				DirtyHackForSpringWeb.ExitExistingInstance.class);
 
 		tweak.tweak(cx);
-
-		cx.flush();
 	}
 
 }
