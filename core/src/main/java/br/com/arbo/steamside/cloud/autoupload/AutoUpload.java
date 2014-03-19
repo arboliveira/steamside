@@ -7,7 +7,7 @@ import br.com.arbo.steamside.settings.file.Save;
 public class AutoUpload {
 
 	@Inject
-	public AutoUpload(Save save, AutouploadingSteamsideData listener) {
-		save.addListener(listener);
+	public AutoUpload(Save save, ParallelUpload parallel) {
+		save.addListener(file -> parallel.submit(file));
 	}
 }
