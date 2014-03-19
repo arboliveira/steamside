@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.xml.bind.JAXB;
 
+import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.xml.SteamsideXml;
 
 public class Save {
@@ -19,7 +20,8 @@ public class Save {
 		listeners.add(listener);
 	}
 
-	public void save(final SteamsideXml xml) {
+	public void save(final SteamsideData data) {
+		final SteamsideXml xml = SteamsideXml.valueOf(data.collections());
 		final File file = file_steamside_xml.steamside_xml();
 		file.getParentFile().mkdirs();
 		JAXB.marshal(xml, file);
