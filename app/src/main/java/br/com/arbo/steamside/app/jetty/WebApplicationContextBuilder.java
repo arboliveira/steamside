@@ -4,7 +4,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.container.ContainerFactory;
-import br.com.arbo.steamside.data.collections.CollectionHomeXmlFile;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.spring.WebConfig;
@@ -32,7 +31,6 @@ class WebApplicationContextBuilder {
 				ContainerFactory.newContainer(springContext);
 
 		container.addComponent(WebConfig.class);
-		container.addComponent(CollectionHomeXmlFile.class);
 
 		finishContainer(container);
 

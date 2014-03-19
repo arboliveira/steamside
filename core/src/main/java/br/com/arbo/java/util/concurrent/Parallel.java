@@ -17,6 +17,14 @@ public class Parallel<T> implements Supplier<T> {
 		return FutureUtils.get(state);
 	}
 
+	public void start() {
+		this.submit();
+	}
+
+	public void stop() {
+		executor.shutdown();
+	}
+
 	public void submit() {
 		this.state = this.executor.submit(loader::get);
 	}

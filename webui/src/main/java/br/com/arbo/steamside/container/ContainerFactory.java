@@ -7,16 +7,19 @@ import br.com.arbo.org.apache.commons.lang3.FromSystemUtils;
 import br.com.arbo.org.apache.commons.lang3.FromWindowsUtils;
 import br.com.arbo.org.apache.commons.lang3.ProgramFiles;
 import br.com.arbo.org.apache.commons.lang3.UserHome;
+import br.com.arbo.steamside.api.app.AppController;
+import br.com.arbo.steamside.api.collection.CollectionController;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
-import br.com.arbo.steamside.collections.CollectionsHome;
-import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
+import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.continues.FilterContinues;
-import br.com.arbo.steamside.data.InMemorySteamsideData;
+import br.com.arbo.steamside.data.LoadData;
 import br.com.arbo.steamside.data.SteamsideData;
+import br.com.arbo.steamside.data.autowire.AutowireCollectionsData;
+import br.com.arbo.steamside.data.autowire.AutowireSteamsideData;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
@@ -28,8 +31,8 @@ import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.settings.file.File_steamside_xml;
-import br.com.arbo.steamside.settings.file.Load;
-import br.com.arbo.steamside.settings.file.Save;
+import br.com.arbo.steamside.settings.file.LoadSteamsideXml;
+import br.com.arbo.steamside.settings.file.SaveSteamsideXml;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.digest.Digester;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
@@ -57,42 +60,66 @@ public class ContainerFactory {
 	}
 
 	public static void onStart(ParallelAppsHomeFactory parallelAppsHomeFactory,
-			Monitor monitor) {
+			Monitor monitor, br.com.arbo.steamside.data.LoadData loadData) {
 		parallelAppsHomeFactory.start();
 		monitor.start();
+		loadData.start();
+	}
+
+	public static void onStop(ParallelAppsHomeFactory parallelAppsHomeFactory,
+			Monitor monitor) {
+		monitor.stop();
+		parallelAppsHomeFactory.stop();
 	}
 
 	private static void addComponents(final ContainerWeb container) {
 		container
 				.addComponent(Library.class, LibraryImpl.class)
 				.addComponent(
-						AppsHomeFactory.class, ParallelAppsHomeFactory.class)
-				.addComponent(KidsMode.class, FromUsername.class)
-				.addComponent(User.class, FromJava.class)
-				.addComponent(SteamBrowserProtocol.class)
-				.addComponent(RunGame.class)
+						AppsHomeFactory.class, ParallelAppsHomeFactory.class);
+
+		container
+				.addComponent(Digester.class)
+				.addComponent(Monitor.class)
+				.addComponent(ChangeListener.class, DigestOnChange.class);
+
+		container
+				.addComponent(
+						SteamsideData.class, AutowireSteamsideData.class)
+				.addComponent(
+						CollectionsData.class, AutowireCollectionsData.class);
+
+		container
+				.addComponent(LoadSteamsideXml.class)
+				.addComponent(File_steamside_xml.class)
+				.addComponent(SaveSteamsideXml.class)
+				.addComponent(LoadData.class);
+
+		container
 				.addComponent(File_sharedconfig_vdf.class)
 				.addComponent(File_localconfig_vdf.class)
 				.addComponent(File_appinfo_vdf.class)
 				.addComponent(Dir_userid.class)
-				.addComponent(Dir_userdata.class)
-				.addComponent(Load.class)
-				.addComponent(File_steamside_xml.class)
-				.addComponent(Save.class)
+				.addComponent(Dir_userdata.class);
+
+		container
+				.addComponent(KidsMode.class, FromUsername.class)
+				.addComponent(User.class, FromJava.class)
+				.addComponent(SteamBrowserProtocol.class)
+				.addComponent(RunGame.class);
+
+		container
 				.addComponent(FilterContinues.class)
 				.addComponent(Continues.class)
 				.addComponent(
 						ContinuesRooster.class,
 						ContinuesFromSteamClientLocalfiles.class)
 				.addComponent(Favorites.class)
-				.addComponent(FavoritesOfUser.class, FromSettings.class)
-				.addComponent(Digester.class)
-				.addComponent(Monitor.class)
-				.addComponent(ChangeListener.class, DigestOnChange.class)
-				.addComponent(
-						SteamsideData.class, InMemorySteamsideData.class)
-				.addComponent(
-						CollectionsHome.class, InMemoryCollectionsHome.class)
+				.addComponent(FavoritesOfUser.class, FromSettings.class);
+
+		container
+				.addComponent(CollectionController.class)
+				.addComponent(AppController.class)
 		//
 		;
 

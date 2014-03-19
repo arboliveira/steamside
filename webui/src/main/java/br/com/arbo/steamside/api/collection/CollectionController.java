@@ -16,7 +16,6 @@ import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
-import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.json.app.AppDTO;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.AppId;
@@ -27,9 +26,9 @@ import br.com.arbo.steamside.types.CollectionName;
 public class CollectionController {
 
 	@Inject
-	public CollectionController(Library library, SteamsideData data) {
+	public CollectionController(Library library, CollectionsData data) {
 		this.library = library;
-		this.data = data.collections();
+		this.data = data;
 	}
 
 	@RequestMapping(value = "{name}/add/{appid}")
@@ -64,9 +63,11 @@ public class CollectionController {
 	void add(final List<AppDTO> result, final AppId appid) {
 		try {
 			result.add(toDTO(appid));
-		} catch (final MissingFrom_appinfo_vdf e) {
+		}
+		catch (final MissingFrom_appinfo_vdf e) {
 			return;
-		} catch (NotFound e) {
+		}
+		catch (NotFound e) {
 			return;
 		}
 	}

@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.settings.file;
 
 import br.com.arbo.steamside.collections.CollectionI;
-import br.com.arbo.steamside.collections.CollectionsHome;
+import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.library.Library;
@@ -33,8 +33,8 @@ public class ExampleLoad {
 										SteamDirectory_ForExamples
 												.fromSteamPhysicalFiles())));
 
-		SteamsideXml xml = new Load(file_steamside_xml).load();
-		CollectionsHome home = xml.collections.toCollectionsHome();
+		SteamsideXml xml = new LoadSteamsideXml(file_steamside_xml).load();
+		CollectionsQueries home = xml.collections.toCollectionsHome();
 
 		CollectionI collection =
 				home.find(new CollectionName("Art"));

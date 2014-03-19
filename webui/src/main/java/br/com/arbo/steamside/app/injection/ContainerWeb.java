@@ -11,27 +11,18 @@ public class ContainerWeb {
 		this.ctx = ctx;
 	}
 
-	public <T> ContainerWeb addComponent(
-			final Class<T> anInterface,
-			final Class< ? extends T> implementor) {
-		guardRegisterTwice(anInterface);
-		annotatedClasses.put(anInterface, implementor);
-		return this;
-	}
-
 	public ContainerWeb addComponent(final Class< ? > aClass) {
 		guardRegisterTwice(aClass);
 		annotatedClasses.put(aClass, aClass);
 		return this;
 	}
 
-	public <T> void replaceComponent(
+	public <T> ContainerWeb addComponent(
 			final Class<T> anInterface,
 			final Class< ? extends T> implementor) {
-		final Class< ? > previous = annotatedClasses.remove(anInterface);
-		if (previous == null)
-			throw new RuntimeException("Never registered: " + anInterface);
-		addComponent(anInterface, implementor);
+		guardRegisterTwice(anInterface);
+		annotatedClasses.put(anInterface, implementor);
+		return this;
 	}
 
 	public void flush() {
@@ -49,9 +40,20 @@ public class ContainerWeb {
 		return component;
 	}
 
+	public <T> void replaceComponent(
+			final Class<T> anInterface,
+			final Class< ? extends T> implementor) {
+		final Class< ? > previous = annotatedClasses.remove(anInterface);
+		if (previous == null)
+			throw new RuntimeException("Never registered: " + anInterface);
+		addComponent(anInterface, implementor);
+	}
+
 	private void guardRegisterTwice(final Class< ? > key) {
-		if (annotatedClasses.containsKey(key))
-			throw new RuntimeException("Registering twice: " + key);
+		Class< ? > already = annotatedClasses.get(key);
+		if (already != null)
+			throw new RuntimeException("Registering twice: " + key
+					+ "(already " + already + ")");
 	}
 
 	private final AnnotationConfigWebApplicationContext ctx;

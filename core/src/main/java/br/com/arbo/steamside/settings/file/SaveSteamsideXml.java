@@ -9,10 +9,10 @@ import javax.xml.bind.JAXB;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.xml.SteamsideXml;
 
-public class Save {
+public class SaveSteamsideXml {
 
 	@Inject
-	public Save(File_steamside_xml file_steamside_xml) {
+	public SaveSteamsideXml(File_steamside_xml file_steamside_xml) {
 		this.file_steamside_xml = file_steamside_xml;
 	}
 
@@ -21,7 +21,7 @@ public class Save {
 	}
 
 	public void save(final SteamsideData data) {
-		final SteamsideXml xml = SteamsideXml.valueOf(data.collections());
+		final SteamsideXml xml = SteamsideXml.valueOf(data);
 		final File file = file_steamside_xml.steamside_xml();
 		file.getParentFile().mkdirs();
 		JAXB.marshal(xml, file);

@@ -7,12 +7,12 @@ import javax.inject.Inject;
 
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
 import br.com.arbo.steamside.data.SteamsideData;
-import br.com.arbo.steamside.settings.file.Save;
+import br.com.arbo.steamside.settings.file.SaveSteamsideXml;
 
 public class ParallelSave {
 
 	@Inject
-	public ParallelSave(Save save) {
+	public ParallelSave(SaveSteamsideXml save) {
 		this.save = save;
 		this.executor = newSingleDaemonThread();
 	}
@@ -29,6 +29,6 @@ public class ParallelSave {
 
 	private final ExecutorService executor;
 
-	private final Save save;
+	private final SaveSteamsideXml save;
 
 }

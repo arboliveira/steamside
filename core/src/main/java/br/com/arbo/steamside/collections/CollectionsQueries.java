@@ -7,7 +7,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.types.CollectionName;
 
-public interface CollectionsHome {
+public interface CollectionsQueries {
 
 	Stream< ? extends CollectionI> all();
 

@@ -3,14 +3,14 @@ package br.com.arbo.steamside.xml.collections;
 import java.util.LinkedList;
 
 import br.com.arbo.steamside.collections.CollectionImpl;
-import br.com.arbo.steamside.collections.CollectionsHome;
+import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.types.AppId;
 
 public class CollectionsXml {
 
-	public static CollectionsXml valueOf(CollectionsHome collections) {
+	public static CollectionsXml valueOf(CollectionsQueries collections) {
 		CollectionsXml xml = new CollectionsXml();
 
 		collections.all()

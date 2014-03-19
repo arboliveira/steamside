@@ -10,12 +10,10 @@ import javax.xml.bind.JAXB;
 
 import br.com.arbo.steamside.xml.SteamsideXml;
 
-public class Load {
-
-	private final File_steamside_xml file_steamside_xml;
+public class LoadSteamsideXml {
 
 	@Inject
-	public Load(File_steamside_xml file_steamside_xml) {
+	public LoadSteamsideXml(File_steamside_xml file_steamside_xml) {
 		this.file_steamside_xml = file_steamside_xml;
 	}
 
@@ -26,14 +24,19 @@ public class Load {
 							file_steamside_xml.steamside_xml());
 			try {
 				return JAXB.unmarshal(stream, SteamsideXml.class);
-			} finally {
+			}
+			finally {
 				stream.close();
 			}
-		} catch (final FileNotFoundException e) {
+		}
+		catch (final FileNotFoundException e) {
 			return new SteamsideXml();
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 
 	}
+
+	private final File_steamside_xml file_steamside_xml;
 }
