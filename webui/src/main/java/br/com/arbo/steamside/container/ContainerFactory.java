@@ -9,11 +9,14 @@ import br.com.arbo.org.apache.commons.lang3.ProgramFiles;
 import br.com.arbo.org.apache.commons.lang3.UserHome;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
+import br.com.arbo.steamside.apps.AppsHomeFactory;
 import br.com.arbo.steamside.collections.CollectionsHome;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.continues.FilterContinues;
+import br.com.arbo.steamside.data.InMemorySteamsideData;
+import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
@@ -62,15 +65,12 @@ public class ContainerFactory {
 	private static void addComponents(final ContainerWeb container) {
 		container
 				.addComponent(Library.class, LibraryImpl.class)
-				.addComponent(//AppsHomeFactory.class,
-						ParallelAppsHomeFactory.class)
+				.addComponent(
+						AppsHomeFactory.class, ParallelAppsHomeFactory.class)
 				.addComponent(KidsMode.class, FromUsername.class)
 				.addComponent(User.class, FromJava.class)
 				.addComponent(SteamBrowserProtocol.class)
 				.addComponent(RunGame.class)
-				//				.addComponent(
-				//						DataFactory_sharedconfig_vdf.class,
-				//						AutoreloadingDataFactory_sharedconfig_vdf.class)
 				.addComponent(File_sharedconfig_vdf.class)
 				.addComponent(File_localconfig_vdf.class)
 				.addComponent(File_appinfo_vdf.class)
@@ -89,6 +89,8 @@ public class ContainerFactory {
 				.addComponent(Digester.class)
 				.addComponent(Monitor.class)
 				.addComponent(ChangeListener.class, DigestOnChange.class)
+				.addComponent(
+						SteamsideData.class, InMemorySteamsideData.class)
 				.addComponent(
 						CollectionsHome.class, InMemoryCollectionsHome.class)
 		//

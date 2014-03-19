@@ -18,6 +18,7 @@ public class ParallelSave {
 	}
 
 	void submit(SteamsideData data) {
+		// TODO Acquire Reader Lock for the duration of save, then release
 		executor.submit(() -> save.save(data));
 	}
 

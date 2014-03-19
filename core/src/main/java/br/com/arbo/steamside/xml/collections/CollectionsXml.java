@@ -20,13 +20,13 @@ public class CollectionsXml {
 		return xml;
 	}
 
-	public CollectionsHome toCollectionsHome() {
+	public InMemoryCollectionsHome toCollectionsHome() {
 		return new ToCollectionsHome().convert();
 	}
 
 	class ToCollectionsHome {
 
-		CollectionsHome convert() {
+		InMemoryCollectionsHome convert() {
 			collection.stream().forEach(this::addCollection);
 			return home;
 		}

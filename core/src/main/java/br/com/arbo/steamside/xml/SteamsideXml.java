@@ -3,6 +3,8 @@ package br.com.arbo.steamside.xml;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import br.com.arbo.steamside.collections.CollectionsHome;
+import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
+import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.xml.collections.CollectionsXml;
 
 @XmlRootElement(name = "steamside")
@@ -14,12 +16,17 @@ public class SteamsideXml {
 		return xml;
 	}
 
+	public SteamsideXml() {
+		this.collections = new CollectionsXml();
+	}
+
 	public SteamsideXml(CollectionsXml collectionsXml) {
 		this.collections = collectionsXml;
 	}
 
-	public SteamsideXml() {
-		this.collections = new CollectionsXml();
+	public InMemorySteamsideData toSteamsideData() {
+		InMemoryCollectionsHome c = collections.toCollectionsHome();
+		return new InMemorySteamsideData(c);
 	}
 
 	public final CollectionsXml collections;
