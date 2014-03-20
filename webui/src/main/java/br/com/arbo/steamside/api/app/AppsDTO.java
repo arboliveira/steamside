@@ -2,13 +2,13 @@ package br.com.arbo.steamside.api.app;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.library.Library;
-import br.com.arbo.steamside.types.AppId;
 
 public class AppsDTO {
 
@@ -21,36 +21,29 @@ public class AppsDTO {
 		this.library = library;
 	}
 
-	private void add(final App app)
-	{
-		final AppDTO dto;
-		try {
-			dto = toDTO(app.appid());
-		}
-		catch (MissingFrom_appinfo_vdf toDTOFailed) {
-			return;
-		}
-		catch (NotFound e) {
-			return;
-		}
-		collection.add(dto);
-	}
-
 	private List<AppDTO> toAppsDTO(Stream<App> apps)
 	{
-		apps.limit(limit).forEach(this::add);
-		return collection;
+		return apps
+				.map(this::toOptionalDTO)
+				.filter(Optional::isPresent)
+				.limit(limit)
+				.map(Optional::get)
+				.collect(
+						() -> new ArrayList<AppDTO>(limit),
+						ArrayList::add, ArrayList::addAll);
 	}
 
-	private AppDTO toDTO(final AppId appid)
-		throws MissingFrom_appinfo_vdf, NotFound
+	private Optional<AppDTO> toOptionalDTO(App app)
 	{
-		return AppDTO.valueOf(appid, library);
+		try {
+			return Optional.of(AppDTO.valueOf(app.appid(), library));
+		}
+		catch (MissingFrom_appinfo_vdf | NotFound unavailable) {
+			return Optional.empty();
+		}
 	}
 
 	private static final int limit = 27;
-
-	private final List<AppDTO> collection = new ArrayList<AppDTO>(limit);
 
 	private final Library library;
 }
