@@ -12,6 +12,7 @@ import br.com.arbo.steamside.api.collection.CollectionController;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
+import br.com.arbo.steamside.cloud.LoadDontpad;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
@@ -53,26 +54,30 @@ public class ContainerFactory {
 
 	public static ContainerWeb newContainer(
 			final AnnotationConfigWebApplicationContext ctx
-			) {
+			)
+	{
 		final ContainerWeb c = new ContainerWeb(ctx);
 		addComponents(c);
 		return c;
 	}
 
 	public static void onStart(ParallelAppsHomeFactory parallelAppsHomeFactory,
-			Monitor monitor, br.com.arbo.steamside.data.LoadData loadData) {
+			Monitor monitor, br.com.arbo.steamside.data.LoadData loadData)
+	{
 		parallelAppsHomeFactory.start();
 		monitor.start();
 		loadData.start();
 	}
 
 	public static void onStop(ParallelAppsHomeFactory parallelAppsHomeFactory,
-			Monitor monitor) {
+			Monitor monitor)
+	{
 		monitor.stop();
 		parallelAppsHomeFactory.stop();
 	}
 
-	private static void addComponents(final ContainerWeb container) {
+	private static void addComponents(final ContainerWeb container)
+	{
 		container
 				.addComponent(Library.class, LibraryImpl.class)
 				.addComponent(
@@ -93,7 +98,8 @@ public class ContainerFactory {
 				.addComponent(LoadSteamsideXml.class)
 				.addComponent(File_steamside_xml.class)
 				.addComponent(SaveSteamsideXml.class)
-				.addComponent(LoadData.class);
+				.addComponent(LoadData.class)
+				.addComponent(LoadDontpad.class);
 
 		container
 				.addComponent(File_sharedconfig_vdf.class)
@@ -126,7 +132,8 @@ public class ContainerFactory {
 		registerSteamLocation(container);
 	}
 
-	private static void registerSteamLocation(final ContainerWeb container) {
+	private static void registerSteamLocation(final ContainerWeb container)
+	{
 		if (SystemUtils.IS_OS_WINDOWS) {
 			container.addComponent(SteamLocation.class, Windows.class);
 			container.addComponent(ProgramFiles.class, FromWindowsUtils.class);
