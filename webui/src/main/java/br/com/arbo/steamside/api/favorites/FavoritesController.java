@@ -1,8 +1,6 @@
 package br.com.arbo.steamside.api.favorites;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -11,11 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.api.app.AppDTO;
+import br.com.arbo.steamside.api.app.AppsDTO;
 import br.com.arbo.steamside.favorites.Favorites;
-import br.com.arbo.steamside.json.app.AppDTO;
-import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor;
-import br.com.arbo.steamside.json.appcollection.ToDTOAppVisitor.Full;
 import br.com.arbo.steamside.library.Library;
 
 @Controller
@@ -26,19 +22,7 @@ public class FavoritesController {
 	@ResponseBody
 	public List<AppDTO> favorites()
 	{
-		final ToDTOAppVisitor visitor = new ToDTOAppVisitor(library);
-		try {
-			from_accept(visitor);
-		} catch (final Full full) {
-			// All right!
-		}
-		return new ArrayList<AppDTO>(visitor.collection);
-	}
-
-	@SuppressWarnings("null")
-	private void from_accept(@NonNull final Consumer<App> visitor)
-	{
-		library.allApps().filter(favorites).forEach(visitor);
+		return AppsDTO.valueOf(library.allApps().filter(favorites), library);
 	}
 
 	@Inject

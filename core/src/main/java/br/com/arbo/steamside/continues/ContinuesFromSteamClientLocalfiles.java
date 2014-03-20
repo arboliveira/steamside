@@ -1,9 +1,6 @@
 package br.com.arbo.steamside.continues;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -15,12 +12,6 @@ import br.com.arbo.steamside.library.Library;
 
 public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 
-	private static void sort(final List<App> list)
-	{
-		Collections.sort(list, new LastPlayedDescending());
-		// TODO Prioritize games launched by current user
-	}
-
 	@Inject
 	public ContinuesFromSteamClientLocalfiles(
 			final @NonNull FilterContinues continues,
@@ -30,24 +21,12 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 	}
 
 	@Override
-	public void accept(final Consumer<App> visitor)
+	public Stream<App> continues()
 	{
-		final List<App> list = queryApps();
-		sort(list);
-		list.forEach(visitor);
-	}
-
-	@SuppressWarnings("null")
-	private void from_accept(final Consumer<App> add)
-	{
-		library.allApps().filter(continues).forEach(add);
-	}
-
-	private List<App> queryApps()
-	{
-		final List<App> list = new ArrayList<App>();
-		from_accept(list::add);
-		return list;
+		// TODO Prioritize games launched by current user
+		return library.allApps()
+				.filter(continues)
+				.sorted(new LastPlayedDescending());
 	}
 
 	@NonNull

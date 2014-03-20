@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.api.steamcategories;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,13 +16,9 @@ public class SteamCategoriesController {
 
 	@RequestMapping("steam-categories.json")
 	@ResponseBody
-	public List<SteamCategoryDTO> steamCategories() {
-		final List<SteamCategoryDTO> dto =
-				new ArrayList<SteamCategoryDTO>();
-		library.allSteamCategories().forEach(
-				each -> dto.add(new SteamCategoryDTO(each))
-				);
-		return dto;
+	public List<SteamCategoryDTO> steamCategories()
+	{
+		return SteamCategoryDTO.valueOf(library.allSteamCategories());
 	}
 
 	@Inject

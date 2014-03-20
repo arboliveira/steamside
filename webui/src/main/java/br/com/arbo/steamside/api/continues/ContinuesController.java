@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.json.app.AppDTO;
+import br.com.arbo.steamside.api.app.AppDTO;
 
 @Controller
 @RequestMapping("continues")

@@ -7,20 +7,21 @@ import br.com.arbo.steamside.opersys.username.FromJava;
 
 public class ExampleDumpContinues {
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args)
+	{
 		final FilterContinues continues =
 				new FilterContinues(new FromUsername(new FromJava()));
 
 		Library library = Library_ForExamples.fromSteamPhysicalFiles();
 
 		new ContinuesFromSteamClientLocalfiles(continues, library)
-				.accept(
-				app ->
-				System.out.println(
-						app.lastPlayed()
-								+ " :: " + app.name()
-								+ " :: " + app.appid()
-						)
+				.continues().forEach(
+						app ->
+						System.out.println(
+								app.lastPlayed()
+										+ " :: " + app.name()
+										+ " :: " + app.appid()
+								)
 				);
 
 	}

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.json.app.AppDTO;
+import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.steam.store.App;
 import br.com.arbo.steamside.steam.store.SearchStore;
 import br.com.arbo.steamside.steam.store.SearchStore.SearchResultVisitor;

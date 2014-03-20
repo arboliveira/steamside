@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.json.app;
+package br.com.arbo.steamside.api.app;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;

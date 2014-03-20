@@ -2,7 +2,7 @@ package br.com.arbo.steamside.app.main;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
@@ -14,14 +14,16 @@ public class MockContinues implements
 		WebApplicationContextTweak {
 
 	@Override
-	public void tweak(ContainerWeb cx) {
+	public void tweak(ContainerWeb cx)
+	{
 		cx.replaceComponent(ContinuesRooster.class, Mock.class);
 	}
 
 	static class Mock implements ContinuesRooster {
 
 		@Override
-		public void accept(final Consumer<App> visitor) {
+		public Stream<App> continues()
+		{
 			final List<String> ids = Arrays.asList(
 					"400", // Portal
 					"70", // Half-Life
@@ -34,7 +36,7 @@ public class MockContinues implements
 					"215690" // Zeno Clash 2
 			);
 			final AppImpl.Builder b = new AppImpl.Builder();
-			ids.stream().map(id -> b.appid(id).make()).forEach(visitor);
+			return ids.stream().map(id -> b.appid(id).make());
 		}
 	}
 

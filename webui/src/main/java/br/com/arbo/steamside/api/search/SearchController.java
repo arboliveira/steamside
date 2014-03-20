@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.continues.Continues;
-import br.com.arbo.steamside.json.app.AppDTO;
 
 @Controller
 @RequestMapping("search")
