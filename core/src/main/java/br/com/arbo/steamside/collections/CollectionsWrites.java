@@ -11,7 +11,7 @@ public interface CollectionsWrites {
 	void add(@NonNull CollectionI in) throws Duplicate;
 
 	void tag(
-			@NonNull final CollectionI c,
-			@NonNull final AppId appid) throws NotFound;
+			@NonNull CollectionI c,
+			@NonNull AppId appid) throws NotFound;
 
 }

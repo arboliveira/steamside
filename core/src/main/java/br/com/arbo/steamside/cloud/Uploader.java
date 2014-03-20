@@ -10,9 +10,14 @@ public class Uploader {
 	private static String read(File file) {
 		try {
 			return FileUtils.readFileToString(file, "UTF-8");
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public Uploader(Cloud cloud) {
+		this.cloud = cloud;
 	}
 
 	public void upload(File file) {
@@ -22,6 +27,8 @@ public class Uploader {
 
 	@SuppressWarnings("static-method")
 	public void upload(String content) {
-		new Dontpad().post(content);
+		cloud.upload(content);
 	}
+
+	private final Cloud cloud;
 }

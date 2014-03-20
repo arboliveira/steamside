@@ -12,7 +12,10 @@ import br.com.arbo.steamside.api.collection.CollectionController;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
-import br.com.arbo.steamside.cloud.LoadDontpad;
+import br.com.arbo.steamside.cloud.Cloud;
+import br.com.arbo.steamside.cloud.Host;
+import br.com.arbo.steamside.cloud.LoadCloud;
+import br.com.arbo.steamside.cloud.dontpad.Dontpad;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
@@ -99,7 +102,9 @@ public class ContainerFactory {
 				.addComponent(File_steamside_xml.class)
 				.addComponent(SaveSteamsideXml.class)
 				.addComponent(LoadData.class)
-				.addComponent(LoadDontpad.class);
+				.addComponent(LoadCloud.class)
+				.addComponent(Cloud.class)
+				.addComponent(Host.class, Dontpad.class);
 
 		container
 				.addComponent(File_sharedconfig_vdf.class)

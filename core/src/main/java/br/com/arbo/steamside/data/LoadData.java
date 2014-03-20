@@ -2,7 +2,7 @@ package br.com.arbo.steamside.data;
 
 import javax.inject.Inject;
 
-import br.com.arbo.steamside.cloud.LoadDontpad;
+import br.com.arbo.steamside.cloud.LoadCloud;
 import br.com.arbo.steamside.data.autowire.AutowireSteamsideData;
 import br.com.arbo.steamside.settings.file.LoadSteamsideXml;
 import br.com.arbo.steamside.xml.SteamsideXml;
@@ -11,10 +11,10 @@ public class LoadData {
 
 	@Inject
 	public LoadData(
-			AutowireSteamsideData data, LoadDontpad dontpad,
+			AutowireSteamsideData data, LoadCloud cloud,
 			LoadSteamsideXml xml) {
 		this.data = data;
-		this.dontpad = dontpad;
+		this.cloud = cloud;
 		this.xml = xml;
 	}
 
@@ -28,16 +28,17 @@ public class LoadData {
 	private SteamsideXml fromWherever()
 	{
 		try {
-			return dontpad.load();
-		} catch (RuntimeException e) {
+			return cloud.load();
+		}
+		catch (RuntimeException e) {
 			e.printStackTrace();
 			return xml.load();
 		}
 	}
 
-	private final AutowireSteamsideData data;
+	private final LoadCloud cloud;
 
-	private final LoadDontpad dontpad;
+	private final AutowireSteamsideData data;
 
 	private final br.com.arbo.steamside.settings.file.LoadSteamsideXml xml;
 }
