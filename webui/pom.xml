@@ -21,12 +21,6 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.10</version>
-			<!-- <scope>runtime</scope> -->
-		</dependency>
-		<dependency>
 			<!-- CGLIB is required to process @Configuration classes -->
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
