@@ -15,29 +15,8 @@ import br.com.arbo.steamside.library.Library;
 
 public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 
-	@NonNull
-	private final FilterContinues continues;
-	private final Library library;
-
-	@Override
-	public void accept(final Consumer<App> visitor) {
-		final List<App> list = queryApps();
-		sort(list);
-		list.forEach(visitor);
-	}
-
-	private List<App> queryApps() {
-		final List<App> list = new ArrayList<App>();
-		from_accept(list::add);
-		return list;
-	}
-
-	@SuppressWarnings("null")
-	private void from_accept(final Consumer<App> add) {
-		library.accept(continues, add);
-	}
-
-	private static void sort(final List<App> list) {
+	private static void sort(final List<App> list)
+	{
 		Collections.sort(list, new LastPlayedDescending());
 		// TODO Prioritize games launched by current user
 	}
@@ -49,5 +28,31 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 		this.library = library;
 		this.continues = continues;
 	}
+
+	@Override
+	public void accept(final Consumer<App> visitor)
+	{
+		final List<App> list = queryApps();
+		sort(list);
+		list.forEach(visitor);
+	}
+
+	@SuppressWarnings("null")
+	private void from_accept(final Consumer<App> add)
+	{
+		library.allApps().filter(continues).forEach(add);
+	}
+
+	private List<App> queryApps()
+	{
+		final List<App> list = new ArrayList<App>();
+		from_accept(list::add);
+		return list;
+	}
+
+	@NonNull
+	private final FilterContinues continues;
+
+	private final Library library;
 
 }

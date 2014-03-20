@@ -11,7 +11,8 @@ import br.com.arbo.steamside.types.AppId;
 
 class ExamplePrintAppNamesGivenIds {
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args)
+	{
 		Data_appinfo_vdf appinfo = new InMemory_appinfo_vdf(
 				new File_appinfo_vdf(
 						SteamDirectory_ForExamples
@@ -23,8 +24,7 @@ class ExamplePrintAppNamesGivenIds {
 				"22000", "9050", "12800", "10150", "35460"
 				).stream().map(
 						appid -> dump.toInfo(new AppId(appid))
-				).
-				forEach(
+				).parallel().forEach(
 						System.out::println
 				);
 	}

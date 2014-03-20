@@ -14,44 +14,50 @@ import br.com.arbo.steamside.types.CollectionName;
 public class InMemoryCollectionsHome implements CollectionsData {
 
 	@Override
-	public void add(@NonNull CollectionI in) throws Duplicate {
+	public void add(@NonNull CollectionI in) throws Duplicate
+	{
 		CollectionName name = in.name();
 		guardDuplicate(name);
 		collections.add(CollectionImpl.clone(in));
 	}
 
 	@Override
-	public Stream< ? extends CollectionI> all() {
+	public Stream< ? extends CollectionI> all()
+	{
 		return collections.stream();
 	}
 
 	@Override
-	public CollectionI find(CollectionName name) throws NotFound {
+	public CollectionI find(CollectionName name) throws NotFound
+	{
 		return findOrCry(name);
 	}
 
 	@Override
 	public void tag(
 			@NonNull final CollectionI c,
-			@NonNull final AppId appid) throws NotFound {
+			@NonNull final AppId appid) throws NotFound
+	{
 		findOrCry(c.name()).tag(appid);
 	}
 
 	private Optional<CollectionImpl> findMaybe(CollectionName name)
 	{
-		return collections.stream()
+		return collections.stream().parallel()
 				.filter(c -> c.name().equalsCollectionName(name))
 				.findAny();
 	}
 
 	private CollectionImpl findOrCry(CollectionName name)
-			throws NotFound {
+			throws NotFound
+	{
 		Optional<CollectionImpl> maybe = findMaybe(name);
 		if (maybe != null) return maybe.get();
 		throw new NotFound();
 	}
 
-	private void guardDuplicate(CollectionName name) throws Duplicate {
+	private void guardDuplicate(CollectionName name) throws Duplicate
+	{
 		Optional<CollectionImpl> maybe = findMaybe(name);
 		if (maybe.isPresent()) throw new Duplicate();
 	}

@@ -24,7 +24,8 @@ public class FavoritesController {
 
 	@RequestMapping("favorites.json")
 	@ResponseBody
-	public List<AppDTO> favorites() {
+	public List<AppDTO> favorites()
+	{
 		final ToDTOAppVisitor visitor = new ToDTOAppVisitor(library);
 		try {
 			from_accept(visitor);
@@ -35,10 +36,9 @@ public class FavoritesController {
 	}
 
 	@SuppressWarnings("null")
-	private void from_accept(@NonNull final Consumer<App> visitor) {
-		@NonNull
-		final Favorites filter = favorites;
-		library.accept(filter, visitor);
+	private void from_accept(@NonNull final Consumer<App> visitor)
+	{
+		library.allApps().filter(favorites).forEach(visitor);
 	}
 
 	@Inject
