@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
-import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
-import br.com.arbo.steamside.apps.NotFound;
+import br.com.arbo.steamside.api.app.AppsDTO;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
@@ -35,8 +35,8 @@ public class CollectionController {
 	@ResponseBody
 	public void add(@PathVariable final @NonNull String name,
 			@PathVariable final @NonNull String appid)
-		throws
-		br.com.arbo.steamside.data.collections.NotFound
+			throws
+			br.com.arbo.steamside.data.collections.NotFound
 	{
 		data.tag(new CollectionName(name), new AppId(appid));
 	}
@@ -51,33 +51,20 @@ public class CollectionController {
 	@RequestMapping(value = "collection.json", params = "name")
 	@ResponseBody
 	public List<AppDTO> json(@RequestParam final String name)
-		throws
-		br.com.arbo.steamside.data.collections.NotFound
+			throws
+			br.com.arbo.steamside.data.collections.NotFound
 	{
-		final List<AppDTO> result = new LinkedList<AppDTO>();
-		data.find(new CollectionName(name)).apps().forEach(
-				app -> add(result, app.appid())
-				);
-		return result;
+		return AppsDTO.valueOfAppIds(
+				data.find(new CollectionName(name)).apps().map(Tag::appid),
+				library);
 	}
 
-	void add(final List<AppDTO> result, final AppId appid)
+	@RequestMapping(value = "collections.json")
+	@ResponseBody
+	public List<CollectionDTO> jsonCollections()
 	{
-		try {
-			result.add(toDTO(appid));
-		}
-		catch (final MissingFrom_appinfo_vdf e) {
-			return;
-		}
-		catch (NotFound e) {
-			return;
-		}
-	}
-
-	private AppDTO toDTO(final AppId appid)
-		throws MissingFrom_appinfo_vdf, NotFound
-	{
-		return AppDTO.valueOf(appid, this.library);
+		return data.all().map(CollectionDTO::valueOf)
+				.collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
 	}
 
 	private final Library library;

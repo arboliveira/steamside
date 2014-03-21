@@ -5,6 +5,48 @@ var CollectionPickTile = {
 	}
 };
 
+var SwitchFavoritesView = Backbone.View.extend({
+	on_category_change: null,
+
+	events: {
+		"click .back-button"         : "backButtonClicked"
+	},
+
+	initialize: function() {		"use strict";
+		this.on_category_change = this.options.on_category_change;
+	},
+
+	render: function ()
+	{
+		var that = this;
+
+		var categories = new SteamCategoryCollection();
+		fetch_json(categories, function () {
+			new SteamCategoriesView({
+				el: this.$("#collection-pick-steam-categories-list"),
+				collection: categories,
+				on_category_change: that.on_category_change
+			}).render();
+		});
+
+		var collections = new SteamsideCollectionInfoCollection();
+		fetch_json(collections, function () {
+			new SteamsideCollectionInfoListView({
+				el: this.$("#collection-pick-list"),
+				collection: collections,
+				on_collection_change: that.on_collection_change
+			}).render();
+		});
+
+		return this;
+	},
+
+	backButtonClicked: function (e) {  "use strict";
+		e.preventDefault();
+		history.back();
+	}
+});
+
 var SteamsideCollectionInfo = Backbone.Model.extend({
     name: function() {
         return this.get('name');
@@ -32,18 +74,11 @@ var SteamsideCollectionInfoView = Backbone.View.extend({
 
     collectionClicked: function(e) {
         e.preventDefault();
-        var aUrl = this.model.link();
-        var that = this;
-        $.ajax({
-            url: aUrl,
-            dataType: dataTypeOf(aUrl),
-            beforeSend: function(){
-                // loading...
-            },
-            complete: function(){
-                that.category_changed();
-            }
-        });
+        var name = this.model.name();
+
+		Backbone.history.navigate(
+				"#/collections/" + name + "/edit",
+			{trigger: true});
     },
 
     category_changed: function() {

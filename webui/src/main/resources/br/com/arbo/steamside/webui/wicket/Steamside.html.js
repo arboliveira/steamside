@@ -25,32 +25,6 @@ var SessionView = Backbone.View.extend({
     }
 });
 
-var SwitchFavoritesView = Backbone.View.extend({
-    on_category_change: null,
-
-    events: {
-        "click .back-button"         : "backButtonClicked"
-    },
-
-    initialize: function() {		"use strict";
-        this.on_category_change = this.options.on_category_change;
-    },
-
-    render: function () {  "use strict";
-        new SteamCategoriesView({
-            el: this.$("#collection-pick-steam-categories-list"),
-            collection: this.collection,
-            on_category_change: this.on_category_change
-        }).render();
-        return this;
-    },
-
-    backButtonClicked: function (e) {  "use strict";
-        e.preventDefault();
-        history.back();
-    }
-});
-
 function sideshow(element) {
 	var segments = element.find('.segment');
 	var left = true;

@@ -20,17 +20,13 @@ var SteamsideRouter = Backbone.Router.extend({
             // TODO Refresh favorites
         };
 
-        var categories = new SteamCategoryCollection();
 		CollectionPickTile.ajaxTile(
 			function(tile) {
 				var view = new SwitchFavoritesView({
 					el: tile.clone(),
-					collection: categories,
 					on_category_change: on_category_change
 				});
-				fetch_json(categories, function () {
-					that.setSecondaryView(view);
-				});
+				that.setSecondaryView(view);
 			}
 		);
     },

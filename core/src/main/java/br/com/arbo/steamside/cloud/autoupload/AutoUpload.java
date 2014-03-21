@@ -8,6 +8,6 @@ public class AutoUpload {
 
 	@Inject
 	public AutoUpload(SaveSteamsideXml save, ParallelUpload parallel) {
-		save.addListener(file -> parallel.submit(file));
+		save.addListener(parallel::submit);
 	}
 }

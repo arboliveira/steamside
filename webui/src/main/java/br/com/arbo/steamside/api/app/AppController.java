@@ -6,6 +6,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.collections.CollectionsData;
@@ -23,8 +24,7 @@ public class AppController {
 	{
 		try {
 			Thread.sleep(4000);
-		}
-		catch (final InterruptedException e) {
+		} catch (final InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -43,12 +43,12 @@ public class AppController {
 
 	@SuppressWarnings("static-method")
 	@RequestMapping("{appid}/tag/{collection}")
+	@ResponseBody
 	public void tag(
 			@NonNull @PathVariable final String appid,
 			@NonNull @PathVariable final String collection
 			) throws Exception
 	{
-
 		data.tag(new CollectionName(collection), new AppId(appid));
 	}
 

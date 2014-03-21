@@ -9,21 +9,37 @@ import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.types.AppId;
 
 public class AppsDTO {
 
 	public static List<AppDTO> valueOf(Stream<App> apps, Library library)
 	{
-		return new AppsDTO(library).toAppsDTO(apps);
+		return new AppsDTO(library).valueOfApps(apps);
+	}
+
+	public static List<AppDTO>
+			valueOfAppIds(Stream<AppId> apps, Library library)
+	{
+		return new AppsDTO(library).valueOfAppIds(apps);
 	}
 
 	private AppsDTO(final Library library) {
 		this.library = library;
 	}
 
-	private List<AppDTO> toAppsDTO(Stream<App> apps)
+	private Optional<AppDTO> toOptionalDTO(AppId appid)
 	{
-		return apps
+		try {
+			return Optional.of(AppDTO.valueOf(appid, library));
+		} catch (MissingFrom_appinfo_vdf | NotFound unavailable) {
+			return Optional.empty();
+		}
+	}
+
+	private List<AppDTO> valueOfAppIds(Stream<AppId> appids)
+	{
+		return appids
 				.map(this::toOptionalDTO)
 				.filter(Optional::isPresent)
 				.limit(limit)
@@ -33,14 +49,9 @@ public class AppsDTO {
 						ArrayList::add, ArrayList::addAll);
 	}
 
-	private Optional<AppDTO> toOptionalDTO(App app)
+	private List<AppDTO> valueOfApps(Stream<App> apps)
 	{
-		try {
-			return Optional.of(AppDTO.valueOf(app.appid(), library));
-		}
-		catch (MissingFrom_appinfo_vdf | NotFound unavailable) {
-			return Optional.empty();
-		}
+		return valueOfAppIds(apps.map(App::appid));
 	}
 
 	private static final int limit = 27;

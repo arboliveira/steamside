@@ -24,7 +24,7 @@ var CollectionEditView = Backbone.View.extend({
 		var collectionEditSearchResults = new SearchResults();
 		this.collectionEditSearchResults = collectionEditSearchResults;
 
-		CommandBoxTile.ajaxTile(function(tile) {
+		CommandBoxTile.whenLoaded(function(tile) {
 			that.render_search_CommandBox(tile);
 		});
 

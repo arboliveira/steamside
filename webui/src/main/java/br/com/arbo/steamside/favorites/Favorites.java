@@ -1,23 +1,37 @@
 package br.com.arbo.steamside.favorites;
 
+import java.util.function.Predicate;
+
 import javax.inject.Inject;
 
 import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.Filter;
+import br.com.arbo.steamside.apps.Filter.Reject;
 import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.favorites.FavoritesOfUser.NotSet;
 import br.com.arbo.steamside.types.Category;
 
-public class Favorites implements Filter {
+public class Favorites implements Predicate<App> {
 
-	@Override
-	public void consider(final App app) throws Reject {
-		final Category category = determineCategory();
-		if (!app.isInCategory(category)) throw new Reject();
-		new FilterPlatform().consider(app);
+	@Inject
+	public Favorites(final FavoritesOfUser ofUser) {
+		this.ofUser = ofUser;
 	}
 
-	private Category determineCategory() {
+	@Override
+	public boolean test(App app)
+	{
+		try {
+			final Category category = determineCategory();
+			if (!app.isInCategory(category)) return false;
+			new FilterPlatform().consider(app);
+			return true;
+		} catch (final Reject e) {
+			return false;
+		}
+	}
+
+	private Category determineCategory()
+	{
 		try {
 			return ofUser.favorites();
 		} catch (final NotSet e) {
@@ -26,10 +40,5 @@ public class Favorites implements Filter {
 	}
 
 	private final FavoritesOfUser ofUser;
-
-	@Inject
-	public Favorites(final FavoritesOfUser ofUser) {
-		this.ofUser = ofUser;
-	}
 
 }
