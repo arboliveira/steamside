@@ -9,32 +9,39 @@ import org.apache.commons.io.FileUtils;
 
 public class Vdf {
 
-	public Vdf(final File file) {
-		root = new RegionImpl(new RootReaderFactory(file));
+	static String readFileToString(File file)
+	{
+		try {
+			return FileUtils.readFileToString(file);
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	public RegionImpl root() {
+	public Vdf(final File file) {
+		root = new RegionImpl(new RootReaderFactory(readFileToString(file)));
+	}
+
+	public RegionImpl root()
+	{
 		return root;
 	}
 
 	class RootReaderFactory implements ReaderFactory {
 
-		public RootReaderFactory(File file) {
-			try {
-				this.content = FileUtils.readFileToString(file);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+		public RootReaderFactory(String content) {
+			this.content = content;
 		}
 
 		@Override
-		public Reader newReaderPositionedInside() {
+		public Reader newReaderPositionedInside()
+		{
 			return new StringReader(content);
 		}
 
-		private String content;
+		private final String content;
 	}
 
 	private final RegionImpl root;
-
 }

@@ -8,31 +8,43 @@ import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 
 public class RegionImpl implements Region {
 
-	private final ReaderFactory parent;
-
 	RegionImpl(final ReaderFactory rf) {
 		this.parent = rf;
 	}
 
-	public RegionImpl region(final String name) throws NotFound {
-		class Find implements KeyValueVisitor {
+	@Override
+	public void accept(final KeyValueVisitor visitor)
+	{
+		try {
+			acceptX(visitor);
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-			RegionImpl found;
+	public RegionImpl region(final String name) throws NotFound
+	{
+		class Find implements KeyValueVisitor {
 
 			@Override
 			public void onKeyValue(final String k, final String v)
-					throws Finished {
+				throws Finished
+			{
 				// Do nothing
 			}
 
 			@Override
 			public void onSubRegion(final String k, final Region r)
-					throws Finished {
+				throws Finished
+			{
 				if (k.equalsIgnoreCase(name)) {
 					found = (RegionImpl) r;
 					throw new Finished();
 				}
 			}
+
+			RegionImpl found;
 
 		}
 
@@ -42,139 +54,149 @@ public class RegionImpl implements Region {
 		throw NotFound.name(name);
 	}
 
-	@Override
-	public void accept(final KeyValueVisitor visitor) {
-		try {
-			acceptX(visitor);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	void accept(final KeyValueVisitor visitor, final Reader reader)
+	{
+		new Tokenize(reader).tokenize(visitor);
 	}
 
-	private void acceptX(final KeyValueVisitor visitor) throws IOException {
+	Reader newReaderFromParent()
+	{
+		return parent.newReaderPositionedInside();
+	}
+
+	private void acceptX(final KeyValueVisitor visitor) throws IOException
+	{
 		final Reader r = newReaderFromParent();
 		try {
 			accept(visitor, r);
-		} finally {
+		}
+		finally {
 			r.close();
 		}
 	}
 
-	Reader newReaderFromParent() {
-		return parent.newReaderPositionedInside();
-	}
-
-	void accept(final KeyValueVisitor visitor, final Reader reader) {
-		final StreamTokenizer tokenizer = StreamTokenizerBuilder.build(reader);
-		accept(visitor, tokenizer);
-	}
-
-	private void accept(final KeyValueVisitor visitor,
-			final StreamTokenizer tokenizer) {
-		try {
-			acceptX(visitor, tokenizer);
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private void acceptX(final KeyValueVisitor visitor,
-			final StreamTokenizer tokenizer)
-			throws IOException {
-		try {
-			sweep(visitor, tokenizer);
-		} catch (final Finished ok) {
-			//
-		}
-	}
-
-	private void sweep(final KeyValueVisitor visitor,
-			final StreamTokenizer tokenizer)
-			throws IOException, Finished {
-		while (true)
-			advance(visitor, tokenizer);
-	}
-
-	private void advance(final KeyValueVisitor visitor,
-			final StreamTokenizer tokenizer)
-			throws IOException, Finished {
-		tokenizer.nextToken();
-		final String key = tokenizer.sval;
-
-		if (key == null) {
-			final int ttype = tokenizer.ttype;
-			if (ttype == '}' || ttype == StreamTokenizer.TT_EOF)
-				throw new Finished();
-			throw new RuntimeException();
-		}
-
-		tokenizer.nextToken();
-		final String value = tokenizer.sval;
-
-		if (value != null) {
-			visitor.onKeyValue(key, value);
-			return;
-		}
-
-		if (tokenizer.ttype == '{') {
-			final RegionImpl sub = new RegionImpl(new RegionReaderFactory(key));
-			visitor.onSubRegion(key, sub);
-			skipPastEndOfRegion(tokenizer);
-			return;
-		}
-
-		throw new RuntimeException();
-	}
-
-	private void skipPastEndOfRegion(final StreamTokenizer parser)
-			throws IOException {
-		class DoNothing implements KeyValueVisitor {
-
-			@Override
-			public void onKeyValue(final String k, final String v)
-					throws Finished {
-				// 
-			}
-
-			@Override
-			public void onSubRegion(final String k, final Region r)
-					throws Finished {
-				// 
-			}
-
-		}
-		acceptX(new DoNothing(), parser);
-	}
-
 	class RegionReaderFactory implements ReaderFactory {
-
-		final String name;
 
 		public RegionReaderFactory(final String name) {
 			this.name = name;
 		}
 
 		@Override
-		public Reader newReaderPositionedInside() {
+		public Reader newReaderPositionedInside()
+		{
+			final Reader reader = newReaderFromParent();
+			skipToName(reader);
+			return reader;
+		}
+
+		private void skipToName(final Reader reader)
+		{
 			class SkipToName implements KeyValueVisitor {
 
 				@Override
 				public void onKeyValue(final String k, final String v)
-						throws Finished {
+					throws Finished
+				{
 					// do nothing
 				}
 
 				@Override
 				public void onSubRegion(final String k, final Region r)
-						throws Finished {
+					throws Finished
+				{
 					if (k.equals(name)) throw new Finished();
 				}
 
 			}
-			final Reader reader = newReaderFromParent();
 			accept(new SkipToName(), reader);
-			return reader;
 		}
 
+		final String name;
+
 	}
+
+	class Tokenize {
+
+		Tokenize(Reader reader) {
+			tokenizer = StreamTokenizerBuilder.build(reader);
+		}
+
+		void tokenize(final KeyValueVisitor visitor)
+		{
+			try {
+				while (true)
+					advance(visitor);
+			}
+			catch (final Finished ok) {
+				//
+			}
+			catch (final IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		private void advance(final KeyValueVisitor visitor)
+			throws IOException, Finished
+		{
+			nextToken();
+			final String key = tokenizer.sval;
+
+			if (key == null) finish();
+
+			nextToken();
+			final String value = tokenizer.sval;
+
+			if (value != null) {
+				visitor.onKeyValue(key, value);
+				return;
+			}
+
+			if (tokenizer.ttype != '{') throw new IllegalStateException();
+
+			final RegionImpl sub = new RegionImpl(new RegionReaderFactory(key));
+			visitor.onSubRegion(key, sub);
+			skipPastEndOfRegion();
+			return;
+		}
+
+		private void finish() throws Finished
+		{
+			final int ttype = tokenizer.ttype;
+			if (ttype == '}' || ttype == StreamTokenizer.TT_EOF)
+				throw new Finished();
+			throw new IllegalStateException();
+		}
+
+		private void nextToken() throws IOException
+		{
+			tokenizer.nextToken();
+		}
+
+		private void skipPastEndOfRegion()
+		{
+			class DoNothing implements KeyValueVisitor {
+
+				@Override
+				public void onKeyValue(final String k, final String v)
+					throws Finished
+				{
+					// 
+				}
+
+				@Override
+				public void onSubRegion(final String k, final Region r)
+					throws Finished
+				{
+					// 
+				}
+
+			}
+			tokenize(new DoNothing());
+		}
+
+		private final StreamTokenizer tokenizer;
+
+	}
+
+	private final ReaderFactory parent;
 }
