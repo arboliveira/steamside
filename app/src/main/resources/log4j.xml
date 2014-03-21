@@ -16,28 +16,91 @@
 		<level value="debug" />
 		<appender-ref ref="CONSOLE-PLAIN" />
 	</logger>
+
+	<logger name="jndi">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
 	<logger name="org.eclipse.jetty">
 		<level value="debug" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
 	<logger name="org.springframework.core.env.StandardEnvironment">
-		<level value="debug" />
+		<level value="info" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
-	<logger name="org.springframework.context">
-		<level value="debug" />
+	
+
+
+	<logger name="org.springframework.beans.factory.annotation.InjectionMetadata">
+		<level value="info" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
+	<logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
 	<logger name="org.springframework.beans.factory">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
+	<logger name="org.springframework.core.io.support.PathMatchingResourcePatternResolver">
 		<level value="debug" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
+	<logger name="org.springframework.ui.context.support.UiApplicationContextUtils">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
+	<logger name="org.springframework.web.context.support.AnnotationConfigWebApplicationContext">
+		<level value="info" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
 	<logger name="org.springframework.web.context.support.StandardServletEnvironment">
-		<level value="debug" />
+		<level value="info" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
+	<logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
 	<logger name="org.springframework.web.servlet">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	
+	<logger name="org.apache.commons.vfs2.impl.StandardFileSystemManager">
 		<level value="debug" />
 		<appender-ref ref="CONSOLE" />
 	</logger>
+	<logger name="org.apache.commons.vfs2">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
+	<logger name="org.apache.http">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	
+	<logger name="org.springframework.core.env">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="org.springframework.jndi">
+		<level value="info" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	
 </log4j:configuration>
