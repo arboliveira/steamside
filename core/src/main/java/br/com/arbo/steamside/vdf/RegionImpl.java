@@ -8,15 +8,15 @@ import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 
 public class RegionImpl implements Region {
 
-	RegionImpl(final ReaderFactory rf) {
-		this.parent = rf;
+	RegionImpl(final Reader reader) {
+		this.reader = reader;
 	}
 
 	@Override
 	public void accept(final KeyValueVisitor visitor)
 	{
-		final Reader r = newReaderFromParent();
-		accept(visitor, r);
+		Tokenize tokenize = new Tokenize();
+		tokenize.tokenize(visitor);
 	}
 
 	public RegionImpl region(final String name) throws NotFound
@@ -25,14 +25,14 @@ public class RegionImpl implements Region {
 
 			@Override
 			public void onKeyValue(final String k, final String v)
-				throws Finished
+					throws Finished
 			{
 				// Do nothing
 			}
 
 			@Override
 			public void onSubRegion(final String k, final Region r)
-				throws Finished
+					throws Finished
 			{
 				if (k.equalsIgnoreCase(name)) {
 					found = (RegionImpl) r;
@@ -51,31 +51,20 @@ public class RegionImpl implements Region {
 		throw NotFound.name(name);
 	}
 
-	void accept(final KeyValueVisitor visitor, final Reader reader)
-	{
-		Tokenize tokenize = new Tokenize(reader);
-		tokenize.tokenize(visitor);
-	}
-
-	Reader newReaderFromParent()
-	{
-		return parent.newReaderPositionedInside();
-	}
-
 	void skipPastEndOfRegion()
 	{
 		class DoNothing implements KeyValueVisitor {
 
 			@Override
 			public void onKeyValue(final String k, final String v)
-				throws Finished
+					throws Finished
 			{
 				// 
 			}
 
 			@Override
 			public void onSubRegion(final String k, final Region r)
-				throws Finished
+					throws Finished
 			{
 				skipPastEndOfRegion();
 			}
@@ -84,19 +73,9 @@ public class RegionImpl implements Region {
 		accept(new DoNothing());
 	}
 
-	class RegionReaderFactory implements ReaderFactory {
-
-		@Override
-		public Reader newReaderPositionedInside()
-		{
-			return newReaderFromParent();
-		}
-
-	}
-
 	class Tokenize {
 
-		Tokenize(Reader reader) {
+		Tokenize() {
 			tokenizer = StreamTokenizerBuilder.build(reader);
 		}
 
@@ -105,17 +84,15 @@ public class RegionImpl implements Region {
 			try {
 				while (true)
 					advance(visitor);
-			}
-			catch (final Finished ok) {
+			} catch (final Finished ok) {
 				//
-			}
-			catch (final IOException e) {
+			} catch (final IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
 
 		private void advance(final KeyValueVisitor visitor)
-			throws IOException, Finished
+				throws IOException, Finished
 		{
 			nextToken();
 			final String key = tokenizer.sval;
@@ -134,7 +111,7 @@ public class RegionImpl implements Region {
 
 			if (tokenizer.ttype != '{') throw new IllegalStateException();
 
-			final RegionImpl sub = new RegionImpl(new RegionReaderFactory());
+			final RegionImpl sub = new RegionImpl(reader);
 			visitor.onSubRegion(key, sub);
 		}
 
@@ -155,5 +132,5 @@ public class RegionImpl implements Region {
 
 	}
 
-	private final ReaderFactory parent;
+	final Reader reader;
 }

@@ -2,6 +2,7 @@ package br.com.arbo.steamside.vdf;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.IsNull;
@@ -33,7 +34,7 @@ public class RegionImplTest {
 		String template = c.getSimpleName() + ".localconfig.vdf";
 		InputStream res = c.getResourceAsStream(template);
 		String content = IOUtils.toString(res, "UTF-8");
-		this.subject = new RegionImpl(new RootReaderFactory(content));
+		this.subject = new RegionImpl(new StringReader(content));
 	}
 
 	private RegionImpl subject;
