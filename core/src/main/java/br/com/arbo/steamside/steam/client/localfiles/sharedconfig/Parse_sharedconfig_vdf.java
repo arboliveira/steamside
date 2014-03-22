@@ -4,7 +4,6 @@ import java.io.File;
 
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.Region;
-import br.com.arbo.steamside.vdf.RegionImpl;
 import br.com.arbo.steamside.vdf.Vdf;
 
 public class Parse_sharedconfig_vdf {
@@ -20,27 +19,17 @@ public class Parse_sharedconfig_vdf {
 	}
 
 	private AppsRegion newAppsRegion() {
-		final RegionImpl rUserRoamingConfigStore =
-				region(content.root(), "UserRoamingConfigStore");
-		final RegionImpl rSoftware =
-				region(rUserRoamingConfigStore, "Software");
-		final RegionImpl rValve =
-				region(rSoftware, "Valve");
-		final RegionImpl rsteam =
-				region(rValve, "Steam");
-		final Region apps =
-				region(rsteam, "apps");
-
-		final AppsRegion apps_region = new AppsRegion(apps);
-		return apps_region;
-	}
-
-	private static RegionImpl region(final RegionImpl r, final String name)
-	{
 		try {
-			return r.region(name);
+			Region rUserRoamingConfigStore =
+					content.root().region("UserRoamingConfigStore");
+			Region rSoftware = rUserRoamingConfigStore.region("Software");
+			Region rValve = rSoftware.region("Valve");
+			Region rSteam = rValve.region("Steam");
+			Region rapps = rSteam.region("apps");
+			return new AppsRegion(rapps);
 		} catch (final NotFound e) {
-			throw new RuntimeException("Not a valid sharedconfig.vdf file?!", e);
+			throw new RuntimeException(
+					"Not a valid sharedconfig.vdf file?!", e);
 		}
 	}
 

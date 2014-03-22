@@ -4,7 +4,6 @@ import java.io.File;
 
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.Region;
-import br.com.arbo.steamside.vdf.RegionImpl;
 import br.com.arbo.steamside.vdf.Vdf;
 
 public class Parse_localconfig_vdf {
@@ -20,23 +19,14 @@ public class Parse_localconfig_vdf {
 	}
 
 	private Region findRegion_apps() {
-		final RegionImpl rUserRoamingConfigStore =
-				region(content.root(), "UserLocalConfigStore");
-		final RegionImpl rSoftware =
-				region(rUserRoamingConfigStore, "Software");
-		final RegionImpl rValve =
-				region(rSoftware, "Valve");
-		final RegionImpl rsteam =
-				region(rValve, "Steam");
-		final Region apps =
-				region(rsteam, "apps");
-		return apps;
-	}
-
-	private static RegionImpl region(final RegionImpl r, final String name)
-	{
 		try {
-			return r.region(name);
+			Region rUserRoamingConfigStore =
+					content.root().region("UserLocalConfigStore");
+			Region rSoftware = rUserRoamingConfigStore.region("Software");
+			Region rValve = rSoftware.region("Valve");
+			Region rSteam = rValve.region("Steam");
+			Region rapps = rSteam.region("apps");
+			return rapps;
 		} catch (final NotFound e) {
 			throw new RuntimeException("Not a valid localconfig.vdf file?!", e);
 		}

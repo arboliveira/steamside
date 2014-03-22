@@ -19,7 +19,8 @@ public class RegionImpl implements Region {
 		tokenize.tokenize(visitor);
 	}
 
-	public RegionImpl region(final String name) throws NotFound
+	@Override
+	public Region region(final String name) throws NotFound
 	{
 		class Find implements KeyValueVisitor {
 
@@ -35,13 +36,13 @@ public class RegionImpl implements Region {
 					throws Finished
 			{
 				if (k.equalsIgnoreCase(name)) {
-					found = (RegionImpl) r;
+					found = r;
 					throw new Finished();
 				}
 				skipPastEndOfRegion();
 			}
 
-			RegionImpl found;
+			Region found;
 
 		}
 

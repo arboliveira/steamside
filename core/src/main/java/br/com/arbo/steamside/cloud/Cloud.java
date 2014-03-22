@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -24,8 +26,7 @@ public class Cloud {
 	{
 		try {
 			return client.execute(post);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -41,8 +42,7 @@ public class Cloud {
 	{
 		try {
 			return entity.getContent();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -65,11 +65,11 @@ public class Cloud {
 		HttpGet get = new HttpGet(uri);
 		prepareRequest(get);
 
-		System.out.println("\nSending 'GET' request to URL : " + uri);
+		log.info("Sending 'GET' request to URL : " + uri);
 
 		HttpResponse response = execute(get);
 
-		System.out.println(
+		log.info(
 				"Response Code : "
 						+ response.getStatusLine().getStatusCode()
 				);
@@ -86,12 +86,12 @@ public class Cloud {
 		prepareRequest(post);
 		addURLParameters(in, post);
 
-		System.out.println("\nSending 'POST' request to URL : " + uri);
-		System.out.println("Post parameters : " + post.getEntity());
+		log.info("\nSending 'POST' request to URL : " + uri);
+		log.info("Post parameters : " + post.getEntity());
 
 		HttpResponse response = execute(post);
 
-		System.out.println(
+		log.info(
 				"Response Code : "
 						+ response.getStatusLine().getStatusCode()
 				);
@@ -101,8 +101,7 @@ public class Cloud {
 		try {
 			host.addURLParameters(post, in);
 
-		}
-		catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -110,8 +109,7 @@ public class Cloud {
 	private URI buildHttpGetURI() {
 		try {
 			return host.buildHttpGetURI();
-		}
-		catch (URISyntaxException e) {
+		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -119,8 +117,7 @@ public class Cloud {
 	private URI buildHttpPostURI() {
 		try {
 			return host.buildHttpPostURI();
-		}
-		catch (URISyntaxException e) {
+		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -128,14 +125,14 @@ public class Cloud {
 	private String readGetContent(InputStream in) {
 		try {
 			return host.readGetContent(in);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private final Host host;
-
 	private static final String USER_AGENT = "Mozilla/5.0";
 
+	private final Host host;
+
+	private final Log log = LogFactory.getLog(this.getClass());
 }

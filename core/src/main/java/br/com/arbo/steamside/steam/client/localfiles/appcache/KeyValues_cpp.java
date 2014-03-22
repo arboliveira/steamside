@@ -6,14 +6,13 @@ import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h
 import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_STRING;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
+import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.Region;
 
 /**
 https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/tier1/KeyValues.cpp
  */
 public class KeyValues_cpp {
-
-	public static final int KEYVALUES_TOKEN_SIZE = 4096;
 
 	public static void readAsBinary(
 			final ByteBufferX buffer,
@@ -39,6 +38,11 @@ public class KeyValues_cpp {
 				readAsBinary(buffer, visitor);
 			}
 
+			@Override
+			public Region region(String name) throws NotFound {
+				throw new UnsupportedOperationException();
+			}
+
 		}
 
 		final String name = buffer.read__null_terminated_string();
@@ -58,4 +62,6 @@ public class KeyValues_cpp {
 				throw new UnexpectedType(type, name);
 		}
 	}
+
+	public static final int KEYVALUES_TOKEN_SIZE = 4096;
 }

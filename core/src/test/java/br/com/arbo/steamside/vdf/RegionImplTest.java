@@ -22,8 +22,8 @@ public class RegionImplTest {
 	@Test
 	public void nestedSubregion__isFound() throws NotFound
 	{
-		RegionImpl region1 = subject.region("UserLocalConfigStore");
-		RegionImpl region2 = region1.region("Software");
+		Region region1 = subject.region("UserLocalConfigStore");
+		Region region2 = region1.region("Software");
 		Assert.assertThat(region2, IsNull.notNullValue());
 	}
 
