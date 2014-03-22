@@ -45,7 +45,7 @@ public class Digester {
 		}
 		finally {
 			w.stop();
-			log.debug("digest: " + w.toString());
+			log.info("digest: " + w.toString());
 		}
 	}
 
@@ -53,34 +53,45 @@ public class Digester {
 	{
 		StopWatch w = new StopWatch();
 		w.start();
-		Data_appinfo_vdf data = new InMemory_appinfo_vdf(file_appinfo_vdf);
-		w.stop();
-		log.debug("appinfo.vdf: " + w.toString());
-		return data;
+		try {
+			return new InMemory_appinfo_vdf(file_appinfo_vdf);
+		}
+		finally {
+			w.stop();
+			log.info("appinfo.vdf: " + w.toString());
+		}
 	}
 
 	Data_localconfig_vdf digest_localconfig_vdf()
 	{
 		StopWatch w = new StopWatch();
 		w.start();
-		final File file = file_localconfig_vdf.localconfig_vdf();
-		final Parse_localconfig_vdf parser = new Parse_localconfig_vdf(file);
-		Data_localconfig_vdf data = parser.parse();
-		w.stop();
-		log.debug("localconfig.vdf: " + w.toString());
-		return data;
+		try {
+			final File file = file_localconfig_vdf.localconfig_vdf();
+			final Parse_localconfig_vdf parser =
+					new Parse_localconfig_vdf(file);
+			return parser.parse();
+		}
+		finally {
+			w.stop();
+			log.info("localconfig.vdf: " + w.toString());
+		}
 	}
 
 	Data_sharedconfig_vdf digest_sharedconfig_vdf()
 	{
 		StopWatch w = new StopWatch();
 		w.start();
-		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
-		final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(file);
-		Data_sharedconfig_vdf data = parser.parse();
-		w.stop();
-		log.debug("sharedconfig.vdf: " + w.toString());
-		return data;
+		try {
+			final File file = file_sharedconfig_vdf.sharedconfig_vdf();
+			final Parse_sharedconfig_vdf parser =
+					new Parse_sharedconfig_vdf(file);
+			return parser.parse();
+		}
+		finally {
+			w.stop();
+			log.info("sharedconfig.vdf: " + w.toString());
+		}
 	}
 
 	private Combine combine()

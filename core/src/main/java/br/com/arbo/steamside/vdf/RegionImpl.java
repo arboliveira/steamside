@@ -15,12 +15,8 @@ public class RegionImpl implements Region {
 	@Override
 	public void accept(final KeyValueVisitor visitor)
 	{
-		try {
-			acceptX(visitor);
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		final Reader r = newReaderFromParent();
+		accept(visitor, r);
 	}
 
 	public RegionImpl region(final String name) throws NotFound
@@ -42,6 +38,7 @@ public class RegionImpl implements Region {
 					found = (RegionImpl) r;
 					throw new Finished();
 				}
+				skipPastEndOfRegion();
 			}
 
 			RegionImpl found;
@@ -56,7 +53,8 @@ public class RegionImpl implements Region {
 
 	void accept(final KeyValueVisitor visitor, final Reader reader)
 	{
-		new Tokenize(reader).tokenize(visitor);
+		Tokenize tokenize = new Tokenize(reader);
+		tokenize.tokenize(visitor);
 	}
 
 	Reader newReaderFromParent()
@@ -64,54 +62,35 @@ public class RegionImpl implements Region {
 		return parent.newReaderPositionedInside();
 	}
 
-	private void acceptX(final KeyValueVisitor visitor) throws IOException
+	void skipPastEndOfRegion()
 	{
-		final Reader r = newReaderFromParent();
-		try {
-			accept(visitor, r);
+		class DoNothing implements KeyValueVisitor {
+
+			@Override
+			public void onKeyValue(final String k, final String v)
+				throws Finished
+			{
+				// 
+			}
+
+			@Override
+			public void onSubRegion(final String k, final Region r)
+				throws Finished
+			{
+				skipPastEndOfRegion();
+			}
+
 		}
-		finally {
-			r.close();
-		}
+		accept(new DoNothing());
 	}
 
 	class RegionReaderFactory implements ReaderFactory {
 
-		public RegionReaderFactory(final String name) {
-			this.name = name;
-		}
-
 		@Override
 		public Reader newReaderPositionedInside()
 		{
-			final Reader reader = newReaderFromParent();
-			skipToName(reader);
-			return reader;
+			return newReaderFromParent();
 		}
-
-		private void skipToName(final Reader reader)
-		{
-			class SkipToName implements KeyValueVisitor {
-
-				@Override
-				public void onKeyValue(final String k, final String v)
-					throws Finished
-				{
-					// do nothing
-				}
-
-				@Override
-				public void onSubRegion(final String k, final Region r)
-					throws Finished
-				{
-					if (k.equals(name)) throw new Finished();
-				}
-
-			}
-			accept(new SkipToName(), reader);
-		}
-
-		final String name;
 
 	}
 
@@ -146,8 +125,6 @@ public class RegionImpl implements Region {
 			nextToken();
 			final String value = tokenizer.sval;
 
-			// all key value pairs come before
-
 			if (value != null) {
 				visitor.onKeyValue(key, value);
 				return;
@@ -157,9 +134,8 @@ public class RegionImpl implements Region {
 
 			if (tokenizer.ttype != '{') throw new IllegalStateException();
 
-			final RegionImpl sub = new RegionImpl(new RegionReaderFactory(key));
+			final RegionImpl sub = new RegionImpl(new RegionReaderFactory());
 			visitor.onSubRegion(key, sub);
-			skipPastEndOfRegion();
 		}
 
 		private void finish() throws Finished
@@ -173,28 +149,6 @@ public class RegionImpl implements Region {
 		private void nextToken() throws IOException
 		{
 			tokenizer.nextToken();
-		}
-
-		private void skipPastEndOfRegion()
-		{
-			class DoNothing implements KeyValueVisitor {
-
-				@Override
-				public void onKeyValue(final String k, final String v)
-					throws Finished
-				{
-					// 
-				}
-
-				@Override
-				public void onSubRegion(final String k, final Region r)
-					throws Finished
-				{
-					// 
-				}
-
-			}
-			tokenize(new DoNothing());
 		}
 
 		private final StreamTokenizer tokenizer;

@@ -103,4 +103,8 @@
 		<appender-ref ref="CONSOLE" />
 	</logger>
 	
+	<logger name="br.com.arbo.steamside">
+		<level value="all" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
 </log4j:configuration>
