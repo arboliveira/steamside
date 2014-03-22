@@ -146,17 +146,20 @@ public class RegionImpl implements Region {
 			nextToken();
 			final String value = tokenizer.sval;
 
+			// all key value pairs come before
+
 			if (value != null) {
 				visitor.onKeyValue(key, value);
 				return;
 			}
+
+			// no value? it's a named sub region
 
 			if (tokenizer.ttype != '{') throw new IllegalStateException();
 
 			final RegionImpl sub = new RegionImpl(new RegionReaderFactory(key));
 			visitor.onSubRegion(key, sub);
 			skipPastEndOfRegion();
-			return;
 		}
 
 		private void finish() throws Finished

@@ -20,7 +20,9 @@ public class Vdf {
 	}
 
 	public Vdf(final File file) {
-		root = new RegionImpl(new RootReaderFactory(readFileToString(file)));
+		String content = readFileToString(file);
+		RootReaderFactory rootContext = new RootReaderFactory(content);
+		root = new RegionImpl(rootContext);
 	}
 
 	public RegionImpl root()
