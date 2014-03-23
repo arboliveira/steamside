@@ -9,14 +9,20 @@ import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
 public class RegionImpl implements Region {
 
 	RegionImpl(final Reader reader) {
-		this.reader = reader;
+		this.tokenizer = StreamTokenizerBuilder.build(reader);
 	}
 
 	@Override
 	public void accept(final KeyValueVisitor visitor)
 	{
-		Tokenize tokenize = new Tokenize();
-		tokenize.tokenize(visitor);
+		try {
+			while (true)
+				advance(visitor);
+		} catch (final Finished ok) {
+			//
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -74,64 +80,38 @@ public class RegionImpl implements Region {
 		accept(new DoNothing());
 	}
 
-	class Tokenize {
+	private void advance(final KeyValueVisitor visitor)
+			throws IOException, Finished
+	{
+		nextToken();
+		final String key = tokenizer.sval;
 
-		Tokenize() {
-			tokenizer = StreamTokenizerBuilder.build(reader);
+		if (key == null) finish();
+
+		nextToken();
+		final String value = tokenizer.sval;
+
+		if (value != null) {
+			visitor.onKeyValue(key, value);
+			return;
 		}
 
-		void tokenize(final KeyValueVisitor visitor)
-		{
-			try {
-				while (true)
-					advance(visitor);
-			} catch (final Finished ok) {
-				//
-			} catch (final IOException e) {
-				throw new RuntimeException(e);
-			}
-		}
-
-		private void advance(final KeyValueVisitor visitor)
-				throws IOException, Finished
-		{
-			nextToken();
-			final String key = tokenizer.sval;
-
-			if (key == null) finish();
-
-			nextToken();
-			final String value = tokenizer.sval;
-
-			if (value != null) {
-				visitor.onKeyValue(key, value);
-				return;
-			}
-
-			// no value? it's a named sub region
-
-			if (tokenizer.ttype != '{') throw new IllegalStateException();
-
-			final RegionImpl sub = new RegionImpl(reader);
-			visitor.onSubRegion(key, sub);
-		}
-
-		private void finish() throws Finished
-		{
-			final int ttype = tokenizer.ttype;
-			if (ttype == '}' || ttype == StreamTokenizer.TT_EOF)
-				throw new Finished();
-			throw new IllegalStateException();
-		}
-
-		private void nextToken() throws IOException
-		{
-			tokenizer.nextToken();
-		}
-
-		private final StreamTokenizer tokenizer;
-
+		if (tokenizer.ttype != '{') throw new IllegalStateException();
+		visitor.onSubRegion(key, RegionImpl.this);
 	}
 
-	final Reader reader;
+	private void finish() throws Finished
+	{
+		final int ttype = tokenizer.ttype;
+		if (ttype == '}' || ttype == StreamTokenizer.TT_EOF)
+			throw new Finished();
+		throw new IllegalStateException();
+	}
+
+	private void nextToken() throws IOException
+	{
+		tokenizer.nextToken();
+	}
+
+	final StreamTokenizer tokenizer;
 }
