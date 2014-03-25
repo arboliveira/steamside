@@ -1,8 +1,10 @@
 package br.com.arbo.steamside.kids;
 
+import br.com.arbo.steamside.types.CollectionName;
+
 public interface KidsMode {
 
-	boolean isKidsModeOn();
+	CollectionName getCollection();
 
-	String getCategoryAllowedToBeSeen();
+	boolean isKidsModeOn();
 }

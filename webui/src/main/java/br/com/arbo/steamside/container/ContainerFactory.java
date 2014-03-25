@@ -26,11 +26,13 @@ import br.com.arbo.steamside.continues.FilterContinues;
 import br.com.arbo.steamside.data.LoadData;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.data.autowire.AutowireCollectionsData;
+import br.com.arbo.steamside.data.autowire.AutowireKidsData;
 import br.com.arbo.steamside.data.autowire.AutowireSteamsideData;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
 import br.com.arbo.steamside.kids.FromUsername;
+import br.com.arbo.steamside.kids.KidsData;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.library.LibraryImpl;
@@ -99,7 +101,9 @@ public class ContainerFactory {
 				.addComponent(
 						SteamsideData.class, AutowireSteamsideData.class)
 				.addComponent(
-						CollectionsData.class, AutowireCollectionsData.class);
+						CollectionsData.class, AutowireCollectionsData.class)
+				.addComponent(
+						KidsData.class, AutowireKidsData.class);
 
 		container
 				.addComponent(LoadSteamsideXml.class)
@@ -125,7 +129,9 @@ public class ContainerFactory {
 
 		container
 				.addComponent(KidsMode.class, FromUsername.class)
-				.addComponent(User.class, FromJava.class)
+				.addComponent(User.class, FromJava.class);
+
+		container
 				.addComponent(SteamBrowserProtocol.class)
 				.addComponent(RunGame.class);
 

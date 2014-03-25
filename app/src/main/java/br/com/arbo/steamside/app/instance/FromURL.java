@@ -28,16 +28,19 @@ public class FromURL implements DetectSteamside {
 			return itsme ?
 					Situation.AlreadyRunningForThisUser
 					: Situation.RunningOnDifferentUser;
-		} catch (final SteamsideNotRunningInThisPort e) {
+		}
+		catch (final SteamsideNotRunningInThisPort e) {
 			return Situation.NotHere;
 		}
 	}
 
 	private static String fetch_username_txt(final URL proof)
-			throws SteamsideNotRunningInThisPort {
+		throws SteamsideNotRunningInThisPort
+	{
 		try {
 			return IOUtils.toString(proof.openStream(), "UTF-8");
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			throw new SteamsideNotRunningInThisPort(e);
 		}
 	}
@@ -49,10 +52,18 @@ public class FromURL implements DetectSteamside {
 		}
 	}
 
-	private static URL proof(final int p) {
+	private static URL proof(final int p)
+	{
 		try {
-			return new URL("http://localhost:" + p + "/session.json");
-		} catch (final MalformedURLException e1) {
+			return new URL("http://localhost:" + p
+					+ "/"
+					+ br.com.arbo.steamside.mapping.Api.api
+					+ "/"
+					+ br.com.arbo.steamside.mapping.Session.session
+					+ "/"
+					+ br.com.arbo.steamside.mapping.Session.session_json);
+		}
+		catch (final MalformedURLException e1) {
 			throw new RuntimeException(e1);
 		}
 	}

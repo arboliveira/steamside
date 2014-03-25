@@ -49,10 +49,10 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	}
 
 	private CollectionImpl findOrCry(CollectionName name)
-			throws NotFound
+		throws NotFound
 	{
 		Optional<CollectionImpl> maybe = findMaybe(name);
-		if (maybe != null) return maybe.get();
+		if (maybe.isPresent()) return maybe.get();
 		throw new NotFound();
 	}
 

@@ -1,33 +1,38 @@
 package br.com.arbo.steamside.kids;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import br.com.arbo.steamside.opersys.username.User;
+import br.com.arbo.steamside.types.CollectionName;
 
 public class FromUsername implements KidsMode {
 
-	@Override
-	public boolean isKidsModeOn() {
-		final String username = user.username();
-		// TODO Read from settings of the given username
-		return kids.contains(username);
-	}
-
-	@Override
-	public String getCategoryAllowedToBeSeen() {
-		// TODO Read from settings of the given username
-		return "favorite";
-	}
-
 	@Inject
-	public FromUsername(final User user) {
+	public FromUsername(final User user, final Kids kids) {
 		this.user = user;
+		this.kids = kids;
 	}
 
-	final List<String> kids = Arrays.asList("kid");
+	@Override
+	public CollectionName getCollection()
+	{
+		return kids.find(user).getCollection();
+	}
+
+	@Override
+	public boolean isKidsModeOn()
+	{
+		try {
+			kids.find(user);
+			return true;
+		}
+		catch (NotFound e) {
+			return false;
+		}
+	}
+
+	private final Kids kids;
 
 	private final User user;
+
 }

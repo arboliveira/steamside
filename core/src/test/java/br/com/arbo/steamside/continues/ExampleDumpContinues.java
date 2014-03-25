@@ -1,16 +1,18 @@
 package br.com.arbo.steamside.continues;
 
-import br.com.arbo.steamside.kids.FromUsername;
+import org.mockito.Mockito;
+
+import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.library.Library_ForExamples;
-import br.com.arbo.steamside.opersys.username.FromJava;
 
 public class ExampleDumpContinues {
 
 	public static void main(final String[] args)
 	{
-		final FilterContinues continues =
-				new FilterContinues(new FromUsername(new FromJava()));
+		KidsMode nop = Mockito.mock(KidsMode.class);
+
+		final FilterContinues continues = new FilterContinues(nop);
 
 		Library library = Library_ForExamples.fromSteamPhysicalFiles();
 

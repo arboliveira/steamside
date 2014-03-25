@@ -10,6 +10,10 @@ import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CollectionsWrites;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
+import br.com.arbo.steamside.kids.Kid;
+import br.com.arbo.steamside.kids.KidsData;
+import br.com.arbo.steamside.kids.KidsWrites;
+import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -19,21 +23,36 @@ public class ObservableSteamsideData implements SteamsideData {
 		steamside = data;
 	}
 
-	public void addObserver(Observer listener) {
+	public void addObserver(Observer listener)
+	{
 		listeners.add(listener);
 	}
 
-	public void changed() {
+	public void changed()
+	{
 		listeners.stream().forEach(l -> l.onChange());
 	}
 
 	@Override
-	public CollectionsData collections() {
+	public CollectionsData collections()
+	{
 		return new AutoSaveCollections();
 	}
 
-	CollectionsData realCollections() {
+	@Override
+	public KidsData kids()
+	{
+		return new AutoSaveKids();
+	}
+
+	CollectionsData realCollections()
+	{
 		return steamside.collections();
+	}
+
+	KidsData realKids()
+	{
+		return steamside.kids();
 	}
 
 	public interface Observer {
@@ -47,14 +66,34 @@ public class ObservableSteamsideData implements SteamsideData {
 			implements CollectionsData {
 
 		@Override
-		public Stream< ? extends CollectionI> all() {
+		public Stream< ? extends CollectionI> all()
+		{
 			return realCollections().all();
 		}
 
 		@Override
 		@NonNull
-		public CollectionI find(CollectionName name) throws NotFound {
+		public CollectionI find(CollectionName name) throws NotFound
+		{
 			return realCollections().find(name);
+		}
+
+	}
+
+	class AutoSaveKids
+			extends KidsWritesSpy
+			implements KidsData {
+
+		@Override
+		public Stream<Kid> all()
+		{
+			return realKids().all();
+		}
+
+		@Override
+		public Kid find(User user) throws br.com.arbo.steamside.kids.NotFound
+		{
+			return realKids().find(user);
 		}
 
 	}
@@ -62,15 +101,28 @@ public class ObservableSteamsideData implements SteamsideData {
 	class CollectionsWritesSpy implements CollectionsWrites {
 
 		@Override
-		public void add(@NonNull CollectionI in) throws Duplicate {
+		public void add(@NonNull CollectionI in) throws Duplicate
+		{
 			realCollections().add(in);
 			changed();
 		}
 
 		@Override
 		public void tag(@NonNull CollectionI c, @NonNull AppId appid)
-				throws NotFound {
+			throws NotFound
+		{
 			realCollections().tag(c, appid);
+			changed();
+		}
+
+	}
+
+	class KidsWritesSpy implements KidsWrites {
+
+		@Override
+		public void add(Kid kid) throws br.com.arbo.steamside.kids.Duplicate
+		{
+			realKids().add(kid);
 			changed();
 		}
 

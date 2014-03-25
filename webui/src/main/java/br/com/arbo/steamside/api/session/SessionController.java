@@ -11,12 +11,13 @@ import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.opersys.username.User;
 
 @Controller
-@RequestMapping("session")
+@RequestMapping(br.com.arbo.steamside.mapping.Session.session)
 public class SessionController {
 
-	@RequestMapping("session.json")
+	@RequestMapping(br.com.arbo.steamside.mapping.Session.session_json)
 	@ResponseBody
-	public SessionDTO session() {
+	public SessionDTO session()
+	{
 		final int gamesOwned = library.count();
 		return new SessionDTO(
 				username, kidsmode,

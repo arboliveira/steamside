@@ -7,9 +7,22 @@ import br.com.arbo.steamside.types.CollectionName;
 public interface CollectionsData
 		extends CollectionsWrites, CollectionsQueries {
 
+	default CollectionI addIfAbsent(CollectionName collection)
+	{
+		try {
+			return this.find(collection);
+		}
+		catch (NotFound e) {
+			CollectionImpl in = new CollectionImpl(collection);
+			this.add(in);
+			return in;
+		}
+	}
+
 	default void tag(CollectionName collection, AppId appid) throws NotFound
 	{
-		this.tag(this.find(collection), appid);
+		CollectionI find = this.addIfAbsent(collection);
+		this.tag(find, appid);
 	}
 
 }
