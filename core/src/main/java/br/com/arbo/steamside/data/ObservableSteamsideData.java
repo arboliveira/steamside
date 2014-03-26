@@ -115,6 +115,13 @@ public class ObservableSteamsideData implements SteamsideData {
 			changed();
 		}
 
+		@Override
+		public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
+		{
+			realCollections().tag(c, apps);
+			changed();
+		}
+
 	}
 
 	class KidsWritesSpy implements KidsWrites {

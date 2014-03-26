@@ -17,7 +17,7 @@ var SteamClientView = Backbone.View.extend({
         return this;
     },
 
-    buttonSteamBrowserProtocolClicked: function (e) {  "use strict";
+    buttonSteamBrowserProtocolClicked: function (e) {
         e.preventDefault();
         var jLink = $(e.target);
         var aUrl = jLink.attr( "href" );

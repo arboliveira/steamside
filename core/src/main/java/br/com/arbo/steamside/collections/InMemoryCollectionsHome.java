@@ -41,6 +41,13 @@ public class InMemoryCollectionsHome implements CollectionsData {
 		findOrCry(c.name()).tag(appid);
 	}
 
+	@Override
+	public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
+	{
+		CollectionImpl collection = findOrCry(c.name());
+		apps.forEach(collection::tag);
+	}
+
 	private Optional<CollectionImpl> findMaybe(CollectionName name)
 	{
 		return collections.stream().parallel()

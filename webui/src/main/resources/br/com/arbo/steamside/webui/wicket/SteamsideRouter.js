@@ -33,8 +33,8 @@ var SteamsideRouter = Backbone.Router.extend({
 
     collections_new: function() {   "use strict";
         var that = this;
-		CollectionNewTile.ajaxTile(function(tile) {
-            var view = new CollectionNewEmptyView({
+		CollectionNewTile.whenLoaded(function(tile) {
+            var view = new CollectionNewView({
                 el: tile.clone()
             });
             that.setSecondaryView(view);
@@ -43,7 +43,7 @@ var SteamsideRouter = Backbone.Router.extend({
 
     collections_edit: function(name) {
         var that = this;
-		CollectionEditTile.ajaxTile(function(tile) {
+		CollectionEditTile.whenLoaded(function(tile) {
 			var view = new CollectionEditView({
                 el: tile.clone(),
                 collection_name: name

@@ -35,10 +35,17 @@ public class CollectionController {
 	@ResponseBody
 	public void add(@PathVariable final @NonNull String name,
 			@PathVariable final @NonNull String appid)
-			throws
-			br.com.arbo.steamside.data.collections.NotFound
+		throws
+		br.com.arbo.steamside.data.collections.NotFound
 	{
 		data.tag(new CollectionName(name), new AppId(appid));
+	}
+
+	@RequestMapping(value = "copy-all-steam-categories")
+	@ResponseBody
+	public void copyAllSteamCategories()
+	{
+		new CopyAllSteamCategories(data, library).execute();
 	}
 
 	@RequestMapping(value = "{name}/create")
@@ -51,8 +58,8 @@ public class CollectionController {
 	@RequestMapping(value = "collection.json", params = "name")
 	@ResponseBody
 	public List<AppDTO> json(@RequestParam final String name)
-			throws
-			br.com.arbo.steamside.data.collections.NotFound
+		throws
+		br.com.arbo.steamside.data.collections.NotFound
 	{
 		return AppsDTO.valueOfAppIds(
 				data.find(new CollectionName(name)).apps().map(Tag::appid),

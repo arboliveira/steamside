@@ -69,7 +69,7 @@ var TagView = Backbone.View.extend({
 
 		var appid = this.game.appid();
 		var collection = this.nameForCollection(input);
-		var aUrl = "api/app/" + appid + "/tag/" + collection;
+		var aUrl = "api/app/" + appid + "/tag/" + encodeURIComponent(collection);
 		var that = this;
 
 		// TODO display 'creating...'
@@ -89,22 +89,7 @@ var TagView = Backbone.View.extend({
 	},
 
 	on_tag_command_alternate: function(view) {
-		var input = view.input_query_val();
-		var name = this.game.name();
-		var text = name + ' --> ' + input;
-		var that = this;
 
-		$.ajax({
-			data: {text: text},
-			url: 'CLOUD_URL',
-			contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-			type: "POST",
-			dataType: 'json'
-		}).done(function(){
-			that.on_tag_done();
-		}).fail(function(error){
-			view.trouble(error);
-		});
 	},
 
 	on_tag_done: function() {

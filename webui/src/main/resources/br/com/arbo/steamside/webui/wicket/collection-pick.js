@@ -77,7 +77,7 @@ var SteamsideCollectionInfoView = Backbone.View.extend({
         var name = this.model.name();
 
 		Backbone.history.navigate(
-				"#/collections/" + name + "/edit",
+			"#/collections/" + name + "/edit",
 			{trigger: true});
     },
 

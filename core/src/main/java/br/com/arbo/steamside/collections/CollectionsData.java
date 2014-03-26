@@ -19,7 +19,7 @@ public interface CollectionsData
 		}
 	}
 
-	default void tag(CollectionName collection, AppId appid) throws NotFound
+	default void tag(CollectionName collection, AppId appid)
 	{
 		CollectionI find = this.addIfAbsent(collection);
 		this.tag(find, appid);

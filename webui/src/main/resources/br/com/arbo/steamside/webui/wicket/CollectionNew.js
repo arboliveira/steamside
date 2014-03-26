@@ -2,10 +2,26 @@ var CollectionNewTile = {
 	tile: new Tile(
 		{url: 'CollectionNew.html', selector: "#collection-new"}),
 
-	ajaxTile: function (callback) {
+	whenLoaded: function (callback) {
 		this.tile.ajaxTile(callback);
 	}
 };
+
+var CollectionNewView = Backbone.View.extend({
+
+	render: function ()
+	{
+		new CollectionNewEmptyView({
+			el: this.$('#collection-new-empty-segment')
+		}).render();
+
+		new CollectionCopyAllCategoriesView({
+			el: this.$('#collection-copy-all-categories-segment')
+		}).render();
+
+		return this;
+	}
+});
 
 var CollectionNewEmptyView = Backbone.View.extend({
 
@@ -68,7 +84,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 
 	createEmpty: function(args) {     "use strict";
 		var name = this.nameForCollection(args.name);
-		var aUrl = "api/collection/" + name + "/create";
+		var aUrl = "api/collection/" + encodeURIComponent(name) + "/create";
 		var that = this;
 
 		$.ajax({
@@ -102,5 +118,32 @@ var CollectionNewEmptyView = Backbone.View.extend({
 	on_empty_change_input: function (view) {  "use strict";
 		var input = view.input_query_val();
 		this.updateWithInputValue(input);
+	}
+});
+
+var CollectionCopyAllCategoriesView = Backbone.View.extend({
+
+	events: {
+		"click .button-copy-em-all": "buttonCopyEmAll"
+	},
+
+	render: function() {
+		return this;
+	},
+
+	buttonCopyEmAll: function (e) {
+		e.preventDefault();
+		var jLink = $(e.target);
+		var aUrl = jLink.attr( "href" );
+
+		$.ajax(
+			{
+				url: aUrl
+			}
+		).done(function(){
+			Backbone.history.navigate(
+					"#/favorites/switch",
+				{trigger: true});
+		});
 	}
 });

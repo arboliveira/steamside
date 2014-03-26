@@ -2,7 +2,7 @@ var CollectionEditTile = {
 	tile: new Tile(
 		{url: 'CollectionEdit.html', selector: "#tile-collection-edit"}),
 
-	ajaxTile: function (callback) {
+	whenLoaded: function (callback) {
 		this.tile.ajaxTile(callback);
 	}
 };
@@ -11,7 +11,7 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
     model: Game,
 	collection_name: null,
 	url: function() {
-		return "api/collection/collection.json?name=" + this.collection_name;
+		return "api/collection/collection.json?name=" + encodeURIComponent(this.collection_name);
 	}
 });
 
