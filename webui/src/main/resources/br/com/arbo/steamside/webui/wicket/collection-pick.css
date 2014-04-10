@@ -1,16 +1,21 @@
 .collection-pick {
 }
 
+.collection-tile {
+    background-color: navajowhite;
+    border-radius: 5px;
+    margin: 5px;
+    border: 1px solid;
+    border-color: aqua;
+    padding: 5px;
+    float: left;
+    font-family: "Karla";
+}
+
+
 .collection-pick-steam-category {
     float: left;
     margin-left: 0.9em;
     margin-bottom: 0.9em;
     font-size: 0.75em;
-    /*
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    padding: 5px;
-    font-size: 0.9em;
-    */
 }
