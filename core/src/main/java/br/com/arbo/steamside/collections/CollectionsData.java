@@ -13,7 +13,8 @@ public interface CollectionsData
 			return this.find(collection);
 		}
 		catch (NotFound e) {
-			CollectionImpl in = new CollectionImpl(collection);
+			CollectionImpl in =
+					new CollectionImpl(collection, CollectionI.IsSystem.NO);
 			this.add(in);
 			return in;
 		}

@@ -62,13 +62,19 @@ public class ObservableSteamsideData implements SteamsideData {
 	}
 
 	class AutoSaveCollections
-			extends CollectionsWritesSpy
-			implements CollectionsData {
+	extends CollectionsWritesSpy
+	implements CollectionsData {
 
 		@Override
 		public Stream< ? extends CollectionI> all()
 		{
 			return realCollections().all();
+		}
+
+		@Override
+		public Stream< ? extends CollectionI> allUser()
+		{
+			return realCollections().allUser();
 		}
 
 		@Override
@@ -81,8 +87,8 @@ public class ObservableSteamsideData implements SteamsideData {
 	}
 
 	class AutoSaveKids
-			extends KidsWritesSpy
-			implements KidsData {
+	extends KidsWritesSpy
+	implements KidsData {
 
 		@Override
 		public Stream<Kid> all()
@@ -109,7 +115,7 @@ public class ObservableSteamsideData implements SteamsideData {
 
 		@Override
 		public void tag(@NonNull CollectionI c, @NonNull AppId appid)
-			throws NotFound
+				throws NotFound
 		{
 			realCollections().tag(c, appid);
 			changed();

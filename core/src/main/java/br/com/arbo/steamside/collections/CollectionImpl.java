@@ -12,18 +12,26 @@ public class CollectionImpl implements CollectionI {
 
 	public static CollectionImpl clone(CollectionI in)
 	{
-		final CollectionImpl clone = new CollectionImpl(in.name());
+		final CollectionImpl clone =
+				new CollectionImpl(in.name(), in.isSystem());
 		return clone;
 	}
 
-	public CollectionImpl(CollectionName name) {
+	public CollectionImpl(CollectionName name, IsSystem system) {
 		this.name = name;
+		this.system = system;
 	}
 
 	@Override
 	public Stream<Tag> apps()
 	{
 		return apps.stream();
+	}
+
+	@Override
+	public IsSystem isSystem()
+	{
+		return system;
 	}
 
 	@Override
@@ -49,4 +57,6 @@ public class CollectionImpl implements CollectionI {
 	private final LinkedList<Tag> apps = new LinkedList<>();
 
 	private final CollectionName name;
+
+	private final IsSystem system;
 }

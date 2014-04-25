@@ -11,6 +11,8 @@ public interface CollectionsQueries {
 
 	Stream< ? extends CollectionI> all();
 
+	Stream< ? extends CollectionI> allUser();
+
 	@NonNull
 	CollectionI find(CollectionName name) throws NotFound;
 }

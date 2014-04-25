@@ -2,6 +2,7 @@ package br.com.arbo.steamside.api.collection;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
+import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.Tag;
@@ -52,7 +54,8 @@ public class CollectionController {
 	@ResponseBody
 	public void create(@PathVariable final @NonNull String name)
 	{
-		data.add(new CollectionImpl(new CollectionName(name)));
+		data.add(new CollectionImpl(new CollectionName(name),
+				CollectionI.IsSystem.NO));
 	}
 
 	@RequestMapping(value = "collection.json", params = "name")
@@ -61,9 +64,9 @@ public class CollectionController {
 		throws
 		br.com.arbo.steamside.data.collections.NotFound
 	{
-		return AppsDTO.valueOfAppIds(
-				data.find(new CollectionName(name)).apps().map(Tag::appid),
-				library);
+		final CollectionI collection = data.find(new CollectionName(name));
+		final Stream<Tag> apps = collection.apps();
+		return AppsDTO.valueOfAppIds(apps.map(Tag::appid), library);
 	}
 
 	@RequestMapping(value = "collections.json")

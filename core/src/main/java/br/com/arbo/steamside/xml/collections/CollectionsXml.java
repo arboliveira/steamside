@@ -10,28 +10,32 @@ import br.com.arbo.steamside.types.AppId;
 
 public class CollectionsXml {
 
-	public static CollectionsXml valueOf(CollectionsQueries collections) {
+	public static CollectionsXml valueOf(CollectionsQueries collections)
+	{
 		CollectionsXml xml = new CollectionsXml();
 
-		collections.all()
+		collections.allUser()
 				.map(CollectionXml::valueOf)
 				.forEach(xml.collection::add);
 
 		return xml;
 	}
 
-	public InMemoryCollectionsHome toCollectionsHome() {
+	public InMemoryCollectionsHome toCollectionsHome()
+	{
 		return new ToCollectionsHome().convert();
 	}
 
 	class ToCollectionsHome {
 
-		InMemoryCollectionsHome convert() {
+		InMemoryCollectionsHome convert()
+		{
 			collection.stream().forEach(this::addCollection);
 			return home;
 		}
 
-		private void addCollection(CollectionXml cxml) throws Duplicate {
+		private void addCollection(CollectionXml cxml) throws Duplicate
+		{
 			final CollectionImpl c = cxml.toCollection();
 			home.add(c);
 			cxml.tags.tag.stream()
@@ -42,6 +46,7 @@ public class CollectionsXml {
 		InMemoryCollectionsHome home = new InMemoryCollectionsHome();
 	}
 
-	public final LinkedList<CollectionXml> collection = new LinkedList<CollectionXml>();
+	public final LinkedList<CollectionXml> collection =
+			new LinkedList<CollectionXml>();
 
 }

@@ -33,6 +33,12 @@ public class AutowireCollectionsData implements CollectionsData {
 	}
 
 	@Override
+	public Stream< ? extends CollectionI> allUser()
+	{
+		return steamside.collections().allUser();
+	}
+
+	@Override
 	@NonNull
 	public CollectionI find(CollectionName name) throws NotFound
 	{
@@ -41,7 +47,7 @@ public class AutowireCollectionsData implements CollectionsData {
 
 	@Override
 	public void tag(@NonNull CollectionI c, @NonNull AppId appid)
-		throws NotFound
+			throws NotFound
 	{
 		steamside.collections().tag(c, appid);
 	}
