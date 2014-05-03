@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.types.AppId;
@@ -33,9 +34,9 @@ public class AutowireCollectionsData implements CollectionsData {
 	}
 
 	@Override
-	public Stream< ? extends CollectionI> allUser()
+	public Stream< ? extends Tag> apps(CollectionI collection)
 	{
-		return steamside.collections().allUser();
+		return steamside.collections().apps(collection);
 	}
 
 	@Override
@@ -43,6 +44,12 @@ public class AutowireCollectionsData implements CollectionsData {
 	public CollectionI find(CollectionName name) throws NotFound
 	{
 		return steamside.collections().find(name);
+	}
+
+	@Override
+	public boolean isCollected(AppId appid)
+	{
+		return steamside.collections().isCollected(appid);
 	}
 
 	@Override

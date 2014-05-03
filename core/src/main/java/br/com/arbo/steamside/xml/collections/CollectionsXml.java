@@ -14,8 +14,8 @@ public class CollectionsXml {
 	{
 		CollectionsXml xml = new CollectionsXml();
 
-		collections.allUser()
-				.map(CollectionXml::valueOf)
+		collections.all()
+				.map(each -> CollectionXml.valueOf(each, collections))
 				.forEach(xml.collection::add);
 
 		return xml;

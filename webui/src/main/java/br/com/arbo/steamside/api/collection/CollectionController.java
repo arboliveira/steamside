@@ -19,6 +19,7 @@ import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.Tag;
+import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
@@ -31,6 +32,7 @@ public class CollectionController {
 	public CollectionController(Library library, CollectionsData data) {
 		this.library = library;
 		this.data = data;
+		this.sys = new SystemCollectionsHome(library, data);
 	}
 
 	@RequestMapping(value = "{name}/add/{appid}")
@@ -64,8 +66,8 @@ public class CollectionController {
 		throws
 		br.com.arbo.steamside.data.collections.NotFound
 	{
-		final CollectionI collection = data.find(new CollectionName(name));
-		final Stream<Tag> apps = collection.apps();
+		final Stream< ? extends Tag> apps =
+				sys.appsOf(new CollectionName(name));
 		return AppsDTO.valueOfAppIds(apps.map(Tag::appid), library);
 	}
 
@@ -73,12 +75,18 @@ public class CollectionController {
 	@ResponseBody
 	public List<CollectionDTO> jsonCollections()
 	{
-		return data.all().map(CollectionDTO::valueOf)
-				.collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
+		return sys
+				.all()
+				.map(CollectionDTO::valueOf)
+				.collect(
+						LinkedList::new, LinkedList::add,
+						LinkedList::addAll);
 	}
 
 	private final Library library;
 
 	private final CollectionsData data;
+
+	private final SystemCollectionsHome sys;
 
 }

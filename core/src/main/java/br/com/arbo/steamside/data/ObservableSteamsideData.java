@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CollectionsWrites;
+import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.kids.Kid;
@@ -72,9 +73,9 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public Stream< ? extends CollectionI> allUser()
+		public Stream< ? extends Tag> apps(CollectionI collection)
 		{
-			return realCollections().allUser();
+			return realCollections().apps(collection);
 		}
 
 		@Override
@@ -82,6 +83,12 @@ public class ObservableSteamsideData implements SteamsideData {
 		public CollectionI find(CollectionName name) throws NotFound
 		{
 			return realCollections().find(name);
+		}
+
+		@Override
+		public boolean isCollected(AppId appid)
+		{
+			return realCollections().isCollected(appid);
 		}
 
 	}

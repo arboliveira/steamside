@@ -1,9 +1,9 @@
 package br.com.arbo.steamside.collections;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -17,44 +17,33 @@ import br.com.arbo.steamside.types.CollectionName;
 
 public class InMemoryCollectionsHome implements CollectionsData {
 
-	private static Optional<CollectionImpl> findMaybe(CollectionName name,
-			List<CollectionImpl> list)
+	private static void guardSystem(final CollectionI c)
 	{
-		return list.stream().parallel()
-				.filter(c -> c.name().equalsCollectionName(name))
-				.findAny();
-	}
-
-	private static List<CollectionImpl> newSystemCollections()
-	{
-		CollectionImpl uncollected =
-				new CollectionImpl(
-						new CollectionName("(uncollected)"), IsSystem.YES);
-
-		return Collections.singletonList(uncollected);
+		if (c.isSystem() == IsSystem.YES)
+			throw new IllegalArgumentException();
 	}
 
 	@Override
 	public void add(@NonNull CollectionI in) throws Duplicate
 	{
+		guardSystem(in);
 		CollectionName name = in.name();
 		guardDuplicate(name);
-		user.add(CollectionImpl.clone(in));
+		objects.add(CollectionImpl.clone(in));
 	}
 
 	@Override
 	public Stream< ? extends CollectionI> all()
 	{
-		List<CollectionI> all = new ArrayList<>(user.size() + system.size());
-		all.addAll(user);
-		all.addAll(system);
-		return all.stream();
+		return objects.stream();
 	}
 
 	@Override
-	public Stream< ? extends CollectionI> allUser()
+	public Stream< ? extends Tag> apps(CollectionI c)
 	{
-		return user.stream();
+		final CollectionImpl stored = stored(c);
+		Tags apps = tags.get(stored);
+		return apps.tags();
 	}
 
 	@Override
@@ -64,26 +53,39 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	}
 
 	@Override
+	public boolean isCollected(AppId appid)
+	{
+		return tags.values().stream().filter(tags -> tags.contains(appid))
+				.findAny().isPresent();
+	}
+
+	@Override
 	public void tag(
 			@NonNull final CollectionI c,
 			@NonNull final AppId appid) throws NotFound
 	{
-		findOrCry(c.name()).tag(appid);
+		final CollectionImpl stored = stored(c);
+		doTag(stored, appid);
 	}
 
 	@Override
 	public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
 	{
-		CollectionImpl collection = findOrCry(c.name());
-		apps.forEach(collection::tag);
+		CollectionImpl stored = stored(c);
+		apps.forEach(app -> this.doTag(stored, app));
+	}
+
+	private void doTag(CollectionImpl c, @NonNull final AppId appid)
+	{
+		Tags apps = tags.computeIfAbsent(c, k -> new Tags());
+		apps.tag(appid);
 	}
 
 	private Optional<CollectionImpl> findMaybe(CollectionName name)
 	{
-		final Optional<CollectionImpl> inSystem = findMaybe(name, system);
-		if (inSystem.isPresent()) return inSystem;
-		final Optional<CollectionImpl> inUser = findMaybe(name, user);
-		return inUser;
+		return objects.stream().parallel()
+				.filter(c -> c.name().equalsCollectionName(name))
+				.findAny();
 	}
 
 	private CollectionImpl findOrCry(CollectionName name)
@@ -100,10 +102,34 @@ public class InMemoryCollectionsHome implements CollectionsData {
 		if (maybe.isPresent()) throw new Duplicate();
 	}
 
-	private final List<CollectionImpl> system =
-			newSystemCollections();
+	private CollectionImpl stored(CollectionI c)
+	{
+		guardSystem(c);
+		return findOrCry(c.name());
+	}
 
-	private final List<CollectionImpl> user =
-			new LinkedList<>();
+	static class Tags {
 
+		boolean contains(AppId appid)
+		{
+			return apps.containsKey(appid);
+		}
+
+		void tag(AppId appid)
+		{
+			apps.computeIfAbsent(appid, k -> new TagImpl(k));
+		}
+
+		Stream< ? extends Tag> tags()
+		{
+			return apps.values().stream();
+		}
+
+		private final Map<AppId, TagImpl> apps = new HashMap<>();
+	}
+
+	private final List<CollectionImpl> objects = new LinkedList<>();
+
+	private final Map<CollectionImpl, Tags> tags =
+			new HashMap<>();
 }
