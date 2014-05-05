@@ -6,37 +6,39 @@ import br.com.arbo.steamside.vdf.Region;
 
 class AppsRegion {
 
-	private final Region content;
-
-	AppsRegion(final Region content) {
+	AppsRegion(final Region content, KV_apps_Impl kv_apps) {
 		this.content = content;
+		this.kv_apps = kv_apps;
 	}
 
-	public Data_localconfig_vdf parse() {
-		final InMemory_localconfig_vdf data = new InMemory_localconfig_vdf();
+	public void parse()
+	{
+		this.content.accept(new ParseEveryAppSubRegion());
+	}
 
-		class ParseEveryAppSubRegion implements KeyValueVisitor {
+	class ParseEveryAppSubRegion implements KeyValueVisitor {
 
-			@Override
-			public void onSubRegion(final String k, final Region r)
-					throws Finished {
-				final AppRegion appRegion = new AppRegion(r);
-				final KV_app_Impl app = appRegion.parse();
-				if (k == null) throw new NullPointerException();
-				app.appid = new AppId(k);
-				data.add(app);
-			}
-
-			@Override
-			public void onKeyValue(final String k, final String v)
-					throws Finished {
-				// Nothing important at the other key-value pairs
-			}
+		@Override
+		public void onKeyValue(final String k, final String v)
+			throws Finished
+		{
+			// Nothing important at the other key-value pairs
 		}
 
-		this.content.accept(new ParseEveryAppSubRegion());
-
-		return data;
+		@Override
+		public void onSubRegion(final String k, final Region r)
+			throws Finished
+		{
+			if (k == null) throw new NullPointerException();
+			final AppRegion appRegion = new AppRegion(r);
+			final KV_app_Impl app = appRegion.parse();
+			app.appid = new AppId(k);
+			kv_apps.add(app);
+		}
 	}
+
+	final KV_apps_Impl kv_apps;
+
+	private final Region content;
 
 }

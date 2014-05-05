@@ -12,25 +12,58 @@ public class Parse_localconfig_vdf {
 		this.content = new Vdf(file);
 	}
 
-	public Data_localconfig_vdf parse() {
-		Region apps = findRegion_apps();
-		Data_localconfig_vdf data = new AppsRegion(apps).parse();
+	public Data_localconfig_vdf parse()
+	{
+		try {
+			findRegion_UserLocalConfigStore();
+
+			// Order is important - apptickets is before apps
+			parse_apptickets();
+			parse_apps();
+		}
+		catch (final NotFound e) {
+			throw new RuntimeException("Not a valid localconfig.vdf file?!", e);
+		}
 		return data;
 	}
 
-	private Region findRegion_apps() {
-		try {
-			Region rUserRoamingConfigStore =
-					content.root().region("UserLocalConfigStore");
-			Region rSoftware = rUserRoamingConfigStore.region("Software");
-			Region rValve = rSoftware.region("Valve");
-			Region rSteam = rValve.region("Steam");
-			Region rapps = rSteam.region("apps");
-			return rapps;
-		} catch (final NotFound e) {
-			throw new RuntimeException("Not a valid localconfig.vdf file?!", e);
-		}
+	private Region findRegion_apps() throws NotFound
+	{
+		Region rSoftware = rUserRoamingConfigStore.region("Software");
+		Region rValve = rSoftware.region("Valve");
+		Region rSteam = rValve.region("Steam");
+		Region rapps = rSteam.region("apps");
+		return rapps;
+	}
+
+	private Region findRegion_apptickets() throws NotFound
+	{
+		Region rapptickets = rUserRoamingConfigStore.region("apptickets");
+		return rapptickets;
+	}
+
+	private void findRegion_UserLocalConfigStore() throws NotFound
+	{
+		this.rUserRoamingConfigStore =
+				content.root().region("UserLocalConfigStore");
+	}
+
+	private void parse_apps() throws NotFound
+	{
+		Region region = findRegion_apps();
+		new AppsRegion(region, data.apps()).parse();
+	}
+
+	private void parse_apptickets() throws NotFound
+	{
+		Region region = findRegion_apptickets();
+		new AppticketsRegion(region, data.apptickets()).parse();
 	}
 
 	private final Vdf content;
+
+	private final InMemory_localconfig_vdf data =
+			new InMemory_localconfig_vdf();
+
+	private Region rUserRoamingConfigStore;
 }

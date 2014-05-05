@@ -1,38 +1,22 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import br.com.arbo.steamside.types.AppId;
-
 public class InMemory_localconfig_vdf
-		implements Data_localconfig_vdf, KV_apps {
+implements Data_localconfig_vdf {
 
 	@Override
-	public KV_apps apps() {
-		return this;
+	public KV_apps_Impl apps()
+	{
+		return kv_apps;
 	}
 
 	@Override
-	public void forEach(Consumer<KV_app> visitor) {
-		map.values().forEach(visitor);
+	public KV_apptickets_Impl apptickets()
+	{
+		return kv_apptickets;
 	}
 
-	public void add(KV_app_Impl app) {
-		this.put(app.appid, app);
-	}
+	private final KV_apps_Impl kv_apps = new KV_apps_Impl();
 
-	private void put(AppId appid, KV_app_Impl app) {
-		this.map.put(appid.appid, app);
-	}
-
-	private final Map<String, KV_app_Impl> map =
-			new HashMap<String, KV_app_Impl>();
-
-	@Override
-	public KV_app get(AppId appid) {
-		return map.get(appid.appid);
-	}
+	private final KV_apptickets_Impl kv_apptickets = new KV_apptickets_Impl();
 
 }
