@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
+import br.com.arbo.steamside.types.AppType;
 import br.com.arbo.steamside.types.Category;
 
 public class AppImpl implements App {
@@ -17,7 +18,7 @@ public class AppImpl implements App {
 	AppImpl(
 			@NonNull final AppId appId,
 			@Nullable AppName name,
-			@Nullable String executable,
+			@Nullable AppType type, @Nullable String executable,
 			@Nullable final Collection<String> categories,
 			@Nullable final String lastPlayed,
 			@Nullable final String cloudEnabled,
@@ -25,6 +26,7 @@ public class AppImpl implements App {
 			@Nullable MissingFrom_appinfo_vdf missingFrom_appinfo_vdf) {
 		this.appid = appId;
 		this.name = name;
+		this.type = type;
 		this.executable = executable;
 		this.categories = categories;
 		this.lastPlayed = lastPlayed;
@@ -36,11 +38,13 @@ public class AppImpl implements App {
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public AppId appid() {
+	public AppId appid()
+	{
 		return appid;
 	}
 
-	public String cloudEnabled() {
+	public String cloudEnabled()
+	{
 		return cloudEnabled;
 	}
 
@@ -48,7 +52,8 @@ public class AppImpl implements App {
 	@Override
 	@NonNull
 	public String executable()
-			throws NotAvailableOnThisPlatform, MissingFrom_appinfo_vdf {
+			throws NotAvailableOnThisPlatform, MissingFrom_appinfo_vdf
+	{
 		guard_notAvailableOnThisPlatform();
 		guard_missingFrom_appinfo_vdf();
 		final String e = executable;
@@ -57,14 +62,16 @@ public class AppImpl implements App {
 	}
 
 	@Override
-	public void forEachCategory(final Consumer<Category> visitor) {
+	public void forEachCategory(final Consumer<Category> visitor)
+	{
 		final Collection<String> c = categories;
 		if (c == null) return;
 		c.stream().map(one -> new Category(one)).forEach(visitor);
 	}
 
 	@Override
-	public boolean isInCategory(final Category category) {
+	public boolean isInCategory(final Category category)
+	{
 		final Collection<String> c = categories;
 		if (c == null) return false;
 		return c.contains(category.category);
@@ -72,13 +79,15 @@ public class AppImpl implements App {
 
 	@Override
 	@Nullable
-	public String lastPlayed() {
+	public String lastPlayed()
+	{
 		return lastPlayed;
 	}
 
 	@Override
 	@NonNull
-	public String lastPlayedOrCry() throws NeverPlayed {
+	public String lastPlayedOrCry() throws NeverPlayed
+	{
 		final String v = lastPlayed;
 		if (v == null) throw new NeverPlayed();
 		return v;
@@ -86,7 +95,8 @@ public class AppImpl implements App {
 
 	@Override
 	@NonNull
-	public AppName name() throws MissingFrom_appinfo_vdf {
+	public AppName name() throws MissingFrom_appinfo_vdf
+	{
 		guard_missingFrom_appinfo_vdf();
 		final AppName _name = name;
 		if (_name == null) throw new NullPointerException();
@@ -94,67 +104,101 @@ public class AppImpl implements App {
 	}
 
 	@Override
-	public String toString() {
-		return appid.toString() + ":" + String.valueOf(name);
+	public String toString()
+	{
+		final String s = appid.toString() + ":" + String.valueOf(name);
+		final AppType _type = type;
+		if (_type == null) return s;
+		if ("game".equals(_type.type)) return s;
+		return s + " (" + _type.type + ")";
 	}
 
-	private void guard_missingFrom_appinfo_vdf() {
+	@Override
+	@NonNull
+	public AppType type()
+	{
+		guard_missingFrom_appinfo_vdf();
+		if (type == null) //
+			throw new NullPointerException();
+		return type;
+	}
+
+	private void guard_missingFrom_appinfo_vdf()
+	{
 		final MissingFrom_appinfo_vdf m = missingFrom_appinfo_vdf;
 		if (m != null) throw m;
 	}
 
-	private void guard_notAvailableOnThisPlatform() {
+	private void guard_notAvailableOnThisPlatform()
+	{
 		final NotAvailableOnThisPlatform n = notAvailableOnThisPlatform;
 		if (n != null) throw n;
 	}
 
 	public static class Builder {
 
-		public void addCategory(String category) {
+		public void addCategory(String category)
+		{
 			this.categories.add(category);
 		}
 
-		public Builder appid(@NonNull final String k) {
+		public Builder appid(@NonNull final String k)
+		{
 			this.appid = new AppId(k);
 			return this;
 		}
 
-		public void cloudEnabled(final String v) {
+		public void cloudEnabled(final String v)
+		{
 			this.cloudEnabled = v;
 		}
 
-		public Builder executable(String executable) {
+		public Builder executable(String executable)
+		{
 			this.executable = executable;
 			return this;
 		}
 
-		public Builder lastPlayed(final String v) {
+		public Builder lastPlayed(final String v)
+		{
 			this.lastPlayed = v;
 			return this;
 		}
 
-		public AppImpl make() {
-			return new AppImpl(newAppId(), this.name, this.executable,
+		public AppImpl make()
+		{
+			return new AppImpl(
+					newAppId(), this.name,
+					this.type, this.executable,
 					this.categories, this.lastPlayed, this.cloudEnabled,
 					this.notAvailableOnThisPlatform,
 					this.missingFrom_appinfo_vdf);
 		}
 
-		public void missingFrom_appinfo_vdf(MissingFrom_appinfo_vdf e) {
+		public void missingFrom_appinfo_vdf(MissingFrom_appinfo_vdf e)
+		{
 			this.missingFrom_appinfo_vdf = e;
 		}
 
-		public Builder name(AppName name) {
+		public Builder name(AppName name)
+		{
 			this.name = name;
 			return this;
 		}
 
-		public void notAvailableOnThisPlatform(NotAvailableOnThisPlatform ex) {
+		public void notAvailableOnThisPlatform(NotAvailableOnThisPlatform ex)
+		{
 			this.notAvailableOnThisPlatform = ex;
 		}
 
+		public void type(AppType type)
+		{
+			this.type = type;
+		}
+
 		@NonNull
-		private AppId newAppId() {
+		private AppId newAppId()
+		{
 			final AppId _appid = appid;
 			if (_appid != null) return _appid;
 			throw new NullPointerException();
@@ -175,6 +219,8 @@ public class AppImpl implements App {
 		private AppName name;
 
 		private NotAvailableOnThisPlatform notAvailableOnThisPlatform;
+
+		private AppType type;
 	}
 
 	@NonNull
@@ -200,5 +246,8 @@ public class AppImpl implements App {
 
 	@Nullable
 	private final NotAvailableOnThisPlatform notAvailableOnThisPlatform;
+
+	@Nullable
+	private final AppType type;
 
 }

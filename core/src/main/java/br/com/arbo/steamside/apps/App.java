@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
+import br.com.arbo.steamside.types.AppType;
 import br.com.arbo.steamside.types.Category;
 
 public interface App {
@@ -16,19 +17,22 @@ public interface App {
 	AppId appid();
 
 	@NonNull
-	AppName name() throws MissingFrom_appinfo_vdf;
-
-	@NonNull
 	String executable() throws NotAvailableOnThisPlatform;
 
-	@NonNull
-	String lastPlayedOrCry() throws NeverPlayed;
+	void forEachCategory(final Consumer<Category> visitor);
+
+	boolean isInCategory(final Category category);
 
 	@Nullable
 	String lastPlayed();
 
-	boolean isInCategory(final Category category);
+	@NonNull
+	String lastPlayedOrCry() throws NeverPlayed;
 
-	void forEachCategory(final Consumer<Category> visitor);
+	@NonNull
+	AppName name() throws MissingFrom_appinfo_vdf;
+
+	@NonNull
+	AppType type() throws MissingFrom_appinfo_vdf;
 
 }

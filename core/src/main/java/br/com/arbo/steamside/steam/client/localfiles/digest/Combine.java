@@ -49,7 +49,7 @@ class Combine {
 
 		final AppImpl.Builder b =
 				new AppImpl.Builder()
-						.appid(appid.appid());
+		.appid(appid.appid());
 
 		from_localconfig_apps(appid, b);
 
@@ -78,6 +78,7 @@ class Combine {
 			return;
 		}
 		b.name(appInfo.name());
+		b.type(appInfo.type());
 		executable(b, appInfo);
 	}
 

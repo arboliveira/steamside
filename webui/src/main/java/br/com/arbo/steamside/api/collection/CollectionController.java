@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
+import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
@@ -66,9 +67,14 @@ public class CollectionController {
 		throws
 		br.com.arbo.steamside.data.collections.NotFound
 	{
-		final Stream< ? extends Tag> apps =
-				sys.appsOf(new CollectionName(name));
-		return AppsDTO.valueOfAppIds(apps.map(Tag::appid), library);
+		boolean gamesOnly = true;
+		final Stream<AppId> apps =
+				sys.appsOf(new CollectionName(name)).map(Tag::appid);
+		final Stream<AppId> end =
+				gamesOnly ?
+						apps.filter(this::isGame)
+						: apps;
+		return AppsDTO.valueOfAppIds(end, library);
 	}
 
 	@RequestMapping(value = "collections.json")
@@ -81,6 +87,16 @@ public class CollectionController {
 				.collect(
 						LinkedList::new, LinkedList::add,
 						LinkedList::addAll);
+	}
+
+	private boolean isGame(AppId appid)
+	{
+		try {
+			return this.library.find(appid).type().isGame();
+		}
+		catch (MissingFrom_appinfo_vdf missing) {
+			return false;
+		}
 	}
 
 	private final Library library;

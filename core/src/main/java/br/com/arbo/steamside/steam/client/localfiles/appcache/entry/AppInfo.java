@@ -6,38 +6,64 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.types.AppName;
+import br.com.arbo.steamside.types.AppType;
 
 public class AppInfo {
 
-	public AppInfo(@NonNull final AppName appName) {
+	public AppInfo(
+			@NonNull final AppName appName,
+			@NonNull AppType appType) {
 		this.name = appName;
+		this.type = appType;
+	}
+
+	public String appnametype()
+	{
+		final String name = name().name;
+		final String type = type().type;
+		if ("game".equals(type)) return name;
+		return name + " (" + type + ")";
 	}
 
 	@NonNull
-	public AppName name() {
-		return name;
-	}
-
-	public void executable(@NonNull final String executable) {
-		this.executable = executable;
-	}
-
-	@NonNull
-	public String executable() {
+	public String executable()
+	{
 		final String _executable = executable;
 		if (_executable == null) throw new NotAvailableOnThisPlatform();
 		return _executable;
 	}
 
+	public void executable(@NonNull final String executable)
+	{
+		this.executable = executable;
+	}
+
+	@NonNull
+	public AppName name()
+	{
+		return name;
+	}
+
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return ToStringBuilder.reflectionToString(this,
 				ToStringStyle.SIMPLE_STYLE);
 	}
 
 	@NonNull
-	private final AppName name;
+	public AppType type()
+	{
+		return type;
+	}
+
 	@Nullable
 	private String executable;
+
+	@NonNull
+	private final AppName name;
+
+	@NonNull
+	private final AppType type;
 
 }
