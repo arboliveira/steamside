@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.library.Library;
 
@@ -22,7 +23,8 @@ public class FavoritesController {
 	@ResponseBody
 	public List<AppDTO> favorites()
 	{
-		return AppsDTO.valueOf(library.allApps().filter(favorites), library);
+		return new AppsDTO(
+				library.allApps().filter(favorites).map(App::appid), library).jsonable();
 	}
 
 	@Inject

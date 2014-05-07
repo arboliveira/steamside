@@ -16,7 +16,8 @@ public class ContinuesController {
 
 	@RequestMapping("continues.json")
 	@ResponseBody
-	public List<AppDTO> continues() {
+	public List<AppDTO> continues()
+	{
 		return this.continues.continues();
 	}
 

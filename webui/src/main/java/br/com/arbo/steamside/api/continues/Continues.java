@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
+import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.library.Library;
 
@@ -16,14 +17,16 @@ public class Continues {
 	@Inject
 	public Continues(
 			@NonNull final ContinuesRooster continues,
-			final Library library) {
+			final Library library)
+	{
 		this.continues = continues;
 		this.library = library;
 	}
 
 	public List<AppDTO> continues()
 	{
-		return AppsDTO.valueOf(continues.continues(), library);
+		return new AppsDTO(
+				continues.continues().map(App::appid), library).jsonable();
 	}
 
 	@NonNull

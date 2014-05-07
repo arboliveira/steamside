@@ -74,7 +74,7 @@ public class CollectionController {
 				gamesOnly ?
 						apps.filter(this::isGame)
 						: apps;
-		return AppsDTO.valueOfAppIds(end, library);
+		return new AppsDTO(end, library).jsonable();
 	}
 
 	@RequestMapping(value = "collections.json")

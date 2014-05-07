@@ -18,7 +18,8 @@ public class SearchController {
 
 	@RequestMapping(value = "search.json", params = { "query", "recent=true" })
 	@ResponseBody
-	public List<AppDTO> recent() {
+	public List<AppDTO> recent()
+	{
 		return this.continues.continues();
 	}
 
@@ -26,7 +27,8 @@ public class SearchController {
 	@RequestMapping(value = "search.json", params = "query")
 	@ResponseBody
 	public List<AppDTO> search(
-			@RequestParam final String query) {
+			@RequestParam final String query)
+	{
 		if (query == null) throw new NullPointerException();
 		return Search.search(query);
 	}
