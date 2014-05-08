@@ -17,7 +17,8 @@ import br.com.arbo.steamside.types.CollectionName;
 public class AutowireCollectionsData implements CollectionsData {
 
 	@Inject
-	public AutowireCollectionsData(AutowireSteamsideData steamside) {
+	public AutowireCollectionsData(AutowireSteamsideData steamside)
+	{
 		this.steamside = steamside;
 	}
 
@@ -63,6 +64,12 @@ public class AutowireCollectionsData implements CollectionsData {
 	public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
 	{
 		steamside.collections().tag(c, apps);
+	}
+
+	@Override
+	public Stream< ? extends CollectionI> tags(AppId app)
+	{
+		return steamside.collections().tags(app);
 	}
 
 	private final AutowireSteamsideData steamside;

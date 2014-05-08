@@ -30,7 +30,8 @@ import br.com.arbo.steamside.types.CollectionName;
 public class CollectionController {
 
 	@Inject
-	public CollectionController(Library library, CollectionsData data) {
+	public CollectionController(Library library, CollectionsData data)
+	{
 		this.library = library;
 		this.data = data;
 		this.sys = new SystemCollectionsHome(library, data);
@@ -40,8 +41,8 @@ public class CollectionController {
 	@ResponseBody
 	public void add(@PathVariable final @NonNull String name,
 			@PathVariable final @NonNull String appid)
-		throws
-		br.com.arbo.steamside.data.collections.NotFound
+			throws
+			br.com.arbo.steamside.data.collections.NotFound
 	{
 		data.tag(new CollectionName(name), new AppId(appid));
 	}
@@ -64,8 +65,8 @@ public class CollectionController {
 	@RequestMapping(value = "collection.json", params = "name")
 	@ResponseBody
 	public List<AppDTO> json(@RequestParam final String name)
-		throws
-		br.com.arbo.steamside.data.collections.NotFound
+			throws
+			br.com.arbo.steamside.data.collections.NotFound
 	{
 		boolean gamesOnly = true;
 		final Stream<AppId> apps =
@@ -74,7 +75,7 @@ public class CollectionController {
 				gamesOnly ?
 						apps.filter(this::isGame)
 						: apps;
-		return new AppsDTO(end, library).jsonable();
+		return new AppsDTO(end, library, data).jsonable();
 	}
 
 	@RequestMapping(value = "collections.json")
@@ -93,8 +94,7 @@ public class CollectionController {
 	{
 		try {
 			return this.library.find(appid).type().isGame();
-		}
-		catch (MissingFrom_appinfo_vdf missing) {
+		} catch (MissingFrom_appinfo_vdf missing) {
 			return false;
 		}
 	}

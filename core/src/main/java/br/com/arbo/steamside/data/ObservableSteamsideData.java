@@ -20,7 +20,8 @@ import br.com.arbo.steamside.types.CollectionName;
 
 public class ObservableSteamsideData implements SteamsideData {
 
-	public ObservableSteamsideData(SteamsideData data) {
+	public ObservableSteamsideData(SteamsideData data)
+	{
 		steamside = data;
 	}
 
@@ -89,6 +90,12 @@ public class ObservableSteamsideData implements SteamsideData {
 		public boolean isCollected(AppId appid)
 		{
 			return realCollections().isCollected(appid);
+		}
+
+		@Override
+		public Stream< ? extends CollectionI> tags(AppId app)
+		{
+			return realCollections().tags(app);
 		}
 
 	}

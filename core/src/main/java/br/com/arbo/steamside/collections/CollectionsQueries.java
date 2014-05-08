@@ -19,4 +19,6 @@ public interface CollectionsQueries {
 
 	boolean isCollected(AppId appid);
 
+	Stream< ? extends CollectionI> tags(AppId app);
+
 }
