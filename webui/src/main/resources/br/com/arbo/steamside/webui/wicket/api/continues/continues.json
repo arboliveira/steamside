@@ -4,30 +4,35 @@
         "name": "Windosill",
         "link": "server-action-placeholder.js",
         "image": "http://cdn.steampowered.com/v/gfx/apps/37600/header.jpg",
-        "store": "http://store.steampowered.com/app/37600/"
+        "store": "http://store.steampowered.com/app/37600/",
+		"tags": [ { "name": "Art" } ]
     },
     {
         "appid": "80300",
         "name": "Puzzle Bots",
         "link": "server-action-placeholder.js",
         "image": "http://cdn.steampowered.com/v/gfx/apps/80300/header.jpg",
-        "store": "http://store.steampowered.com/app/80300/"
+        "store": "http://store.steampowered.com/app/80300/",
+		"tags": [ { "name": "Kids" } ]
     },
     {
         "appid": "29160",
         "name": "Blueberry Garden",
         "link": "server-action-placeholder.js",
         "image": "http://cdn.steampowered.com/v/gfx/apps/29160/header.jpg",
-        "store": "http://store.steampowered.com/app/29160/"
+        "store": "http://store.steampowered.com/app/29160/",
+		"tags": [ { "name": "Unique visual style" } ]
     },
     {
         "appid": "37600",
         "name": "Windosill",
-        "link": "server-action-placeholder.js"
+        "link": "server-action-placeholder.js",
+		"tags": [ { "name": "Unique visual style" } ]
     },
     {
         "appid": "80300",
         "name": "Puzzle Bots",
-        "link": "server-action-placeholder.js"
+        "link": "server-action-placeholder.js",
+		"tags": [ { "name": "Adventure" } ]
     }
 ]

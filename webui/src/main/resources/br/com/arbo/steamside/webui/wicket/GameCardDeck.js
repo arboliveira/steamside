@@ -1,19 +1,29 @@
 var Game = Backbone.Model.extend({
-    appid : function() {		"use strict";
+
+	initialize: function( opts ){
+		this.tags = new Game_Tags();
+		this.tags.reset( this.get( "tags" ) );
+	},
+
+	appid : function() {
 		return this.get('appid');
     },
-    name: function() {		"use strict";
+    name: function() {
 		return this.get('name');
     },
-    link: function() {		"use strict";
+    link: function() {
 		return this.get('link');
     },
-    image: function() {		"use strict";
+    image: function() {
         return this.get('image');
     },
-    store: function() {		"use strict";
+    store: function() {
         return this.get('store');
     },
+
+	tagsCollection: function() {
+		return this.tags;
+	},
 
 	play: function() {
 		var aUrl = this.link();
@@ -32,6 +42,21 @@ var Game = Backbone.Model.extend({
 	}
 
 });
+
+
+var Game_Tag = Backbone.Model.extend({
+
+	name: function() {
+		return this.get('name');
+	}
+
+});
+
+
+var Game_Tags = Backbone.Collection.extend({
+	model: Game_Tag
+});
+
 
 var ContinueGames = Backbone.Collection.extend({
     model: Game,
@@ -108,6 +133,52 @@ var Deck = Backbone.Model.extend({
 	}
 });
 
+
+var Game_Tag_View = Backbone.View.extend({
+
+	events: {
+		"click .game-tag-name": "tagClicked"
+	},
+
+	render: function() {
+		var name_el = this.$el.find(".game-tag-name");
+		name_el.text(this.model.name());
+		return this;
+	},
+
+	tagClicked: function(e) {
+		e.preventDefault();
+		var name = this.model.name();
+
+		Backbone.history.navigate(
+				"#/collections/" + name + "/edit",
+			{trigger: true});
+	}
+
+});
+
+var Game_Tag_ListView = Backbone.View.extend({
+
+	render: function() {
+		var container = this.$el;
+
+		var one_el = this.$(".game-tag");
+		container.empty();
+
+		this.collection.each( function(one) {
+			var view = new Game_Tag_View({
+				model: one,
+				el: one_el.clone()
+			});
+			container.append(view.render().el);
+		});
+
+		return this;
+	}
+});
+
+
+
 var GameCardView = Backbone.View.extend({
 	continues: null,
     enormity: null,
@@ -147,6 +218,12 @@ var GameCardView = Backbone.View.extend({
 		this.$('.game-img').attr('src', img);
 		this.$('.game-link').attr('href', link);
         this.$('.game-tile-store').attr('href', store);
+
+		var tags = this.model.tagsCollection();
+		new Game_Tag_ListView({
+			el: this.$("#game-tag-list"),
+			collection: tags
+		}).render();
 
 		if (this.kidsMode) this.hideAllCommandsButPlay();
 
