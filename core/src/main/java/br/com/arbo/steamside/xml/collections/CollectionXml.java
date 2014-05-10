@@ -1,7 +1,5 @@
 package br.com.arbo.steamside.xml.collections;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsQueries;
@@ -14,23 +12,23 @@ public class CollectionXml {
 	{
 		CollectionXml xml = new CollectionXml();
 		xml.name = collection.name().value;
-		xml.system = collection.isSystem().toDTOString();
 		home.apps(collection).forEach(c -> xml.tags.add(c));
 		return xml;
+	}
+
+	public CollectionXml()
+	{
+		//
 	}
 
 	public CollectionImpl toCollection()
 	{
 		final CollectionName name = new CollectionName(this.name);
-		return new CollectionImpl(name,
-				CollectionI.IsSystem.fromDTOString(system));
+		return new CollectionImpl(name, CollectionI.IsSystem.NO);
 	}
 
 	public String name;
 
-	@Nullable
-	public String system;
-
-	public final TagsXml tags = new TagsXml();
+	public TagsXml tags = new TagsXml();
 
 }
