@@ -2,7 +2,6 @@ package br.com.arbo.steamside.api.collection;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -14,12 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
-import br.com.arbo.steamside.api.app.AppsDTO;
-import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
-import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.AppId;
@@ -68,14 +64,8 @@ public class CollectionController {
 			throws
 			br.com.arbo.steamside.data.collections.NotFound
 	{
-		boolean gamesOnly = true;
-		final Stream<AppId> apps =
-				sys.appsOf(new CollectionName(name)).map(Tag::appid);
-		final Stream<AppId> end =
-				gamesOnly ?
-						apps.filter(this::isGame)
-						: apps;
-		return new AppsDTO(end, library, data).jsonable();
+		return new CollectionController_collection_json(
+				name, sys, library, data).jsonable();
 	}
 
 	@RequestMapping(value = "collections.json")
@@ -88,15 +78,6 @@ public class CollectionController {
 				.collect(
 						LinkedList::new, LinkedList::add,
 						LinkedList::addAll);
-	}
-
-	private boolean isGame(AppId appid)
-	{
-		try {
-			return this.library.find(appid).type().isGame();
-		} catch (MissingFrom_appinfo_vdf missing) {
-			return false;
-		}
 	}
 
 	private final Library library;
