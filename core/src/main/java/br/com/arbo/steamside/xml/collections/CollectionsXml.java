@@ -3,23 +3,11 @@ package br.com.arbo.steamside.xml.collections;
 import java.util.LinkedList;
 
 import br.com.arbo.steamside.collections.CollectionImpl;
-import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.types.AppId;
 
 public class CollectionsXml {
-
-	public static CollectionsXml valueOf(CollectionsQueries collections)
-	{
-		CollectionsXml xml = new CollectionsXml();
-
-		collections.all()
-				.map(each -> CollectionXml.valueOf(each, collections))
-				.forEach(xml.collection::add);
-
-		return xml;
-	}
 
 	public InMemoryCollectionsHome toCollectionsHome()
 	{
@@ -39,8 +27,8 @@ public class CollectionsXml {
 			final CollectionImpl c = cxml.toCollection();
 			home.add(c);
 			cxml.tags.tag.stream()
-					.map(appxml -> new AppId(appxml.appid))
-					.forEach(appid -> home.tag(c, appid));
+			.map(appxml -> new AppId(appxml.appid))
+			.forEach(appid -> home.tag(c, appid));
 		}
 
 		InMemoryCollectionsHome home = new InMemoryCollectionsHome();

@@ -12,13 +12,14 @@ import br.com.arbo.steamside.xml.SteamsideXml;
 
 public class LoadSteamsideXml {
 
-	private static SteamsideXml unmarshal(final InputStream stream)
+	static SteamsideXml unmarshal(final InputStream stream)
 	{
 		return JAXB.unmarshal(stream, SteamsideXml.class);
 	}
 
 	@Inject
-	public LoadSteamsideXml(File_steamside_xml file_steamside_xml) {
+	public LoadSteamsideXml(File_steamside_xml file_steamside_xml)
+	{
 		this.file_steamside_xml = file_steamside_xml;
 	}
 

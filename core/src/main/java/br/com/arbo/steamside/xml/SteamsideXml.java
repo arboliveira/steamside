@@ -7,6 +7,7 @@ import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.kids.InMemoryKids;
 import br.com.arbo.steamside.xml.collections.CollectionsXml;
+import br.com.arbo.steamside.xml.collections.CollectionsXmlFactory;
 import br.com.arbo.steamside.xml.kids.KidsXml;
 
 @XmlRootElement(name = "steamside")
@@ -15,18 +16,20 @@ public class SteamsideXml {
 	public static SteamsideXml valueOf(SteamsideData data)
 	{
 		CollectionsXml collectionsXml =
-				CollectionsXml.valueOf(data.collections());
+				CollectionsXmlFactory.valueOf(data.collections());
 		KidsXml kidsXml = KidsXml.valueOf(data.kids());
 		SteamsideXml xml = new SteamsideXml(collectionsXml, kidsXml);
 		return xml;
 	}
 
-	public SteamsideXml() {
+	public SteamsideXml()
+	{
 		this.collections = new CollectionsXml();
 		this.kids = new KidsXml();
 	}
 
-	public SteamsideXml(CollectionsXml collections, KidsXml kids) {
+	public SteamsideXml(CollectionsXml collections, KidsXml kids)
+	{
 		this.collections = collections;
 		this.kids = kids;
 	}
