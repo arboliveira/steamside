@@ -23,7 +23,7 @@ public class InMemoryTagsHome {
 	{
 		appsByCollection.tag(c, appid);
 		collectionsByApp.tag(c, appid);
-		tagsByCollection.tag(c, null);
+		tagsByCollection.tag(c, appid);
 	}
 
 	static class AppsByCollection {
@@ -68,10 +68,11 @@ public class InMemoryTagsHome {
 
 	static class TagsByCollection {
 
-		void tag(CollectionImpl c, AppId a)
+		void tag(CollectionImpl c, @NonNull AppId a)
 		{
+			if (a == null) throw new NullPointerException();
 			map.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
-			.computeIfAbsent(a, k -> new TagImpl(a));
+			.computeIfAbsent(a, TagImpl::new);
 		}
 
 		Stream<TagImpl> tags(CollectionImpl c)

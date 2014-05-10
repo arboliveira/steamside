@@ -8,18 +8,22 @@ import br.com.arbo.steamside.types.AppId;
 
 public class TagImpl implements Tag {
 
-	public TagImpl(@NonNull AppId appid) {
+	public TagImpl(@NonNull AppId appid)
+	{
+		if (appid == null) throw new NullPointerException();
 		this.appid = appid;
 	}
 
 	@Override
 	@NonNull
-	public AppId appid() {
+	public AppId appid()
+	{
 		return appid;
 	}
 
 	@Override
-	public Optional<Notes> notes() {
+	public Optional<Notes> notes()
+	{
 		return notes;
 	}
 

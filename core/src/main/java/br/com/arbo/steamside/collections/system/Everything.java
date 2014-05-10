@@ -12,7 +12,8 @@ import br.com.arbo.steamside.types.CollectionName;
 
 class Everything {
 
-	public Everything(Library library) {
+	public Everything(Library library)
+	{
 		this.library = library;
 		this.instance =
 				new CollectionImpl(new CollectionName("(everything)"),
@@ -25,7 +26,7 @@ class Everything {
 			throw new NotFound();
 
 		return library.allApps().map(app -> app.appid())
-				.map(appid -> new TagImpl(appid));
+				.map(TagImpl::new);
 	}
 
 	final CollectionImpl instance;

@@ -13,7 +13,8 @@ import br.com.arbo.steamside.types.CollectionName;
 
 class Uncollected {
 
-	public Uncollected(Library library, CollectionsData collections) {
+	public Uncollected(Library library, CollectionsData collections)
+	{
 		this.library = library;
 		this.collections = collections;
 		this.instance =
@@ -28,7 +29,7 @@ class Uncollected {
 
 		return library.allApps().map(app -> app.appid())
 				.filter(appid -> !collections.isCollected(appid))
-				.map(appid -> new TagImpl(appid));
+				.map(TagImpl::new);
 	}
 
 	final CollectionImpl instance;
