@@ -1,11 +1,10 @@
 package br.com.arbo.steamside.apps;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
 import br.com.arbo.steamside.apps.AppImpl.Builder;
-import br.com.arbo.steamside.apps.Filter.Reject;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 
 public class FilterPlatformTest {
@@ -17,12 +16,7 @@ public class FilterPlatformTest {
 		builder.notAvailableOnThisPlatform(new NotAvailableOnThisPlatform());
 		final App app = builder.make();
 
-		try {
-			subject.consider(app);
-			fail();
-		} catch (Reject ex) {
-			// all right!
-		}
+		assertFalse(subject.test(app));
 	}
 
 	private final FilterPlatform subject = new FilterPlatform();

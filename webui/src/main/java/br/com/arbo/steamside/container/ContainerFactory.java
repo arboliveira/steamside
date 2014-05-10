@@ -39,6 +39,8 @@ import br.com.arbo.steamside.library.LibraryImpl;
 import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.rungame.RunGame;
+import br.com.arbo.steamside.settings.Settings;
+import br.com.arbo.steamside.settings.SettingsImpl;
 import br.com.arbo.steamside.settings.file.File_steamside_xml;
 import br.com.arbo.steamside.settings.file.LoadSteamsideXml;
 import br.com.arbo.steamside.settings.file.SaveSteamsideXml;
@@ -87,6 +89,8 @@ public class ContainerFactory {
 
 	private static void addComponents(final ContainerWeb container)
 	{
+		container.addComponent(Settings.class, SettingsImpl.class);
+
 		container
 				.addComponent(Library.class, LibraryImpl.class)
 				.addComponent(

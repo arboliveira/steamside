@@ -18,6 +18,7 @@ import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -26,10 +27,12 @@ import br.com.arbo.steamside.types.CollectionName;
 public class CollectionController {
 
 	@Inject
-	public CollectionController(Library library, CollectionsData data)
+	public CollectionController(Library library, CollectionsData data,
+			Settings settings)
 	{
 		this.library = library;
 		this.data = data;
+		this.settings = settings;
 		this.sys = new SystemCollectionsHome(library, data);
 	}
 
@@ -65,7 +68,8 @@ public class CollectionController {
 			br.com.arbo.steamside.data.collections.NotFound
 	{
 		return new CollectionController_collection_json(
-				name, sys, library, data).jsonable();
+				name, sys, library, data,
+				settings.gamesOnly()).jsonable();
 	}
 
 	@RequestMapping(value = "collections.json")
@@ -79,6 +83,8 @@ public class CollectionController {
 						LinkedList::new, LinkedList::add,
 						LinkedList::addAll);
 	}
+
+	private final Settings settings;
 
 	private final Library library;
 

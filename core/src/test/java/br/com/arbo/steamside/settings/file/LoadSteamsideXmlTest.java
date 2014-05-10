@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 
 import org.junit.Test;
 
+@SuppressWarnings("static-method")
 public class LoadSteamsideXmlTest {
 
 	@Test

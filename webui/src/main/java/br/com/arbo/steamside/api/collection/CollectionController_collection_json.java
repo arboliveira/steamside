@@ -16,18 +16,18 @@ class CollectionController_collection_json {
 
 	CollectionController_collection_json(
 			String name, SystemCollectionsHome sys, Library library,
-			CollectionsQueries queries)
+			CollectionsQueries queries, boolean gamesOnly)
 	{
 		this.name = name;
 		this.sys = sys;
 		this.library = library;
 		this.queries = queries;
+		this.gamesOnly = gamesOnly;
 		this.gameFinder = new GameFinder(library);
 	}
 
 	List<AppDTO> jsonable()
 	{
-		boolean gamesOnly = true;
 		final Stream<AppId> apps =
 				sys.appsOf(new CollectionName(name)).map(
 						Tag::appid);
@@ -42,6 +42,8 @@ class CollectionController_collection_json {
 	{
 		return gameFinder.isGame(appid);
 	}
+
+	private final boolean gamesOnly;
 
 	private final String name;
 

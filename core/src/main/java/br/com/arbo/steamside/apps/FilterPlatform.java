@@ -1,17 +1,22 @@
 package br.com.arbo.steamside.apps;
 
+import java.util.function.Predicate;
+
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 
-public class FilterPlatform implements Filter {
+public class FilterPlatform implements Predicate<App> {
 
 	@Override
-	public void consider(final App app) throws Reject {
+	public boolean test(App app) {
 		try {
 			app.executable();
-		} catch (final NotAvailableOnThisPlatform e) {
-			throw new Reject();
-		} catch (final MissingFrom_appinfo_vdf e) {
-			throw new Reject();
+			return true;
+		}
+		catch (final NotAvailableOnThisPlatform e) {
+			return false;
+		}
+		catch (final MissingFrom_appinfo_vdf e) {
+			return false;
 		}
 	}
 
