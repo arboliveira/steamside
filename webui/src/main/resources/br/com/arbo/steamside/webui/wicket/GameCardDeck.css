@@ -72,13 +72,14 @@
 	width: 100%;
 }
 .game-tile-caption {
-	text-align: center;
+	text-align: left;
 	margin-top: 2px;
 }
 .game-tile-command-bar {
 	font-size: x-small;
-	text-align: center;
+	text-align: left;
 	padding-top: 6px;
+	padding-left: 6px;
 	padding-bottom: 5px;
 	border-top: dotted 1px crimson;
 	background-color: whitesmoke;
@@ -106,30 +107,43 @@
     font-size: large;
     font-weight: bolder;
     color: crimson;
-    padding: 0.25em;
-    margin: 0em;
-    text-align: center;
-    background-color: white;
-    border-top-left-radius: 1em;
-    border-top-right-radius: 1em;
+    text-align: left;
+    margin-top: 0.25em;
+    margin-left: 0.25em;
+    margin-bottom: 0.5em;
+}
 
+.display-collection-name {
+    padding: 0.25em;
+    padding-left: 0.5em;
+    padding-right: 2em;
+    background-color: linen;
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
     border-top: 1px solid #999;
     border-right: 2px solid #555;
-    border-bottom: 2px solid #555;
-    border-left: 1px solid #999;
+    border-bottom: 1px solid #555;
+    border-left: 16px outset #999;
 }
 
 .game-tag {
-/*
-    background-color: navajowhite;    
-    font-family: "Karla";
-    padding: 5px;
-*/
+    float: right;
+
+    background-color: linen;    
     margin: 3px;
 	font-size: x-small;
 	padding: 2px;
+	
+	/*
 	border-radius: 3px;
     border: 1px solid;
     border-color: LightBlue;
-    float: right;
+    */
+    
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
+    border-top: 1px solid #999;
+    border-right: 1px solid #555;
+    border-bottom: 1px solid #555;
+    border-left: 2px outset #999;
 }
