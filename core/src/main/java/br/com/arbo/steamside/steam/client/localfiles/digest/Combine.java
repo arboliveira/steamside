@@ -49,12 +49,10 @@ class Combine {
 
 		final AppImpl.Builder b =
 				new AppImpl.Builder()
-		.appid(appid.appid());
+						.appid(appid.appid());
 
 		from_localconfig_apps(appid, b);
-
 		from_appinfo(appid, b);
-
 		from_sharedconfig(appid, b);
 
 		home.add(b.make());

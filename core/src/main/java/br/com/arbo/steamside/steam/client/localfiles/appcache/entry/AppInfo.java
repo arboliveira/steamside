@@ -26,7 +26,7 @@ public class AppInfo {
 	}
 
 	@NonNull
-	public String executable()
+	public String executable() throws NotAvailableOnThisPlatform
 	{
 		final String _executable = executable;
 		if (_executable == null) throw new NotAvailableOnThisPlatform();
