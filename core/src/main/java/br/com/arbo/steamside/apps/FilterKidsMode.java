@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.apps;
 
 import br.com.arbo.steamside.kids.KidsMode;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
 public class FilterKidsMode implements Filter {
 
@@ -19,7 +19,7 @@ public class FilterKidsMode implements Filter {
 	private boolean kidsMustNotSeeThisCategory(final App app)
 	{
 		String name = kidsmode.getCollection().value;
-		return !app.isInCategory(new Category(name));
+		return !app.isInCategory(new SteamCategory(name));
 	}
 
 	private final KidsMode kidsmode;

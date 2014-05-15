@@ -11,12 +11,12 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
-public class ExampleDumpCategoriesFrom_Library {
+public class ExampleDumpSteamCategoriesFrom_Library {
 
 	public static void main(final String[] args) {
-		new ExampleDumpCategoriesFrom_Library().execute();
+		new ExampleDumpSteamCategoriesFrom_Library().execute();
 	}
 
 	final Data_appinfo_vdf appinfo =
@@ -39,7 +39,7 @@ public class ExampleDumpCategoriesFrom_Library {
 		System.out.println(indent.on(dump.toInfo(app.appid())));
 	}
 
-	void printCategory(final Category category) {
+	void printCategory(final SteamCategory category) {
 		System.out.println(indent.on(category));
 		indent.increase();
 		Stream<App> apps = library.findIn(category);

@@ -7,7 +7,7 @@ import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class CopyAllSteamCategories {
@@ -22,7 +22,7 @@ public class CopyAllSteamCategories {
 		library.allSteamCategories().forEach(this::copy);
 	}
 
-	private void copy(Category category)
+	private void copy(SteamCategory category)
 	{
 		Stream<AppId> apps = library.findIn(category).map(App::appid);
 

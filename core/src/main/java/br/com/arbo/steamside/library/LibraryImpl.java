@@ -9,7 +9,7 @@ import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
 import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
 public class LibraryImpl implements Library {
 
@@ -25,7 +25,7 @@ public class LibraryImpl implements Library {
 	}
 
 	@Override
-	public Stream<Category> allSteamCategories()
+	public Stream<SteamCategory> allSteamCategories()
 	{
 		return apps().allSteamCategories();
 	}
@@ -43,7 +43,7 @@ public class LibraryImpl implements Library {
 	}
 
 	@Override
-	public Stream<App> findIn(Category category)
+	public Stream<App> findIn(SteamCategory category)
 	{
 		return apps().findIn(category);
 	}

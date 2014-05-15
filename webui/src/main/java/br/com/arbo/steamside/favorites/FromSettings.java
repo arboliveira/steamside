@@ -3,14 +3,14 @@ package br.com.arbo.steamside.favorites;
 import javax.inject.Inject;
 
 import br.com.arbo.steamside.opersys.username.User;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
 public class FromSettings implements FavoritesOfUser {
 
 	@Override
-	public Category favorites() throws NotSet {
+	public SteamCategory favorites() throws NotSet {
 		if (user.username().equals("andre"))
-			return new Category("+Favorites");
+			return new SteamCategory("+Favorites");
 		throw new NotSet();
 	}
 

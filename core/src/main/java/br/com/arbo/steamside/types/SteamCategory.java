@@ -1,10 +1,10 @@
 package br.com.arbo.steamside.types;
 
-public class Category {
+public class SteamCategory {
 
 	public final String category;
 
-	public Category(final String category) {
+	public SteamCategory(final String category) {
 		this.category = category;
 	}
 

@@ -9,7 +9,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailable
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
 import br.com.arbo.steamside.types.AppType;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
 public interface App {
 
@@ -19,9 +19,9 @@ public interface App {
 	@NonNull
 	String executable() throws NotAvailableOnThisPlatform;
 
-	void forEachCategory(final Consumer<Category> visitor);
+	void forEachCategory(final Consumer<SteamCategory> visitor);
 
-	boolean isInCategory(final Category category);
+	boolean isInCategory(final SteamCategory category);
 
 	@Nullable
 	String lastPlayed();

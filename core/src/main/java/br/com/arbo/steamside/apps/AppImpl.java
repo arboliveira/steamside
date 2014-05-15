@@ -11,7 +11,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailable
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.AppName;
 import br.com.arbo.steamside.types.AppType;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
 public class AppImpl implements App {
 
@@ -62,15 +62,15 @@ public class AppImpl implements App {
 	}
 
 	@Override
-	public void forEachCategory(final Consumer<Category> visitor)
+	public void forEachCategory(final Consumer<SteamCategory> visitor)
 	{
 		final Collection<String> c = categories;
 		if (c == null) return;
-		c.stream().map(one -> new Category(one)).forEach(visitor);
+		c.stream().map(one -> new SteamCategory(one)).forEach(visitor);
 	}
 
 	@Override
-	public boolean isInCategory(final Category category)
+	public boolean isInCategory(final SteamCategory category)
 	{
 		final Collection<String> c = categories;
 		if (c == null) return false;

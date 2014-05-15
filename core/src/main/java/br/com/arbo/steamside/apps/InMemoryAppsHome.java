@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
 import com.google.common.collect.ArrayListMultimap;
 
@@ -19,9 +19,9 @@ public class InMemoryAppsHome implements AppsHome {
 	}
 
 	@Override
-	public Stream<Category> allSteamCategories()
+	public Stream<SteamCategory> allSteamCategories()
 	{
-		return categories.keySet().stream().map(Category::new);
+		return categories.keySet().stream().map(SteamCategory::new);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class InMemoryAppsHome implements AppsHome {
 	}
 
 	@Override
-	public Stream<App> findIn(Category category)
+	public Stream<App> findIn(SteamCategory category)
 	{
 		final List<App> c = categories.get(category.category);
 		if (c == null)

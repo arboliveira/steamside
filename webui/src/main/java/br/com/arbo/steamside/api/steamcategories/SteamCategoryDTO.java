@@ -7,12 +7,12 @@ import java.util.stream.Stream;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
 @JsonAutoDetect
 public class SteamCategoryDTO {
 
-	public static List<SteamCategoryDTO> valueOf(Stream<Category> categories)
+	public static List<SteamCategoryDTO> valueOf(Stream<SteamCategory> categories)
 	{
 		final List<SteamCategoryDTO> dto;
 		dto = categories
@@ -22,7 +22,7 @@ public class SteamCategoryDTO {
 	}
 
 	public SteamCategoryDTO(
-			final Category category) {
+			final SteamCategory category) {
 		this.name = category.category;
 		this.link = "/favorites/setsteam/" + this.name;
 	}

@@ -1,12 +1,12 @@
 package br.com.arbo.steamside.apps;
 
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
 public class FilterCategory implements Filter {
 
-	private final Category category;
+	private final SteamCategory category;
 
-	public FilterCategory(final Category category) {
+	public FilterCategory(final SteamCategory category) {
 		this.category = category;
 	}
 

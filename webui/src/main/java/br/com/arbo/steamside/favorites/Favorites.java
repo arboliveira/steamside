@@ -8,7 +8,7 @@ import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.favorites.FavoritesOfUser.NotSet;
 import br.com.arbo.steamside.settings.Settings;
-import br.com.arbo.steamside.types.Category;
+import br.com.arbo.steamside.types.SteamCategory;
 
 public class Favorites implements Predicate<App> {
 
@@ -21,20 +21,20 @@ public class Favorites implements Predicate<App> {
 	@Override
 	public boolean test(App app)
 	{
-		final Category category = determineCategory();
+		final SteamCategory category = determineCategory();
 		if (!app.isInCategory(category)) return false;
 		if (currentPlatformOnly)
 			return new FilterPlatform().test(app);
 		return true;
 	}
 
-	private Category determineCategory()
+	private SteamCategory determineCategory()
 	{
 		try {
 			return ofUser.favorites();
 		}
 		catch (final NotSet e) {
-			return new Category("favorite");
+			return new SteamCategory("favorite");
 		}
 	}
 
