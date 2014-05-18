@@ -8,6 +8,7 @@ import br.com.arbo.org.apache.commons.lang3.FromWindowsUtils;
 import br.com.arbo.org.apache.commons.lang3.ProgramFiles;
 import br.com.arbo.org.apache.commons.lang3.UserHome;
 import br.com.arbo.steamside.api.app.AppController;
+import br.com.arbo.steamside.api.app.RunGameCommand;
 import br.com.arbo.steamside.api.collection.CollectionController;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
@@ -38,19 +39,16 @@ import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.library.LibraryImpl;
 import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.opersys.username.User;
-import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.settings.SettingsImpl;
 import br.com.arbo.steamside.settings.file.File_steamside_xml;
 import br.com.arbo.steamside.settings.file.LoadSteamsideXml;
 import br.com.arbo.steamside.settings.file.SaveSteamsideXml;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.digest.Digester;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.ChangeListener;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.DigestOnChange;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Monitor;
-import br.com.arbo.steamside.steam.client.localfiles.monitoring.ParallelAppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
@@ -97,7 +95,6 @@ public class ContainerFactory {
 						AppsHomeFactory.class, ParallelAppsHomeFactory.class);
 
 		container
-				.addComponent(Digester.class)
 				.addComponent(Monitor.class)
 				.addComponent(ChangeListener.class, DigestOnChange.class);
 
@@ -137,7 +134,7 @@ public class ContainerFactory {
 
 		container
 				.addComponent(SteamBrowserProtocol.class)
-				.addComponent(RunGame.class);
+				.addComponent(RunGameCommand.class);
 
 		container
 				.addComponent(FilterContinues.class)

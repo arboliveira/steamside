@@ -4,16 +4,17 @@ import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
+import br.com.arbo.steamside.api.app.RunGameCommand;
 import br.com.arbo.steamside.app.main.NoTweak;
 import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.opersys.username.FromJava;
-import br.com.arbo.steamside.rungame.RunGame;
 
 public class WebApplicationContextBuilderTest {
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void instantiation__wiringShouldBeComplete() {
+	public void instantiation__wiringShouldBeComplete()
+	{
 		final FromJava user = new FromJava();
 		@SuppressWarnings("resource")
 		final AnnotationConfigWebApplicationContext context =
@@ -22,7 +23,8 @@ public class WebApplicationContextBuilderTest {
 						new Exit() {
 
 							@Override
-							public void exit() {
+							public void exit()
+							{
 								// Do nothing
 							}
 						},
@@ -30,7 +32,7 @@ public class WebApplicationContextBuilderTest {
 				).newSpringContext();
 		context.setServletContext(new MockServletContext());
 		context.refresh();
-		context.getBean(RunGame.class);
+		context.getBean(RunGameCommand.class);
 	}
 
 }

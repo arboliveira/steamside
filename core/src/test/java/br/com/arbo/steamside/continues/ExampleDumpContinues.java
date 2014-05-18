@@ -4,8 +4,8 @@ import org.mockito.Mockito;
 
 import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.library.Libraries;
 import br.com.arbo.steamside.library.Library;
-import br.com.arbo.steamside.library.Library_ForExamples;
 import br.com.arbo.steamside.settings.SettingsImpl;
 
 public class ExampleDumpContinues {
@@ -20,7 +20,7 @@ public class ExampleDumpContinues {
 
 		final FilterContinues continues = new FilterContinues(nop);
 
-		Library library = Library_ForExamples.fromSteamPhysicalFiles();
+		Library library = Libraries.fromSteamPhysicalFiles();
 
 		new ContinuesFromSteamClientLocalfiles(
 				continues, library, new SettingsImpl())

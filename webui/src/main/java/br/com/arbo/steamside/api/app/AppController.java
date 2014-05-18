@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.collections.CollectionsData;
-import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.rungame.Timeout;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.types.AppId;
@@ -24,7 +23,8 @@ public class AppController {
 	{
 		try {
 			Thread.sleep(4000);
-		} catch (final InterruptedException e) {
+		}
+		catch (final InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -53,7 +53,7 @@ public class AppController {
 	}
 
 	@Inject
-	private RunGame rungame;
+	private RunGameCommand rungame;
 
 	@Inject
 	private CollectionsData data;

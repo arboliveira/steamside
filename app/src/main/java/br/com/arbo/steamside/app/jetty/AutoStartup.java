@@ -5,9 +5,9 @@ import javax.inject.Inject;
 import org.springframework.context.SmartLifecycle;
 
 import br.com.arbo.steamside.container.ContainerFactory;
+import br.com.arbo.steamside.container.ParallelAppsHomeFactory;
 import br.com.arbo.steamside.data.LoadData;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Monitor;
-import br.com.arbo.steamside.steam.client.localfiles.monitoring.ParallelAppsHomeFactory;
 
 public class AutoStartup implements SmartLifecycle {
 

@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.NotFound;
+import br.com.arbo.steamside.library.Libraries;
 import br.com.arbo.steamside.library.Library;
-import br.com.arbo.steamside.library.Library_ForExamples;
 import br.com.arbo.steamside.settings.file.SteamsideData_ForExamples;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
@@ -35,5 +35,5 @@ public class ExampleUncollected {
 	}
 
 	InMemoryCollectionsHome home = SteamsideData_ForExamples.fromXmlFile();
-	Library library = Library_ForExamples.fromSteamPhysicalFiles();
+	Library library = Libraries.fromSteamPhysicalFiles();
 }
