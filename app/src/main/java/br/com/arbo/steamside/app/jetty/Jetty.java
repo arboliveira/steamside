@@ -60,9 +60,11 @@ public class Jetty implements LocalWebserver {
 		try {
 			server.stop();
 			server.join();
-		} catch (final RuntimeException e) {
+		}
+		catch (final RuntimeException e) {
 			throw e;
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -118,11 +120,14 @@ public class Jetty implements LocalWebserver {
 	private void doStart() {
 		try {
 			server.start();
-		} catch (final BindException e) {
+		}
+		catch (final BindException e) {
 			throw new PortAlreadyInUse(e);
-		} catch (final RuntimeException e) {
+		}
+		catch (final RuntimeException e) {
 			throw e;
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -136,7 +141,7 @@ public class Jetty implements LocalWebserver {
 	}
 
 	private static String root_of_resources() {
-		return "br/com/arbo/steamside/webui/wicket";
+		return "br/com/arbo/steamside/webui";
 	}
 
 	static boolean DEV_MODE = true;
