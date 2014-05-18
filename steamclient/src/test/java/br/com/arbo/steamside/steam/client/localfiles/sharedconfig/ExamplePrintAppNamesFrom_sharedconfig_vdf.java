@@ -14,7 +14,7 @@ class ExamplePrintAppNamesFrom_sharedconfig_vdf {
 		final SysoutAppInfoLine dump = new SysoutAppInfoLine(appnameFactory);
 
 		final DataFactory_sharedconfig_vdf vdf =
-				Factory_sharedconfig_vdf_ForExamples
+				DataFactories_sharedconfig_vdf
 						.fromSteamPhysicalFiles();
 
 		vdf.data().apps().streamAppId().map(
