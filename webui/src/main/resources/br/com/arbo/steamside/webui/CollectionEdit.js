@@ -34,7 +34,8 @@ var CollectionEditView = Backbone.View.extend({
 			el: this.$('#collection-edit-search-results-deck'),
 			collection: collectionEditSearchResults,
 			continues: continues,
-			on_GameCard_render: function(viewGameCard) { that.on_SearchResults_GameCard_render(viewGameCard) }
+			on_GameCard_render: function(viewGameCard) { that.on_SearchResults_GameCard_render(viewGameCard) },
+			on_tag: function(game, segmentWithGameCard) { TagTile.on_tag(game, segmentWithGameCard) }
 		});
 
         var name = that.options.collection_name;
@@ -45,7 +46,8 @@ var CollectionEditView = Backbone.View.extend({
         inCollection.collection_name = name;
 		new DeckView({
             el: this.$('#games-in-collection-deck'),
-            collection: inCollection
+            collection: inCollection,
+			on_tag: function(game, segmentWithGameCard) { TagTile.on_tag(game, segmentWithGameCard) }
         });
 
 		fetch_json(inCollection);

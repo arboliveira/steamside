@@ -95,17 +95,9 @@ var SteamsideView = Backbone.View.extend({
 		return this;
 	},
 
-	on_tag: function(game, segmentWithGameCard) {
-		var segment = $("#tag-segment");
-		var clone = segment.clone();
-		segmentWithGameCard.after(clone);
-
-		var viewTag = new TagView({
-			el: clone,
-			game: game
-		});
-
-		viewTag.render();
+	on_tag: function(game, segmentWithGameCard)
+	{
+		TagTile.on_tag(game, segmentWithGameCard);
 	}
 });
 

@@ -1,3 +1,31 @@
+var TagTile = {
+	tile: new Tile(
+		{url: 'Tag.html', selector: "#TagTile"}),
+
+	whenLoaded: function (callback)
+	{
+		this.tile.ajaxTile(callback);
+	},
+
+	on_tag: function(game, segmentWithGameCard)
+	{
+		TagTile.whenLoaded(function(tile)
+		{
+			var clone = tile.clone();
+
+			var view = new TagView({
+				el: clone,
+				game: game
+			});
+
+			view.render();
+
+			segmentWithGameCard.after(clone);
+		});
+	}
+};
+
+
 var TagView = Backbone.View.extend({
 
 	game: null,
@@ -19,7 +47,7 @@ var TagView = Backbone.View.extend({
 		this.$el.hide();
 		this.$el.slideDown();
 
-		this.on_tag_done();
+		// this.on_tag_done();
 
 		return this;
 	},
@@ -96,7 +124,7 @@ var TagView = Backbone.View.extend({
 		var input_el = this.$('#input-text-command-box');
 		input_el.val('');
 		input_el.focus();
-		this.on_tag_change_input('');
+		this.on_tag_change_input(this);
 	},
 
 	nameForCollection: function(input) {
