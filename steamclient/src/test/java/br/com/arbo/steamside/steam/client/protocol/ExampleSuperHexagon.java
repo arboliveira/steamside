@@ -17,15 +17,18 @@ public class ExampleSuperHexagon {
 		final AppId appid = new AppId("221640");
 		final FromJava user = new FromJava();
 		final SteamBrowserProtocol steam = new SteamBrowserProtocol(user);
+
 		final Library library = Libraries.fromSteamPhysicalFiles();
+
 		ScheduledExecutorService executorService =
 				Executors.newSingleThreadScheduledExecutor();
 		try {
 			new RunGame(steam, library, (prefix -> executorService))
-					.askSteamToRunGameAndWaitUntilItsUp(appid);
+			.askSteamToRunGameAndWaitUntilItsUp(appid);
 		}
 		finally {
 			executorService.shutdown();
 		}
+
 	}
 }

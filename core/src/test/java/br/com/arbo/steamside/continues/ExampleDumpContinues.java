@@ -15,7 +15,8 @@ public class ExampleDumpContinues {
 		new ExampleDumpContinues().dumpContinues();
 	}
 
-	private void dumpContinues() {
+	private void dumpContinues()
+	{
 		KidsMode nop = Mockito.mock(KidsMode.class);
 
 		final FilterContinues continues = new FilterContinues(nop);
@@ -29,7 +30,8 @@ public class ExampleDumpContinues {
 				);
 	}
 
-	private void printApp(App app) {
+	private void printApp(App app)
+	{
 		System.out.println(
 				app.lastPlayed()
 						+ " :: " + app.name()

@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.library;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import br.com.arbo.steamside.apps.AppsHome;
@@ -21,14 +22,24 @@ public class Libraries {
 
 		Dir_userid dir_userid = Dirs_userid.from_Dir_userid();
 
-		Digester digester = new Digester(
-				new File_appinfo_vdf(steamDir),
-				new File_localconfig_vdf(dir_userid),
-				new File_sharedconfig_vdf(dir_userid),
-				Executors.newSingleThreadExecutor()
-				);
+		final AppsHome appsHome;
 
-		final AppsHome appsHome = digester.digest();
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+
+			Digester digester = new Digester(
+					new File_appinfo_vdf(steamDir),
+					new File_localconfig_vdf(dir_userid),
+					new File_sharedconfig_vdf(dir_userid),
+					executorService
+					);
+
+			appsHome = digester.digest();
+		}
+		finally {
+			executorService.shutdown();
+		}
+
 		return new LibraryImpl(() -> appsHome);
 	}
 

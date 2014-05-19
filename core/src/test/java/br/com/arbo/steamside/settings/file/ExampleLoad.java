@@ -35,5 +35,6 @@ public class ExampleLoad {
 	}
 
 	InMemoryCollectionsHome home = SteamsideData_ForExamples.fromXmlFile();
+
 	Library library = Libraries.fromSteamPhysicalFiles();
 }
