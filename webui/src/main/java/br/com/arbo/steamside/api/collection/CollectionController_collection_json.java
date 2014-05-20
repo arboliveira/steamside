@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
@@ -23,24 +24,20 @@ class CollectionController_collection_json {
 		this.library = library;
 		this.queries = queries;
 		this.gamesOnly = gamesOnly;
-		this.gameFinder = new GameFinder(library);
 	}
 
 	List<AppDTO> jsonable()
 	{
-		final Stream<AppId> apps =
-				sys.appsOf(new CollectionName(name)).map(
-						Tag::appid);
-		final Stream<AppId> end =
-				gamesOnly ?
-						apps.filter(this::isGame)
-						: apps;
-		return new AppsDTO(end, library, queries).jsonable();
-	}
+		boolean _gamesOnly = gamesOnly;
+		final Stream< ? extends Tag> appsOf =
+				sys.appsOf(new CollectionName(name), new AppCriteria() {
 
-	private boolean isGame(AppId appid)
-	{
-		return gameFinder.isGame(appid);
+					{
+						this.gamesOnly = _gamesOnly;
+					}
+				});
+		final Stream<AppId> appids = appsOf.map(Tag::appid);
+		return new AppsDTO(appids, library, queries).jsonable();
 	}
 
 	private final boolean gamesOnly;
@@ -52,7 +49,5 @@ class CollectionController_collection_json {
 	private final SystemCollectionsHome sys;
 
 	private final CollectionsQueries queries;
-
-	private final GameFinder gameFinder;
 
 }

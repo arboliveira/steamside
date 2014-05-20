@@ -2,6 +2,7 @@ package br.com.arbo.steamside.collections.system;
 
 import java.util.stream.Stream;
 
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.Tag;
@@ -20,12 +21,13 @@ class Everything {
 						IsSystem.YES);
 	}
 
-	public Stream< ? extends Tag> appsOf(CollectionName collectionName)
+	public Stream< ? extends Tag> appsOf(
+			CollectionName collectionName, AppCriteria criteria)
 	{
 		if (!instance.name().equalsCollectionName(collectionName))
 			throw new NotFound();
 
-		return library.allApps().map(app -> app.appid())
+		return library.allApps(criteria).map(app -> app.appid())
 				.map(TagImpl::new);
 	}
 

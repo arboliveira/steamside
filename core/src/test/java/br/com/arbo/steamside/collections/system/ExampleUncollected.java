@@ -2,6 +2,7 @@ package br.com.arbo.steamside.collections.system;
 
 import java.util.stream.Stream;
 
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.NotFound;
@@ -30,7 +31,14 @@ public class ExampleUncollected {
 		final Stream< ? extends Tag> apps;
 		SystemCollectionsHome sys =
 				new SystemCollectionsHome(library, home);
-		apps = sys.appsOf(new CollectionName("(uncollected)"));
+		apps = sys.appsOf(
+				new CollectionName("(uncollected)"),
+				new AppCriteria() {
+
+					{
+						gamesOnly = true;
+					}
+				});
 		apps.forEach(this::printTag);
 	}
 

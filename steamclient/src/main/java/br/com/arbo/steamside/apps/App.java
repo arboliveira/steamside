@@ -21,6 +21,16 @@ public interface App {
 
 	void forEachCategory(final Consumer<SteamCategory> visitor);
 
+	default boolean isGame()
+	{
+		try {
+			return type().isGame();
+		}
+		catch (MissingFrom_appinfo_vdf e) {
+			return false;
+		}
+	}
+
 	boolean isInCategory(final SteamCategory category);
 
 	@Nullable

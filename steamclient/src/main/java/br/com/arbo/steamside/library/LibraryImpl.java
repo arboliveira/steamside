@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
 import br.com.arbo.steamside.apps.NotFound;
@@ -14,14 +15,15 @@ import br.com.arbo.steamside.types.SteamCategory;
 public class LibraryImpl implements Library {
 
 	@Inject
-	public LibraryImpl(AppsHomeFactory appsHomeFactory) {
+	public LibraryImpl(AppsHomeFactory appsHomeFactory)
+	{
 		this.appsHomeFactory = appsHomeFactory;
 	}
 
 	@Override
-	public Stream<App> allApps()
+	public Stream<App> allApps(AppCriteria criteria)
 	{
-		return apps().stream();
+		return apps().stream(criteria);
 	}
 
 	@Override
@@ -31,9 +33,9 @@ public class LibraryImpl implements Library {
 	}
 
 	@Override
-	public int count()
+	public int count(AppCriteria criteria)
 	{
-		return apps().count();
+		return apps().count(criteria);
 	}
 
 	@Override

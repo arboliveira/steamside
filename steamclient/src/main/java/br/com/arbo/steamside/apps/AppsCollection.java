@@ -4,5 +4,5 @@ import java.util.stream.Stream;
 
 public interface AppsCollection {
 
-	Stream<App> stream();
+	Stream<App> stream(AppCriteria criteria);
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.opersys.username.User;
@@ -18,7 +19,13 @@ public class SessionController {
 	@ResponseBody
 	public SessionDTO session()
 	{
-		final int gamesOwned = library.count();
+		final int gamesOwned = library.count(
+				new AppCriteria() {
+
+					{
+						gamesOnly = true;
+					}
+				});
 		return new SessionDTO(
 				username, kidsmode,
 				String.valueOf(gamesOwned));

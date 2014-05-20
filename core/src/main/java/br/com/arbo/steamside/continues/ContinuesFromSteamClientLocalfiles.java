@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.apps.LastPlayedDescending;
 import br.com.arbo.steamside.library.Library;
@@ -18,7 +19,8 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 	public ContinuesFromSteamClientLocalfiles(
 			final @NonNull FilterContinues continues,
 			final Library library,
-			Settings settings) {
+			Settings settings)
+	{
 		this.library = library;
 		this.continues = continues;
 		this.currentPlatformOnly = settings.currentPlatformOnly();
@@ -30,7 +32,12 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 		// TODO Prioritize games launched by current user
 
 		@SuppressWarnings("resource")
-		final Stream<App> cont = library.allApps().filter(continues);
+		final Stream<App> cont = library.allApps(new AppCriteria() {
+
+			{
+				gamesOnly = true;
+			}
+		}).filter(continues);
 		final Stream<App> end = currentPlatformOnly ?
 				cont.filter(new FilterPlatform()) : cont;
 		return end.sorted(new LastPlayedDescending());

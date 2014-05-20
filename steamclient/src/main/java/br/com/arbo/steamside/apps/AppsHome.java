@@ -9,7 +9,7 @@ public interface AppsHome extends AppsCollection {
 
 	Stream<SteamCategory> allSteamCategories();
 
-	int count();
+	int count(AppCriteria criteria);
 
 	App find(AppId appid) throws NotFound;
 

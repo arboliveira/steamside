@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.arbo.steamside.apps.NotFound;
+import br.com.arbo.steamside.library.GameFinder;
 import br.com.arbo.steamside.library.Library;
 
 public class GameFinderTest {

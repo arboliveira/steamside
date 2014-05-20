@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.SteamCategory;
 
@@ -25,9 +27,10 @@ public class InMemoryAppsHome implements AppsHome {
 	}
 
 	@Override
-	public int count()
+	public int count(AppCriteria criteria)
 	{
-		return apps.size();
+		if (AppCriteria.isAll(criteria)) return apps.size();
+		return (int) select(criteria).count();
 	}
 
 	@Override
@@ -48,9 +51,18 @@ public class InMemoryAppsHome implements AppsHome {
 	}
 
 	@Override
-	public Stream<App> stream()
+	public Stream<App> stream(AppCriteria criteria)
 	{
-		return apps.values().stream();
+		if (AppCriteria.isAll(criteria)) return apps.values().stream();
+		return select(criteria);
+	}
+
+	private Stream<App> select(@NonNull AppCriteria criteria)
+	{
+		Stream<App> s = apps.values().stream();
+		if (criteria.gamesOnly)
+			s = s.filter(App::isGame);
+		return s;
 	}
 
 	final ArrayListMultimap<String, App> categories =

@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
 import br.com.arbo.steamside.apps.App;
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.settings.Settings;
 
 @Controller
 @RequestMapping("favorites")
@@ -25,7 +27,12 @@ public class FavoritesController {
 	public List<AppDTO> favorites()
 	{
 		return new AppsDTO(
-				library.allApps().filter(favorites).map(App::appid),
+				library.allApps(new AppCriteria() {
+
+					{
+						gamesOnly = settings.gamesOnly();
+					}
+				}).filter(favorites).map(App::appid),
 				library, queries).jsonable();
 	}
 
@@ -36,4 +43,6 @@ public class FavoritesController {
 	private Library library;
 	@Inject
 	private CollectionsQueries queries;
+	@Inject
+	Settings settings;
 }
