@@ -32,7 +32,7 @@ var SwitchFavoritesView = Backbone.View.extend({
 		var collections = new SteamsideCollectionInfoCollection();
 		fetch_json(collections, function () {
 			new SteamsideCollectionInfoListView({
-				el: this.$("#collection-pick-list"),
+				el: this.$("#SteamsideCollectionInfoListView"),
 				collection: collections,
 				on_collection_change: that.on_collection_change
 			}).render();
@@ -50,7 +50,10 @@ var SwitchFavoritesView = Backbone.View.extend({
 var SteamsideCollectionInfo = Backbone.Model.extend({
     name: function() {
         return this.get('name');
-    }
+    },
+	count: function() {
+		return this.get('count');
+	}
 });
 
 var SteamsideCollectionInfoCollection = Backbone.Collection.extend({
@@ -68,7 +71,11 @@ var SteamsideCollectionInfoView = Backbone.View.extend({
     render: function() {
         var that = this;
         var choose_el = this.$el.find(".collection-pick-one-name");
-        choose_el.text(this.model.name());
+		var name_text = this.model.name();
+        choose_el.text(name_text);
+		var count_text = this.model.count();
+		var count_el = this.$el.find("#count");
+		count_el.text(count_text);
         return this;
     },
 
@@ -91,7 +98,7 @@ var SteamsideCollectionInfoListView = Backbone.View.extend({
     render: function() {
         var container = this.$el;
 
-        var one_el = this.$(".collection-tile");
+        var one_el = this.$("#SteamsideCollectionInfoView");
         container.empty();
 
         var that = this;

@@ -3,8 +3,10 @@ package br.com.arbo.steamside.collections.system;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.apps.AppCriteria;
+import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.collections.CollectionImpl;
+import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagImpl;
 import br.com.arbo.steamside.data.collections.NotFound;
@@ -31,7 +33,26 @@ class Everything {
 				.map(TagImpl::new);
 	}
 
+	public WithCount withCount()
+	{
+		return new WithCount() {
+
+			@Override
+			public CollectionI collection()
+			{
+				return instance;
+			}
+
+			@Override
+			public int count()
+			{
+				return library.count(null);
+			}
+
+		};
+	}
+
 	final CollectionImpl instance;
 
-	private final Library library;
+	final Library library;
 }

@@ -12,6 +12,8 @@ public interface CollectionsQueries {
 
 	Stream< ? extends CollectionI> all();
 
+	Stream< ? extends WithCount> allWithCount();
+
 	Stream< ? extends Tag> apps(CollectionI collection);
 
 	@NonNull
@@ -20,5 +22,12 @@ public interface CollectionsQueries {
 	boolean isCollected(AppId appid);
 
 	Stream< ? extends CollectionI> tags(AppId app);
+
+	public static interface WithCount {
+
+		CollectionI collection();
+
+		int count();
+	}
 
 }

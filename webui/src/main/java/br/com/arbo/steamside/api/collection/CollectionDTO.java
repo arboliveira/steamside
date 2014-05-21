@@ -6,19 +6,23 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import br.com.arbo.steamside.collections.CollectionI;
+import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 
 @JsonAutoDetect
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class CollectionDTO {
 
-	static CollectionDTO valueOf(CollectionI c)
+	static CollectionDTO valueOf(WithCount w)
 	{
-		return new CollectionDTO(c.name().value, c.isSystem());
+		CollectionI c = w.collection();
+		return new CollectionDTO(c.name().value, c.isSystem(), w.count());
 	}
 
-	CollectionDTO(String name, CollectionI.IsSystem system) {
+	CollectionDTO(String name, CollectionI.IsSystem system, int count)
+	{
 		this.name = name;
 		this.system = system.toDTOString();
+		this.count = String.valueOf(count);
 	}
 
 	@JsonProperty
@@ -26,5 +30,8 @@ public class CollectionDTO {
 
 	@JsonProperty
 	final String system;
+
+	@JsonProperty
+	final String count;
 
 }

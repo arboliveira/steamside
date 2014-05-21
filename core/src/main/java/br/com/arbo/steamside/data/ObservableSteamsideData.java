@@ -64,13 +64,19 @@ public class ObservableSteamsideData implements SteamsideData {
 	}
 
 	class AutoSaveCollections
-	extends CollectionsWritesSpy
-	implements CollectionsData {
+			extends CollectionsWritesSpy
+			implements CollectionsData {
 
 		@Override
 		public Stream< ? extends CollectionI> all()
 		{
 			return realCollections().all();
+		}
+
+		@Override
+		public Stream< ? extends WithCount> allWithCount()
+		{
+			return realCollections().allWithCount();
 		}
 
 		@Override
@@ -101,8 +107,8 @@ public class ObservableSteamsideData implements SteamsideData {
 	}
 
 	class AutoSaveKids
-	extends KidsWritesSpy
-	implements KidsData {
+			extends KidsWritesSpy
+			implements KidsData {
 
 		@Override
 		public Stream<Kid> all()

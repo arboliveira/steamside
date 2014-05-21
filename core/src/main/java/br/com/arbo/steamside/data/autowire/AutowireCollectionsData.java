@@ -35,6 +35,12 @@ public class AutowireCollectionsData implements CollectionsData {
 	}
 
 	@Override
+	public Stream< ? extends WithCount> allWithCount()
+	{
+		return steamside.collections().allWithCount();
+	}
+
+	@Override
 	public Stream< ? extends Tag> apps(CollectionI collection)
 	{
 		return steamside.collections().apps(collection);

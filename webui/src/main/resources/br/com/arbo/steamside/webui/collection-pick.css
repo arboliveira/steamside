@@ -12,6 +12,9 @@
     font-family: "Karla";
 }
 
+#SteamsideCollectionInfoView #count {
+    font-size: x-small;
+}
 
 .collection-pick-steam-category {
     float: left;

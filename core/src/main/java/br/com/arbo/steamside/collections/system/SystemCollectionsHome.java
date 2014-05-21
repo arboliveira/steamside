@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.library.GameFinder;
@@ -30,10 +31,17 @@ public class SystemCollectionsHome {
 				Stream.of(uncollected.instance, everything.instance));
 	}
 
+	public Stream< ? extends WithCount> allWithCount()
+	{
+		return Stream.concat(
+				collections.allWithCount(),
+				Stream.of(uncollected.withCount(), everything.withCount()));
+	}
+
 	public Stream< ? extends Tag> appsOf(
 			CollectionName collectionName,
 			AppCriteria criteria)
-	{
+			{
 		try {
 			return uncollected.appsOf(collectionName, criteria);
 		}
@@ -45,17 +53,17 @@ public class SystemCollectionsHome {
 				return filter(collections.appsOf(collectionName), criteria);
 			}
 		}
-	}
+			}
 
 	private Stream< ? extends Tag> filter(
 			Stream< ? extends Tag> appsOf,
 			AppCriteria criteria)
-	{
+			{
 		if (AppCriteria.isAll(criteria)) return appsOf;
 		Stream< ? extends Tag> s = appsOf;
 		if (criteria.gamesOnly) s = s.filter(this::isGame);
 		return s;
-	}
+			}
 
 	private boolean isGame(AppId appid)
 	{

@@ -37,10 +37,16 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	}
 
 	@Override
+	public Stream< ? extends WithCount> allWithCount()
+	{
+		return objects.stream().map(this::withCount);
+	}
+
+	@Override
 	public Stream< ? extends Tag> apps(CollectionI c)
 	{
 		final CollectionImpl stored = stored(c);
-		return tags.tagsByCollection.tags(stored);
+		return appsIn(stored);
 	}
 
 	@Override
@@ -75,6 +81,30 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	public Stream< ? extends CollectionI> tags(AppId app)
 	{
 		return tags.collectionsByApp.collections(app);
+	}
+
+	Stream<TagImpl> appsIn(final CollectionImpl stored)
+	{
+		return tags.tagsByCollection.tags(stored);
+	}
+
+	WithCount withCount(CollectionImpl c)
+	{
+		return new WithCount() {
+
+			@Override
+			public CollectionI collection()
+			{
+				return c;
+			}
+
+			@Override
+			public int count()
+			{
+				return (int) appsIn(c).count();
+			}
+
+		};
 	}
 
 	private Optional<CollectionImpl> findMaybe(CollectionName name)
