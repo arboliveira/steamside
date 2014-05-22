@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.Tag;
@@ -35,9 +36,9 @@ public class AutowireCollectionsData implements CollectionsData {
 	}
 
 	@Override
-	public Stream< ? extends WithCount> allWithCount()
+	public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
 	{
-		return steamside.collections().allWithCount();
+		return steamside.collections().allWithCount(criteria);
 	}
 
 	@Override

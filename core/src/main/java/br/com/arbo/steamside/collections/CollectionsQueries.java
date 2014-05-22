@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
@@ -12,7 +13,7 @@ public interface CollectionsQueries {
 
 	Stream< ? extends CollectionI> all();
 
-	Stream< ? extends WithCount> allWithCount();
+	Stream< ? extends WithCount> allWithCount(AppCriteria criteria);
 
 	Stream< ? extends Tag> apps(CollectionI collection);
 

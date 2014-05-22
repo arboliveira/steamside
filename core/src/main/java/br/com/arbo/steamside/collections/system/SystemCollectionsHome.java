@@ -31,11 +31,12 @@ public class SystemCollectionsHome {
 				Stream.of(uncollected.instance, everything.instance));
 	}
 
-	public Stream< ? extends WithCount> allWithCount()
+	public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
 	{
 		return Stream.concat(
-				collections.allWithCount(),
-				Stream.of(uncollected.withCount(), everything.withCount()));
+				collections.allWithCount(criteria),
+				Stream.of(uncollected.withCount(criteria),
+						everything.withCount(criteria)));
 	}
 
 	public Stream< ? extends Tag> appsOf(

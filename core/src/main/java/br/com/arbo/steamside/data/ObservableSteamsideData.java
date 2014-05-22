@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CollectionsWrites;
@@ -74,9 +75,9 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public Stream< ? extends WithCount> allWithCount()
+		public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
 		{
-			return realCollections().allWithCount();
+			return realCollections().allWithCount(criteria);
 		}
 
 		@Override

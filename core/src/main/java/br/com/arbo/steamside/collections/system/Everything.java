@@ -25,15 +25,15 @@ class Everything {
 
 	public Stream< ? extends Tag> appsOf(
 			CollectionName collectionName, AppCriteria criteria)
-	{
+			{
 		if (!instance.name().equalsCollectionName(collectionName))
 			throw new NotFound();
 
 		return library.allApps(criteria).map(app -> app.appid())
 				.map(TagImpl::new);
-	}
+			}
 
-	public WithCount withCount()
+	public WithCount withCount(AppCriteria criteria)
 	{
 		return new WithCount() {
 
@@ -46,7 +46,7 @@ class Everything {
 			@Override
 			public int count()
 			{
-				return library.count(null);
+				return library.count(criteria);
 			}
 
 		};

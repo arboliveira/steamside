@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
-import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.settings.Settings;
@@ -77,20 +77,21 @@ public class CollectionController {
 	@ResponseBody
 	public List<CollectionDTO> jsonCollections()
 	{
+		AppCriteria criteria = new AppCriteria() {
+
+			{
+				this.gamesOnly = settings.gamesOnly();
+			}
+		};
 		return sys
-				.allWithCount()
-				.map(this::dto)
+				.allWithCount(criteria)
+				.map(CollectionDTO::valueOf)
 				.collect(
 						LinkedList::new, LinkedList::add,
 						LinkedList::addAll);
 	}
 
-	private CollectionDTO dto(WithCount c)
-	{
-		return CollectionDTO.valueOf(c);
-	}
-
-	private final Settings settings;
+	final Settings settings;
 
 	private final Library library;
 

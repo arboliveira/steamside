@@ -26,7 +26,7 @@ class Uncollected {
 						IsSystem.YES);
 	}
 
-	public WithCount withCount()
+	public WithCount withCount(AppCriteria criteria)
 	{
 		return new WithCount() {
 
@@ -39,19 +39,19 @@ class Uncollected {
 			@Override
 			public int count()
 			{
-				return (int) uncollectedIds(null).count();
+				return (int) uncollectedIds(criteria).count();
 			}
 		};
 	}
 
 	Stream< ? extends Tag> appsOf(
 			CollectionName collectionName, AppCriteria criteria)
-			{
+	{
 		if (!instance.name().equalsCollectionName(collectionName))
 			throw new NotFound();
 
 		return uncollectedIds(criteria).map(TagImpl::new);
-			}
+	}
 
 	Stream<AppId> uncollectedIds(AppCriteria criteria)
 	{

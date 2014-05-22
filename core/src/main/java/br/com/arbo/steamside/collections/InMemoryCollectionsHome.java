@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
@@ -37,7 +38,7 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	}
 
 	@Override
-	public Stream< ? extends WithCount> allWithCount()
+	public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
 	{
 		return objects.stream().map(this::withCount);
 	}
