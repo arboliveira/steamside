@@ -1,26 +1,14 @@
 package br.com.arbo.steamside.vdf;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-
-import org.apache.commons.io.FileUtils;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class Vdf {
 
-	static String readFileToString(File file)
+	public Vdf(final InputStream in)
 	{
-		try {
-			return FileUtils.readFileToString(file);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public Vdf(final File file) {
-		String content = readFileToString(file);
-		StringReader reader = new StringReader(content);
-		root = new RegionImpl(reader);
+		root = new RegionImpl(new BufferedReader(new InputStreamReader(in)));
 	}
 
 	public RegionImpl root()

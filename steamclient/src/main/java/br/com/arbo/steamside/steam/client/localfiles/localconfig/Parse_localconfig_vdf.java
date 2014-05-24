@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
-import java.io.File;
+import java.io.InputStream;
 
 import br.com.arbo.steamside.vdf.NotFound;
 import br.com.arbo.steamside.vdf.Region;
@@ -8,8 +8,9 @@ import br.com.arbo.steamside.vdf.Vdf;
 
 public class Parse_localconfig_vdf {
 
-	public Parse_localconfig_vdf(final File file) {
-		this.content = new Vdf(file);
+	public Parse_localconfig_vdf(final InputStream in)
+	{
+		this.content = new Vdf(in);
 	}
 
 	public Data_localconfig_vdf parse()

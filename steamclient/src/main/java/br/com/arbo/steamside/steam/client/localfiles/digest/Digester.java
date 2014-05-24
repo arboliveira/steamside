@@ -1,6 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.digest;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -60,15 +62,21 @@ public class Digester {
 		}
 	}
 
-	Data_localconfig_vdf digest_localconfig_vdf()
+	Data_localconfig_vdf digest_localconfig_vdf() throws IOException
 	{
 		StopWatch w = new StopWatch();
 		w.start();
 		try {
 			final File file = file_localconfig_vdf.localconfig_vdf();
-			final Parse_localconfig_vdf parser =
-					new Parse_localconfig_vdf(file);
-			return parser.parse();
+			FileInputStream in = new FileInputStream(file);
+			try {
+				final Parse_localconfig_vdf parser =
+						new Parse_localconfig_vdf(in);
+				return parser.parse();
+			}
+			finally {
+				in.close();
+			}
 		}
 		finally {
 			w.stop();
@@ -77,14 +85,21 @@ public class Digester {
 	}
 
 	Data_sharedconfig_vdf digest_sharedconfig_vdf()
+			throws IOException
 	{
 		StopWatch w = new StopWatch();
 		w.start();
 		try {
 			final File file = file_sharedconfig_vdf.sharedconfig_vdf();
-			final Parse_sharedconfig_vdf parser =
-					new Parse_sharedconfig_vdf(file);
-			return parser.parse();
+			FileInputStream in = new FileInputStream(file);
+			try {
+				final Parse_sharedconfig_vdf parser =
+						new Parse_sharedconfig_vdf(in);
+				return parser.parse();
+			}
+			finally {
+				in.close();
+			}
 		}
 		finally {
 			w.stop();
