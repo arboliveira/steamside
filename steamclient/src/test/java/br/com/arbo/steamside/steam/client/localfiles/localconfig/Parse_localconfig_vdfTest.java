@@ -1,16 +1,23 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.junit.Test;
-
 
 public class Parse_localconfig_vdfTest {
 
 	@Test
-	public void test()
+	public void apps_before_apptickets() throws IOException
 	{
-		fail("Not yet implemented");
+		InputStream in = this.getClass().getResourceAsStream(
+				"apps_before_apptickets-appinfo.vdf");
+		try {
+			Parse_localconfig_vdf parse = new Parse_localconfig_vdf(in);
+			parse.parse();
+		}
+		finally {
+			in.close();
+		}
 	}
-
 }
