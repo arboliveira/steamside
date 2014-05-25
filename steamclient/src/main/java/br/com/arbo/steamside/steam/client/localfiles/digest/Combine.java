@@ -1,5 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.digest;
 
+import java.util.HashSet;
+import java.util.stream.Stream;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -23,10 +26,12 @@ class Combine {
 	private static void executable(final AppImpl.Builder b, AppInfo appInfo)
 	{
 		final String executable;
-		try {
+		try
+		{
 			executable = appInfo.executable();
 		}
-		catch (NotAvailableOnThisPlatform ex) {
+		catch (NotAvailableOnThisPlatform ex)
+		{
 			b.notAvailableOnThisPlatform(ex);
 			return;
 		}
@@ -36,17 +41,47 @@ class Combine {
 	Combine(
 			Data_appinfo_vdf d_appinfo,
 			Data_localconfig_vdf d_localconfig,
-			Data_sharedconfig_vdf d_sharedconfig) {
+			Data_sharedconfig_vdf d_sharedconfig)
+	{
 		this.d_appinfo = d_appinfo;
 		this.d_localconfig = d_localconfig;
 		this.d_sharedconfig = d_sharedconfig;
+	}
+
+	void eachAppId(AppId appid)
+	{
+		final AppImpl make = buildFromAppId(appid);
+		home.add(make);
 	}
 
 	void eachAppticket(KV_appticket each)
 	{
 		@NonNull
 		AppId appid = each.appid();
+		eachAppId(appid);
+	}
 
+	AppsHome reduce()
+	{
+		Stream<AppId> appidsFrom_localconfig = d_localconfig.apptickets()
+				.all().map(KV_appticket::appid);
+
+		Stream<AppId> appidsFrom_sharedconfig = d_sharedconfig.apps()
+				.streamAppId();
+
+		final Stream<AppId> appidsToGoIntoLibrary =
+				Stream.concat(appidsFrom_localconfig, appidsFrom_sharedconfig);
+
+		HashSet<AppId> appids = new HashSet<>();
+		appidsToGoIntoLibrary.forEach(appid -> appids.add(appid));
+
+		appids.forEach(this::eachAppId);
+
+		return home;
+	}
+
+	private AppImpl buildFromAppId(AppId appid)
+	{
 		final AppImpl.Builder b =
 				new AppImpl.Builder()
 						.appid(appid.appid());
@@ -55,23 +90,19 @@ class Combine {
 		from_appinfo(appid, b);
 		from_sharedconfig(appid, b);
 
-		home.add(b.make());
-	}
-
-	AppsHome reduce()
-	{
-		d_localconfig.apptickets().forEach(this::eachAppticket);
-
-		return home;
+		final AppImpl make = b.make();
+		return make;
 	}
 
 	private void from_appinfo(AppId appid, final AppImpl.Builder b)
 	{
 		AppInfo appInfo;
-		try {
+		try
+		{
 			appInfo = d_appinfo.get(appid);
 		}
-		catch (MissingFrom_appinfo_vdf e) {
+		catch (MissingFrom_appinfo_vdf e)
+		{
 			b.missingFrom_appinfo_vdf(e);
 			return;
 		}
