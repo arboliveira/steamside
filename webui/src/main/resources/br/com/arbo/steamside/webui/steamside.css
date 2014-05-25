@@ -2,6 +2,11 @@ body {
 	background-color: lightgray;
 }
 
+.vaporware {
+	color: transparent;
+	text-shadow: 0 0 1px rgba(0,0,0,0.5);
+}
+
 .segment {
     display: table;
     table-layout: fixed;
