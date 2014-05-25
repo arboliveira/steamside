@@ -3,6 +3,7 @@ package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import br.com.arbo.steamside.types.AppId;
 
@@ -12,6 +13,15 @@ class KV_apps_Impl implements KV_apps
 	public void add(KV_app_Impl app)
 	{
 		this.put(app.appid, app);
+	}
+
+	@Override
+	public Stream< ? extends KV_app> all()
+	{
+		@SuppressWarnings("unchecked")
+		final Stream<KV_app_Impl> stream = map.values().stream();
+		final Stream< ? extends KV_app> all = stream;
+		return all;
 	}
 
 	@Override
