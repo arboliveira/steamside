@@ -106,13 +106,14 @@ var Steamside_html = {
     render_page: function () {     "use strict";
 
         new SteamsideRouter();
-        // Start Backbone history a necessary step for bookmarkable URL's
-        Backbone.history.start();
 
 		/*
-		Load the entire tileset before you try to render anything.
+		Load the entire tileset before you try to render anything -- including routes.
 		 */
 		SteamsideTileset.loadTileset().done(function(){
+			// Start Backbone history a necessary step for bookmarkable URL's
+			Backbone.history.start();
+
 			new SteamsideView().render();
 		});
     }

@@ -20,7 +20,7 @@ var SteamsideRouter = Backbone.Router.extend({
             // TODO Refresh favorites
         };
 
-		CollectionPickTile.ajaxTile(
+		CollectionPickTile.whenLoaded(
 			function(tile) {
 				var view = new SwitchFavoritesView({
 					el: tile.clone(),

@@ -1,6 +1,6 @@
 var CollectionPickTile = {
 
-	ajaxTile: function (callback) {
+	whenLoaded: function (callback) {
 		SteamsideTileset.ajaxCollectionPick(callback);
 	}
 };
