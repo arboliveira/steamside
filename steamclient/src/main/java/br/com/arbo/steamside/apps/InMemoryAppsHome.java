@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.types.SteamCategory;
+import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 import com.google.common.collect.ArrayListMultimap;
 

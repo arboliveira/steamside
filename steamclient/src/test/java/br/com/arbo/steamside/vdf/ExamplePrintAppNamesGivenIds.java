@@ -7,7 +7,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appi
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 class ExamplePrintAppNamesGivenIds {
 

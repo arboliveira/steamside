@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.data.collections.Duplicate;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class CollectionsXml {
 

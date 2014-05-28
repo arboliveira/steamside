@@ -16,7 +16,7 @@ import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.KidsData;
 import br.com.arbo.steamside.kids.KidsWrites;
 import br.com.arbo.steamside.opersys.username.User;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class ObservableSteamsideData implements SteamsideData {

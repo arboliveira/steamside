@@ -12,8 +12,8 @@ import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.library.Library;
-import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.types.AppName;
+import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppName;
 
 @JsonAutoDetect
 public class AppDTO {

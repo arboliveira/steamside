@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.types;
+package br.com.arbo.steamside.steam.client.types;
 
 public class SteamCategory {
 

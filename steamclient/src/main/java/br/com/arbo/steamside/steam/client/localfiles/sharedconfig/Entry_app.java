@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class Entry_app {
 

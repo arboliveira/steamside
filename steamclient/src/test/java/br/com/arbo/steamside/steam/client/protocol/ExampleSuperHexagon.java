@@ -7,7 +7,7 @@ import br.com.arbo.steamside.library.Libraries;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.opersys.username.FromJava;
 import br.com.arbo.steamside.rungame.RunGame;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class ExampleSuperHexagon {
 

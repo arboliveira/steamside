@@ -18,8 +18,8 @@ import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_app;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_appticket;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Entry_app;
-import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.types.LastPlayed;
+import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.types.LastPlayed;
 
 class Combine {
 

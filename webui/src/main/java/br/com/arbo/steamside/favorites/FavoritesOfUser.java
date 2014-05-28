@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.favorites;
 
-import br.com.arbo.steamside.types.SteamCategory;
+import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 public interface FavoritesOfUser {
 

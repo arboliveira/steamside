@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import br.com.arbo.steamside.types.SteamCategory;
+import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 @JsonAutoDetect
 public class SteamCategoryDTO {

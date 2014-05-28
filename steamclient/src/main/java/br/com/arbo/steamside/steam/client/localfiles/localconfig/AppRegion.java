@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
-import br.com.arbo.steamside.types.LastPlayed;
+import br.com.arbo.steamside.steam.client.types.LastPlayed;
 import br.com.arbo.steamside.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.vdf.Region;
 

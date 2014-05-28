@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.steam.store;
 
-import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.types.AppName;
+import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppName;
 
 public class App {
 

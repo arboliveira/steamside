@@ -12,7 +12,7 @@ import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.rungame.Timeout;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 @Controller

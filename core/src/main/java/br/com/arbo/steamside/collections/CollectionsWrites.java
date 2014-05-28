@@ -6,7 +6,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public interface CollectionsWrites {
 

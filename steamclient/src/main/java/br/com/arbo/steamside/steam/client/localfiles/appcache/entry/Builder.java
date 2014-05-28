@@ -2,8 +2,8 @@ package br.com.arbo.steamside.steam.client.localfiles.appcache.entry;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import br.com.arbo.steamside.types.AppName;
-import br.com.arbo.steamside.types.AppType;
+import br.com.arbo.steamside.steam.client.types.AppName;
+import br.com.arbo.steamside.steam.client.types.AppType;
 
 public class Builder {
 

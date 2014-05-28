@@ -5,8 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import br.com.arbo.steamside.types.AppName;
-import br.com.arbo.steamside.types.AppType;
+import br.com.arbo.steamside.steam.client.types.AppName;
+import br.com.arbo.steamside.steam.client.types.AppType;
 
 public class AppInfo {
 

@@ -9,8 +9,8 @@ import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.apps.AppsHome;
 import br.com.arbo.steamside.apps.AppsHomeFactory;
 import br.com.arbo.steamside.apps.NotFound;
-import br.com.arbo.steamside.types.AppId;
-import br.com.arbo.steamside.types.SteamCategory;
+import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 public class LibraryImpl implements Library {
 

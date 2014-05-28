@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.protocol;
 
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class C_rungameid implements Command {
 

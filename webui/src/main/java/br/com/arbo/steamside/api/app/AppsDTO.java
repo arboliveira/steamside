@@ -9,7 +9,7 @@ import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.library.Library;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class AppsDTO {
 

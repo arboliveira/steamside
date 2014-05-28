@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class KV_apptickets_Impl implements KV_apptickets {
 

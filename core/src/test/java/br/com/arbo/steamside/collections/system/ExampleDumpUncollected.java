@@ -9,7 +9,7 @@ import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.library.Libraries;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.settings.file.SteamsideData_ForExamples;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class ExampleDumpUncollected {

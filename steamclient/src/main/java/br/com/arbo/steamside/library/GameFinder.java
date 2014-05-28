@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.library;
 
 import br.com.arbo.steamside.apps.NotFound;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class GameFinder {
 

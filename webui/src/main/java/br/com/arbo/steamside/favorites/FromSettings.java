@@ -3,7 +3,7 @@ package br.com.arbo.steamside.favorites;
 import javax.inject.Inject;
 
 import br.com.arbo.steamside.opersys.username.User;
-import br.com.arbo.steamside.types.SteamCategory;
+import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 public class FromSettings implements FavoritesOfUser {
 

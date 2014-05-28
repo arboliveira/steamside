@@ -13,7 +13,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.ParseVisitor;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.Parse_appinfo_vdf;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class InMemory_appinfo_vdf implements Data_appinfo_vdf {
 

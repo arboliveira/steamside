@@ -20,7 +20,7 @@ import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.settings.Settings;
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 @Controller

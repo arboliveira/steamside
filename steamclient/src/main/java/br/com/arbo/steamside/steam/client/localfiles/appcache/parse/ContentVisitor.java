@@ -4,8 +4,8 @@ import org.apache.commons.lang3.SystemUtils;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.Builder;
-import br.com.arbo.steamside.types.AppName;
-import br.com.arbo.steamside.types.AppType;
+import br.com.arbo.steamside.steam.client.types.AppName;
+import br.com.arbo.steamside.steam.client.types.AppType;
 import br.com.arbo.steamside.vdf.Candidate;
 import br.com.arbo.steamside.vdf.Region;
 

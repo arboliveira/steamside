@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import br.com.arbo.steamside.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class InMemory_sharedconfig_vdf
 		implements Data_sharedconfig_vdf, R_apps {

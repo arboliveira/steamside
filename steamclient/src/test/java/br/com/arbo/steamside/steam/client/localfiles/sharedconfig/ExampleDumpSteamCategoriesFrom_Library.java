@@ -11,7 +11,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appi
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
-import br.com.arbo.steamside.types.SteamCategory;
+import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 public class ExampleDumpSteamCategoriesFrom_Library {
 
