@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.kids.KidsMode;
-import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
+import br.com.arbo.steamside.steam.client.library.Library;
 
 @Controller
 @RequestMapping(br.com.arbo.steamside.mapping.Session.session)

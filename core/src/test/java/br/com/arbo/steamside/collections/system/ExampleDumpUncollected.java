@@ -5,10 +5,10 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.NotFound;
-import br.com.arbo.steamside.library.Libraries;
-import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.settings.file.SteamsideData_ForExamples;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
+import br.com.arbo.steamside.steam.client.library.Libraries;
+import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 

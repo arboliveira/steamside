@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.library;
+package br.com.arbo.steamside.steam.client.library;
 
 import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.types.AppId;

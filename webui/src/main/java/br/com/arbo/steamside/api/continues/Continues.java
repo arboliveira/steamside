@@ -10,8 +10,8 @@ import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.continues.ContinuesRooster;
-import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.library.Library;
 
 public class Continues {
 

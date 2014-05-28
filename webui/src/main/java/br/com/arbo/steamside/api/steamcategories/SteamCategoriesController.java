@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.steam.client.library.Library;
 
 @Controller
 @RequestMapping("steam-categories")

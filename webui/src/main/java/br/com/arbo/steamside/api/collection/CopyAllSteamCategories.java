@@ -4,8 +4,8 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
-import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
 import br.com.arbo.steamside.types.CollectionName;

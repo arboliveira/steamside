@@ -5,9 +5,9 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
-import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.rungame.RunGame;
 import br.com.arbo.steamside.rungame.ScheduledExecutorServiceFactory;
+import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.client.types.AppId;
 

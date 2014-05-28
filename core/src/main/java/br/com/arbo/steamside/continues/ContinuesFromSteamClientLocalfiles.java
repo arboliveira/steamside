@@ -8,10 +8,10 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.apps.LastPlayedDescending;
-import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
+import br.com.arbo.steamside.steam.client.library.Library;
 
 public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 

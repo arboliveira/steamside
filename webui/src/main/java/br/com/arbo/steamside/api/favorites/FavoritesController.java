@@ -13,10 +13,10 @@ import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.favorites.Favorites;
-import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
+import br.com.arbo.steamside.steam.client.library.Library;
 
 @Controller
 @RequestMapping("favorites")

@@ -6,9 +6,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.collections.CollectionsQueries;
-import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.apps.NotFound;
+import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class AppsDTO {
