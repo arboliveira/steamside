@@ -6,12 +6,12 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.apps.FilterPlatform;
 import br.com.arbo.steamside.apps.LastPlayedDescending;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.settings.Settings;
+import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 
 public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 

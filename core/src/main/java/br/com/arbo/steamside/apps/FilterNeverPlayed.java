@@ -1,5 +1,8 @@
 package br.com.arbo.steamside.apps;
 
+import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.apps.NeverPlayed;
+
 public class FilterNeverPlayed implements Filter {
 
 	@Override

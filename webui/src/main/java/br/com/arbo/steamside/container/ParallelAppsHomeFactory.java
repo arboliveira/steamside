@@ -7,8 +7,8 @@ import javax.inject.Inject;
 
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
 import br.com.arbo.java.util.concurrent.Parallel;
-import br.com.arbo.steamside.apps.AppsHome;
-import br.com.arbo.steamside.apps.AppsHomeFactory;
+import br.com.arbo.steamside.steam.client.apps.AppsHome;
+import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.digest.Digester;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;

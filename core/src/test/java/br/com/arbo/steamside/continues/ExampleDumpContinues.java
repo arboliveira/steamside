@@ -2,11 +2,11 @@ package br.com.arbo.steamside.continues;
 
 import org.mockito.Mockito;
 
-import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.library.Libraries;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.settings.SettingsImpl;
+import br.com.arbo.steamside.steam.client.apps.App;
 
 public class ExampleDumpContinues {
 

@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.apps;
+package br.com.arbo.steamside.steam.client.apps;
 
 import java.util.function.Consumer;
 

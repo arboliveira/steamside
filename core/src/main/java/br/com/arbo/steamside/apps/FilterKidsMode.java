@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.apps;
 
 import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 public class FilterKidsMode implements Filter {

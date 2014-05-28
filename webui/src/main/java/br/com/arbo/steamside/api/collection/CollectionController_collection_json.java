@@ -5,11 +5,11 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
-import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 

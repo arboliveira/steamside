@@ -2,10 +2,10 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.indent.Indent;
 import br.com.arbo.steamside.library.Libraries;
 import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;

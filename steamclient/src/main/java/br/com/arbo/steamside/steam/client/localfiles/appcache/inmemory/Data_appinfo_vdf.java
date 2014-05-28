@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory;
 
-import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.types.AppId;
 

@@ -4,11 +4,11 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.AppCriteria;
-import br.com.arbo.steamside.apps.AppsHome;
-import br.com.arbo.steamside.apps.AppsHomeFactory;
-import br.com.arbo.steamside.apps.NotFound;
+import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.apps.AppCriteria;
+import br.com.arbo.steamside.steam.client.apps.AppsHome;
+import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
+import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
 

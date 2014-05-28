@@ -3,7 +3,7 @@ package br.com.arbo.steamside.library;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import br.com.arbo.steamside.apps.AppsHome;
+import br.com.arbo.steamside.steam.client.apps.AppsHome;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.digest.Digester;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;

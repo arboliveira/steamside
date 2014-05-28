@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.rungame;
 
-import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.protocol.C_rungameid;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;

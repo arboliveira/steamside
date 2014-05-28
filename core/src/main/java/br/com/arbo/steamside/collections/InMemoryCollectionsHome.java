@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
+import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 

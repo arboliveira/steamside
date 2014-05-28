@@ -6,9 +6,9 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
-import br.com.arbo.steamside.apps.App;
-import br.com.arbo.steamside.apps.AppImpl;
 import br.com.arbo.steamside.continues.ContinuesRooster;
+import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.apps.AppImpl;
 
 public class MockContinues implements
 		WebApplicationContextTweak {

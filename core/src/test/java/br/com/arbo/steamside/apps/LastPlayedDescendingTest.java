@@ -5,6 +5,10 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.apps.AppImpl;
+import br.com.arbo.steamside.steam.client.apps.NeverPlayed;
+
 public class LastPlayedDescendingTest {
 
 	@Test

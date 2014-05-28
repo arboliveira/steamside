@@ -2,6 +2,8 @@ package br.com.arbo.steamside.apps;
 
 import java.util.function.Predicate;
 
+import br.com.arbo.steamside.steam.client.apps.App;
+
 public interface Filter extends Predicate<App> {
 
 	@Override

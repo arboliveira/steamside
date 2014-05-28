@@ -18,7 +18,7 @@ public class ExampleDumpOneCollection {
 		new ExampleDumpOneCollection().run();
 	}
 
-	void printTag(Tag tag) throws br.com.arbo.steamside.apps.NotFound
+	void printTag(Tag tag) throws br.com.arbo.steamside.steam.client.apps.NotFound
 	{
 		AppId appid = tag.appid();
 

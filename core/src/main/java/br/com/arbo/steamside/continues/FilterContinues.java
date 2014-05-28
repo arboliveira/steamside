@@ -2,11 +2,11 @@ package br.com.arbo.steamside.continues;
 
 import javax.inject.Inject;
 
-import br.com.arbo.steamside.apps.App;
 import br.com.arbo.steamside.apps.Filter;
 import br.com.arbo.steamside.apps.FilterKidsMode;
 import br.com.arbo.steamside.apps.FilterNeverPlayed;
 import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.steam.client.apps.App;
 
 public class FilterContinues implements Filter {
 

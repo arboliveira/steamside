@@ -6,12 +6,12 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
+import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 

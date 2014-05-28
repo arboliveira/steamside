@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import br.com.arbo.steamside.steam.client.apps.App;
+
 public final class LastPlayedDescending implements Comparator<App> {
 
 	@Override

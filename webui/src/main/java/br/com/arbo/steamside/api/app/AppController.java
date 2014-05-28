@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.rungame.Timeout;
+import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;

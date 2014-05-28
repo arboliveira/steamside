@@ -4,7 +4,9 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
-import br.com.arbo.steamside.apps.AppImpl.Builder;
+import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.apps.AppImpl;
+import br.com.arbo.steamside.steam.client.apps.AppImpl.Builder;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 
 public class FilterPlatformTest {

@@ -9,9 +9,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.arbo.steamside.apps.NotFound;
 import br.com.arbo.steamside.library.GameFinder;
 import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.steam.client.apps.NotFound;
 
 public class GameFinderTest {
 

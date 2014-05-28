@@ -2,7 +2,6 @@ package br.com.arbo.steamside.collections.system;
 
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.collections.CollectionImpl;
@@ -12,6 +11,7 @@ import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagImpl;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.library.Library;
+import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 

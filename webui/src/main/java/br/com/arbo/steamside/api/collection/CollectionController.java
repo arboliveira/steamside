@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
-import br.com.arbo.steamside.apps.AppCriteria;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.library.Library;
 import br.com.arbo.steamside.settings.Settings;
+import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 

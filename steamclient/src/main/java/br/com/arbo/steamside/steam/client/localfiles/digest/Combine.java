@@ -6,10 +6,10 @@ import java.util.stream.Stream;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import br.com.arbo.steamside.apps.AppImpl;
-import br.com.arbo.steamside.apps.AppsHome;
-import br.com.arbo.steamside.apps.InMemoryAppsHome;
-import br.com.arbo.steamside.apps.MissingFrom_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.apps.AppImpl;
+import br.com.arbo.steamside.steam.client.apps.AppsHome;
+import br.com.arbo.steamside.steam.client.apps.InMemoryAppsHome;
+import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
