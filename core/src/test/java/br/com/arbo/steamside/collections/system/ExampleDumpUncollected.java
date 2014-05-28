@@ -12,11 +12,11 @@ import br.com.arbo.steamside.settings.file.SteamsideData_ForExamples;
 import br.com.arbo.steamside.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class ExampleUncollected {
+public class ExampleDumpUncollected {
 
 	public static void main(final String[] args) throws NotFound
 	{
-		new ExampleUncollected().run();
+		new ExampleDumpUncollected().run();
 	}
 
 	void printTag(Tag tag) throws br.com.arbo.steamside.apps.NotFound
