@@ -12,17 +12,10 @@ public class AppInfo {
 
 	public AppInfo(
 			@NonNull final AppName appName,
-			@NonNull AppType appType) {
+			@NonNull AppType appType)
+	{
 		this.name = appName;
 		this.type = appType;
-	}
-
-	public String appnametype()
-	{
-		final String name = name().name;
-		final String type = type().type;
-		if ("game".equals(type)) return name;
-		return name + " (" + type + ")";
 	}
 
 	@NonNull

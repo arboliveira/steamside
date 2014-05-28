@@ -3,6 +3,7 @@ package br.com.arbo.steamside.steam.client.vdf;
 import java.util.Arrays;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.AppInfoAppNameType;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
@@ -18,12 +19,14 @@ class ExamplePrintAppNamesGivenIds {
 						SteamLocations
 								.fromSteamPhysicalFiles()));
 
-		final SysoutAppInfoLine dump = new SysoutAppInfoLine(appinfo);
-
 		Arrays.asList(
 				"22000", "9050", "12800", "10150", "35460"
-				).stream().map(
-						appid -> dump.toInfo(new AppId(appid))
+				)
+				.stream()
+				.map(
+						appid -> SysoutAppInfoLine.toInfo(
+								new AppInfoAppNameType(
+										new AppId(appid), appinfo))
 				).parallel().forEach(
 						System.out::println
 				);

@@ -18,7 +18,8 @@ public class ExampleDumpOneCollection {
 		new ExampleDumpOneCollection().run();
 	}
 
-	void printTag(Tag tag) throws br.com.arbo.steamside.steam.client.apps.NotFound
+	void printTag(Tag tag)
+			throws br.com.arbo.steamside.steam.client.apps.NotFound
 	{
 		AppId appid = tag.appid();
 
@@ -29,7 +30,7 @@ public class ExampleDumpOneCollection {
 	{
 		final Stream< ? extends Tag> apps;
 		CollectionI collection =
-				home.find(new CollectionName("Art"));
+				home.find(new CollectionName("Unplayed"));
 		apps = home.apps(collection);
 		apps.forEach(this::printTag);
 	}

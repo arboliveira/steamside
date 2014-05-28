@@ -6,29 +6,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.AppInfoAppNameType;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 class ExamplePrintAppNamesFrom_sharedconfig_vdf {
 
 	public static void main(final String[] args) throws IOException
 	{
-		final Data_appinfo_vdf appnameFactory = newAppNameFactory();
-
-		final SysoutAppInfoLine dump = new SysoutAppInfoLine(appnameFactory);
-
-		File_sharedconfig_vdf file_sharedconfig_vdf = new File_sharedconfig_vdf(
-				Dirs_userid.from_Dir_userid());
-
-		Data_sharedconfig_vdf data = data(file_sharedconfig_vdf);
-
-		data.apps().streamAppId().map(
-				appid -> dump.toInfo(appid)
-				).forEach(
-						System.out::println
-				);
+		new ExamplePrintAppNamesFrom_sharedconfig_vdf().execute();
 	}
 
 	private static Data_sharedconfig_vdf data(
@@ -37,11 +26,13 @@ class ExamplePrintAppNamesFrom_sharedconfig_vdf {
 	{
 		final File file = file_sharedconfig_vdf.sharedconfig_vdf();
 		FileInputStream in = new FileInputStream(file);
-		try {
+		try
+		{
 			final Parse_sharedconfig_vdf parser = new Parse_sharedconfig_vdf(in);
 			return parser.parse();
 		}
-		finally {
+		finally
+		{
 			in.close();
 		}
 	}
@@ -52,5 +43,29 @@ class ExamplePrintAppNamesFrom_sharedconfig_vdf {
 				SteamLocations
 						.fromSteamPhysicalFiles()));
 	}
+
+	private void execute() throws FileNotFoundException, IOException
+	{
+		this.appnameFactory = newAppNameFactory();
+
+		File_sharedconfig_vdf file_sharedconfig_vdf = new File_sharedconfig_vdf(
+				Dirs_userid.from_Dir_userid());
+
+		Data_sharedconfig_vdf data = data(file_sharedconfig_vdf);
+
+		data.apps().streamAppId().map(
+				this::toInfo
+				).forEach(
+						System.out::println
+				);
+	}
+
+	private String toInfo(AppId appid)
+	{
+		return SysoutAppInfoLine.toInfo(
+				new AppInfoAppNameType(appid, appnameFactory));
+	}
+
+	private Data_appinfo_vdf appnameFactory;
 
 }
