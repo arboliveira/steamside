@@ -8,7 +8,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
-import br.com.arbo.steamside.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
 
 public class Content_appinfo_vdf {
 

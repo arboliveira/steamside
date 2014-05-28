@@ -4,11 +4,11 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.kids.Duplicate;
 import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.KidsData;
 import br.com.arbo.steamside.kids.NotFound;
-import br.com.arbo.steamside.opersys.username.User;
 
 public class AutowireKidsData implements KidsData {
 

@@ -4,10 +4,10 @@ import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h
 import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_NONE;
 import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_NUMTYPES;
 import static br.com.arbo.steamside.steam.client.localfiles.appcache.KeyValues_h.TYPE_STRING;
-import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.KeyValueVisitor.Finished;
-import br.com.arbo.steamside.vdf.NotFound;
-import br.com.arbo.steamside.vdf.Region;
+import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.vdf.NotFound;
+import br.com.arbo.steamside.steam.client.vdf.Region;
+import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor.Finished;
 
 /**
 https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/tier1/KeyValues.cpp

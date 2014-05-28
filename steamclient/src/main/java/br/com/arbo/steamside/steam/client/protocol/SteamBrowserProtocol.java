@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import br.com.arbo.steamside.opersys.username.User;
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.steam.client.executable.KillSteamIfAlreadyRunningInADifferentUserSession;
 
 public class SteamBrowserProtocol {

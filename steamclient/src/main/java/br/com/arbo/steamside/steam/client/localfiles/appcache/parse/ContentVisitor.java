@@ -6,8 +6,8 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vd
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.Builder;
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
-import br.com.arbo.steamside.vdf.Candidate;
-import br.com.arbo.steamside.vdf.Region;
+import br.com.arbo.steamside.steam.client.vdf.Candidate;
+import br.com.arbo.steamside.steam.client.vdf.Region;
 
 class ContentVisitor implements Content_appinfo_vdf_Visitor {
 

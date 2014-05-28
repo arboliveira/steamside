@@ -3,11 +3,11 @@ package br.com.arbo.steamside.steam.client.executable;
 import org.apache.commons.lang3.SystemUtils;
 import org.jvnet.winp.WinProcess;
 
-import br.com.arbo.processes.seek.Criteria;
-import br.com.arbo.processes.seek.NotFound;
-import br.com.arbo.processes.seek.UsernameNot;
-import br.com.arbo.processes.seek.windows.FindProcess;
-import br.com.arbo.steamside.opersys.username.User;
+import br.com.arbo.opersys.processes.seek.Criteria;
+import br.com.arbo.opersys.processes.seek.NotFound;
+import br.com.arbo.opersys.processes.seek.UsernameNot;
+import br.com.arbo.opersys.processes.seek.windows.FindProcess;
+import br.com.arbo.opersys.username.User;
 
 public class KillSteamIfAlreadyRunningInADifferentUserSession {
 

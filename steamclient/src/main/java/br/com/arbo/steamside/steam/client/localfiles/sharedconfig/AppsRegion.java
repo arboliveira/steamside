@@ -2,8 +2,8 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.util.function.Consumer;
 
-import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.Region;
+import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.vdf.Region;
 
 class AppsRegion {
 

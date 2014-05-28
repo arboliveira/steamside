@@ -6,7 +6,8 @@ import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class SysoutAppInfoLine {
 
-	public SysoutAppInfoLine(final Data_appinfo_vdf appinfo) {
+	public SysoutAppInfoLine(final Data_appinfo_vdf appinfo)
+	{
 		this.appinfo = appinfo;
 	}
 
@@ -17,11 +18,13 @@ public class SysoutAppInfoLine {
 
 	private String appname(final AppId appid)
 	{
-		try {
+		try
+		{
 			final AppInfo app = appinfo.get(appid);
 			return app.appnametype();
 		}
-		catch (final MissingFrom_appinfo_vdf e) {
+		catch (final MissingFrom_appinfo_vdf e)
+		{
 			return ">>>>" + e.getMessage() + "<<<<";
 		}
 	}

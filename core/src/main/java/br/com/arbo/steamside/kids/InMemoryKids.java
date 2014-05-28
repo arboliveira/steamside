@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.opersys.username.User;
+import br.com.arbo.opersys.username.User;
 
 public class InMemoryKids implements KidsData {
 

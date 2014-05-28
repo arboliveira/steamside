@@ -2,10 +2,10 @@ package br.com.arbo.steamside.app.jetty;
 
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.container.ContainerFactory;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.spring.WebConfig;
 
 class WebApplicationContextBuilder {

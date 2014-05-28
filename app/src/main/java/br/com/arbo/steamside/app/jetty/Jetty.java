@@ -14,10 +14,10 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.app.port.Port;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.opersys.username.User;
 
 public class Jetty implements LocalWebserver {
 

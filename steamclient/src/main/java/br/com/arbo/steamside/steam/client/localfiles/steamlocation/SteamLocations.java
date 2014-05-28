@@ -2,8 +2,8 @@ package br.com.arbo.steamside.steam.client.localfiles.steamlocation;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import br.com.arbo.org.apache.commons.lang3.FromSystemUtils;
-import br.com.arbo.org.apache.commons.lang3.FromWindowsUtils;
+import br.com.arbo.opersys.userhome.FromSystemUtils;
+import br.com.arbo.opersys.userhome.FromWindowsUtils;
 
 public class SteamLocations {
 

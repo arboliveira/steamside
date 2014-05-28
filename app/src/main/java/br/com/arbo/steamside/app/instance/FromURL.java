@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
 
-import br.com.arbo.steamside.opersys.username.User;
+import br.com.arbo.opersys.username.User;
 
 public class FromURL implements DetectSteamside {
 

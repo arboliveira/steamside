@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.app.jetty;
 
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.opersys.username.User;
 
 public class DirtyHackForSpringWeb {
 

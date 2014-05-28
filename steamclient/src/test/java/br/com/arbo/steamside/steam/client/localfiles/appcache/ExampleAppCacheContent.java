@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
-import br.com.arbo.steamside.vdf.DumpVdfStructure;
-import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.Region;
+import br.com.arbo.steamside.steam.client.vdf.DumpVdfStructure;
+import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.vdf.Region;
 
 class ExampleAppCacheContent {
 

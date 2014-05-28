@@ -3,8 +3,8 @@ package br.com.arbo.steamside.api.session;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.kids.KidsMode;
-import br.com.arbo.steamside.opersys.username.User;
 
 @JsonAutoDetect
 public class SessionDTO {

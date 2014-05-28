@@ -2,6 +2,8 @@ package br.com.arbo.steamside.app.main;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import br.com.arbo.opersys.username.FromJava;
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.app.browser.LetJavaOpen;
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.injection.Container;
@@ -13,8 +15,6 @@ import br.com.arbo.steamside.app.jetty.Jetty;
 import br.com.arbo.steamside.app.jetty.LocalWebserver;
 import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
 import br.com.arbo.steamside.exit.Exit;
-import br.com.arbo.steamside.opersys.username.FromJava;
-import br.com.arbo.steamside.opersys.username.User;
 
 public class ContainerFactory {
 

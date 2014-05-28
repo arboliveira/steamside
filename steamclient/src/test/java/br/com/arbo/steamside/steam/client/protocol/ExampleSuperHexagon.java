@@ -3,10 +3,10 @@ package br.com.arbo.steamside.steam.client.protocol;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import br.com.arbo.steamside.opersys.username.FromJava;
-import br.com.arbo.steamside.rungame.RunGame;
+import br.com.arbo.opersys.username.FromJava;
 import br.com.arbo.steamside.steam.client.library.Libraries;
 import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.rungame.RunGame;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class ExampleSuperHexagon {

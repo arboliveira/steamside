@@ -2,11 +2,11 @@ package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
 import java.io.InputStream;
 
-import br.com.arbo.steamside.vdf.Candidate;
-import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.NotFound;
-import br.com.arbo.steamside.vdf.Region;
-import br.com.arbo.steamside.vdf.Vdf;
+import br.com.arbo.steamside.steam.client.vdf.Candidate;
+import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.vdf.NotFound;
+import br.com.arbo.steamside.steam.client.vdf.Region;
+import br.com.arbo.steamside.steam.client.vdf.Vdf;
 
 public class Parse_localconfig_vdf {
 

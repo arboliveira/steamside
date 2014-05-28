@@ -3,8 +3,8 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 import java.util.Collection;
 import java.util.HashSet;
 
-import br.com.arbo.steamside.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.vdf.Region;
+import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.vdf.Region;
 
 class TagsRegion {
 

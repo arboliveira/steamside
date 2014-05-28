@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CollectionsWrites;
@@ -14,7 +15,6 @@ import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.KidsData;
 import br.com.arbo.steamside.kids.KidsWrites;
-import br.com.arbo.steamside.opersys.username.User;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;

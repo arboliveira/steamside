@@ -4,8 +4,8 @@ import java.io.File;
 
 import org.mockito.Mockito;
 
-import br.com.arbo.org.apache.commons.lang3.ProgramFiles;
-import br.com.arbo.org.apache.commons.lang3.UserHome;
+import br.com.arbo.opersys.userhome.ProgramFiles;
+import br.com.arbo.opersys.userhome.UserHome;
 
 class SteamLocationTestFixture {
 

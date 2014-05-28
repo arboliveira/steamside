@@ -7,7 +7,7 @@ import java.io.File;
 
 import org.junit.Test;
 
-import br.com.arbo.org.apache.commons.lang3.UserHome;
+import br.com.arbo.opersys.userhome.UserHome;
 
 public class LinuxTest {
 

@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
-import br.com.arbo.steamside.vdf.DumpVdfStructure;
+import br.com.arbo.steamside.steam.client.vdf.DumpVdfStructure;
 
 public final class ExampleDumpVdfStructureFrom_sharedconfig_vdf {
 

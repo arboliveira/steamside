@@ -2,8 +2,8 @@ package br.com.arbo.steamside.app.main;
 
 import org.mockito.Mockito;
 
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.app.injection.Container;
-import br.com.arbo.steamside.opersys.username.User;
 
 class DifferentUser implements Part {
 

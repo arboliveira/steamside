@@ -4,7 +4,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import br.com.arbo.org.apache.commons.lang3.UserHome;
+import br.com.arbo.opersys.userhome.UserHome;
 
 public class MacOSX implements SteamLocation {
 

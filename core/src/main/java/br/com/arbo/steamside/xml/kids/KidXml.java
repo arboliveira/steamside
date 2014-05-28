@@ -1,8 +1,8 @@
 package br.com.arbo.steamside.xml.kids;
 
+import br.com.arbo.opersys.username.Username;
 import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.KidImpl;
-import br.com.arbo.steamside.opersys.username.Username;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class KidXml {
