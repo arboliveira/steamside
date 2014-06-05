@@ -20,6 +20,9 @@ var Game = Backbone.Model.extend({
     store: function() {
         return this.get('store');
     },
+    unavailable: function() {
+    	return this.get('unavailable') == 'Y';
+    },
 
 	tagsCollection: function() {
 		return this.tags;
@@ -218,6 +221,11 @@ var GameCardView = Backbone.View.extend({
 		this.$('.game-img').attr('src', img);
 		this.$('.game-link').attr('href', link);
         this.$('.game-tile-store').attr('href', store);
+
+        if (this.model.unavailable()) {
+        	this.$el.addClass('game-unavailable');
+        	this.$('.game-tile-play').hide();
+        }
 
 		var tags = this.model.tagsCollection();
 		new Game_Tag_ListView({

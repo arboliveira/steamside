@@ -93,6 +93,10 @@
 	border-radius: 3px;
 }
 
+.game-unavailable {
+	background-color: lightgray;
+}
+
 .more-button {
 	float: right;
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsQueries;
@@ -12,10 +14,12 @@ import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.AppName;
 
 @JsonAutoDetect
+@JsonSerialize(include = Inclusion.NON_NULL)
 public class AppDTO {
 
 	public static AppDTO valueOf(
@@ -31,11 +35,27 @@ public class AppDTO {
 				.map(CollectionI::name).map(AppTagDTO::new)
 				.forEach(list::add);
 
-		return new AppDTO(appid, app.name(), list);
+		boolean unavailable = isUnavailable(app);
+
+		return new AppDTO(appid, app.name(), list, unavailable);
+	}
+
+	private static boolean isUnavailable(final App app)
+	{
+		try
+		{
+			app.executable();
+			return false;
+		}
+		catch (NotAvailableOnThisPlatform not)
+		{
+			return true;
+		}
 	}
 
 	public AppDTO(
-			final AppId appid, final AppName name, List<AppTagDTO> tags)
+			final AppId appid, final AppName name, List<AppTagDTO> tags,
+			boolean unavailable)
 	{
 		final String s_id = appid.appid;
 		this.appid = s_id;
@@ -51,6 +71,7 @@ public class AppDTO {
 				+ s_id + "/header.jpg";
 		this.store = "http://store.steampowered.com/app/" + s_id;
 		this.tags = tags;
+		this.unavailable = unavailable ? "Y" : null;
 	}
 
 	@JsonProperty
@@ -65,4 +86,6 @@ public class AppDTO {
 	final String store;
 	@JsonProperty
 	final List<AppTagDTO> tags;
+	@JsonProperty
+	final String unavailable;
 }
