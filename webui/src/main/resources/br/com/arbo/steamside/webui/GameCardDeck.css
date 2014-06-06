@@ -118,6 +118,8 @@
 }
 
 .display-collection-name {
+    float: left;
+    margin: 4px;
     padding: 0.25em;
     padding-left: 0.5em;
     padding-right: 2em;

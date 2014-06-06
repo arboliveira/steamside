@@ -65,14 +65,15 @@ var SteamsideCollectionInfoView = Backbone.View.extend({
     on_collection_change: null,
 
     events: {
-        "click .collection-pick-one-name": "collectionClicked"
+        "click #collection-pick-one-name": "collectionClicked"
     },
 
     render: function() {
         var that = this;
-        var choose_el = this.$el.find(".collection-pick-one-name");
+        var choose_el = this.$el.find("#collection-pick-one-name");
 		var name_text = this.model.name();
         choose_el.text(name_text);
+		choose_el.attr('href', '#/collections/' + name_text + '/edit');
 		var count_text = this.model.count();
 		var count_el = this.$el.find("#count");
 		count_el.text(count_text);
