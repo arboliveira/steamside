@@ -43,6 +43,8 @@ var TagView = Backbone.View.extend({
 
 	game: null,
 
+	viewCommandBox: null,
+
 	initialize: function() {
 		this.game = this.options.game;
 	},
@@ -61,9 +63,10 @@ var TagView = Backbone.View.extend({
 		var suggestions = new TagSuggestionsCollection();
 		fetch_json(suggestions, function () {
 			new TagSuggestionsView({
-				el: this.$("#TagSuggestionsView"),
+				el: that.$("#TagSuggestionsView"),
 				collection: suggestions,
-				on_tag_suggestion_select: that.on_tag_suggestion_select
+				on_tag_suggestion_select:
+					function(model){that.on_tag_suggestion_select(model)}
 			}).render();
 		});
 
@@ -100,6 +103,7 @@ var TagView = Backbone.View.extend({
 			on_command_alternate: function(input) { that.on_tag_command_alternate(input) },
 			on_change_input: function(input) { that.on_tag_change_input(input); }
 		});
+		this.viewCommandBox = viewCommandBox;
 
 		var targetEl = this.$('#div-command-box');
 		targetEl.empty();
@@ -144,10 +148,7 @@ var TagView = Backbone.View.extend({
 	},
 
 	on_tag_done: function() {
-		var input_el = this.$('#input-text-command-box');
-		input_el.val('');
-		input_el.focus();
-		this.on_tag_change_input(this);
+		this.viewCommandBox.input_query_setval('');
 	},
 
 	nameForCollection: function(input) {
@@ -168,7 +169,7 @@ var TagView = Backbone.View.extend({
 	},
 
 	on_tag_suggestion_select: function(model) {
-		this.updateWithInputValue(model.name());
+		this.viewCommandBox.input_query_setval(model.name());
 	}
 
 });
@@ -182,7 +183,6 @@ var TagSuggestionView = Backbone.View.extend({
 	},
 
 	render: function() {
-		var that = this;
 		var choose_el = this.$el.find("#tag-name");
 		var name_text = this.model.name();
 		choose_el.text(name_text);
@@ -192,7 +192,7 @@ var TagSuggestionView = Backbone.View.extend({
 	tagClicked: function(e) {
 		e.preventDefault();
 
-		this.on_tag_suggestion_select(this.model);
+		this.options.on_tag_suggestion_select(this.model);
 	}
 });
 

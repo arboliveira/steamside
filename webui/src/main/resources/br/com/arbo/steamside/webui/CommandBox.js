@@ -48,6 +48,13 @@ var CommandBoxView = Backbone.View.extend({
 		return this.input_query_el().val();
 	},
 
+	input_query_setval: function (val) {
+		var input_el = this.input_query_el();
+		input_el.val(val);
+		input_el.focus();
+		this.change_input();
+	},
+
 	doCommand: function () {
 		this.options.on_command(this);
 	},
