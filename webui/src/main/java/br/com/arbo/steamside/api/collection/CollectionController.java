@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.collections.CollectionI;
+import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.TagsData;
@@ -91,6 +92,16 @@ public class CollectionController {
 				.collect(
 						LinkedList::new, LinkedList::add,
 						LinkedList::addAll);
+	}
+
+	@RequestMapping(value = "tag-suggestions.json")
+	@ResponseBody
+	public List<CollectionDTO> jsonTagSuggestions()
+	{
+		LinkedList<CollectionDTO> l = new LinkedList<CollectionDTO>();
+		l.add(new CollectionDTO("Unplayed", IsSystem.NO, 0));
+		l.add(new CollectionDTO("Favorites", IsSystem.NO, 0));
+		return l;
 	}
 
 	final Settings settings;

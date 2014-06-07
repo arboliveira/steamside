@@ -25,6 +25,19 @@ var TagTile = {
 	}
 };
 
+var TagSuggestion = Backbone.Model.extend({
+	name: function() {
+		return this.get('name');
+	}
+});
+
+
+
+var TagSuggestionsCollection = Backbone.Collection.extend({
+	model: TagSuggestion,
+	url: 'api/collection/tag-suggestions.json'
+});
+
 
 var TagView = Backbone.View.extend({
 
@@ -189,7 +202,7 @@ var TagSuggestionsView = Backbone.View.extend({
 	render: function() {
 		var container = this.$el;
 
-		var one_el = this.$("#TagSuggestionsView");
+		var one_el = this.$("#TagSuggestionView");
 		container.empty();
 
 		var that = this;

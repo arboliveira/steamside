@@ -118,8 +118,9 @@
 }
 
 .display-collection-name {
-    float: left;
-    margin: 4px;
+	float: left;
+	margin: 4px;
+
     padding: 0.25em;
     padding-left: 0.5em;
     padding-right: 2em;
@@ -130,6 +131,12 @@
     border-right: 2px solid #555;
     border-bottom: 1px solid #555;
     border-left: 16px outset #999;
+}
+a.display-collection-name {
+	text-decoration: none;	/* hide link underline */
+}
+
+.tag-outer-div {
 }
 
 .game-tag {
