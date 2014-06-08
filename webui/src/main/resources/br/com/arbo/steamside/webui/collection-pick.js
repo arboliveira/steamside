@@ -33,8 +33,7 @@ var SwitchFavoritesView = Backbone.View.extend({
 		fetch_json(collections, function () {
 			new SteamsideCollectionInfoListView({
 				el: this.$("#SteamsideCollectionInfoListView"),
-				collection: collections,
-				on_collection_change: that.on_collection_change
+				collection: collections
 			}).render();
 		});
 
@@ -74,7 +73,8 @@ var SteamsideCollectionInfoView = Backbone.View.extend({
 		var name_text = this.model.name();
         name_el.text(name_text);
 		var link_el = this.$el.find("#collection-pick-one-link");
-		link_el.attr('href', '#/collections/' + name_text + '/edit');
+		var fragment = '#/collections/' + name_text + '/edit';
+		link_el.attr('href', fragment);
 		var count_text = this.model.count();
 		var count_el = this.$el.find("#count");
 		count_el.text(count_text);
@@ -83,11 +83,11 @@ var SteamsideCollectionInfoView = Backbone.View.extend({
 
     collectionClicked: function(e) {
         e.preventDefault();
-        var name = this.model.name();
 
-		Backbone.history.navigate(
-			"#/collections/" + name + "/edit",
-			{trigger: true});
+        var name = this.model.name();
+		var fragment = "#/collections/" + name + "/edit";
+
+		Backbone.history.navigate(fragment, {trigger: true});
     },
 
     category_changed: function() {

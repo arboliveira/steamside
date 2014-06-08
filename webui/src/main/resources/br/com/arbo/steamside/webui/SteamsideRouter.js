@@ -43,10 +43,16 @@ var SteamsideRouter = Backbone.Router.extend({
 
     collections_edit: function(name) {
         var that = this;
+
+		/*
+		 https://github.com/jashkenas/backbone/issues/2566#issuecomment-26065829
+		 */
+		var workaroundFirefox = decodeURIComponent(name);
+
 		CollectionEditTile.whenLoaded(function(tile) {
 			var view = new CollectionEditView({
                 el: tile.clone(),
-                collection_name: name
+                collection_name: workaroundFirefox
             });
             that.setSecondaryView(view);
         });
