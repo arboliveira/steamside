@@ -13,26 +13,32 @@ import br.com.arbo.steamside.kids.NotFound;
 public class AutowireKidsData implements KidsData {
 
 	@Inject
-	public AutowireKidsData(AutowireSteamsideData steamside) {
+	public AutowireKidsData(AutowireSteamsideData steamside)
+	{
 		this.steamside = steamside;
 	}
 
 	@Override
 	public void add(Kid kid) throws Duplicate
 	{
-		steamside.kids().add(kid);
+		reloadable().add(kid);
 	}
 
 	@Override
 	public Stream<Kid> all()
 	{
-		return steamside.kids().all();
+		return reloadable().all();
 	}
 
 	@Override
 	public Kid find(User user) throws NotFound
 	{
-		return steamside.kids().find(user);
+		return reloadable().find(user);
+	}
+
+	private KidsData reloadable()
+	{
+		return steamside.kids();
 	}
 
 	private final AutowireSteamsideData steamside;

@@ -5,10 +5,10 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.collections.CollectionImpl;
-import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagImpl;
+import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.Library;
@@ -17,10 +17,10 @@ import br.com.arbo.steamside.types.CollectionName;
 
 class Uncollected {
 
-	public Uncollected(Library library, CollectionsData collections)
+	public Uncollected(Library library, TagsQueries tags)
 	{
 		this.library = library;
-		this.collections = collections;
+		this.tags = tags;
 		this.instance =
 				new CollectionImpl(new CollectionName("(uncollected)"),
 						IsSystem.YES);
@@ -56,13 +56,13 @@ class Uncollected {
 	Stream<AppId> uncollectedIds(AppCriteria criteria)
 	{
 		return library.allApps(criteria).map(app -> app.appid())
-				.filter(appid -> !collections.isCollected(appid));
+				.filter(appid -> !tags.isCollected(appid));
 	}
 
 	final CollectionImpl instance;
 
-	private final CollectionsData collections;
-
 	private final Library library;
+
+	private final TagsQueries tags;
 
 }

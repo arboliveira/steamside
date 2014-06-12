@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.rungame.Timeout;
@@ -21,10 +21,12 @@ public class AppController {
 
 	private static void letLoadingAnimationRunForJustALittleLonger()
 	{
-		try {
+		try
+		{
 			Thread.sleep(4000);
 		}
-		catch (final InterruptedException e) {
+		catch (final InterruptedException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
@@ -49,13 +51,13 @@ public class AppController {
 			@NonNull @PathVariable final String collection
 			) throws Exception
 	{
-		data.tag(new CollectionName(collection), new AppId(appid));
+		tags.tag(new CollectionName(collection), new AppId(appid));
 	}
 
 	@Inject
 	private RunGameCommand rungame;
 
 	@Inject
-	private CollectionsData data;
+	private TagsData tags;
 
 }

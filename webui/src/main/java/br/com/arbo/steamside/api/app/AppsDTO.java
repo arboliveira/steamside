@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.collections.CollectionsQueries;
+import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.library.Library;
@@ -14,7 +14,7 @@ import br.com.arbo.steamside.steam.client.types.AppId;
 public class AppsDTO {
 
 	public AppsDTO(Stream<AppId> appids, final Library library,
-			CollectionsQueries queries)
+			TagsQueries queries)
 	{
 		this.appids = appids;
 		this.library = library;
@@ -35,14 +35,17 @@ public class AppsDTO {
 
 	private Optional<AppDTO> toOptionalDTO(AppId appid)
 	{
-		try {
-			return Optional.of(AppDTO.valueOf(appid, library, queries));
-		} catch (MissingFrom_appinfo_vdf | NotFound unavailable) {
+		try
+		{
+			return Optional.of(AppDTOFactory.valueOf(appid, library, queries));
+		}
+		catch (MissingFrom_appinfo_vdf | NotFound unavailable)
+		{
 			return Optional.empty();
 		}
 	}
 
-	private final CollectionsQueries queries;
+	private final TagsQueries queries;
 
 	private final Stream<AppId> appids;
 

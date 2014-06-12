@@ -2,7 +2,7 @@ package br.com.arbo.steamside.collections.system;
 
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
+import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.settings.file.SteamsideData_ForExamples;
@@ -19,7 +19,8 @@ public class ExampleDumpUncollected {
 		new ExampleDumpUncollected().run();
 	}
 
-	void printTag(Tag tag) throws br.com.arbo.steamside.steam.client.apps.NotFound
+	void printTag(Tag tag)
+			throws br.com.arbo.steamside.steam.client.apps.NotFound
 	{
 		AppId appid = tag.appid();
 
@@ -42,7 +43,7 @@ public class ExampleDumpUncollected {
 		apps.forEach(this::printTag);
 	}
 
-	InMemoryCollectionsHome home = SteamsideData_ForExamples.fromXmlFile();
+	InMemoryTagsHome home = SteamsideData_ForExamples.fromXmlFile();
 
 	Library library = Libraries.fromSteamPhysicalFiles();
 }

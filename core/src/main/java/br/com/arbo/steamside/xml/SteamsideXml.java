@@ -3,6 +3,7 @@ package br.com.arbo.steamside.xml;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
+import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.kids.InMemoryKids;
@@ -16,7 +17,7 @@ public class SteamsideXml {
 	public static SteamsideXml valueOf(SteamsideData data)
 	{
 		CollectionsXml collectionsXml =
-				CollectionsXmlFactory.valueOf(data.collections());
+				CollectionsXmlFactory.valueOf(data.tags());
 		KidsXml kidsXml = KidsXml.valueOf(data.kids());
 		SteamsideXml xml = new SteamsideXml(collectionsXml, kidsXml);
 		return xml;
@@ -36,9 +37,11 @@ public class SteamsideXml {
 
 	public InMemorySteamsideData toSteamsideData()
 	{
-		InMemoryCollectionsHome c = collections.toCollectionsHome();
+		InMemoryCollectionsHome c = new InMemoryCollectionsHome();
+		InMemoryTagsHome t = new InMemoryTagsHome(c);
+		collections.toCollectionsHome(c, t);
 		InMemoryKids k = kids.toKids();
-		return new InMemorySteamsideData(c, k);
+		return new InMemorySteamsideData(c, t, k);
 	}
 
 	public final CollectionsXml collections;

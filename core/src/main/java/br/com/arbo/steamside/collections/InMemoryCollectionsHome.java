@@ -10,8 +10,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
-import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class InMemoryCollectionsHome implements CollectionsData {
@@ -38,74 +36,15 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	}
 
 	@Override
-	public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
-	{
-		return objects.stream().map(this::withCount);
-	}
-
-	@Override
-	public Stream< ? extends Tag> apps(CollectionI c)
-	{
-		final CollectionImpl stored = stored(c);
-		return appsIn(stored);
-	}
-
-	@Override
 	public CollectionI find(CollectionName name) throws NotFound
 	{
 		return findOrCry(name);
 	}
 
-	@Override
-	public boolean isCollected(AppId appid)
+	CollectionImpl stored(CollectionI c)
 	{
-		return tags.collectionsByApp.isCollected(appid);
-	}
-
-	@Override
-	public void tag(
-			@NonNull final CollectionI c,
-			@NonNull final AppId appid) throws NotFound
-	{
-		CollectionImpl stored = stored(c);
-		tags.doTag(stored, appid);
-	}
-
-	@Override
-	public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
-	{
-		CollectionImpl stored = stored(c);
-		apps.forEach(appid -> tags.doTag(stored, appid));
-	}
-
-	@Override
-	public Stream< ? extends CollectionI> tags(AppId app)
-	{
-		return tags.collectionsByApp.collections(app);
-	}
-
-	Stream<TagImpl> appsIn(final CollectionImpl stored)
-	{
-		return tags.tagsByCollection.tags(stored);
-	}
-
-	WithCount withCount(CollectionImpl c)
-	{
-		return new WithCount() {
-
-			@Override
-			public CollectionI collection()
-			{
-				return c;
-			}
-
-			@Override
-			public int count()
-			{
-				return (int) appsIn(c).count();
-			}
-
-		};
+		guardSystem(c);
+		return findOrCry(c.name());
 	}
 
 	private Optional<CollectionImpl> findMaybe(CollectionName name)
@@ -129,13 +68,5 @@ public class InMemoryCollectionsHome implements CollectionsData {
 		if (maybe.isPresent()) throw new Duplicate();
 	}
 
-	private CollectionImpl stored(CollectionI c)
-	{
-		guardSystem(c);
-		return findOrCry(c.name());
-	}
-
 	private final List<CollectionImpl> objects = new LinkedList<>();
-
-	private final InMemoryTagsHome tags = new InMemoryTagsHome();
 }

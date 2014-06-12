@@ -16,6 +16,7 @@ import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
@@ -28,13 +29,14 @@ import br.com.arbo.steamside.types.CollectionName;
 public class CollectionController {
 
 	@Inject
-	public CollectionController(Library library, CollectionsData data,
-			Settings settings)
+	public CollectionController(Library library, CollectionsData collections,
+			TagsData tags, Settings settings)
 	{
 		this.library = library;
-		this.data = data;
+		this.collections = collections;
+		this.tags = tags;
 		this.settings = settings;
-		this.sys = new SystemCollectionsHome(library, data);
+		this.sys = new SystemCollectionsHome(library, tags);
 	}
 
 	@RequestMapping(value = "{name}/add/{appid}")
@@ -44,21 +46,21 @@ public class CollectionController {
 			throws
 			br.com.arbo.steamside.data.collections.NotFound
 	{
-		data.tag(new CollectionName(name), new AppId(appid));
+		tags.tag(new CollectionName(name), new AppId(appid));
 	}
 
 	@RequestMapping(value = "copy-all-steam-categories")
 	@ResponseBody
 	public void copyAllSteamCategories()
 	{
-		new CopyAllSteamCategories(data, library).execute();
+		new CopyAllSteamCategories(tags, library).execute();
 	}
 
 	@RequestMapping(value = "{name}/create")
 	@ResponseBody
 	public void create(@PathVariable final @NonNull String name)
 	{
-		data.add(new CollectionImpl(new CollectionName(name),
+		collections.add(new CollectionImpl(new CollectionName(name),
 				CollectionI.IsSystem.NO));
 	}
 
@@ -69,7 +71,7 @@ public class CollectionController {
 			br.com.arbo.steamside.data.collections.NotFound
 	{
 		return new CollectionController_collection_json(
-				name, sys, library, data,
+				name, sys, library, tags,
 				settings.gamesOnly()).jsonable();
 	}
 
@@ -95,7 +97,9 @@ public class CollectionController {
 
 	private final Library library;
 
-	private final CollectionsData data;
+	private final CollectionsData collections;
+
+	private final TagsData tags;
 
 	private final SystemCollectionsHome sys;
 

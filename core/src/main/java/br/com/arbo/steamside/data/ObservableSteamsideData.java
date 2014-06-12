@@ -8,8 +8,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.CollectionsWrites;
 import br.com.arbo.steamside.collections.Tag;
+import br.com.arbo.steamside.collections.TagsData;
+import br.com.arbo.steamside.collections.TagsWrites;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.kids.Kid;
@@ -39,13 +42,19 @@ public class ObservableSteamsideData implements SteamsideData {
 	@Override
 	public CollectionsData collections()
 	{
-		return new AutoSaveCollections();
+		return autoSaveCollections;
 	}
 
 	@Override
 	public KidsData kids()
 	{
 		return new AutoSaveKids();
+	}
+
+	@Override
+	public TagsData tags()
+	{
+		return new AutoSaveTags();
 	}
 
 	CollectionsData realCollections()
@@ -56,6 +65,11 @@ public class ObservableSteamsideData implements SteamsideData {
 	KidsData realKids()
 	{
 		return steamside.kids();
+	}
+
+	TagsData realTags()
+	{
+		return steamside.tags();
 	}
 
 	public interface Observer {
@@ -75,34 +89,10 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
-		{
-			return realCollections().allWithCount(criteria);
-		}
-
-		@Override
-		public Stream< ? extends Tag> apps(CollectionI collection)
-		{
-			return realCollections().apps(collection);
-		}
-
-		@Override
 		@NonNull
 		public CollectionI find(CollectionName name) throws NotFound
 		{
 			return realCollections().find(name);
-		}
-
-		@Override
-		public boolean isCollected(AppId appid)
-		{
-			return realCollections().isCollected(appid);
-		}
-
-		@Override
-		public Stream< ? extends CollectionI> tags(AppId app)
-		{
-			return realCollections().tags(app);
 		}
 
 	}
@@ -125,27 +115,47 @@ public class ObservableSteamsideData implements SteamsideData {
 
 	}
 
+	class AutoSaveTags
+			extends TagsWritesSpy
+			implements TagsData {
+
+		@Override
+		public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
+		{
+			return realTags().allWithCount(criteria);
+		}
+
+		@Override
+		public Stream< ? extends Tag> apps(CollectionI collection)
+		{
+			return realTags().apps(collection);
+		}
+
+		@Override
+		public CollectionsData collections()
+		{
+			return autoSaveCollections;
+		}
+
+		@Override
+		public boolean isCollected(AppId appid)
+		{
+			return realTags().isCollected(appid);
+		}
+
+		@Override
+		public Stream< ? extends CollectionI> tags(AppId app)
+		{
+			return realTags().tags(app);
+		}
+	}
+
 	class CollectionsWritesSpy implements CollectionsWrites {
 
 		@Override
 		public void add(@NonNull CollectionI in) throws Duplicate
 		{
 			realCollections().add(in);
-			changed();
-		}
-
-		@Override
-		public void tag(@NonNull CollectionI c, @NonNull AppId appid)
-				throws NotFound
-		{
-			realCollections().tag(c, appid);
-			changed();
-		}
-
-		@Override
-		public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
-		{
-			realCollections().tag(c, apps);
 			changed();
 		}
 
@@ -161,6 +171,27 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 	}
+
+	class TagsWritesSpy implements TagsWrites {
+
+		@Override
+		public void tag(@NonNull CollectionI c, @NonNull AppId appid)
+				throws NotFound
+		{
+			realTags().tag(c, appid);
+			changed();
+		}
+
+		@Override
+		public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
+		{
+			realTags().tag(c, apps);
+			changed();
+		}
+
+	}
+
+	final AutoSaveCollections autoSaveCollections = new AutoSaveCollections();
 
 	private final ArrayList<Observer> listeners = new ArrayList<>(1);
 

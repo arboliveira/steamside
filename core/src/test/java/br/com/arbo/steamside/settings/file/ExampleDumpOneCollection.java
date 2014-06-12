@@ -3,7 +3,7 @@ package br.com.arbo.steamside.settings.file;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.collections.CollectionI;
-import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
+import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.library.Libraries;
@@ -29,13 +29,13 @@ public class ExampleDumpOneCollection {
 	void run()
 	{
 		final Stream< ? extends Tag> apps;
-		CollectionI collection =
-				home.find(new CollectionName("Unplayed"));
+		CollectionI collection = home.collections().find(
+				new CollectionName("Unplayed"));
 		apps = home.apps(collection);
 		apps.forEach(this::printTag);
 	}
 
-	InMemoryCollectionsHome home = SteamsideData_ForExamples.fromXmlFile();
+	InMemoryTagsHome home = SteamsideData_ForExamples.fromXmlFile();
 
 	Library library = Libraries.fromSteamPhysicalFiles();
 }

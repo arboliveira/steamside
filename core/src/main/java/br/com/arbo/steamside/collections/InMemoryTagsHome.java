@@ -9,9 +9,12 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
+import br.com.arbo.steamside.data.collections.NotFound;
+import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class InMemoryTagsHome {
+public class InMemoryTagsHome implements TagsData {
 
 	{
 		appsByCollection = new AppsByCollection();
@@ -19,11 +22,92 @@ public class InMemoryTagsHome {
 		tagsByCollection = new TagsByCollection();
 	}
 
+	public InMemoryTagsHome(InMemoryCollectionsHome collections)
+	{
+		this.collections = collections;
+	}
+
+	@Override
+	public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
+	{
+		return appsByCollection.map.entrySet().stream().map(this::withCount);
+	}
+
+	@Override
+	public Stream< ? extends Tag> apps(CollectionI c)
+	{
+		final CollectionImpl stored = stored(c);
+		return appsIn(stored);
+	}
+
+	@Override
+	public CollectionsData collections()
+	{
+		return collections;
+	}
+
+	@Override
+	public boolean isCollected(AppId appid)
+	{
+		return collectionsByApp.isCollected(appid);
+	}
+
+	@Override
+	public void tag(
+			@NonNull final CollectionI c,
+			@NonNull final AppId appid) throws NotFound
+	{
+		CollectionImpl stored = stored(c);
+		doTag(stored, appid);
+	}
+
+	@Override
+	public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
+	{
+		CollectionImpl stored = stored(c);
+		apps.forEach(appid -> doTag(stored, appid));
+	}
+
+	@Override
+	public Stream< ? extends CollectionI> tags(AppId app)
+	{
+		return collectionsByApp.collections(app);
+	}
+
+	Stream<TagImpl> appsIn(final CollectionImpl stored)
+	{
+		return tagsByCollection.tags(stored);
+	}
+
 	void doTag(CollectionImpl c, @NonNull final AppId appid)
 	{
 		appsByCollection.tag(c, appid);
 		collectionsByApp.tag(c, appid);
 		tagsByCollection.tag(c, appid);
+	}
+
+	WithCount withCount(final Map.Entry<CollectionImpl, Collection<AppId>> e)
+	{
+		return new WithCount() {
+
+			@Override
+			public CollectionI collection()
+			{
+				return e.getKey();
+			}
+
+			@Override
+			public int count()
+			{
+				return e.getValue().size();
+			}
+
+		};
+	}
+
+	private CollectionImpl stored(CollectionI c)
+	{
+		return collections.stored(c);
 	}
 
 	static class AppsByCollection {
@@ -72,7 +156,7 @@ public class InMemoryTagsHome {
 		{
 			if (a == null) throw new NullPointerException();
 			map.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
-			.computeIfAbsent(a, TagImpl::new);
+					.computeIfAbsent(a, TagImpl::new);
 		}
 
 		Stream<TagImpl> tags(CollectionImpl c)
@@ -90,4 +174,7 @@ public class InMemoryTagsHome {
 	final CollectionsByApp collectionsByApp;
 
 	final TagsByCollection tagsByCollection;
+
+	private final InMemoryCollectionsHome collections;
+
 }

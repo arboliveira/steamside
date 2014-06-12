@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.data.autowire;
 
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.kids.KidsData;
 
@@ -9,24 +10,30 @@ public class AutowireSteamsideData implements SteamsideData {
 	@Override
 	public CollectionsData collections()
 	{
-		return data.collections();
+		return reloadable.collections();
 	}
 
 	public SteamsideData get()
 	{
-		return data;
+		return reloadable;
 	}
 
 	@Override
 	public KidsData kids()
 	{
-		return data.kids();
+		return reloadable.kids();
 	}
 
-	public void set(SteamsideData data)
+	public void set(SteamsideData reloaded)
 	{
-		this.data = data;
+		this.reloadable = reloaded;
 	}
 
-	private SteamsideData data;
+	@Override
+	public TagsData tags()
+	{
+		return reloadable.tags();
+	}
+
+	private SteamsideData reloadable;
 }

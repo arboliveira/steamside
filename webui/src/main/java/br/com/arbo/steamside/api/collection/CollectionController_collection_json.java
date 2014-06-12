@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
-import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.Tag;
+import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.Library;
@@ -17,7 +17,7 @@ class CollectionController_collection_json {
 
 	CollectionController_collection_json(
 			String name, SystemCollectionsHome sys, Library library,
-			CollectionsQueries queries, boolean gamesOnly)
+			TagsQueries queries, boolean gamesOnly)
 	{
 		this.name = name;
 		this.sys = sys;
@@ -48,6 +48,6 @@ class CollectionController_collection_json {
 
 	private final SystemCollectionsHome sys;
 
-	private final CollectionsQueries queries;
+	private final TagsQueries queries;
 
 }

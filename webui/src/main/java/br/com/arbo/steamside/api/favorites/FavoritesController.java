@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
-import br.com.arbo.steamside.collections.CollectionsQueries;
+import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.App;
@@ -42,7 +42,7 @@ public class FavoritesController {
 	@Inject
 	private Library library;
 	@Inject
-	private CollectionsQueries queries;
+	private TagsQueries queries;
 	@Inject
 	Settings settings;
 }

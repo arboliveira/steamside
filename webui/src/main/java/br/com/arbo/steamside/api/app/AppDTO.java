@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.api.app;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
@@ -8,50 +7,12 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import br.com.arbo.steamside.collections.CollectionI;
-import br.com.arbo.steamside.collections.CollectionsQueries;
-import br.com.arbo.steamside.steam.client.apps.App;
-import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.apps.NotFound;
-import br.com.arbo.steamside.steam.client.library.Library;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.AppName;
 
 @JsonAutoDetect
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class AppDTO {
-
-	public static AppDTO valueOf(
-			final AppId appid, final Library library,
-			CollectionsQueries queries)
-			throws MissingFrom_appinfo_vdf, NotFound
-	{
-		final App app = library.find(appid);
-
-		List<AppTagDTO> list = new LinkedList<AppTagDTO>();
-
-		queries.tags(appid)
-				.map(CollectionI::name).map(AppTagDTO::new)
-				.forEach(list::add);
-
-		boolean unavailable = isUnavailable(app);
-
-		return new AppDTO(appid, app.name(), list, unavailable);
-	}
-
-	private static boolean isUnavailable(final App app)
-	{
-		try
-		{
-			app.executable();
-			return false;
-		}
-		catch (NotAvailableOnThisPlatform not)
-		{
-			return true;
-		}
-	}
 
 	public AppDTO(
 			final AppId appid, final AppName name, List<AppTagDTO> tags,

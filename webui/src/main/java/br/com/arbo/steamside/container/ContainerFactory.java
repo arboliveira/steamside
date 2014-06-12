@@ -22,6 +22,7 @@ import br.com.arbo.steamside.cloud.autoupload.AutoUpload;
 import br.com.arbo.steamside.cloud.autoupload.ParallelUpload;
 import br.com.arbo.steamside.cloud.dontpad.Dontpad;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.continues.FilterContinues;
@@ -30,6 +31,7 @@ import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.data.autowire.AutowireCollectionsData;
 import br.com.arbo.steamside.data.autowire.AutowireKidsData;
 import br.com.arbo.steamside.data.autowire.AutowireSteamsideData;
+import br.com.arbo.steamside.data.autowire.AutowireTagsData;
 import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
@@ -104,6 +106,8 @@ public class ContainerFactory {
 				.addComponent(
 						CollectionsData.class, AutowireCollectionsData.class)
 				.addComponent(
+						TagsData.class, AutowireTagsData.class)
+				.addComponent(
 						KidsData.class, AutowireKidsData.class);
 
 		container
@@ -156,19 +160,22 @@ public class ContainerFactory {
 
 	private static void registerSteamLocation(final ContainerWeb container)
 	{
-		if (SystemUtils.IS_OS_WINDOWS) {
+		if (SystemUtils.IS_OS_WINDOWS)
+		{
 			container.addComponent(SteamLocation.class, Windows.class);
 			container.addComponent(ProgramFiles.class, FromWindowsUtils.class);
 			return;
 		}
 
-		if (SystemUtils.IS_OS_LINUX) {
+		if (SystemUtils.IS_OS_LINUX)
+		{
 			container.addComponent(SteamLocation.class, Linux.class);
 			container.addComponent(UserHome.class, FromSystemUtils.class);
 			return;
 		}
 
-		if (SystemUtils.IS_OS_MAC_OSX) {
+		if (SystemUtils.IS_OS_MAC_OSX)
+		{
 			container.addComponent(SteamLocation.class, MacOSX.class);
 			container.addComponent(UserHome.class, FromSystemUtils.class);
 			return;

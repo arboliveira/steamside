@@ -4,34 +4,45 @@ import java.util.LinkedList;
 
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
+import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class CollectionsXml {
 
-	public InMemoryCollectionsHome toCollectionsHome()
+	public void toCollectionsHome(
+			InMemoryCollectionsHome collections,
+			InMemoryTagsHome tags)
 	{
-		return new ToCollectionsHome().convert();
+		new ToCollectionsHome(collections, tags).convert();
 	}
 
 	class ToCollectionsHome {
 
-		InMemoryCollectionsHome convert()
+		public ToCollectionsHome(InMemoryCollectionsHome collections,
+				InMemoryTagsHome tags)
+		{
+			this.collections = collections;
+			this.tags = tags;
+		}
+
+		void convert()
 		{
 			collection.stream().forEach(this::addCollection);
-			return home;
 		}
 
 		private void addCollection(CollectionXml cxml) throws Duplicate
 		{
 			final CollectionImpl c = cxml.toCollection();
-			home.add(c);
+			collections.add(c);
 			cxml.tags.tag.stream()
-			.map(appxml -> new AppId(appxml.appid))
-			.forEach(appid -> home.tag(c, appid));
+					.map(appxml -> new AppId(appxml.appid))
+					.forEach(appid -> tags.tag(c, appid));
 		}
 
-		InMemoryCollectionsHome home = new InMemoryCollectionsHome();
+		private final InMemoryCollectionsHome collections;
+
+		private final InMemoryTagsHome tags;
 	}
 
 	public final LinkedList<CollectionXml> collection =
