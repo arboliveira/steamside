@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.xml.collections;
 
 import java.util.LinkedList;
+import java.util.stream.Stream;
 
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
@@ -35,9 +36,12 @@ public class CollectionsXml {
 		{
 			final CollectionImpl c = cxml.toCollection();
 			collections.add(c);
-			cxml.tags.tag.stream()
-			.map(appxml -> new AppId(appxml.appid))
-			.forEach(appid -> tags.tag(c, appid));
+
+			Stream<AppId> appids =
+					cxml.tags.tag.stream()
+							.map(appxml -> new AppId(appxml.appid));
+
+			tags.tag(c, appids);
 		}
 
 		private final InMemoryCollectionsHome collections;

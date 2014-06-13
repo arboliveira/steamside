@@ -77,6 +77,16 @@ public class InMemoryTagsHome implements TagsData {
 	}
 
 	@Override
+	public void tagRemember(
+			@NonNull final CollectionI c,
+			@NonNull final AppId appid) throws NotFound
+	{
+		CollectionImpl stored = stored(c);
+		doTag(stored, appid);
+		recent.tagged(stored);
+	}
+
+	@Override
 	public Stream< ? extends CollectionI> tags(AppId app)
 	{
 		return collectionsByApp.collections(app);
@@ -92,7 +102,6 @@ public class InMemoryTagsHome implements TagsData {
 		appsByCollection.tag(c, appid);
 		collectionsByApp.tag(c, appid);
 		tagsByCollection.tag(c, appid);
-		recent.tagged(c);
 	}
 
 	WithCount withCount(CollectionI c)
@@ -184,7 +193,7 @@ public class InMemoryTagsHome implements TagsData {
 		protected boolean removeEldestEntry(
 				java.util.Map.Entry<String, CollectionImpl> eldest)
 		{
-			return size() > 8;
+			return size() > 6;
 		}
 
 		void tagged(CollectionImpl c)

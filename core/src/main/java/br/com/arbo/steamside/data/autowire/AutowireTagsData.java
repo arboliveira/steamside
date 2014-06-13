@@ -53,6 +53,7 @@ public class AutowireTagsData implements TagsData {
 		return reloadable().recent();
 	}
 
+	@Deprecated
 	@Override
 	public void tag(@NonNull CollectionI c, @NonNull AppId appid)
 			throws NotFound
@@ -64,6 +65,13 @@ public class AutowireTagsData implements TagsData {
 	public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
 	{
 		reloadable().tag(c, apps);
+	}
+
+	@Override
+	public void tagRemember(@NonNull CollectionI c, @NonNull AppId appid)
+			throws NotFound
+	{
+		reloadable().tagRemember(c, appid);
 	}
 
 	@Override

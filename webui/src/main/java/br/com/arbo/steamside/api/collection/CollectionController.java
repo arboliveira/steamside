@@ -58,7 +58,7 @@ public class CollectionController {
 			throws
 			br.com.arbo.steamside.data.collections.NotFound
 	{
-		tags.tag(new CollectionName(name), new AppId(appid));
+		tags.tagRemember(new CollectionName(name), new AppId(appid));
 	}
 
 	@RequestMapping(value = "copy-all-steam-categories")

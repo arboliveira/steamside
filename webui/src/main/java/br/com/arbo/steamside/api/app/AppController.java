@@ -51,7 +51,7 @@ public class AppController {
 			@NonNull @PathVariable final String collection
 			) throws Exception
 	{
-		tags.tag(new CollectionName(collection), new AppId(appid));
+		tags.tagRemember(new CollectionName(collection), new AppId(appid));
 	}
 
 	@Inject

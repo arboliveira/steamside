@@ -13,7 +13,7 @@ public class RecentTagsXml {
 
 		tags.recent().forEach(xml::add);
 
-		return null;
+		return xml;
 	}
 
 	void add(WithCount w)

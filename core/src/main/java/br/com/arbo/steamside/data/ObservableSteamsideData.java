@@ -79,8 +79,8 @@ public class ObservableSteamsideData implements SteamsideData {
 	}
 
 	class AutoSaveCollections
-	extends CollectionsWritesSpy
-	implements CollectionsData {
+			extends CollectionsWritesSpy
+			implements CollectionsData {
 
 		@Override
 		public Stream< ? extends CollectionI> all()
@@ -98,8 +98,8 @@ public class ObservableSteamsideData implements SteamsideData {
 	}
 
 	class AutoSaveKids
-	extends KidsWritesSpy
-	implements KidsData {
+			extends KidsWritesSpy
+			implements KidsData {
 
 		@Override
 		public Stream<Kid> all()
@@ -116,8 +116,8 @@ public class ObservableSteamsideData implements SteamsideData {
 	}
 
 	class AutoSaveTags
-	extends TagsWritesSpy
-	implements TagsData {
+			extends TagsWritesSpy
+			implements TagsData {
 
 		@Override
 		public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
@@ -180,6 +180,7 @@ public class ObservableSteamsideData implements SteamsideData {
 
 	class TagsWritesSpy implements TagsWrites {
 
+		@Deprecated
 		@Override
 		public void tag(@NonNull CollectionI c, @NonNull AppId appid)
 				throws NotFound
@@ -193,6 +194,13 @@ public class ObservableSteamsideData implements SteamsideData {
 		{
 			realTags().tag(c, apps);
 			changed();
+		}
+
+		@Override
+		public void tagRemember(@NonNull CollectionI c, @NonNull AppId appid)
+				throws NotFound
+		{
+			realTags().tagRemember(c, appid);
 		}
 
 	}
