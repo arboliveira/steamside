@@ -2,6 +2,7 @@ package br.com.arbo.steamside.api.app;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.TagsQueries;
@@ -21,11 +22,12 @@ public class AppDTOFactory {
 	{
 		final App app = library.find(appid);
 
-		List<AppTagDTO> list = new LinkedList<AppTagDTO>();
+		final Stream<AppTagDTO> dtos = queries.tags(appid)
+				.map(CollectionI::name).map(AppTagDTO::new);
 
-		queries.tags(appid)
-				.map(CollectionI::name).map(AppTagDTO::new)
-				.forEach(list::add);
+		List<AppTagDTO> list = dtos.collect(
+				LinkedList::new, LinkedList::add,
+				LinkedList::addAll);
 
 		boolean unavailable = isUnavailable(app);
 

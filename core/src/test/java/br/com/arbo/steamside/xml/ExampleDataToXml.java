@@ -4,12 +4,13 @@ import java.util.Arrays;
 
 import javax.xml.bind.JAXB;
 
-import br.com.arbo.steamside.xml.collections.TagXml;
 import br.com.arbo.steamside.xml.collections.CollectionXml;
+import br.com.arbo.steamside.xml.collections.TagXml;
 
 public class ExampleDataToXml {
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args)
+	{
 		final SteamsideXml xml = new SteamsideXml();
 
 		final CollectionXml c = new CollectionXml();
@@ -22,10 +23,14 @@ public class ExampleDataToXml {
 
 		xml.collections.collection.add(c);
 
+		xml.recentTags.tag.add("Unplayed");
+		xml.recentTags.tag.add(c.name);
+
 		JAXB.marshal(xml, System.out);
 	}
 
-	private static TagXml newAppInCollectionXml(final String appid) {
+	private static TagXml newAppInCollectionXml(final String appid)
+	{
 		final TagXml a = new TagXml();
 		a.appid = appid;
 		return a;

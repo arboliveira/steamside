@@ -36,8 +36,8 @@ public class CollectionsXml {
 			final CollectionImpl c = cxml.toCollection();
 			collections.add(c);
 			cxml.tags.tag.stream()
-					.map(appxml -> new AppId(appxml.appid))
-					.forEach(appid -> tags.tag(c, appid));
+			.map(appxml -> new AppId(appxml.appid))
+			.forEach(appid -> tags.tag(c, appid));
 		}
 
 		private final InMemoryCollectionsHome collections;

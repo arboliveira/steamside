@@ -2,6 +2,7 @@ package br.com.arbo.steamside.api.collection;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.collections.CollectionI;
-import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.settings.Settings;
@@ -28,6 +29,16 @@ import br.com.arbo.steamside.types.CollectionName;
 @Controller
 @RequestMapping("collection")
 public class CollectionController {
+
+	private static LinkedList<CollectionDTO> jsonify(
+			final Stream< ? extends WithCount> all)
+	{
+		return all
+				.map(CollectionDTO::valueOf)
+				.collect(
+						LinkedList::new, LinkedList::add,
+						LinkedList::addAll);
+	}
 
 	@Inject
 	public CollectionController(Library library, CollectionsData collections,
@@ -86,22 +97,14 @@ public class CollectionController {
 				this.gamesOnly = settings.gamesOnly();
 			}
 		};
-		return sys
-				.allWithCount(criteria)
-				.map(CollectionDTO::valueOf)
-				.collect(
-						LinkedList::new, LinkedList::add,
-						LinkedList::addAll);
+		return jsonify(sys.allWithCount(criteria));
 	}
 
 	@RequestMapping(value = "tag-suggestions.json")
 	@ResponseBody
 	public List<CollectionDTO> jsonTagSuggestions()
 	{
-		LinkedList<CollectionDTO> l = new LinkedList<CollectionDTO>();
-		l.add(new CollectionDTO("Unplayed", IsSystem.NO, 0));
-		l.add(new CollectionDTO("Favorites", IsSystem.NO, 0));
-		return l;
+		return jsonify(tags.recent());
 	}
 
 	final Settings settings;

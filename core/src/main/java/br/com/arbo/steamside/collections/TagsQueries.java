@@ -23,6 +23,8 @@ public interface TagsQueries {
 
 	boolean isCollected(AppId appid);
 
+	Stream< ? extends WithCount> recent();
+
 	Stream< ? extends CollectionI> tags(AppId app);
 
 }

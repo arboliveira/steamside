@@ -48,6 +48,12 @@ public class AutowireTagsData implements TagsData {
 	}
 
 	@Override
+	public Stream< ? extends WithCount> recent()
+	{
+		return reloadable().recent();
+	}
+
+	@Override
 	public void tag(@NonNull CollectionI c, @NonNull AppId appid)
 			throws NotFound
 	{

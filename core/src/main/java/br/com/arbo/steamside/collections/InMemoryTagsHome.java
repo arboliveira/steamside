@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -25,6 +26,7 @@ public class InMemoryTagsHome implements TagsData {
 	public InMemoryTagsHome(InMemoryCollectionsHome collections)
 	{
 		this.collections = collections;
+		this.recent = new Recent();
 	}
 
 	@Override
@@ -50,6 +52,12 @@ public class InMemoryTagsHome implements TagsData {
 	public boolean isCollected(AppId appid)
 	{
 		return collectionsByApp.isCollected(appid);
+	}
+
+	@Override
+	public Stream< ? extends WithCount> recent()
+	{
+		return recent.values().stream().map(this::withCount);
 	}
 
 	@Override
@@ -84,6 +92,26 @@ public class InMemoryTagsHome implements TagsData {
 		appsByCollection.tag(c, appid);
 		collectionsByApp.tag(c, appid);
 		tagsByCollection.tag(c, appid);
+		recent.tagged(c);
+	}
+
+	WithCount withCount(CollectionI c)
+	{
+		return new WithCount() {
+
+			@Override
+			public CollectionI collection()
+			{
+				return c;
+			}
+
+			@Override
+			public int count()
+			{
+				return 0;
+			}
+
+		};
 	}
 
 	WithCount withCount(final Map.Entry<CollectionImpl, Collection<AppId>> e)
@@ -150,6 +178,22 @@ public class InMemoryTagsHome implements TagsData {
 
 	}
 
+	static class Recent extends LinkedHashMap<String, CollectionImpl> {
+
+		@Override
+		protected boolean removeEldestEntry(
+				java.util.Map.Entry<String, CollectionImpl> eldest)
+		{
+			return size() > 8;
+		}
+
+		void tagged(CollectionImpl c)
+		{
+			this.put(c.name().value, c);
+		}
+
+	}
+
 	static class TagsByCollection {
 
 		void tag(CollectionImpl c, @NonNull AppId a)
@@ -176,5 +220,7 @@ public class InMemoryTagsHome implements TagsData {
 	final TagsByCollection tagsByCollection;
 
 	private final InMemoryCollectionsHome collections;
+
+	private final Recent recent;
 
 }
