@@ -14,6 +14,7 @@ import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.types.CollectionName;
 
 public class InMemoryTagsHome implements TagsData {
 
@@ -60,6 +61,13 @@ public class InMemoryTagsHome implements TagsData {
 		return recent.values().stream().map(this::withCount);
 	}
 
+	public void rememberRecentTag(CollectionName collectionName)
+	{
+		CollectionI c = collections().find(collectionName);
+		CollectionImpl stored = stored(c);
+		doRememberRecentTag(stored);
+	}
+
 	@Override
 	public void tag(
 			@NonNull final CollectionI c,
@@ -83,7 +91,7 @@ public class InMemoryTagsHome implements TagsData {
 	{
 		CollectionImpl stored = stored(c);
 		doTag(stored, appid);
-		recent.tagged(stored);
+		doRememberRecentTag(stored);
 	}
 
 	@Override
@@ -140,6 +148,11 @@ public class InMemoryTagsHome implements TagsData {
 			}
 
 		};
+	}
+
+	private void doRememberRecentTag(CollectionImpl stored)
+	{
+		recent.tagged(stored);
 	}
 
 	private CollectionImpl stored(CollectionI c)
@@ -209,7 +222,7 @@ public class InMemoryTagsHome implements TagsData {
 		{
 			if (a == null) throw new NullPointerException();
 			map.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
-					.computeIfAbsent(a, TagImpl::new);
+			.computeIfAbsent(a, TagImpl::new);
 		}
 
 		Stream<TagImpl> tags(CollectionImpl c)

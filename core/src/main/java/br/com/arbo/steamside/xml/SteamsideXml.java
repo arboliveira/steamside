@@ -46,6 +46,7 @@ public class SteamsideXml {
 		InMemoryCollectionsHome c = new InMemoryCollectionsHome();
 		InMemoryTagsHome t = new InMemoryTagsHome(c);
 		collections.toCollectionsHome(c, t);
+		recentTags.toTagsHome(t);
 		InMemoryKids k = kids.toKids();
 		return new InMemorySteamsideData(c, t, k);
 	}
