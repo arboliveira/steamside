@@ -201,6 +201,7 @@ public class ObservableSteamsideData implements SteamsideData {
 				throws NotFound
 		{
 			realTags().tagRemember(c, appid);
+			changed();
 		}
 
 	}
