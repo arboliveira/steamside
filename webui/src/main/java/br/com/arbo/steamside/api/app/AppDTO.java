@@ -14,6 +14,13 @@ import br.com.arbo.steamside.steam.client.types.AppName;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class AppDTO {
 
+	private static String image(final String s_id)
+	{
+		return "http://cdn.akamai.steamstatic.com/steam/apps/"
+				+ s_id
+				+ "/header.jpg";
+	}
+
 	public AppDTO(
 			final AppId appid, final AppName name, List<AppTagDTO> tags,
 			boolean unavailable)
@@ -28,8 +35,7 @@ public class AppDTO {
 						br.com.arbo.steamside.mapping.App.app,
 						s_id,
 						br.com.arbo.steamside.mapping.App.run);
-		this.image = "http://cdn.steampowered.com/v/gfx/apps/"
-				+ s_id + "/header.jpg";
+		this.image = image(s_id);
 		this.store = "http://store.steampowered.com/app/" + s_id;
 		this.tags = tags;
 		this.unavailable = unavailable ? "Y" : null;
