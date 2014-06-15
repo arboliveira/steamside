@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.AppInfoAppNameType;
@@ -13,11 +14,11 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutApp
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-class ExamplePrintAppNamesFrom_sharedconfig_vdf {
+class ExampleDumpAppNamesFrom_sharedconfig_vdf {
 
 	public static void main(final String[] args) throws IOException
 	{
-		new ExamplePrintAppNamesFrom_sharedconfig_vdf().execute();
+		new ExampleDumpAppNamesFrom_sharedconfig_vdf().execute();
 	}
 
 	private static Data_sharedconfig_vdf data(
@@ -53,9 +54,11 @@ class ExamplePrintAppNamesFrom_sharedconfig_vdf {
 
 		Data_sharedconfig_vdf data = data(file_sharedconfig_vdf);
 
-		data.apps().streamAppId().map(
+		final Stream<AppId> appids = data.apps().streamAppId();
+
+		appids.map(
 				this::toInfo
-				).forEach(
+				).parallel().forEach(
 						System.out::println
 				);
 	}

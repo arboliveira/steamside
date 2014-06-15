@@ -11,7 +11,7 @@ import br.com.arbo.steamside.steam.client.vdf.DumpVdfStructure;
 import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.steam.client.vdf.Region;
 
-class ExampleAppCacheContent {
+class ExampleDumpAppCacheContent {
 
 	public static void main(final String[] args) throws IOException {
 		final FileInputStream f =

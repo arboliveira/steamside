@@ -8,7 +8,7 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
 
-public class ExampleAppCacheParse {
+public class ExampleDumpAppCacheParse {
 
 	public static void main(final String[] args) throws IOException {
 		final FileInputStream f =

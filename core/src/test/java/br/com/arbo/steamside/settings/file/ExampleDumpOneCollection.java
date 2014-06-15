@@ -28,10 +28,12 @@ public class ExampleDumpOneCollection {
 
 	void run()
 	{
-		final Stream< ? extends Tag> apps;
+		final String name = "Hack n' Slash"; //"Unplayed";
+
 		CollectionI collection = home.collections().find(
-				new CollectionName("Unplayed"));
-		apps = home.apps(collection);
+				new CollectionName(name));
+
+		final Stream< ? extends Tag> apps = home.apps(collection);
 		apps.forEach(this::printTag);
 	}
 
