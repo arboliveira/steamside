@@ -1,7 +1,7 @@
 [ {
   "appid" : "12800",
   "name" : "FUEL™",
-    "image": "http://cdn.steampowered.com/v/gfx/apps/12800/header.jpg",
+    "image": "http://cdn.akamai.steamstatic.com/steam/apps/12800/header.jpg",
   "link" : "server-action-placeholder.js"
 }, {
   "appid" : "80300",

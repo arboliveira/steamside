@@ -92,6 +92,8 @@ var HomeView = Backbone.View.extend({
 
 		fetch_json(continues);
 		fetch_json(favorites);
+
+		return this;
 	}
 
 });

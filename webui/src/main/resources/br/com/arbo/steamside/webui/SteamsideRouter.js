@@ -35,7 +35,7 @@ var SteamsideRouter = Backbone.Router.extend(
 				return new HomeView({
 					// el: tile.clone(),
 					sessionModel: sessionModel
-				});
+				}).render();
 			}
 		});
     },
@@ -64,7 +64,7 @@ var SteamsideRouter = Backbone.Router.extend(
 				return new SwitchFavoritesView({
 					el: tile.clone(),
 					on_category_change: on_category_change
-				});
+				}).render();
 			}
 		});
     },
@@ -84,7 +84,7 @@ var SteamsideRouter = Backbone.Router.extend(
 			{
 				return new CollectionNewView({
 					el: tile.clone()
-				});
+				}).render();
 			}
 		});
     },
@@ -111,7 +111,7 @@ var SteamsideRouter = Backbone.Router.extend(
 				return new CollectionEditView({
 					el: tile.clone(),
 					collection_name: workaroundFirefox
-				});
+				}).render();
 			}
 		});
     },
@@ -132,7 +132,7 @@ var SteamsideRouter = Backbone.Router.extend(
 			{
 				return new SteamClientView({
 					el: tile.clone()
-				});
+				}).render();
 			}
 		});
     },
@@ -153,7 +153,7 @@ var SteamsideRouter = Backbone.Router.extend(
 			{
 				return new ExitView({
 					el: tile.clone()
-				});
+				}).render();
 			}
 		});
     },
@@ -180,7 +180,7 @@ var SteamsideRouter = Backbone.Router.extend(
 	setWorldview:  function(view) {
 		if (this.worldview != null) {
 			this.worldview.$el.slideUp();
-			this.worldview.$el.remove();
+//			this.worldview.$el.remove();
 		}
 
 		$('#world').append(view.$el);
