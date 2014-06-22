@@ -1,4 +1,5 @@
-var SteamsideRouter = Backbone.Router.extend({
+var SteamsideRouter = Backbone.Router.extend(
+{
     routes: {
         "": "home",
         "favorites/switch": "switch_favorites",
@@ -8,79 +9,186 @@ var SteamsideRouter = Backbone.Router.extend({
         "exit": "exit"
     },
 
-    home: function() {      "use strict";
-        $('#secondary-view').hide();
-        $('#primary-view').show();
+	sessionModel: null,
+
+	initialize: function(options) {
+		this.sessionModel = options.sessionModel;
+	},
+
+	homeView: { view: null },
+
+	home: function()
+	{
+		var sessionModel = this.sessionModel;
+
+		this.goWorld({
+			viewBox: this.homeView,
+
+			tileLoad: function(whenDone)
+			{
+				// HomeTile.whenLoaded(whenDone);
+				whenDone(null);
+			},
+
+			newView: function(tile)
+			{
+				return new HomeView({
+					// el: tile.clone(),
+					sessionModel: sessionModel
+				});
+			}
+		});
     },
 
-    switch_favorites: function() {   "use strict";
+	switch_favoritesView: { view: null },
+
+	switch_favorites: function() {
         var that = this;
-        var on_category_change = function() {
+
+        var on_category_change = function()
+		{
             that.navigate("", {trigger: true});
             // TODO Refresh favorites
         };
 
-		CollectionPickTile.whenLoaded(
-			function(tile) {
-				var view = new SwitchFavoritesView({
+		this.goWorld({
+			viewBox: this.switch_favoritesView,
+
+			tileLoad: function(whenDone)
+			{
+				CollectionPickTile.whenLoaded(whenDone);
+			},
+
+			newView: function(tile)
+			{
+				return new SwitchFavoritesView({
 					el: tile.clone(),
 					on_category_change: on_category_change
 				});
-				that.setSecondaryView(view);
 			}
-		);
+		});
     },
 
-    collections_new: function() {   "use strict";
-        var that = this;
-		CollectionNewTile.whenLoaded(function(tile) {
-            var view = new CollectionNewView({
-                el: tile.clone()
-            });
-            that.setSecondaryView(view);
-        });
+	collections_newView: { view: null },
+
+    collections_new: function() {
+		this.goWorld({
+			viewBox: this.collections_newView,
+
+			tileLoad: function(whenDone)
+			{
+				CollectionNewTile.whenLoaded(whenDone);
+			},
+
+			newView: function(tile)
+			{
+				return new CollectionNewView({
+					el: tile.clone()
+				});
+			}
+		});
     },
 
-    collections_edit: function(name) {
-        var that = this;
+	collections_editView: { view: null },
 
+	collections_edit: function(name)
+	{
 		/*
 		 https://github.com/jashkenas/backbone/issues/2566#issuecomment-26065829
 		 */
 		var workaroundFirefox = decodeURIComponent(name);
 
-		CollectionEditTile.whenLoaded(function(tile) {
-			var view = new CollectionEditView({
-                el: tile.clone(),
-                collection_name: workaroundFirefox
-            });
-            that.setSecondaryView(view);
-        });
+		this.goWorld({
+			viewBox: this.collections_editView,
+
+			tileLoad: function(whenDone)
+			{
+				CollectionEditTile.whenLoaded(whenDone);
+			},
+
+			newView: function(tile)
+			{
+				return new CollectionEditView({
+					el: tile.clone(),
+					collection_name: workaroundFirefox
+				});
+			}
+		});
     },
 
-    steam_client:  function() {
-        var that = this;
-        SteamClientTile.ajaxTile(function(tile) {
-            that.setSecondaryView(new SteamClientView({
-                el: tile.clone()
-            }));
-        });
+	steamclientView: { view: null },
+
+    steam_client:  function()
+	{
+		this.goWorld({
+			viewBox: this.steamclientView,
+
+			tileLoad: function(whenDone)
+			{
+				SteamClientTile.ajaxTile(whenDone);
+			},
+
+			newView: function(tile)
+			{
+				return new SteamClientView({
+					el: tile.clone()
+				});
+			}
+		});
     },
 
-    exit:  function() {
-        var that = this;
-        ExitTile.ajaxTile(function(tile) {
-            that.setSecondaryView(new ExitView({
-                el: tile.clone()
-            }));
-        });
+	exitView: { view: null },
+
+    exit:  function()
+	{
+		this.goWorld({
+			viewBox: this.exitView,
+
+			tileLoad: function(whenDone)
+			{
+				ExitTile.ajaxTile(whenDone);
+			},
+
+			newView: function(tile)
+			{
+				return new ExitView({
+					el: tile.clone()
+				});
+			}
+		});
     },
 
-    setSecondaryView:  function(view) {   "use strict";
-        var s_el = $('#secondary-view');
-        s_el.empty();
-        s_el.append(view.render().el);
-        s_el.show();
-        $('#primary-view').hide();
-    }
+	goWorld: function(options)
+	{
+		var that = this;
+
+		var whenDone = function(tile)
+		{
+			if (options.viewBox.view == null)
+			{
+				options.viewBox.view = options.newView(tile);
+			}
+
+			that.setWorldview(options.viewBox.view);
+		};
+
+		options.tileLoad(whenDone);
+	},
+
+	worldview: null,
+
+	setWorldview:  function(view) {
+		if (this.worldview != null) {
+			this.worldview.$el.slideUp();
+			this.worldview.$el.remove();
+		}
+
+		$('#world').append(view.$el);
+
+		if (this.worldview != null) {
+			view.$el.slideDown();
+		}
+
+		this.worldview = view;
+	}
 });

@@ -47,15 +47,19 @@ function sideshow(element) {
 	});
 }
 
-var SteamsideView = Backbone.View.extend({
+var HomeView = Backbone.View.extend({
+	el: "#primary-view",
 
-	el: "body",
+	sessionModel: null,
+
+	initialize: function() {
+		this.sessionModel = this.options.sessionModel;
+	},
 
 	continues: null,
 
-	render: function () {  "use strict";
-		var sessionModel = new SessionModel();
-
+	render: function ()
+	{
 		var continues = new ContinueGames();
 		var favorites = new FavoritesCollection();
 
@@ -65,7 +69,13 @@ var SteamsideView = Backbone.View.extend({
 
 		sideshow(this.$el);
 
-		new SessionView({model: sessionModel});
+		new DeckView({
+			el: $('#continues-deck'),
+			collection: continues,
+			continues: continues,
+			kidsMode: this.sessionModel.kidsmode(),
+			on_tag: that.on_tag
+		});
 
 		new DeckView({
 			el: $('#favorites-deck'),
@@ -80,17 +90,26 @@ var SteamsideView = Backbone.View.extend({
 			on_tag: that.on_tag
 		}).render();
 
-		fetch_json(sessionModel, function() {
-			new DeckView({
-				el: $('#continues-deck'),
-				collection: continues,
-				continues: continues,
-				kidsMode: sessionModel.kidsmode(),
-				on_tag: that.on_tag
-			});
-			fetch_json(continues);
-			fetch_json(favorites);
-		});
+		fetch_json(continues);
+		fetch_json(favorites);
+	}
+
+});
+
+var SteamsideView = Backbone.View.extend({
+
+	el: "body",
+
+	sessionModel: null,
+
+	initialize: function() {
+		this.sessionModel = this.options.sessionModel;
+	},
+
+	render: function () {
+		var sessionModel = this.sessionModel;
+
+		new SessionView({model: sessionModel});
 
 		return this;
 	},
@@ -103,19 +122,30 @@ var SteamsideView = Backbone.View.extend({
 
 var Steamside_html = {
 
-    render_page: function () {     "use strict";
+    render_page: function ()
+	{
+		var sessionModel = new SessionModel();
+		fetch_json(sessionModel, function()
+		{
+			new SteamsideRouter({
+				sessionModel: sessionModel
+			});
 
-        new SteamsideRouter();
+			/*
+			Load the entire tileset before you try to render anything -- including routes.
+			 */
+			SteamsideTileset.loadTileset().done(function()
+			{
+				// Start Backbone history a necessary step for bookmarkable URL's
+				Backbone.history.start();
 
-		/*
-		Load the entire tileset before you try to render anything -- including routes.
-		 */
-		SteamsideTileset.loadTileset().done(function(){
-			// Start Backbone history a necessary step for bookmarkable URL's
-			Backbone.history.start();
+				new SteamsideView({
+					sessionModel: sessionModel
+				}).render();
+			});
 
-			new SteamsideView().render();
 		});
+
     }
 
 };
