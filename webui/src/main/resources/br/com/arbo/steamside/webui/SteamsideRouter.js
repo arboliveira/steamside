@@ -1,3 +1,234 @@
+var Worldchanger = Backbone.Model.extend(
+{
+	worldbed_el: null,
+
+	initialize: function(options) {
+		this.worldbed_el = options.worldbed_el;
+	},
+
+	worldview: null,
+
+	goWorld: function(world) {
+		var that = this;
+
+		if (this.worldview == null)
+		{
+			if (!world.isFront()) {
+				that.worldbed_el.children().hide();
+			}
+		}
+
+		world.submitForView(function(view)
+		{
+			that.setWorldview(view);
+		});
+	},
+
+	setWorldview:  function(view) {
+		if (this.worldview != null)
+		{
+			this.worldview.$el.slideUp();
+//			this.worldview.$el.remove();
+		}
+
+		this.worldbed_el.append(view.$el);
+
+		if (this.worldview != null) {
+			view.$el.slideDown();
+		}
+
+		this.worldview = view;
+	}
+
+});
+
+var World = Backbone.Model.extend(
+{
+	view: null,
+
+	worldActions: null,
+
+	initialize: function(options) {
+		this.worldActions = options.worldActions;
+	},
+
+	submitForView: function(whenViewReady)
+	{
+		var that = this;
+
+		var tileLoadDone = function(tile)
+		{
+			if (that.view == null)
+			{
+				that.view = that.newView(tile);
+			}
+
+			whenViewReady(that.view);
+		};
+
+		that.tileLoad(tileLoadDone);
+	},
+
+	respawn: function()
+	{
+		this.view = null;
+	},
+
+	tileLoad: function (whenDone)
+	{
+		return this.worldActions.tileLoad(whenDone);
+	},
+
+	newView: function(tile)
+	{
+		return this.worldActions.newView(tile);
+	},
+
+	isFront: function() {
+		return this.worldActions.isFront();
+	}
+});
+
+var WorldActions = Backbone.Model.extend(
+{
+	newView: function(){},
+
+	tileLoad: function(){},
+
+	isFront: function()
+	{
+		return false;
+	}
+}
+);
+
+var HomeWorld = WorldActions.extend(
+{
+	sessionModel: null,
+
+	initialize: function(options)
+	{
+		this.sessionModel = options.sessionModel;
+	},
+
+	tileLoad: function(whenDone)
+	{
+		// HomeTile.whenLoaded(whenDone);
+		whenDone(null);
+	},
+
+	newView: function(tile)
+	{
+		return new HomeView({
+			// el: tile.clone(),
+			sessionModel: this.sessionModel
+		}).render();
+	},
+
+	isFront: function()
+	{
+		return true;
+	}
+}
+);
+
+var CollectionsEditWorld = WorldActions.extend(
+{
+	collection_name: null,
+
+	respawnWithCollection: function(collection_name) {
+		this.collection_name = collection_name;
+	},
+
+	tileLoad: function(whenDone)
+	{
+		CollectionEditTile.whenLoaded(whenDone);
+	},
+
+	newView: function(tile)
+	{
+		return new CollectionEditView({
+			el: tile.clone(),
+			collection_name: this.collection_name
+		}).render();
+	}
+}
+);
+
+var CollectionsNewWorld = WorldActions.extend(
+{
+	tileLoad: function(whenDone)
+	{
+		CollectionNewTile.whenLoaded(whenDone);
+	},
+
+	newView: function(tile)
+	{
+		return new CollectionNewView({
+			el: tile.clone()
+		}).render();
+	}
+}
+);
+
+var SwitchFavoritesWorld = WorldActions.extend(
+{
+	on_category_change: null,
+
+	initialize: function(options)
+	{
+		this.on_category_change = options.on_category_change;
+	},
+
+	tileLoad: function(whenDone)
+	{
+		CollectionPickTile.whenLoaded(whenDone);
+	},
+
+	newView: function(tile)
+	{
+		var that = this;
+
+		return new SwitchFavoritesView({
+			el: tile.clone(),
+			on_category_change: function() {that.on_category_change();}
+		}).render();
+	}
+}
+);
+
+var SteamClientWorld = WorldActions.extend(
+{
+	tileLoad: function(whenDone)
+	{
+		SteamClientTile.ajaxTile(whenDone);
+	},
+
+	newView: function(tile)
+	{
+		return new SteamClientView({
+			el: tile.clone()
+		}).render();
+	}
+}
+);
+
+var ExitWorld = WorldActions.extend(
+{
+	tileLoad: function(whenDone)
+	{
+		ExitTile.ajaxTile(whenDone);
+	},
+
+	newView: function(tile)
+	{
+		return new ExitView({
+			el: tile.clone()
+		}).render();
+	}
+}
+);
+
 var SteamsideRouter = Backbone.Router.extend(
 {
     routes: {
@@ -9,87 +240,56 @@ var SteamsideRouter = Backbone.Router.extend(
         "exit": "exit"
     },
 
-	sessionModel: null,
+	worldchanger: null,
 
-	initialize: function(options) {
-		this.sessionModel = options.sessionModel;
+	homeView: null,
+
+	switch_favoritesView: null,
+
+	collections_newView: null,
+
+	worldCollectionsEdit: null,
+
+	collections_editView: null,
+
+	steamclientView: null,
+
+	exitView: null,
+
+	initialize: function(options)
+	{
+		var worldbed_el = $('#world');
+
+		this.worldchanger = new Worldchanger({worldbed_el: worldbed_el});
+
+		this.homeView = new World({worldActions:this.newHomeView(options.sessionModel)});
+
+		this.switch_favoritesView = new World({worldActions:this.newSwitch_favoritesView()});
+
+		this.collections_newView = new World({worldActions:new CollectionsNewWorld()});
+
+		this.worldCollectionsEdit = new CollectionsEditWorld();
+		this.collections_editView = new World({worldActions:this.worldCollectionsEdit});
+
+		this.steamclientView = new World({worldActions:new SteamClientWorld()});
+
+		this.exitView = new World({worldActions:new ExitWorld()});
 	},
-
-	homeView: { view: null },
 
 	home: function()
 	{
-		var sessionModel = this.sessionModel;
-
-		this.goWorld({
-			viewBox: this.homeView,
-
-			tileLoad: function(whenDone)
-			{
-				// HomeTile.whenLoaded(whenDone);
-				whenDone(null);
-			},
-
-			newView: function(tile)
-			{
-				return new HomeView({
-					// el: tile.clone(),
-					sessionModel: sessionModel
-				}).render();
-			}
-		});
+		this.worldchanger.goWorld(this.homeView);
     },
 
-	switch_favoritesView: { view: null },
+	switch_favorites: function()
+	{
+		this.worldchanger.goWorld(this.switch_favoritesView);
+	},
 
-	switch_favorites: function() {
-        var that = this;
-
-        var on_category_change = function()
-		{
-            that.navigate("", {trigger: true});
-            // TODO Refresh favorites
-        };
-
-		this.goWorld({
-			viewBox: this.switch_favoritesView,
-
-			tileLoad: function(whenDone)
-			{
-				CollectionPickTile.whenLoaded(whenDone);
-			},
-
-			newView: function(tile)
-			{
-				return new SwitchFavoritesView({
-					el: tile.clone(),
-					on_category_change: on_category_change
-				}).render();
-			}
-		});
-    },
-
-	collections_newView: { view: null },
-
-    collections_new: function() {
-		this.goWorld({
-			viewBox: this.collections_newView,
-
-			tileLoad: function(whenDone)
-			{
-				CollectionNewTile.whenLoaded(whenDone);
-			},
-
-			newView: function(tile)
-			{
-				return new CollectionNewView({
-					el: tile.clone()
-				}).render();
-			}
-		});
-    },
-
-	collections_editView: { view: null },
+	collections_new: function()
+	{
+		this.worldchanger.goWorld(this.collections_newView);
+	},
 
 	collections_edit: function(name)
 	{
@@ -98,97 +298,41 @@ var SteamsideRouter = Backbone.Router.extend(
 		 */
 		var workaroundFirefox = decodeURIComponent(name);
 
-		this.goWorld({
-			viewBox: this.collections_editView,
+		this.worldCollectionsEdit.respawnWithCollection(workaroundFirefox);
 
-			tileLoad: function(whenDone)
-			{
-				CollectionEditTile.whenLoaded(whenDone);
-			},
-
-			newView: function(tile)
-			{
-				return new CollectionEditView({
-					el: tile.clone(),
-					collection_name: workaroundFirefox
-				}).render();
-			}
-		});
-    },
-
-	steamclientView: { view: null },
-
-    steam_client:  function()
-	{
-		this.goWorld({
-			viewBox: this.steamclientView,
-
-			tileLoad: function(whenDone)
-			{
-				SteamClientTile.ajaxTile(whenDone);
-			},
-
-			newView: function(tile)
-			{
-				return new SteamClientView({
-					el: tile.clone()
-				}).render();
-			}
-		});
-    },
-
-	exitView: { view: null },
-
-    exit:  function()
-	{
-		this.goWorld({
-			viewBox: this.exitView,
-
-			tileLoad: function(whenDone)
-			{
-				ExitTile.ajaxTile(whenDone);
-			},
-
-			newView: function(tile)
-			{
-				return new ExitView({
-					el: tile.clone()
-				}).render();
-			}
-		});
-    },
-
-	goWorld: function(options)
-	{
-		var that = this;
-
-		var whenDone = function(tile)
-		{
-			if (options.viewBox.view == null)
-			{
-				options.viewBox.view = options.newView(tile);
-			}
-
-			that.setWorldview(options.viewBox.view);
-		};
-
-		options.tileLoad(whenDone);
+		this.collections_editView.respawn();
+		this.worldchanger.goWorld(this.collections_editView);
 	},
 
-	worldview: null,
+	steam_client:  function()
+	{
+		this.worldchanger.goWorld(this.steamclientView);
+	},
 
-	setWorldview:  function(view) {
-		if (this.worldview != null) {
-			this.worldview.$el.slideUp();
-//			this.worldview.$el.remove();
-		}
+	exit:  function()
+	{
+		this.worldchanger.goWorld(this.exitView);
+	},
 
-		$('#world').append(view.$el);
+	newHomeView: function(sessionModel)
+	{
+		return new HomeWorld(
+		{
+			sessionModel: sessionModel
+		});
+	},
 
-		if (this.worldview != null) {
-			view.$el.slideDown();
-		}
+	newSwitch_favoritesView: function()
+	{
+		var router = this;
 
-		this.worldview = view;
+		return new SwitchFavoritesWorld(
+		{
+			on_category_change: function()
+			{
+				router.navigate("", {trigger: true});
+				// TODO Refresh favorites
+			}
+		});
 	}
 });

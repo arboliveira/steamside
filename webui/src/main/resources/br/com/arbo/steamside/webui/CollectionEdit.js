@@ -17,7 +17,12 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 
 var CollectionEditView = Backbone.View.extend({
 
-    render: function() {		"use strict";
+	initialize: function(options)
+	{
+		this.collection_name = options.collection_name;
+	},
+
+	render: function() {		"use strict";
 
 		var that = this;
 
@@ -38,7 +43,7 @@ var CollectionEditView = Backbone.View.extend({
 			on_tag: function(game, segmentWithGameCard) { TagTile.on_tag(game, segmentWithGameCard) }
 		});
 
-        var name = that.options.collection_name;
+        var name = that.collection_name;
         this.$("#display-collection-name").text(name);
 
 		var inCollection = new SteamsideCollectionApps();
@@ -161,7 +166,7 @@ var CollectionEditView = Backbone.View.extend({
 	},
 
 	on_add_click: function(appid) {
-        var name = this.options.collection_name;
+        var name = this.collection_name;
         var aUrl = "api/collection/" + name + "/add/" + appid;
 
         var that = this;

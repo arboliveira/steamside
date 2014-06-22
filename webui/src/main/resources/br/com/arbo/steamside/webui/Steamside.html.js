@@ -52,8 +52,8 @@ var HomeView = Backbone.View.extend({
 
 	sessionModel: null,
 
-	initialize: function() {
-		this.sessionModel = this.options.sessionModel;
+	initialize: function(options) {
+		this.sessionModel = options.sessionModel;
 	},
 
 	continues: null,
@@ -94,6 +94,11 @@ var HomeView = Backbone.View.extend({
 		fetch_json(favorites);
 
 		return this;
+	},
+
+	on_tag: function(game, segmentWithGameCard)
+	{
+		TagTile.on_tag(game, segmentWithGameCard);
 	}
 
 });
@@ -111,14 +116,9 @@ var SteamsideView = Backbone.View.extend({
 	render: function () {
 		var sessionModel = this.sessionModel;
 
-		new SessionView({model: sessionModel});
+		new SessionView({model: sessionModel}).render();
 
 		return this;
-	},
-
-	on_tag: function(game, segmentWithGameCard)
-	{
-		TagTile.on_tag(game, segmentWithGameCard);
 	}
 });
 
