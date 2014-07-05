@@ -1,16 +1,109 @@
-.steamside-body-background {
-	background-color: lightgray;
+.steamside-body-background
+{
+	/*
+	http://lea.verou.me/css3patterns/#cicada-stripes
+	*/
+
+	background-color: #026873;
+	background-image: linear-gradient(90deg, rgba(255,255,255,.07) 50%, transparent 50%),
+	linear-gradient(90deg, rgba(255,255,255,.13) 50%, transparent 50%),
+	linear-gradient(90deg, transparent 50%, rgba(255,255,255,.17) 50%),
+	linear-gradient(90deg, transparent 50%, rgba(255,255,255,.19) 50%);
+	background-size: 13px, 29px, 37px, 53px;
+
 }
 
-.vaporware {
+.page-header
+{
+	margin: 0px auto;
+	width: 98%;
+}
+
+.page-header-logo-section
+{
+	float:left;
+}
+
+.page-header-logo
+{
+	float:left;
+}
+
+.page-header-stamp
+{
+	background-color: aquamarine;
+	border-radius: 4px;
+	border: crimson solid 2px;
+	box-shadow: 0 0 0 1px navy;
+	padding: 8px;
+}
+
+.page-header-name
+{
+	float:left;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.page-header-name-text
+{
+	font-family: Jura;
+	font-weight: bold;
+	font-size: 2em;
+	color: darkred;
+}
+
+.page-header-banner-section
+{
+	width: 65%;
+	float: right;
+}
+
+.page-header-navigation-bar
+{
+	display: table;
+	list-style: none;
+	width: 95%;
+	float: none;
+	/*
+	width: 65%;
+	float: right;
+	*/
+}
+
+.page-header-navigation-bar li
+{
+	display: table-cell;
+	text-align: center;
+	font-family: Arvo;
+	font-size: 1em;
+	width: 20%;
+	float: none;
+}
+
+.page-header-navigation-bar li a
+{
+	text-decoration: none;	/* hide link underline */
+}
+
+.page-header-separator
+{
+	clear: both;
+	/* border: 1px dotted lightgray; */
+	height: 0px;
+}
+
+.vaporware
+{
 	color: transparent;
 	text-shadow: 0 0 1px rgba(0,0,0,0.5);
 }
 
-.segment {
+.segment
+{
     display: table;
     table-layout: fixed;
-    width: 100%;
+    width: 98%;
     clear: both;
     overflow: auto;
     padding: 0;
@@ -23,14 +116,16 @@
     box-shadow: 2px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
-.side-header {
+.side-header
+{
     margin: 0;
     padding: 0.8em;
     padding-top: 0.6em;
     padding-bottom: 0.4em;
 }
 
-.side-header-at-left {
+.side-header-at-left
+{
     /*
     side-header-at-left.width + GAP = content-at-right.margin-left
     */
@@ -122,7 +217,14 @@
     margin-left: 106px;
 }
 
-.footer {
+.page-footer
+{
+	width: 98%;
+	padding: 4px;
+}
+
+.footer
+{
     font-family: Karla;
     font-size: xx-small;
     text-align: left;

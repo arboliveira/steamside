@@ -12,15 +12,6 @@ var SessionView = Backbone.View.extend({
         this.$('#version').text(m.versionOfSteamside());
         this.$('#number-of-games').text(m.gamesOwned());
 
-        // TODO var username = m.username();
-        var kidsMode = m.kidsmode();
-
-        if (kidsMode) {
-            $("#page-header-navigation-bar").hide();
-            $("#search-segment").hide();
-            $("#favorites-segment").hide();
-            $("#collections-segment").hide();
-        }
         return this;
     }
 });
@@ -109,16 +100,39 @@ var SteamsideView = Backbone.View.extend({
 
 	sessionModel: null,
 
-	initialize: function() {
+	initialize: function()
+	{
 		this.sessionModel = this.options.sessionModel;
 	},
 
-	render: function () {
+	render: function ()
+	{
 		var sessionModel = this.sessionModel;
+
+		// TODO var username = sessionModel.username();
+		var kidsMode = sessionModel.kidsmode();
+
+		this.applyKidsMode(kidsMode);
 
 		new SessionView({model: sessionModel}).render();
 
+		this.$el.show();
+
 		return this;
+	},
+
+	applyKidsMode: function(kidsMode)
+	{
+		if (kidsMode) {
+			this.$el
+				.removeClass("steamside-body-background")
+				.addClass("steamside-kids-body-background");
+
+			$("#page-header-navigation-bar").hide();
+			$("#search-segment").hide();
+			$("#favorites-segment").hide();
+			$("#collections-segment").hide();
+		}
 	}
 });
 
@@ -127,6 +141,7 @@ var Steamside_html = {
     render_page: function ()
 	{
 		var sessionModel = new SessionModel();
+
 		fetch_json(sessionModel, function()
 		{
 			new SteamsideRouter({
@@ -134,16 +149,15 @@ var Steamside_html = {
 			});
 
 			/*
-			Load the entire tileset before you try to render anything -- including routes.
+			   Load the entire tileset before you try to render anything.
+			   This includes history start, which loads the main page.
 			 */
 			SteamsideTileset.loadTileset().done(function()
 			{
 				// Start Backbone history a necessary step for bookmarkable URL's
 				Backbone.history.start();
 
-				new SteamsideView({
-					sessionModel: sessionModel
-				}).render();
+				new SteamsideView({ sessionModel: sessionModel }).render();
 			});
 
 		});
