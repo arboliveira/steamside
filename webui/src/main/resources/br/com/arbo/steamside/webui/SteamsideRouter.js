@@ -105,10 +105,12 @@ var WorldActions = Backbone.Model.extend(
 var HomeWorld = WorldActions.extend(
 {
 	sessionModel: null,
+	kidsTileset: null,
 
 	initialize: function(options)
 	{
 		this.sessionModel = options.sessionModel;
+		this.kidsTileset = options.kidsTileset;
 	},
 
 	tileLoad: function(whenDone)
@@ -121,7 +123,8 @@ var HomeWorld = WorldActions.extend(
 	{
 		return new HomeView({
 			// el: tile.clone(),
-			sessionModel: this.sessionModel
+			sessionModel: this.sessionModel,
+			kidsTileset: this.kidsTileset
 		}).render();
 	},
 
@@ -262,7 +265,10 @@ var SteamsideRouter = Backbone.Router.extend(
 
 		this.worldchanger = new Worldchanger({worldbed_el: worldbed_el});
 
-		this.homeView = new World({worldActions:this.newHomeView(options.sessionModel)});
+		this.homeView = new World({
+			worldActions:this.newHomeView(
+				options.sessionModel, options.kidsTileset)
+		});
 
 		this.switch_favoritesView = new World({worldActions:this.newSwitch_favoritesView()});
 
@@ -314,11 +320,12 @@ var SteamsideRouter = Backbone.Router.extend(
 		this.worldchanger.goWorld(this.exitView);
 	},
 
-	newHomeView: function(sessionModel)
+	newHomeView: function(sessionModel, kidsTileset)
 	{
 		return new HomeWorld(
 		{
-			sessionModel: sessionModel
+			sessionModel: sessionModel,
+			kidsTileset: kidsTileset
 		});
 	},
 

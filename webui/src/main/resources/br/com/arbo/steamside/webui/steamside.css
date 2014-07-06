@@ -231,11 +231,14 @@
     padding: 1em;
 }
 
-.footer a {
+.indicator {
+	background: aquamarine;
+	border-radius: 4px;
+	padding: 3px;	/* distance from text to border */
+}
+
+a.indicator {
     text-decoration: none;	/* hide link underline */
-    background: aquamarine;
-    border-radius: 4px;
-    padding: 3px;	/* distance from text to border */
 }
 
 .instructions-and-explanations {

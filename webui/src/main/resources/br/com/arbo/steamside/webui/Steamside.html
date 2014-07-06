@@ -31,6 +31,7 @@ xml:lang="en" lang="en">
     <script src="backbone.js" type="text/javascript"></script>
 
     <script src="tileset.js" type="text/javascript"></script>
+	<script src="Kids.js" type="text/javascript"></script>
 	<script src="CommandBox.js" type="text/javascript"></script>
     <script src="GameCardDeck.js" type="text/javascript"></script>
 	<script src="Search.js" type="text/javascript"></script>
@@ -80,7 +81,8 @@ $(function() {
         </a>
     </div>
 
-    <div class="page-header-banner-section page-header-stamp">
+    <div class="page-header-banner-section page-header-stamp"
+		 id="PageHeaderBannerSection">
 		<ul id="page-header-navigation-bar" class="page-header-navigation-bar">
 		<li><span class="vaporware">My games</span></li>
 		<li><a href="http://steampowered.com" target="_blank">Steam Store</a></li>
@@ -222,9 +224,10 @@ $(function() {
 
 <div id="page-footer" class="page-footer page-header-separator">
     <div class="footer">
-        <a href="#/system"><span id="version">[version]</span> (<span id="userName">[user]</span>)</a>
-        &nbsp; <a href="http://arbo.com.br/steamside">Steamside on the web</a>
-        &nbsp; <a href="#/exit">Exit</a>
+		<span class="indicator" id="KidsModeIndicator">KIDS MODE</span>&nbsp;
+        <a class="indicator" href="#/system"><span id="version">[version]</span> (<span id="userName">[user]</span>)</a>
+        &nbsp; <a class="indicator" href="http://arbo.com.br/steamside">Steamside on the web</a>
+        &nbsp; <a class="indicator" href="#/exit">Exit</a>
     </div>
 </div>
 

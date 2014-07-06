@@ -19,8 +19,9 @@ var SearchResults = Backbone.Collection.extend({
     }
 });
 
-var SearchView = Backbone.View.extend({
-
+var SearchView = Backbone.View.extend(
+{
+	cardTemplatePromise: null,
 	searchResults: null,
 	continues: null,
 	on_tag: null,
@@ -30,6 +31,7 @@ var SearchView = Backbone.View.extend({
 	},
 
 	initialize: function() {
+		this.cardTemplatePromise = this.options.cardTemplatePromise;
 		this.continues = this.options.continues;
 		this.on_tag = this.options.on_tag;
 
@@ -43,6 +45,7 @@ var SearchView = Backbone.View.extend({
 
 		new DeckView({
 			el: $('#search-results-deck'),
+			cardTemplatePromise: this.cardTemplatePromise,
 			collection: searchResults,
 			continues: this.continues,
 			on_tag: this.on_tag

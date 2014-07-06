@@ -186,7 +186,6 @@ var GameCardView = Backbone.View.extend({
 	continues: null,
     enormity: null,
 	width: 0,
-	kidsMode: false,
 	on_render: null,
 	on_tag: null,
 
@@ -201,7 +200,6 @@ var GameCardView = Backbone.View.extend({
 	initialize: function() {		"use strict";
 		this.continues = this.options.continues;
 		this.enormity = this.options.enormity;
-		this.kidsMode = this.options.kidsMode;
 		this.on_render = this.options.on_render;
 		this.on_tag = this.options.on_tag;
 		this.model.on('game:play:beforeSend', this.game_play_beforeSend, this);
@@ -233,20 +231,15 @@ var GameCardView = Backbone.View.extend({
 			collection: tags
 		}).render();
 
-		if (this.kidsMode) this.hideAllCommandsButPlay();
-
 		if (this.on_render != null) this.on_render(this);
 
 		return this;		
 	},
 
-	hideAllCommandsButPlay: function () {
-		this.$(".game-tile-command").hide();
-		this.$(".game-tile-play").show();
-	},
-
 	whatWillHappen: function () {
-		return this.$('.game-tile-command').first();
+		var $game = this.$('.game-tile-command');
+		if ($game.length == 0) return null;
+		return $game.first();
 	},
 
 	mouseenter_hot_zone: function(e) {
@@ -264,7 +257,12 @@ var GameCardView = Backbone.View.extend({
     gameClicked: function(e) {				"use strict";
 		e.preventDefault();
 		var w = this.whatWillHappen();
-		w.click();
+		if (w != null)
+		{
+			w.click();
+			return;
+		}
+		this.playClicked(e);
 	},
 
 	playClicked: function(e) {				"use strict";
@@ -361,6 +359,7 @@ var DeckView = Backbone.View.extend({
 	deck: null,
 	first_row: null,
 	current_row: null,
+	cardTemplatePromise: null,
     continues: null,
 	kidsMode: false,
 	on_GameCard_render: null,
@@ -378,6 +377,7 @@ var DeckView = Backbone.View.extend({
 		this.on_GameCard_render = this.options.on_GameCard_render;
 		this.on_tag = this.options.on_tag;
 		this.collection.on('reset', this.render, this);
+		this.cardTemplatePromise = this.options.cardTemplatePromise;
 	},
 
 	renderMoreButton: function () {
@@ -461,18 +461,19 @@ var DeckView = Backbone.View.extend({
 		}
 
 		var that = this;
-		SteamsideTileset.ajaxGameCard(function(tile) {
-			that.renderGameCard(tile, oneResult, enormity);
+
+		this.cardTemplatePromise.done(function(template_el) {
+			that.renderGameCard(template_el, oneResult, enormity);
 		});
 	},
 
-	renderGameCard: function(tile, oneResult, enormity) {
+	renderGameCard: function(template_el, oneResult, enormity) {
 		var that = this;
 		var on_tag_deck = function(game) {
 			that.on_tag_deck(game);
-		}
+		};
 		var card_view = new GameCardView({
-			el: tile.clone(),
+			el: template_el.clone(),
 			model: oneResult,
 			enormity: enormity,
 			kidsMode: this.kidsMode,

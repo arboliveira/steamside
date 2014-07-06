@@ -42,47 +42,73 @@ var HomeView = Backbone.View.extend({
 	el: "#primary-view",
 
 	sessionModel: null,
+	kidsTileset: null,
 
 	initialize: function(options) {
 		this.sessionModel = options.sessionModel;
+		this.kidsTileset = options.kidsTileset;
 	},
-
-	continues: null,
 
 	render: function ()
 	{
 		var continues = new ContinueGames();
 		var favorites = new FavoritesCollection();
 
-		this.continues = continues;
-
 		var that = this;
 
-		sideshow(this.$el);
+		var kidsMode = this.sessionModel.kidsmode();
+
+		var cardTemplatePromise;
+
+		if (kidsMode) {
+			cardTemplatePromise = this.kidsTileset.promise.then(function(xml)
+			{
+				var cardTile = new Tile({selector: "#KidsGameCard"});
+				cardTile.chomp($(xml));
+				return cardTile.tile;
+			});
+		}
+		else
+		{
+			cardTemplatePromise = SteamsideTileset.tileset.promise.then(function(xml)
+			{
+				var cardTile = new Tile({selector: ".game-tile"});
+				cardTile.chomp($(xml));
+				return cardTile.tile;
+			});
+		}
 
 		new DeckView({
 			el: $('#continues-deck'),
+			cardTemplatePromise: cardTemplatePromise,
 			collection: continues,
 			continues: continues,
 			kidsMode: this.sessionModel.kidsmode(),
 			on_tag: that.on_tag
 		});
 
-		new DeckView({
-			el: $('#favorites-deck'),
-			collection: favorites,
-			continues: continues,
-			on_tag: that.on_tag
-		});
-
-		new SearchView({
-			el: $('#search-segment'),
-			continues: continues,
-			on_tag: that.on_tag
-		}).render();
-
 		fetch_json(continues);
-		fetch_json(favorites);
+
+		if (!kidsMode) {
+			new DeckView({
+				el: $('#favorites-deck'),
+				cardTemplatePromise: cardTemplatePromise,
+				collection: favorites,
+				continues: continues,
+				on_tag: that.on_tag
+			});
+
+			new SearchView({
+				el: $('#search-segment'),
+				cardTemplatePromise: cardTemplatePromise,
+				continues: continues,
+				on_tag: that.on_tag
+			}).render();
+
+			fetch_json(favorites);
+		}
+
+		sideshow(this.$el);
 
 		return this;
 	},
@@ -99,20 +125,19 @@ var SteamsideView = Backbone.View.extend({
 	el: "body",
 
 	sessionModel: null,
+	kidsTileset: null,
 
 	initialize: function()
 	{
 		this.sessionModel = this.options.sessionModel;
+		this.kidsTileset = this.options.kidsTileset;
 	},
 
 	render: function ()
 	{
 		var sessionModel = this.sessionModel;
 
-		// TODO var username = sessionModel.username();
-		var kidsMode = sessionModel.kidsmode();
-
-		this.applyKidsMode(kidsMode);
+		this.applyKidsMode();
 
 		new SessionView({model: sessionModel}).render();
 
@@ -123,16 +148,17 @@ var SteamsideView = Backbone.View.extend({
 
 	applyKidsMode: function(kidsMode)
 	{
-		if (kidsMode) {
-			this.$el
-				.removeClass("steamside-body-background")
-				.addClass("steamside-kids-body-background");
+		var kids = this.sessionModel.kidsmode();
 
-			$("#page-header-navigation-bar").hide();
-			$("#search-segment").hide();
-			$("#favorites-segment").hide();
-			$("#collections-segment").hide();
+		if (!kids) {
+			this.$("#KidsModeIndicator").hide();
+			return;
 		}
+
+		new KidsView({
+			el: this.$el, username: this.sessionModel.userName(),
+			tileset: this.kidsTileset
+		}).render();
 	}
 });
 
@@ -144,8 +170,11 @@ var Steamside_html = {
 
 		fetch_json(sessionModel, function()
 		{
+			var kidsTileset = new Tileset({url: 'Kids.html'});
+
 			new SteamsideRouter({
-				sessionModel: sessionModel
+				sessionModel: sessionModel,
+				kidsTileset: kidsTileset
 			});
 
 			/*
@@ -157,7 +186,10 @@ var Steamside_html = {
 				// Start Backbone history a necessary step for bookmarkable URL's
 				Backbone.history.start();
 
-				new SteamsideView({ sessionModel: sessionModel }).render();
+				new SteamsideView({
+					sessionModel: sessionModel,
+					kidsTileset: kidsTileset
+				}).render();
 			});
 
 		});
