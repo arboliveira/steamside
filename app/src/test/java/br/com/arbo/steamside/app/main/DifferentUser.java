@@ -7,6 +7,8 @@ import br.com.arbo.steamside.app.injection.Container;
 
 class DifferentUser implements Part {
 
+	final static String DIFFERENT_USER = "kid";
+
 	@Override
 	public void apply(final Container c)
 	{
@@ -16,7 +18,7 @@ class DifferentUser implements Part {
 	private static User mockDifferentUser()
 	{
 		final User user = Mockito.mock(User.class);
-		Mockito.when(user.username()).thenReturn("kid");
+		Mockito.when(user.username()).thenReturn(DIFFERENT_USER);
 		return user;
 	}
 

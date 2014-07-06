@@ -10,7 +10,9 @@ var SessionModel = Backbone.Model.extend({
 		return this.get('username');
     },
     kidsmode: function() {		"use strict";
-		return this.get('kidsmode') === "true";
+		var v = this.get('kidsmode');
+		if (v === true) return true;
+		return v === "true";
     }
 });
 
