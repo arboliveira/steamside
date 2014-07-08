@@ -52,28 +52,5 @@
 	<properties>
 		<jetty.version>8.1.7.v20120910</jetty.version>
 	</properties>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<configuration>
-					<executable>java</executable>
-					<arguments>
-						<argument>-classpath</argument>
-						<classpath />
-						<argument>rubyquest.jetty.Start</argument>
-					</arguments>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 	<name>Executable</name>
 </project>
