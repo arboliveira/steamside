@@ -11,7 +11,7 @@ public class SettingsImpl implements Settings {
 	@Override
 	public boolean gamesOnly()
 	{
-		return false;
+		return true;
 	}
 
 }

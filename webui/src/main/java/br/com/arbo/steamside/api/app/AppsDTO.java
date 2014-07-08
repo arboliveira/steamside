@@ -13,23 +13,27 @@ import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class AppsDTO {
 
-	public AppsDTO(Stream<AppId> appids, final Library library,
-			TagsQueries queries)
+	public AppsDTO(
+			Stream<AppId> appids, Limit limit,
+			final Library library, TagsQueries queries)
 	{
 		this.appids = appids;
+		this.limit = limit;
 		this.library = library;
 		this.queries = queries;
 	}
 
 	public List<AppDTO> jsonable()
 	{
+		final int size = limit.limit;
+
 		return appids
 				.map(this::toOptionalDTO)
 				.filter(Optional::isPresent)
-				.limit(limit)
+				.limit(size)
 				.map(Optional::get)
 				.collect(
-						() -> new ArrayList<AppDTO>(limit),
+						() -> new ArrayList<AppDTO>(size),
 						ArrayList::add, ArrayList::addAll);
 	}
 
@@ -49,7 +53,7 @@ public class AppsDTO {
 
 	private final Stream<AppId> appids;
 
-	private static final int limit = 27;
+	private final Limit limit;
 
 	private final Library library;
 }

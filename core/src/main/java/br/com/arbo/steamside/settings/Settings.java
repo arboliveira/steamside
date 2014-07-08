@@ -5,4 +5,5 @@ public interface Settings {
 	boolean currentPlatformOnly();
 
 	boolean gamesOnly();
+
 }

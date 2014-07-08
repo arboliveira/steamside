@@ -42,12 +42,14 @@ public class CollectionController {
 
 	@Inject
 	public CollectionController(Library library, CollectionsData collections,
-			TagsData tags, Settings settings)
+			TagsData tags, Settings settings,
+			br.com.arbo.steamside.api.app.AppSettings apiAppSettings)
 	{
 		this.library = library;
 		this.collections = collections;
 		this.tags = tags;
 		this.settings = settings;
+		this.apiAppSettings = apiAppSettings;
 		this.sys = new SystemCollectionsHome(library, tags);
 	}
 
@@ -83,7 +85,7 @@ public class CollectionController {
 			br.com.arbo.steamside.data.collections.NotFound
 	{
 		return new CollectionController_collection_json(
-				name, sys, library, tags,
+				name, apiAppSettings.limit(), sys, library, tags,
 				settings.gamesOnly()).jsonable();
 	}
 
@@ -106,6 +108,8 @@ public class CollectionController {
 	{
 		return jsonify(tags.recent());
 	}
+
+	private final br.com.arbo.steamside.api.app.AppSettings apiAppSettings;
 
 	final Settings settings;
 

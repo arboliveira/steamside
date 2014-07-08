@@ -33,7 +33,7 @@ public class FavoritesController {
 						gamesOnly = settings.gamesOnly();
 					}
 				}).filter(favorites).map(App::appid),
-				library, queries).jsonable();
+				apiAppSettings.limit(), library, queries).jsonable();
 	}
 
 	@Inject
@@ -45,4 +45,6 @@ public class FavoritesController {
 	private TagsQueries queries;
 	@Inject
 	Settings settings;
+	@Inject
+	br.com.arbo.steamside.api.app.AppSettings apiAppSettings;
 }

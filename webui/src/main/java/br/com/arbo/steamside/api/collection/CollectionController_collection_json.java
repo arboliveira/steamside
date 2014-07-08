@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
+import br.com.arbo.steamside.api.app.Limit;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
@@ -16,10 +17,12 @@ import br.com.arbo.steamside.types.CollectionName;
 class CollectionController_collection_json {
 
 	CollectionController_collection_json(
-			String name, SystemCollectionsHome sys, Library library,
+			String name, Limit limit, SystemCollectionsHome sys,
+			Library library,
 			TagsQueries queries, boolean gamesOnly)
 	{
 		this.name = name;
+		this.limit = limit;
 		this.sys = sys;
 		this.library = library;
 		this.queries = queries;
@@ -37,8 +40,10 @@ class CollectionController_collection_json {
 					}
 				});
 		final Stream<AppId> appids = appsOf.map(Tag::appid);
-		return new AppsDTO(appids, library, queries).jsonable();
+		return new AppsDTO(appids, limit, library, queries).jsonable();
 	}
+
+	private final Limit limit;
 
 	private final boolean gamesOnly;
 

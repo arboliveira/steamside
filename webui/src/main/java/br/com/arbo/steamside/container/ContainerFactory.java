@@ -90,6 +90,9 @@ public class ContainerFactory {
 	private static void addComponents(final ContainerWeb container)
 	{
 		container.addComponent(Settings.class, SettingsImpl.class);
+		container.addComponent(
+				br.com.arbo.steamside.api.app.AppSettings.class,
+				br.com.arbo.steamside.api.app.AppSettingsImpl.class);
 
 		container
 				.addComponent(Library.class, LibraryImpl.class)

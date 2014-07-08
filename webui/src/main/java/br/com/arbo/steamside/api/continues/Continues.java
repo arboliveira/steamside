@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
+import br.com.arbo.steamside.api.app.AppSettings;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.steam.client.apps.App;
@@ -18,9 +19,11 @@ public class Continues {
 	@Inject
 	public Continues(
 			@NonNull final ContinuesRooster continues,
+			@NonNull AppSettings apiAppSettings,
 			final Library library, TagsQueries queries)
 	{
 		this.continues = continues;
+		this.apiAppSettings = apiAppSettings;
 		this.library = library;
 		this.queries = queries;
 	}
@@ -28,9 +31,12 @@ public class Continues {
 	public List<AppDTO> continues()
 	{
 		return new AppsDTO(
-				continues.continues().map(App::appid), library, queries)
-				.jsonable();
+				continues.continues().map(App::appid),
+				apiAppSettings.limit(), library, queries).jsonable();
 	}
+
+	@NonNull
+	private final AppSettings apiAppSettings;
 
 	private final TagsQueries queries;
 
