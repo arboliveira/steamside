@@ -395,22 +395,30 @@ var DeckView = Backbone.View.extend({
 		});
 	},
 
-	render: function() {		"use strict";
-		this.$el.empty();
-        this.$el.addClass('game-deck');
+	render: function() {
+		try {
+			this.$el.empty();
+			this.$el.addClass('game-deck');
 
-		this.xCell = 0;
-		this.yRow = 0;
-		this.deck = new Deck();
-		this.first_row = null;
-		this.current_row = null;
-		
-		var that = this;
-		this.collection.each( function(oneResult) {
-			that.renderOneCell(oneResult);
-		});
-		this.deck.display();
-		this.renderMoreButton();
+			this.xCell = 0;
+			this.yRow = 0;
+			this.deck = new Deck();
+			this.first_row = null;
+			this.current_row = null;
+
+			var that = this;
+			this.collection.each(function (oneResult) {
+				that.renderOneCell(oneResult);
+			});
+			this.deck.display();
+			this.renderMoreButton();
+		}
+		catch (e)
+		{
+			var trace = printStackTrace({e: e});
+			$("#page-footer").text(trace);
+			throw e;
+		}
 		return this;
 	},
 	
