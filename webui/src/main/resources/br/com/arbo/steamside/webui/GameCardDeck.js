@@ -416,7 +416,9 @@ var DeckView = Backbone.View.extend({
 		catch (e)
 		{
 			var trace = printStackTrace({e: e});
-			$("#page-footer").text(trace);
+			var err_el = $("#ErrorMessageView");
+			err_el.text(e + " #### " +trace);
+			$("#ErrorBoxView").show();
 			throw e;
 		}
 		return this;
