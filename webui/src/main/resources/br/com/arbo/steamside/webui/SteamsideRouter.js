@@ -299,15 +299,28 @@ var SteamsideRouter = Backbone.Router.extend(
 
 	collections_edit: function(name)
 	{
-		/*
-		 https://github.com/jashkenas/backbone/issues/2566#issuecomment-26065829
-		 */
-		var workaroundFirefox = decodeURIComponent(name);
+		try
+		{
 
-		this.worldCollectionsEdit.respawnWithCollection(workaroundFirefox);
+			/*
+			 https://github.com/jashkenas/backbone/issues/2566#issuecomment-26065829
+			 */
+			var workaroundFirefox = decodeURIComponent(name);
 
-		this.collections_editView.respawn();
-		this.worldchanger.goWorld(this.collections_editView);
+			this.worldCollectionsEdit.respawnWithCollection(workaroundFirefox);
+
+			this.collections_editView.respawn();
+			this.worldchanger.goWorld(this.collections_editView);
+
+		}
+		catch (e)
+		{
+			var trace = printStackTrace({e: e});
+			$("#ErrorMessageView").text(e + " #### " +trace);
+			$("#ErrorBoxView").show();
+			throw e;
+		}
+
 	},
 
 	steam_client:  function()

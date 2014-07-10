@@ -365,19 +365,25 @@ var DeckView = Backbone.View.extend({
 	on_GameCard_render: null,
 	on_tag: null,
 
-	initialize: function() {		"use strict";
+	initialize: function() {
         /*
          visible will not be part of the result anymore,
          because we want logic like "first row is visible"
          and this depends on calculations inside the browser
          */
+
+		if (this.options.cardTemplatePromise == null) {
+			throw new Error("cardTemplatePromise is required");
+		}
+
+		this.cardTemplatePromise = this.options.cardTemplatePromise;
+
 		this.kidsMode = this.options.kidsMode === true;
 		this.alwaysVisible = this.kidsMode;
 		this.continues = this.options.continues;
 		this.on_GameCard_render = this.options.on_GameCard_render;
 		this.on_tag = this.options.on_tag;
 		this.collection.on('reset', this.render, this);
-		this.cardTemplatePromise = this.options.cardTemplatePromise;
 	},
 
 	renderMoreButton: function () {
@@ -416,8 +422,7 @@ var DeckView = Backbone.View.extend({
 		catch (e)
 		{
 			var trace = printStackTrace({e: e});
-			var err_el = $("#ErrorMessageView");
-			err_el.text(e + " #### " +trace);
+			$("#ErrorMessageView").text(e + " #### " +trace);
 			$("#ErrorBoxView").show();
 			throw e;
 		}

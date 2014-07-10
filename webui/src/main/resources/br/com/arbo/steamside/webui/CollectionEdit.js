@@ -17,8 +17,16 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 
 var CollectionEditView = Backbone.View.extend({
 
+	cardTemplatePromise: null,
+
 	initialize: function(options)
 	{
+		if (this.options.cardTemplatePromise == null) {
+			throw new Error("cardTemplatePromise is required");
+		}
+
+		this.cardTemplatePromise = this.options.cardTemplatePromise;
+
 		this.collection_name = options.collection_name;
 	},
 
@@ -37,6 +45,7 @@ var CollectionEditView = Backbone.View.extend({
 		var continues = new ContinueGames();
 		new DeckView({
 			el: this.$('#collection-edit-search-results-deck'),
+			cardTemplatePromise: this.cardTemplatePromise,
 			collection: collectionEditSearchResults,
 			continues: continues,
 			on_GameCard_render: function(viewGameCard) { that.on_SearchResults_GameCard_render(viewGameCard) },
