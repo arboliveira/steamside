@@ -24,7 +24,6 @@ var CollectionEditView = Backbone.View.extend({
 		if (this.options.cardTemplatePromise == null) {
 			throw new Error("cardTemplatePromise is required");
 		}
-
 		this.cardTemplatePromise = this.options.cardTemplatePromise;
 
 		this.collection_name = options.collection_name;
@@ -60,6 +59,7 @@ var CollectionEditView = Backbone.View.extend({
         inCollection.collection_name = name;
 		new DeckView({
             el: this.$('#games-in-collection-deck'),
+			cardTemplatePromise: this.cardTemplatePromise,
             collection: inCollection,
 			on_tag: function(game, segmentWithGameCard) { TagTile.on_tag(game, segmentWithGameCard) }
         });

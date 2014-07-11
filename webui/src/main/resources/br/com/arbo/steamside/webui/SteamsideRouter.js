@@ -9,6 +9,8 @@ var Worldchanger = Backbone.Model.extend(
 	worldview: null,
 
 	goWorld: function(world) {
+		$("body").show();
+
 		var that = this;
 
 		if (this.worldview == null)
@@ -106,11 +108,18 @@ var HomeWorld = WorldActions.extend(
 {
 	sessionModel: null,
 	kidsTileset: null,
+	cardTemplatePromise: null,
 
 	initialize: function(options)
 	{
 		this.sessionModel = options.sessionModel;
 		this.kidsTileset = options.kidsTileset;
+
+		if (options.cardTemplatePromise == null)
+		{
+			throw new Error("cardTemplatePromise is required");
+		}
+		this.cardTemplatePromise = options.cardTemplatePromise;
 	},
 
 	tileLoad: function(whenDone)
@@ -124,6 +133,7 @@ var HomeWorld = WorldActions.extend(
 		return new HomeView({
 			// el: tile.clone(),
 			sessionModel: this.sessionModel,
+			cardTemplatePromise: this.cardTemplatePromise,
 			kidsTileset: this.kidsTileset
 		}).render();
 	},
@@ -139,6 +149,17 @@ var CollectionsEditWorld = WorldActions.extend(
 {
 	collection_name: null,
 
+	cardTemplatePromise: null,
+
+	initialize: function(options)
+	{
+		if (options.cardTemplatePromise == null)
+		{
+			throw new Error("cardTemplatePromise is required");
+		}
+		this.cardTemplatePromise = options.cardTemplatePromise;
+	},
+
 	respawnWithCollection: function(collection_name) {
 		this.collection_name = collection_name;
 	},
@@ -152,6 +173,7 @@ var CollectionsEditWorld = WorldActions.extend(
 	{
 		return new CollectionEditView({
 			el: tile.clone(),
+			cardTemplatePromise: this.cardTemplatePromise,
 			collection_name: this.collection_name
 		}).render();
 	}
@@ -259,9 +281,17 @@ var SteamsideRouter = Backbone.Router.extend(
 
 	exitView: null,
 
+	cardTemplatePromise: null,
+
 	initialize: function(options)
 	{
 		var worldbed_el = $('#world');
+
+		if (options.cardTemplatePromise == null)
+		{
+			throw new Error("cardTemplatePromise is required");
+		}
+		this.cardTemplatePromise = options.cardTemplatePromise;
 
 		this.worldchanger = new Worldchanger({worldbed_el: worldbed_el});
 
@@ -274,7 +304,7 @@ var SteamsideRouter = Backbone.Router.extend(
 
 		this.collections_newView = new World({worldActions:new CollectionsNewWorld()});
 
-		this.worldCollectionsEdit = new CollectionsEditWorld();
+		this.worldCollectionsEdit = new CollectionsEditWorld({cardTemplatePromise: this.cardTemplatePromise});
 		this.collections_editView = new World({worldActions:this.worldCollectionsEdit});
 
 		this.steamclientView = new World({worldActions:new SteamClientWorld()});
@@ -338,6 +368,7 @@ var SteamsideRouter = Backbone.Router.extend(
 		return new HomeWorld(
 		{
 			sessionModel: sessionModel,
+			cardTemplatePromise: this.cardTemplatePromise,
 			kidsTileset: kidsTileset
 		});
 	},
