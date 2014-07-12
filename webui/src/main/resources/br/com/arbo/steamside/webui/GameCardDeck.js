@@ -421,9 +421,7 @@ var DeckView = Backbone.View.extend({
 		}
 		catch (e)
 		{
-			var trace = printStackTrace({e: e});
-			$("#ErrorMessageView").text(e + " #### " +trace);
-			$("#ErrorBoxView").show();
+			ErrorHandler.explode(e);
 			throw e;
 		}
 		return this;
@@ -526,6 +524,18 @@ function fetch_json(collection, success) {
         success: success,
         error: function() { console.log(arguments); }
     });
+}
+
+function json_promise(fetchable)
+{
+	var promise = fetchable.fetch({
+		mimeType: 'application/json',
+		cache: false
+	});
+
+	promise.fail(function() { console.log(arguments); });
+
+	return promise;
 }
 
 function dataTypeOf(aUrl) {

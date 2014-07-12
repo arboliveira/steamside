@@ -345,9 +345,7 @@ var SteamsideRouter = Backbone.Router.extend(
 		}
 		catch (e)
 		{
-			var trace = printStackTrace({e: e});
-			$("#ErrorMessageView").text(e + " #### " +trace);
-			$("#ErrorBoxView").show();
+			ErrorHandler.explode(e);
 			throw e;
 		}
 

@@ -38,9 +38,18 @@
         <div class="content content-at-right">
 
             <div>
-                <p class="instructions-and-explanations">
-                    <span id="steam-client-status-line">Steam is not running.</span>
-                    <a href="api/steamclient/open/main" id="button-open-steam-client" class="button-steam-browser-protocol target-button">Open Steam Client</a></p>
+                <p id="SteamClientStatusView" class="instructions-and-explanations">
+                    <span id="SteamClientStatusMessage">Looking for the Steam Client...</span>
+					<span id="SteamClientAnotherUserMessage" style="display: none">
+						Another user is running Steam.
+					</span>
+                    <a href="api/steamclient/open/main"
+					   id="ButtonOpenSteamClient"
+					   class="button-steam-browser-protocol target-button"
+					   style="display: none">
+						Open Steam Client
+					</a>
+				</p>
             </div>
 
         </div>

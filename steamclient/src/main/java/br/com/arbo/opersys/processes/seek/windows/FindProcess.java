@@ -7,14 +7,18 @@ import br.com.arbo.opersys.processes.seek.NotFound;
 
 public class FindProcess {
 
-	public static WinProcess seek(
+	public static WinProcessX seek(
 			final Criteria criteria)
-			throws NotFound {
-		try {
+			throws NotFound
+	{
+		try
+		{
 			return new FindWith_winp(criteria).find();
-		} catch (final NotFound e) {
-			return new WinProcess(
-					new FindWith_tasklist(criteria).find());
+		}
+		catch (final NotFound e)
+		{
+			return new WinProcessX(new WinProcess(
+					new FindWith_tasklist(criteria).find()));
 		}
 	}
 
