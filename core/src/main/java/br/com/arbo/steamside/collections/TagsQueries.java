@@ -23,6 +23,14 @@ public interface TagsQueries {
 
 	boolean isCollected(AppId appid);
 
+	boolean isTagged(AppId appid, CollectionI collection);
+
+	default boolean isTagged(AppId appid, CollectionName collectionName)
+	{
+		CollectionI find = collections().find(collectionName);
+		return this.isTagged(appid, find);
+	}
+
 	Stream< ? extends WithCount> recent();
 
 	Stream< ? extends CollectionI> tags(AppId app);

@@ -48,6 +48,12 @@ public class AutowireTagsData implements TagsData {
 	}
 
 	@Override
+	public boolean isTagged(AppId appid, CollectionI collection)
+	{
+		return reloadable().isTagged(appid, collection);
+	}
+
+	@Override
 	public Stream< ? extends WithCount> recent()
 	{
 		return reloadable().recent();

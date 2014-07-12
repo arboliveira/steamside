@@ -1,10 +1,10 @@
 package br.com.arbo.steamside.favorites;
 
-import br.com.arbo.steamside.steam.client.types.SteamCategory;
+import br.com.arbo.steamside.types.CollectionName;
 
 public interface FavoritesOfUser {
 
-	SteamCategory favorites() throws NotSet;
+	CollectionName favorites() throws NotSet;
 
 	public static class NotSet extends Exception {
 		//

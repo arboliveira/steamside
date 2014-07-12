@@ -56,6 +56,13 @@ public class InMemoryTagsHome implements TagsData {
 	}
 
 	@Override
+	public boolean isTagged(AppId appid, CollectionI collection)
+	{
+		final CollectionImpl stored = stored(collection);
+		return appsByCollection.isTagged(appid, stored);
+	}
+
+	@Override
 	public Stream< ? extends WithCount> recent()
 	{
 		return recent.values().stream().map(this::withCount);
@@ -162,6 +169,13 @@ public class InMemoryTagsHome implements TagsData {
 
 	static class AppsByCollection {
 
+		public boolean isTagged(AppId a, CollectionImpl c)
+		{
+			Collection<AppId> v = map.get(c);
+			if (v == null) return false;
+			return v.contains(a);
+		}
+
 		Stream<AppId> apps(CollectionImpl c)
 		{
 			Collection<AppId> v = map.get(c);
@@ -222,7 +236,7 @@ public class InMemoryTagsHome implements TagsData {
 		{
 			if (a == null) throw new NullPointerException();
 			map.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
-			.computeIfAbsent(a, TagImpl::new);
+					.computeIfAbsent(a, TagImpl::new);
 		}
 
 		Stream<TagImpl> tags(CollectionImpl c)
