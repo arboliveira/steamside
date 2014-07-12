@@ -64,35 +64,42 @@ var HomeView = Backbone.View.extend({
 
 		var kidsMode = this.sessionModel.kidsmode();
 
-		new DeckView({
-			el: $('#continues-deck'),
-			cardTemplatePromise: this.cardTemplatePromise,
-			collection: continues,
-			continues: continues,
-			kidsMode: this.sessionModel.kidsmode(),
-			on_tag: that.on_tag
-		});
-
-		fetch_json(continues);
-
 		if (!kidsMode) {
 			new DeckView({
-				el: $('#favorites-deck'),
+				el: $('#continues-deck'),
 				cardTemplatePromise: this.cardTemplatePromise,
-				collection: favorites,
+				collection: continues,
 				continues: continues,
+				kidsMode: this.sessionModel.kidsmode(),
 				on_tag: that.on_tag
 			});
+		}
 
+		if (!kidsMode)
+		{
 			new SearchView({
 				el: $('#search-segment'),
 				cardTemplatePromise: this.cardTemplatePromise,
 				continues: continues,
 				on_tag: that.on_tag
 			}).render();
+		}
+
+		if (true || !kidsMode)
+		{
+			new DeckView({
+				el: $('#favorites-deck'),
+				cardTemplatePromise: this.cardTemplatePromise,
+				collection: favorites,
+				continues: continues,
+				kidsMode: this.sessionModel.kidsmode(),
+				on_tag: that.on_tag
+			});
 
 			fetch_json(favorites);
 		}
+
+		fetch_json(continues);
 
 		sideshow(this.$el);
 
