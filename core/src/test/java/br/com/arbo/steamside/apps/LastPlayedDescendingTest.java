@@ -7,26 +7,29 @@ import org.junit.Test;
 
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
-import br.com.arbo.steamside.steam.client.apps.NeverPlayed;
 
 public class LastPlayedDescendingTest {
 
 	@Test
 	@SuppressWarnings("static-method")
-	public void playedInThePast__afterPlayedRecently() {
-		final App a1 = new AppImpl.Builder().appid("1").lastPlayed("1").make();
+	public void neverPlayed__afterPlayed()
+	{
+		final App a1 = new AppImpl.Builder().appid("1").make();
 		final App a2 = new AppImpl.Builder().appid("2").lastPlayed("2").make();
-		final int firstArgumentIsGreater = 1;
 		assertThat(new LastPlayedDescending().compare(a1, a2),
 				is(firstArgumentIsGreater));
 	}
 
-	@Test(expected = NeverPlayed.class)
+	@Test
 	@SuppressWarnings("static-method")
-	public void neverPlayed__mustRefuse() {
-		final App a1 = new AppImpl.Builder().appid("1").make();
-		final App a2 = null;
-		new LastPlayedDescending().compare(a1, a2);
+	public void playedInThePast__afterPlayedRecently()
+	{
+		final App a1 = new AppImpl.Builder().appid("1").lastPlayed("1").make();
+		final App a2 = new AppImpl.Builder().appid("2").lastPlayed("2").make();
+		assertThat(new LastPlayedDescending().compare(a1, a2),
+				is(firstArgumentIsGreater));
 	}
+
+	static final int firstArgumentIsGreater = 1;
 
 }

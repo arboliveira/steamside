@@ -5,21 +5,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import br.com.arbo.steamside.apps.LastPlayedDescending;
 import br.com.arbo.steamside.collections.TagsQueries;
+import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.apps.NotFound;
-import br.com.arbo.steamside.steam.client.library.Library;
-import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class AppsDTO {
 
 	public AppsDTO(
-			Stream<AppId> appids, Limit limit,
-			final Library library, TagsQueries queries)
+			Stream<App> apps, Limit limit,
+			TagsQueries queries)
 	{
-		this.appids = appids;
+		this.apps = apps;
 		this.limit = limit;
-		this.library = library;
 		this.queries = queries;
 	}
 
@@ -27,23 +25,28 @@ public class AppsDTO {
 	{
 		final int size = limit.limit;
 
-		return appids
+		Stream<App> sorted =
+				apps.sorted(new LastPlayedDescending());
+
+		final Stream<AppDTO> narrow = sorted
 				.map(this::toOptionalDTO)
 				.filter(Optional::isPresent)
 				.limit(size)
-				.map(Optional::get)
+				.map(Optional::get);
+
+		return narrow
 				.collect(
 						() -> new ArrayList<AppDTO>(size),
 						ArrayList::add, ArrayList::addAll);
 	}
 
-	private Optional<AppDTO> toOptionalDTO(AppId appid)
+	private Optional<AppDTO> toOptionalDTO(App app)
 	{
 		try
 		{
-			return Optional.of(AppDTOFactory.valueOf(appid, library, queries));
+			return Optional.of(AppDTOFactory.valueOf(app, queries));
 		}
-		catch (MissingFrom_appinfo_vdf | NotFound unavailable)
+		catch (MissingFrom_appinfo_vdf unavailable)
 		{
 			return Optional.empty();
 		}
@@ -51,9 +54,7 @@ public class AppsDTO {
 
 	private final TagsQueries queries;
 
-	private final Stream<AppId> appids;
+	private final Stream<App> apps;
 
 	private final Limit limit;
-
-	private final Library library;
 }

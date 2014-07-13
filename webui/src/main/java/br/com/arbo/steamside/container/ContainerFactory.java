@@ -32,7 +32,6 @@ import br.com.arbo.steamside.data.autowire.AutowireCollectionsData;
 import br.com.arbo.steamside.data.autowire.AutowireKidsData;
 import br.com.arbo.steamside.data.autowire.AutowireSteamsideData;
 import br.com.arbo.steamside.data.autowire.AutowireTagsData;
-import br.com.arbo.steamside.favorites.Favorites;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
 import br.com.arbo.steamside.kids.FromUsername;
@@ -149,7 +148,6 @@ public class ContainerFactory {
 				.addComponent(
 						ContinuesRooster.class,
 						ContinuesFromSteamClientLocalfiles.class)
-				.addComponent(Favorites.class)
 				.addComponent(FavoritesOfUser.class, FromSettings.class);
 
 		container

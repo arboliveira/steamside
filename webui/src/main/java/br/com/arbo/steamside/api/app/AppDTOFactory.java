@@ -8,20 +8,17 @@ import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.apps.NotFound;
-import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class AppDTOFactory {
 
 	public static AppDTO valueOf(
-			final AppId appid, final Library library,
+			final App app,
 			TagsQueries queries)
-			throws MissingFrom_appinfo_vdf, NotFound
+			throws MissingFrom_appinfo_vdf
 	{
-		final App app = library.find(appid);
-
+		final AppId appid = app.appid();
 		final Stream<AppTagDTO> dtos = queries.tags(appid)
 				.map(CollectionI::name).map(AppTagDTO::new);
 

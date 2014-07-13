@@ -1,9 +1,7 @@
-package br.com.arbo.steamside.apps;
+package br.com.arbo.steamside.steam.client.apps;
 
 import java.util.function.Predicate;
 
-import br.com.arbo.steamside.steam.client.apps.App;
-import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 
 public class FilterPlatform implements Predicate<App> {
