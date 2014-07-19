@@ -139,23 +139,33 @@ var Deck = Backbone.Model.extend({
 
 var Game_Tag_View = Backbone.View.extend({
 
-	events: {
-		"click .game-tag-name": "tagClicked"
+	events:
+	{
+		//"click .game-tag-link": "tagClicked"
 	},
 
-	render: function() {
-		var name_el = this.$el.find(".game-tag-name");
-		name_el.text(this.model.name());
+	render: function()
+	{
+		this.$(".game-tag-name").text(this.model.name());
+		this.$(".game-tag-link").attr('href', this.collection_url());
 		return this;
 	},
 
-	tagClicked: function(e) {
+	tagClicked: function(e)
+	{
 		e.preventDefault();
-		var name = this.model.name();
 
+		/*
 		Backbone.history.navigate(
-				"#/collections/" + name + "/edit",
+				,
 			{trigger: true});
+			*/
+	},
+
+	collection_url: function()
+	{
+		var name = this.model.name();
+		return "#/collections/" + name + "/edit";
 	}
 
 });
@@ -220,10 +230,15 @@ var GameCardView = Backbone.View.extend({
 		this.$('.game-link').attr('href', link);
         this.$('.game-tile-store').attr('href', store);
 
-        if (this.model.unavailable()) {
+        if (this.model.unavailable())
+		{
         	this.$el.addClass('game-unavailable');
         	this.$('.game-tile-play').hide();
         }
+		else
+		{
+			this.$('.game-tile-play').attr('href', link);
+		}
 
 		var tags = this.model.tagsCollection();
 		new Game_Tag_ListView({
@@ -254,7 +269,8 @@ var GameCardView = Backbone.View.extend({
 		whatWillHappen.removeClass('what-will-happen');
     },
 
-    gameClicked: function(e) {				"use strict";
+    gameClicked: function(e)
+	{
 		e.preventDefault();
 		var w = this.whatWillHappen();
 		if (w != null)
@@ -265,12 +281,14 @@ var GameCardView = Backbone.View.extend({
 		this.playClicked(e);
 	},
 
-	playClicked: function(e) {				"use strict";
+	playClicked: function(e)
+	{
 		e.preventDefault();
 		this.model.play();
 	},
 
-	tagClicked: function(e) {				"use strict";
+	tagClicked: function(e)
+	{
 		e.preventDefault();
 		if (this.on_tag != null) this.on_tag(this.model);
 	},
