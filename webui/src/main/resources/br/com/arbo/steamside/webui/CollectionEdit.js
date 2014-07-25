@@ -29,8 +29,8 @@ var CollectionEditView = Backbone.View.extend({
 		this.collection_name = options.collection_name;
 	},
 
-	render: function() {		"use strict";
-
+	render: function()
+	{
 		var that = this;
 
 		var collectionEditSearchResults = new SearchResults();
@@ -87,12 +87,6 @@ var CollectionEditView = Backbone.View.extend({
 		var form = this.$("#form-command-box");
 		form.append(recent);
 		viewCommandBox.emptyCommandHints();
-        /*
-		viewCommandBox.appendCommandHint(this.tileSearchHintContinueA);
-		viewCommandBox.appendCommandHint(this.tileSearchHintSearchA);
-		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintContinueB);
-		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintSearchB);
-		*/
 		viewCommandBox.input_query_focus();
 
         this.prepareSearchRecent();
@@ -103,23 +97,8 @@ var CollectionEditView = Backbone.View.extend({
 		var input = view.input_query_val();
 		if (input == '') {
             this.$('.command-hint').text('recently played');
-            /*
-			this.tileSearchHintContinueA.show();
-			this.tileSearchHintContinueB.show();
-			this.tileSearchHintSearchA.hide();
-			this.tileSearchHintSearchB.hide();
-             */
 		} else {
             this.$('.command-hint').text('search ' + input);
-             /*
-			this.tileSearchHintContinueA.hide();
-			this.tileSearchHintContinueB.hide();
-			this.tileSearchHintSearchA.show();
-			this.tileSearchHintSearchB.show();
-			var selector = '#search-command-hint-subject';
-			this.tileSearchHintSearchA.find(selector).text(input);
-			this.tileSearchHintSearchB.find(selector).text(input);
-             */
 		}
 	},
 
@@ -142,36 +121,32 @@ var CollectionEditView = Backbone.View.extend({
     },
 
     on_search_command_alternate: function(view) {
-		/*
-		 var input = view.input_query_val();
-		if (input == '') {
-			var gameB = this.continues.at(1);
-			gameB.play();
-		} else {
-			var searchResults = this.searchResults;
-			searchResults.query = input;
-			fetch_json(searchResults, function() {
-				var first = searchResults.at(0);
-				first.play();
-			});
-		}
-		*/
 	},
 
-	on_SearchResults_GameCard_render: function (viewGameCard) {
+	find_play_button: function (viewGameCard) {
 		var bar = viewGameCard.$el.find('.game-tile-command-bar');
 		var play = bar.find('.game-tile-play');
+		return play;
+	},
+
+	build_add_button: function (play, viewGameCard) {
 		var add = play.clone();
 		add.text('add');
 		add.removeClass('game-tile-play');
-		add.insertBefore(play);
 
 		var that = this;
-		add.click(function(e) {
-            e.preventDefault();
-            that.on_add_click(viewGameCard.model.appid());
-            viewGameCard.$el.slideUp();
-        });
+		add.click(function (e) {
+			e.preventDefault();
+			that.on_add_click(viewGameCard.model.appid());
+			viewGameCard.$el.slideUp();
+		});
+		return add;
+	},
+
+	on_SearchResults_GameCard_render: function (viewGameCard) {
+		var play = this.find_play_button(viewGameCard);
+		var add = this.build_add_button(play, viewGameCard);
+		add.insertBefore(play);
 	},
 
 	on_add_click: function(appid) {

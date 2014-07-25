@@ -216,7 +216,8 @@ var GameCardView = Backbone.View.extend({
 		this.model.on('game:play:complete', this.game_play_complete, this);
 	},
 
-	render: function () {		"use strict";
+	render: function ()
+	{
 		var name = this.model.name();
 		var link = this.model.link();
 		var img = this.model.image();
