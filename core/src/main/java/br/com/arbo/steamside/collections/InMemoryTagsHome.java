@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -107,6 +109,14 @@ public class InMemoryTagsHome implements TagsData {
 		return collectionsByApp.collections(app);
 	}
 
+	@Override
+	public void untag(@NonNull CollectionI c, @NonNull AppId appid)
+			throws NotFound
+	{
+		CollectionImpl stored = stored(c);
+		doUntag(stored, appid);
+	}
+
 	Stream<TagImpl> appsIn(final CollectionImpl stored)
 	{
 		return tagsByCollection.tags(stored);
@@ -117,6 +127,13 @@ public class InMemoryTagsHome implements TagsData {
 		appsByCollection.tag(c, appid);
 		collectionsByApp.tag(c, appid);
 		tagsByCollection.tag(c, appid);
+	}
+
+	void doUntag(CollectionImpl c, @NonNull final AppId appid)
+	{
+		appsByCollection.untag(c, appid);
+		collectionsByApp.untag(c, appid);
+		tagsByCollection.untag(c, appid);
 	}
 
 	WithCount withCount(CollectionI c)
@@ -169,23 +186,36 @@ public class InMemoryTagsHome implements TagsData {
 
 	static class AppsByCollection {
 
-		public boolean isTagged(AppId a, CollectionImpl c)
-		{
-			Collection<AppId> v = map.get(c);
-			if (v == null) return false;
-			return v.contains(a);
-		}
-
 		Stream<AppId> apps(CollectionImpl c)
 		{
-			Collection<AppId> v = map.get(c);
-			if (v == null) return Stream.empty();
-			return v.stream();
+			return getOptional(c)
+					.map(Collection::stream)
+					.orElse(Stream.empty());
+		}
+
+		boolean isTagged(AppId a, CollectionImpl c)
+		{
+			return getOptional(c)
+					.map(v -> v.contains(a))
+					.orElse(false);
 		}
 
 		void tag(CollectionImpl c, AppId a)
 		{
-			map.computeIfAbsent(c, k -> new HashSet<AppId>()).add(a);
+			map
+					.computeIfAbsent(c, k -> new HashSet<AppId>())
+					.add(a);
+		}
+
+		void untag(CollectionImpl c, AppId a)
+		{
+			getOptional(c)
+					.ifPresent(v -> v.remove(a));
+		}
+
+		private Optional<Collection<AppId>> getOptional(CollectionImpl c)
+		{
+			return Optional.ofNullable(map.get(c));
 		}
 
 		Map<CollectionImpl, Collection<AppId>> map = new IdentityHashMap<>();
@@ -193,21 +223,34 @@ public class InMemoryTagsHome implements TagsData {
 
 	static class CollectionsByApp {
 
-		public boolean isCollected(AppId appid)
+		Stream<CollectionImpl> collections(AppId a)
+		{
+			return getOptional(a)
+					.map(v -> v.stream())
+					.orElse(Stream.empty());
+		}
+
+		boolean isCollected(AppId appid)
 		{
 			return map.containsKey(appid);
 		}
 
-		Stream<CollectionImpl> collections(AppId a)
-		{
-			Collection<CollectionImpl> v = map.get(a);
-			if (v == null) return Stream.empty();
-			return v.stream();
-		}
-
 		void tag(CollectionImpl c, AppId a)
 		{
-			map.computeIfAbsent(a, k -> new HashSet<CollectionImpl>()).add(c);
+			map
+			.computeIfAbsent(a, k -> new HashSet<CollectionImpl>())
+			.add(c);
+		}
+
+		void untag(CollectionImpl c, AppId a)
+		{
+			getOptional(a)
+					.ifPresent(v -> v.remove(c));
+		}
+
+		private Optional<Collection<CollectionImpl>> getOptional(AppId a)
+		{
+			return Optional.ofNullable(map.get(a));
 		}
 
 		Map<AppId, Collection<CollectionImpl>> map = new HashMap<>();
@@ -234,16 +277,28 @@ public class InMemoryTagsHome implements TagsData {
 
 		void tag(CollectionImpl c, @NonNull AppId a)
 		{
-			if (a == null) throw new NullPointerException();
-			map.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
-					.computeIfAbsent(a, TagImpl::new);
+			Objects.requireNonNull(a);
+			map
+			.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
+			.computeIfAbsent(a, TagImpl::new);
 		}
 
 		Stream<TagImpl> tags(CollectionImpl c)
 		{
-			Map<AppId, TagImpl> v = map.get(c);
-			if (v == null) return Stream.empty();
-			return v.values().stream();
+			return getOptional(c)
+					.map(v -> v.values().stream())
+					.orElse(Stream.empty());
+		}
+
+		void untag(CollectionImpl c, AppId a)
+		{
+			getOptional(c)
+					.ifPresent(v -> v.remove(a));
+		}
+
+		private Optional<Map<AppId, TagImpl>> getOptional(CollectionImpl c)
+		{
+			return Optional.ofNullable(map.get(c));
 		}
 
 		Map<CollectionImpl, Map<AppId, TagImpl>> map = new IdentityHashMap<>();

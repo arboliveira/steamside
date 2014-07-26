@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.data;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -30,6 +31,22 @@ import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class ObservableSteamsideData implements SteamsideData {
+
+	static Object invokeMethod(Object obj, Method method, Object[] args)
+			throws IllegalAccessException, InvocationTargetException
+	{
+		try
+		{
+			return method.invoke(obj, args);
+		}
+		catch (InvocationTargetException e)
+		{
+			Throwable cause = e.getCause();
+			if (cause instanceof RuntimeException)
+				throw (RuntimeException) cause;
+			throw e;
+		}
+	}
 
 	public ObservableSteamsideData(SteamsideData data)
 	{
@@ -115,7 +132,7 @@ public class ObservableSteamsideData implements SteamsideData {
 		public Object invoke(Object proxy, Method method, Object[] args)
 				throws Throwable
 		{
-			Object ret = method.invoke(target.get(), args);
+			Object ret = invokeMethod(target.get(), method, args);
 			changed();
 			return ret;
 		}
@@ -282,7 +299,7 @@ public class ObservableSteamsideData implements SteamsideData {
 		public Object invoke(Object proxy, Method method, Object[] args)
 				throws Throwable
 		{
-			return method.invoke(target.get(), args);
+			return invokeMethod(target.get(), method, args);
 		}
 
 		private final Supplier< ? extends T> target;

@@ -86,6 +86,13 @@ public class AutowireTagsData implements TagsData {
 		return reloadable().tags(app);
 	}
 
+	@Override
+	public void untag(@NonNull CollectionI c, @NonNull AppId appid)
+			throws NotFound
+	{
+		reloadable().untag(c, appid);
+	}
+
 	private TagsData reloadable()
 	{
 		return steamside.tags();
