@@ -31,7 +31,7 @@ import br.com.arbo.steamside.types.CollectionName;
 public class CollectionController {
 
 	private static LinkedList<CollectionDTO> jsonify(
-			final Stream< ? extends WithCount> all)
+			Stream< ? extends WithCount> all)
 	{
 		return all
 				.map(CollectionDTO::valueOf)
@@ -41,7 +41,8 @@ public class CollectionController {
 	}
 
 	@Inject
-	public CollectionController(Library library, CollectionsData collections,
+	public CollectionController(
+			Library library, CollectionsData collections,
 			TagsData tags, Settings settings,
 			br.com.arbo.steamside.api.app.AppSettings apiAppSettings)
 	{
@@ -55,10 +56,9 @@ public class CollectionController {
 
 	@RequestMapping(value = "{name}/add/{appid}")
 	@ResponseBody
-	public void add(@PathVariable final @NonNull String name,
-			@PathVariable final @NonNull String appid)
-			throws
-			br.com.arbo.steamside.data.collections.NotFound
+	public void add(
+			@PathVariable @NonNull String name,
+			@PathVariable @NonNull String appid)
 	{
 		tags.tagRemember(new CollectionName(name), new AppId(appid));
 	}
@@ -72,17 +72,17 @@ public class CollectionController {
 
 	@RequestMapping(value = "{name}/create")
 	@ResponseBody
-	public void create(@PathVariable final @NonNull String name)
+	public void create(@PathVariable @NonNull String name)
 	{
-		collections.add(new CollectionImpl(new CollectionName(name),
-				CollectionI.IsSystem.NO));
+		collections.add(
+				new CollectionImpl(
+						new CollectionName(name),
+						CollectionI.IsSystem.NO));
 	}
 
 	@RequestMapping(value = "collection.json", params = "name")
 	@ResponseBody
-	public List<AppDTO> json(@RequestParam final String name)
-			throws
-			br.com.arbo.steamside.data.collections.NotFound
+	public List<AppDTO> json(@RequestParam String name)
 	{
 		return new CollectionController_collection_json(
 				name, apiAppSettings.limit(), sys, library, tags,
@@ -107,6 +107,15 @@ public class CollectionController {
 	public List<CollectionDTO> jsonTagSuggestions()
 	{
 		return jsonify(tags.recent());
+	}
+
+	@RequestMapping(value = "{name}/remove/{appid}")
+	@ResponseBody
+	public void remove(
+			@PathVariable @NonNull String name,
+			@PathVariable @NonNull String appid)
+	{
+		tags.untag(new CollectionName(name), new AppId(appid));
 	}
 
 	private final br.com.arbo.steamside.api.app.AppSettings apiAppSettings;

@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.collections;
 
+import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -19,6 +20,22 @@ public interface TagsData extends TagsQueries, TagsWrites {
 	{
 		CollectionI find = collections().addIfAbsent(collection);
 		this.tagRemember(find, appid);
+	}
+
+	default void untag(CollectionName collection, AppId appid)
+	{
+		CollectionI find;
+
+		try
+		{
+			find = collections().find(collection);
+		}
+		catch (NotFound e)
+		{
+			return;
+		}
+
+		this.untag(find, appid);
 	}
 
 }

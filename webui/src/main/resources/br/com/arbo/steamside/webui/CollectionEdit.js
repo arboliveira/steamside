@@ -61,6 +61,7 @@ var CollectionEditView = Backbone.View.extend({
             el: this.$('#games-in-collection-deck'),
 			cardTemplatePromise: this.cardTemplatePromise,
             collection: inCollection,
+			on_GameCard_render: function(viewGameCard) { that.on_GamesInCollection_GameCard_render(viewGameCard) },
 			on_tag: function(game, segmentWithGameCard) { TagTile.on_tag(game, segmentWithGameCard) }
         });
 
@@ -129,6 +130,18 @@ var CollectionEditView = Backbone.View.extend({
 		return play;
 	},
 
+	on_SearchResults_GameCard_render: function (viewGameCard) {
+		var play = this.find_play_button(viewGameCard);
+		var add = this.build_add_button(play, viewGameCard);
+		add.insertBefore(play);
+	},
+
+	on_GamesInCollection_GameCard_render: function (viewGameCard) {
+		var play = this.find_play_button(viewGameCard);
+		var button = this.build_remove_button(play, viewGameCard);
+		button.insertBefore(play);
+	},
+
 	build_add_button: function (play, viewGameCard) {
 		var add = play.clone();
 		add.text('add');
@@ -138,15 +151,25 @@ var CollectionEditView = Backbone.View.extend({
 		add.click(function (e) {
 			e.preventDefault();
 			that.on_add_click(viewGameCard.model.appid());
+			// TODO UI Hide the card by event reaction instead of brute force
 			viewGameCard.$el.slideUp();
 		});
 		return add;
 	},
 
-	on_SearchResults_GameCard_render: function (viewGameCard) {
-		var play = this.find_play_button(viewGameCard);
-		var add = this.build_add_button(play, viewGameCard);
-		add.insertBefore(play);
+	build_remove_button: function (play, viewGameCard) {
+		var button = play.clone();
+		button.text('remove');
+		button.removeClass('game-tile-play');
+
+		var that = this;
+		button.click(function (e) {
+			e.preventDefault();
+			that.on_remove_click(viewGameCard.model.appid());
+			// TODO UI Hide the card by event reaction instead of brute force
+			viewGameCard.$el.slideUp();
+		});
+		return button;
 	},
 
 	on_add_click: function(appid) {
@@ -164,5 +187,22 @@ var CollectionEditView = Backbone.View.extend({
                 fetch_json(that.inCollection);
             }
         });
+	},
+
+	on_remove_click: function(appid) {
+		var name = this.collection_name;
+		var aUrl = "api/collection/" + name + "/remove/" + appid;
+
+		var that = this;
+		$.ajax({
+			url: aUrl,
+			dataType: dataTypeOf(aUrl),
+			beforeSend: function(){
+				// TODO display 'removing...'
+			},
+			complete: function(){
+				fetch_json(that.inCollection);
+			}
+		});
 	}
 });

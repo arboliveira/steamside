@@ -25,4 +25,7 @@ public interface TagsWrites {
 			@NonNull CollectionI c,
 			@NonNull AppId appid) throws NotFound;
 
+	void untag(
+			@NonNull CollectionI c,
+			@NonNull AppId appid) throws NotFound;
 }

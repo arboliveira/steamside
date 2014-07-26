@@ -1,6 +1,10 @@
 package br.com.arbo.steamside.data;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -8,14 +12,17 @@ import org.eclipse.jdt.annotation.NonNull;
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.CollectionsWrites;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsData;
+import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.TagsWrites;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.kids.Kid;
+import br.com.arbo.steamside.kids.Kids;
 import br.com.arbo.steamside.kids.KidsData;
 import br.com.arbo.steamside.kids.KidsWrites;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
@@ -29,7 +36,7 @@ public class ObservableSteamsideData implements SteamsideData {
 		steamside = data;
 	}
 
-	public void addObserver(Observer listener)
+	public void addObserver(ChangeObserver listener)
 	{
 		listeners.add(listener);
 	}
@@ -48,13 +55,23 @@ public class ObservableSteamsideData implements SteamsideData {
 	@Override
 	public KidsData kids()
 	{
-		return new AutoSaveKids();
+		return new ChangeAwareKidsData();
 	}
 
 	@Override
 	public TagsData tags()
 	{
-		return new AutoSaveTags();
+		return new ChangeAwareTagsData();
+	}
+
+	<T> T newChangeAwareProxy(Class<T> intf, Supplier< ? extends T> target)
+	{
+		return newProxyInstance(intf, new ChangeAware<T>(target));
+	}
+
+	<T> T newImmediateProxy(Class<T> intf, Supplier< ? extends T> target)
+	{
+		return newProxyInstance(intf, new Immediate<T>(target));
 	}
 
 	CollectionsData realCollections()
@@ -72,63 +89,126 @@ public class ObservableSteamsideData implements SteamsideData {
 		return steamside.tags();
 	}
 
-	public interface Observer {
+	@SuppressWarnings("unchecked")
+	private <T> T newProxyInstance(Class<T> intf, final InvocationHandler h)
+	{
+		return (T) Proxy.newProxyInstance(
+				this.getClass().getClassLoader(),
+				new Class[] { intf },
+				h);
+	}
+
+	public interface ChangeObserver {
 
 		void onChange();
 
 	}
 
-	class AutoSaveCollections
-	extends CollectionsWritesSpy
-	implements CollectionsData {
+	class ChangeAware<T> implements InvocationHandler {
+
+		ChangeAware(final Supplier< ? extends T> target)
+		{
+			this.target = target;
+		}
+
+		@Override
+		public Object invoke(Object proxy, Method method, Object[] args)
+				throws Throwable
+		{
+			Object ret = method.invoke(target.get(), args);
+			changed();
+			return ret;
+		}
+
+		private final Supplier< ? extends T> target;
+
+	}
+
+	class ChangeAwareCollectionsData implements CollectionsData {
+
+		ChangeAwareCollectionsData()
+		{
+			Supplier<CollectionsData> target = () -> realCollections();
+			reads = newImmediateProxy(CollectionsQueries.class, target);
+			writes = newChangeAwareProxy(CollectionsWrites.class, target);
+		}
+
+		@Override
+		public void add(@NonNull CollectionI in) throws Duplicate
+		{
+			writes.add(in);
+		}
 
 		@Override
 		public Stream< ? extends CollectionI> all()
 		{
-			return realCollections().all();
+			return reads.all();
 		}
 
 		@Override
 		@NonNull
 		public CollectionI find(CollectionName name) throws NotFound
 		{
-			return realCollections().find(name);
+			return reads.find(name);
 		}
 
+		private final CollectionsQueries reads;
+		private final CollectionsWrites writes;
 	}
 
-	class AutoSaveKids
-	extends KidsWritesSpy
-	implements KidsData {
+	class ChangeAwareKidsData implements KidsData
+	{
+
+		ChangeAwareKidsData()
+		{
+			Supplier<KidsData> target = () -> realKids();
+			reads = newImmediateProxy(Kids.class, target);
+			writes = newChangeAwareProxy(KidsWrites.class, target);
+		}
+
+		@Override
+		public void add(Kid kid) throws br.com.arbo.steamside.kids.Duplicate
+		{
+			writes.add(kid);
+		}
 
 		@Override
 		public Stream<Kid> all()
 		{
-			return realKids().all();
+			return reads.all();
 		}
 
 		@Override
 		public Kid find(User user) throws br.com.arbo.steamside.kids.NotFound
 		{
-			return realKids().find(user);
+			return reads.find(user);
 		}
+
+		private final Kids reads;
+
+		private final KidsWrites writes;
 
 	}
 
-	class AutoSaveTags
-	extends TagsWritesSpy
-	implements TagsData {
+	class ChangeAwareTagsData implements TagsData {
+
+		ChangeAwareTagsData()
+		{
+			Supplier<TagsData> target = () -> realTags();
+			reads = newImmediateProxy(TagsQueries.class, target);
+			writes = newChangeAwareProxy(TagsWrites.class, target);
+		}
 
 		@Override
 		public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
 		{
-			return realTags().allWithCount(criteria);
+			return reads.allWithCount(criteria);
 		}
 
 		@Override
 		public Stream< ? extends Tag> apps(CollectionI collection)
 		{
-			return realTags().apps(collection);
+			return reads.apps(collection);
 		}
 
 		@Override
@@ -140,81 +220,78 @@ public class ObservableSteamsideData implements SteamsideData {
 		@Override
 		public boolean isCollected(AppId appid)
 		{
-			return realTags().isCollected(appid);
+			return reads.isCollected(appid);
 		}
 
 		@Override
 		public boolean isTagged(AppId appid, CollectionI collection)
 		{
-			return realTags().isTagged(appid, collection);
+			return reads.isTagged(appid, collection);
 		}
 
 		@Override
 		public Stream< ? extends WithCount> recent()
 		{
-			return realTags().recent();
+			return reads.recent();
+		}
+
+		@Deprecated
+		@Override
+		public void tag(@NonNull CollectionI c, @NonNull AppId appid)
+		{
+			writes.tag(c, appid);
+		}
+
+		@Override
+		public void tag(CollectionI c, Stream<AppId> apps)
+		{
+			writes.tag(c, apps);
+		}
+
+		@Override
+		public void tagRemember(@NonNull CollectionI c, @NonNull AppId appid)
+		{
+			writes.tagRemember(c, appid);
 		}
 
 		@Override
 		public Stream< ? extends CollectionI> tags(AppId app)
 		{
-			return realTags().tags(app);
+			return reads.tags(app);
 		}
+
+		@Override
+		public void untag(@NonNull CollectionI c, @NonNull AppId appid)
+		{
+			writes.untag(c, appid);
+		}
+
+		private final TagsQueries reads;
+
+		private final TagsWrites writes;
 	}
 
-	class CollectionsWritesSpy implements CollectionsWrites {
+	static final class Immediate<T> implements InvocationHandler {
 
-		@Override
-		public void add(@NonNull CollectionI in) throws Duplicate
+		Immediate(final Supplier< ? extends T> target)
 		{
-			realCollections().add(in);
-			changed();
-		}
-
-	}
-
-	class KidsWritesSpy implements KidsWrites {
-
-		@Override
-		public void add(Kid kid) throws br.com.arbo.steamside.kids.Duplicate
-		{
-			realKids().add(kid);
-			changed();
-		}
-
-	}
-
-	class TagsWritesSpy implements TagsWrites {
-
-		@Deprecated
-		@Override
-		public void tag(@NonNull CollectionI c, @NonNull AppId appid)
-				throws NotFound
-		{
-			realTags().tag(c, appid);
-			changed();
+			this.target = target;
 		}
 
 		@Override
-		public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
+		public Object invoke(Object proxy, Method method, Object[] args)
+				throws Throwable
 		{
-			realTags().tag(c, apps);
-			changed();
+			return method.invoke(target.get(), args);
 		}
 
-		@Override
-		public void tagRemember(@NonNull CollectionI c, @NonNull AppId appid)
-				throws NotFound
-		{
-			realTags().tagRemember(c, appid);
-			changed();
-		}
+		private final Supplier< ? extends T> target;
 
 	}
 
-	final AutoSaveCollections autoSaveCollections = new AutoSaveCollections();
+	final CollectionsData autoSaveCollections = new ChangeAwareCollectionsData();
 
-	private final ArrayList<Observer> listeners = new ArrayList<>(1);
+	private final ArrayList<ChangeObserver> listeners = new ArrayList<>(1);
 
 	private final SteamsideData steamside;
 }
