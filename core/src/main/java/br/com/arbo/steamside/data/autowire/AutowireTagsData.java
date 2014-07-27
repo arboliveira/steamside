@@ -8,11 +8,9 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
-import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.data.collections.NotFound;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class AutowireTagsData implements TagsData {
@@ -24,9 +22,9 @@ public class AutowireTagsData implements TagsData {
 	}
 
 	@Override
-	public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
+	public Stream< ? extends WithTags> allWithTags()
 	{
-		return reloadable().allWithCount(criteria);
+		return reloadable().allWithTags();
 	}
 
 	@Override

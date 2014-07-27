@@ -19,11 +19,31 @@
 
     <script type="application/javascript">
 
-        function visibleGames(segment) {
-            return segment.find('.game-tile').filter(':visible').length;
-        }
+		//
+		// TESTS BEGIN
+		//
 
         var Test_Steamside_html = Backbone.Model.extend({
+
+			loadAndTest: function() {
+				this.loadPageToTest();
+				this.runTests();
+			},
+
+			loadPageToTest: function () {
+				var path = 'Steamside.html';
+				$.ajax({url:path, success: function(page) {
+					$('#page-to-test').append($(page));
+				}, dataType: 'html'});
+			},
+
+			runTests: function () {
+				var that = this;
+				asyncTest("Continues Segment", function(){that.testContinues()});
+				asyncTest("Search Segment", function(){that.testSearch()});
+				asyncTest("Favorites Segment - more button", function(){that.testFavorites_moreButton()});
+				asyncTest("Favorites Segment - switch", function(){that.testFavorites_switch()});
+			},
 
             testContinues: function() {
                 var segment = $('#continues-segment');
@@ -104,35 +124,23 @@
                     start();
                 };
                 whenDialogAppears();
-            },
-
-            runTests: function () {
-                var that = this;
-                asyncTest("Continues Segment", function(){that.testContinues()});
-                asyncTest("Search Segment", function(){that.testSearch()});
-                asyncTest("Favorites Segment - more button", function(){that.testFavorites_moreButton()});
-                asyncTest("Favorites Segment - switch", function(){that.testFavorites_switch()});
-            },
-
-            loadPageToTest: function () {
-                var path = 'Steamside.html';
-                $.ajax({url:path, success: function(page) {
-                    $('#page-to-test').append($(page));
-                }, dataType: 'html'});
-            },
-
-            loadAndTest: function() {
-                this.loadPageToTest();
-                this.runTests();
             }
 
         });
 
-        $(function() {
+		function visibleGames(segment) {
+			return segment.find('.game-tile').filter(':visible').length;
+		}
+
+		$(function() {
             new Test_Steamside_html().loadAndTest();
         });
 
-    </script>
+		//
+		// TESTS END
+		//
+
+	</script>
 
 </head>
 <body>

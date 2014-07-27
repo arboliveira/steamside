@@ -7,9 +7,9 @@ import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class Available {
+public class MissingFromLibrary {
 
-	public Available(Library library)
+	public MissingFromLibrary(Library library)
 	{
 		this.library = library;
 	}

@@ -5,6 +5,32 @@ var CollectionPickTile = {
 	}
 };
 
+var SwitchFavoritesWorld = WorldActions.extend(
+	{
+		on_category_change: null,
+
+		initialize: function(options)
+		{
+			this.on_category_change = options.on_category_change;
+		},
+
+		tileLoad: function(whenDone)
+		{
+			CollectionPickTile.whenLoaded(whenDone);
+		},
+
+		newView: function(tile)
+		{
+			var that = this;
+
+			return new SwitchFavoritesView({
+				el: tile.clone(),
+				on_category_change: function() {that.on_category_change();}
+			}).render();
+		}
+	}
+);
+
 var SwitchFavoritesView = Backbone.View.extend({
 	on_category_change: null,
 

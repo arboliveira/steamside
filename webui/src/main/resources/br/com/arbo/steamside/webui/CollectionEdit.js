@@ -7,6 +7,41 @@ var CollectionEditTile = {
 	}
 };
 
+var CollectionsEditWorld = WorldActions.extend(
+	{
+		collection_name: null,
+
+		cardTemplatePromise: null,
+
+		initialize: function(options)
+		{
+			if (options.cardTemplatePromise == null)
+			{
+				throw new Error("cardTemplatePromise is required");
+			}
+			this.cardTemplatePromise = options.cardTemplatePromise;
+		},
+
+		respawnWithCollection: function(collection_name) {
+			this.collection_name = collection_name;
+		},
+
+		tileLoad: function(whenDone)
+		{
+			CollectionEditTile.whenLoaded(whenDone);
+		},
+
+		newView: function(tile)
+		{
+			return new CollectionEditView({
+				el: tile.clone(),
+				cardTemplatePromise: this.cardTemplatePromise,
+				collection_name: this.collection_name
+			}).render();
+		}
+	}
+);
+
 var SteamsideCollectionApps = Backbone.Collection.extend({
     model: Game,
 	collection_name: null,

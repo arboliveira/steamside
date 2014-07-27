@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+		PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<!-- ======================================================================= -->
+	<title>Test CollectionEdit</title>
+
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+
+	<script src="underscore.js" type="text/javascript"></script>
+	<script src="backbone.js" type="text/javascript"></script>
+	<script src="jquery-2.1.1.js" type="text/javascript"></script>
+
+	<link rel="stylesheet" href="qunit-1.11.0.css" />
+	<script src="qunit-1.11.0.js" type="text/javascript"></script>
+
+	<script type="application/javascript">
+
+		//
+		// TESTS BEGIN
+		//
+
+		var Test_CollectionEdit_html = Backbone.Model.extend({
+
+			loadAndTest: function() {
+				this.loadPageToTest();
+				this.runTests();
+			},
+
+			loadPageToTest: function () {
+				var path = 'CollectionEdit.html';
+				$.ajax({url:path, success: function(page) {
+					$('#page-to-test').append($(page));
+				}, dataType: 'html'});
+			},
+
+			runTests: function () {
+				var that = this;
+				asyncTest("Collection Segment", function(){that.testCollection()});
+			},
+
+			testCollection: function() {
+				var segment = $('#collection-segment');
+
+				var whenMoreButtonAppears = function () {
+					var b = segment.find('.more-button-text');
+					if (!b.is(':visible')) {
+						setTimeout(whenMoreButtonAppears, 40);
+						return;
+					}
+
+					equal(visibleGames(segment), 3, 'visible games before more');
+					b.click();
+					equal(visibleGames(segment), 5, 'visible games after more');
+
+					start();
+				};
+				whenMoreButtonAppears();
+			}
+
+		});
+
+		function visibleGames(segment) {
+			return segment.find('.game-tile').filter(':visible').length;
+		}
+
+		$(function() {
+			new Test_CollectionEdit_html().loadAndTest();
+		});
+
+		//
+		// TESTS END
+		//
+
+	</script>
+
+</head>
+<body>
+<!-- ======================================================================= -->
+
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<div id="page-to-test"></div>
+
+<!-- ======================================================================= -->
+</body>
+</html>

@@ -13,7 +13,7 @@ import br.com.arbo.steamside.favorites.FavoritesOfUser.NotSet;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
-import br.com.arbo.steamside.steam.client.library.Available;
+import br.com.arbo.steamside.steam.client.library.MissingFromLibrary;
 import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -38,7 +38,7 @@ class FavoritesController_favorites_json {
 		final Stream< ? extends Tag> appsOf = queries.appsOf(collection);
 
 		Stream<App> apps =
-				new Available(library)
+				new MissingFromLibrary(library)
 						.narrow(appsOf.map(Tag::appid));
 
 		Stream<App> filtered = new AppCriteria() {

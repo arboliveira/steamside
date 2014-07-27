@@ -12,13 +12,32 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.data.collections.NotFound;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class InMemoryTagsHome implements TagsData {
+
+	static WithTags withTags(
+			Map.Entry<CollectionImpl, Map<AppId, TagImpl>> e)
+	{
+		return new WithTags() {
+
+			@Override
+			public CollectionI collection()
+			{
+				return e.getKey();
+			}
+
+			@Override
+			public Stream<TagImpl> tags()
+			{
+				final Map<AppId, TagImpl> tags = e.getValue();
+				return tags.values().stream();
+			}
+
+		};
+	}
 
 	{
 		appsByCollection = new AppsByCollection();
@@ -33,9 +52,10 @@ public class InMemoryTagsHome implements TagsData {
 	}
 
 	@Override
-	public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
+	public Stream< ? extends WithTags> allWithTags()
 	{
-		return appsByCollection.map.entrySet().stream().map(this::withCount);
+		return tagsByCollection.map.entrySet().stream().map(
+				e -> withTags(e));
 	}
 
 	@Override
@@ -155,25 +175,6 @@ public class InMemoryTagsHome implements TagsData {
 		};
 	}
 
-	WithCount withCount(final Map.Entry<CollectionImpl, Collection<AppId>> e)
-	{
-		return new WithCount() {
-
-			@Override
-			public CollectionI collection()
-			{
-				return e.getKey();
-			}
-
-			@Override
-			public int count()
-			{
-				return e.getValue().size();
-			}
-
-		};
-	}
-
 	private void doRememberRecentTag(CollectionImpl stored)
 	{
 		recent.tagged(stored);
@@ -238,8 +239,8 @@ public class InMemoryTagsHome implements TagsData {
 		void tag(CollectionImpl c, AppId a)
 		{
 			map
-			.computeIfAbsent(a, k -> new HashSet<CollectionImpl>())
-			.add(c);
+					.computeIfAbsent(a, k -> new HashSet<CollectionImpl>())
+					.add(c);
 		}
 
 		void untag(CollectionImpl c, AppId a)
@@ -279,13 +280,14 @@ public class InMemoryTagsHome implements TagsData {
 		{
 			Objects.requireNonNull(a);
 			map
-			.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
-			.computeIfAbsent(a, TagImpl::new);
+					.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
+					.computeIfAbsent(a, TagImpl::new);
 		}
 
 		Stream<TagImpl> tags(CollectionImpl c)
 		{
-			return getOptional(c)
+			final Optional<Map<AppId, TagImpl>> optional = getOptional(c);
+			return optional
 					.map(v -> v.values().stream())
 					.orElse(Stream.empty());
 		}

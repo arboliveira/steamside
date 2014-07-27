@@ -11,8 +11,9 @@ import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
-import br.com.arbo.steamside.steam.client.library.Available;
 import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.library.MissingFromLibrary;
+import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 class CollectionController_collection_json {
@@ -40,9 +41,9 @@ class CollectionController_collection_json {
 						this.gamesOnly = _gamesOnly;
 					}
 				});
-		final Stream<App> apps =
-				new Available(library)
-						.narrow(appsOf.map(Tag::appid));
+		Stream<AppId> appids = appsOf.map(Tag::appid);
+		Stream<App> apps = new MissingFromLibrary(library)
+				.narrow(appids);
 		return new AppsDTO(apps, limit, queries).jsonable();
 	}
 

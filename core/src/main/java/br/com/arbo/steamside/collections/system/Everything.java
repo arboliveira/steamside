@@ -5,9 +5,9 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.collections.CollectionImpl;
-import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagImpl;
+import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.Library;
@@ -25,13 +25,13 @@ class Everything {
 
 	public Stream< ? extends Tag> appsOf(
 			CollectionName collectionName, AppCriteria criteria)
-			{
+	{
 		if (!instance.name().equalsCollectionName(collectionName))
 			throw new NotFound();
 
 		return library.allApps(criteria).map(app -> app.appid())
 				.map(TagImpl::new);
-			}
+	}
 
 	public WithCount withCount(AppCriteria criteria)
 	{

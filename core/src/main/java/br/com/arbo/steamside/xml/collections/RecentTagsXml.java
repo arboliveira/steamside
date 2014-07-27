@@ -2,9 +2,9 @@ package br.com.arbo.steamside.xml.collections;
 
 import java.util.LinkedList;
 
-import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.collections.TagsData;
+import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class RecentTagsXml {

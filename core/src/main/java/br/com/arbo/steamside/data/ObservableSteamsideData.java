@@ -14,7 +14,6 @@ import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CollectionsQueries;
-import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.CollectionsWrites;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsData;
@@ -26,7 +25,6 @@ import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.Kids;
 import br.com.arbo.steamside.kids.KidsData;
 import br.com.arbo.steamside.kids.KidsWrites;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -217,9 +215,9 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
+		public Stream< ? extends WithTags> allWithTags()
 		{
-			return reads.allWithCount(criteria);
+			return reads.allWithTags();
 		}
 
 		@Override

@@ -6,7 +6,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import br.com.arbo.steamside.collections.CollectionI;
-import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
+import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 
 @JsonAutoDetect
 @JsonSerialize(include = Inclusion.NON_NULL)

@@ -2,14 +2,12 @@ package br.com.arbo.steamside.collections;
 
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 public interface TagsQueries {
 
-	Stream< ? extends WithCount> allWithCount(AppCriteria criteria);
+	Stream< ? extends WithTags> allWithTags();
 
 	Stream< ? extends Tag> apps(CollectionI collection);
 
@@ -34,5 +32,19 @@ public interface TagsQueries {
 	Stream< ? extends WithCount> recent();
 
 	Stream< ? extends CollectionI> tags(AppId app);
+
+	public static interface WithCount {
+
+		CollectionI collection();
+
+		int count();
+	}
+
+	public static interface WithTags {
+
+		CollectionI collection();
+
+		Stream< ? extends Tag> tags();
+	}
 
 }

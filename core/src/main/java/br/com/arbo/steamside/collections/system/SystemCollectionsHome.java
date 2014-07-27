@@ -3,9 +3,10 @@ package br.com.arbo.steamside.collections.system;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.collections.CollectionI;
-import br.com.arbo.steamside.collections.CollectionsQueries.WithCount;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
+import br.com.arbo.steamside.collections.TagsQueries.WithCount;
+import br.com.arbo.steamside.collections.TagsQueries.WithTags;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.GameFinder;
@@ -34,7 +35,7 @@ public class SystemCollectionsHome {
 	public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
 	{
 		return Stream.concat(
-				tags.allWithCount(criteria),
+				this.withCount(criteria),
 				Stream.of(uncollected.withCount(criteria),
 						everything.withCount(criteria)));
 	}
@@ -60,7 +61,7 @@ public class SystemCollectionsHome {
 		}
 	}
 
-	private Stream< ? extends Tag> filter(
+	Stream< ? extends Tag> filter(
 			Stream< ? extends Tag> appsOf,
 			AppCriteria criteria)
 	{
@@ -68,6 +69,26 @@ public class SystemCollectionsHome {
 		Stream< ? extends Tag> s = appsOf;
 		if (criteria.gamesOnly) s = s.filter(this::isGame);
 		return s;
+	}
+
+	WithCount withCount(WithTags t, AppCriteria criteria)
+	{
+		return new WithCount() {
+
+			@Override
+			public CollectionI collection()
+			{
+				return t.collection();
+			}
+
+			@Override
+			public int count()
+			{
+				final Stream< ? extends Tag> tags = t.tags();
+				if (AppCriteria.isAll(criteria)) return (int) tags.count();
+				return (int) filter(tags, criteria).count();
+			}
+		};
 	}
 
 	private boolean isGame(AppId appid)
@@ -78,6 +99,12 @@ public class SystemCollectionsHome {
 	private boolean isGame(Tag tag)
 	{
 		return isGame(tag.appid());
+	}
+
+	private Stream< ? extends WithCount> withCount(AppCriteria criteria)
+	{
+		final Stream< ? extends WithTags> withTags = tags.allWithTags();
+		return withTags.map(t -> this.withCount(t, criteria));
 	}
 
 	private final Everything everything;

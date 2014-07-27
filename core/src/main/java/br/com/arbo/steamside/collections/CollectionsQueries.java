@@ -14,11 +14,4 @@ public interface CollectionsQueries {
 	@NonNull
 	CollectionI find(CollectionName name) throws NotFound;
 
-	public static interface WithCount {
-
-		CollectionI collection();
-
-		int count();
-	}
-
 }

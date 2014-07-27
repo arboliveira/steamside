@@ -211,12 +211,7 @@ var Steamside_html = {
 			});
 		}
 
-		return steamsideTileset.promise.then(function(xml)
-		{
-			var cardTile = new Tile({selector: ".game-tile"});
-			cardTile.chomp($(xml));
-			return cardTile.tile;
-		});
+		return GameTilePromise.buildCardTemplatePromise(steamsideTileset);
 	}
 
 };

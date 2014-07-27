@@ -1,3 +1,15 @@
+var GameTilePromise = {
+	buildCardTemplatePromise: function(steamsideTileset)
+	{
+		return steamsideTileset.promise.then(function(xml)
+		{
+			var cardTile = new Tile({selector: ".game-tile"});
+			cardTile.chomp($(xml));
+			return cardTile.tile;
+		});
+	}
+}
+
 var Game = Backbone.Model.extend({
 
 	initialize: function( opts ){
