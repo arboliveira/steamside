@@ -18,37 +18,39 @@ var Tileset = Backbone.Model.extend({
 var Tile = Backbone.Model.extend({
     selector: null,
 	tileset: null,
-	tile: null,
+	el_promise: null,
 
 	initialize: function() {
         this.selector = this.attributes.selector;
-        if (this.attributes.tileset != null) {
+
+        if (this.attributes.tileset != null)
+		{
             this.tileset = this.attributes.tileset;
-        } else if (this.attributes.url != null) {
+        }
+		else if (this.attributes.url != null)
+		{
             this.tileset = new Tileset({url: this.attributes.url});
         }
-		if (this.tileset != null) {
+
+		if (this.tileset != null)
+		{
 			var that = this;
-			this.tileset.promise.done(
+
+			this.el_promise = this.tileset.promise.then(
 				function($xml) {
-					that.chomp($($xml));
+					return that.chomp_el($($xml));
 				}
 			);
 		}
 	},
 
-	ajaxTile: function (callback) {
-		var that = this;
-		this.tileset.promise.done(
-			function() {
-				callback(that.tile);
-			}
-		);
+	ajaxTile: function (callback_el) {
+		this.el_promise.done(callback_el);
 	},
 
-	chomp: function($xml) {
+	chomp_el: function($xml) {
 		var element = $xml.find(this.selector);
-		this.tile = this.xml2html(element);
+		return this.xml2html(element);
 	},
 
 	xml2html: function(element) {
@@ -62,50 +64,35 @@ var SteamsideTileset = {
 
     tileset: new Tileset({url: 'tileset.html'}),
 
-	loadTileset: function() {
+	loadTileset: function()
+	{
 		var that = this;
-		this.tileset.promise.done(
-			function($xml) {
-				that.on_load($($xml));
+
+		this._moreButton = new Tile(
+			{
+				tileset: that.tileset,
+				selector: ".more-button"
 			}
 		);
+
+		this._collectionPick = new Tile(
+			{
+				tileset: that.tileset,
+				selector: ".collection-pick"
+			}
+		);
+
 		return this.tileset.promise;
 	},
 
-	on_load: function ($xml) {
-		this._gameCard = new Tile({selector: ".game-tile"});
-		this._moreButton = new Tile({selector: ".more-button"});
-		this._collectionPick = new Tile({selector: ".collection-pick"});
-		this._gameCard.chomp($xml);
-		this._moreButton.chomp($xml);
-		this._collectionPick.chomp($xml);
-	},
-
-    ajaxGameCard: function (callback) {
-		var that = this;
-		this.tileset.promise.done(
-			function() {
-				callback(that._gameCard.tile);
-			}
-		);
+    ajaxMoreButton: function (callback_el)
+	{
+		this._moreButton.ajaxTile(callback_el);
     },
 
-    ajaxMoreButton: function (callback) {
-		var that = this;
-		this.tileset.promise.done(
-			function() {
-				callback(that._moreButton.tile);
-			}
-		);
-    },
-
-    ajaxCollectionPick: function (callback) {
-		var that = this;
-		this.tileset.promise.done(
-			function() {
-				callback(that._collectionPick.tile);
-			}
-		);
+    ajaxCollectionPick: function (callback_el)
+	{
+		this._collectionPick.ajaxTile(callback_el);
     }
 
 };

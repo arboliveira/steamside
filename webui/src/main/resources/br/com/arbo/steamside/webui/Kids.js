@@ -1,3 +1,18 @@
+var KidsTilePromise =
+{
+	buildCardTemplatePromise: function(kidsTileset)
+	{
+		var cardTile = new Tile(
+			{
+				tileset: kidsTileset,
+				selector: "#KidsGameCard"
+			}
+		);
+
+		return cardTile.el_promise;
+	}
+}
+
 var KidsView = Backbone.View.extend({
 
 	tileset: null,
@@ -34,8 +49,7 @@ var KidsView = Backbone.View.extend({
 	on_tileset_done: function($xml)
 	{
 		var greetings = new Tile({selector: "#KidsGreetingView"});
-		greetings.chomp($xml);
-		var tile_el = greetings.tile.clone();
+		var tile_el = greetings.chomp_el($xml).clone();
 		this.$("#PageHeaderBannerSection").append(tile_el);
 	}
 });

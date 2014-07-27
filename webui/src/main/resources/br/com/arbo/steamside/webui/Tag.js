@@ -136,9 +136,13 @@ var TagView = Backbone.View.extend({
 		$.ajax({
 			url: aUrl,
 			dataType: dataTypeOf(aUrl)
-		}).done(function(){
+		})
+		.done(function()
+		{
 			that.on_tag_done();
-		}).fail(function(error){
+		})
+		.fail(function(error)
+		{
 			view.trouble(error);
 		});
 	},

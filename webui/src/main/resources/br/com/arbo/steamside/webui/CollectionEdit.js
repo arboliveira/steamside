@@ -52,6 +52,10 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 
 var CollectionEditView = Backbone.View.extend({
 
+	events: {
+		"click #side-link-merge": "mergeClicked"
+	},
+
 	cardTemplatePromise: null,
 
 	initialize: function(options)
@@ -92,6 +96,10 @@ var CollectionEditView = Backbone.View.extend({
 		var inCollection = new SteamsideCollectionApps();
         this.inCollection = inCollection;
         inCollection.collection_name = name;
+
+
+
+
 		new DeckView({
             el: this.$('#games-in-collection-deck'),
 			cardTemplatePromise: this.cardTemplatePromise,
@@ -138,7 +146,8 @@ var CollectionEditView = Backbone.View.extend({
 		}
 	},
 
-	on_search_command: function(view) {
+	on_search_command: function(view)
+	{
 		var input = view.input_query_val();
 		if (input == '') {
             this.prepareSearchRecent();
@@ -148,7 +157,8 @@ var CollectionEditView = Backbone.View.extend({
 		fetch_json(this.collectionEditSearchResults);
 	},
 
-    prepareSearchRecent: function () {
+    prepareSearchRecent: function ()
+	{
         var recent = this.$('#input-recent');
         recent.attr('value', 'true');
         var form = this.$("#form-command-box");
@@ -156,10 +166,12 @@ var CollectionEditView = Backbone.View.extend({
         this.collectionEditSearchResults.setQueryString(q);
     },
 
-    on_search_command_alternate: function(view) {
+    on_search_command_alternate: function(view)
+	{
 	},
 
-	find_play_button: function (viewGameCard) {
+	find_play_button: function (viewGameCard)
+	{
 		var bar = viewGameCard.$el.find('.game-tile-command-bar');
 		var play = bar.find('.game-tile-play');
 		return play;
@@ -171,13 +183,15 @@ var CollectionEditView = Backbone.View.extend({
 		add.insertBefore(play);
 	},
 
-	on_GamesInCollection_GameCard_render: function (viewGameCard) {
+	on_GamesInCollection_GameCard_render: function (viewGameCard)
+	{
 		var play = this.find_play_button(viewGameCard);
 		var button = this.build_remove_button(play, viewGameCard);
 		button.insertBefore(play);
 	},
 
-	build_add_button: function (play, viewGameCard) {
+	build_add_button: function (play, viewGameCard)
+	{
 		var add = play.clone();
 		add.text('add');
 		add.removeClass('game-tile-play');
@@ -192,7 +206,8 @@ var CollectionEditView = Backbone.View.extend({
 		return add;
 	},
 
-	build_remove_button: function (play, viewGameCard) {
+	build_remove_button: function (play, viewGameCard)
+	{
 		var button = play.clone();
 		button.text('remove');
 		button.removeClass('game-tile-play');
@@ -224,7 +239,8 @@ var CollectionEditView = Backbone.View.extend({
         });
 	},
 
-	on_remove_click: function(appid) {
+	on_remove_click: function(appid)
+	{
 		var name = this.collection_name;
 		var aUrl = "api/collection/" + name + "/remove/" + appid;
 
@@ -239,5 +255,10 @@ var CollectionEditView = Backbone.View.extend({
 				fetch_json(that.inCollection);
 			}
 		});
+	},
+
+	mergeClicked: function()
+	{
+
 	}
 });

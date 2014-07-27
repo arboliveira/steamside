@@ -139,7 +139,7 @@ var SteamsideView = Backbone.View.extend({
 		return this;
 	},
 
-	applyKidsMode: function(kidsMode)
+	applyKidsMode: function()
 	{
 		var kids = this.sessionModel.kidsmode();
 
@@ -185,18 +185,16 @@ var Steamside_html = {
 			 Load the entire tileset before you try to render anything.
 			 This includes history start, which loads the main page.
 			 */
-			SteamsideTileset.loadTileset().done(function()
-			{
-				// Start Backbone history a necessary step for bookmarkable URL's
-				Backbone.history.start();
+			SteamsideTileset.loadTileset();
 
-				new SteamsideView({
-					sessionModel: sessionModel,
-					cardTemplatePromise: cardTemplatePromise,
-					kidsTileset: kidsTileset
-				}).render();
-			});
+			// Start Backbone history a necessary step for bookmarkable URL's
+			Backbone.history.start();
 
+			new SteamsideView({
+				sessionModel: sessionModel,
+				cardTemplatePromise: cardTemplatePromise,
+				kidsTileset: kidsTileset
+			}).render();
 		}
 		).fail(function(jqXHR, textStatus, errorThrown)
 		{
@@ -206,13 +204,9 @@ var Steamside_html = {
 
 	buildCardTemplatePromise: function(kidsMode, kidsTileset, steamsideTileset)
 	{
-		if (kidsMode) {
-			return kidsTileset.promise.then(function(xml)
-			{
-				var cardTile = new Tile({selector: "#KidsGameCard"});
-				cardTile.chomp($(xml));
-				return cardTile.tile;
-			});
+		if (kidsMode)
+		{
+			return KidsTilePromise.buildCardTemplatePromise(kidsTileset);
 		}
 
 		return GameTilePromise.buildCardTemplatePromise(steamsideTileset);

@@ -1,12 +1,14 @@
 var GameTilePromise = {
 	buildCardTemplatePromise: function(steamsideTileset)
 	{
-		return steamsideTileset.promise.then(function(xml)
-		{
-			var cardTile = new Tile({selector: ".game-tile"});
-			cardTile.chomp($(xml));
-			return cardTile.tile;
-		});
+		var cardTile = new Tile(
+			{
+				tileset: steamsideTileset,
+				selector: ".game-tile"
+			}
+		);
+
+		return cardTile.el_promise;
 	}
 }
 
@@ -423,9 +425,9 @@ var DeckView = Backbone.View.extend({
         if (this.first_row == null) /* zero games */ return;
 
 		var that = this;
-		SteamsideTileset.ajaxMoreButton(function (tile) {
+		SteamsideTileset.ajaxMoreButton(function (tile_el) {
 			var moreButton = new MoreButtonView({
-				el: tile.clone(),
+				el: tile_el.clone(),
 				deck: that.deck
 			});
 			that.first_row.append(moreButton.render().el);
