@@ -8,10 +8,22 @@ import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class AppDTOFactory {
+
+	public static List<AppTagDTO> tags_jsonable(
+			final AppId appid,
+			TagsQueries queries)
+	{
+		final Stream<AppTagDTO> dtos = queries.tags(appid)
+				.map(CollectionI::name).map(AppTagDTO::new);
+
+		List<AppTagDTO> list = dtos.collect(
+				LinkedList::new, LinkedList::add,
+				LinkedList::addAll);
+		return list;
+	}
 
 	public static AppDTO valueOf(
 			final App app,
@@ -19,29 +31,10 @@ public class AppDTOFactory {
 			throws MissingFrom_appinfo_vdf
 	{
 		final AppId appid = app.appid();
-		final Stream<AppTagDTO> dtos = queries.tags(appid)
-				.map(CollectionI::name).map(AppTagDTO::new);
 
-		List<AppTagDTO> list = dtos.collect(
-				LinkedList::new, LinkedList::add,
-				LinkedList::addAll);
+		List<AppTagDTO> list = tags_jsonable(appid, queries);
 
-		boolean unavailable = isUnavailable(app);
-
-		return new AppDTO(appid, app.name(), list, unavailable);
-	}
-
-	private static boolean isUnavailable(final App app)
-	{
-		try
-		{
-			app.executable();
-			return false;
-		}
-		catch (NotAvailableOnThisPlatform not)
-		{
-			return true;
-		}
+		return new AppDTO(new AppApiApp(app), list);
 	}
 
 }
