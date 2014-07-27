@@ -13,7 +13,7 @@ public class AppDTO {
 
 	public AppDTO(AppApi app, List<AppTagDTO> tags)
 	{
-		this.appid = app.appid();
+		this.appid = app.appid().appid;
 		this.name = app.name();
 		this.link = app.run_api_link();
 		this.image = app.image();

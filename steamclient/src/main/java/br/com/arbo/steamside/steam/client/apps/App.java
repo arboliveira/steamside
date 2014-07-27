@@ -11,7 +11,7 @@ import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
-public interface App {
+public interface App extends LastPlayed {
 
 	@NonNull
 	AppId appid();
@@ -23,10 +23,12 @@ public interface App {
 
 	default boolean isGame()
 	{
-		try {
+		try
+		{
 			return type().isGame();
 		}
-		catch (MissingFrom_appinfo_vdf e) {
+		catch (MissingFrom_appinfo_vdf e)
+		{
 			return false;
 		}
 	}
@@ -35,9 +37,6 @@ public interface App {
 
 	@Nullable
 	String lastPlayed();
-
-	@NonNull
-	String lastPlayedOrCry() throws NeverPlayed;
 
 	@NonNull
 	AppName name() throws MissingFrom_appinfo_vdf;

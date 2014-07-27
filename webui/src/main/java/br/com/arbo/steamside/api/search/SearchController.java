@@ -17,7 +17,6 @@ import br.com.arbo.steamside.api.app.AppTagDTO;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.collections.TagsQueries;
-import br.com.arbo.steamside.steam.client.types.AppId;
 
 @Controller
 @RequestMapping("search")
@@ -52,7 +51,7 @@ public class SearchController {
 
 		List<AppTagDTO> tagsDTO =
 				AppDTOFactory.tags_jsonable(
-						new AppId(appApi.appid()), queries);
+						appApi.appid(), queries);
 
 		return new AppDTO(appApi, tagsDTO);
 	}

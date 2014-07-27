@@ -12,11 +12,13 @@ public class GameFinder {
 
 	public boolean isGame(AppId appid)
 	{
-		try {
+		try
+		{
 			return this.library.find(appid).isGame();
 		}
-		catch (NotFound notfound) {
-			return false;
+		catch (NotFound notfound)
+		{
+			return true;
 		}
 	}
 

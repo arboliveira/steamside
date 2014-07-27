@@ -1,7 +1,12 @@
 package br.com.arbo.steamside.api.app;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.apps.NeverPlayed;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class AppApiApp implements AppApi {
 
@@ -11,13 +16,20 @@ public class AppApiApp implements AppApi {
 	}
 
 	@Override
-	public String appid()
+	public AppId appid()
 	{
-		return app.appid().appid;
+		return app.appid();
 	}
 
 	@Override
-	public String name()
+	@NonNull
+	public String lastPlayedOrCry() throws NeverPlayed
+	{
+		return app.lastPlayedOrCry();
+	}
+
+	@Override
+	public String name() throws MissingFrom_appinfo_vdf
 	{
 		return app.name().name;
 	}

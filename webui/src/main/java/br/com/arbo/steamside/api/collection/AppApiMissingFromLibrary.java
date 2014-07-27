@@ -1,23 +1,22 @@
-package br.com.arbo.steamside.api.search;
+package br.com.arbo.steamside.api.collection;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.api.app.AppApi;
 import br.com.arbo.steamside.steam.client.apps.NeverPlayed;
 import br.com.arbo.steamside.steam.client.types.AppId;
-import br.com.arbo.steamside.steam.store.App;
 
-public class AppApiSearch implements AppApi {
+public class AppApiMissingFromLibrary implements AppApi {
 
-	public AppApiSearch(App app)
+	public AppApiMissingFromLibrary(AppId appid)
 	{
-		this.app = app;
+		this.appid = appid;
 	}
 
 	@Override
 	public AppId appid()
 	{
-		return app.appid;
+		return appid;
 	}
 
 	@Override
@@ -30,7 +29,7 @@ public class AppApiSearch implements AppApi {
 	@Override
 	public String name()
 	{
-		return app.name.name;
+		return appid + " [missing from library]";
 	}
 
 	@Override
@@ -39,6 +38,6 @@ public class AppApiSearch implements AppApi {
 		return false;
 	}
 
-	private final App app;
+	private final AppId appid;
 
 }

@@ -7,13 +7,12 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.apps.LastPlayedDescending;
 import br.com.arbo.steamside.collections.TagsQueries;
-import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 
 public class AppsDTO {
 
 	public AppsDTO(
-			Stream<App> apps, Limit limit,
+			Stream<AppApi> apps, Limit limit,
 			TagsQueries queries)
 	{
 		this.apps = apps;
@@ -25,14 +24,15 @@ public class AppsDTO {
 	{
 		final int size = limit.limit;
 
-		Stream<App> sorted =
+		Stream<AppApi> sorted =
 				apps.sorted(new LastPlayedDescending());
 
-		final Stream<AppDTO> narrow = sorted
-				.map(this::toOptionalDTO)
-				.filter(Optional::isPresent)
-				.limit(size)
-				.map(Optional::get);
+		final Stream<AppDTO> narrow =
+				sorted
+						.map(this::toOptionalDTO)
+						.filter(Optional::isPresent)
+						.limit(size)
+						.map(Optional::get);
 
 		return narrow
 				.collect(
@@ -40,7 +40,7 @@ public class AppsDTO {
 						ArrayList::add, ArrayList::addAll);
 	}
 
-	private Optional<AppDTO> toOptionalDTO(App app)
+	private Optional<AppDTO> toOptionalDTO(AppApi app)
 	{
 		try
 		{
@@ -54,7 +54,7 @@ public class AppsDTO {
 
 	private final TagsQueries queries;
 
-	private final Stream<App> apps;
+	private final Stream<AppApi> apps;
 
 	private final Limit limit;
 }

@@ -2,12 +2,13 @@ package br.com.arbo.steamside.apps;
 
 import java.util.Comparator;
 
-import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.apps.LastPlayed;
 import br.com.arbo.steamside.steam.client.apps.NeverPlayed;
 
-public final class LastPlayedDescending implements Comparator<App> {
+public final class LastPlayedDescending
+		implements Comparator<LastPlayed> {
 
-	private static Long lastPlayedAsLong(App a)
+	private static Long lastPlayedAsLong(LastPlayed a)
 	{
 		try
 		{
@@ -20,7 +21,7 @@ public final class LastPlayedDescending implements Comparator<App> {
 	}
 
 	@Override
-	public int compare(final App a1, final App a2)
+	public int compare(final LastPlayed a1, final LastPlayed a2)
 	{
 		return lastPlayedAsLong(a2).compareTo(lastPlayedAsLong(a1));
 	}

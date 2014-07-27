@@ -3,6 +3,8 @@ package br.com.arbo.steamside.api.collection;
 import java.util.List;
 import java.util.stream.Stream;
 
+import br.com.arbo.steamside.api.app.AppApi;
+import br.com.arbo.steamside.api.app.AppApiApp;
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppsDTO;
 import br.com.arbo.steamside.api.app.Limit;
@@ -11,8 +13,8 @@ import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
+import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.library.Library;
-import br.com.arbo.steamside.steam.client.library.MissingFromLibrary;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -42,9 +44,28 @@ class CollectionController_collection_json {
 					}
 				});
 		Stream<AppId> appids = appsOf.map(Tag::appid);
+
+		/*
 		Stream<App> apps = new MissingFromLibrary(library)
 				.narrow(appids);
+				*/
+
+		Stream<AppApi> apps = appids.map(appid -> this.toAppApi(appid));
+
 		return new AppsDTO(apps, limit, queries).jsonable();
+	}
+
+	private AppApi toAppApi(AppId appid)
+	{
+		try
+		{
+			final App app = library.find(appid);
+			return new AppApiApp(app);
+		}
+		catch (NotFound unavailable)
+		{
+			return new AppApiMissingFromLibrary(appid);
+		}
 	}
 
 	private final Limit limit;

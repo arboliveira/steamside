@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.api.collection;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 
@@ -19,7 +19,7 @@ public class GameFinderTest {
 	public void notFound()
 	{
 		doThrow(NotFound.class).when(library).find(any());
-		assertFalse(finder.isGame(null));
+		assertTrue(finder.isGame(null));
 	}
 
 	@Before

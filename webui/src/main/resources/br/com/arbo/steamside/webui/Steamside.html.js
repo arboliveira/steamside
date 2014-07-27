@@ -164,7 +164,8 @@ var Steamside_html = {
 
 		var that = this;
 
-		fetch_json(sessionModel, function()
+		json_promise(sessionModel)
+		.done(function()
 		{
 			var kidsTileset = new Tileset({url: 'Kids.html'});
 
@@ -181,8 +182,8 @@ var Steamside_html = {
 			});
 
 			/*
-			   Load the entire tileset before you try to render anything.
-			   This includes history start, which loads the main page.
+			 Load the entire tileset before you try to render anything.
+			 This includes history start, which loads the main page.
 			 */
 			SteamsideTileset.loadTileset().done(function()
 			{
@@ -196,8 +197,11 @@ var Steamside_html = {
 				}).render();
 			});
 
+		}
+		).fail(function(jqXHR, textStatus, errorThrown)
+		{
+			ErrorHandler.explode(errorThrown);
 		});
-
     },
 
 	buildCardTemplatePromise: function(kidsMode, kidsTileset, steamsideTileset)

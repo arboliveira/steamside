@@ -1,8 +1,11 @@
 package br.com.arbo.steamside.api.app;
 
-public interface AppApi {
+import br.com.arbo.steamside.steam.client.apps.LastPlayed;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
-	String appid();
+public interface AppApi extends LastPlayed {
+
+	AppId appid();
 
 	default String image()
 	{

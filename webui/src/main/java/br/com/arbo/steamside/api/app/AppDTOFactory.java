@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.TagsQueries;
-import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
@@ -26,7 +25,7 @@ public class AppDTOFactory {
 	}
 
 	public static AppDTO valueOf(
-			final App app,
+			final AppApi app,
 			TagsQueries queries)
 			throws MissingFrom_appinfo_vdf
 	{
@@ -34,7 +33,7 @@ public class AppDTOFactory {
 
 		List<AppTagDTO> list = tags_jsonable(appid, queries);
 
-		return new AppDTO(new AppApiApp(app), list);
+		return new AppDTO(app, list);
 	}
 
 }

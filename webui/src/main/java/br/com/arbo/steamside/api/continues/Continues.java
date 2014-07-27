@@ -1,11 +1,14 @@
 package br.com.arbo.steamside.api.continues;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import br.com.arbo.steamside.api.app.AppApi;
+import br.com.arbo.steamside.api.app.AppApiApp;
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppSettings;
 import br.com.arbo.steamside.api.app.AppsDTO;
@@ -27,8 +30,12 @@ public class Continues {
 
 	public List<AppDTO> continues()
 	{
+		final Stream<AppApi> apps =
+				continues.continues()
+						.map(AppApiApp::new);
+
 		return new AppsDTO(
-				continues.continues(),
+				apps,
 				apiAppSettings.limit(), queries).jsonable();
 	}
 
