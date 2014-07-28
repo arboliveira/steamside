@@ -78,7 +78,7 @@ var SteamsideTileset = {
 		this._collectionPick = new Tile(
 			{
 				tileset: that.tileset,
-				selector: ".collection-pick"
+				selector: "#collection-pick-tile"
 			}
 		);
 

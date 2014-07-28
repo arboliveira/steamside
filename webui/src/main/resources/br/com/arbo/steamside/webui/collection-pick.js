@@ -1,4 +1,4 @@
-var CollectionPickTile = {
+var SwitchFavoritesCollectionsTile = {
 
 	whenLoaded: function (callback) {
 		SteamsideTileset.ajaxCollectionPick(callback);
@@ -16,7 +16,7 @@ var SwitchFavoritesWorld = WorldActions.extend(
 
 		tileLoad: function(whenDone)
 		{
-			CollectionPickTile.whenLoaded(whenDone);
+			SwitchFavoritesCollectionsTile.whenLoaded(whenDone);
 		},
 
 		newView: function(tile)
@@ -31,18 +31,59 @@ var SwitchFavoritesWorld = WorldActions.extend(
 	}
 );
 
-var SwitchFavoritesView = Backbone.View.extend({
+var CollectionPickTile = {
+	tile: new Tile(
+		{
+			url: 'CollectionPick.html',
+			selector: "#collection-pick-collections-segment"
+		}
+	),
+
+	ajaxTile: function (callback) {
+		this.tile.ajaxTile(callback);
+	}
+};
+
+var CollectionPickView = Backbone.View.extend(
+{
+	render: function()
+	{
+		var that = this;
+
+		var collections = new SteamsideCollectionInfoCollection();
+
+		fetch_json(collections, function()
+		{
+			new SteamsideCollectionInfoListView({
+				el: this.$("#SteamsideCollectionInfoListView"),
+				collection: collections
+			}).render();
+
+			if (collections.length > 0)
+			{
+				that.$("#no-collections-yet").hide();
+			}
+		}
+		);
+
+		return this;
+	}
+});
+
+var SwitchFavoritesView = Backbone.View.extend(
+{
 	on_category_change: null,
 
 	events: {
 		"click .back-button"         : "backButtonClicked"
 	},
 
-	initialize: function() {		"use strict";
+	initialize: function()
+	{
 		this.on_category_change = this.options.on_category_change;
 	},
 
-	render: function ()
+	render: function()
 	{
 		var that = this;
 
@@ -55,13 +96,16 @@ var SwitchFavoritesView = Backbone.View.extend({
 			}).render();
 		});
 
-		var collections = new SteamsideCollectionInfoCollection();
-		fetch_json(collections, function () {
-			new SteamsideCollectionInfoListView({
-				el: this.$("#SteamsideCollectionInfoListView"),
-				collection: collections
-			}).render();
-		});
+		CollectionPickTile.ajaxTile(function(tile_el)
+		{
+			var pick = new CollectionPickView(
+				{
+					el: tile_el.clone()
+				}
+			);
+			that.$("#CollectionPickView").append(pick.render().el);
+		}
+		);
 
 		return this;
 	},

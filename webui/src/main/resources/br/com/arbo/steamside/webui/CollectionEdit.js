@@ -173,8 +173,7 @@ var CollectionEditView = Backbone.View.extend({
 	find_play_button: function (viewGameCard)
 	{
 		var bar = viewGameCard.$el.find('.game-tile-command-bar');
-		var play = bar.find('.game-tile-play');
-		return play;
+		return bar.find('.game-tile-play');
 	},
 
 	on_SearchResults_GameCard_render: function (viewGameCard) {
@@ -259,6 +258,17 @@ var CollectionEditView = Backbone.View.extend({
 
 	mergeClicked: function()
 	{
+		var that = this;
 
+		CollectionPickTile.ajaxTile(function(tile_el)
+			{
+				var pick = new CollectionPickView(
+					{
+						el: tile_el.clone()
+					}
+				);
+				that.$("#collection-segment").after(pick.render().el);
+			}
+		);
 	}
 });
