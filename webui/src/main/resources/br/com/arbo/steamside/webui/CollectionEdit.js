@@ -1,3 +1,5 @@
+"use strict";
+
 var CollectionEditTile = {
 	tile: new Tile(
 		{url: 'CollectionEdit.html', selector: "#tile-collection-edit"}),
@@ -221,7 +223,8 @@ var CollectionEditView = Backbone.View.extend({
 		return button;
 	},
 
-	on_add_click: function(appid) {
+	on_add_click: function(appid)
+	{
         var name = this.collection_name;
         var aUrl = "api/collection/" + name + "/add/" + appid;
 
@@ -256,8 +259,10 @@ var CollectionEditView = Backbone.View.extend({
 		});
 	},
 
-	mergeClicked: function()
+	mergeClicked: function(e)
 	{
+		e.preventDefault();
+
 		var that = this;
 
 		CollectionPickTile.ajaxTile(function(tile_el)

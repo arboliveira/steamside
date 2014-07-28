@@ -1,4 +1,7 @@
-var ErrorHandler = {
+"use strict";
+
+var ErrorHandler =
+{
 	explode: function (e)
 	{
 		var trace = printStackTrace({e: e});

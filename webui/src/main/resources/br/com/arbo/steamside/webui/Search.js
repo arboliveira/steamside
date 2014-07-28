@@ -1,4 +1,7 @@
-var SearchResults = Backbone.Collection.extend({
+"use strict";
+
+var SearchResults = Backbone.Collection.extend(
+{
 	model: Game,
 	query: null,
 	queryString: null,

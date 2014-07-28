@@ -1,7 +1,11 @@
-var Tileset = Backbone.Model.extend({
+"use strict";
+
+var Tileset = Backbone.Model.extend(
+{
 	promise: null,
 
-    initialize: function() {
+    initialize: function()
+	{
 		this.promise = $.ajax({
 			url: this.attributes.url,
 			dataType: 'xml'
@@ -15,12 +19,14 @@ var Tileset = Backbone.Model.extend({
 
 });
 
-var Tile = Backbone.Model.extend({
+var Tile = Backbone.Model.extend(
+{
     selector: null,
 	tileset: null,
 	el_promise: null,
 
-	initialize: function() {
+	initialize: function()
+	{
         this.selector = this.attributes.selector;
 
         if (this.attributes.tileset != null)

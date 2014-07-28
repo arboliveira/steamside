@@ -1,3 +1,5 @@
+"use strict";
+
 var SessionView = Backbone.View.extend({
     el : 'body',
 
@@ -5,7 +7,8 @@ var SessionView = Backbone.View.extend({
 		this.model.bind('change', this.render, this);
     },
 
-    render: function () {                "use strict";
+    render: function ()
+	{
         var m = this.model;
 
         this.$('#userName').text(m.userName());
@@ -16,7 +19,8 @@ var SessionView = Backbone.View.extend({
     }
 });
 
-function sideshow(element) {
+function sideshow(element)
+{
 	var segments = element.find('.segment');
 	var left = true;
 	segments.each(function(){
@@ -164,8 +168,7 @@ var Steamside_html = {
 
 		var that = this;
 
-		json_promise(sessionModel)
-		.done(function()
+		json_promise(sessionModel).done(function()
 		{
 			var kidsTileset = new Tileset({url: 'Kids.html'});
 
@@ -196,10 +199,7 @@ var Steamside_html = {
 				kidsTileset: kidsTileset
 			}).render();
 		}
-		).fail(function(jqXHR, textStatus, errorThrown)
-		{
-			ErrorHandler.explode(errorThrown);
-		});
+		);
     },
 
 	buildCardTemplatePromise: function(kidsMode, kidsTileset, steamsideTileset)

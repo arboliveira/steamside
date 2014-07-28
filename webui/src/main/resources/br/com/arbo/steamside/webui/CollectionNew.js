@@ -1,3 +1,5 @@
+"use strict";
+
 var CollectionNewTile = {
 	tile: new Tile(
 		{url: 'CollectionNew.html', selector: "#collection-new"}),

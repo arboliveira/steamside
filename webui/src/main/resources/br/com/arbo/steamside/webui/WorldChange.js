@@ -1,3 +1,5 @@
+"use strict";
+
 var Worldchanger = Backbone.Model.extend(
 	{
 		worldbed_el: null,

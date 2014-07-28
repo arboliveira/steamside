@@ -1,3 +1,5 @@
+"use strict";
+
 var HomeWorld = WorldActions.extend(
 	{
 		sessionModel: null,

@@ -1,3 +1,5 @@
+"use strict";
+
 var SteamClientTile = {
 	tile: new Tile(
 		{url: 'SteamClient.html', selector: "#steam-client"}),
@@ -36,15 +38,11 @@ var SteamClientView = Backbone.View.extend({
 
 		var that = this;
 
-		json_promise(model)
-			.done(function()
-			{
-				that.renderModel(model);
-			}
-			).fail(function(jqXHR, textStatus, errorThrown)
-			{
-				ErrorHandler.explode(errorThrown);
-			});
+		json_promise(model).done(function()
+		{
+			that.renderModel(model);
+		}
+		);
 
         return this;
     },

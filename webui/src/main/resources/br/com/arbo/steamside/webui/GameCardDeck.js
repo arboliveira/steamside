@@ -1,4 +1,7 @@
-var GameTilePromise = {
+"use strict";
+
+var GameTilePromise =
+{
 	buildCardTemplatePromise: function(steamsideTileset)
 	{
 		var cardTile = new Tile(

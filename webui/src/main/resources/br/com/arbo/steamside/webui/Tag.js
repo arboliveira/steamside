@@ -1,3 +1,5 @@
+"use strict";
+
 var TagTile = {
 	tile: new Tile(
 		{url: 'Tag.html', selector: "#TagTile"}),

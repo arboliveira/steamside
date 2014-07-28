@@ -1,3 +1,5 @@
+"use strict";
+
 function fetch_json(collection, success) {
 	collection.fetch({
 		mimeType: 'application/json',
@@ -15,6 +17,11 @@ function json_promise(fetchable)
 	});
 
 	promise.fail(function() { console.log(arguments); });
+
+	promise.fail(function(jqXHR, textStatus, errorThrown)
+	{
+		ErrorHandler.explode(errorThrown);
+	});
 
 	return promise;
 }

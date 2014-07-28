@@ -1,4 +1,7 @@
-var SessionModel = Backbone.Model.extend({
+"use strict";
+
+var SessionModel = Backbone.Model.extend(
+{
 	url: "api/session/session.json",
     versionOfSteamside: function() {
         return this.get("versionOfSteamside");

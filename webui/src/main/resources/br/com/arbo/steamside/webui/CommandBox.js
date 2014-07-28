@@ -1,3 +1,5 @@
+"use strict";
+
 var CommandBoxTile = {
 	tile: new Tile(
 		{url: 'CommandBox.html', selector: "#tile-command-box"}),

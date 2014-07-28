@@ -1,3 +1,5 @@
+"use strict";
+
 var SteamsideRouter = Backbone.Router.extend(
 {
     routes: {

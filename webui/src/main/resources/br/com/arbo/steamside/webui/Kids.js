@@ -1,3 +1,5 @@
+"use strict";
+
 var KidsTilePromise =
 {
 	buildCardTemplatePromise: function(kidsTileset)
