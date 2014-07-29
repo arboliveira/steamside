@@ -188,7 +188,7 @@ var CollectionEditView = Backbone.View.extend({
 	{
 		var play = this.find_play_button(viewGameCard);
 		var button = this.build_remove_button(play, viewGameCard);
-		button.insertBefore(play);
+		button.insertAfter(play);
 	},
 
 	build_add_button: function (play, viewGameCard)
