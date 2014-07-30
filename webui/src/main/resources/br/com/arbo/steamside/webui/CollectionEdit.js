@@ -269,7 +269,8 @@ var CollectionEditView = Backbone.View.extend({
 			{
 				var pick = new CollectionPickView(
 					{
-						el: tile_el.clone()
+						el: tile_el.clone(),
+						merge_collection: that.collection_name
 					}
 				);
 				that.$("#collection-segment").after(pick.render().el);

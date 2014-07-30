@@ -48,9 +48,22 @@ var CollectionPickTile = {
 
 var CollectionPickView = Backbone.View.extend(
 {
+	subject_collection: null,
+
+	initialize: function(options)
+	{
+		this.merge_collection = options.merge_collection;
+	},
+
 	render: function()
 	{
 		var that = this;
+
+		var m = this.merge_collection;
+		if (m != null)
+		{
+			this.$('#MergeCollectionName').text(m);
+		}
 
 		var collections = new SteamsideCollectionInfoCollection();
 

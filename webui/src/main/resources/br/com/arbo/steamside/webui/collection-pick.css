@@ -9,3 +9,8 @@
     margin-bottom: 0.9em;
     font-size: 0.75em;
 }
+
+.subject-collection-name {
+	color: crimson;
+	font-weight: bold;
+}
