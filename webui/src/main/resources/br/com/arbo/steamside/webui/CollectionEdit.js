@@ -267,14 +267,27 @@ var CollectionEditView = Backbone.View.extend({
 
 		CollectionPickTile.ajaxTile(function(tile_el)
 			{
+				var pick_el;
 				var pick = new CollectionPickView(
 					{
 						el: tile_el.clone(),
-						merge_collection: that.collection_name
+						merge_collection: that.collection_name,
+						on_collection_pick: function(collection)
+							{
+								$(pick_el).hide();
+								that.on_collection_merge(collection);
+							}
 					}
 				);
-				that.$("#collection-segment").after(pick.render().el);
+				pick_el = pick.render().el;
+				that.$("#collection-segment").after(pick_el);
 			}
 		);
+	},
+
+	on_collection_merge: function(collection)
+	{
+
 	}
+
 });
