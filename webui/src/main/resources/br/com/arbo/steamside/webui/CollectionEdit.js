@@ -287,7 +287,53 @@ var CollectionEditView = Backbone.View.extend({
 
 	on_collection_merge: function(collection)
 	{
+		var that = this;
+		CommandBoxTile.whenLoaded(function(el_CommandBox) {
+			that.render_merge_CommandBox(el_CommandBox, collection);
+		});
+	},
 
+	render_merge_CommandBox: function(el_CommandBox, collection) {
+		var that = this;
+
+		var mergeCommandBox = new CommandBoxView({
+			el: el_CommandBox.clone(),
+			placeholder_text:
+				('Merge ' + this.collection_name + ' with ' + collection.name()),
+			on_command: function(input) { that.on_merge_command(input) },
+			on_command_alternate: function(input) { that.on_merge_command_alternate(input) },
+			on_change_input: function(input) { that.on_merge_change_input(input); }
+		});
+
+		var targetEl = this.$('#MergeCommandBoxView');
+		targetEl.empty();
+		targetEl.append(mergeCommandBox.render().el);
+
+		mergeCommandBox.input_query_setval(
+				this.collection_name + ' and ' + collection.name()
+		)
+
+		/*
+		viewCommandBox.emptyCommandHints();
+		viewCommandBox.appendCommandHint(this.elCommandHintA);
+		viewCommandBox.appendCommandHintAlternate(this.elCommandHintB);
+		*/
+
+		mergeCommandBox.input_query_focus();
+	},
+
+	on_merge_change_input: function (view) {
+		var input = view.input_query_val();
+		this.merge_updateWithInputValue(input);
+	},
+
+	merge_updateWithInputValue: function (input) {
+		/*
+		var name = this.nameForCollection(input);
+		var selector = '#tag-command-hint-subject';
+		this.elCommandHintA.find(selector).text(name);
+		this.elCommandHintB.find(selector).text(name);
+		*/
 	}
 
 });
