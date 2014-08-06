@@ -60,6 +60,10 @@ var CollectionEditView = Backbone.View.extend({
 
 	cardTemplatePromise: null,
 
+    mergeCommandHintATemplate: null,
+
+    mergeCommandHintBTemplate: null,
+
 	initialize: function(options)
 	{
 		if (this.options.cardTemplatePromise == null) {
@@ -72,6 +76,14 @@ var CollectionEditView = Backbone.View.extend({
 
 	render: function()
 	{
+        var mergeCommandHintTemplate = this.$('#MergeCommandHint');
+        mergeCommandHintTemplate.remove();
+
+        this.mergeCommandHintATemplate = mergeCommandHintTemplate.clone();
+        this.mergeCommandHintATemplate.find('#MergeCommandHintDelete').remove();
+
+        this.mergeCommandHintBTemplate = mergeCommandHintTemplate.clone();
+
 		var that = this;
 
 		var collectionEditSearchResults = new SearchResults();
@@ -302,38 +314,42 @@ var CollectionEditView = Backbone.View.extend({
 				('Merge ' + this.collection_name + ' with ' + collection.name()),
 			on_command: function(input) { that.on_merge_command(input) },
 			on_command_alternate: function(input) { that.on_merge_command_alternate(input) },
-			on_change_input: function(input) { that.on_merge_change_input(input); }
+			on_change_input: function(input) { that.on_merge_change_input(input, collection); }
 		});
 
 		var targetEl = this.$('#MergeCommandBoxView');
 		targetEl.empty();
 		targetEl.append(mergeCommandBox.render().el);
 
-		mergeCommandBox.input_query_setval(
-				this.collection_name + ' and ' + collection.name()
-		)
+		//mergeCommandBox.input_query_setval('');
 
-		/*
-		viewCommandBox.emptyCommandHints();
-		viewCommandBox.appendCommandHint(this.elCommandHintA);
-		viewCommandBox.appendCommandHintAlternate(this.elCommandHintB);
-		*/
+        this.mergeCommandHintBTemplate.find('#MergeCommandHintDeleteC1').text(this.collection_name);
+        this.mergeCommandHintBTemplate.find('#MergeCommandHintDeleteC2').text(collection.name());
+
+		mergeCommandBox.emptyCommandHints();
+		mergeCommandBox.appendCommandHint(this.mergeCommandHintATemplate);
+		mergeCommandBox.appendCommandHintAlternate(this.mergeCommandHintBTemplate);
 
 		mergeCommandBox.input_query_focus();
 	},
 
-	on_merge_change_input: function (view) {
+	on_merge_change_input: function (view, collection) {
 		var input = view.input_query_val();
-		this.merge_updateWithInputValue(input);
+		this.merge_updateWithInputValue(input, collection);
 	},
 
-	merge_updateWithInputValue: function (input) {
-		/*
-		var name = this.nameForCollection(input);
-		var selector = '#tag-command-hint-subject';
-		this.elCommandHintA.find(selector).text(name);
-		this.elCommandHintB.find(selector).text(name);
-		*/
-	}
+	merge_updateWithInputValue: function (input, collection) {
+		var name = this.nameForCombinedCollection(input, collection);
+
+		var selector = '#MergeCommandHintCollection';
+		this.mergeCommandHintATemplate.find(selector).text(name);
+		this.mergeCommandHintBTemplate.find(selector).text(name);
+	},
+
+    nameForCombinedCollection: function(input, collection) {
+        if (input == '')
+            return this.collection_name + ' and ' + collection.name();
+        return input;
+    }
 
 });
