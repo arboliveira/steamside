@@ -60,9 +60,7 @@ var CollectionEditView = Backbone.View.extend({
 
 	cardTemplatePromise: null,
 
-    mergeCommandHintATemplate: null,
-
-    mergeCommandHintBTemplate: null,
+    combineCommandBoxView: null,
 
 	initialize: function(options)
 	{
@@ -76,17 +74,14 @@ var CollectionEditView = Backbone.View.extend({
 
 	render: function()
 	{
-        var mergeCommandHintTemplate = this.$('#MergeCommandHint');
-        mergeCommandHintTemplate.remove();
-
-        this.mergeCommandHintATemplate = mergeCommandHintTemplate.clone();
-        this.mergeCommandHintATemplate.find('#MergeCommandHintDelete').remove();
-
-        this.mergeCommandHintBTemplate = mergeCommandHintTemplate.clone();
-
 		var that = this;
 
-		var collectionEditSearchResults = new SearchResults();
+        this.combineCommandBoxView = new CombineCommandBoxView({
+            collection_name: that.collection_name,
+            el: that.$('#MergeCommandBoxView')
+        });
+
+        var collectionEditSearchResults = new SearchResults();
 		this.collectionEditSearchResults = collectionEditSearchResults;
 
 		CommandBoxTile.whenLoaded(function(tile) {
@@ -110,9 +105,6 @@ var CollectionEditView = Backbone.View.extend({
 		var inCollection = new SteamsideCollectionApps();
         this.inCollection = inCollection;
         inCollection.collection_name = name;
-
-
-
 
 		new DeckView({
             el: this.$('#games-in-collection-deck'),
@@ -299,52 +291,116 @@ var CollectionEditView = Backbone.View.extend({
 
 	on_collection_merge: function(collection)
 	{
-		var that = this;
-		CommandBoxTile.whenLoaded(function(el_CommandBox) {
-			that.render_merge_CommandBox(el_CommandBox, collection);
-		});
-	},
+        this.combineCommandBoxView.collection_combine = collection;
+        this.combineCommandBoxView.render();
+	}
 
-	render_merge_CommandBox: function(el_CommandBox, collection) {
-		var that = this;
+});
 
-		var mergeCommandBox = new CommandBoxView({
-			el: el_CommandBox.clone(),
-			placeholder_text:
-				('Merge ' + this.collection_name + ' with ' + collection.name()),
-			on_command: function(input) { that.on_merge_command(input) },
-			on_command_alternate: function(input) { that.on_merge_command_alternate(input) },
-			on_change_input: function(input) { that.on_merge_change_input(input, collection); }
-		});
+var CombineCommandBoxHintAView = Backbone.View.extend({
 
-		var targetEl = this.$('#MergeCommandBoxView');
-		targetEl.empty();
-		targetEl.append(mergeCommandBox.render().el);
+    initialize: function(options) {
+        this.$('#MergeCommandHintDelete').remove();
+    },
 
-		//mergeCommandBox.input_query_setval('');
+    setCombinedName: function (name)
+    {
+        this.$('#MergeCommandHintCollection').text(name);
+    }
 
-        this.mergeCommandHintBTemplate.find('#MergeCommandHintDeleteC1').text(this.collection_name);
-        this.mergeCommandHintBTemplate.find('#MergeCommandHintDeleteC2').text(collection.name());
+});
 
-		mergeCommandBox.emptyCommandHints();
-		mergeCommandBox.appendCommandHint(this.mergeCommandHintATemplate);
-		mergeCommandBox.appendCommandHintAlternate(this.mergeCommandHintBTemplate);
+var CombineCommandBoxHintBView = Backbone.View.extend({
 
-		mergeCommandBox.input_query_focus();
-	},
+    setCombinedName: function (name)
+    {
+        this.$('#MergeCommandHintCollection').text(name);
+    },
 
-	on_merge_change_input: function (view, collection) {
-		var input = view.input_query_val();
-		this.merge_updateWithInputValue(input, collection);
-	},
+    setCollectionName: function (collection_name) {
+        this.$('#MergeCommandHintDeleteC1').text(collection_name);
 
-	merge_updateWithInputValue: function (input, collection) {
-		var name = this.nameForCombinedCollection(input, collection);
+    },
 
-		var selector = '#MergeCommandHintCollection';
-		this.mergeCommandHintATemplate.find(selector).text(name);
-		this.mergeCommandHintBTemplate.find(selector).text(name);
-	},
+    setCollectionCombine: function (collection_name) {
+        this.$('#MergeCommandHintDeleteC2').text(collection_name);
+    }
+
+});
+
+var CombineCommandBoxView = Backbone.View.extend({
+
+    mergeCommandHintAView: null,
+
+    mergeCommandHintBView: null,
+
+    initialize: function(options)
+    {
+        this.collection_name = options.collection_name;
+
+        var mergeCommandHintTemplate = this.$('#MergeCommandHint');
+        mergeCommandHintTemplate.remove();
+
+        this.mergeCommandHintAView = new CombineCommandBoxHintAView({
+            el: mergeCommandHintTemplate.clone()
+        });
+
+        this.mergeCommandHintBView = new CombineCommandBoxHintBView({
+            el: mergeCommandHintTemplate.clone()
+        });
+    },
+
+    render: function()
+    {
+        var that = this;
+        CommandBoxTile.whenLoaded(function(el_CommandBox) {
+            that.render_merge_CommandBox(el_CommandBox);
+        });
+
+        return this;
+    },
+
+    render_merge_CommandBox: function(el_CommandBox) {
+        var collection = this.collection_combine;
+
+        var that = this;
+
+        var mergeCommandBox = new CommandBoxView({
+            el: el_CommandBox.clone(),
+            placeholder_text:
+                ('Merge ' + this.collection_name + ' with ' + collection.name()),
+            on_change_input: function(input) { that.on_merge_change_input(input, collection); },
+            on_command: function(input) { that.on_merge_command(input) },
+            on_command_alternate: function(input) { that.on_merge_command_alternate(input) }
+        });
+
+        var targetEl = this.$el;
+        targetEl.empty();
+        targetEl.append(mergeCommandBox.render().el);
+
+        //mergeCommandBox.input_query_setval('');
+
+        this.mergeCommandHintBView.setCollectionName(this.collection_name);
+        this.mergeCommandHintBView.setCollectionCombine(collection.name());
+
+        mergeCommandBox.emptyCommandHints();
+        mergeCommandBox.appendCommandHint(this.mergeCommandHintAView.el);
+        mergeCommandBox.appendCommandHintAlternate(this.mergeCommandHintBView.el);
+
+        mergeCommandBox.input_query_focus();
+    },
+
+    on_merge_change_input: function (view, collection) {
+        var input = view.input_query_val();
+        this.merge_updateWithInputValue(input, collection);
+    },
+
+    merge_updateWithInputValue: function (input, collection) {
+        var name = this.nameForCombinedCollection(input, collection);
+
+        this.mergeCommandHintAView.setCombinedName(name);
+        this.mergeCommandHintBView.setCombinedName(name);
+    },
 
     nameForCombinedCollection: function(input, collection) {
         if (input == '')

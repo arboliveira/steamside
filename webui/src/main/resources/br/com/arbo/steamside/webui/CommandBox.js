@@ -19,7 +19,7 @@ var CommandBoxView = Backbone.View.extend({
 		"click #command-button-alternate": "doCommandAlternate"
 	},
 
-	render: function() {		"use strict";
+	render: function() {
 		this.input_query_el().attr('placeholder', this.options.placeholder_text);
 		this.change_input();
 		return this;
@@ -80,7 +80,7 @@ var CommandBoxView = Backbone.View.extend({
 		this.options.on_change_input(this);
 	},
 
-	event_change_input: function(e) {     "use strict";
+	event_change_input: function(e) {
 		e.preventDefault();
 		this.change_input();
 	},
