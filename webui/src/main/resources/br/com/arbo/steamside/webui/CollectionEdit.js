@@ -60,7 +60,7 @@ var CollectionEditView = Backbone.View.extend({
 
 	cardTemplatePromise: null,
 
-    combineCommandBoxView: null,
+    combineView: null,
 
 	initialize: function(options)
 	{
@@ -76,9 +76,9 @@ var CollectionEditView = Backbone.View.extend({
 	{
 		var that = this;
 
-        this.combineCommandBoxView = new CombineCommandBoxView({
+        this.combineView = new CombineView({
             collection_name: that.collection_name,
-            el: that.$('#MergeCommandBoxView')
+            el: that.$('#CombineView')
         });
 
         var collectionEditSearchResults = new SearchResults();
@@ -291,8 +291,7 @@ var CollectionEditView = Backbone.View.extend({
 
 	on_collection_merge: function(collection)
 	{
-        this.combineCommandBoxView.collection_combine = collection;
-        this.combineCommandBoxView.render();
+        this.combineView.renderCommandBox(collection);
 	}
 
 });
@@ -328,7 +327,53 @@ var CombineCommandBoxHintBView = Backbone.View.extend({
 
 });
 
+var CombineView = Backbone.View.extend({
+
+    collection_name: null,
+
+    combineCommandHintTemplate: null,
+
+    initialize: function(options) {
+        this.collection_name = options.collection_name;
+
+        this.combineCommandHintTemplate = this.$('#CombineCommandHint');
+        this.combineCommandHintTemplate.remove();
+    },
+
+    renderCommandBox: function(collection_combine)
+    {
+        var that = this;
+
+        CommandBoxTile.whenLoaded(function(el_CommandBox)
+        {
+            that.render_merge_CommandBox(el_CommandBox, collection_combine);
+        });
+    },
+
+    render_merge_CommandBox: function(el_CommandBox, collection_combine)
+    {
+        var that = this;
+
+        var commandBoxView = new CombineCommandBoxView({
+            collection_name: that.collection_name,
+            collection_combine: collection_combine,
+            combineCommandHintTemplate: that.combineCommandHintTemplate,
+            el: el_CommandBox.clone()
+        });
+
+        var targetEl = this.$el;
+        targetEl.append(commandBoxView.render().el);
+
+        commandBoxView.input_query_focus();
+    }
+
+});
+
 var CombineCommandBoxView = Backbone.View.extend({
+
+    commandBox: null,
+
+    collection_combine: null,
 
     mergeCommandHintAView: null,
 
@@ -337,36 +382,27 @@ var CombineCommandBoxView = Backbone.View.extend({
     initialize: function(options)
     {
         this.collection_name = options.collection_name;
+        this.collection_combine = options.collection_combine;
 
-        var mergeCommandHintTemplate = this.$('#MergeCommandHint');
-        mergeCommandHintTemplate.remove();
+        var combineCommandHintTemplate = options.combineCommandHintTemplate;
 
         this.mergeCommandHintAView = new CombineCommandBoxHintAView({
-            el: mergeCommandHintTemplate.clone()
+            el: combineCommandHintTemplate.clone()
         });
 
         this.mergeCommandHintBView = new CombineCommandBoxHintBView({
-            el: mergeCommandHintTemplate.clone()
+            el: combineCommandHintTemplate.clone()
         });
     },
 
     render: function()
     {
-        var that = this;
-        CommandBoxTile.whenLoaded(function(el_CommandBox) {
-            that.render_merge_CommandBox(el_CommandBox);
-        });
-
-        return this;
-    },
-
-    render_merge_CommandBox: function(el_CommandBox) {
         var collection = this.collection_combine;
 
         var that = this;
 
         var mergeCommandBox = new CommandBoxView({
-            el: el_CommandBox.clone(),
+            el: that.el,
             placeholder_text:
                 ('Merge ' + this.collection_name + ' with ' + collection.name()),
             on_change_input: function(input) { that.on_merge_change_input(input, collection); },
@@ -374,9 +410,7 @@ var CombineCommandBoxView = Backbone.View.extend({
             on_command_alternate: function(input) { that.on_merge_command_alternate(input) }
         });
 
-        var targetEl = this.$el;
-        targetEl.empty();
-        targetEl.append(mergeCommandBox.render().el);
+        mergeCommandBox.render();
 
         //mergeCommandBox.input_query_setval('');
 
@@ -387,7 +421,14 @@ var CombineCommandBoxView = Backbone.View.extend({
         mergeCommandBox.appendCommandHint(this.mergeCommandHintAView.el);
         mergeCommandBox.appendCommandHintAlternate(this.mergeCommandHintBView.el);
 
-        mergeCommandBox.input_query_focus();
+        this.commandBox = mergeCommandBox;
+
+        return this;
+    },
+
+    input_query_focus: function()
+    {
+        this.commandBox.input_query_focus();
     },
 
     on_merge_change_input: function (view, collection) {
