@@ -54,7 +54,7 @@
 					collection_name: "Testing"
 				}).render()
 			}
-		}
+		};
 
 		$(function() {
 			CollectionEdit_html.render_page();
@@ -81,7 +81,7 @@
             <div class="side-links">
                 <ul>
 					<li><a class="vaporware" href="">Rename...</a></li>
-					<li><a id="side-link-merge" href="#/collections/Foo/merge">Merge...</a></li>
+					<li><a id="side-link-merge" href="#">Merge...</a></li>
                 </ul>
             </div>
         </div>
@@ -95,13 +95,13 @@
 
             <div id="CombineView">
                 <span id="CombineCommandHint" class="command-hint">
-                    Create
-                    <span id="MergeCommandHintCollection" class="command-hint-special">Combined</span>
-                    collection<span id="MergeCommandHintDelete">
+                    <span id="CombineCommandHintAction">Create</span>
+                    <span id="CombineCommandHintCollection" class="command-hint-special">Combined</span>
+                    collection<span id="CombineCommandHintDelete">
+                        <span id="CombineCommandHintDelete1">+ <span style="color: red">delete</span>
+                        <span id="CombineCommandHintDelete1Name" class="command-hint-special">C1</span></span>
                         + <span style="color: red">delete</span>
-                        <span id="MergeCommandHintDeleteC1" class="command-hint-special">C1</span>
-                        + <span style="color: red">delete</span>
-                        <span id="MergeCommandHintDeleteC2" class="command-hint-special">C2</span>
+                        <span id="CombineCommandHintDelete2Name" class="command-hint-special">C2</span>
                     </span>
                 </span>
             </div>

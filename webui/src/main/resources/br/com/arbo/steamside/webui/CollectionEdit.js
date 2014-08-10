@@ -303,11 +303,13 @@ var Combine = Backbone.Model.extend({
     initialize: function(options)
     {
         this.set_collection_editing(options.collection_editing);
+        this.set_collection_combine(options.collection_combine);
     },
 
     set_collection_editing: function (value)
     {
         this.set('collection_editing', value);
+        this.calc_same();
     },
 
     set_collection_combine: function (value)
@@ -318,6 +320,12 @@ var Combine = Backbone.Model.extend({
     set_combined_name: function (value)
     {
         this.set('combined_name', value);
+        this.calc_same();
+    },
+
+    set_same: function( value )
+    {
+        this.set('same', value);
     },
 
     set_user_input_combined_name: function (input) {
@@ -340,6 +348,16 @@ var Combine = Backbone.Model.extend({
         return this.get('combined_name');
     },
 
+    get_same: function ()
+    {
+        return this.get('same');
+    },
+
+    calc_same: function()
+    {
+        this.set_same(this.get_collection_editing() == this.get_combined_name());
+    },
+
     nameForCombinedCollection: function(input) {
         if (input == '')
             return this.get_collection_editing() + ' and ' + this.get_collection_combine();
@@ -352,20 +370,28 @@ var CombineCommandBoxHintAView = Backbone.View.extend({
 
     initialize: function(options)
     {
-        this.$('#MergeCommandHintDelete').remove();
+        this.$('#CombineCommandHintDelete').remove();
         this.combine = options.combine;
         this.combine.on('change:combined_name', this.change_combined_name, this);
+        this.combine.on('change:same', this.change_same, this);
         this.combine.on('change', this.change_all, this);
     },
 
     change_combined_name: function ()
     {
-        this.$('#MergeCommandHintCollection').text(this.combine.get_combined_name());
+        this.$('#CombineCommandHintCollection').text(this.combine.get_combined_name());
+    },
+
+    change_same: function ()
+    {
+        var action = this.combine.get_same() ? 'Update' : 'Create';
+        this.$('#CombineCommandHintAction').text(action);
     },
 
     change_all: function()
     {
         this.change_combined_name();
+        this.change_same();
     }
 
 });
@@ -383,17 +409,26 @@ var CombineCommandBoxHintBView = Backbone.View.extend({
 
     change_combined_name: function ()
     {
-        this.$('#MergeCommandHintCollection').text(this.combine.get_combined_name());
+        this.$('#CombineCommandHintCollection').text(this.combine.get_combined_name());
     },
 
     change_collection_editing: function ()
     {
-        this.$('#MergeCommandHintDeleteC1').text(this.combine.get_collection_editing());
+        this.$('#CombineCommandHintDelete1Name').text(this.combine.get_collection_editing());
     },
 
     change_collection_combine: function ()
     {
-        this.$('#MergeCommandHintDeleteC2').text(this.combine.get_collection_combine());
+        this.$('#CombineCommandHintDelete2Name').text(this.combine.get_collection_combine());
+    },
+
+    change_same: function ()
+    {
+        var same = this.combine.get_same();
+        var action = same ? 'Update' : 'Create';
+        this.$('#CombineCommandHintAction').text(action);
+        var el_delete = this.$('#CombineCommandHintDelete1');
+        if (same) el_delete.hide(); else el_delete.show();
     },
 
     change_all: function()
@@ -401,21 +436,20 @@ var CombineCommandBoxHintBView = Backbone.View.extend({
         this.change_collection_combine();
         this.change_collection_editing();
         this.change_combined_name();
+        this.change_same();
     }
 
 });
 
 var CombineView = Backbone.View.extend({
 
-    combine: null,
+    collection_editing: null,
 
     combineCommandHintTemplate: null,
 
     initialize: function(options)
     {
-        this.combine = new Combine({
-            collection_editing: options.collection_editing
-        });
+        this.collection_editing = options.collection_editing;
 
         this.combineCommandHintTemplate = this.$('#CombineCommandHint');
         this.combineCommandHintTemplate.remove();
@@ -423,19 +457,22 @@ var CombineView = Backbone.View.extend({
 
     renderCommandBox: function(collection_combine)
     {
-        this.combine.set_collection_combine(collection_combine);
-
         var that = this;
 
         CommandBoxTile.whenLoaded(function(el_CommandBox)
         {
-            that.render_merge_CommandBox(el_CommandBox);
+            that.render_merge_CommandBox(el_CommandBox, collection_combine);
         });
     },
 
-    render_merge_CommandBox: function(el_CommandBox)
+    render_merge_CommandBox: function(el_CommandBox, collection_combine)
     {
         var that = this;
+
+        this.combine = new Combine({
+            collection_editing: that.collection_editing,
+            collection_combine: collection_combine
+        });
 
         var commandBoxView = new CombineCommandBoxView({
             combine: that.combine,
@@ -485,26 +522,24 @@ var CombineCommandBoxView = Backbone.View.extend({
 
         var that = this;
 
-        var mergeCommandBox = new CommandBoxView({
+        var combineCommandBox = new CommandBoxView({
             el: that.el,
             placeholder_text:
-                ('Merge ' + collection_editing + ' with ' + collection_combine),
+                ('Combine ' + collection_editing + ' with ' + collection_combine),
             on_change_input: function(input) { that.on_combine_change_input(input); },
             on_command: function(input) { that.on_merge_command(input) },
             on_command_alternate: function(input) { that.on_merge_command_alternate(input) }
         });
 
-        mergeCommandBox.render();
-
-        //mergeCommandBox.input_query_setval('');
+        combineCommandBox.render();
 
         this.combine.trigger('change');
 
-        mergeCommandBox.emptyCommandHints();
-        mergeCommandBox.appendCommandHint(this.mergeCommandHintAView.el);
-        mergeCommandBox.appendCommandHintAlternate(this.mergeCommandHintBView.el);
+        combineCommandBox.emptyCommandHints();
+        combineCommandBox.appendCommandHint(this.mergeCommandHintAView.el);
+        combineCommandBox.appendCommandHintAlternate(this.mergeCommandHintBView.el);
 
-        this.commandBox = mergeCommandBox;
+        this.commandBox = combineCommandBox;
 
         return this;
     },
