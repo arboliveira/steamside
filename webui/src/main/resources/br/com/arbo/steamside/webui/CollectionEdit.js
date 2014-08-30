@@ -315,6 +315,7 @@ var Combine = Backbone.Model.extend({
     set_collection_combine: function (value)
     {
         this.set('collection_combine', value);
+		this.calc_same();
     },
 
     set_combined_name: function (value)
@@ -355,7 +356,19 @@ var Combine = Backbone.Model.extend({
 
     calc_same: function()
     {
-        this.set_same(this.get_collection_editing() == this.get_combined_name());
+		var combinedName = this.get_combined_name();
+		if (
+			(this.get_collection_editing() == combinedName)
+			||
+			(this.get_collection_combine() == combinedName)
+			)
+		{
+			this.set_same(combinedName);
+		}
+		else
+		{
+			this.set_same(null);
+		}
     },
 
     nameForCombinedCollection: function(input) {
@@ -384,7 +397,7 @@ var CombineCommandBoxHintAView = Backbone.View.extend({
 
     change_same: function ()
     {
-        var action = this.combine.get_same() ? 'Update' : 'Create';
+        var action = (this.combine.get_same() != null) ? 'Update' : 'Create';
         this.$('#CombineCommandHintAction').text(action);
     },
 
@@ -425,11 +438,31 @@ var CombineCommandBoxHintBView = Backbone.View.extend({
     change_same: function ()
     {
         var same = this.combine.get_same();
-        var action = same ? 'Update' : 'Create';
+
+		var action = (same != null) ? 'Update' : 'Create';
         this.$('#CombineCommandHintAction').text(action);
-        var el_delete = this.$('#CombineCommandHintDelete1');
-        if (same) el_delete.hide(); else el_delete.show();
-    },
+
+		var el_delete1 = this.$('#CombineCommandHintDelete1');
+		var el_delete2 = this.$('#CombineCommandHintDelete2');
+		if (same == null)
+		{
+			el_delete1.show();
+			el_delete2.show();
+		}
+		else
+		{
+			var collectionCombine = this.combine.get_collection_combine();
+			var collectionEditing = this.combine.get_collection_editing();
+			if (same == collectionCombine)
+				el_delete1.show();
+			else
+				el_delete1.hide();
+			if (same == collectionEditing)
+				el_delete2.show();
+			else
+				el_delete2.hide();
+		}
+	},
 
     change_all: function()
     {
@@ -527,8 +560,8 @@ var CombineCommandBoxView = Backbone.View.extend({
             placeholder_text:
                 ('Combine ' + collection_editing + ' with ' + collection_combine),
             on_change_input: function(input) { that.on_combine_change_input(input); },
-            on_command: function(input) { that.on_merge_command(input) },
-            on_command_alternate: function(input) { that.on_merge_command_alternate(input) }
+            on_command: function(view) { that.on_merge_command(view) },
+            on_command_alternate: function(view) { that.on_merge_command_alternate(view) }
         });
 
         combineCommandBox.render();
@@ -552,6 +585,16 @@ var CombineCommandBoxView = Backbone.View.extend({
     on_combine_change_input: function (view, collection) {
         var input = view.input_query_val();
         this.combine.set_user_input_combined_name(input);
-    }
+    },
+
+	on_merge_command: function(view) {
+		var input = view.input_query_val();
+		alert('command: ' + input);
+	},
+
+	on_merge_command_alternate: function(view) {
+		var input = view.input_query_val();
+		alert('alternate: ' + input);
+	}
 
 });

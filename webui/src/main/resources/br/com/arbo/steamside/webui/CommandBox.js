@@ -65,15 +65,29 @@ var CommandBoxView = Backbone.View.extend({
 		this.options.on_command_alternate(this);
 	},
 
+	doConfirm: function ()
+	{
+
+	},
+
 	event_keydown_input: function(e) {
-		if (e.keyCode === 13) {
-			e.preventDefault();
-			if (!e.ctrlKey) {
-				this.doCommand();
-			} else {
-				this.doCommandAlternate();
-			}
+		if (!(e.keyCode === 13)) return;
+
+		e.preventDefault();
+
+		if (e.shiftKey)
+		{
+			this.doConfirm();
+			return;
 		}
+
+		if (e.ctrlKey)
+		{
+			this.doCommandAlternate();
+			return;
+		}
+
+		this.doCommand();
 	},
 
 	change_input: function () {
