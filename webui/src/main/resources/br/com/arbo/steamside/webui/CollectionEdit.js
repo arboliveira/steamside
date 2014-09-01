@@ -354,7 +354,21 @@ var Combine = Backbone.Model.extend({
         return this.get('same');
     },
 
-    calc_same: function()
+	is_same_as_editing: function()
+	{
+		var combinedName = this.get_combined_name();
+		var collectionEditing = this.get_collection_editing();
+		return combinedName == collectionEditing;
+	},
+
+	is_same_as_combine: function()
+	{
+		var combinedName = this.get_combined_name();
+		var collectionCombine = this.get_collection_combine();
+		return combinedName == collectionCombine;
+	},
+
+	calc_same: function()
     {
 		var combinedName = this.get_combined_name();
 		if (
@@ -427,41 +441,37 @@ var CombineCommandBoxHintBView = Backbone.View.extend({
 
     change_collection_editing: function ()
     {
-        this.$('#CombineCommandHintDelete1Name').text(this.combine.get_collection_editing());
+		var el_deleteName_editing = this.$('#CombineCommandHintDelete1Name');
+		el_deleteName_editing.text(this.combine.get_collection_editing());
     },
 
     change_collection_combine: function ()
     {
-        this.$('#CombineCommandHintDelete2Name').text(this.combine.get_collection_combine());
+		var el_deleteName_combine = this.$('#CombineCommandHintDelete2Name');
+		el_deleteName_combine.text(this.combine.get_collection_combine());
     },
 
     change_same: function ()
     {
-        var same = this.combine.get_same();
+		var same_as_combine = this.combine.is_same_as_combine();
+		var same_as_editing = this.combine.is_same_as_editing();
 
-		var action = (same != null) ? 'Update' : 'Create';
+        var same = same_as_combine || same_as_editing;
+
+		var action = same ? 'Update' : 'Create';
         this.$('#CombineCommandHintAction').text(action);
 
-		var el_delete1 = this.$('#CombineCommandHintDelete1');
-		var el_delete2 = this.$('#CombineCommandHintDelete2');
-		if (same == null)
-		{
-			el_delete1.show();
-			el_delete2.show();
-		}
+		var el_delete_editing = this.$('#CombineCommandHintDelete1');
+		if (!same_as_editing)
+			el_delete_editing.show();
 		else
-		{
-			var collectionCombine = this.combine.get_collection_combine();
-			var collectionEditing = this.combine.get_collection_editing();
-			if (same == collectionCombine)
-				el_delete1.show();
-			else
-				el_delete1.hide();
-			if (same == collectionEditing)
-				el_delete2.show();
-			else
-				el_delete2.hide();
-		}
+			el_delete_editing.hide();
+
+		var el_delete_combine = this.$('#CombineCommandHintDelete2');
+		if (!same_as_combine)
+			el_delete_combine.show();
+		else
+			el_delete_combine.hide();
 	},
 
     change_all: function()
@@ -582,7 +592,7 @@ var CombineCommandBoxView = Backbone.View.extend({
         this.commandBox.input_query_focus();
     },
 
-    on_combine_change_input: function (view, collection) {
+    on_combine_change_input: function (view) {
         var input = view.input_query_val();
         this.combine.set_user_input_combined_name(input);
     },
@@ -593,8 +603,27 @@ var CombineCommandBoxView = Backbone.View.extend({
 	},
 
 	on_merge_command_alternate: function(view) {
-		var input = view.input_query_val();
-		alert('alternate: ' + input);
+		var same_as_combine = this.combine.is_same_as_combine();
+		var same_as_editing = this.combine.is_same_as_editing();
+
+		var same = same_as_combine || same_as_editing;
+
+		var action = same ? 'Update' : 'Create';
+
+		var hint = action + ' ' + this.combine.get_combined_name();
+
+		if (!same_as_editing)
+			hint += ' + delete ' + this.combine.get_collection_editing();
+
+		if (!same_as_combine)
+			hint += ' + delete ' + this.combine.get_collection_combine();
+
+		var question = 'Are you sure? ' + hint;
+
+		if (confirm(question))
+			alert('confirmed.');
+		else
+			alert('canceled.');
 	}
 
 });
