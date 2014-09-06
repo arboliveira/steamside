@@ -48,3 +48,8 @@
 	display: none;
 }
 
+.command-confirm
+{
+	color: crimson;
+	font-weight: bold;
+}

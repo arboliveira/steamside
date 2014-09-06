@@ -537,25 +537,32 @@ var CombineCommandBoxView = Backbone.View.extend({
 
     combine: null,
 
-    mergeCommandHintAView: null,
+    combineCommandHintAView: null,
 
-    mergeCommandHintBView: null,
+    combineCommandHintBView: null,
 
-    initialize: function(options)
+	combineCommandHintCView: null,
+
+	initialize: function(options)
     {
         this.combine = options.combine;
 
         var combineCommandHintTemplate = options.combineCommandHintTemplate;
 
-        this.mergeCommandHintAView = new CombineCommandBoxHintAView({
+        this.combineCommandHintAView = new CombineCommandBoxHintAView({
             el: combineCommandHintTemplate.clone(),
             combine: this.combine
         });
 
-        this.mergeCommandHintBView = new CombineCommandBoxHintBView({
+        this.combineCommandHintBView = new CombineCommandBoxHintBView({
             el: combineCommandHintTemplate.clone(),
             combine: this.combine
         });
+
+		this.combineCommandHintCView = new CombineCommandBoxHintBView({
+			el: combineCommandHintTemplate.clone(),
+			combine: this.combine
+		});
     },
 
     render: function()
@@ -579,8 +586,8 @@ var CombineCommandBoxView = Backbone.View.extend({
         this.combine.trigger('change');
 
         combineCommandBox.emptyCommandHints();
-        combineCommandBox.appendCommandHint(this.mergeCommandHintAView.el);
-        combineCommandBox.appendCommandHintAlternate(this.mergeCommandHintBView.el);
+        combineCommandBox.appendCommandHint(this.combineCommandHintAView.el);
+        combineCommandBox.appendCommandHintAlternate(this.combineCommandHintBView.el);
 
         this.commandBox = combineCommandBox;
 
@@ -597,33 +604,14 @@ var CombineCommandBoxView = Backbone.View.extend({
         this.combine.set_user_input_combined_name(input);
     },
 
-	on_merge_command: function(view) {
-		var input = view.input_query_val();
+	on_merge_command: function(commandBoxView) {
+		var input = commandBoxView.input_query_val();
 		alert('command: ' + input);
 	},
 
-	on_merge_command_alternate: function(view) {
-		var same_as_combine = this.combine.is_same_as_combine();
-		var same_as_editing = this.combine.is_same_as_editing();
-
-		var same = same_as_combine || same_as_editing;
-
-		var action = same ? 'Update' : 'Create';
-
-		var hint = action + ' ' + this.combine.get_combined_name();
-
-		if (!same_as_editing)
-			hint += ' + delete ' + this.combine.get_collection_editing();
-
-		if (!same_as_combine)
-			hint += ' + delete ' + this.combine.get_collection_combine();
-
-		var question = 'Are you sure? ' + hint;
-
-		if (confirm(question))
-			alert('confirmed.');
-		else
-			alert('canceled.');
+	on_merge_command_alternate: function(commandBoxView) {
+		commandBoxView.showCommandHintConfirm(
+			this.combineCommandHintCView.el);
 	}
 
 });

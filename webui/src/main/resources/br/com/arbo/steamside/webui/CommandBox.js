@@ -21,6 +21,7 @@ var CommandBoxView = Backbone.View.extend({
 
 	render: function() {
 		this.input_query_el().attr('placeholder', this.options.placeholder_text);
+		this.$('#command-confirm').hide();
 		this.change_input();
 		return this;
 	},
@@ -36,6 +37,7 @@ var CommandBoxView = Backbone.View.extend({
 	emptyCommandHints: function() {
 		this.$("#command-hint").empty();
 		this.$("#command-hint-alternate").empty();
+		this.$("#command-confirm-what").empty();
 	},
 
 	appendCommandHint: function (elHint) {
@@ -44,6 +46,13 @@ var CommandBoxView = Backbone.View.extend({
 
 	appendCommandHintAlternate: function (elHint) {
 		this.$("#command-hint-alternate").append(elHint);
+	},
+
+	showCommandHintConfirm: function (elHint) {
+		var el = this.$("#command-confirm-what");
+		el.empty();
+		el.append(elHint);
+		this.$('#command-confirm').show();
 	},
 
 	input_query_val: function () {
