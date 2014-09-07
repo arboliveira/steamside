@@ -48,13 +48,13 @@ var CollectionPickTile = {
 
 var CollectionPickView = Backbone.View.extend(
 {
-	merge_collection: null,
+	combine_collection: null,
 
 	on_collection_pick: null,
 
 	initialize: function(options)
 	{
-		this.merge_collection = options.merge_collection;
+		this.combine_collection = options.combine_collection;
 		this.on_collection_pick = options.on_collection_pick;
 	},
 
@@ -62,7 +62,7 @@ var CollectionPickView = Backbone.View.extend(
 	{
 		var that = this;
 
-		var m = this.merge_collection;
+		var m = this.combine_collection;
 		if (m != null)
 		{
 			this.$('#MergeCollectionName').text(m);

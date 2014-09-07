@@ -55,7 +55,7 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 var CollectionEditView = Backbone.View.extend({
 
 	events: {
-		"click #side-link-merge": "mergeClicked"
+		"click #side-link-combine": "combineClicked"
 	},
 
 	cardTemplatePromise: null,
@@ -265,7 +265,7 @@ var CollectionEditView = Backbone.View.extend({
 		});
 	},
 
-	mergeClicked: function(e)
+	combineClicked: function(e)
 	{
 		e.preventDefault();
 
@@ -277,11 +277,11 @@ var CollectionEditView = Backbone.View.extend({
 				var pick = new CollectionPickView(
 					{
 						el: tile_el.clone(),
-						merge_collection: that.collection_name,
+						combine_collection: that.collection_name,
 						on_collection_pick: function(collection)
 							{
 								$(pick_el).hide();
-								that.on_collection_merge(collection);
+								that.on_collection_combine(collection);
 							}
 					}
 				);
@@ -291,7 +291,7 @@ var CollectionEditView = Backbone.View.extend({
 		);
 	},
 
-	on_collection_merge: function(collection)
+	on_collection_combine: function(collection)
 	{
         this.combineView.renderCommandBox(collection.name());
 	}
@@ -504,11 +504,11 @@ var CombineView = Backbone.View.extend({
 
         CommandBoxTile.whenLoaded(function(el_CommandBox)
         {
-            that.render_merge_CommandBox(el_CommandBox, collection_combine);
+            that.render_combine_CommandBox(el_CommandBox, collection_combine);
         });
     },
 
-    render_merge_CommandBox: function(el_CommandBox, collection_combine)
+    render_combine_CommandBox: function(el_CommandBox, collection_combine)
     {
         var that = this;
 
@@ -541,7 +541,7 @@ var CombineCommandBoxView = Backbone.View.extend({
 
     combineCommandHintBView: null,
 
-	combineCommandHintCView: null,
+	combineCommandHintTemplate: null,
 
 	initialize: function(options)
     {
@@ -559,11 +559,8 @@ var CombineCommandBoxView = Backbone.View.extend({
             combine: this.combine
         });
 
-		this.combineCommandHintCView = new CombineCommandBoxHintBView({
-			el: combineCommandHintTemplate.clone(),
-			combine: this.combine
-		});
-    },
+		this.combineCommandHintTemplate = combineCommandHintTemplate;
+	},
 
     render: function()
     {
@@ -577,8 +574,8 @@ var CombineCommandBoxView = Backbone.View.extend({
             placeholder_text:
                 ('Combine ' + collection_editing + ' with ' + collection_combine),
             on_change_input: function(input) { that.on_combine_change_input(input); },
-            on_command: function(view) { that.on_merge_command(view) },
-            on_command_alternate: function(view) { that.on_merge_command_alternate(view) }
+            on_command: function(view) { that.on_combine_command(view) },
+            on_command_alternate: function(view) { that.on_combine_command_alternate(view) }
         });
 
         combineCommandBox.render();
@@ -599,19 +596,37 @@ var CombineCommandBoxView = Backbone.View.extend({
         this.commandBox.input_query_focus();
     },
 
-    on_combine_change_input: function (view) {
+    on_combine_change_input: function (view)
+	{
         var input = view.input_query_val();
         this.combine.set_user_input_combined_name(input);
     },
 
-	on_merge_command: function(commandBoxView) {
+	on_combine_command: function(commandBoxView)
+	{
 		var input = commandBoxView.input_query_val();
 		alert('command: ' + input);
 	},
 
-	on_merge_command_alternate: function(commandBoxView) {
-		commandBoxView.showCommandHintConfirm(
-			this.combineCommandHintCView.el);
+	on_combine_command_alternate: function(commandBoxView)
+	{
+		var that = this;
+		var confirmCombine = new Combine(
+			{
+				collection_combine: that.combine.get_collection_combine(),
+				collection_editing: that.combine.get_collection_editing()
+			}
+		);
+
+		var combineCommandHintCView = new CombineCommandBoxHintBView(
+		{
+			el: that.combineCommandHintTemplate.clone(),
+			combine: confirmCombine
+		});
+
+		confirmCombine.set_combined_name(that.combine.get_combined_name());
+
+		commandBoxView.showCommandHintConfirm(combineCommandHintCView.el);
 	}
 
 });
