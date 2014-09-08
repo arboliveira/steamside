@@ -234,17 +234,19 @@ var CollectionEditView = Backbone.View.extend({
         var name = this.collection_name;
         var aUrl = "api/collection/" + name + "/add/" + appid;
 
+		// TODO display 'adding...'
+		/*
+		 beforeSend: function(){
+		 },
+		 */
+
         var that = this;
-        $.ajax({
-            url: aUrl,
-            dataType: dataTypeOf(aUrl),
-            beforeSend: function(){
-                // TODO display 'creating...'
-            },
-            complete: function(){
+
+		ajax_promise(aUrl)
+			.done(function()
+			{
                 fetch_json(that.inCollection);
-            }
-        });
+	        });
 	},
 
 	on_remove_click: function(appid)
@@ -252,17 +254,19 @@ var CollectionEditView = Backbone.View.extend({
 		var name = this.collection_name;
 		var aUrl = "api/collection/" + name + "/remove/" + appid;
 
+		// TODO display 'removing...'
+		/*
+		 beforeSend: function(){
+		 },
+		 */
+
 		var that = this;
-		$.ajax({
-			url: aUrl,
-			dataType: dataTypeOf(aUrl),
-			beforeSend: function(){
-				// TODO display 'removing...'
-			},
-			complete: function(){
+
+		ajax_promise(aUrl)
+			.done(function()
+			{
 				fetch_json(that.inCollection);
-			}
-		});
+			});
 	},
 
 	combineClicked: function(e)
@@ -395,6 +399,8 @@ var Combine = Backbone.Model.extend({
 
 var CombineCommandBoxHintAView = Backbone.View.extend({
 
+	combine: null,
+
     initialize: function(options)
     {
         this.$('#CombineCommandHintDelete').remove();
@@ -424,6 +430,8 @@ var CombineCommandBoxHintAView = Backbone.View.extend({
 });
 
 var CombineCommandBoxHintBView = Backbone.View.extend({
+
+	combine: null,
 
     initialize: function(options)
     {
@@ -541,6 +549,8 @@ var CombineCommandBoxView = Backbone.View.extend({
 
     combineCommandHintBView: null,
 
+	combineCommandHintCView: null,
+
 	combineCommandHintTemplate: null,
 
 	initialize: function(options)
@@ -575,7 +585,8 @@ var CombineCommandBoxView = Backbone.View.extend({
                 ('Combine ' + collection_editing + ' with ' + collection_combine),
             on_change_input: function(input) { that.on_combine_change_input(input); },
             on_command: function(view) { that.on_combine_command(view) },
-            on_command_alternate: function(view) { that.on_combine_command_alternate(view) }
+            on_command_alternate: function(view) { that.on_combine_command_alternate(view) },
+			on_command_confirm: function(view) { that.on_combine_command_confirm(view) }
         });
 
         combineCommandBox.render();
@@ -627,6 +638,18 @@ var CombineCommandBoxView = Backbone.View.extend({
 		confirmCombine.set_combined_name(that.combine.get_combined_name());
 
 		commandBoxView.showCommandHintConfirm(combineCommandHintCView.el);
-	}
 
+		this.combineCommandHintCView = combineCommandHintCView;
+	},
+
+	on_combine_command_confirm: function(commandBoxView)
+	{
+		var confirmCombine = this.combineCommandHintCView.combine;
+
+		// server command
+
+		commandBoxView.hideCommandHintConfirm();
+
+		this.combineCommandHintCView = null;
+	}
 });

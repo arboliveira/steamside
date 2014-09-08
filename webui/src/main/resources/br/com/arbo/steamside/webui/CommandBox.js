@@ -16,7 +16,8 @@ var CommandBoxView = Backbone.View.extend({
 		"keyup #input-text-command-box": "event_change_input",
 		"change #input-text-command-box": "event_change_input",
 		"click #command-button": "doCommand",
-		"click #command-button-alternate": "doCommandAlternate"
+		"click #command-button-alternate": "doCommandAlternate",
+		"click #command-button-confirm": "doCommandConfirm"
 	},
 
 	render: function() {
@@ -37,7 +38,7 @@ var CommandBoxView = Backbone.View.extend({
 	emptyCommandHints: function() {
 		this.$("#command-hint").empty();
 		this.$("#command-hint-alternate").empty();
-		this.$("#command-confirm-what").empty();
+		this.emptyCommandHintConfirm();
 	},
 
 	appendCommandHint: function (elHint) {
@@ -49,10 +50,22 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	showCommandHintConfirm: function (elHint) {
-		var el = this.$("#command-confirm-what");
-		el.empty();
+		var el = this.emptyCommandHintConfirm();
 		el.append(elHint);
 		this.$('#command-confirm').show();
+	},
+
+	hideCommandHintConfirm: function ()
+	{
+		this.emptyCommandHintConfirm();
+		this.$('#command-confirm').hide();
+	},
+
+	emptyCommandHintConfirm: function ()
+	{
+		var el = this.$("#command-confirm-what");
+		el.empty();
+		return el;
 	},
 
 	input_query_val: function () {
@@ -74,9 +87,9 @@ var CommandBoxView = Backbone.View.extend({
 		this.options.on_command_alternate(this);
 	},
 
-	doConfirm: function ()
+	doCommandConfirm: function ()
 	{
-
+		this.options.on_command_confirm(this);
 	},
 
 	event_keydown_input: function(e) {
@@ -86,7 +99,7 @@ var CommandBoxView = Backbone.View.extend({
 
 		if (e.shiftKey)
 		{
-			this.doConfirm();
+			this.doCommandConfirm();
 			return;
 		}
 

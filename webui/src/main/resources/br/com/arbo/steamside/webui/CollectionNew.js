@@ -89,25 +89,26 @@ var CollectionNewEmptyView = Backbone.View.extend({
 		var aUrl = "api/collection/" + encodeURIComponent(name) + "/create";
 		var that = this;
 
-		$.ajax({
-			url: aUrl,
-			dataType: dataTypeOf(aUrl),
-			beforeSend: function(){
-				// TODO display 'creating...'
-			},
-			complete: function(){
-				if (args.stay) {
-					var input_el = that.$('#input-text-command-box');
-					input_el.val('');
-					input_el.focus();
-					that.on_empty_change_input('');
-				} else {
-					Backbone.history.navigate(
-						"#/collections/" + name + "/edit",
-						{trigger: true});
-				}
-			}
-		});
+		// TODO display 'creating...'
+		/*
+		 beforeSend: function(){
+		 },
+		 */
+
+		ajax_promise(aUrl)
+			.done(function()
+				{
+					if (args.stay) {
+						var input_el = that.$('#input-text-command-box');
+						input_el.val('');
+						input_el.focus();
+						that.on_empty_change_input('');
+					} else {
+						Backbone.history.navigate(
+							"#/collections/" + name + "/edit",
+							{trigger: true});
+					}
+				});
 	},
 
 	updateWithInputValue: function (input) {
@@ -138,14 +139,12 @@ var CollectionCopyAllCategoriesView = Backbone.View.extend({
 		var jLink = $(e.target);
 		var aUrl = jLink.attr( "href" );
 
-		$.ajax(
+		ajax_promise(aUrl)
+			.done(function()
 			{
-				url: aUrl
-			}
-		).done(function(){
-			Backbone.history.navigate(
-					"#/favorites/switch",
-				{trigger: true});
-		});
+				Backbone.history.navigate(
+						"#/favorites/switch",
+					{trigger: true});
+			});
 	}
 });

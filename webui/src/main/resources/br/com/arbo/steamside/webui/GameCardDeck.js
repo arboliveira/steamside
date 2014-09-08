@@ -13,11 +13,11 @@ var GameTilePromise =
 
 		return cardTile.el_promise;
 	}
-}
+};
 
 var Game = Backbone.Model.extend({
 
-	initialize: function( opts ){
+	initialize: function(){
 		this.tags = new Game_Tags();
 		this.tags.reset( this.get( "tags" ) );
 	},
@@ -49,16 +49,13 @@ var Game = Backbone.Model.extend({
 		var aUrl = this.link();
 		var that = this;
 
-		$.ajax({
-			url: aUrl,
-			dataType: dataTypeOf(aUrl),
-			beforeSend: function(){
-				that.trigger('game:play:beforeSend');
-			},
-			complete: function(){
+		that.trigger('game:play:beforeSend');
+
+		ajax_promise(aUrl)
+			.done(function()
+			{
 				that.trigger('game:play:complete');
-			}
-		});
+			});
 	}
 
 });

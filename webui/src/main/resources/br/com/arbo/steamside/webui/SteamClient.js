@@ -89,11 +89,7 @@ var SteamClientView = Backbone.View.extend({
         e.preventDefault();
         var jLink = $(e.target);
         var aUrl = jLink.attr( "href" );
-        $.ajax(
-            {
-                url: aUrl
-            }
-        );
+		ajax_promise(aUrl);
     }
 });
 

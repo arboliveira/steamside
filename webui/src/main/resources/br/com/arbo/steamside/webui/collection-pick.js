@@ -280,17 +280,20 @@ var SteamCategoryView = Backbone.View.extend({
 	categoryClicked: function(e) {
 		e.preventDefault();
 		var aUrl = this.model.link();
+
+		// TODO display 'loading...'
+		/*
+		 beforeSend: function(){
+		 },
+		 */
+
 		var that = this;
-		$.ajax({
-			url: aUrl,
-			dataType: dataTypeOf(aUrl),
-			beforeSend: function(){
-				// loading...
-			},
-			complete: function(){
-				that.category_changed();
-			}
-		});
+
+		ajax_promise(aUrl)
+			.done(function()
+				{
+					that.category_changed();
+				});
 	},
 
 	category_changed: function() {

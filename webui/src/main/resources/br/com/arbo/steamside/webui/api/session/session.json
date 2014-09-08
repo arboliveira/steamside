@@ -1,4 +1,5 @@
 {
+	"backoff": "true",
     "versionOfSteamside": "0.142857",
     "gamesOwned": "42",
 	"username": "gaben",

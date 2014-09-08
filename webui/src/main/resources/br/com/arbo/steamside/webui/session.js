@@ -3,19 +3,35 @@
 var SessionModel = Backbone.Model.extend(
 {
 	url: "api/session/session.json",
-    versionOfSteamside: function() {
+
+	backoff: function()
+	{
+		return this.booleanValue(this.get("backoff"));
+	},
+
+	versionOfSteamside: function()
+	{
         return this.get("versionOfSteamside");
     },
-    gamesOwned: function() {
+
+    gamesOwned: function()
+	{
         return this.get("gamesOwned");
     },
-    userName : function() {		"use strict";
+
+    userName : function()
+	{
 		return this.get('username');
     },
-    kidsmode: function() {		"use strict";
-		var v = this.get('kidsmode');
+
+    kidsmode: function()
+	{
+		return this.booleanValue(this.get('kidsmode'));
+    },
+
+	booleanValue: function(v)
+	{
 		if (v === true) return true;
 		return v === "true";
-    }
+	}
 });
-
