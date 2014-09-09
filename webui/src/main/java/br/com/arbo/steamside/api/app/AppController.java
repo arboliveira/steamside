@@ -33,14 +33,13 @@ public class AppController {
 
 	@SuppressWarnings("static-method")
 	@RequestMapping("{appid}/" + br.com.arbo.steamside.mapping.App.run)
+	@ResponseBody
 	public void run(
 			@NonNull @PathVariable final String appid
 			) throws NotAvailableOnThisPlatform, Timeout, NotFound
 	{
-
 		rungame.askSteamToRunGameAndWaitUntilItsUp(new AppId(appid));
 		letLoadingAnimationRunForJustALittleLonger();
-
 	}
 
 	@SuppressWarnings("static-method")
