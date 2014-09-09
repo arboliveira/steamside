@@ -17,12 +17,14 @@ import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 public class SteamClientController {
 
 	@RequestMapping("{command}")
+	@ResponseBody
 	public void launch(@PathVariable final String command)
 	{
 		launchCommand(command);
 	}
 
 	@RequestMapping("{command}/{argument}")
+	@ResponseBody
 	public void launch(
 			@PathVariable final String command,
 			@PathVariable final String argument)

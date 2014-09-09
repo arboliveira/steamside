@@ -30,12 +30,17 @@ var BACKOFF = false;
 
 function ajax_promise(aUrl)
 {
-	var promise = $.ajax(
-		{
-			url: aUrl,
-			dataType: dataTypeOf(aUrl)
-		}
-	);
+	var promise;
+
+	if (BACKOFF)
+	{
+		alert("Back end is OFF. Ignoring: \n\n" + aUrl);
+
+		promise = $.ajax({});
+	}
+	else {
+		promise = $.ajax(aUrl);
+	}
 
 	promise.fail(function() { console.log(arguments); });
 
@@ -44,22 +49,5 @@ function ajax_promise(aUrl)
 		ErrorHandler.explode(errorThrown);
 	});
 
-	if (BACKOFF)
-	{
-		promise.done(function()
-			{
-				alert("This would be the part where something is posted to the back end");
-			}
-		);
-	}
-
 	return promise;
-}
-
-function dataTypeOf(aUrl)
-{
-	if (BACKOFF) return 'text';
-
-	if (aUrl.indexOf('.js') === aUrl.length - 3) return 'script';
-	return 'json';
 }

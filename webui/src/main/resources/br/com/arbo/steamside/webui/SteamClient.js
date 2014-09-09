@@ -29,7 +29,8 @@ var SteamClientStatusModel = Backbone.Model.extend(
 var SteamClientView = Backbone.View.extend({
 
     events: {
-        "click #ButtonOpenSteamClient": "buttonSteamBrowserProtocolClicked"
+		// any Steam Protocol button
+        "click .button-steam-browser-protocol": "buttonSteamBrowserProtocolClicked"
     },
 
     render: function () {
