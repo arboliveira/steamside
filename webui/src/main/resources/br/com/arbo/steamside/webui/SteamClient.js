@@ -33,16 +33,21 @@ var SteamClientView = Backbone.View.extend({
         "click .button-steam-browser-protocol": "buttonSteamBrowserProtocolClicked"
     },
 
-    render: function () {
+	initialize: function(options)
+	{
+		this.backend = options.backend;
+	},
+
+	render: function () {
 
 		var model = new SteamClientStatusModel();
 
 		var that = this;
 
-		json_promise(model).done(function()
-		{
-			that.renderModel(model);
-		}
+		this.backend.fetch_promise(model).done(function()
+			{
+				that.renderModel(model);
+			}
 		);
 
         return this;
@@ -90,7 +95,7 @@ var SteamClientView = Backbone.View.extend({
         e.preventDefault();
         var jLink = $(e.target);
         var aUrl = jLink.attr( "href" );
-		ajax_promise(aUrl);
+		this.backend.ajax_ajax_promise(aUrl);
     }
 });
 

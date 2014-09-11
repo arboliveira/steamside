@@ -53,10 +53,11 @@ var HomeView = Backbone.View.extend({
 		this.sessionModel = options.sessionModel;
 		this.kidsTileset = options.kidsTileset;
 
-		if (this.options.cardTemplatePromise == null) {
+		if (options.cardTemplatePromise == null) {
 			throw new Error("cardTemplatePromise is required");
 		}
-		this.cardTemplatePromise = this.options.cardTemplatePromise;
+		this.cardTemplatePromise = options.cardTemplatePromise;
+		this.backend = options.backend;
 	},
 
 	render: function ()
@@ -75,7 +76,8 @@ var HomeView = Backbone.View.extend({
 				collection: continues,
 				continues: continues,
 				kidsMode: this.sessionModel.kidsmode(),
-				on_tag: that.on_tag
+				on_tag: that.on_tag,
+				backend: that.backend
 			});
 		}
 
@@ -85,7 +87,8 @@ var HomeView = Backbone.View.extend({
 				el: $('#search-segment'),
 				cardTemplatePromise: this.cardTemplatePromise,
 				continues: continues,
-				on_tag: that.on_tag
+				on_tag: that.on_tag,
+				backend: that.backend
 			}).render();
 		}
 
@@ -97,13 +100,14 @@ var HomeView = Backbone.View.extend({
 				collection: favorites,
 				continues: continues,
 				kidsMode: this.sessionModel.kidsmode(),
-				on_tag: that.on_tag
+				on_tag: that.on_tag,
+				backend: that.backend
 			});
 
-			fetch_json(favorites);
+			this.backend.fetch_fetch_json(favorites);
 		}
 
-		fetch_json(continues);
+		this.backend.fetch_fetch_json(continues);
 
 		sideshow(this.$el);
 
@@ -112,7 +116,7 @@ var HomeView = Backbone.View.extend({
 
 	on_tag: function(game, segmentWithGameCard)
 	{
-		TagTile.on_tag(game, segmentWithGameCard);
+		TagTile.on_tag(game, segmentWithGameCard, this.backend);
 	}
 
 });
@@ -125,11 +129,11 @@ var SteamsideView = Backbone.View.extend({
 	cardTemplatePromise: null,
 	kidsTileset: null,
 
-	initialize: function()
+	initialize: function(options)
 	{
-		this.sessionModel = this.options.sessionModel;
-		this.cardTemplatePromise = this.options.cardTemplatePromise;
-		this.kidsTileset = this.options.kidsTileset;
+		this.sessionModel = options.sessionModel;
+		this.cardTemplatePromise = options.cardTemplatePromise;
+		this.kidsTileset = options.kidsTileset;
 	},
 
 	render: function ()
@@ -164,11 +168,13 @@ var Steamside_html = {
 
     render_page: function ()
 	{
+		var backend = new Backend();
+
 		var sessionModel = new SessionModel();
 
 		var that = this;
 
-		json_promise(sessionModel).done(function()
+		backend.fetch_promise(sessionModel).done(function()
 		{
 			var kidsTileset = new Tileset({url: 'Kids.html'});
 
@@ -181,7 +187,8 @@ var Steamside_html = {
 			new SteamsideRouter({
 				sessionModel: sessionModel,
 				cardTemplatePromise: cardTemplatePromise,
-				kidsTileset: kidsTileset
+				kidsTileset: kidsTileset,
+				backend: backend
 			});
 
 			/*

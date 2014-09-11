@@ -29,6 +29,8 @@ var SteamsideRouter = Backbone.Router.extend(
 
 	cardTemplatePromise: null,
 
+	backend: null,
+
 	initialize: function(options)
 	{
 		var worldbed_el = $('#world');
@@ -39,6 +41,8 @@ var SteamsideRouter = Backbone.Router.extend(
 		}
 		this.cardTemplatePromise = options.cardTemplatePromise;
 
+		this.backend = options.backend;
+
 		this.worldchanger = new Worldchanger({worldbed_el: worldbed_el});
 
 		this.homeView = new World({
@@ -48,14 +52,40 @@ var SteamsideRouter = Backbone.Router.extend(
 
 		this.switch_favoritesView = new World({worldActions:this.newSwitch_favoritesView()});
 
-		this.collections_newView = new World({worldActions:new CollectionsNewWorld()});
+		this.collections_newView = new World(
+			{
+				worldActions:new CollectionsNewWorld(
+					{
+						backend: this.backend
+					}
+				)
+			}
+		);
 
-		this.worldCollectionsEdit = new CollectionsEditWorld({cardTemplatePromise: this.cardTemplatePromise});
+		this.worldCollectionsEdit = new CollectionsEditWorld(
+			{
+				cardTemplatePromise: this.cardTemplatePromise,
+				backend: this.backend
+			});
 		this.collections_editView = new World({worldActions:this.worldCollectionsEdit});
 
-		this.steamclientView = new World({worldActions:new SteamClientWorld()});
+		this.steamclientView = new World(
+			{
+				worldActions:new SteamClientWorld(
+					{
+						backend: this.backend
+					}
+				)
+			}
+		);
 
-		this.exitView = new World({worldActions:new ExitWorld()});
+		this.exitView = new World({
+			worldActions:new ExitWorld(
+				{
+					backend: this.backend
+				}
+			)
+		});
 	},
 
 	home: function()
@@ -113,7 +143,8 @@ var SteamsideRouter = Backbone.Router.extend(
 		{
 			sessionModel: sessionModel,
 			cardTemplatePromise: this.cardTemplatePromise,
-			kidsTileset: kidsTileset
+			kidsTileset: kidsTileset,
+			backend: this.backend
 		});
 	},
 
@@ -127,7 +158,9 @@ var SteamsideRouter = Backbone.Router.extend(
 			{
 				router.navigate("", {trigger: true});
 				// TODO Refresh favorites
-			}
+			},
+
+			backend: router.backend
 		});
 	}
 });

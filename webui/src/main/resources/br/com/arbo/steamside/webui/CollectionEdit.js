@@ -22,6 +22,7 @@ var CollectionsEditWorld = WorldActions.extend(
 				throw new Error("cardTemplatePromise is required");
 			}
 			this.cardTemplatePromise = options.cardTemplatePromise;
+			this.backend = options.backend;
 		},
 
 		respawnWithCollection: function(collection_name) {
@@ -35,11 +36,14 @@ var CollectionsEditWorld = WorldActions.extend(
 
 		newView: function(tile)
 		{
-			return new CollectionEditView({
-				el: tile.clone(),
-				cardTemplatePromise: this.cardTemplatePromise,
-				collection_name: this.collection_name
-			}).render();
+			return new CollectionEditView(
+				{
+					el: tile.clone(),
+					cardTemplatePromise: this.cardTemplatePromise,
+					collection_name: this.collection_name,
+					backend: this.backend
+				}
+			).render();
 		}
 	}
 );
@@ -66,12 +70,12 @@ var CollectionEditView = Backbone.View.extend({
 
 	initialize: function(options)
 	{
-		if (this.options.cardTemplatePromise == null) {
+		if (options.cardTemplatePromise == null) {
 			throw new Error("cardTemplatePromise is required");
 		}
-		this.cardTemplatePromise = this.options.cardTemplatePromise;
-
+		this.cardTemplatePromise = options.cardTemplatePromise;
 		this.collection_name = options.collection_name;
+		this.backend = options.backend;
 	},
 
 	render: function()
@@ -98,7 +102,9 @@ var CollectionEditView = Backbone.View.extend({
 			collection: collectionEditSearchResults,
 			continues: continues,
 			on_GameCard_render: function(viewGameCard) { that.on_SearchResults_GameCard_render(viewGameCard) },
-			on_tag: function(game, segmentWithGameCard) { TagTile.on_tag(game, segmentWithGameCard) }
+			on_tag: function(game, segmentWithGameCard)
+				{ TagTile.on_tag(game, segmentWithGameCard, that.backend) },
+			backend: this.backend
 		});
 
         var name = that.collection_name;
@@ -112,11 +118,15 @@ var CollectionEditView = Backbone.View.extend({
             el: this.$('#games-in-collection-deck'),
 			cardTemplatePromise: this.cardTemplatePromise,
             collection: inCollection,
+			continues: continues,
 			on_GameCard_render: function(viewGameCard) { that.on_GamesInCollection_GameCard_render(viewGameCard) },
-			on_tag: function(game, segmentWithGameCard) { TagTile.on_tag(game, segmentWithGameCard) }
+			on_tag: function(game, segmentWithGameCard)
+				{ TagTile.on_tag(game, segmentWithGameCard, that.backend)
+				},
+			backend: this.backend
         });
 
-		fetch_json(inCollection);
+		this.backend.fetch_fetch_json(inCollection);
 
         return this;
     },
@@ -142,7 +152,7 @@ var CollectionEditView = Backbone.View.extend({
 		viewCommandBox.input_query_focus();
 
         this.prepareSearchRecent();
-        fetch_json(this.collectionEditSearchResults);
+        this.backend.fetch_fetch_json(this.collectionEditSearchResults);
 	},
 
 	on_search_input_changed: function(view) {
@@ -162,7 +172,7 @@ var CollectionEditView = Backbone.View.extend({
 		} else {
 			this.collectionEditSearchResults.setQuery(input);
 		}
-		fetch_json(this.collectionEditSearchResults);
+		this.backend.fetch_fetch_json(this.collectionEditSearchResults);
 	},
 
     prepareSearchRecent: function ()
@@ -242,10 +252,10 @@ var CollectionEditView = Backbone.View.extend({
 
         var that = this;
 
-		ajax_promise(aUrl)
+		that.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 			{
-                fetch_json(that.inCollection);
+                that.backend.fetch_promise(that.inCollection);
 	        });
 	},
 
@@ -262,10 +272,10 @@ var CollectionEditView = Backbone.View.extend({
 
 		var that = this;
 
-		ajax_promise(aUrl)
+		that.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 			{
-				fetch_json(that.inCollection);
+				that.backend.fetch_promise(that.inCollection);
 			});
 	},
 
@@ -286,7 +296,8 @@ var CollectionEditView = Backbone.View.extend({
 							{
 								$(pick_el).hide();
 								that.on_collection_combine(collection);
-							}
+							},
+						backend: that.backend
 					}
 				);
 				pick_el = pick.render().el;

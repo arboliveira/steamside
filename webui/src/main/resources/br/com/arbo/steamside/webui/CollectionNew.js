@@ -11,14 +11,21 @@ var CollectionNewTile = {
 
 var CollectionNewView = Backbone.View.extend({
 
+	initialize: function(options)
+	{
+		this.backend = options.backend;
+	},
+
 	render: function ()
 	{
 		new CollectionNewEmptyView({
-			el: this.$('#collection-new-empty-segment')
+			el: this.$('#collection-new-empty-segment'),
+			backend: this.backend
 		}).render();
 
 		new CollectionCopyAllCategoriesView({
-			el: this.$('#collection-copy-all-categories-segment')
+			el: this.$('#collection-copy-all-categories-segment'),
+			backend: this.backend
 		}).render();
 
 		return this;
@@ -29,6 +36,11 @@ var CollectionNewEmptyView = Backbone.View.extend({
 
 	elCommandHintA: null,
 	elCommandHintB: null,
+
+	initialize: function(options)
+	{
+		this.backend = options.backend;
+	},
 
 	render: function() {
 		var tileEmptyCommandHint = this.$('#empty-command-hint');
@@ -95,7 +107,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 		 },
 		 */
 
-		ajax_promise(aUrl)
+		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 				{
 					if (args.stay) {
@@ -130,6 +142,11 @@ var CollectionCopyAllCategoriesView = Backbone.View.extend({
 		"click .button-copy-em-all": "buttonCopyEmAll"
 	},
 
+	initialize: function(options)
+	{
+		this.backend = options.backend;
+	},
+
 	render: function() {
 		return this;
 	},
@@ -139,7 +156,7 @@ var CollectionCopyAllCategoriesView = Backbone.View.extend({
 		var jLink = $(e.target);
 		var aUrl = jLink.attr( "href" );
 
-		ajax_promise(aUrl)
+		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 			{
 				Backbone.history.navigate(

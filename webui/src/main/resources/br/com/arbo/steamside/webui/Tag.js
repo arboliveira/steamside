@@ -9,7 +9,7 @@ var TagTile = {
 		this.tile.ajaxTile(callback);
 	},
 
-	on_tag: function(game, segmentWithGameCard)
+	on_tag: function(game, segmentWithGameCard, backend)
 	{
 		TagTile.whenLoaded(function(tile)
 		{
@@ -17,7 +17,8 @@ var TagTile = {
 
 			var view = new TagView({
 				el: clone,
-				game: game
+				game: game,
+				backend: backend
 			});
 
 			view.render();
@@ -47,8 +48,9 @@ var TagView = Backbone.View.extend({
 
 	viewCommandBox: null,
 
-	initialize: function() {
-		this.game = this.options.game;
+	initialize: function(options) {
+		this.game = options.game;
+		this.backend = options.backend;
 	},
 
 	render: function() {
@@ -61,9 +63,8 @@ var TagView = Backbone.View.extend({
 			that.on_CommandBox_TileLoaded(tile);
 		});
 
-
 		var suggestions = new TagSuggestionsCollection();
-		fetch_json(suggestions, function () {
+		this.backend.fetch_fetch_json(suggestions, function () {
 			new TagSuggestionsView({
 				el: that.$("#TagSuggestionsView"),
 				collection: suggestions,
@@ -135,7 +136,7 @@ var TagView = Backbone.View.extend({
 		 },
 		 */
 
-		ajax_promise(aUrl)
+		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 				{
 					that.on_tag_done();
@@ -185,6 +186,10 @@ var TagSuggestionView = Backbone.View.extend({
 		"click": "tagClicked"
 	},
 
+	initialize: function(options) {
+		this.on_tag_suggestion_select = options.on_tag_suggestion_select;
+	},
+
 	render: function() {
 		var choose_el = this.$el.find("#tag-name");
 		var name_text = this.model.name();
@@ -195,12 +200,16 @@ var TagSuggestionView = Backbone.View.extend({
 	tagClicked: function(e) {
 		e.preventDefault();
 
-		this.options.on_tag_suggestion_select(this.model);
+		this.on_tag_suggestion_select(this.model);
 	}
 });
 
 
 var TagSuggestionsView = Backbone.View.extend({
+
+	initialize: function(options) {
+		this.on_tag_suggestion_select = options.on_tag_suggestion_select;
+	},
 
 	render: function() {
 		var container = this.$el;
@@ -213,7 +222,7 @@ var TagSuggestionsView = Backbone.View.extend({
 			var view = new TagSuggestionView({
 				model: one,
 				el: one_el.clone(),
-				on_tag_suggestion_select: that.options.on_tag_suggestion_select
+				on_tag_suggestion_select: that.on_tag_suggestion_select
 			});
 			container.append(view.render().el);
 		});

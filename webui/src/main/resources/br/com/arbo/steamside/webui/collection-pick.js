@@ -14,6 +14,7 @@ var SwitchFavoritesWorld = WorldActions.extend(
 		initialize: function(options)
 		{
 			this.on_category_change = options.on_category_change;
+			this.backend = options.backend;
 		},
 
 		tileLoad: function(whenDone)
@@ -25,10 +26,13 @@ var SwitchFavoritesWorld = WorldActions.extend(
 		{
 			var that = this;
 
-			return new SwitchFavoritesView({
-				el: tile.clone(),
-				on_category_change: function() {that.on_category_change();}
-			}).render();
+			return new SwitchFavoritesView(
+				{
+					el: tile.clone(),
+					on_category_change: function() {that.on_category_change();},
+					backend: that.backend
+				}
+			).render();
 		}
 	}
 );
@@ -56,6 +60,7 @@ var CollectionPickView = Backbone.View.extend(
 	{
 		this.combine_collection = options.combine_collection;
 		this.on_collection_pick = options.on_collection_pick;
+		this.backend = options.backend;
 	},
 
 	render: function()
@@ -71,7 +76,7 @@ var CollectionPickView = Backbone.View.extend(
 
 		var collections = new SteamsideCollectionInfoCollection();
 
-		json_promise(collections).done(function()
+		this.backend.fetch_promise(collections).done(function()
 		{
 			new SteamsideCollectionInfoListView(
 				{
@@ -100,9 +105,10 @@ var SwitchFavoritesView = Backbone.View.extend(
 		"click .back-button"         : "backButtonClicked"
 	},
 
-	initialize: function()
+	initialize: function(options)
 	{
-		this.on_category_change = this.options.on_category_change;
+		this.on_category_change = options.on_category_change;
+		this.backend = options.backend;
 	},
 
 	render: function()
@@ -110,13 +116,14 @@ var SwitchFavoritesView = Backbone.View.extend(
 		var that = this;
 
 		var categories = new SteamCategoryCollection();
-		json_promise(categories).done(function ()
+		this.backend.fetch_promise(categories).done(function ()
 		{
 			new SteamCategoriesView(
 				{
 					el: that.$("#collection-pick-steam-categories-list"),
 					collection: categories,
-					on_category_change: that.on_category_change
+					on_category_change: that.on_category_change,
+					backend: that.backend
 				}
 			).render();
 		}
@@ -126,7 +133,8 @@ var SwitchFavoritesView = Backbone.View.extend(
 		{
 			var pick = new CollectionPickView(
 				{
-					el: tile_el.clone()
+					el: tile_el.clone(),
+					backend: that.backend
 				}
 			);
 			that.$("#CollectionPickView").append(pick.render().el);
@@ -173,7 +181,6 @@ var SteamsideCollectionInfoView = Backbone.View.extend(
 
 	render: function()
 	{
-        var that = this;
         var name_el = this.$el.find("#collection-pick-one-name");
 		var name_text = this.model.name();
         name_el.text(name_text);
@@ -252,8 +259,10 @@ var SteamCategoryCollection = Backbone.Collection.extend({
 var SteamCategoryView = Backbone.View.extend({
 	on_category_change: null,
 
-	initialize: function() {
-		this.on_category_change = this.options.on_category_change;
+	initialize: function(options)
+	{
+		this.on_category_change = options.on_category_change;
+		this.backend = options.backend;
 	},
 
 	render: function() {
@@ -289,7 +298,7 @@ var SteamCategoryView = Backbone.View.extend({
 
 		var that = this;
 
-		ajax_promise(aUrl)
+		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 				{
 					that.category_changed();
@@ -304,8 +313,10 @@ var SteamCategoryView = Backbone.View.extend({
 var SteamCategoriesView = Backbone.View.extend({
 	on_category_change: null,
 
-	initialize: function() {
-		this.on_category_change = this.options.on_category_change;
+	initialize: function(options)
+	{
+		this.on_category_change = options.on_category_change;
+		this.backend = options.backend;
 	},
 
 	render: function() {
@@ -319,7 +330,8 @@ var SteamCategoriesView = Backbone.View.extend({
 			var view = new SteamCategoryView({
 				model: one,
 				el: one_el.clone(),
-				on_category_change: that.on_category_change
+				on_category_change: that.on_category_change,
+				backend: that.backend
 			});
 			container.append(view.render().el);
 		});

@@ -1,36 +1,47 @@
 "use strict";
 
-function fetch_json(collection, success) {
-	collection.fetch({
-		mimeType: 'application/json',
-		cache: false,
-		success: success,
-		error: function() { console.log(arguments); }
-	});
-}
-
-function json_promise(fetchable)
+var Backend = Backbone.Model.extend(
 {
-	var promise = fetchable.fetch({
-		mimeType: 'application/json',
-		cache: false
-	});
-
-	promise.fail(function() { console.log(arguments); });
-
-	promise.fail(function(jqXHR, textStatus, errorThrown)
+	fetch_promise: function(fetchable)
 	{
-		ErrorHandler.explode(errorThrown);
-	});
+		var promise = fetchable.fetch({
+			reset: true,
+			mimeType: 'application/json',
+			cache: false
+		});
 
-	return promise;
-}
+		promise.fail(function() { console.log(arguments); });
 
-var BACKOFF = false;
+		promise.fail(function(jqXHR, textStatus, errorThrown)
+		{
+			ErrorHandler.explode(errorThrown);
+		});
+
+		return promise;
+	},
+
+	fetch_fetch_json: function(collection, success)
+	{
+		collection.fetch({
+			reset: true,
+			mimeType: 'application/json',
+			cache: false,
+			success: success,
+			error: function() { console.log(arguments); }
+		});
+	},
+
+	ajax_ajax_promise: function(aUrl)
+	{
+		return ajax_promise(aUrl);
+	}
+});
 
 function ajax_promise(aUrl)
 {
 	var promise;
+
+	var BACKOFF = true;
 
 	if (BACKOFF)
 	{

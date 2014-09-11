@@ -33,12 +33,14 @@ var SearchView = Backbone.View.extend(
 		//'submit #form-tag': 'event_form_submit'
 	},
 
-	initialize: function() {
-		this.cardTemplatePromise = this.options.cardTemplatePromise;
-		this.continues = this.options.continues;
-		this.on_tag = this.options.on_tag;
+	initialize: function(options)
+	{
+		this.cardTemplatePromise = options.cardTemplatePromise;
+		this.continues = options.continues;
+		this.on_tag = options.on_tag;
+		this.backend = options.backend;
 
-		this.continues.on('reset', this.continues_reset, this);
+		this.listenTo(this.continues, 'reset', this.continues_reset);
 	},
 
 	render: function() {
@@ -51,7 +53,8 @@ var SearchView = Backbone.View.extend(
 			cardTemplatePromise: this.cardTemplatePromise,
 			collection: searchResults,
 			continues: this.continues,
-			on_tag: this.on_tag
+			on_tag: this.on_tag,
+			backend: this.backend
 		});
 
 		var tileSearchCommandHint = this.$('#search-command-hint');
@@ -120,7 +123,7 @@ var SearchView = Backbone.View.extend(
 		} else {
 			var searchResults = this.searchResults;
 			searchResults.query = input;
-			fetch_json(searchResults);
+			this.backend.fetch_fetch_json(searchResults);
 		}
 	},
 
@@ -132,7 +135,7 @@ var SearchView = Backbone.View.extend(
 		} else {
 			var searchResults = this.searchResults;
 			searchResults.query = input;
-			fetch_json(searchResults, function() {
+			this.backend.fetch_fetch_json(searchResults, function() {
 				var first = searchResults.at(0);
 				first.play();
 			});

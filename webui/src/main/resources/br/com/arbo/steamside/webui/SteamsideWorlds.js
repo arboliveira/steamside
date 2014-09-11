@@ -16,6 +16,7 @@ var HomeWorld = WorldActions.extend(
 				throw new Error("cardTemplatePromise is required");
 			}
 			this.cardTemplatePromise = options.cardTemplatePromise;
+			this.backend = options.backend;
 		},
 
 		tileLoad: function(whenDone)
@@ -24,13 +25,14 @@ var HomeWorld = WorldActions.extend(
 			whenDone(null);
 		},
 
-		newView: function(tile)
+		newView: function(/*tile*/)
 		{
 			return new HomeView({
 				// el: tile.clone(),
 				sessionModel: this.sessionModel,
 				cardTemplatePromise: this.cardTemplatePromise,
-				kidsTileset: this.kidsTileset
+				kidsTileset: this.kidsTileset,
+				backend: this.backend
 			}).render();
 		},
 
@@ -43,6 +45,11 @@ var HomeWorld = WorldActions.extend(
 
 var CollectionsNewWorld = WorldActions.extend(
 	{
+		initialize: function(options)
+		{
+			this.backend = options.backend;
+		},
+
 		tileLoad: function(whenDone)
 		{
 			CollectionNewTile.whenLoaded(whenDone);
@@ -51,7 +58,8 @@ var CollectionsNewWorld = WorldActions.extend(
 		newView: function(tile)
 		{
 			return new CollectionNewView({
-				el: tile.clone()
+				el: tile.clone(),
+				backend: this.backend
 			}).render();
 		}
 	}
@@ -59,6 +67,11 @@ var CollectionsNewWorld = WorldActions.extend(
 
 var SteamClientWorld = WorldActions.extend(
 	{
+		initialize: function(options)
+		{
+			this.backend = options.backend;
+		},
+
 		tileLoad: function(whenDone)
 		{
 			SteamClientTile.ajaxTile(whenDone);
@@ -66,15 +79,23 @@ var SteamClientWorld = WorldActions.extend(
 
 		newView: function(tile)
 		{
-			return new SteamClientView({
-				el: tile.clone()
-			}).render();
+			return new SteamClientView(
+				{
+					el: tile.clone(),
+					backend: this.backend
+				}
+			).render();
 		}
 	}
 );
 
 var ExitWorld = WorldActions.extend(
 	{
+		initialize: function(options)
+		{
+			this.backend = options.backend;
+		},
+
 		tileLoad: function(whenDone)
 		{
 			ExitTile.ajaxTile(whenDone);
@@ -83,7 +104,8 @@ var ExitWorld = WorldActions.extend(
 		newView: function(tile)
 		{
 			return new ExitView({
-				el: tile.clone()
+				el: tile.clone(),
+				backend: this.backend
 			}).render();
 		}
 	}

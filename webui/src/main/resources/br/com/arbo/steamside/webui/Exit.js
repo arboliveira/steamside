@@ -13,8 +13,13 @@ var ExitTile =
 
 var ExitView = Backbone.View.extend(
 {
-    render: function () {
-		ajax_promise('api/exit');
+	initialize: function(options)
+	{
+		this.backend = options.backend;
+	},
+
+	render: function () {
+		this.backend.ajax_ajax_promise('api/exit');
         return this;
     }
 

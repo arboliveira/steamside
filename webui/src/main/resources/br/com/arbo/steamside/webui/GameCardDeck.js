@@ -90,16 +90,21 @@ var DeckCell = Backbone.View.extend({
 	alwaysVisible: false,
 	visible: false,
 	
-	initialize: function() {		"use strict";
-		this.view = this.options.view;
-		this.alwaysVisible = this.options.alwaysVisible;
+	initialize: function(options)
+	{
+		this.view = options.view;
+		this.alwaysVisible = options.alwaysVisible;
 		this.visible = this.alwaysVisible;
 	},
 			
-	toggleVisibility: function() {		"use strict";
-		if (this.alwaysVisible) {
+	toggleVisibility: function()
+	{
+		if (this.alwaysVisible)
+		{
 			this.visible = true;
-		} else {
+		}
+		else
+		{
 			this.visible = !this.visible;
 		}
 		this.display();		
@@ -221,13 +226,16 @@ var GameCardView = Backbone.View.extend({
         "click .game-tile-tag": "tagClicked"
 	},
 
-	initialize: function() {		"use strict";
-		this.continues = this.options.continues;
-		this.enormity = this.options.enormity;
-		this.on_render = this.options.on_render;
-		this.on_tag = this.options.on_tag;
-		this.model.on('game:play:beforeSend', this.game_play_beforeSend, this);
-		this.model.on('game:play:complete', this.game_play_complete, this);
+	initialize: function(options)
+	{
+		this.continues = options.continues;
+		this.enormity = options.enormity;
+		this.on_render = options.on_render;
+		this.on_tag = options.on_tag;
+		this.backend = options.backend;
+
+		this.listenTo(this.model, 'game:play:beforeSend', this.game_play_beforeSend);
+		this.listenTo(this.model, 'game:play:complete', this.game_play_complete);
 	},
 
 	render: function ()
@@ -331,19 +339,20 @@ var GameCardView = Backbone.View.extend({
         loading_underlay.removeClass('game-tile-inner-blurred');
     },
 
-    redisplay_continues: function () {		"use strict";
-        fetch_json(this.continues);
+    redisplay_continues: function () {
+        this.backend.fetch_fetch_json(this.continues);
     }
 });
 
 var FillerCellView = Backbone.View.extend({
 	width: 0,
 	
-	initialize: function() {		"use strict";
-		this.width = this.options.width;
+	initialize: function(options)
+	{
+		this.width = options.width;
 	},
 
-	render: function() {		"use strict";
+	render: function() {
 		this.$el.html('&nbsp;');
 		this.$el.width(this.width.toString() + "%");
 		this.$el.addClass('game-cell-filler');
@@ -359,22 +368,23 @@ var MoreButtonView = Backbone.View.extend({
 		"click" : "moreClicked"
 	},
 	
-	initialize: function() {		"use strict";
-		this.deck = this.options.deck;
+	initialize: function(options)
+	{
+		this.deck = options.deck;
 	},
 
-	render: function() {		"use strict";
+	render: function() {
 		this.textRefresh();
 		this.$el.fadeIn();
 		return this;
 	},
 	
-	moreClicked: function(e) {		"use strict";
+	moreClicked: function(e) {
 		e.preventDefault();
 		this.toggle();
 	},
 
-	toggle: function() {		"use strict";
+	toggle: function() {
 		this.deck.toggleVisibility();
 		this.hiding = !this.hiding;
 		this.textRefresh();
@@ -398,25 +408,27 @@ var DeckView = Backbone.View.extend({
 	on_GameCard_render: null,
 	on_tag: null,
 
-	initialize: function() {
+	initialize: function(options) {
         /*
          visible will not be part of the result anymore,
          because we want logic like "first row is visible"
          and this depends on calculations inside the browser
          */
 
-		if (this.options.cardTemplatePromise == null) {
+		if (options.cardTemplatePromise == null) {
 			throw new Error("cardTemplatePromise is required");
 		}
 
-		this.cardTemplatePromise = this.options.cardTemplatePromise;
+		this.cardTemplatePromise = options.cardTemplatePromise;
 
-		this.kidsMode = this.options.kidsMode === true;
+		this.kidsMode = options.kidsMode === true;
 		this.alwaysVisible = this.kidsMode;
-		this.continues = this.options.continues;
-		this.on_GameCard_render = this.options.on_GameCard_render;
-		this.on_tag = this.options.on_tag;
-		this.collection.on('reset', this.render, this);
+		this.continues = options.continues;
+		this.on_GameCard_render = options.on_GameCard_render;
+		this.on_tag = options.on_tag;
+		this.backend = options.backend;
+
+		this.listenTo(this.collection, 'reset', this.render);
 	},
 
 	renderMoreButton: function () {
@@ -525,7 +537,8 @@ var DeckView = Backbone.View.extend({
 			kidsMode: this.kidsMode,
 			continues: this.continues,
 			on_render: this.on_GameCard_render,
-			on_tag: on_tag_deck
+			on_tag: on_tag_deck,
+			backend: this.backend
 		});
 		this.deck.push(card_view, this.alwaysVisible || this.yRow === 1);
 		var card_el = card_view.render().el;
