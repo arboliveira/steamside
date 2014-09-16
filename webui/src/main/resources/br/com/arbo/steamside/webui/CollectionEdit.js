@@ -402,7 +402,10 @@ var Combine = Backbone.Model.extend({
 
     nameForCombinedCollection: function(input) {
         if (input == '')
-            return this.get_collection_editing() + ' and ' + this.get_collection_combine();
+            return
+				this.get_collection_editing() +
+				' and ' +
+				this.get_collection_combine();
         return input;
     }
 
@@ -626,8 +629,36 @@ var CombineCommandBoxView = Backbone.View.extend({
 
 	on_combine_command: function(commandBoxView)
 	{
-		var input = commandBoxView.input_query_val();
-		alert('command: ' + input);
+		var combine = this.combine;
+		var editing_name = combine.get_collection_editing();
+		var combine_name = combine.get_collection_combine();
+		var spliced_name = combine.get_combined_name();
+		var aUrl =
+			"api/collection/" +
+			encodeURIComponent(editing_name) +
+			"/combine/" +
+			encodeURIComponent(combine_name) +
+			"/into/" +
+			encodeURIComponent(spliced_name) +
+			"/creating";
+
+		// TODO display 'combining...'
+		/*
+		 beforeSend: function(){
+		 },
+		 */
+
+		var that = this;
+
+		this.backend.ajax_ajax_promise(aUrl)
+			.done(function()
+			{
+				that.on_combine_command_done();
+			})
+			.fail(function(error)
+			{
+				commandBoxView.trouble(error);
+			});
 	},
 
 	on_combine_command_alternate: function(commandBoxView)
@@ -655,12 +686,44 @@ var CombineCommandBoxView = Backbone.View.extend({
 
 	on_combine_command_confirm: function(commandBoxView)
 	{
-		var confirmCombine = this.combineCommandHintCView.combine;
+		var combine = this.combineCommandHintCView.combine;
+		var editing_name = combine.get_collection_editing();
+		var combine_name = combine.get_collection_combine();
+		var spliced_name = combine.get_combined_name();
+		var aUrl =
+			"api/collection/" +
+			encodeURIComponent(editing_name) +
+			"/combine/" +
+			encodeURIComponent(combine_name) +
+			"/into/" +
+			encodeURIComponent(spliced_name) +
+			"/deleting";
 
-		// server command
+		// TODO display 'combining...'
+		/*
+		 beforeSend: function(){
+		 },
+		 */
 
 		commandBoxView.hideCommandHintConfirm();
 
 		this.combineCommandHintCView = null;
+
+		var that = this;
+
+		this.backend.ajax_ajax_promise(aUrl)
+			.done(function()
+			{
+				that.on_combine_command_done();
+			})
+			.fail(function(error)
+			{
+				commandBoxView.trouble(error);
+			});
+	},
+
+	on_combine_command_done: function() {
+		this.viewCommandBox.input_query_setval('');
 	}
+
 });

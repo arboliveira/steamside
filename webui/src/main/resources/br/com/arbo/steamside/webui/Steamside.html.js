@@ -176,6 +176,8 @@ var Steamside_html = {
 
 		backend.fetch_promise(sessionModel).done(function()
 		{
+			backend.set_backoff(sessionModel.backoff());
+
 			var kidsTileset = new Tileset({url: 'Kids.html'});
 
 			var steamsideTileset = SteamsideTileset.tileset;

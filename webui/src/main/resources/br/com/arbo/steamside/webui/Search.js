@@ -28,6 +28,7 @@ var SearchView = Backbone.View.extend(
 	searchResults: null,
 	continues: null,
 	on_tag: null,
+	player: null,
 
 	events: {
 		//'submit #form-tag': 'event_form_submit'
@@ -39,6 +40,7 @@ var SearchView = Backbone.View.extend(
 		this.continues = options.continues;
 		this.on_tag = options.on_tag;
 		this.backend = options.backend;
+		this.player = new Game_Player({ backend: options.backend });
 
 		this.listenTo(this.continues, 'reset', this.continues_reset);
 	},
@@ -119,7 +121,7 @@ var SearchView = Backbone.View.extend(
 		var input = view.input_query_val();
 		if (input == '') {
 			var gameA = this.continues.at(0);
-			gameA.play();
+			this.player.play(gameA);
 		} else {
 			var searchResults = this.searchResults;
 			searchResults.query = input;
@@ -131,13 +133,13 @@ var SearchView = Backbone.View.extend(
 		var input = view.input_query_val();
 		if (input == '') {
 			var gameB = this.continues.at(1);
-			gameB.play();
+			this.player.play(gameB);
 		} else {
 			var searchResults = this.searchResults;
 			searchResults.query = input;
 			this.backend.fetch_fetch_json(searchResults, function() {
 				var first = searchResults.at(0);
-				first.play();
+				this.player.play(first);
 			});
 		}
 	},

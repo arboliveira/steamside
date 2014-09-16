@@ -63,6 +63,26 @@ public class CollectionController {
 		tags.tagRemember(new CollectionName(name), new AppId(appid));
 	}
 
+	@RequestMapping(value = "{name}/combine/{collection}/into/{combined}/deleting")
+	@ResponseBody
+	public void combine_into_deleting(
+			@PathVariable @NonNull String name,
+			@PathVariable @NonNull String collection,
+			@PathVariable @NonNull String combined)
+	{
+
+	}
+
+	@RequestMapping(value = "{name}/combine/{collection}/into/{combined}/preserving")
+	@ResponseBody
+	public void combine_into_preserving(
+			@PathVariable @NonNull String name,
+			@PathVariable @NonNull String collection,
+			@PathVariable @NonNull String combined)
+	{
+
+	}
+
 	@RequestMapping(value = "copy-all-steam-categories")
 	@ResponseBody
 	public void copyAllSteamCategories()

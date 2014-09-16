@@ -2,6 +2,8 @@
 
 var Backend = Backbone.Model.extend(
 {
+	backoff: false,
+
 	fetch_promise: function(fetchable)
 	{
 		var promise = fetchable.fetch({
@@ -33,32 +35,35 @@ var Backend = Backbone.Model.extend(
 
 	ajax_ajax_promise: function(aUrl)
 	{
-		return ajax_promise(aUrl);
+		var promise;
+
+		if (this.is_backoff())
+		{
+			alert("Back end is OFF. Ignoring: \n\n" + aUrl);
+
+			promise = $.ajax({});
+		}
+		else {
+			promise = $.ajax(aUrl);
+		}
+
+		promise.fail(function() { console.log(arguments); });
+
+		promise.fail(function(jqXHR, textStatus, errorThrown)
+		{
+			ErrorHandler.explode(errorThrown);
+		});
+
+		return promise;
+	},
+
+	set_backoff: function(value)
+	{
+		this.backoff = value;
+	},
+
+	is_backoff: function()
+	{
+		return this.backoff;
 	}
 });
-
-function ajax_promise(aUrl)
-{
-	var promise;
-
-	var BACKOFF = true;
-
-	if (BACKOFF)
-	{
-		alert("Back end is OFF. Ignoring: \n\n" + aUrl);
-
-		promise = $.ajax({});
-	}
-	else {
-		promise = $.ajax(aUrl);
-	}
-
-	promise.fail(function() { console.log(arguments); });
-
-	promise.fail(function(jqXHR, textStatus, errorThrown)
-	{
-		ErrorHandler.explode(errorThrown);
-	});
-
-	return promise;
-}

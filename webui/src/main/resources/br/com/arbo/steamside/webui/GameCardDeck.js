@@ -43,21 +43,28 @@ var Game = Backbone.Model.extend({
 
 	tagsCollection: function() {
 		return this.tags;
+	}
+});
+
+
+var Game_Player = Backbone.Model.extend(
+{
+	initialize: function(options) {
+		this.backend = options.backend;
 	},
 
-	play: function() {
-		var aUrl = this.link();
-		var that = this;
+	play: function(game) {
+		var aUrl = game.link();
+		var that = game;
 
 		that.trigger('game:play:beforeSend');
 
-		ajax_promise(aUrl)
+		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 			{
 				that.trigger('game:play:complete');
 			});
 	}
-
 });
 
 
@@ -217,6 +224,7 @@ var GameCardView = Backbone.View.extend({
 	width: 0,
 	on_render: null,
 	on_tag: null,
+	player: null,
 
 	events: {
 		"mouseenter .game-link": "mouseenter_hot_zone",
@@ -233,6 +241,7 @@ var GameCardView = Backbone.View.extend({
 		this.on_render = options.on_render;
 		this.on_tag = options.on_tag;
 		this.backend = options.backend;
+		this.player = new Game_Player({ backend: options.backend });
 
 		this.listenTo(this.model, 'game:play:beforeSend', this.game_play_beforeSend);
 		this.listenTo(this.model, 'game:play:complete', this.game_play_complete);
@@ -307,7 +316,7 @@ var GameCardView = Backbone.View.extend({
 	playClicked: function(e)
 	{
 		e.preventDefault();
-		this.model.play();
+		this.player.play(this.model);
 	},
 
 	tagClicked: function(e)
