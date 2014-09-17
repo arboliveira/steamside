@@ -63,9 +63,9 @@ public class CollectionController {
 		tags.tagRemember(new CollectionName(name), new AppId(appid));
 	}
 
-	@RequestMapping(value = "{name}/combine/{collection}/into/{combined}/deleting")
+	@RequestMapping(value = "{name}/combine/{collection}/into/{combined}/copy")
 	@ResponseBody
-	public void combine_into_deleting(
+	public void combine_into_copy(
 			@PathVariable @NonNull String name,
 			@PathVariable @NonNull String collection,
 			@PathVariable @NonNull String combined)
@@ -73,9 +73,9 @@ public class CollectionController {
 
 	}
 
-	@RequestMapping(value = "{name}/combine/{collection}/into/{combined}/preserving")
+	@RequestMapping(value = "{name}/combine/{collection}/into/{combined}/move")
 	@ResponseBody
-	public void combine_into_preserving(
+	public void combine_into_move(
 			@PathVariable @NonNull String name,
 			@PathVariable @NonNull String collection,
 			@PathVariable @NonNull String combined)

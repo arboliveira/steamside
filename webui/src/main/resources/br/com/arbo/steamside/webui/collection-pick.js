@@ -70,8 +70,8 @@ var CollectionPickView = Backbone.View.extend(
 		var m = this.combine_collection;
 		if (m != null)
 		{
-			this.$('#MergeCollectionName').text(m);
-			this.$('#MergeCollectionWithView').show();
+			this.$('#CombineCollectionName').text(m);
+			this.$('#CombineCollectionWithView').show();
 		}
 
 		var collections = new SteamsideCollectionInfoCollection();

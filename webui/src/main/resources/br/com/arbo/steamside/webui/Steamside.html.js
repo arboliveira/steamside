@@ -168,6 +168,12 @@ var Steamside_html = {
 
     render_page: function ()
 	{
+		window.onerror = function errorHandler(msg, url, line, col, error)
+		{
+			ErrorHandler.explode(error);
+			throw error;
+		};
+
 		var backend = new Backend();
 
 		var sessionModel = new SessionModel();
