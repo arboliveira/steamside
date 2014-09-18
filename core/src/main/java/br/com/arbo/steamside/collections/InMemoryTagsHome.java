@@ -92,9 +92,17 @@ public class InMemoryTagsHome implements TagsData {
 
 	public void rememberRecentTag(CollectionName collectionName)
 	{
-		CollectionI c = collections().find(collectionName);
-		CollectionImpl stored = stored(c);
-		doRememberRecentTag(stored);
+		try
+		{
+			CollectionI c = collections().find(collectionName);
+			CollectionImpl stored = stored(c);
+			doRememberRecentTag(stored);
+		}
+		catch (NotFound e)
+		{
+			// Collection was deleted but name is still in recent tags
+			return;
+		}
 	}
 
 	@Override
@@ -204,14 +212,14 @@ public class InMemoryTagsHome implements TagsData {
 		void tag(CollectionImpl c, AppId a)
 		{
 			map
-					.computeIfAbsent(c, k -> new HashSet<AppId>())
-					.add(a);
+			.computeIfAbsent(c, k -> new HashSet<AppId>())
+			.add(a);
 		}
 
 		void untag(CollectionImpl c, AppId a)
 		{
 			getOptional(c)
-					.ifPresent(v -> v.remove(a));
+			.ifPresent(v -> v.remove(a));
 		}
 
 		private Optional<Collection<AppId>> getOptional(CollectionImpl c)
@@ -239,14 +247,14 @@ public class InMemoryTagsHome implements TagsData {
 		void tag(CollectionImpl c, AppId a)
 		{
 			map
-					.computeIfAbsent(a, k -> new HashSet<CollectionImpl>())
-					.add(c);
+			.computeIfAbsent(a, k -> new HashSet<CollectionImpl>())
+			.add(c);
 		}
 
 		void untag(CollectionImpl c, AppId a)
 		{
 			getOptional(a)
-					.ifPresent(v -> v.remove(c));
+			.ifPresent(v -> v.remove(c));
 		}
 
 		private Optional<Collection<CollectionImpl>> getOptional(AppId a)
@@ -280,8 +288,8 @@ public class InMemoryTagsHome implements TagsData {
 		{
 			Objects.requireNonNull(a);
 			map
-					.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
-					.computeIfAbsent(a, TagImpl::new);
+			.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
+			.computeIfAbsent(a, TagImpl::new);
 		}
 
 		Stream<TagImpl> tags(CollectionImpl c)
@@ -295,7 +303,7 @@ public class InMemoryTagsHome implements TagsData {
 		void untag(CollectionImpl c, AppId a)
 		{
 			getOptional(c)
-					.ifPresent(v -> v.remove(a));
+			.ifPresent(v -> v.remove(a));
 		}
 
 		private Optional<Map<AppId, TagImpl>> getOptional(CollectionImpl c)
