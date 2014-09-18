@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
+import br.com.arbo.steamside.api.collection.CombineCollections.Operation;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
@@ -70,7 +71,9 @@ public class CollectionController {
 			@PathVariable @NonNull String collection,
 			@PathVariable @NonNull String combined)
 	{
-
+		new CombineCollections(
+				name, collection, combined, Operation.Copy, tags)
+				.combine();
 	}
 
 	@RequestMapping(value = "{name}/combine/{collection}/into/{combined}/move")
@@ -80,7 +83,9 @@ public class CollectionController {
 			@PathVariable @NonNull String collection,
 			@PathVariable @NonNull String combined)
 	{
-
+		new CombineCollections(
+				name, collection, combined, Operation.Move, tags)
+				.combine();
 	}
 
 	@RequestMapping(value = "copy-all-steam-categories")

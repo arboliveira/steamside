@@ -36,6 +36,14 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	}
 
 	@Override
+	public void delete(@NonNull CollectionI in) throws Duplicate
+	{
+		guardSystem(in);
+		CollectionImpl stored = stored(in);
+		objects.remove(stored);
+	}
+
+	@Override
 	public CollectionI find(CollectionName name) throws NotFound
 	{
 		return findOrCry(name);

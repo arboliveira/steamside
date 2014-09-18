@@ -2,7 +2,6 @@ package br.com.arbo.steamside.api.collection;
 
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.library.Library;
@@ -27,11 +26,7 @@ public class CopyAllSteamCategories {
 	{
 		Stream<AppId> apps = library.findIn(category).map(App::appid);
 
-		CollectionI collection =
-				data.collections().addIfAbsent(
-						new CollectionName(category.category));
-
-		data.tag(collection, apps);
+		data.tagn(new CollectionName(category.category), apps);
 	}
 
 	private final Library library;

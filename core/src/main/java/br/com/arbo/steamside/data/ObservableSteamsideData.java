@@ -161,6 +161,12 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
+		public void delete(CollectionI in)
+		{
+			writes.delete(in);
+		}
+
+		@Override
 		@NonNull
 		public CollectionI find(CollectionName name) throws NotFound
 		{

@@ -8,4 +8,6 @@ public interface CollectionsWrites {
 
 	void add(@NonNull CollectionI in) throws Duplicate;
 
+	void delete(CollectionI in);
+
 }

@@ -33,6 +33,12 @@ public class AutowireCollectionsData implements CollectionsData {
 	}
 
 	@Override
+	public void delete(CollectionI in)
+	{
+		reloadable().delete(in);
+	}
+
+	@Override
 	@NonNull
 	public CollectionI find(CollectionName name) throws NotFound
 	{
