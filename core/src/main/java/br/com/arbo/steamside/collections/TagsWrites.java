@@ -9,14 +9,6 @@ import br.com.arbo.steamside.steam.client.types.AppId;
 
 public interface TagsWrites {
 
-	/**
-	 * @deprecated Single taggings are using tagRemember for Recent tags
-	 */
-	@Deprecated
-	void tag(
-			@NonNull CollectionI c,
-			@NonNull AppId appid) throws NotFound;
-
 	void tag(
 			CollectionI c,
 			Stream<AppId> apps) throws NotFound;

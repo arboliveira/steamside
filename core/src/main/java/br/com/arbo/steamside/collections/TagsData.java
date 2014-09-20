@@ -24,13 +24,6 @@ public interface TagsData extends TagsQueries, TagsWrites {
 		collections().delete(find);
 	}
 
-	@Deprecated
-	default void tag(CollectionName collection, AppId appid)
-	{
-		CollectionI find = collections().addIfAbsent(collection);
-		this.tag(find, appid);
-	}
-
 	default void tagn(CollectionName collection, Stream<AppId> apps)
 	{
 		CollectionI find = collections().addIfAbsent(collection);

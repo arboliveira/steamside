@@ -12,11 +12,12 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import br.com.arbo.steamside.collections.InMemoryCollectionsHome.DeleteListener;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class InMemoryTagsHome implements TagsData {
+public class InMemoryTagsHome implements TagsData, DeleteListener {
 
 	static WithTags withTags(
 			Map.Entry<CollectionImpl, Map<AppId, TagImpl>> e)
@@ -42,13 +43,14 @@ public class InMemoryTagsHome implements TagsData {
 	{
 		appsByCollection = new AppsByCollection();
 		collectionsByApp = new CollectionsByApp();
+		recent = new Recent();
 		tagsByCollection = new TagsByCollection();
 	}
 
 	public InMemoryTagsHome(InMemoryCollectionsHome collections)
 	{
+		collections.addListener(this);
 		this.collections = collections;
-		this.recent = new Recent();
 	}
 
 	@Override
@@ -85,6 +87,15 @@ public class InMemoryTagsHome implements TagsData {
 	}
 
 	@Override
+	public void onDelete(CollectionImpl c)
+	{
+		appsByCollection.onDelete(c);
+		collectionsByApp.onDelete(c);
+		recent.onDelete(c);
+		tagsByCollection.onDelete(c);
+	}
+
+	@Override
 	public Stream< ? extends WithCount> recent()
 	{
 		return recent.values().stream().map(this::withCount);
@@ -103,15 +114,6 @@ public class InMemoryTagsHome implements TagsData {
 			// Collection was deleted but name is still in recent tags
 			return;
 		}
-	}
-
-	@Override
-	public void tag(
-			@NonNull final CollectionI c,
-			@NonNull final AppId appid) throws NotFound
-	{
-		CollectionImpl stored = stored(c);
-		doTag(stored, appid);
 	}
 
 	@Override
@@ -209,17 +211,22 @@ public class InMemoryTagsHome implements TagsData {
 					.orElse(false);
 		}
 
+		void onDelete(CollectionImpl c)
+		{
+			map.remove(c);
+		}
+
 		void tag(CollectionImpl c, AppId a)
 		{
 			map
-			.computeIfAbsent(c, k -> new HashSet<AppId>())
-			.add(a);
+					.computeIfAbsent(c, k -> new HashSet<AppId>())
+					.add(a);
 		}
 
 		void untag(CollectionImpl c, AppId a)
 		{
 			getOptional(c)
-			.ifPresent(v -> v.remove(a));
+					.ifPresent(v -> v.remove(a));
 		}
 
 		private Optional<Collection<AppId>> getOptional(CollectionImpl c)
@@ -244,17 +251,22 @@ public class InMemoryTagsHome implements TagsData {
 			return map.containsKey(appid);
 		}
 
+		void onDelete(CollectionImpl c)
+		{
+			map.forEach((appid, collections) -> collections.remove(c));
+		}
+
 		void tag(CollectionImpl c, AppId a)
 		{
 			map
-			.computeIfAbsent(a, k -> new HashSet<CollectionImpl>())
-			.add(c);
+					.computeIfAbsent(a, k -> new HashSet<CollectionImpl>())
+					.add(c);
 		}
 
 		void untag(CollectionImpl c, AppId a)
 		{
 			getOptional(a)
-			.ifPresent(v -> v.remove(c));
+					.ifPresent(v -> v.remove(c));
 		}
 
 		private Optional<Collection<CollectionImpl>> getOptional(AppId a)
@@ -275,6 +287,11 @@ public class InMemoryTagsHome implements TagsData {
 			return size() > 6;
 		}
 
+		void onDelete(CollectionImpl c)
+		{
+			this.remove(c.name().value);
+		}
+
 		void tagged(CollectionImpl c)
 		{
 			this.put(c.name().value, c);
@@ -284,12 +301,17 @@ public class InMemoryTagsHome implements TagsData {
 
 	static class TagsByCollection {
 
+		void onDelete(CollectionImpl c)
+		{
+			map.remove(c);
+		}
+
 		void tag(CollectionImpl c, @NonNull AppId a)
 		{
 			Objects.requireNonNull(a);
 			map
-			.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
-			.computeIfAbsent(a, TagImpl::new);
+					.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
+					.computeIfAbsent(a, TagImpl::new);
 		}
 
 		Stream<TagImpl> tags(CollectionImpl c)
@@ -303,7 +325,7 @@ public class InMemoryTagsHome implements TagsData {
 		void untag(CollectionImpl c, AppId a)
 		{
 			getOptional(c)
-			.ifPresent(v -> v.remove(a));
+					.ifPresent(v -> v.remove(a));
 		}
 
 		private Optional<Map<AppId, TagImpl>> getOptional(CollectionImpl c)

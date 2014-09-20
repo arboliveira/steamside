@@ -1,15 +1,13 @@
-package br.com.arbo.steamside.api.collection;
+package br.com.arbo.steamside.collections;
 
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.collections.Tag;
-import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-class CombineCollections {
+public class CombineCollections {
 
-	CombineCollections(
+	public CombineCollections(
 			String name, String collection, String combined,
 			Operation op, TagsData tags)
 	{
@@ -20,7 +18,7 @@ class CombineCollections {
 		this.operation = op;
 	}
 
-	void combine()
+	public void combine()
 	{
 		if (mine.equalsCollectionName(with))
 			throw new IllegalArgumentException(
@@ -79,18 +77,18 @@ class CombineCollections {
 		}
 	}
 
-	enum Operation {
+	public enum Operation {
 		Copy, Move
 	}
 
-	private final TagsData tags;
-
 	private final CollectionName mine;
+
+	private final Operation operation;
+
+	private final TagsData tags;
 
 	private final CollectionName with;
 
 	private final CollectionName yarn;
-
-	private final Operation operation;
 
 }

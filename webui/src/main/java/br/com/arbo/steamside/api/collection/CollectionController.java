@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.api.app.AppDTO;
-import br.com.arbo.steamside.api.collection.CombineCollections.Operation;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.CombineCollections;
 import br.com.arbo.steamside.collections.TagsData;
+import br.com.arbo.steamside.collections.CombineCollections.Operation;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.settings.Settings;

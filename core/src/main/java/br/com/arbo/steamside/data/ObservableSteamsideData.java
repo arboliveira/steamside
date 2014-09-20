@@ -256,13 +256,6 @@ public class ObservableSteamsideData implements SteamsideData {
 			return reads.recent();
 		}
 
-		@Deprecated
-		@Override
-		public void tag(@NonNull CollectionI c, @NonNull AppId appid)
-		{
-			writes.tag(c, appid);
-		}
-
 		@Override
 		public void tag(CollectionI c, Stream<AppId> apps)
 		{

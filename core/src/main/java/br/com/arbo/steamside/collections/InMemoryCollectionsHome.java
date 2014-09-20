@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.collections;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,11 @@ public class InMemoryCollectionsHome implements CollectionsData {
 		objects.add(CollectionImpl.clone(in));
 	}
 
+	public void addListener(DeleteListener listener)
+	{
+		deleteListeners.add(listener);
+	}
+
 	@Override
 	public Stream< ? extends CollectionI> all()
 	{
@@ -40,6 +46,7 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	{
 		guardSystem(in);
 		CollectionImpl stored = stored(in);
+		deleteListeners.forEach(l -> l.onDelete(stored));
 		objects.remove(stored);
 	}
 
@@ -75,6 +82,14 @@ public class InMemoryCollectionsHome implements CollectionsData {
 		Optional<CollectionImpl> maybe = findMaybe(name);
 		if (maybe.isPresent()) throw new Duplicate();
 	}
+
+	interface DeleteListener {
+
+		void onDelete(CollectionImpl c);
+
+	}
+
+	private final List<DeleteListener> deleteListeners = new ArrayList<>(1);
 
 	private final List<CollectionImpl> objects = new LinkedList<>();
 }
