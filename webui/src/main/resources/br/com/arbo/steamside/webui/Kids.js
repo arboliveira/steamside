@@ -19,9 +19,9 @@ var KidsView = Backbone.View.extend({
 
 	tileset: null,
 
-	initialize: function()
+	initialize: function(options)
 	{
-		this.tileset = this.options.tileset;
+		this.tileset = options.tileset;
 	},
 
 	render: function ()
