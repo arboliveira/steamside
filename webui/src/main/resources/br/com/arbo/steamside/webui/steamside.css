@@ -248,7 +248,7 @@ a.indicator {
     font-family: Arvo;
 }
 
-.purpose-of-this-page {
+.purpose-of-this-section {
     font-family: Arvo;
     font-size: x-large;
     color: coral;
@@ -268,4 +268,14 @@ a.target-button {
 
 #tag-segment {
     display: none;
+}
+
+.attention
+{
+	background-color: lightgoldenrodyellow;
+	padding: 1em;
+}
+
+a.instructions-and-explanations {
+	text-decoration: none;	/* hide link underline */
 }

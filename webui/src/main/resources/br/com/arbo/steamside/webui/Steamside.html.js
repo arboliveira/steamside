@@ -164,8 +164,8 @@ var SteamsideView = Backbone.View.extend({
 	}
 });
 
-var Steamside_html = {
-
+var Steamside_html =
+{
     render_page: function ()
 	{
 		window.onerror = function errorHandler(msg, url, line, col, error)
@@ -226,5 +226,4 @@ var Steamside_html = {
 
 		return GameTilePromise.buildCardTemplatePromise(steamsideTileset);
 	}
-
 };
