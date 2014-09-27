@@ -19,28 +19,27 @@ import br.com.arbo.steamside.steam.client.types.AppName;
 public class SearchStore {
 
 	public static void search(@NonNull final String query,
-			final SearchResultVisitor visitor) {
+			final SearchResultVisitor visitor)
+	{
 		final String content = storeSearchResults(query);
 		accept(content, visitor);
 	}
 
 	private static void accept(final String content,
-			final SearchResultVisitor visitor) {
+			final SearchResultVisitor visitor)
+	{
 		final Pattern pattern = pattern();
 		final Matcher matcher = pattern.matcher(content);
-		while (matcher.find()) {
+		while (matcher.find())
+		{
 			final App oneApp = extractOne(matcher);
 			visitor.each(oneApp);
 		}
 	}
 
-	public interface SearchResultVisitor {
-
-		void each(App app);
-	}
-
 	private static App extractOne(
-			final Matcher matcher) {
+			final Matcher matcher)
+	{
 		final String appid = matcher.group(1);
 		final String name = StringEscapeUtils.unescapeHtml4(matcher
 				.group(2));
@@ -49,46 +48,64 @@ public class SearchStore {
 		return app;
 	}
 
-	private static Pattern pattern() {
+	private static Pattern pattern()
+	{
 		final String aopen =
 				Pattern.quote("<a href=\"http://store.steampowered.com/app/");
 		final String appidgroup = "\\d+";
 		final String anything = ".*?";
-		final String h4open = Pattern.quote("<h4>");
+		final String nameopen = Pattern.quote("<span class=\"title\">");
 		final String namegroup = ".+?";
-		final String h4close = Pattern.quote("</h4>");
+		final String nameclose = Pattern.quote("</span>");
 		final String regex =
 				aopen + "(" + appidgroup + ")"
 						+ anything +
-						h4open + "(" + namegroup + ")" + h4close;
+						nameopen + "(" + namegroup + ")" + nameclose;
 		final Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
 		return pattern;
 	}
 
-	private static String storeSearchResults(final @NonNull String query) {
-		final URL store = storeSearch(query);
-		try {
-			final InputStream stream = store.openStream();
-			try {
-				return IOUtils.toString(stream);
-			} finally {
-				stream.close();
-			}
-		} catch (final IOException e) {
+	private static URL storeSearch(final @NonNull String query)
+	{
+		try
+		{
+			return new URI("http", "store.steampowered.com", "/search/results",
+					"term=" + query, null).toURL();
+		}
+		catch (final MalformedURLException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch (final URISyntaxException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
-	private static URL storeSearch(final @NonNull String query)
+	private static String storeSearchResults(final @NonNull String query)
 	{
-		try {
-			return new URI("http", "store.steampowered.com", "/search/",
-					"term=" + query, null).toURL();
-		} catch (final MalformedURLException e) {
-			throw new RuntimeException(e);
-		} catch (final URISyntaxException e) {
+		final URL store = storeSearch(query);
+		try
+		{
+			final InputStream stream = store.openStream();
+			try
+			{
+				return IOUtils.toString(stream);
+			}
+			finally
+			{
+				stream.close();
+			}
+		}
+		catch (final IOException e)
+		{
 			throw new RuntimeException(e);
 		}
+	}
+
+	public interface SearchResultVisitor {
+
+		void each(App app);
 	}
 
 }
