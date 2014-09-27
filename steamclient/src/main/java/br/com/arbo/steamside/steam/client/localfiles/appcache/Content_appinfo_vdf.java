@@ -12,19 +12,32 @@ import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
 
 public class Content_appinfo_vdf {
 
-	public interface Content_appinfo_vdf_Visitor extends KeyValueVisitor {
-
-		void onApp(int app_id);
-
-		void onSection(byte section_number);
-
-		void onAppEnd();
+	private static ByteBufferX newBuffer(final FileInputStream f)
+	{
+		final FileChannel ch = f.getChannel();
+		final MappedByteBuffer map;
+		try
+		{
+			map = ch.map(MapMode.READ_ONLY, 0L, ch.size());
+		}
+		catch (final IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		return new ByteBufferX(map, KEYVALUES_TOKEN_SIZE * 2);
 	}
 
-	public void accept(final Content_appinfo_vdf_Visitor visitor) {
+	public Content_appinfo_vdf(final FileInputStream f)
+	{
+		buffer = newBuffer(f);
+	}
+
+	public void accept(final Content_appinfo_vdf_Visitor visitor)
+	{
 		buffer.read__uint32_t(); // 0x07564426
 		buffer.read__uint32_t(); // enum EUniverse
-		while (true) {
+		while (true)
+		{
 			final int app_id = buffer.read__uint32_t();
 			if (app_id == 0) break;
 			go_app_id(app_id, visitor);
@@ -32,7 +45,8 @@ public class Content_appinfo_vdf {
 	}
 
 	private void go_app_id(final int app_id,
-			final Content_appinfo_vdf_Visitor visitor) {
+			final Content_appinfo_vdf_Visitor visitor)
+	{
 		visitor.onApp(app_id);
 
 		buffer.read__uint32_t(); // data_size
@@ -43,7 +57,8 @@ public class Content_appinfo_vdf {
 			buffer.read__uint8_t(); // unknown3[20];
 		buffer.read__uint32_t(); // change_number;
 
-		while (true) {
+		while (true)
+		{
 			final byte section_number = buffer.read__uint8_t(); // enum EAppInfoSection
 			if (section_number == 0) break;
 
@@ -55,21 +70,15 @@ public class Content_appinfo_vdf {
 		visitor.onAppEnd();
 	}
 
-	private static ByteBufferX newBuffer(final FileInputStream f) {
-		final FileChannel ch = f.getChannel();
-		final MappedByteBuffer map;
-		try {
-			map = ch.map(MapMode.READ_ONLY, 0L, ch.size());
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
-		return new ByteBufferX(map, KEYVALUES_TOKEN_SIZE);
+	public interface Content_appinfo_vdf_Visitor extends KeyValueVisitor {
+
+		void onApp(int app_id);
+
+		void onAppEnd();
+
+		void onSection(byte section_number);
 	}
 
 	private final ByteBufferX buffer;
-
-	public Content_appinfo_vdf(final FileInputStream f) {
-		buffer = newBuffer(f);
-	}
 
 }
