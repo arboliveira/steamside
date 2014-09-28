@@ -13,8 +13,9 @@
     <script src="backbone.js" type="text/javascript"></script>
     <script src="jquery-2.1.1.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="qunit-1.11.0.css" />
-    <script src="qunit-1.11.0.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="mocha.css">
+	<script src="mocha.js" type="text/javascript"></script>
+	<script src="chai.js" type="text/javascript"></script>
 
 	<script src="TestRunner.js" type="text/javascript"></script>
 
@@ -22,10 +23,17 @@
 			TESTS BEGIN
 	-->
 	<script src="Test-Steamside.js" type="text/javascript"></script>
+	<script src="Test-Cloud.js" type="text/javascript"></script>
     <script type="application/javascript">
 
 		$(function() {
-			new TestRunner().loadAndTest(new Test_Steamside_html());
+			global.mocha.setup('bdd');
+			global.expect = chai.expect;
+			global.assert = chai.assert;
+
+			var r = new TestRunner();
+			r.loadAndTest(new Test_Steamside_html());
+			if (false) r.loadAndTest(new Test_Cloud_html());
         });
 
 	</script>
@@ -36,6 +44,9 @@
 </head>
 <body>
 <!-- ======================================================================= -->
+
+<div id="mocha"></div>
+
 
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
