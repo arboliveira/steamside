@@ -17,7 +17,6 @@ var Test_Steamside_html = Backbone.Model.extend({
 	runTests: function ()
 	{
 		var that = this;
-
 		var describe = global.describe;
 		var it = global.it;
 		var mocha = global.mocha;

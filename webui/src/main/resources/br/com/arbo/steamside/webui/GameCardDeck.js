@@ -283,7 +283,7 @@ var GameCardView = Backbone.View.extend({
 		return this;		
 	},
 
-	whatWillHappen: function () {
+	littleCommandToLightUp: function () {
 		var $game = this.$('.game-tile-command');
 		if ($game.length == 0) return null;
 		return $game.first();
@@ -291,20 +291,22 @@ var GameCardView = Backbone.View.extend({
 
 	mouseenter_hot_zone: function(e) {
         e.preventDefault();
-		var whatWillHappen = this.whatWillHappen();
-		whatWillHappen.addClass('what-will-happen');
+		var littleCommandToLightUp = this.littleCommandToLightUp();
+		if (littleCommandToLightUp == null) return;
+		littleCommandToLightUp.addClass('what-will-happen');
     },
 
     mouseleave_hot_zone: function(e) {
         e.preventDefault();
-		var whatWillHappen = this.whatWillHappen();
-		whatWillHappen.removeClass('what-will-happen');
+		var littleCommandToLightUp = this.littleCommandToLightUp();
+		if (littleCommandToLightUp == null) return;
+		littleCommandToLightUp.removeClass('what-will-happen');
     },
 
     gameClicked: function(e)
 	{
 		e.preventDefault();
-		var w = this.whatWillHappen();
+		var w = this.littleCommandToLightUp();
 		if (w != null)
 		{
 			w.click();

@@ -23,6 +23,7 @@
 			TESTS BEGIN
 	-->
 	<script src="Test-Steamside.js" type="text/javascript"></script>
+	<script src="Test-Kids.js" type="text/javascript"></script>
 	<script src="Test-Cloud.js" type="text/javascript"></script>
     <script type="application/javascript">
 
@@ -33,6 +34,7 @@
 
 			var r = new TestRunner();
 			r.loadAndTest(new Test_Steamside_html());
+			if (false) r.loadAndTest(new Test_Kids_html());
 			if (false) r.loadAndTest(new Test_Cloud_html());
         });
 

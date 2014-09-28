@@ -4,36 +4,42 @@ var TestRunner = Backbone.Model.extend(
 {
 	loadAndTest: function (testsuite)
 	{
-		this.loadPageToTest(testsuite.pageToTest());
+		var load = this.loadPageToTest(testsuite.pageToTest());
 
-		var is_loaded = function () {
-			return testsuite.isPageLoaded();
-		};
+		load.done(function()
+		{
+			var is_loaded = function () {
+				return testsuite.isPageLoaded();
+			};
 
-		var ok_loaded = function () {
-			testsuite.runTests();
-		};
+			var ok_loaded = function () {
+				testsuite.runTests();
+			};
 
-		var no_loaded = function() {
-			throw new Error('page never loaded?!');
-		};
+			var no_loaded = function() {
+				throw new Error('page never loaded?!');
+			};
 
-		Insisting.seen(is_loaded, ok_loaded, no_loaded, 3000);
+			Insisting.seen(is_loaded, ok_loaded, no_loaded, 3000);
+		})
 	},
 
 	loadPageToTest: function (pageToTest)
 	{
-		$.ajax(
+		var load = $.ajax(
 			{
 				url: pageToTest,
-				success: function(page)
-					{
-						var testbed = $('#page-to-test');
-						testbed.empty();
-						testbed.append($(page));
-					},
 				dataType: 'html'
 			});
+
+		var append = load.then(function(page)
+		{
+			var testbed = $('#page-to-test');
+			testbed.empty();
+			testbed.append($(page));
+		});
+
+		return append;
 	}
 });
 
