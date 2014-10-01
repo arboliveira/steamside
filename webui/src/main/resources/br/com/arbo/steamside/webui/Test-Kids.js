@@ -70,35 +70,18 @@ var Test_Kids_html = Backbone.Model.extend({
 		});
 
 		var card_el = card_view.render().el;
-		$(card_el).show();
+		var $card_el = $(card_el);
+		$card_el.show();
 
 		cardHolder.append(card_el);
 
-		// ---
+		var game_link = $card_el.find('.game-link');
 
-		if (true) return;
+		// No asserts, just don't crash on mouseenter and mouseleave
+		game_link.trigger('mouseenter');
+		game_link.trigger('mouseleave');
 
-		var segment = $('#search-segment');
-		var input = segment.find('.search-text-input');
-		input.val('anything');
-		var button = segment.find('.command-button').get(0);
-		button.click();
-
-		var games;
-
-		var is_effect_seen = function ()
-		{
-			games = segment.find('.game-tile');
-			return games.length == 2;
-		};
-
-		var ok_effect_seen = function()
-		{
-			assert.equal(games.length, 2, 'search results');
-			done();
-		};
-
-		this.insist(is_effect_seen, ok_effect_seen, done);
+		done();
 	}
 
 });
