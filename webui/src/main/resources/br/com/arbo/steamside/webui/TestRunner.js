@@ -2,7 +2,7 @@
 
 var TestRunner = Backbone.Model.extend(
 {
-	loadAndTest: function (testsuite)
+	loadPage: function (testsuite, done)
 	{
 		var load = this.loadPageToTest(testsuite.pageToTest());
 
@@ -13,7 +13,7 @@ var TestRunner = Backbone.Model.extend(
 			};
 
 			var ok_loaded = function () {
-				testsuite.runTests();
+				done();
 			};
 
 			var no_loaded = function() {

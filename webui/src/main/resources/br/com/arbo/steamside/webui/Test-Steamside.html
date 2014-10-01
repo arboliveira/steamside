@@ -28,14 +28,7 @@
     <script type="application/javascript">
 
 		$(function() {
-			global.mocha.setup('bdd');
-			global.expect = chai.expect;
-			global.assert = chai.assert;
-
-			var r = new TestRunner();
-			r.loadAndTest(new Test_Steamside_html());
-			if (false) r.loadAndTest(new Test_Kids_html());
-			if (false) r.loadAndTest(new Test_Cloud_html());
+			Test_Steamside.testSteamside();
         });
 
 	</script>
@@ -47,13 +40,9 @@
 <body>
 <!-- ======================================================================= -->
 
-<div id="mocha"></div>
-
-
-<div id="qunit"></div>
-<div id="qunit-fixture"></div>
-
 <div id="page-to-test"></div>
+
+<div id="mocha"></div>
 
 <!-- ======================================================================= -->
 </body>

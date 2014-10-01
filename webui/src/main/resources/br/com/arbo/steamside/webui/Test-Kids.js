@@ -12,22 +12,26 @@ var Test_Kids_html = Backbone.Model.extend({
 		return true;
 	},
 
-	runTests: function ()
+	addTests: function (pageLoader)
 	{
 		var that = this;
+		var before = global.before;
 		var describe = global.describe;
 		var it = global.it;
-		var mocha = global.mocha;
 
 		describe('Kids', function(){
+
+			before(function(done)
+			{
+				pageLoader.loadPage(that, done);
+			});
+
 			describe("Game Card", function () {
-				it('Loading...', function(done){
+				it('Loading overlay', function(done){
 					that.testLoading(done);
 				})
 			});
 		});
-
-		mocha.run();
 	},
 
 	testLoading: function (done)

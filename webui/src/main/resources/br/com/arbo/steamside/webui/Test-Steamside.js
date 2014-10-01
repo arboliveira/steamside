@@ -1,5 +1,40 @@
 "use strict";
 
+var Test_Steamside =
+{
+	testSteamside: function()
+	{
+		var tests =
+			[
+				new Test_Kids_html(),
+				new Test_Cloud_html(),
+				new Test_Steamside_html(),
+				null
+			];
+		var pageLoader = new TestRunner();
+
+		var that = this;
+
+		var mocha = global.mocha;
+		mocha.setup('bdd');
+		var describe = global.describe;
+		var it = global.it;
+		global.expect = chai.expect;
+		global.assert = chai.assert;
+
+		describe("Steamside", function()
+		{
+			for (var i = 0; i < tests.length; i++)
+			{
+				if (tests[i] != null)
+					tests[i].addTests(pageLoader);
+			}
+		});
+
+		mocha.run();
+	}
+};
+
 var Test_Steamside_html = Backbone.Model.extend({
 
 	pageToTest: function()
@@ -14,14 +49,21 @@ var Test_Steamside_html = Backbone.Model.extend({
 		return b.is(':visible');
 	},
 
-	runTests: function ()
+	addTests: function (pageLoader)
 	{
 		var that = this;
+		var before = global.before;
 		var describe = global.describe;
 		var it = global.it;
 		var mocha = global.mocha;
 
-		describe('Steamside', function(){
+		describe('Home', function(){
+
+			before(function(done)
+			{
+				pageLoader.loadPage(that, done);
+			});
+
 			describe("Continues Segment", function () {
 				it('more button', function(done){
 					that.testContinues(done);
@@ -41,8 +83,6 @@ var Test_Steamside_html = Backbone.Model.extend({
 				})
 			})
 		});
-
-		mocha.run();
 	},
 
 	testContinues: function(done) {
