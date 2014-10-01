@@ -50,17 +50,36 @@ var Test_Kids_html = Backbone.Model.extend({
 
 	testLoading_done_cardTemplateLoaded: function(template_el, done)
 	{
+		var expect = global.expect;
+
+		var oneResult = new Game();
+		oneResult.set("name", "Game of Kids");
+		oneResult.set("link", "would be URL");
+
 		var cardHolder = $("#test-space");
 
-		var backend = null;
+		var backend_invoked = $.Deferred();
+
+		var MockBackend = Backbone.Model.extend(
+			{
+				ajax_ajax_promise: function(aUrl)
+				{
+					expect(aUrl).to.equal('would be URL');
+					return backend_invoked;
+				},
+
+				fetch_fetch_json: function(collection, success)
+				{
+
+				}
+			});
+
+		var backend = new MockBackend();
 
 		var enormity = {
 			styleClass: 'game-tile-large',
 			width: 100
 		};
-
-		var oneResult = new Game();
-		oneResult.set("name", "Game of Kids");
 
 		var card_view = new GameCardView({
 			el: template_el.clone(),
@@ -85,7 +104,18 @@ var Test_Kids_html = Backbone.Model.extend({
 		game_link.trigger('mouseenter');
 		game_link.trigger('mouseleave');
 
-		done();
+		game_link.trigger('click');
+
+		var loadingOverlay = $card_el.find('.game-tile-inner-loading-overlay');
+		expect(loadingOverlay.is(':visible')).to.equal(true);
+
+		backend_invoked.done(function()
+		{
+			expect(loadingOverlay.is(':visible')).to.equal(false);
+			done();
+		});
+
+		backend_invoked.resolve();
 	}
 
 });

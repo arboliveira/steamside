@@ -13,12 +13,9 @@ var Test_Steamside =
 			];
 		var pageLoader = new TestRunner();
 
-		var that = this;
-
 		var mocha = global.mocha;
 		mocha.setup('bdd');
 		var describe = global.describe;
-		var it = global.it;
 		global.expect = chai.expect;
 		global.assert = chai.assert;
 
@@ -55,7 +52,6 @@ var Test_Steamside_html = Backbone.Model.extend({
 		var before = global.before;
 		var describe = global.describe;
 		var it = global.it;
-		var mocha = global.mocha;
 
 		describe('Home', function(){
 
