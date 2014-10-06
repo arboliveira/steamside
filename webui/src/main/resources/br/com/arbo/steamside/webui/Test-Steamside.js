@@ -11,6 +11,7 @@ var Test_Steamside =
 				new Test_Steamside_html(),
 				null
 			];
+		//tests = [new Test_Cloud_html()];
 		var pageLoader = new TestRunner();
 
 		var mocha = global.mocha;

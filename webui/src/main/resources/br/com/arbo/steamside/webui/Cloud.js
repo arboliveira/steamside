@@ -7,7 +7,10 @@ var CloudModel = Backbone.Model.extend(
 
 var CloudView = Backbone.View.extend(
 {
-	initialize: function(options) {
+	cloudModel: null,
+
+	initialize: function(options)
+	{
 		this.cloudModel = options.cloudModel;
 	},
 
@@ -15,9 +18,11 @@ var CloudView = Backbone.View.extend(
 	{
 		var that = this;
 
-		CommandBoxTile.whenLoaded(function(el_CommandBox) {
-			that.render_cloud_CommandBox(el_CommandBox);
-		});
+		this.rendered = CommandBoxTile.tile.el_promise.then(
+			function(el_CommandBox) {
+				that.render_cloud_CommandBox(el_CommandBox);
+			}
+		);
 
 		return this;
 	},
@@ -34,6 +39,9 @@ var CloudView = Backbone.View.extend(
 			on_command_alternate: function(view) { that.on_cloud_command_alternate(view) },
 			on_command_confirm: function(view) { that.on_cloud_command_confirm(view) }
 		});
+
+		var randomSuggestion = that.cloudModel.randomSuggestion();
+		commandBoxView.input_query_setval(randomSuggestion);
 
 		var targetEl = this.$el;
 		targetEl.append(commandBoxView.render().el);
@@ -62,6 +70,7 @@ var Cloud_html =
 	{
 		var cloudModel = new CloudModel();
 
+		if (false)
 		new CloudView({
 			el: $('#CloudView'),
 			cloudModel: cloudModel
