@@ -36,7 +36,7 @@ import br.com.arbo.steamside.data.autowire.AutowireCollectionsData;
 import br.com.arbo.steamside.data.autowire.AutowireKidsData;
 import br.com.arbo.steamside.data.autowire.AutowireSteamsideData;
 import br.com.arbo.steamside.data.autowire.AutowireTagsData;
-import br.com.arbo.steamside.data.load.FromFileAndCloud;
+import br.com.arbo.steamside.data.load.FromCloudAndFile;
 import br.com.arbo.steamside.data.load.InitialLoad;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
@@ -124,7 +124,7 @@ public class ContainerFactory {
 				.addComponent(File_steamside_xml.class)
 				.addComponent(SaveSteamsideXml.class)
 				.addComponent(ParallelSave.class)
-				.addComponent(InitialLoad.class, FromFileAndCloud.class)
+				.addComponent(InitialLoad.class, FromCloudAndFile.class)
 				.addComponent(Autowire.class);
 
 		container

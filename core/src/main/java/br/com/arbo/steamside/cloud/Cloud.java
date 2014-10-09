@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 
 import javax.inject.Inject;
 
@@ -24,9 +25,16 @@ public class Cloud {
 	private static HttpResponse client_execute(
 			HttpClient client, HttpUriRequest post)
 	{
-		try {
+		try
+		{
 			return client.execute(post);
-		} catch (IOException e) {
+		}
+		catch (UnknownHostException e)
+		{
+			throw new Unavailable(e);
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
@@ -40,9 +48,12 @@ public class Cloud {
 
 	private static InputStream getContent(final HttpEntity entity)
 	{
-		try {
+		try
+		{
 			return entity.getContent();
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
@@ -56,11 +67,13 @@ public class Cloud {
 	}
 
 	@Inject
-	public Cloud(Host host) {
+	public Cloud(Host host)
+	{
 		this.host = host;
 	}
 
-	public String download() {
+	public String download()
+	{
 		URI uri = buildHttpGetURI();
 		HttpGet get = new HttpGet(uri);
 		prepareRequest(get);
@@ -80,7 +93,8 @@ public class Cloud {
 		return content;
 	}
 
-	public void upload(String in) {
+	public void upload(String in)
+	{
 		URI uri = buildHttpPostURI();
 		HttpPost post = new HttpPost(uri);
 		prepareRequest(post);
@@ -97,42 +111,58 @@ public class Cloud {
 				);
 	}
 
-	private void addURLParameters(String in, HttpPost post) {
-		try {
+	private void addURLParameters(String in, HttpPost post)
+	{
+		try
+		{
 			host.addURLParameters(post, in);
 
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
-	private URI buildHttpGetURI() {
-		try {
+	private URI buildHttpGetURI()
+	{
+		try
+		{
 			return host.buildHttpGetURI();
-		} catch (URISyntaxException e) {
+		}
+		catch (URISyntaxException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
-	private URI buildHttpPostURI() {
-		try {
+	private URI buildHttpPostURI()
+	{
+		try
+		{
 			return host.buildHttpPostURI();
-		} catch (URISyntaxException e) {
+		}
+		catch (URISyntaxException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
-	private String readGetContent(InputStream in) {
-		try {
+	private String readGetContent(InputStream in)
+	{
+		try
+		{
 			return host.readGetContent(in);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
-
-	private static final String USER_AGENT = "Mozilla/5.0";
 
 	private final Host host;
 
 	private final Log log = LogFactory.getLog(this.getClass());
+
+	private static final String USER_AGENT = "Mozilla/5.0";
 }
