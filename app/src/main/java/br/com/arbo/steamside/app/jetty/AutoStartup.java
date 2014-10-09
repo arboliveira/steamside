@@ -6,20 +6,20 @@ import org.springframework.context.SmartLifecycle;
 
 import br.com.arbo.steamside.container.ContainerFactory;
 import br.com.arbo.steamside.container.ParallelAppsHomeFactory;
-import br.com.arbo.steamside.data.LoadData;
+import br.com.arbo.steamside.data.autowire.Autowire;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Monitor;
 
 public class AutoStartup implements SmartLifecycle {
 
 	private ParallelAppsHomeFactory parallelAppsHomeFactory;
 	private Monitor monitor;
-	private LoadData loadData;
+	private Autowire loadData;
 
 	@Inject
 	public AutoStartup(
 			ParallelAppsHomeFactory parallelAppsHomeFactory,
 			Monitor monitor,
-			LoadData loadData) {
+			Autowire loadData) {
 		this.parallelAppsHomeFactory = parallelAppsHomeFactory;
 		this.monitor = monitor;
 		this.loadData = loadData;

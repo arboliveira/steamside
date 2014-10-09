@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -31,9 +33,16 @@ public class Dontpad implements Host {
 		return jackson.readValue(in, Dont.class);
 	}
 
+	@Inject
+	public Dontpad(DontpadSettings settings)
+	{
+		this.settings = settings;
+	}
+
 	@Override
 	public void addURLParameters(HttpPost post, String text)
-			throws UnsupportedEncodingException {
+			throws UnsupportedEncodingException
+	{
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		urlParameters.add(new BasicNameValuePair("text", text));
 		post.setEntity(newUrlEncodedFormEntity(urlParameters));
@@ -42,23 +51,31 @@ public class Dontpad implements Host {
 	@Override
 	public URI buildHttpGetURI() throws URISyntaxException
 	{
-		return new URIBuilder(url + ".body.json")
+		return new URIBuilder(url() + ".body.json")
 				.addParameter("lastUpdate", "0")
 				.build();
 	}
 
 	@Override
-	public URI buildHttpPostURI() throws URISyntaxException {
-		return new URIBuilder(url).build();
+	public URI buildHttpPostURI() throws URISyntaxException
+	{
+		return new URIBuilder(url()).build();
 	}
 
 	@Override
-	public String readGetContent(InputStream in) throws IOException {
+	public String readGetContent(InputStream in) throws IOException
+	{
 		Dont dont = readValueX(in);
 		return dont.body;
 	}
 
+	private String url()
+	{
+		return settings.url();
+	}
+
 	private static ObjectMapper jackson = new ObjectMapper();
 
-	private static final String url = "CLOUD_URL";
+	private final DontpadSettings settings;
+
 }

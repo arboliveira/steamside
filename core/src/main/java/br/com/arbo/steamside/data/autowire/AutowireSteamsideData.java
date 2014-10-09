@@ -13,11 +13,6 @@ public class AutowireSteamsideData implements SteamsideData {
 		return reloadable.collections();
 	}
 
-	public SteamsideData get()
-	{
-		return reloadable;
-	}
-
 	@Override
 	public KidsData kids()
 	{

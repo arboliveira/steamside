@@ -11,29 +11,32 @@ public class Uploader {
 
 	private static String read(File file)
 	{
-		try {
+		try
+		{
 			return FileUtils.readFileToString(file, "UTF-8");
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Inject
-	public Uploader(Cloud cloud) {
+	public Uploader(Cloud cloud, CloudSettings settings)
+	{
 		this.cloud = cloud;
+		this.settings = settings;
 	}
 
 	public void upload(File file)
 	{
-		String content = read(file);
-		upload(content);
-	}
+		if (!this.settings.isEnabled()) return;
 
-	@SuppressWarnings("static-method")
-	public void upload(String content)
-	{
+		String content = read(file);
 		cloud.upload(content);
 	}
 
 	private final Cloud cloud;
+
+	private final CloudSettings settings;
 }

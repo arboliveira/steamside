@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.settings.file;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,23 +24,22 @@ public class LoadSteamsideXml {
 		this.file_steamside_xml = file_steamside_xml;
 	}
 
-	public SteamsideXml load()
+	public SteamsideXml load() throws FileNotFoundException
 	{
-		try {
-			final InputStream stream =
-					new FileInputStream(
-							file_steamside_xml.steamside_xml());
-			try {
-				return unmarshal(stream);
-			} finally {
-				stream.close();
-			}
-		} catch (final FileNotFoundException e) {
-			return new SteamsideXml();
-		} catch (final IOException e) {
+		File file = file_steamside_xml.steamside_xml();
+
+		try (InputStream stream = new FileInputStream(file))
+		{
+			return unmarshal(stream);
+		}
+		catch (final FileNotFoundException e)
+		{
+			throw e;
+		}
+		catch (final IOException e)
+		{
 			throw new RuntimeException(e);
 		}
-
 	}
 
 	private final File_steamside_xml file_steamside_xml;

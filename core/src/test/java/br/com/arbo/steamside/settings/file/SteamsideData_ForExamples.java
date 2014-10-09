@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.settings.file;
 
+import java.io.FileNotFoundException;
+
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
@@ -18,11 +20,23 @@ public class SteamsideData_ForExamples {
 										SteamLocations
 												.fromSteamPhysicalFiles())));
 
-		SteamsideXml xml = new LoadSteamsideXml(file_steamside_xml).load();
+		SteamsideXml xml = load(file_steamside_xml);
 		InMemoryCollectionsHome collections = new InMemoryCollectionsHome();
 		InMemoryTagsHome tags = new InMemoryTagsHome(collections);
 		xml.collections.toCollectionsHome(collections, tags);
 		return tags;
 	}
 
+	private static SteamsideXml load(File_steamside_xml file_steamside_xml)
+
+	{
+		try
+		{
+			return new LoadSteamsideXml(file_steamside_xml).load();
+		}
+		catch (FileNotFoundException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 }

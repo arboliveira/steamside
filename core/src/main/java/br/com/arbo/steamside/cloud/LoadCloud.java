@@ -14,10 +14,27 @@ public class LoadCloud {
 
 	private static byte[] getBytes(String xml)
 	{
-		try {
+		try
+		{
 			return xml.getBytes("UTF-8");
 		}
-		catch (UnsupportedEncodingException e) {
+		catch (UnsupportedEncodingException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static SteamsideXml toSteamsideXml(String xmlFromCloud)
+	{
+		final byte[] bytes = getBytes(xmlFromCloud);
+
+		try (InputStream stream = new ByteArrayInputStream(bytes))
+		{
+			return unmarshal(stream);
+		}
+		catch (IOException e)
+		{
+			// never happens with a ByteArrayInputStream, "close" API fail 
 			throw new RuntimeException(e);
 		}
 	}
@@ -28,28 +45,26 @@ public class LoadCloud {
 	}
 
 	@Inject
-	public LoadCloud(Cloud cloud) {
+	public LoadCloud(Cloud cloud, CloudSettings settings)
+	{
 		this.cloud = cloud;
+		this.settings = settings;
 	}
 
-	@SuppressWarnings("static-method")
 	public SteamsideXml load()
 	{
+		if (!settings.isEnabled()) throw new Disabled();
+
 		String xml = cloud.download();
-		InputStream stream = new ByteArrayInputStream(getBytes(xml));
-		try {
-			try {
-				return unmarshal(stream);
-			}
-			finally {
-				stream.close();
-			}
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+
+		return toSteamsideXml(xml);
+	}
+
+	public static class Disabled extends RuntimeException {
+		//
 	}
 
 	private final Cloud cloud;
 
+	private final CloudSettings settings;
 }

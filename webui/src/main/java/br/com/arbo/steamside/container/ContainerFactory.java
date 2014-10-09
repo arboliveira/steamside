@@ -15,23 +15,29 @@ import br.com.arbo.steamside.api.collection.CollectionController;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.cloud.Cloud;
+import br.com.arbo.steamside.cloud.CloudSettings;
+import br.com.arbo.steamside.cloud.CloudSettingsFromLocalSettings;
 import br.com.arbo.steamside.cloud.Host;
 import br.com.arbo.steamside.cloud.LoadCloud;
 import br.com.arbo.steamside.cloud.Uploader;
 import br.com.arbo.steamside.cloud.autoupload.AutoUpload;
 import br.com.arbo.steamside.cloud.autoupload.ParallelUpload;
 import br.com.arbo.steamside.cloud.dontpad.Dontpad;
+import br.com.arbo.steamside.cloud.dontpad.DontpadSettings;
+import br.com.arbo.steamside.cloud.dontpad.DontpadSettingsFromLocalSettings;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.continues.FilterContinues;
-import br.com.arbo.steamside.data.LoadData;
 import br.com.arbo.steamside.data.SteamsideData;
+import br.com.arbo.steamside.data.autowire.Autowire;
 import br.com.arbo.steamside.data.autowire.AutowireCollectionsData;
 import br.com.arbo.steamside.data.autowire.AutowireKidsData;
 import br.com.arbo.steamside.data.autowire.AutowireSteamsideData;
 import br.com.arbo.steamside.data.autowire.AutowireTagsData;
+import br.com.arbo.steamside.data.load.FromFileAndCloud;
+import br.com.arbo.steamside.data.load.InitialLoad;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
 import br.com.arbo.steamside.kids.FromUsername;
@@ -72,7 +78,8 @@ public class ContainerFactory {
 	}
 
 	public static void onStart(ParallelAppsHomeFactory parallelAppsHomeFactory,
-			Monitor monitor, br.com.arbo.steamside.data.LoadData loadData)
+			Monitor monitor,
+			br.com.arbo.steamside.data.autowire.Autowire loadData)
 	{
 		parallelAppsHomeFactory.start();
 		monitor.start();
@@ -117,10 +124,19 @@ public class ContainerFactory {
 				.addComponent(File_steamside_xml.class)
 				.addComponent(SaveSteamsideXml.class)
 				.addComponent(ParallelSave.class)
-				.addComponent(LoadData.class)
+				.addComponent(InitialLoad.class, FromFileAndCloud.class)
+				.addComponent(Autowire.class);
+
+		container
 				.addComponent(LoadCloud.class)
 				.addComponent(Cloud.class)
-				.addComponent(Host.class, Dontpad.class);
+				.addComponent(
+						CloudSettings.class,
+						CloudSettingsFromLocalSettings.class)
+				.addComponent(Host.class, Dontpad.class)
+				.addComponent(
+						DontpadSettings.class,
+						DontpadSettingsFromLocalSettings.class);
 
 		container
 				.addComponent(ParallelUpload.class)

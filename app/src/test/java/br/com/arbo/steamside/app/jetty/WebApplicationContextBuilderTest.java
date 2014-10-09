@@ -6,7 +6,8 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 
 import br.com.arbo.opersys.username.FromJava;
 import br.com.arbo.steamside.api.app.RunGameCommand;
-import br.com.arbo.steamside.app.main.NoTweak;
+import br.com.arbo.steamside.app.injection.ContainerWeb;
+import br.com.arbo.steamside.cloud.CloudSettings;
 import br.com.arbo.steamside.exit.Exit;
 
 public class WebApplicationContextBuilderTest {
@@ -20,19 +21,47 @@ public class WebApplicationContextBuilderTest {
 		final AnnotationConfigWebApplicationContext context =
 				new WebApplicationContextBuilder(
 						user,
-						new Exit() {
-
-							@Override
-							public void exit()
-							{
-								// Do nothing
-							}
-						},
-						new NoTweak()
+						newExit(),
+						newTweak()
 				).newSpringContext();
 		context.setServletContext(new MockServletContext());
 		context.refresh();
 		context.getBean(RunGameCommand.class);
+	}
+
+	private static WebApplicationContextTweak newTweak()
+	{
+		return new WebApplicationContextTweak() {
+
+			@Override
+			public void tweak(ContainerWeb cx)
+			{
+				cx.replaceComponent(CloudSettings.class, Mock.class);
+			}
+
+		};
+	}
+
+	static class Mock implements CloudSettings {
+
+		@Override
+		public boolean isEnabled()
+		{
+			return false;
+		}
+
+	}
+
+	private static Exit newExit()
+	{
+		return new Exit() {
+
+			@Override
+			public void exit()
+			{
+				// Do nothing
+			}
+		};
 	}
 
 }
