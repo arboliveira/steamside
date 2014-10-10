@@ -28,7 +28,6 @@ public class SteamsideData_ForExamples {
 	}
 
 	private static SteamsideXml load(File_steamside_xml file_steamside_xml)
-
 	{
 		try
 		{

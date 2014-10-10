@@ -7,16 +7,16 @@ import javax.inject.Inject;
 import br.com.arbo.steamside.cloud.LoadCloud;
 import br.com.arbo.steamside.cloud.LoadCloud.Disabled;
 import br.com.arbo.steamside.cloud.Unavailable;
-import br.com.arbo.steamside.settings.file.LoadSteamsideXml;
+import br.com.arbo.steamside.settings.file.LoadFile;
 import br.com.arbo.steamside.xml.SteamsideXml;
 
 public class FromCloudAndFile implements InitialLoad {
 
 	@Inject
-	public FromCloudAndFile(LoadCloud cloud, LoadSteamsideXml xml)
+	public FromCloudAndFile(LoadCloud cloud, LoadFile file)
 	{
 		this.cloud = cloud;
-		this.xml = xml;
+		this.file = file;
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class FromCloudAndFile implements InitialLoad {
 	{
 		try
 		{
-			return xml.load();
+			return file.load();
 		}
 		catch (FileNotFoundException e)
 		{
@@ -67,5 +67,5 @@ public class FromCloudAndFile implements InitialLoad {
 
 	private final LoadCloud cloud;
 
-	private final LoadSteamsideXml xml;
+	private final LoadFile file;
 }

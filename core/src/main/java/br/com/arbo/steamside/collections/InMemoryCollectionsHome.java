@@ -74,7 +74,7 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	{
 		Optional<CollectionImpl> maybe = findMaybe(name);
 		if (maybe.isPresent()) return maybe.get();
-		throw new NotFound();
+		throw new NotFound(name);
 	}
 
 	private void guardDuplicate(CollectionName name) throws Duplicate

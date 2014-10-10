@@ -11,7 +11,7 @@ import javax.xml.bind.JAXB;
 
 import br.com.arbo.steamside.xml.SteamsideXml;
 
-public class LoadSteamsideXml {
+public class LoadSteamsideXml implements LoadFile {
 
 	static SteamsideXml unmarshal(final InputStream stream)
 	{
@@ -24,6 +24,7 @@ public class LoadSteamsideXml {
 		this.file_steamside_xml = file_steamside_xml;
 	}
 
+	@Override
 	public SteamsideXml load() throws FileNotFoundException
 	{
 		File file = file_steamside_xml.steamside_xml();

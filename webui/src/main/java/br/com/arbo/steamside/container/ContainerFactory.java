@@ -46,6 +46,7 @@ import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.settings.SettingsImpl;
 import br.com.arbo.steamside.settings.file.File_steamside_xml;
+import br.com.arbo.steamside.settings.file.LoadFile;
 import br.com.arbo.steamside.settings.file.LoadSteamsideXml;
 import br.com.arbo.steamside.settings.file.SaveSteamsideXml;
 import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
@@ -120,7 +121,7 @@ public class ContainerFactory {
 						KidsData.class, AutowireKidsData.class);
 
 		container
-				.addComponent(LoadSteamsideXml.class)
+				.addComponent(LoadFile.class, LoadSteamsideXml.class)
 				.addComponent(File_steamside_xml.class)
 				.addComponent(SaveSteamsideXml.class)
 				.addComponent(ParallelSave.class)

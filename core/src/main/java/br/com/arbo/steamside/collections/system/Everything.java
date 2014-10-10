@@ -27,7 +27,7 @@ class Everything {
 			CollectionName collectionName, AppCriteria criteria)
 	{
 		if (!instance.name().equalsCollectionName(collectionName))
-			throw new NotFound();
+			throw new NotFound(collectionName);
 
 		return library.allApps(criteria).map(app -> app.appid())
 				.map(TagImpl::new);
