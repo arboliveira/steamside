@@ -59,9 +59,21 @@ var TagView = Backbone.View.extend({
 		this.renderCommandHints();
 
 		var that = this;
-		CommandBoxTile.whenLoaded(function(tile) {
-			that.on_CommandBox_TileLoaded(tile);
-		});
+
+		var viewCommandBox = new CommandBoxView(
+			{
+				placeholder_text: 'Collection for ' + this.game.name(),
+				on_command: function(input) { that.on_tag_command(input) },
+				on_command_alternate: function(input) { that.on_tag_command_alternate(input) },
+				on_change_input: function(input) { that.on_tag_change_input(input); }
+			}
+		).render();
+		viewCommandBox.whenRendered.done(function(view)
+			{
+				that.on_CommandBox_TileLoaded(view);
+			});
+
+		this.viewCommandBox = viewCommandBox;
 
 		var suggestions = new TagSuggestionsCollection();
 		this.backend.fetch_fetch_json(suggestions, function () {
@@ -97,20 +109,10 @@ var TagView = Backbone.View.extend({
 		return el;
 	},
 
-	on_CommandBox_TileLoaded: function(tile) {
-		var that = this;
-		var viewCommandBox = new CommandBoxView({
-			el: tile.clone(),
-			placeholder_text: 'Collection for ' + this.game.name(),
-			on_command: function(input) { that.on_tag_command(input) },
-			on_command_alternate: function(input) { that.on_tag_command_alternate(input) },
-			on_change_input: function(input) { that.on_tag_change_input(input); }
-		});
-		this.viewCommandBox = viewCommandBox;
-
+	on_CommandBox_TileLoaded: function(viewCommandBox) {
 		var targetEl = this.$('#div-command-box');
 		targetEl.empty();
-		targetEl.append(viewCommandBox.render().el);
+		targetEl.append(viewCommandBox.el);
 
 		viewCommandBox.emptyCommandHints();
 		viewCommandBox.appendCommandHint(this.elCommandHintA);

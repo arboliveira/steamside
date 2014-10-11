@@ -1,12 +1,9 @@
 "use strict";
 
-var CommandBoxTile = {
+var CommandBoxTile =
+{
 	tile: new Tile(
-		{url: 'CommandBox.html', selector: "#tile-command-box"}),
-
-	whenLoaded: function (callback) {
-		this.tile.ajaxTile(callback);
-	}
+		{url: 'CommandBox.html', selector: "#tile-command-box"})
 };
 
 var CommandBoxView = Backbone.View.extend({
@@ -31,10 +28,20 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	render: function() {
+		var that = this;
+		this.whenRendered =
+			CommandBoxTile.tile.el_promise.then(function(tile) {
+				that.render_el(tile.clone());
+				return that;
+			});
+		return this;
+	},
+
+	render_el: function(el) {
+		this.$el.append(el);
 		this.input_query_el().attr('placeholder', this.placeholder_text);
 		this.$('#command-confirm').hide();
 		this.change_input();
-		return this;
 	},
 
 	input_query_el: function() {

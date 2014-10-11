@@ -43,6 +43,8 @@ var CollectionNewEmptyView = Backbone.View.extend({
 	},
 
 	render: function() {
+		var that = this;
+
 		var tileEmptyCommandHint = this.$('#empty-command-hint');
 		tileEmptyCommandHint.remove();
 		this.elCommandHintA = tileEmptyCommandHint.clone();
@@ -51,27 +53,25 @@ var CollectionNewEmptyView = Backbone.View.extend({
 		this.elCommandHintA.find(selectorAfterwards).text("add games");
 		this.elCommandHintB.find(selectorAfterwards).text("stay here");
 
-		var that = this;
-		CommandBoxTile.whenLoaded(function(tile) {
-			that.on_empty_CommandBox_rendered(tile);
-		});
+		new CommandBoxView(
+			{
+				placeholder_text: 'Name for empty collection',
+				on_command: function(input) { that.on_empty_command(input) },
+				on_command_alternate: function(input) { that.on_empty_command_alternate(input) },
+				on_change_input: function(input) { that.on_empty_change_input(input); }
+			}
+		).render().whenRendered.done(function(view)
+			{
+				that.on_empty_CommandBox_rendered(view);
+			});
 
 		return this;
 	},
 
-	on_empty_CommandBox_rendered: function(tile) {
-		var that = this;
-		var viewCommandBox = new CommandBoxView({
-			el: tile.clone(),
-			placeholder_text: 'Name for empty collection',
-			on_command: function(input) { that.on_empty_command(input) },
-			on_command_alternate: function(input) { that.on_empty_command_alternate(input) },
-			on_change_input: function(input) { that.on_empty_change_input(input); }
-		});
-
+	on_empty_CommandBox_rendered: function(viewCommandBox) {
 		var targetEl = this.$('#div-empty-name-form');
 		targetEl.empty();
-		targetEl.append(viewCommandBox.render().el);
+		targetEl.append(viewCommandBox.el);
 
 		viewCommandBox.emptyCommandHints();
 		viewCommandBox.appendCommandHint(this.elCommandHintA);

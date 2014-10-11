@@ -46,6 +46,8 @@ var SearchView = Backbone.View.extend(
 	},
 
 	render: function() {
+		var that = this;
+
 		var searchResults = new SearchResults();
 
 		this.searchResults = searchResults;
@@ -69,24 +71,23 @@ var SearchView = Backbone.View.extend(
 		this.tileSearchHintSearchA.find(selectorVerb).text("search");
 		this.tileSearchHintSearchB.find(selectorVerb).text("play first result for");
 
-		var that = this;
-		CommandBoxTile.whenLoaded(function(tile) {
-			that.render_search_CommandBox(tile);
-		});
+		new CommandBoxView(
+			{
+				placeholder_text: 'game or command',
+				on_change_input: function(input) { that.on_search_input_changed(input) },
+				on_command: function(input) { that.on_search_command(input) },
+				on_command_alternate: function(input) { that.on_search_command_alternate(input) }
+			}
+		).render().whenRendered.done(function(view)
+			{
+				that.rendered_search_CommandBox(view);
+			});
 
 		return this;
 	},
 
-	render_search_CommandBox: function(tile) {
-		var that = this;
-		var viewCommandBox = new CommandBoxView({
-			el: tile.clone(),
-			placeholder_text: 'game or command',
-			on_change_input: function(input) { that.on_search_input_changed(input) },
-			on_command: function(input) { that.on_search_command(input) },
-			on_command_alternate: function(input) { that.on_search_command_alternate(input) }
-		});
-		var viewCommandBox_el = viewCommandBox.render().el;
+	rendered_search_CommandBox: function(viewCommandBox){
+		var viewCommandBox_el = viewCommandBox.el;
 		viewCommandBox.emptyCommandHints();
 		viewCommandBox.appendCommandHint(this.tileSearchHintContinueA);
 		viewCommandBox.appendCommandHint(this.tileSearchHintSearchA);
@@ -130,6 +131,7 @@ var SearchView = Backbone.View.extend(
 	},
 
 	on_search_command_alternate: function(view) {
+		var that = this;
 		var input = view.input_query_val();
 		if (input == '') {
 			var gameB = this.continues.at(1);
@@ -139,7 +141,7 @@ var SearchView = Backbone.View.extend(
 			searchResults.query = input;
 			this.backend.fetch_fetch_json(searchResults, function() {
 				var first = searchResults.at(0);
-				this.player.play(first);
+				that.player.play(first);
 			});
 		}
 	},

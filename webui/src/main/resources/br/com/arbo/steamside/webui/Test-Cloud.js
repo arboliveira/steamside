@@ -69,7 +69,7 @@ var Test_Cloud_html = Backbone.Model.extend(
 			}
 		).render();
 
-		cloudView.rendered.done(function()
+		cloudView.whenRendered.done(function()
 		{
 			var $input = cloudView.$('#input-text-command-box');
 			var val = $input.val();

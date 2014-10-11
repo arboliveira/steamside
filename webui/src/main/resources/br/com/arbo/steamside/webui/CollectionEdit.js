@@ -91,9 +91,18 @@ var CollectionEditView = Backbone.View.extend({
         var collectionEditSearchResults = new SearchResults();
 		this.collectionEditSearchResults = collectionEditSearchResults;
 
-		CommandBoxTile.whenLoaded(function(tile) {
-			that.render_search_CommandBox(tile);
-		});
+		new CommandBoxView(
+			{
+				placeholder_text: 'search for games',
+				on_change_input: function(input) { that.on_search_input_changed(input) },
+				on_command: function(input) { that.on_search_command(input) },
+				on_command_alternate: function(input) { that.on_search_command_alternate(input) }
+			}
+		).render()
+			.whenRendered.done(function(view)
+				{
+					that.render_search_CommandBox(view);
+				});
 
 		// TODO Reuse same continues collection as front page?
 		var continues = new ContinueGames();
@@ -132,16 +141,8 @@ var CollectionEditView = Backbone.View.extend({
         return this;
     },
 
-	render_search_CommandBox: function(tile) {
-		var that = this;
-		var viewCommandBox = new CommandBoxView({
-			el: tile.clone(),
-			placeholder_text: 'search for games',
-			on_change_input: function(input) { that.on_search_input_changed(input) },
-			on_command: function(input) { that.on_search_command(input) },
-			on_command_alternate: function(input) { that.on_search_command_alternate(input) }
-		});
-		var view_el = viewCommandBox.render().el;
+	render_search_CommandBox: function(viewCommandBox) {
+		var view_el = viewCommandBox.el;
 		var searchEl = this.$('#collection-edit-search-command-box');
 		searchEl.empty();
 		searchEl.append(view_el);
@@ -149,7 +150,6 @@ var CollectionEditView = Backbone.View.extend({
 		recent.remove();
 		var form = this.$("#form-command-box");
 		form.append(recent);
-		viewCommandBox.emptyCommandHints();
 		viewCommandBox.input_query_focus();
 
         this.prepareSearchRecent();
@@ -158,10 +158,11 @@ var CollectionEditView = Backbone.View.extend({
 
 	on_search_input_changed: function(view) {
 		var input = view.input_query_val();
+		var find = view.$el.find('#command-hint');
 		if (input == '') {
-            this.$('.command-hint').text('recently played');
+			find.text('recently played');
 		} else {
-            this.$('.command-hint').text('search ' + input);
+            find.text('search ' + input);
 		}
 	},
 
@@ -533,32 +534,27 @@ var CombineView = Backbone.View.extend({
     {
         var that = this;
 
-        CommandBoxTile.whenLoaded(function(el_CommandBox)
+		this.combine = new Combine({
+			collection_editing: that.collection_editing,
+			collection_combine: collection_combine
+		});
+
+		new CombineCommandBoxView(
+			{
+				backend: that.backend,
+				combine: that.combine,
+				combineCommandHintTemplate: that.combineCommandHintTemplate
+			}
+		).render().whenRendered.done(function(view)
         {
-            that.render_combine_CommandBox(el_CommandBox, collection_combine);
+            that.render_combine_CommandBox(view);
         });
     },
 
-    render_combine_CommandBox: function(el_CommandBox, collection_combine)
+    render_combine_CommandBox: function(viewCommandBox)
     {
-        var that = this;
-
-        this.combine = new Combine({
-            collection_editing: that.collection_editing,
-            collection_combine: collection_combine
-        });
-
-        var commandBoxView = new CombineCommandBoxView({
-			backend: that.backend,
-            combine: that.combine,
-            combineCommandHintTemplate: that.combineCommandHintTemplate,
-            el: el_CommandBox.clone()
-        });
-
-        var targetEl = this.$el;
-        targetEl.append(commandBoxView.render().el);
-
-        commandBoxView.input_query_focus();
+		this.$el.append(viewCommandBox.el);
+        viewCommandBox.input_query_focus();
     }
 
 });
@@ -606,28 +602,34 @@ var CombineCommandBoxView = Backbone.View.extend({
 
         var that = this;
 
-        var combineCommandBox = new CommandBoxView({
-            el: that.el,
-            placeholder_text:
-                ('Combine ' + collection_editing + ' with ' + collection_combine),
-            on_change_input: function(input) { that.on_combine_change_input(input); },
-            on_command: function(view) { that.on_combine_command(view) },
-            on_command_alternate: function(view) { that.on_combine_command_alternate(view) },
-			on_command_confirm: function(view) { that.on_combine_command_confirm(view) }
-        });
-
-        combineCommandBox.render();
-
-        this.combine.trigger('change');
-
-        combineCommandBox.emptyCommandHints();
-        combineCommandBox.appendCommandHint(this.combineCommandHintAView.el);
-        combineCommandBox.appendCommandHintAlternate(this.combineCommandHintBView.el);
-
-        this.commandBox = combineCommandBox;
+		this.whenRendered = new CommandBoxView(
+			{
+				placeholder_text:
+					('Combine ' + collection_editing + ' with ' + collection_combine),
+				on_change_input: function(input) { that.on_combine_change_input(input); },
+				on_command: function(view) { that.on_combine_command(view) },
+				on_command_alternate: function(view) { that.on_combine_command_alternate(view) },
+				on_command_confirm: function(view) { that.on_combine_command_confirm(view) }
+			}
+		).render().whenRendered.then(function(view)
+			{
+				that.rendered_combineCommandBox(view);
+				return view;
+			});
 
         return this;
     },
+
+	rendered_combineCommandBox: function(combineCommandBox)
+	{
+		this.combine.trigger('change');
+
+		combineCommandBox.emptyCommandHints();
+		combineCommandBox.appendCommandHint(this.combineCommandHintAView.el);
+		combineCommandBox.appendCommandHintAlternate(this.combineCommandHintBView.el);
+
+		this.commandBox = combineCommandBox;
+	},
 
     input_query_focus: function()
     {
