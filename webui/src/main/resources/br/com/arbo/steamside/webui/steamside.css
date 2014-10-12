@@ -276,6 +276,13 @@ a.target-button {
 	padding: 1em;
 }
 
-a.instructions-and-explanations {
+a.instructions-and-explanations
+{
 	text-decoration: none;	/* hide link underline */
+}
+
+.steamside-animated
+{
+	-webkit-animation-duration: 1s;
+	-moz-animation-duration: 1s;
 }

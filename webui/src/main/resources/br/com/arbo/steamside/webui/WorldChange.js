@@ -31,14 +31,24 @@ var Worldchanger = Backbone.Model.extend(
 		setWorldview:  function(view) {
 			if (this.worldview != null)
 			{
-				this.worldview.$el.slideUp();
+				var $wel = this.worldview.$el;
+				$wel.removeClass(
+					'animated fadeInRight fadeInLeft fadeOutRight fadeOutLeft');
+				$wel.addClass(
+					'animated fadeOutRight steamside-animated');
+				$wel.hide();
 //			this.worldview.$el.remove();
 			}
 
 			this.worldbed_el.append(view.$el);
 
 			if (this.worldview != null) {
-				view.$el.slideDown();
+				var $vel = view.$el;
+				$vel.show();
+				$vel.removeClass(
+					'animated fadeInRight fadeInLeft fadeOutRight fadeOutLeft');
+				$vel.addClass(
+					'animated fadeInLeft steamside-animated');
 			}
 
 			this.worldview = view;
