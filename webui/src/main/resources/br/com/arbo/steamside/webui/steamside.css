@@ -283,6 +283,6 @@ a.instructions-and-explanations
 
 .steamside-animated
 {
-	-webkit-animation-duration: 1s;
-	-moz-animation-duration: 1s;
+	-webkit-animation-duration: 0.5s;
+	-moz-animation-duration: 0.5s;
 }

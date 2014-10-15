@@ -32,12 +32,7 @@ var Worldchanger = Backbone.Model.extend(
 			if (this.worldview != null)
 			{
 				var $wel = this.worldview.$el;
-				$wel.removeClass(
-					'animated fadeInRight fadeInLeft fadeOutRight fadeOutLeft');
-				$wel.addClass(
-					'animated fadeOutRight steamside-animated');
 				$wel.hide();
-//			this.worldview.$el.remove();
 			}
 
 			this.worldbed_el.append(view.$el);
@@ -45,11 +40,9 @@ var Worldchanger = Backbone.Model.extend(
 			if (this.worldview != null) {
 				var $vel = view.$el;
 				$vel.show();
-				$vel.removeClass(
-					'animated fadeInRight fadeInLeft fadeOutRight fadeOutLeft');
-				$vel.addClass(
-					'animated fadeInLeft steamside-animated');
 			}
+
+			sideshow(view.$el);
 
 			this.worldview = view;
 		}

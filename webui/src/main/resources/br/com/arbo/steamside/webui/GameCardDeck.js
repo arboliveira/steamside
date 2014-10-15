@@ -92,76 +92,9 @@ var FavoritesCollection = Backbone.Collection.extend({
     url: 'api/favorites/favorites.json'
 });
 
-var DeckCell = Backbone.View.extend({
-	view: null,
-	alwaysVisible: false,
-	visible: false,
-	
-	initialize: function(options)
-	{
-		this.view = options.view;
-		this.alwaysVisible = options.alwaysVisible;
-		this.visible = this.alwaysVisible;
-	},
-			
-	toggleVisibility: function()
-	{
-		if (this.alwaysVisible)
-		{
-			this.visible = true;
-		}
-		else
-		{
-			this.visible = !this.visible;
-		}
-		this.display();		
-	},
-	
-	display: function() {		"use strict";
-		var el = this.view.$el;
-		if (this.visible) {
-			el.fadeIn();
-		} else { 
-			el.fadeOut();
-		}
-	}
-});
-
 var DeckRow = Backbone.View.extend({
 	className: 'game-row'
 });
-
-var Deck = Backbone.Model.extend({
-	deck: null,
-
-	initialize: function() {		"use strict";
-		this.deck = [];
-	},
-
-	push: function(view, alwaysVisible) {		"use strict";
-		this.deck.push(
-			new DeckCell({
-				view: view,
-				alwaysVisible: alwaysVisible
-			})
-		);
-	},
-	
-	display: function() {		"use strict";
-		var i;
-		for (i = 0; i < this.deck.length; i += 1) {
-			this.deck[i].display();
-		}
-	},
-	
-	toggleVisibility: function() {		"use strict";
-		var i;
-		for (i = 0; i < this.deck.length; i += 1) {
-			this.deck[i].toggleVisibility();
-		}
-	}
-});
-
 
 var Game_Tag_View = Backbone.View.extend({
 
@@ -254,7 +187,6 @@ var GameCardView = Backbone.View.extend({
 		var img = this.model.image();
         var store = this.model.store();
 
-		this.$el.hide();
 		this.$el.addClass(this.enormity.styleClass);
 		this.$el.width(this.enormity.width.toString() + "%");
 		this.$('.game-name').text(name);
@@ -371,11 +303,13 @@ var FillerCellView = Backbone.View.extend({
 	}
 });
 
-var MoreButtonView = Backbone.View.extend({
+var MoreButtonView = Backbone.View.extend(
+{
 	hiding: true,
 	deck: null,
 	
-	events: {
+	events:
+	{
 		"click" : "moreClicked"
 	},
 	
@@ -384,42 +318,48 @@ var MoreButtonView = Backbone.View.extend({
 		this.deck = options.deck;
 	},
 
-	render: function() {
+	render: function()
+	{
 		this.textRefresh();
 		this.$el.fadeIn();
 		return this;
 	},
 	
-	moreClicked: function(e) {
+	moreClicked: function(e)
+	{
 		e.preventDefault();
 		this.toggle();
 	},
 
-	toggle: function() {
+	toggle: function()
+	{
 		this.deck.toggleVisibility();
 		this.hiding = !this.hiding;
 		this.textRefresh();
 	},
 	
-	textRefresh: function() {		"use strict";
+	textRefresh: function()
+	{
 		this.$('.more-button-text').text(this.hiding ? 'more...' : 'less...');
 	}
 });
 
-var DeckView = Backbone.View.extend({
+var DeckView = Backbone.View.extend(
+{
     alwaysVisible: false,
 	xCell: 0,
 	yRow: 0,
-	deck: null,
 	first_row: null,
 	current_row: null,
 	cardTemplatePromise: null,
     continues: null,
 	kidsMode: false,
+	tailVisibility: false,
 	on_GameCard_render: null,
 	on_tag: null,
 
-	initialize: function(options) {
+	initialize: function(options)
+	{
         /*
          visible will not be part of the result anymore,
          because we want logic like "first row is visible"
@@ -442,37 +382,23 @@ var DeckView = Backbone.View.extend({
 		this.listenTo(this.collection, 'reset', this.render);
 	},
 
-	renderMoreButton: function () {
-		if (this.yRow == 1) return;
-		if (this.alwaysVisible) return;
-        if (this.first_row == null) /* zero games */ return;
-
+	render: function()
+	{
 		var that = this;
-		SteamsideTileset.ajaxMoreButton(function (tile_el) {
-			var moreButton = new MoreButtonView({
-				el: tile_el.clone(),
-				deck: that.deck
-			});
-			that.first_row.append(moreButton.render().el);
-		});
-	},
 
-	render: function() {
 		try {
 			this.$el.empty();
 			this.$el.addClass('game-deck');
 
 			this.xCell = 0;
 			this.yRow = 0;
-			this.deck = new Deck();
 			this.first_row = null;
 			this.current_row = null;
 
-			var that = this;
 			this.collection.each(function (oneResult) {
 				that.renderOneCell(oneResult);
 			});
-			this.deck.display();
+
 			this.renderMoreButton();
 		}
 		catch (e)
@@ -483,8 +409,8 @@ var DeckView = Backbone.View.extend({
 		return this;
 	},
 	
-	renderOneCell: function(oneResult) { "use strict";
-
+	renderOneCell: function(oneResult)
+	{
 		var cells_in_a_row = 3;
 
         var enormityRegular = {
@@ -506,69 +432,129 @@ var DeckView = Backbone.View.extend({
 				this.xCell = 0;
 			}
 		}
-		
-		if (this.xCell === 1) {
-			this.startNewRow();
+
+		var rowForCell;
+
+		if (this.xCell === 1)
+		{
+			rowForCell = this.startNewRow();
+		}
+		else
+		{
+			rowForCell = this.current_row;
 		}
 
-		if (this.xCell === 1 && this.yRow > 1) {
+		if (this.xCell === 1 && this.yRow > 1)
+		{
 			var filler_view =
-				new FillerCellView({
-					width: widthFiller
-				});
-			this.deck.push(filler_view, this.alwaysVisible);
+				new FillerCellView(
+					{
+						width: widthFiller
+					});
 			var filler_el = filler_view.render().el;
-			this.current_row.append(filler_el);
+			rowForCell.append(filler_el);
 		}
 
 		var enormity;
         var topLeftIsLarger = this.xCell === 1 && this.yRow === 1;
-        if (topLeftIsLarger) {
+        if (topLeftIsLarger)
+		{
 			enormity = enormityLarge;
-		} else {
+		}
+		else
+		{
 			enormity = enormityRegular;
 		}
 
 		var that = this;
 
 		this.cardTemplatePromise.done(function(template_el) {
-			that.renderGameCard(template_el, oneResult, enormity);
+			that.renderGameCard(template_el, oneResult, enormity, rowForCell);
 		});
 	},
 
-	renderGameCard: function(template_el, oneResult, enormity) {
+	renderGameCard: function(template_el, oneResult, enormity, rowForCell)
+	{
 		var that = this;
-		var on_tag_deck = function(game) {
+		var on_tag_deck = function(game)
+		{
 			that.on_tag_deck(game);
 		};
-		var card_view = new GameCardView({
-			el: template_el.clone(),
-			model: oneResult,
-			enormity: enormity,
-			kidsMode: this.kidsMode,
-			continues: this.continues,
-			on_render: this.on_GameCard_render,
-			on_tag: on_tag_deck,
-			backend: this.backend
-		});
-		this.deck.push(card_view, this.alwaysVisible || this.yRow === 1);
+		var card_view = new GameCardView(
+			{
+				el: template_el.clone(),
+				model: oneResult,
+				enormity: enormity,
+				kidsMode: this.kidsMode,
+				continues: this.continues,
+				on_render: this.on_GameCard_render,
+				on_tag: on_tag_deck,
+				backend: this.backend
+			});
 		var card_el = card_view.render().el;
-		this.current_row.append(card_el);
+		rowForCell.append(card_el);
 	},
-	
-	startNewRow: function() {        "use strict";
+
+	renderMoreButton: function ()
+	{
+		if (this.yRow == 1) return;
+		if (this.alwaysVisible) return;
+		if (this.first_row == null) /* zero games */ return;
+
+		var that = this;
+
+		SteamsideTileset.ajaxMoreButton(function (tile_el)
+			{
+				var moreButton = new MoreButtonView(
+					{
+						el: tile_el.clone(),
+						deck: that
+					});
+				that.first_row.append(moreButton.render().el);
+			});
+	},
+
+	startNewRow: function()
+	{
 		var row_view = new DeckRow().render();
 		var row_el = row_view.el;
 		var row = row_view.$el;
-		row.show();
+
 		this.$el.append(row_el);
-		this.current_row = row;
-		if (this.first_row === null) {
+
+		if (this.first_row === null)
+		{
 			this.first_row = row;
+		}
+		else
+		{
+			row.addClass('game-row-tail');
+			if (!this.alwaysVisible) row.hide();
+		}
+
+		this.current_row = row;
+
+		return row;
+	},
+
+	toggleVisibility: function()
+	{
+		this.tailVisibility = !this.tailVisibility;
+
+		var tails = this.$('.game-row-tail');
+
+		if (this.tailVisibility)
+		{
+			tails.slideDown();
+		}
+		else
+		{
+			tails.slideUp();
 		}
 	},
 
-	on_tag_deck: function(game) {
+	on_tag_deck: function(game)
+	{
 		var segment = this.$el.parent().parent();
 		if (this.on_tag != null) this.on_tag(game, segment);
 	}

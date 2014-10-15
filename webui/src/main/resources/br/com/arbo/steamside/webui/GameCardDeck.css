@@ -3,14 +3,12 @@
 }
 
 .game-row {
-	display:none;
 	float: right;
 	clear: both;
 	width: 100%;
 }
 
 .game-cell-filler {
-	display:none;
 	float: left;
 	background-color: lightgray;
 }

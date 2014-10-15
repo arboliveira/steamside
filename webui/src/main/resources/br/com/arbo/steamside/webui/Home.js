@@ -71,32 +71,32 @@ var HomeView = Backbone.View.extend(
 
 		var kidsMode = this.sessionModel.kidsmode();
 
-		if (!kidsMode) {
+		if (!kidsMode)
+		{
 			new DeckView({
 				el: $('#continues-deck'),
-				cardTemplatePromise: this.cardTemplatePromise,
+				cardTemplatePromise: that.cardTemplatePromise,
 				collection: continues,
 				continues: continues,
 				kidsMode: kidsMode,
 				on_tag: that.on_tag,
 				backend: that.backend
 			});
-		}
 
-		if (!kidsMode)
-		{
-			new SearchView({
-				el: $('#search-segment'),
-				cardTemplatePromise: this.cardTemplatePromise,
-				continues: continues,
-				on_tag: that.on_tag,
-				backend: that.backend
-			}).render();
+			new SearchView(
+				{
+					el: $('#search-segment'),
+					cardTemplatePromise: this.cardTemplatePromise,
+					continues: continues,
+					on_tag: that.on_tag,
+					backend: that.backend
+				}
+			).render();
 		}
 
 		new DeckView({
 			el: $('#favorites-deck'),
-			cardTemplatePromise: this.cardTemplatePromise,
+			cardTemplatePromise: that.cardTemplatePromise,
 			collection: favorites,
 			continues: continues,
 			kidsMode: kidsMode,
@@ -104,11 +104,9 @@ var HomeView = Backbone.View.extend(
 			backend: that.backend
 		});
 
-		this.backend.fetch_fetch_json(favorites);
+		this.backend.fetch_promise(favorites);
 
-		this.backend.fetch_fetch_json(continues);
-
-		sideshow(this.$el);
+		this.backend.fetch_promise(continues);
 
 		return this;
 	},
