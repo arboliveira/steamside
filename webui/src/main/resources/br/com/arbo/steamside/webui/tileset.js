@@ -68,37 +68,6 @@ var Tile = Backbone.Model.extend(
 
 var SteamsideTileset = {
 
-    tileset: new Tileset({url: 'tileset.html'}),
-
-	loadTileset: function()
-	{
-		var that = this;
-
-		this._moreButton = new Tile(
-			{
-				tileset: that.tileset,
-				selector: ".more-button"
-			}
-		);
-
-		this._collectionPick = new Tile(
-			{
-				tileset: that.tileset,
-				selector: "#collection-pick-tile"
-			}
-		);
-
-		return this.tileset.promise;
-	},
-
-    ajaxMoreButton: function (callback_el)
-	{
-		this._moreButton.ajaxTile(callback_el);
-    },
-
-    ajaxCollectionPick: function (callback_el)
-	{
-		this._collectionPick.ajaxTile(callback_el);
-    }
+    tileset: new Tileset({url: 'tileset.html'})
 
 };

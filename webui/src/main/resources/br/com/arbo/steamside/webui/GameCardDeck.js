@@ -303,47 +303,6 @@ var FillerCellView = Backbone.View.extend({
 	}
 });
 
-var MoreButtonView = Backbone.View.extend(
-{
-	hiding: true,
-	deck: null,
-	
-	events:
-	{
-		"click" : "moreClicked"
-	},
-	
-	initialize: function(options)
-	{
-		this.deck = options.deck;
-	},
-
-	render: function()
-	{
-		this.textRefresh();
-		this.$el.fadeIn();
-		return this;
-	},
-	
-	moreClicked: function(e)
-	{
-		e.preventDefault();
-		this.toggle();
-	},
-
-	toggle: function()
-	{
-		this.deck.toggleVisibility();
-		this.hiding = !this.hiding;
-		this.textRefresh();
-	},
-	
-	textRefresh: function()
-	{
-		this.$('.more-button-text').text(this.hiding ? 'more...' : 'less...');
-	}
-});
-
 var DeckView = Backbone.View.extend(
 {
     alwaysVisible: false,
@@ -503,14 +462,13 @@ var DeckView = Backbone.View.extend(
 
 		var that = this;
 
-		SteamsideTileset.ajaxMoreButton(function (tile_el)
+		new MoreButtonView(
 			{
-				var moreButton = new MoreButtonView(
-					{
-						el: tile_el.clone(),
-						deck: that
-					});
-				that.first_row.append(moreButton.render().el);
+				deck: that
+			}
+		).render().whenRendered.done(function(view)
+			{
+				that.first_row.append(view.el);
 			});
 	},
 

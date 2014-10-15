@@ -95,12 +95,6 @@ var Steamside_html =
 				backend: backend
 			});
 
-			/*
-			 Load the entire tileset before you try to render anything.
-			 This includes history start, which loads the main page.
-			 */
-			SteamsideTileset.loadTileset();
-
 			// Start Backbone history a necessary step for bookmarkable URL's
 			Backbone.history.start();
 
