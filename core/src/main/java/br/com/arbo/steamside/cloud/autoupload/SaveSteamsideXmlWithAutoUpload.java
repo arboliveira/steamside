@@ -7,16 +7,15 @@ import br.com.arbo.steamside.settings.file.SaveFile;
 import br.com.arbo.steamside.settings.file.SaveSteamsideXml;
 import br.com.arbo.steamside.xml.SteamsideXml;
 
-public class AutoUpload implements SaveFile {
+public class SaveSteamsideXmlWithAutoUpload implements SaveFile {
 
 	@Inject
-	public AutoUpload(
+	public SaveSteamsideXmlWithAutoUpload(
 			File_steamside_xml file_steamside_xml,
 			ParallelUpload parallel)
 	{
-		SaveSteamsideXml save = new SaveSteamsideXml(file_steamside_xml);
-		save.addListener(parallel::submit);
-		this.save = save;
+		this.save = new SaveSteamsideXml(file_steamside_xml);
+		this.save.addListener(parallel::submit);
 	}
 
 	@Override
@@ -25,6 +24,6 @@ public class AutoUpload implements SaveFile {
 		this.save.save(xml);
 	}
 
-	private final SaveFile save;
+	private final SaveSteamsideXml save;
 
 }

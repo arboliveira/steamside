@@ -48,7 +48,7 @@ import br.com.arbo.steamside.settings.SettingsImpl;
 import br.com.arbo.steamside.settings.file.File_steamside_xml;
 import br.com.arbo.steamside.settings.file.LoadFile;
 import br.com.arbo.steamside.settings.file.LoadSteamsideXml;
-import br.com.arbo.steamside.settings.file.SaveSteamsideXml;
+import br.com.arbo.steamside.settings.file.SaveFile;
 import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
 import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.library.LibraryImpl;
@@ -123,7 +123,6 @@ public class ContainerFactory {
 		container
 				.addComponent(LoadFile.class, LoadSteamsideXml.class)
 				.addComponent(File_steamside_xml.class)
-				.addComponent(SaveSteamsideXml.class)
 				.addComponent(ParallelSave.class)
 				.addComponent(InitialLoad.class, FromCloudAndFile.class)
 				.addComponent(Autowire.class);
@@ -142,7 +141,7 @@ public class ContainerFactory {
 		container
 				.addComponent(ParallelUpload.class)
 				.addComponent(Uploader.class)
-				.addComponent(AutoUpload.class);
+				.addComponent(SaveFile.class, AutoUpload.class);
 
 		container
 				.addComponent(File_sharedconfig_vdf.class)
