@@ -273,13 +273,15 @@ var GameCardView = Backbone.View.extend({
         var underlay = this.$('.game-tile-inner');
         overlay.show();
         underlay.addClass('game-tile-inner-blurred');
+		var img = overlay.find('img');
+		heartbeat(img, false, 0, 15, 25);
     },
 
     hideOverlay: function() {
-        var loading_overlay = this.$('.game-tile-inner-loading-overlay');
-        var loading_underlay = this.$('.game-tile-inner');
-        loading_overlay.hide();
-        loading_underlay.removeClass('game-tile-inner-blurred');
+        var overlay = this.$('.game-tile-inner-loading-overlay');
+        var underlay = this.$('.game-tile-inner');
+        overlay.hide();
+        underlay.removeClass('game-tile-inner-blurred');
     },
 
     redisplay_continues: function () {

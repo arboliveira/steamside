@@ -41,7 +41,14 @@ var Backend = Backbone.Model.extend(
 		{
 			alert("Back end is OFF. Ignoring: \n\n" + aUrl);
 
-			promise = $.ajax({});
+			//promise = $.ajax({});
+			promise = $.Deferred();
+
+			setTimeout(function()
+				{
+					promise.resolve();
+				},
+				6000);
 		}
 		else {
 			promise = $.ajax(aUrl);
