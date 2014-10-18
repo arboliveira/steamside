@@ -1,10 +1,14 @@
 package br.com.arbo.steamside.kids;
 
-import br.com.arbo.steamside.types.CollectionName;
-
 public interface KidsMode {
 
-	CollectionName getCollection();
+	Kid kid() throws NotInKidsMode;
 
-	boolean isKidsModeOn();
+	public class NotInKidsMode extends Exception {
+
+		public NotInKidsMode(Throwable cause)
+		{
+			super(cause);
+		}
+	}
 }

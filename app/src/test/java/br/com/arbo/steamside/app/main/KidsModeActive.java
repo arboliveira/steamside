@@ -1,7 +1,10 @@
 package br.com.arbo.steamside.app.main;
 
+import org.mockito.Mockito;
+
 import br.com.arbo.steamside.app.injection.ContainerWeb;
 import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
+import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -14,15 +17,18 @@ class KidsModeActive implements WebApplicationContextTweak, KidsMode {
 	}
 
 	@Override
-	public boolean isKidsModeOn()
+	public Kid kid() throws NotInKidsMode
 	{
-		return true;
+		return kid;
 	}
 
-	@Override
-	public CollectionName getCollection()
+	private final Kid kid;
+
+	KidsModeActive()
 	{
-		return new CollectionName("+a-Ongoing");
+		kid = Mockito.mock(Kid.class);
+		Mockito.when(kid.getCollection())
+				.thenReturn(new CollectionName("+a-Ongoing"));
 	}
 
 }
