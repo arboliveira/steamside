@@ -59,6 +59,7 @@ var SwitchFavoritesView = Backbone.View.extend(
 			}
 		).render().whenRendered.done(function(view)
 			{
+				view.$('#PurposeView').hide();
 				that.$("#CollectionPickView").append(view.el);
 			});
 

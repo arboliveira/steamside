@@ -289,7 +289,6 @@ var CollectionEditView = Backbone.View.extend({
 
 		var viewCollectionPick = new CollectionPickView(
 			{
-				combine_collection: that.collection_name,
 				on_collection_pick: function(collection)
 				{
 					viewCollectionPick.remove();
@@ -300,8 +299,21 @@ var CollectionEditView = Backbone.View.extend({
 
 		viewCollectionPick.render().whenRendered.done(function(view)
 			{
-				that.$("#collection-segment").after(view.el);
+				that.rendered_CollectionPickView(view);
 			});
+	},
+
+	rendered_CollectionPickView: function(view)
+	{
+		var viewCombinePurpose = view;
+
+		viewCombinePurpose.$('#CombineCollectionName')
+			.text(this.collection_name);
+
+		// TODO Instill purpose
+		// view.$('#PurposeView').append(viewCombinePurpose.el);
+
+		this.$("#collection-segment").after(view.el);
 	},
 
 	on_collection_combine: function(collection)

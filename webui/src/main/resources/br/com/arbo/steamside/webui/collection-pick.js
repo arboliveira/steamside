@@ -11,13 +11,10 @@ var CollectionPickTile = {
 
 var CollectionPickView = Backbone.View.extend(
 {
-	combine_collection: null,
-
 	on_collection_pick: null,
 
 	initialize: function(options)
 	{
-		this.combine_collection = options.combine_collection;
 		this.on_collection_pick = options.on_collection_pick;
 		this.backend = options.backend;
 	},
@@ -40,13 +37,6 @@ var CollectionPickView = Backbone.View.extend(
 	{
 		var that = this;
 
-		var m = this.combine_collection;
-		if (m != null)
-		{
-			el.find('#CombineCollectionName').text(m);
-			el.find('#CombineCollectionWithView').show();
-		}
-
 		var collections = new SteamsideCollectionInfoCollection();
 
 		this.backend.fetch_promise(collections).done(function()
@@ -64,8 +54,7 @@ var CollectionPickView = Backbone.View.extend(
 			{
 				el.find("#no-collections-yet").hide();
 			}
-		}
-		);
+		});
 
 		return this;
 	}
