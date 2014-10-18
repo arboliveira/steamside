@@ -4,7 +4,7 @@ var SwitchFavoritesCollectionsTile =
 {
 	tile: new Tile(
 		{
-			tileset: SteamsideTileset.tileset,
+			url: 'SwitchFavorites.html',
 			selector: "#switch-favorites-tile"
 		})
 };
@@ -40,7 +40,6 @@ var SwitchFavoritesWorld = WorldActions.extend(
 
 var SwitchFavoritesView = Backbone.View.extend(
 {
-	on_category_change: null,
 
 	events: {
 		"click .back-button"         : "backButtonClicked"
@@ -48,27 +47,12 @@ var SwitchFavoritesView = Backbone.View.extend(
 
 	initialize: function(options)
 	{
-		this.on_category_change = options.on_category_change;
 		this.backend = options.backend;
 	},
 
 	render: function()
 	{
 		var that = this;
-
-		var categories = new SteamCategoryCollection();
-		this.backend.fetch_promise(categories).done(function ()
-			{
-				new SteamCategoriesView(
-					{
-						el: that.$("#switch-favorites-steam-categories-list"),
-						collection: categories,
-						on_category_change: that.on_category_change,
-						backend: that.backend
-					}
-				).render();
-			}
-		);
 
 		CollectionPickTile.ajaxTile(function(tile_el)
 			{
@@ -90,4 +74,3 @@ var SwitchFavoritesView = Backbone.View.extend(
 		history.back();
 	}
 });
-
