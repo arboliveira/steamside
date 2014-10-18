@@ -5,8 +5,4 @@ import br.com.arbo.steamside.types.CollectionName;
 public interface FavoritesOfUser {
 
 	CollectionName favorites() throws NotSet;
-
-	public static class NotSet extends Exception {
-		//
-	}
 }

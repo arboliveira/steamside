@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
+import br.com.arbo.steamside.collections.FavoriteNotSet;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.types.CollectionName;
@@ -36,6 +37,13 @@ public class AutowireCollectionsData implements CollectionsData {
 	public void delete(CollectionI in)
 	{
 		reloadable().delete(in);
+	}
+
+	@Override
+	@NonNull
+	public CollectionI favorite() throws FavoriteNotSet
+	{
+		return reloadable().favorite();
 	}
 
 	@Override

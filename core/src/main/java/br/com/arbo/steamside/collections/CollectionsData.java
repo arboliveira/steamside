@@ -1,12 +1,14 @@
 package br.com.arbo.steamside.collections;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.types.CollectionName;
 
 public interface CollectionsData
 		extends CollectionsWrites, CollectionsQueries {
 
-	default CollectionI addIfAbsent(CollectionName collection)
+	default CollectionI addIfAbsent(@NonNull CollectionName collection)
 	{
 		try
 		{

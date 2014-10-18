@@ -12,6 +12,9 @@ public interface CollectionsQueries {
 	Stream< ? extends CollectionI> all();
 
 	@NonNull
-	CollectionI find(CollectionName name) throws NotFound;
+	CollectionI favorite() throws FavoriteNotSet;
+
+	@NonNull
+	CollectionI find(@NonNull CollectionName name) throws NotFound;
 
 }

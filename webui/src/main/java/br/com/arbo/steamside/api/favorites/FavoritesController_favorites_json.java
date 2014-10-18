@@ -10,7 +10,7 @@ import br.com.arbo.steamside.api.app.Limit;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
-import br.com.arbo.steamside.favorites.FavoritesOfUser.NotSet;
+import br.com.arbo.steamside.favorites.NotSet;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;

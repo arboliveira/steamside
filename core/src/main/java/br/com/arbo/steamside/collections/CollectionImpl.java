@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.collections;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import br.com.arbo.steamside.types.CollectionName;
 
 public class CollectionImpl implements CollectionI {
@@ -11,7 +13,8 @@ public class CollectionImpl implements CollectionI {
 		return clone;
 	}
 
-	public CollectionImpl(CollectionName name, IsSystem system) {
+	public CollectionImpl(@NonNull CollectionName name, IsSystem system)
+	{
 		this.name = name;
 		this.system = system;
 	}
@@ -23,6 +26,7 @@ public class CollectionImpl implements CollectionI {
 	}
 
 	@Override
+	@NonNull
 	public CollectionName name()
 	{
 		return name;
@@ -34,7 +38,7 @@ public class CollectionImpl implements CollectionI {
 		return name.toString();
 	}
 
-	private final CollectionName name;
+	private final @NonNull CollectionName name;
 
 	private final IsSystem system;
 }

@@ -1,20 +1,25 @@
 package br.com.arbo.steamside.types;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public class CollectionName {
 
-	public final String value;
-
-	public CollectionName(final String value) {
+	public CollectionName(@NonNull String value)
+	{
 		this.value = value;
 	}
 
+	public boolean equalsCollectionName(CollectionName name)
+	{
+		return value.equals(name.value);
+	}
+
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return value;
 	}
 
-	public boolean equalsCollectionName(CollectionName name) {
-		return value.equals(name.value);
-	}
+	public final @NonNull String value;
 
 }

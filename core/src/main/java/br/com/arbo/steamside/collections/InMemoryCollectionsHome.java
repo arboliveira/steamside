@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.data.collections.Duplicate;
@@ -48,10 +49,25 @@ public class InMemoryCollectionsHome implements CollectionsData {
 		CollectionImpl stored = stored(in);
 		deleteListeners.forEach(l -> l.onDelete(stored));
 		objects.remove(stored);
+		if (favorite == stored) favorite = null;
 	}
 
 	@Override
-	public CollectionI find(CollectionName name) throws NotFound
+	@NonNull
+	public CollectionI favorite() throws FavoriteNotSet
+	{
+		if (favorite == null) throw new FavoriteNotSet();
+		return favorite;
+	}
+
+	public void favorite(CollectionName collectionName) throws NotFound
+	{
+		favorite = findOrCry(collectionName);
+	}
+
+	@Override
+	@NonNull
+	public CollectionI find(@NonNull CollectionName name) throws NotFound
 	{
 		return findOrCry(name);
 	}
@@ -69,7 +85,8 @@ public class InMemoryCollectionsHome implements CollectionsData {
 				.findAny();
 	}
 
-	private CollectionImpl findOrCry(CollectionName name)
+	@NonNull
+	private CollectionImpl findOrCry(@NonNull CollectionName name)
 			throws NotFound
 	{
 		Optional<CollectionImpl> maybe = findMaybe(name);
@@ -90,6 +107,9 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	}
 
 	private final List<DeleteListener> deleteListeners = new ArrayList<>(1);
+
+	@Nullable
+	private CollectionI favorite;
 
 	private final List<CollectionImpl> objects = new LinkedList<>();
 }

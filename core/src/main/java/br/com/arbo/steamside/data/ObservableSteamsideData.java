@@ -15,6 +15,7 @@ import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.CollectionsWrites;
+import br.com.arbo.steamside.collections.FavoriteNotSet;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.collections.TagsQueries;
@@ -164,6 +165,13 @@ public class ObservableSteamsideData implements SteamsideData {
 		public void delete(CollectionI in)
 		{
 			writes.delete(in);
+		}
+
+		@Override
+		@NonNull
+		public CollectionI favorite() throws FavoriteNotSet
+		{
+			return reads.favorite();
 		}
 
 		@Override
