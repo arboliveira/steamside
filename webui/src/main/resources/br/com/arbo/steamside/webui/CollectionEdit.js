@@ -65,6 +65,7 @@ var CollectionEditView = Backbone.View.extend({
 	cardTemplatePromise: null,
 
     combineView: null,
+	combine_purpose_el: null,
 
     collection_name: null,
 
@@ -87,6 +88,9 @@ var CollectionEditView = Backbone.View.extend({
             el: that.$('#CombineView'),
             collection_editing: that.collection_name
         });
+
+		this.combine_purpose_el = this.$("#CombinePurposeView");
+		this.combine_purpose_el.remove();
 
         var collectionEditSearchResults = new SearchResults();
 		this.collectionEditSearchResults = collectionEditSearchResults;
@@ -305,13 +309,14 @@ var CollectionEditView = Backbone.View.extend({
 
 	rendered_CollectionPickView: function(view)
 	{
-		var viewCombinePurpose = view;
+		var el_combine_purpose = this.combine_purpose_el.clone();
 
-		viewCombinePurpose.$('#CombineCollectionName')
+		el_combine_purpose.find('#CombineCollectionName')
 			.text(this.collection_name);
 
-		// TODO Instill purpose
-		// view.$('#PurposeView').append(viewCombinePurpose.el);
+		var el_purpose = view.$('#PurposeView');
+		el_purpose.empty();
+		el_purpose.append(el_combine_purpose);
 
 		this.$("#collection-segment").after(view.el);
 	},
