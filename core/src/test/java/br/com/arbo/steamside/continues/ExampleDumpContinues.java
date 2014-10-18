@@ -19,12 +19,10 @@ public class ExampleDumpContinues {
 	{
 		KidsMode nop = Mockito.mock(KidsMode.class);
 
-		final FilterContinues continues = new FilterContinues(nop);
-
 		Library library = Libraries.fromSteamPhysicalFiles();
 
 		new ContinuesFromSteamClientLocalfiles(
-				continues, library, new SettingsImpl())
+				nop, library, new SettingsImpl())
 				.continues().forEach(
 						this::printApp
 				);

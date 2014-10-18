@@ -29,7 +29,6 @@ import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
-import br.com.arbo.steamside.continues.FilterContinues;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.data.autowire.Autowire;
 import br.com.arbo.steamside.data.autowire.AutowireCollectionsData;
@@ -159,7 +158,6 @@ public class ContainerFactory {
 				.addComponent(RunGameCommand.class);
 
 		container
-				.addComponent(FilterContinues.class)
 				.addComponent(Continues.class)
 				.addComponent(
 						ContinuesRooster.class,

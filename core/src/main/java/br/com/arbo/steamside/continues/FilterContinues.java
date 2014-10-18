@@ -1,29 +1,32 @@
 package br.com.arbo.steamside.continues;
 
-import javax.inject.Inject;
+import java.util.function.Predicate;
 
-import br.com.arbo.steamside.apps.Filter;
 import br.com.arbo.steamside.apps.FilterKidsMode;
 import br.com.arbo.steamside.apps.FilterNeverPlayed;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.steam.client.apps.App;
 
-public class FilterContinues implements Filter {
+class FilterContinues implements Predicate<App> {
 
-	private static void considerAll(final App app, final Filter... filters)
-			throws Reject {
-		for (final Filter filter : filters)
-			filter.consider(app);
+	@SafeVarargs
+	private static boolean considerAll(
+			final App app, final Predicate<App>... filters)
+	{
+		for (final Predicate<App> filter : filters)
+			if (!filter.test(app)) return false;
+		return true;
 	}
 
-	@Inject
-	public FilterContinues(final KidsMode kidsmode) {
+	FilterContinues(final KidsMode kidsmode)
+	{
 		this.kidsmode = kidsmode;
 	}
 
 	@Override
-	public void consider(final App app) throws Reject {
-		considerAll(app,
+	public boolean test(final App app)
+	{
+		return considerAll(app,
 				new FilterNeverPlayed(),
 				new FilterKidsMode(kidsmode));
 	}

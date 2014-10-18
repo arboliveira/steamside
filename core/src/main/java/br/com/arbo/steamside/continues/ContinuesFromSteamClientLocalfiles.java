@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.apps.LastPlayedDescending;
+import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
@@ -17,12 +18,12 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 
 	@Inject
 	public ContinuesFromSteamClientLocalfiles(
-			final @NonNull FilterContinues continues,
-			final Library library,
+			@NonNull KidsMode kidsmode,
+			Library library,
 			Settings settings)
 	{
 		this.library = library;
-		this.continues = continues;
+		this.continues = new FilterContinues(kidsmode);
 		this.currentPlatformOnly = settings.currentPlatformOnly();
 	}
 
