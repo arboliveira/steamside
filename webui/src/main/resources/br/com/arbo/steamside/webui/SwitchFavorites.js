@@ -40,7 +40,6 @@ var SwitchFavoritesWorld = WorldActions.extend(
 
 var SwitchFavoritesView = Backbone.View.extend(
 {
-
 	events: {
 		"click .back-button"         : "backButtonClicked"
 	},
@@ -54,17 +53,14 @@ var SwitchFavoritesView = Backbone.View.extend(
 	{
 		var that = this;
 
-		CollectionPickTile.ajaxTile(function(tile_el)
+		new CollectionPickView(
 			{
-				var pick = new CollectionPickView(
-					{
-						el: tile_el.clone(),
-						backend: that.backend
-					}
-				);
-				that.$("#CollectionPickView").append(pick.render().el);
+				backend: that.backend
 			}
-		);
+		).render().whenRendered.done(function(view)
+			{
+				that.$("#CollectionPickView").append(view.el);
+			});
 
 		return this;
 	},

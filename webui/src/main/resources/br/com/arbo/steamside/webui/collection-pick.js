@@ -6,11 +6,7 @@ var CollectionPickTile = {
 			url: 'CollectionPick.html',
 			selector: "#collection-pick-collections-segment"
 		}
-	),
-
-	ajaxTile: function (callback) {
-		this.tile.ajaxTile(callback);
-	}
+	)
 };
 
 var CollectionPickView = Backbone.View.extend(
@@ -29,21 +25,36 @@ var CollectionPickView = Backbone.View.extend(
 	render: function()
 	{
 		var that = this;
+		this.whenRendered =
+			CollectionPickTile.tile.el_promise.then(function(tile)
+				{
+					var el = tile.clone();
+					that.render_el(el);
+					that.$el.append(el);
+					return that;
+				});
+		return this;
+	},
+
+	render_el: function(el)
+	{
+		var that = this;
 
 		var m = this.combine_collection;
 		if (m != null)
 		{
-			this.$('#CombineCollectionName').text(m);
-			this.$('#CombineCollectionWithView').show();
+			el.find('#CombineCollectionName').text(m);
+			el.find('#CombineCollectionWithView').show();
 		}
 
 		var collections = new SteamsideCollectionInfoCollection();
 
 		this.backend.fetch_promise(collections).done(function()
 		{
+			var el_list = el.find("#SteamsideCollectionInfoListView");
 			new SteamsideCollectionInfoListView(
 				{
-					el: that.$("#SteamsideCollectionInfoListView"),
+					el: el_list,
 					collection: collections,
 					on_collection_pick: that.on_collection_pick
 				}
@@ -51,7 +62,7 @@ var CollectionPickView = Backbone.View.extend(
 
 			if (collections.length > 0)
 			{
-				that.$("#no-collections-yet").hide();
+				el.find("#no-collections-yet").hide();
 			}
 		}
 		);

@@ -287,25 +287,21 @@ var CollectionEditView = Backbone.View.extend({
 
 		var that = this;
 
-		CollectionPickTile.ajaxTile(function(tile_el)
+		var viewCollectionPick = new CollectionPickView(
 			{
-				var pick_el;
-				var pick = new CollectionPickView(
-					{
-						el: tile_el.clone(),
-						combine_collection: that.collection_name,
-						on_collection_pick: function(collection)
-							{
-								$(pick_el).hide();
-								that.on_collection_combine(collection);
-							},
-						backend: that.backend
-					}
-				);
-				pick_el = pick.render().el;
-				that.$("#collection-segment").after(pick_el);
-			}
-		);
+				combine_collection: that.collection_name,
+				on_collection_pick: function(collection)
+				{
+					viewCollectionPick.remove();
+					that.on_collection_combine(collection);
+				},
+				backend: that.backend
+			});
+
+		viewCollectionPick.render().whenRendered.done(function(view)
+			{
+				that.$("#collection-segment").after(view.el);
+			});
 	},
 
 	on_collection_combine: function(collection)
