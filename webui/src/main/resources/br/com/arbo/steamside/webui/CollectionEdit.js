@@ -58,7 +58,8 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 
 var CollectionEditView = Backbone.View.extend({
 
-	events: {
+	events:
+	{
 		"click #side-link-combine": "combineClicked"
 	},
 

@@ -45,7 +45,7 @@ var SteamsideView = Backbone.View.extend({
 
 	applyKidsMode: function()
 	{
-		var kids = this.sessionModel.kidsmode();
+		var kids = this.sessionModel.kidsMode();
 
 		if (!kids) {
 			this.$("#KidsModeIndicator").hide();
@@ -84,7 +84,7 @@ var Steamside_html =
 
 			var steamsideTileset = SteamsideTileset.tileset;
 
-			var kidsMode = sessionModel.kidsmode();
+			var kidsMode = sessionModel.kidsMode();
 
 			var cardTemplatePromise = that.buildCardTemplatePromise(kidsMode, kidsTileset, steamsideTileset);
 

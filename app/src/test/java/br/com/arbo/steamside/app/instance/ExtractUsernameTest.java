@@ -11,7 +11,7 @@ public class ExtractUsernameTest {
 	@Test
 	public void happyDay() {
 		final String json = "{\n" +
-				"  \"username\" : \"kid\"\n" +
+				"  \"userName\" : \"kid\"\n" +
 				"}";
 		final String username = ExtractUsername.from(json);
 		assertThat(username, equalTo("kid"));

@@ -21,12 +21,12 @@ var SessionModel = Backbone.Model.extend(
 
     userName : function()
 	{
-		return this.get('username');
+		return this.get('userName');
     },
 
-    kidsmode: function()
+    kidsMode: function()
 	{
-		return this.booleanValue(this.get('kidsmode'));
+		return this.booleanValue(this.get('kidsMode'));
     },
 
 	booleanValue: function(v)

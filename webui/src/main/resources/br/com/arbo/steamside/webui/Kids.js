@@ -36,7 +36,7 @@ var KidsView = Backbone.View.extend({
 		//this.$("#favorites-segment").hide();
 		this.$("#collections-segment").hide();
 
-		this.$("#switch-link").hide();
+		this.$(".side-links").hide();
 
 		var that = this;
 

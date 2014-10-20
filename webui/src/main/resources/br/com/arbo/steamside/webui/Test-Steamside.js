@@ -160,22 +160,22 @@ var Test_Steamside_html = Backbone.Model.extend({
 	{
 		var segment = $('#favorites-segment');
 
-		var l = segment.find("#switch-link").get(0);
+		var l = segment.find("#side-link-favorite-switch").get(0);
 		l.click();
 
-		var buttons;
+		var info;
 
 		var is_effect_seen = function ()
 		{
-			var dialog = $("#collection-pick-steam-categories-list");
-			if (dialog.length == 0) return false;
-			buttons = dialog.find(".collection-pick-steam-category-button");
-			return buttons.length == 3;
+			var listView = $("#SteamsideCollectionInfoListView");
+			if (listView.length == 0) return false;
+			info = listView.find("#SteamsideCollectionInfoView");
+			return info.length > 0;
 		};
 
 		var ok_effect_seen = function()
 		{
-			assert.equal(buttons.length, 3, 'category buttons');
+			assert.equal(info.length > 0, true, 'category buttons');
 
 			var bMaybeLater = $(".back-button");
 			bMaybeLater.click();

@@ -33,17 +33,17 @@ public class SessionDTO {
 			final User username, final KidsMode kidsmode,
 			final String gamesOwned)
 	{
-		this.username = username.username();
-		this.kidsmode = isKidsModeOn(kidsmode);
+		this.userName = username.username();
+		this.kidsMode = isKidsModeOn(kidsmode);
 		this.versionOfSteamside = new MavenBuild().readVersion();
 		this.gamesOwned = gamesOwned;
 	}
 
 	@JsonProperty
-	public String username;
+	public String userName;
 
 	@JsonProperty
-	public boolean kidsmode;
+	public boolean kidsMode;
 
 	public String versionOfSteamside;
 

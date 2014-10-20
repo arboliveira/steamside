@@ -7,7 +7,7 @@ class ExtractUsername {
 
 	static String from(final String json) {
 		final SessionDTO dto = JsonUtils.fromString(json, SessionDTO.class);
-		return dto.username;
+		return dto.userName;
 	}
 
 }

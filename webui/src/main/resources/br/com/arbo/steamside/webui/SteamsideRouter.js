@@ -143,7 +143,6 @@ var SteamsideRouter = Backbone.Router.extend(
 		{
 			sessionModel: sessionModel,
 			cardTemplatePromise: this.cardTemplatePromise,
-			kidsTileset: kidsTileset,
 			backend: this.backend
 		});
 	},

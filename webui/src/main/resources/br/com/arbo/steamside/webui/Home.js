@@ -3,13 +3,11 @@
 var HomeWorld = WorldActions.extend(
 	{
 		sessionModel: null,
-		kidsTileset: null,
 		cardTemplatePromise: null,
 
 		initialize: function(options)
 		{
 			this.sessionModel = options.sessionModel;
-			this.kidsTileset = options.kidsTileset;
 
 			if (options.cardTemplatePromise == null)
 			{
@@ -31,7 +29,6 @@ var HomeWorld = WorldActions.extend(
 				// el: tile.clone(),
 				sessionModel: this.sessionModel,
 				cardTemplatePromise: this.cardTemplatePromise,
-				kidsTileset: this.kidsTileset,
 				backend: this.backend
 			}).render();
 		},
@@ -48,28 +45,27 @@ var HomeView = Backbone.View.extend(
 	el: "#primary-view",
 
 	sessionModel: null,
-	kidsTileset: null,
 	cardTemplatePromise: null,
 
-	initialize: function(options) {
+	initialize: function(options)
+	{
 		this.sessionModel = options.sessionModel;
-		this.kidsTileset = options.kidsTileset;
 
 		if (options.cardTemplatePromise == null) {
 			throw new Error("cardTemplatePromise is required");
 		}
 		this.cardTemplatePromise = options.cardTemplatePromise;
+
 		this.backend = options.backend;
 	},
 
 	render: function ()
 	{
 		var continues = new ContinueGames();
-		var favorites = new FavoritesCollection();
 
 		var that = this;
 
-		var kidsMode = this.sessionModel.kidsmode();
+		var kidsMode = this.sessionModel.kidsMode();
 
 		if (!kidsMode)
 		{
@@ -94,19 +90,17 @@ var HomeView = Backbone.View.extend(
 			).render();
 		}
 
-		new DeckView({
-			el: $('#favorites-deck'),
-			cardTemplatePromise: that.cardTemplatePromise,
-			collection: favorites,
-			continues: continues,
-			kidsMode: kidsMode,
-			on_tag: that.on_tag,
-			backend: that.backend
-		});
-
-		this.backend.fetch_promise(favorites);
-
 		this.backend.fetch_promise(continues);
+
+		new FavoritesView(
+			{
+				cardTemplatePromise: this.cardTemplatePromise,
+				backend: this.backend,
+				on_tag: this.on_tag,
+				kidsMode: kidsMode,
+				continues: continues
+			}
+		).render();
 
 		return this;
 	},
@@ -115,6 +109,48 @@ var HomeView = Backbone.View.extend(
 	{
 		TagTile.on_tag(game, segmentWithGameCard, this.backend);
 	}
-
 });
 
+
+
+var FavoritesView = Backbone.View.extend(
+{
+	el: "#favorites-segment",
+
+	events:
+	{
+		"click #side-link-combine": "combineClicked"
+	},
+
+	initialize: function(options)
+	{
+		if (options.cardTemplatePromise == null) {
+			throw new Error("cardTemplatePromise is required");
+		}
+		this.cardTemplatePromise = options.cardTemplatePromise;
+
+		this.backend = options.backend;
+		this.on_tag = options.on_tag;
+		this.kidsMode = options.kidsMode;
+		this.continues = options.continues;
+	},
+
+	render: function()
+	{
+		var favorites = new FavoritesCollection();
+
+		new DeckView({
+			el: $('#favorites-deck'),
+			cardTemplatePromise: this.cardTemplatePromise,
+			collection: favorites,
+			continues: this.continues,
+			kidsMode: this.kidsMode,
+			on_tag: this.on_tag,
+			backend: this.backend
+		});
+
+		this.backend.fetch_promise(favorites);
+		
+		return this;
+	}
+});
