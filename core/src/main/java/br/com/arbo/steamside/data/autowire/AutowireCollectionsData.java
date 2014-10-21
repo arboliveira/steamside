@@ -47,6 +47,12 @@ public class AutowireCollectionsData implements CollectionsData {
 	}
 
 	@Override
+	public void favorite(@NonNull CollectionI in)
+	{
+		reloadable().favorite(in);
+	}
+
+	@Override
 	@NonNull
 	public CollectionI find(CollectionName name) throws NotFound
 	{

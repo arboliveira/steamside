@@ -8,6 +8,8 @@ public interface CollectionsWrites {
 
 	void add(@NonNull CollectionI in) throws Duplicate;
 
-	void delete(CollectionI in);
+	void delete(@NonNull CollectionI in);
+
+	void favorite(@NonNull CollectionI in);
 
 }

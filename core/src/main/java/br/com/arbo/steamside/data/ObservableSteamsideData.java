@@ -175,6 +175,12 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
+		public void favorite(@NonNull CollectionI in)
+		{
+			writes.favorite(in);
+		}
+
+		@Override
 		@NonNull
 		public CollectionI find(CollectionName name) throws NotFound
 		{

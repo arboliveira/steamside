@@ -1,8 +1,10 @@
 package br.com.arbo.steamside.xml.collections;
 
+import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.FavoriteNotSet;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
+import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class FavoritesXml {
@@ -24,8 +26,16 @@ public class FavoritesXml {
 	public void toCollectionsHome(InMemoryCollectionsHome c)
 	{
 		if (favorite == null) return;
-		// TODO Notify UI if favorite collection name not found in persistence
-		c.favorite(new CollectionName(favorite));
+		try
+		{
+			CollectionI in = c.find(new CollectionName(favorite));
+			c.favorite(in);
+		}
+		catch (NotFound e)
+		{
+			// Ignore bogus favorite name, will fall back to "favorite"
+			// TODO Notify UI if favorite name from xml not found in persistence
+		}
 	}
 
 	public String favorite;

@@ -117,9 +117,11 @@ var FavoritesView = Backbone.View.extend(
 {
 	el: "#favorites-segment",
 
+	favorites: null,
+
 	events:
 	{
-		"click #side-link-combine": "combineClicked"
+		"click #side-link-favorite-switch": "switchClicked"
 	},
 
 	initialize: function(options)
@@ -137,20 +139,97 @@ var FavoritesView = Backbone.View.extend(
 
 	render: function()
 	{
-		var favorites = new FavoritesCollection();
+		this.switch_purpose_el = this.$("#SwitchPurposeView");
+		this.switch_purpose_el.remove();
+
+		this.favorites = new FavoritesCollection();
 
 		new DeckView({
 			el: $('#favorites-deck'),
 			cardTemplatePromise: this.cardTemplatePromise,
-			collection: favorites,
+			collection: this.favorites,
 			continues: this.continues,
 			kidsMode: this.kidsMode,
 			on_tag: this.on_tag,
 			backend: this.backend
 		});
 
-		this.backend.fetch_promise(favorites);
-		
+		this.fetch_favorites_collection();
+
 		return this;
+	},
+
+	fetch_favorites_collection: function()
+	{
+		this.backend.fetch_promise(this.favorites);
+	},
+
+	switchClicked: function(e) {
+		e.preventDefault();
+
+		var that = this;
+
+		var viewCollectionPick = new CollectionPickView(
+			{
+				on_collection_pick: function(modelCollection)
+				{
+					viewCollectionPick.remove();
+					that.on_switch_favorites_collection_pick(modelCollection);
+				},
+				backend: that.backend
+			});
+
+		viewCollectionPick.render().whenRendered.done(function(view)
+		{
+			that.rendered_SwitchFavoritesCollectionPickView(view);
+		});
+	},
+
+	rendered_SwitchFavoritesCollectionPickView: function(view)
+	{
+		var el_switch_purpose = this.switch_purpose_el.clone();
+
+		var el_purpose = view.$('#PurposeView');
+		el_purpose.empty();
+		el_purpose.append(el_switch_purpose);
+
+		this.$el.after(view.el);
+
+		$('html, body').scrollTop(view.$el.offset().top);
+	},
+
+	on_switch_favorites_collection_pick: function(modelCollection)
+	{
+		var aUrl =
+			"api/favorites/set/" +
+			encodeURIComponent(modelCollection.name());
+
+
+		// TODO display 'setting favorites...'
+		/*
+		 beforeSend: function(){
+		 },
+		 */
+
+		var that = this;
+
+		this.backend.ajax_ajax_promise(aUrl)
+			.done(function()
+			{
+				that.on_switch_favorites_done();
+			})
+			.fail(function(error)
+			{
+				// TODO display error closer to line of sight
+				ErrorHandler.explode(error);
+			});
+
+		this.fetch_favorites_collection();
+	},
+
+	on_switch_favorites_done: function()
+	{
+		this.fetch_favorites_collection();
 	}
+
 });

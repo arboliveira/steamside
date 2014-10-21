@@ -60,9 +60,12 @@ public class InMemoryCollectionsHome implements CollectionsData {
 		return favorite;
 	}
 
-	public void favorite(CollectionName collectionName) throws NotFound
+	@Override
+	public void favorite(@NonNull CollectionI in)
 	{
-		favorite = findOrCry(collectionName);
+		guardSystem(in);
+		CollectionImpl stored = stored(in);
+		favorite = stored;
 	}
 
 	@Override
