@@ -23,7 +23,12 @@ var TagTile = {
 
 			view.render();
 
+			view.$el.hide();
+			view.$el.slideDown();
+
 			segmentWithGameCard.after(clone);
+
+			$('html, body').scrollTop(view.$el.offset().top);
 		});
 	}
 };
@@ -84,9 +89,6 @@ var TagView = Backbone.View.extend({
 					function(model){that.on_tag_suggestion_select(model)}
 			}).render();
 		});
-
-		this.$el.hide();
-		this.$el.slideDown();
 
 		// this.on_tag_done();
 
