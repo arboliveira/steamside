@@ -59,10 +59,17 @@ var Game_Player = Backbone.Model.extend(
 
 		that.trigger('game:play:beforeSend');
 
-		this.backend.ajax_ajax_promise(aUrl)
+		this.backend.ajax_ajax_promise_2(aUrl)
 			.done(function()
 			{
 				that.trigger('game:play:complete');
+			})
+			.fail(function(jqXHR, textStatus, error)
+			{
+				that.trigger('game:play:complete');
+				
+				// TODO display error closer to line of sight
+				ErrorHandler.calm(error);
 			});
 	}
 });

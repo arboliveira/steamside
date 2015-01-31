@@ -35,6 +35,19 @@ var Backend = Backbone.Model.extend(
 
 	ajax_ajax_promise: function(aUrl)
 	{
+		var promise = this.ajax_ajax_promise_2(aUrl);
+	
+		promise.fail(function(jqXHR, textStatus, errorThrown)
+		{
+			ErrorHandler.explode(errorThrown);
+		});
+	
+		return promise;
+		 
+	},
+
+	ajax_ajax_promise_2: function(aUrl)
+	{
 		var promise;
 
 		if (this.is_backoff())
@@ -55,11 +68,6 @@ var Backend = Backbone.Model.extend(
 		}
 
 		promise.fail(function() { console.log(arguments); });
-
-		promise.fail(function(jqXHR, textStatus, errorThrown)
-		{
-			ErrorHandler.explode(errorThrown);
-		});
 
 		return promise;
 	},

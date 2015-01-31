@@ -24,11 +24,17 @@ class WaitForExecutable {
 				"Seek executable: " + exe);
 	}
 
-	void waitFor()
+	void waitFor() throws Timeout
 	{
 		goSeekInAnotherThread();
-		waitUntilItsUp();
-		stopSeeking();
+		try
+		{
+			waitUntilItsUp();
+		}
+		finally
+		{
+			stopSeeking();
+		}
 	}
 
 	private void goSeekInAnotherThread()
@@ -51,10 +57,15 @@ class WaitForExecutable {
 
 	private void waitUntilItsUp() throws Timeout
 	{
-		try {
-			if (!seeking.tryAcquire(2, TimeUnit.MINUTES)) throw new Timeout();
+		try
+		{
+			if (!seeking.tryAcquire(1, TimeUnit.MINUTES))
+			{
+				throw new Timeout();
+			}
 		}
-		catch (final InterruptedException e) {
+		catch (final InterruptedException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
