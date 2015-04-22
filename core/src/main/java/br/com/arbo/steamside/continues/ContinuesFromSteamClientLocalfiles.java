@@ -18,7 +18,7 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 
 	@Inject
 	public ContinuesFromSteamClientLocalfiles(
-			@NonNull KidsMode kidsmode,
+			KidsMode kidsmode,
 			Library library,
 			Settings settings)
 	{
@@ -39,9 +39,9 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster {
 				gamesOnly = true;
 			}
 		}).filter(continues);
-		final Stream<App> end = currentPlatformOnly ?
-				cont.filter(new FilterPlatform()) : cont;
-		return end.sorted(new LastPlayedDescending());
+		final Stream<App> end = currentPlatformOnly
+				? cont.filter(new FilterPlatform()) : cont;
+				return end.sorted(new LastPlayedDescending());
 	}
 
 	@NonNull

@@ -22,14 +22,4 @@ class DifferentUser implements Part {
 		return user;
 	}
 
-	public static Part on()
-	{
-		return new DifferentUser();
-	}
-
-	public static Part off()
-	{
-		return null;
-	}
-
 }

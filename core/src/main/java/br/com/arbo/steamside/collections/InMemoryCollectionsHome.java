@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
@@ -23,7 +20,7 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	}
 
 	@Override
-	public void add(@NonNull CollectionI in) throws Duplicate
+	public void add(CollectionI in) throws Duplicate
 	{
 		guardSystem(in);
 		CollectionName name = in.name();
@@ -43,34 +40,31 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	}
 
 	@Override
-	public void delete(@NonNull CollectionI in) throws Duplicate
+	public void delete(CollectionI in) throws Duplicate
 	{
 		guardSystem(in);
 		CollectionImpl stored = stored(in);
 		deleteListeners.forEach(l -> l.onDelete(stored));
 		objects.remove(stored);
-		if (favorite == stored) favorite = null;
+		favorite.unset(stored);
 	}
 
 	@Override
-	@NonNull
 	public CollectionI favorite() throws FavoriteNotSet
 	{
-		if (favorite == null) throw new FavoriteNotSet();
-		return favorite;
+		return favorite.get();
 	}
 
 	@Override
-	public void favorite(@NonNull CollectionI in)
+	public void favorite(CollectionI in)
 	{
 		guardSystem(in);
 		CollectionImpl stored = stored(in);
-		favorite = stored;
+		favorite.set(stored);
 	}
 
 	@Override
-	@NonNull
-	public CollectionI find(@NonNull CollectionName name) throws NotFound
+	public CollectionI find(CollectionName name) throws NotFound
 	{
 		return findOrCry(name);
 	}
@@ -88,13 +82,11 @@ public class InMemoryCollectionsHome implements CollectionsData {
 				.findAny();
 	}
 
-	@NonNull
-	private CollectionImpl findOrCry(@NonNull CollectionName name)
+	private CollectionImpl findOrCry(CollectionName name)
 			throws NotFound
 	{
 		Optional<CollectionImpl> maybe = findMaybe(name);
-		if (maybe.isPresent()) return maybe.get();
-		throw new NotFound(name);
+		return maybe.orElseThrow(() -> new NotFound(name));
 	}
 
 	private void guardDuplicate(CollectionName name) throws Duplicate
@@ -111,8 +103,7 @@ public class InMemoryCollectionsHome implements CollectionsData {
 
 	private final List<DeleteListener> deleteListeners = new ArrayList<>(1);
 
-	@Nullable
-	private CollectionI favorite;
+	private final InMemoryFavoriteHome favorite = new InMemoryFavoriteHome();
 
 	private final List<CollectionImpl> objects = new LinkedList<>();
 }

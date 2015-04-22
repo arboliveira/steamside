@@ -2,6 +2,7 @@ package br.com.arbo.steamside.steam.client.apps;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -18,12 +19,14 @@ public class AppImpl implements App {
 	AppImpl(
 			@NonNull final AppId appId,
 			@Nullable AppName name,
-			@Nullable AppType type, @Nullable String executable,
+			Optional<AppType> type,
+			@Nullable String executable,
 			@Nullable final Collection<String> categories,
 			@Nullable final String lastPlayed,
 			@Nullable final String cloudEnabled,
 			@Nullable NotAvailableOnThisPlatform notAvailableOnThisPlatform,
-			@Nullable MissingFrom_appinfo_vdf missingFrom_appinfo_vdf) {
+			@Nullable MissingFrom_appinfo_vdf missingFrom_appinfo_vdf)
+			{
 		this.appid = appId;
 		this.name = name;
 		this.type = type;
@@ -33,7 +36,7 @@ public class AppImpl implements App {
 		this.cloudEnabled = cloudEnabled;
 		this.notAvailableOnThisPlatform = notAvailableOnThisPlatform;
 		this.missingFrom_appinfo_vdf = missingFrom_appinfo_vdf;
-	}
+			}
 
 	@SuppressWarnings("null")
 	@Override
@@ -106,21 +109,21 @@ public class AppImpl implements App {
 	@Override
 	public String toString()
 	{
-		final String s = appid.toString() + ":" + String.valueOf(name);
-		final AppType _type = type;
-		if (_type == null) return s;
-		if ("game".equals(_type.type)) return s;
-		return s + " (" + _type.type + ")";
+		String s = appid.toString() + ":" + String.valueOf(name);
+
+		String t = type
+				.filter(_type -> !_type.isGame())
+				.map(_type -> " (" + _type + ")")
+				.orElse("");
+
+		return s + t;
 	}
 
 	@Override
-	@NonNull
 	public AppType type()
 	{
 		guard_missingFrom_appinfo_vdf();
-		if (type == null) //
-			throw new NullPointerException();
-		return type;
+		return type.orElseThrow(NullPointerException::new);
 	}
 
 	private void guard_missingFrom_appinfo_vdf()
@@ -193,7 +196,7 @@ public class AppImpl implements App {
 
 		public void type(AppType type)
 		{
-			this.type = type;
+			this.type = Optional.of(type);
 		}
 
 		@NonNull
@@ -220,7 +223,7 @@ public class AppImpl implements App {
 
 		private NotAvailableOnThisPlatform notAvailableOnThisPlatform;
 
-		private AppType type;
+		private Optional<AppType> type = Optional.empty();
 	}
 
 	@NonNull
@@ -247,7 +250,6 @@ public class AppImpl implements App {
 	@Nullable
 	private final NotAvailableOnThisPlatform notAvailableOnThisPlatform;
 
-	@Nullable
-	private final AppType type;
+	private final Optional<AppType> type;
 
 }

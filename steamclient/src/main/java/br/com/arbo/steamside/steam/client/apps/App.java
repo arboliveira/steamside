@@ -41,7 +41,6 @@ public interface App extends LastPlayed {
 	@NonNull
 	AppName name() throws MissingFrom_appinfo_vdf;
 
-	@NonNull
 	AppType type() throws MissingFrom_appinfo_vdf;
 
 }

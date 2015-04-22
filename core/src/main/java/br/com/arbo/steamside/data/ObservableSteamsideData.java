@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
@@ -150,7 +148,7 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public void add(@NonNull CollectionI in) throws Duplicate
+		public void add(CollectionI in) throws Duplicate
 		{
 			writes.add(in);
 		}
@@ -168,20 +166,18 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		@NonNull
 		public CollectionI favorite() throws FavoriteNotSet
 		{
 			return reads.favorite();
 		}
 
 		@Override
-		public void favorite(@NonNull CollectionI in)
+		public void favorite(CollectionI in)
 		{
 			writes.favorite(in);
 		}
 
 		@Override
-		@NonNull
 		public CollectionI find(CollectionName name) throws NotFound
 		{
 			return reads.find(name);
@@ -191,8 +187,7 @@ public class ObservableSteamsideData implements SteamsideData {
 		private final CollectionsWrites writes;
 	}
 
-	class ChangeAwareKidsData implements KidsData
-	{
+	class ChangeAwareKidsData implements KidsData {
 
 		ChangeAwareKidsData()
 		{
@@ -277,7 +272,7 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public void tagRemember(@NonNull CollectionI c, @NonNull AppId appid)
+		public void tagRemember(CollectionI c, AppId appid)
 		{
 			writes.tagRemember(c, appid);
 		}
@@ -289,7 +284,7 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public void untag(@NonNull CollectionI c, @NonNull AppId appid)
+		public void untag(CollectionI c, AppId appid)
 		{
 			writes.untag(c, appid);
 		}

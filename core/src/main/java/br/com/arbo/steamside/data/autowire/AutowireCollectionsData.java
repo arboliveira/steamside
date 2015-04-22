@@ -4,8 +4,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.FavoriteNotSet;
@@ -22,7 +20,7 @@ public class AutowireCollectionsData implements CollectionsData {
 	}
 
 	@Override
-	public void add(@NonNull CollectionI in) throws Duplicate
+	public void add(CollectionI in) throws Duplicate
 	{
 		reloadable().add(in);
 	}
@@ -40,20 +38,18 @@ public class AutowireCollectionsData implements CollectionsData {
 	}
 
 	@Override
-	@NonNull
 	public CollectionI favorite() throws FavoriteNotSet
 	{
 		return reloadable().favorite();
 	}
 
 	@Override
-	public void favorite(@NonNull CollectionI in)
+	public void favorite(CollectionI in)
 	{
 		reloadable().favorite(in);
 	}
 
 	@Override
-	@NonNull
 	public CollectionI find(CollectionName name) throws NotFound
 	{
 		return reloadable().find(name);

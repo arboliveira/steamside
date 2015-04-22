@@ -1,9 +1,8 @@
 package br.com.arbo.steamside.kids;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.stream.Stream;
-
-import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.opersys.username.User;
 
@@ -24,13 +23,12 @@ public class InMemoryKids implements KidsData {
 	}
 
 	@Override
-	@NonNull
 	public Kid find(User user) throws NotFound
 	{
 		String username = user.username();
 		Kid kid = iUser.get(username);
-		if (kid == null) throw NotFound.user(username);
-		return kid;
+		return Optional.ofNullable(kid)
+				.orElseThrow(() -> NotFound.user(username));
 	}
 
 	HashMap<String, Kid> iUser = new HashMap<>();

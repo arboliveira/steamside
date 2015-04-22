@@ -4,8 +4,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.Tag;
@@ -64,7 +62,7 @@ public class AutowireTagsData implements TagsData {
 	}
 
 	@Override
-	public void tagRemember(@NonNull CollectionI c, @NonNull AppId appid)
+	public void tagRemember(CollectionI c, AppId appid)
 			throws NotFound
 	{
 		reloadable().tagRemember(c, appid);
@@ -77,7 +75,7 @@ public class AutowireTagsData implements TagsData {
 	}
 
 	@Override
-	public void untag(@NonNull CollectionI c, @NonNull AppId appid)
+	public void untag(CollectionI c, AppId appid)
 			throws NotFound
 	{
 		reloadable().untag(c, appid);

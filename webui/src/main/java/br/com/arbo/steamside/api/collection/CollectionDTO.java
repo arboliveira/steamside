@@ -4,6 +4,7 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
@@ -21,15 +22,17 @@ public class CollectionDTO {
 	CollectionDTO(String name, CollectionI.IsSystem system, int count)
 	{
 		this.name = name;
-		this.system = system.toDTOString();
 		this.count = String.valueOf(count);
+
+		system.toDTOString().ifPresent(v -> this.system = v);
 	}
 
 	@JsonProperty
 	final String name;
 
 	@JsonProperty
-	final String system;
+	@Nullable
+	String system;
 
 	@JsonProperty
 	final String count;

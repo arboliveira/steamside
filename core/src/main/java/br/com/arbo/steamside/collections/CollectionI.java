@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.collections;
 
-import org.eclipse.jdt.annotation.NonNull;
+import java.util.Optional;
 
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -8,21 +8,24 @@ public interface CollectionI {
 
 	IsSystem isSystem();
 
-	@NonNull
 	CollectionName name();
 
 	enum IsSystem {
-		NO, YES;
+		NO, YES {
 
-		public static IsSystem fromDTOString(String dto)
+			@Override
+			public Optional<String> toDTOString()
+			{
+				return Optional.of("Y");
+			}
+		};
+
+		@SuppressWarnings("static-method")
+		public Optional<String> toDTOString()
 		{
-			return dto == null ? NO : YES;
+			return Optional.empty();
 		}
 
-		public String toDTOString()
-		{
-			return this == NO ? null : "Y";
-		}
 	}
 
 }

@@ -1,37 +1,31 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache.entry;
 
+import java.util.Optional;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
 
 public class AppInfo {
 
-	public AppInfo(
-			@NonNull final AppName appName,
-			@NonNull AppType appType)
+	public AppInfo(AppName appName, AppType appType)
 	{
 		this.name = appName;
 		this.type = appType;
 	}
 
-	@NonNull
 	public String executable() throws NotAvailableOnThisPlatform
 	{
-		final String _executable = executable;
-		if (_executable == null) throw new NotAvailableOnThisPlatform();
-		return _executable;
+		return executable.orElseThrow(NotAvailableOnThisPlatform::new);
 	}
 
-	public void executable(@NonNull final String executable)
+	public void executable(String executable)
 	{
-		this.executable = executable;
+		this.executable = Optional.of(executable);
 	}
 
-	@NonNull
 	public AppName name()
 	{
 		return name;
@@ -44,19 +38,15 @@ public class AppInfo {
 				ToStringStyle.SIMPLE_STYLE);
 	}
 
-	@NonNull
 	public AppType type()
 	{
 		return type;
 	}
 
-	@Nullable
-	private String executable;
+	private Optional<String> executable = Optional.empty();
 
-	@NonNull
 	private final AppName name;
 
-	@NonNull
 	private final AppType type;
 
 }

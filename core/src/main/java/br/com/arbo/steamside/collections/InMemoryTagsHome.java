@@ -10,8 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome.DeleteListener;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.types.AppId;
@@ -125,8 +123,8 @@ public class InMemoryTagsHome implements TagsData, DeleteListener {
 
 	@Override
 	public void tagRemember(
-			@NonNull final CollectionI c,
-			@NonNull final AppId appid) throws NotFound
+			CollectionI c,
+			AppId appid) throws NotFound
 	{
 		CollectionImpl stored = stored(c);
 		doTag(stored, appid);
@@ -140,7 +138,7 @@ public class InMemoryTagsHome implements TagsData, DeleteListener {
 	}
 
 	@Override
-	public void untag(@NonNull CollectionI c, @NonNull AppId appid)
+	public void untag(CollectionI c, AppId appid)
 			throws NotFound
 	{
 		CollectionImpl stored = stored(c);
@@ -152,14 +150,14 @@ public class InMemoryTagsHome implements TagsData, DeleteListener {
 		return tagsByCollection.tags(stored);
 	}
 
-	void doTag(CollectionImpl c, @NonNull final AppId appid)
+	void doTag(CollectionImpl c, AppId appid)
 	{
 		appsByCollection.tag(c, appid);
 		collectionsByApp.tag(c, appid);
 		tagsByCollection.tag(c, appid);
 	}
 
-	void doUntag(CollectionImpl c, @NonNull final AppId appid)
+	void doUntag(CollectionImpl c, AppId appid)
 	{
 		appsByCollection.untag(c, appid);
 		collectionsByApp.untag(c, appid);
@@ -219,14 +217,14 @@ public class InMemoryTagsHome implements TagsData, DeleteListener {
 		void tag(CollectionImpl c, AppId a)
 		{
 			map
-					.computeIfAbsent(c, k -> new HashSet<AppId>())
-					.add(a);
+			.computeIfAbsent(c, k -> new HashSet<AppId>())
+			.add(a);
 		}
 
 		void untag(CollectionImpl c, AppId a)
 		{
 			getOptional(c)
-					.ifPresent(v -> v.remove(a));
+			.ifPresent(v -> v.remove(a));
 		}
 
 		private Optional<Collection<AppId>> getOptional(CollectionImpl c)
@@ -259,14 +257,14 @@ public class InMemoryTagsHome implements TagsData, DeleteListener {
 		void tag(CollectionImpl c, AppId a)
 		{
 			map
-					.computeIfAbsent(a, k -> new HashSet<CollectionImpl>())
-					.add(c);
+			.computeIfAbsent(a, k -> new HashSet<CollectionImpl>())
+			.add(c);
 		}
 
 		void untag(CollectionImpl c, AppId a)
 		{
 			getOptional(a)
-					.ifPresent(v -> v.remove(c));
+			.ifPresent(v -> v.remove(c));
 		}
 
 		private Optional<Collection<CollectionImpl>> getOptional(AppId a)
@@ -306,12 +304,12 @@ public class InMemoryTagsHome implements TagsData, DeleteListener {
 			map.remove(c);
 		}
 
-		void tag(CollectionImpl c, @NonNull AppId a)
+		void tag(CollectionImpl c, AppId a)
 		{
 			Objects.requireNonNull(a);
 			map
-					.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
-					.computeIfAbsent(a, TagImpl::new);
+			.computeIfAbsent(c, k -> new HashMap<AppId, TagImpl>())
+			.computeIfAbsent(a, TagImpl::new);
 		}
 
 		Stream<TagImpl> tags(CollectionImpl c)
@@ -325,7 +323,7 @@ public class InMemoryTagsHome implements TagsData, DeleteListener {
 		void untag(CollectionImpl c, AppId a)
 		{
 			getOptional(c)
-					.ifPresent(v -> v.remove(a));
+			.ifPresent(v -> v.remove(a));
 		}
 
 		private Optional<Map<AppId, TagImpl>> getOptional(CollectionImpl c)

@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache.entry;
 
-import org.eclipse.jdt.annotation.Nullable;
+import java.util.Optional;
 
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
@@ -16,45 +16,41 @@ public class Builder {
 
 	public void executable(final String executable)
 	{
-		this.executable = executable;
+		this.executable = Optional.of(executable);
 	}
 
 	public boolean executable_missing()
 	{
-		return executable == null;
+		return !executable.isPresent();
 	}
 
 	public void name(final AppName appName)
 	{
-		if (this.appName != null) throw new TwoNames();
-		this.appName = appName;
+		if (this.appName.isPresent()) throw new TwoNames();
+		this.appName = Optional.of(appName);
 	}
 
 	public void type(AppType appType)
 	{
-		if (this.appType != null) throw new TwoNames();
-		this.appType = appType;
+		if (this.appType.isPresent()) throw new TwoNames();
+		this.appType = Optional.of(appType);
 	}
 
 	private void executable_set(final AppInfo entry)
 	{
-		if (executable != null) entry.executable(executable);
+		executable.ifPresent(entry::executable);
 	}
 
 	private AppInfo newEntry()
 	{
-		if (appName == null)
-			throw new InternalStructureChanged_appinfo_vdf();
-		if (appType == null)
-			throw new InternalStructureChanged_appinfo_vdf();
-		final AppInfo entry = new AppInfo(appName, appType);
-		return entry;
+		return new AppInfo(
+				appName.orElseThrow(InternalStructureChanged_appinfo_vdf::new),
+				appType.orElseThrow(InternalStructureChanged_appinfo_vdf::new));
 	}
 
-	@Nullable
-	private AppName appName;
-	@Nullable
-	private AppType appType;
-	@Nullable
-	private String executable;
+	private Optional<AppName> appName = Optional.empty();
+
+	private Optional<AppType> appType = Optional.empty();
+
+	private Optional<String> executable = Optional.empty();
 }

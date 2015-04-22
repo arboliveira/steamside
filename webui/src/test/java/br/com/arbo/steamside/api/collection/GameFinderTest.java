@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.arbo.steamside.steam.client.apps.NotFound;
 import br.com.arbo.steamside.steam.client.library.GameFinder;
 import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class GameFinderTest {
 
@@ -19,7 +20,7 @@ public class GameFinderTest {
 	public void notFound()
 	{
 		doThrow(NotFound.class).when(library).find(any());
-		assertTrue(finder.isGame(null));
+		assertTrue(finder.isGame(new AppId("foo")));
 	}
 
 	@Before
