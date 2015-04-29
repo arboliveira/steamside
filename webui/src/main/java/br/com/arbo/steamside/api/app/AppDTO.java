@@ -19,7 +19,8 @@ public class AppDTO {
 		this.image = app.image();
 		this.store = app.store();
 		this.tags = tags;
-		this.unavailable = app.unavailable() ? "Y" : null;
+		if (app.unavailable())
+			this.unavailable = "Y";
 	}
 
 	@JsonProperty
@@ -35,5 +36,5 @@ public class AppDTO {
 	@JsonProperty
 	final List<AppTagDTO> tags;
 	@JsonProperty
-	final String unavailable;
+	String unavailable;
 }

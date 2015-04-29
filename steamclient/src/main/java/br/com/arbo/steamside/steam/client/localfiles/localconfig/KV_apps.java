@@ -1,9 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-
-import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.steam.client.types.AppId;
 
@@ -13,7 +12,6 @@ public interface KV_apps {
 
 	void forEach(Consumer<KV_app> each);
 
-	@Nullable
-	KV_app get(AppId appid);
+	Optional<KV_app> get(AppId appid);
 
 }

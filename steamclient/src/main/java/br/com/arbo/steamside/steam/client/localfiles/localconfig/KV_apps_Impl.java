@@ -2,13 +2,13 @@ package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-class KV_apps_Impl implements KV_apps
-{
+class KV_apps_Impl implements KV_apps {
 
 	public void add(KV_app_Impl app)
 	{
@@ -31,9 +31,9 @@ class KV_apps_Impl implements KV_apps
 	}
 
 	@Override
-	public KV_app get(AppId appid)
+	public Optional<KV_app> get(AppId appid)
 	{
-		return map.get(appid.appid);
+		return Optional.ofNullable(map.get(appid.appid));
 	}
 
 	private void put(AppId appid, KV_app_Impl app)

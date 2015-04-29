@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache.parse;
 
+import java.util.Optional;
+
 import org.apache.commons.lang3.SystemUtils;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
@@ -20,7 +22,8 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 		throw new IllegalArgumentException();
 	}
 
-	public ContentVisitor(final ParseVisitor parsevisitor) {
+	public ContentVisitor(final ParseVisitor parsevisitor)
+	{
 		this.parsevisitor = parsevisitor;
 	}
 
@@ -38,9 +41,10 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 		final boolean noSectionsWereVisited = path.isEmpty();
 		if (noSectionsWereVisited) return;
 
-		if (builder.executable_missing() && this.lastseen_executable != null
-				&& SystemUtils.IS_OS_WINDOWS)
-			builder.executable(this.lastseen_executable);
+		if (SystemUtils.IS_OS_WINDOWS)
+			if (builder.executable_missing()
+					&& this.lastseen_executable.isPresent())
+				builder.executable(this.lastseen_executable);
 
 		parsevisitor.each(appid, builder.build());
 	}
@@ -54,7 +58,7 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 		if (is_key_type(key))
 			builder.type(new AppType(v));
 		if (is_key_executable(key))
-			this.lastseen_executable = v;
+			this.lastseen_executable = Optional.of(v);
 		if (is_key_oslist(key))
 			if (osMatches(v))
 				builder.executable(this.lastseen_executable);
@@ -79,9 +83,11 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "executable";
 		if (key.named(wanted)
-				.underDeep("4/" + appid + "/launch").matches()) return true;
+				.underDeep("4/" + appid + "/launch").matches())
+			return true;
 		if (key.named(wanted)
-				.underDeep("4/config/launch").matches()) return true;
+				.underDeep("4/config/launch").matches())
+			return true;
 		return false;
 	}
 
@@ -89,9 +95,11 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "name";
 		if (key.named(wanted)
-				.under("2/" + appid).matches()) return true;
+				.under("2/" + appid).matches())
+			return true;
 		if (key.named(wanted)
-				.under("2/common").matches()) return true;
+				.under("2/common").matches())
+			return true;
 		return false;
 	}
 
@@ -99,9 +107,11 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "oslist";
 		if (key.named(wanted)
-				.underDeep("4/" + appid + "/launch").matches()) return true;
+				.underDeep("4/" + appid + "/launch").matches())
+			return true;
 		if (key.named(wanted)
-				.underDeep("4/config/launch").matches()) return true;
+				.underDeep("4/config/launch").matches())
+			return true;
 		return false;
 	}
 
@@ -109,9 +119,11 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "type";
 		if (key.named(wanted)
-				.under("2/" + appid).matches()) return true;
+				.under("2/" + appid).matches())
+			return true;
 		if (key.named(wanted)
-				.under("2/common").matches()) return true;
+				.under("2/common").matches())
+			return true;
 		return false;
 	}
 
@@ -119,7 +131,7 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 
 	private Builder builder;
 
-	private String lastseen_executable;
+	private Optional<String> lastseen_executable = Optional.empty();
 
 	private final ParseVisitor parsevisitor;
 

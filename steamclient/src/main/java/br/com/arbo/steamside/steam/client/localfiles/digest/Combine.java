@@ -3,9 +3,6 @@ package br.com.arbo.steamside.steam.client.localfiles.digest;
 import java.util.HashSet;
 import java.util.stream.Stream;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
 import br.com.arbo.steamside.steam.client.apps.AppsHome;
 import br.com.arbo.steamside.steam.client.apps.InMemoryAppsHome;
@@ -14,12 +11,9 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.Data_localconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_app;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_appticket;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Entry_app;
 import br.com.arbo.steamside.steam.client.types.AppId;
-import br.com.arbo.steamside.steam.client.types.LastPlayed;
 
 class Combine {
 
@@ -56,7 +50,6 @@ class Combine {
 
 	void eachAppticket(KV_appticket each)
 	{
-		@NonNull
 		AppId appid = each.appid();
 		eachAppId(appid);
 	}
@@ -69,8 +62,8 @@ class Combine {
 		Stream<AppId> appidsFrom_sharedconfig = d_sharedconfig.apps()
 				.streamAppId();
 
-		final Stream<AppId> appidsToGoIntoLibrary =
-				Stream.concat(appidsFrom_localconfig, appidsFrom_sharedconfig);
+		final Stream<AppId> appidsToGoIntoLibrary = Stream
+				.concat(appidsFrom_localconfig, appidsFrom_sharedconfig);
 
 		HashSet<AppId> appids = new HashSet<>();
 		appidsToGoIntoLibrary.forEach(appid -> appids.add(appid));
@@ -82,9 +75,8 @@ class Combine {
 
 	private AppImpl buildFromAppId(AppId appid)
 	{
-		final AppImpl.Builder b =
-				new AppImpl.Builder()
-						.appid(appid.appid());
+		final AppImpl.Builder b = new AppImpl.Builder()
+				.appid(appid.appid());
 
 		from_localconfig_apps(appid, b);
 		from_appinfo(appid, b);
@@ -113,25 +105,15 @@ class Combine {
 
 	private void from_localconfig_apps(AppId appid, final AppImpl.Builder b)
 	{
-		@Nullable
-		KV_app applocal = d_localconfig.apps().get(appid);
-
-		if (applocal == null) return;
-
-		@Nullable
-		final LastPlayed lastPlayed = applocal.lastPlayed();
-		if (lastPlayed != null)
-			b.lastPlayed(lastPlayed.value);
+		d_localconfig.apps().get(appid).ifPresent(
+				app -> app.lastPlayed().ifPresent(
+						lastPlayed -> b.lastPlayed(lastPlayed.value)));
 	}
 
 	private void from_sharedconfig(AppId appid, final AppImpl.Builder b)
 	{
-		@Nullable
-		Entry_app each = d_sharedconfig.get(appid);
-
-		if (each == null) return;
-
-		each.accept(tag -> b.addCategory(tag));
+		d_sharedconfig.get(appid).ifPresent(
+				each -> each.accept(tag -> b.addCategory(tag)));
 	}
 
 	private final Data_appinfo_vdf d_appinfo;

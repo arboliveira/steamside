@@ -1,18 +1,22 @@
 package br.com.arbo.opersys.userhome;
 
 import java.io.File;
+import java.util.Optional;
 
 public class FromWindowsUtils implements ProgramFiles {
 
-	@Override
-	public File getProgramFiles() {
-		return new File(envProgramFiles());
+	private static String envProgramFiles()
+	{
+		return Optional.of(
+				System.getenv("ProgramFiles(x86)"))
+				.orElse(
+						System.getenv("ProgramFiles"));
 	}
 
-	private static String envProgramFiles() {
-		final String x86 = System.getenv("ProgramFiles(x86)");
-		if (x86 != null) return x86;
-		return System.getenv("ProgramFiles");
+	@Override
+	public File getProgramFiles()
+	{
+		return new File(envProgramFiles());
 	}
 
 }

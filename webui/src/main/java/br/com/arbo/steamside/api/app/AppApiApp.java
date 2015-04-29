@@ -1,7 +1,5 @@
 package br.com.arbo.steamside.api.app;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.apps.NeverPlayed;
@@ -22,7 +20,6 @@ public class AppApiApp implements AppApi {
 	}
 
 	@Override
-	@NonNull
 	public String lastPlayedOrCry() throws NeverPlayed
 	{
 		return app.lastPlayedOrCry();

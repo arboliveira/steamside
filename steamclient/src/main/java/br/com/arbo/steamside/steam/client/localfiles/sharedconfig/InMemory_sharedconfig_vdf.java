@@ -2,10 +2,9 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-
-import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.steam.client.types.AppId;
 
@@ -23,7 +22,6 @@ public class InMemory_sharedconfig_vdf
 		return this;
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public void forEachAppId(Consumer<AppId> visitor)
 	{
@@ -36,11 +34,10 @@ public class InMemory_sharedconfig_vdf
 		map.values().forEach(visitor);
 	}
 
-	@Nullable
 	@Override
-	public Entry_app get(AppId appid)
+	public Optional<Entry_app> get(AppId appid)
 	{
-		return map.get(appid.appid);
+		return Optional.ofNullable(map.get(appid.appid));
 	}
 
 	@Override

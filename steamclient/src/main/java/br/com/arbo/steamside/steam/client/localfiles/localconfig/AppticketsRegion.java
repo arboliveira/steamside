@@ -1,12 +1,15 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
+import java.util.Objects;
+
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.steam.client.vdf.Region;
 
 class AppticketsRegion {
 
-	AppticketsRegion(final Region content, KV_apptickets_Impl kv_apptickets) {
+	AppticketsRegion(final Region content, KV_apptickets_Impl kv_apptickets)
+	{
 		this.content = content;
 		this.kv_apptickets = kv_apptickets;
 	}
@@ -20,9 +23,9 @@ class AppticketsRegion {
 
 		@Override
 		public void onKeyValue(final String k, final String v)
-			throws Finished
+				throws Finished
 		{
-			if (k == null) throw new NullPointerException();
+			Objects.requireNonNull(k);
 			final KV_appticket_Impl app = new KV_appticket_Impl();
 			app.appid = new AppId(k);
 			kv_apptickets.add(app);
@@ -30,7 +33,7 @@ class AppticketsRegion {
 
 		@Override
 		public void onSubRegion(final String k, final Region r)
-			throws Finished
+				throws Finished
 		{
 			// apptickets has no sub-regions
 		}

@@ -6,22 +6,22 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.eclipse.jdt.annotation.NonNull;
 
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.AppName;
 
 public class SearchStore {
 
-	public static void search(@NonNull final String query,
+	public static void search(String term,
 			final SearchResultVisitor visitor)
 	{
-		final String content = storeSearchResults(query);
+		final String content = storeSearchResults(term);
 		accept(content, visitor);
 	}
 
@@ -43,34 +43,48 @@ public class SearchStore {
 		final String appid = matcher.group(1);
 		final String name = StringEscapeUtils.unescapeHtml4(matcher
 				.group(2));
-		if (appid == null) throw new NullPointerException();
-		final App app = new App(new AppId(appid), new AppName(name));
+		final App app = new App(
+				new AppId(Objects.requireNonNull(appid)),
+				new AppName(name));
 		return app;
 	}
 
 	private static Pattern pattern()
 	{
-		final String aopen =
-				Pattern.quote("<a href=\"http://store.steampowered.com/app/");
+		final String aopen = Pattern
+				.quote("<a href=\"http://store.steampowered.com/app/");
 		final String appidgroup = "\\d+";
 		final String anything = ".*?";
 		final String nameopen = Pattern.quote("<span class=\"title\">");
 		final String namegroup = ".+?";
 		final String nameclose = Pattern.quote("</span>");
-		final String regex =
-				aopen + "(" + appidgroup + ")"
-						+ anything +
-						nameopen + "(" + namegroup + ")" + nameclose;
+		final String regex = aopen + "(" + appidgroup + ")"
+				+ anything + nameopen + "(" + namegroup + ")" + nameclose;
 		final Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
 		return pattern;
 	}
 
-	private static URL storeSearch(final @NonNull String query)
+	private static URL storeSearch(String term)
 	{
+		class URIParams {
+
+			String scheme, authority, path, query, fragment;
+		}
+
+		URIParams p = new URIParams() {
+
+			{
+				scheme = "http";
+				authority = "store.steampowered.com";
+				path = "/search/results";
+				query = "term=" + Objects.requireNonNull(term);
+			}
+		};
+
 		try
 		{
-			return new URI("http", "store.steampowered.com", "/search/results",
-					"term=" + query, null).toURL();
+			return new URI(p.scheme, p.authority, p.path,
+					p.query, p.fragment).toURL();
 		}
 		catch (final MalformedURLException e)
 		{
@@ -82,9 +96,9 @@ public class SearchStore {
 		}
 	}
 
-	private static String storeSearchResults(final @NonNull String query)
+	private static String storeSearchResults(String term)
 	{
-		final URL store = storeSearch(query);
+		final URL store = storeSearch(term);
 		try
 		{
 			final InputStream stream = store.openStream();

@@ -3,24 +3,31 @@ package br.com.arbo.steamside.steam.client.vdf;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
+import java.util.Optional;
 
 import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor.Finished;
 
 public class RegionImpl implements Region {
 
-	RegionImpl(final Reader reader) {
+	RegionImpl(final Reader reader)
+	{
 		this.tokenizer = StreamTokenizerBuilder.build(reader);
 	}
 
 	@Override
 	public void accept(final KeyValueVisitor visitor)
 	{
-		try {
+		try
+		{
 			while (true)
 				advance(visitor);
-		} catch (final Finished ok) {
+		}
+		catch (final Finished ok)
+		{
 			//
-		} catch (final IOException e) {
+		}
+		catch (final IOException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
@@ -41,21 +48,21 @@ public class RegionImpl implements Region {
 			public void onSubRegion(final String k, final Region r)
 					throws Finished
 			{
-				if (k.equalsIgnoreCase(name)) {
-					found = r;
+				if (k.equalsIgnoreCase(name))
+				{
+					found = Optional.of(r);
 					throw new Finished();
 				}
 				skipPastEndOfRegion();
 			}
 
-			Region found;
+			Optional<Region> found = Optional.empty();
 
 		}
 
 		final Find find = new Find();
 		accept(find);
-		if (find.found != null) return find.found;
-		throw NotFound.name(name);
+		return find.found.orElseThrow(() -> NotFound.name(name));
 	}
 
 	void skipPastEndOfRegion()
@@ -66,7 +73,7 @@ public class RegionImpl implements Region {
 			public void onKeyValue(final String k, final String v)
 					throws Finished
 			{
-				// 
+				//
 			}
 
 			@Override
@@ -84,20 +91,21 @@ public class RegionImpl implements Region {
 			throws IOException, Finished
 	{
 		nextToken();
-		final String key = tokenizer.sval;
+		final Optional<String> key = sval();
 
-		if (key == null) finish();
+		if (!key.isPresent()) finish();
 
 		nextToken();
-		final String value = tokenizer.sval;
+		final Optional<String> value = sval();
 
-		if (value != null) {
-			visitor.onKeyValue(key, value);
+		if (value.isPresent())
+		{
+			visitor.onKeyValue(key.get(), value.get());
 			return;
 		}
 
 		if (tokenizer.ttype != '{') throw new IllegalStateException();
-		visitor.onSubRegion(key, RegionImpl.this);
+		visitor.onSubRegion(key.get(), RegionImpl.this);
 	}
 
 	private void finish() throws Finished
@@ -111,6 +119,11 @@ public class RegionImpl implements Region {
 	private void nextToken() throws IOException
 	{
 		tokenizer.nextToken();
+	}
+
+	private Optional<String> sval()
+	{
+		return Optional.ofNullable(tokenizer.sval);
 	}
 
 	final StreamTokenizer tokenizer;

@@ -5,37 +5,35 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import br.com.arbo.opersys.processes.ProcessUtils;
 import br.com.arbo.opersys.processes.seek.Criteria;
 import br.com.arbo.opersys.processes.seek.NotFound;
 
-import org.apache.commons.lang3.StringUtils;
-
 class FindWith_tasklist {
 
-	private final Criteria criteria;
-
-	public FindWith_tasklist(final Criteria criteria) {
+	public FindWith_tasklist(final Criteria criteria)
+	{
 		this.criteria = criteria;
 	}
 
-	int find() throws NotFound {
-		try {
+	int find() throws NotFound
+	{
+		try
+		{
 			return findOrCry();
-		} catch (final IOException e) {
+		}
+		catch (final IOException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
 
-	private int findOrCry()
-			throws IOException, NotFound {
-		final String tasklist = run_tasklist();
-		final int pid = extract_pid(tasklist);
-		return pid;
-	}
-
-	private int extract_pid(final String tasklist) throws NotFound {
-		final int exeb = StringUtils.indexOfIgnoreCase(tasklist, criteria.executable);
+	private int extract_pid(final String tasklist) throws NotFound
+	{
+		final int exeb = StringUtils.indexOfIgnoreCase(tasklist,
+				criteria.executable);
 		if (exeb == -1) throw new NotFound();
 		final int exee = exeb + criteria.executable.length() + 1;
 		int i = exee;
@@ -50,20 +48,29 @@ class FindWith_tasklist {
 		return pid;
 	}
 
-	private String run_tasklist() throws IOException {
-		final List<String> command =
-				new ArrayList<String>(Arrays.asList(
-						"tasklist.exe",
-						"/FI",
-						"IMAGENAME eq " + criteria.executable));
+	private int findOrCry()
+			throws IOException, NotFound
+	{
+		final String tasklist = run_tasklist();
+		final int pid = extract_pid(tasklist);
+		return pid;
+	}
 
-		if (criteria.usernameNot != null)
-			command.addAll(Arrays.asList(
-					"/FI",
-					"USERNAME ne " + criteria.usernameNot.username
-					));
+	private String run_tasklist() throws IOException
+	{
+		final List<String> command = new ArrayList<String>(Arrays.asList(
+				"tasklist.exe",
+				"/FI",
+				"IMAGENAME eq " + criteria.executable));
+
+		criteria.usernameNot
+				.ifPresent(usernameNot -> command.addAll(Arrays.asList(
+						"/FI",
+						"USERNAME ne " + usernameNot.username)));
 
 		return ProcessUtils.processout(new ProcessBuilder(command));
 	}
+
+	private final Criteria criteria;
 
 }

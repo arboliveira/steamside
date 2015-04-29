@@ -6,7 +6,6 @@ public class AppCriteria {
 
 	public static boolean isAll(AppCriteria c)
 	{
-		if (c == null) return true;
 		if (c.gamesOnly) return false;
 		if (c.currentPlatformOnly) return false;
 		return true;

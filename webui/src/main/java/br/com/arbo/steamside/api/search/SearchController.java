@@ -35,8 +35,6 @@ public class SearchController {
 	public List<AppDTO> search(
 			@RequestParam final String query)
 	{
-		if (query == null) throw new NullPointerException();
-
 		List<AppApi> apps = Search.search(query);
 		List<AppDTO> dtos = new ArrayList<>(apps.size());
 		for (AppApi appApi : apps)
@@ -49,9 +47,8 @@ public class SearchController {
 	{
 		TagsQueries queries = tags;
 
-		List<AppTagDTO> tagsDTO =
-				AppDTOFactory.tags_jsonable(
-						appApi.appid(), queries);
+		List<AppTagDTO> tagsDTO = AppDTOFactory.tags_jsonable(
+				appApi.appid(), queries);
 
 		return new AppDTO(appApi, tagsDTO);
 	}

@@ -14,9 +14,9 @@ public class Builder {
 		return entry;
 	}
 
-	public void executable(final String executable)
+	public void executable(Optional<String> executable)
 	{
-		this.executable = Optional.of(executable);
+		this.executable = executable;
 	}
 
 	public boolean executable_missing()

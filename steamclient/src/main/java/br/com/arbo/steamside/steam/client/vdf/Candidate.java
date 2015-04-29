@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.steam.client.vdf;
 
+import java.util.Optional;
+
 public class Candidate {
 
 	public Candidate(final String incoming, String path)
@@ -12,30 +14,30 @@ public class Candidate {
 	{
 		if (!wanted.equals(incoming))
 			return false;
-		if (under != null && !path.equals(under))
+		if (under.isPresent() && !path.equals(under.get()))
 			return false;
-		if (underDeep != null && !path.startsWith(underDeep))
+		if (underDeep.isPresent() && !path.startsWith(underDeep.get()))
 			return false;
 		return true;
 	}
 
-	public Candidate named(final String wanted)
+	public Candidate named(String wanted)
 	{
 		this.wanted = wanted;
-		this.under = null;
-		this.underDeep = null;
+		this.under = Optional.empty();
+		this.underDeep = Optional.empty();
 		return this;
 	}
 
-	public Candidate under(final String path)
+	public Candidate under(String path)
 	{
-		this.under = path;
+		this.under = Optional.of(path);
 		return this;
 	}
 
-	public Candidate underDeep(final String pathPrefix)
+	public Candidate underDeep(String pathPrefix)
 	{
-		this.underDeep = pathPrefix;
+		this.underDeep = Optional.of(pathPrefix);
 		return this;
 	}
 
@@ -43,9 +45,9 @@ public class Candidate {
 
 	private String wanted;
 
-	private String under;
+	private Optional<String> under = Optional.empty();
 
-	private String underDeep;
+	private Optional<String> underDeep = Optional.empty();
 
 	private final String path;
 }

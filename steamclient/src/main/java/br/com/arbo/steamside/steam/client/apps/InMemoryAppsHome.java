@@ -3,12 +3,13 @@ package br.com.arbo.steamside.steam.client.apps;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import com.google.common.collect.ArrayListMultimap;
 
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
-
-import com.google.common.collect.ArrayListMultimap;
 
 public class InMemoryAppsHome implements AppsHome {
 
@@ -34,18 +35,23 @@ public class InMemoryAppsHome implements AppsHome {
 	@Override
 	public App find(final AppId appid) throws NotFound
 	{
-		final App app = apps.get(appid.appid);
-		if (app != null) return app;
-		throw NotFound.appid(appid.appid);
+		return Optional
+				.ofNullable(
+						apps.get(appid.appid))
+				.orElseThrow(
+						() -> NotFound.appid(appid.appid));
 	}
 
 	@Override
 	public Stream<App> findIn(SteamCategory category)
 	{
-		final List<App> c = categories.get(category.category);
-		if (c == null)
-			throw new SteamCategory.NotFound();
-		return c.stream();
+		return Optional
+				.ofNullable(
+						categories.get(category.category))
+				.map(
+						List::stream)
+				.orElseThrow(
+						() -> new SteamCategory.NotFound());
 	}
 
 	@Override
@@ -56,8 +62,8 @@ public class InMemoryAppsHome implements AppsHome {
 		return criteria.filter(stream);
 	}
 
-	final ArrayListMultimap<String, App> categories =
-			ArrayListMultimap.<String, App> create();
+	final ArrayListMultimap<String, App> categories = ArrayListMultimap
+			.<String, App> create();
 
 	private final Map<String, App> apps = new HashMap<String, App>();
 

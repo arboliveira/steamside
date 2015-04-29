@@ -1,11 +1,12 @@
 package br.com.arbo.opersys.processes.seek.windows;
 
+import java.util.Optional;
+
 import org.jvnet.winp.WinProcess;
 import org.jvnet.winp.WinpException;
 
 import br.com.arbo.opersys.processes.seek.Criteria;
 import br.com.arbo.opersys.processes.seek.NotFound;
-import br.com.arbo.opersys.processes.seek.UsernameNot;
 
 class FindWith_winp {
 
@@ -23,9 +24,7 @@ class FindWith_winp {
 
 	private void filterUsernameNot(final WinProcessX exe) throws NotFound
 	{
-		final UsernameNot unwanted = criteria.usernameNot;
-		if (unwanted == null) return;
-		if (exe.username().equals(unwanted.username))
+		if (criteria.usernameNot.equals(Optional.of(exe.username())))
 			throw new NotFound();
 	}
 

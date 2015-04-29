@@ -1,12 +1,15 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
+import java.util.Objects;
+
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.steam.client.vdf.Region;
 
 class AppsRegion {
 
-	AppsRegion(final Region content, KV_apps_Impl kv_apps) {
+	AppsRegion(final Region content, KV_apps_Impl kv_apps)
+	{
 		this.content = content;
 		this.kv_apps = kv_apps;
 	}
@@ -20,16 +23,16 @@ class AppsRegion {
 
 		@Override
 		public void onKeyValue(final String k, final String v)
-			throws Finished
+				throws Finished
 		{
 			// Nothing important at the other key-value pairs
 		}
 
 		@Override
 		public void onSubRegion(final String k, final Region r)
-			throws Finished
+				throws Finished
 		{
-			if (k == null) throw new NullPointerException();
+			Objects.requireNonNull(k);
 			final AppRegion appRegion = new AppRegion(r);
 			final KV_app_Impl app = appRegion.parse();
 			app.appid = new AppId(k);

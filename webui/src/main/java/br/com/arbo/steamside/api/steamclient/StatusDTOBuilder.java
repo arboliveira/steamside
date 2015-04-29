@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.api.steamclient;
 
+import java.util.Optional;
+
 import br.com.arbo.opersys.processes.seek.Criteria;
 import br.com.arbo.opersys.processes.seek.UsernameNot;
 import br.com.arbo.opersys.processes.seek.windows.WinProcessX;
@@ -36,8 +38,8 @@ public class StatusDTOBuilder {
 
 	private void findThere()
 	{
-		final Criteria criteria = new Criteria();
-		criteria.usernameNot = new UsernameNot(user.username());
+		Criteria criteria = new Criteria();
+		criteria.usernameNot = Optional.of(new UsernameNot(user.username()));
 		seek(criteria);
 	}
 
