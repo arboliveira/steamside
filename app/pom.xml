@@ -13,6 +13,12 @@
 			<groupId>br.com.arbo.steamside</groupId>
 			<artifactId>steamside-webui</artifactId>
 			<version>1.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>br.com.arbo.steamside</groupId>
@@ -20,6 +26,13 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter</artifactId>
+	        <!-- 
+	        <artifactId>spring-boot-starter-web</artifactId>
+	         -->
+	    </dependency>
+   		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>

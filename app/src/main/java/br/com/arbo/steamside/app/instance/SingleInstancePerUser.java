@@ -2,23 +2,23 @@ package br.com.arbo.steamside.app.instance;
 
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-
-import org.springframework.context.Lifecycle;
 
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
 import br.com.arbo.steamside.app.jetty.LocalWebserver;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 
-public class SingleInstancePerUser implements Lifecycle {
+public class SingleInstancePerUser {
 
 	@Inject
 	public SingleInstancePerUser(
-			final DetectSteamside detect,
-			final LimitPossiblePorts rangesize,
-			final LocalWebserver webserver,
-			final WebBrowser browser)
+		final DetectSteamside detect,
+		final LimitPossiblePorts rangesize,
+		final LocalWebserver webserver,
+		final WebBrowser browser)
 	{
 		this.webserver = webserver;
 		this.browser = browser;
@@ -26,7 +26,7 @@ public class SingleInstancePerUser implements Lifecycle {
 		this.rangesize = rangesize;
 	}
 
-	@Override
+	@PostConstruct
 	public void start() throws AllPortsTaken
 	{
 		try
@@ -37,20 +37,12 @@ public class SingleInstancePerUser implements Lifecycle {
 		{
 			// all right!
 		}
-		this.running = true;
 	}
 
-	@Override
+	@PreDestroy
 	public void stop()
 	{
 		this.webserver.stop();
-		this.running = false;
-	}
-
-	@Override
-	public boolean isRunning()
-	{
-		return running;
 	}
 
 	private void attemptRepeatedly() throws SteamsideUpAndRunning, AllPortsTaken
@@ -65,15 +57,6 @@ public class SingleInstancePerUser implements Lifecycle {
 		{
 			sweepPortCandidates();
 			notRunningSteamsideTryOnFirstFreeFound();
-		}
-
-		private void sweepPortCandidates() throws SteamsideUpAndRunning
-		{
-			int from = RANGE_BEGIN;
-			int to = from + rangesize.size - 1;
-
-			for (int p = from; p <= to; p++)
-				consider(p);
 		}
 
 		private void consider(final int p) throws SteamsideUpAndRunning
@@ -93,8 +76,14 @@ public class SingleInstancePerUser implements Lifecycle {
 			}
 		}
 
+		private void freefound(final int p)
+		{
+			if (!this.firstfreefound.isPresent())
+				this.firstfreefound = Optional.of(p);
+		}
+
 		private void notRunningSteamsideTryOnFirstFreeFound()
-				throws SteamsideUpAndRunning, AllPortsTaken
+			throws SteamsideUpAndRunning, AllPortsTaken
 		{
 			final int port = firstfreefound.orElseThrow(AllPortsTaken::new);
 
@@ -113,22 +102,23 @@ public class SingleInstancePerUser implements Lifecycle {
 			throw new SteamsideUpAndRunning();
 		}
 
-		private void freefound(final int p)
+		private void sweepPortCandidates() throws SteamsideUpAndRunning
 		{
-			if (!this.firstfreefound.isPresent())
-				this.firstfreefound = Optional.of(p);
+			int from = RANGE_BEGIN;
+			int to = from + rangesize.size - 1;
+
+			for (int p = from; p <= to; p++)
+				consider(p);
 		}
 
 		private Optional<Integer> firstfreefound = Optional.empty();
 	}
 
-	private boolean running;
-
+	private static final int RANGE_BEGIN = 42424;
 	final DetectSteamside detect;
 	final LimitPossiblePorts rangesize;
 	final WebBrowser browser;
-	final LocalWebserver webserver;
 
-	private static final int RANGE_BEGIN = 42424;
+	final LocalWebserver webserver;
 
 }
