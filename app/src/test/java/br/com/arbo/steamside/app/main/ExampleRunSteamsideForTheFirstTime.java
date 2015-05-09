@@ -3,15 +3,17 @@ package br.com.arbo.steamside.app.main;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import br.com.arbo.steamside.app.injection.SpringApplicationFactory;
 import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
 
 public class ExampleRunSteamsideForTheFirstTime {
 
 	public static void main(final String[] args)
 	{
-		SpringApplicationBuilderXFactory.newInstance().replaceWithConfiguration(
-			WebApplicationContextTweak.class, Singletons.class)
-			.build().run(args);
+		SpringApplicationFactory.buildWith(
+			SourcesFactory.newInstance().replaceWithConfiguration(
+				WebApplicationContextTweak.class, Singletons.class))
+			.run(args);
 	}
 
 	@Configuration

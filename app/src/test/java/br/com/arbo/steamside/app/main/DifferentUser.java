@@ -5,14 +5,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.arbo.opersys.username.User;
-import br.com.arbo.steamside.app.injection.SpringApplicationBuilderX;
+import br.com.arbo.org.springframework.boot.builder.Sources;
 
 @Configuration
 public class DifferentUser {
 
-	public static void apply(final SpringApplicationBuilderX c)
+	public static Sources modify(Sources s)
 	{
-		c.replaceWithConfiguration(User.class, DifferentUser.class);
+		return s.replaceWithConfiguration(User.class, DifferentUser.class);
 	}
 
 	@Bean

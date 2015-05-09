@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Configuration;
 
 import br.com.arbo.opersys.username.FromJava;
 import br.com.arbo.opersys.username.User;
+import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.app.browser.LetJavaOpen;
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.exit.ApplicationExit;
-import br.com.arbo.steamside.app.injection.SpringApplicationBuilderX;
 import br.com.arbo.steamside.app.instance.DetectSteamside;
 import br.com.arbo.steamside.app.instance.FromURL;
 import br.com.arbo.steamside.app.instance.LimitPossiblePorts;
@@ -17,15 +17,15 @@ import br.com.arbo.steamside.app.jetty.Jetty;
 import br.com.arbo.steamside.app.jetty.LocalWebserver;
 import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
 
-public class SpringApplicationBuilderXFactory {
+public class SourcesFactory {
 
-	public static SpringApplicationBuilderX newInstance()
+	public static Sources newInstance()
 	{
 		//@formatter:off
-		return new SpringApplicationBuilderX()
-			.sources(Singletons.class)
-			.sources(SingleInstancePerUser.class)
-			.sources(ApplicationExit.class)
+		return new Sources()
+			.sources(
+				Singletons.class, SingleInstancePerUser.class,
+				ApplicationExit.class)
 			.sourceImplementor(DetectSteamside.class, FromURL.class)
 			.sourceImplementor(User.class, FromJava.class)
 			.sourceImplementor(LocalWebserver.class, Jetty.class)
