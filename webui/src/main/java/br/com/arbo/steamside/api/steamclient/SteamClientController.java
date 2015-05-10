@@ -2,38 +2,35 @@ package br.com.arbo.steamside.api.steamclient;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.mapping.SteamClient;
 import br.com.arbo.steamside.steam.client.protocol.LiteralCommand;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 
-@Controller
+@RestController
 @RequestMapping(SteamClient.steamclient)
 public class SteamClientController {
 
 	@RequestMapping("{command}")
-	@ResponseBody
-	public void launch(@PathVariable final String command)
+	public void launch(
+		@PathVariable String command)
 	{
 		launchCommand(command);
 	}
 
 	@RequestMapping("{command}/{argument}")
-	@ResponseBody
 	public void launch(
-			@PathVariable final String command,
-			@PathVariable final String argument)
+		@PathVariable String command,
+		@PathVariable String argument)
 	{
 		launchCommand(command + "/" + argument);
 	}
 
 	@RequestMapping(SteamClient.status_json)
-	@ResponseBody
 	public StatusDTO status()
 	{
 		return new StatusDTOBuilder(user).build();

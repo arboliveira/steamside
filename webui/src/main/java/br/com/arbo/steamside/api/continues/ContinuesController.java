@@ -4,18 +4,16 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.arbo.steamside.api.app.AppDTO;
 
-@Controller
+@RestController
 @RequestMapping("continues")
 public class ContinuesController {
 
 	@RequestMapping("continues.json")
-	@ResponseBody
 	public List<AppDTO> continues()
 	{
 		return this.continues.continues();

@@ -2,33 +2,31 @@ package br.com.arbo.steamside.api.session;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.Library;
 
-@Controller
+@RestController
 @RequestMapping(br.com.arbo.steamside.mapping.Session.session)
 public class SessionController {
 
 	@RequestMapping(br.com.arbo.steamside.mapping.Session.session_json)
-	@ResponseBody
 	public SessionDTO session()
 	{
 		final int gamesOwned = library.count(
-				new AppCriteria() {
+			new AppCriteria() {
 
-					{
-						gamesOnly = true;
-					}
-				});
+				{
+					gamesOnly = true;
+				}
+			});
 		return new SessionDTO(
-				username, kidsmode,
-				String.valueOf(gamesOwned));
+			username, kidsmode,
+			String.valueOf(gamesOwned));
 	}
 
 	@Inject

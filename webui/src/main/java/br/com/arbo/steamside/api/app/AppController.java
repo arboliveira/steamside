@@ -2,11 +2,9 @@ package br.com.arbo.steamside.api.app;
 
 import javax.inject.Inject;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.steam.client.apps.NotFound;
@@ -15,7 +13,7 @@ import br.com.arbo.steamside.steam.client.rungame.Timeout;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-@Controller
+@RestController
 @RequestMapping(br.com.arbo.steamside.mapping.App.app)
 public class AppController {
 
@@ -31,24 +29,19 @@ public class AppController {
 		}
 	}
 
-	@SuppressWarnings("static-method")
 	@RequestMapping("{appid}/" + br.com.arbo.steamside.mapping.App.run)
-	@ResponseBody
 	public void run(
-			@NonNull @PathVariable final String appid
-			) throws NotAvailableOnThisPlatform, Timeout, NotFound
+		@PathVariable String appid)
+			throws NotAvailableOnThisPlatform, Timeout, NotFound
 	{
 		rungame.askSteamToRunGameAndWaitUntilItsUp(new AppId(appid));
 		letLoadingAnimationRunForJustALittleLonger();
 	}
 
-	@SuppressWarnings("static-method")
 	@RequestMapping("{appid}/tag/{collection}")
-	@ResponseBody
 	public void tag(
-			@NonNull @PathVariable final String appid,
-			@NonNull @PathVariable final String collection
-			) throws Exception
+		@PathVariable String appid,
+		@PathVariable String collection) throws Exception
 	{
 		tags.tagRemember(new CollectionName(collection), new AppId(appid));
 	}

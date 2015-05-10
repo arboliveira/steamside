@@ -5,8 +5,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import br.com.arbo.steamside.api.app.AppApi;
 import br.com.arbo.steamside.api.app.AppApiApp;
 import br.com.arbo.steamside.api.app.AppDTO;
@@ -19,9 +17,9 @@ public class Continues {
 
 	@Inject
 	public Continues(
-			@NonNull final ContinuesRooster continues,
-			@NonNull AppSettings apiAppSettings,
-			TagsQueries queries)
+		ContinuesRooster continues,
+		AppSettings apiAppSettings,
+		TagsQueries queries)
 	{
 		this.continues = continues;
 		this.apiAppSettings = apiAppSettings;
@@ -30,20 +28,17 @@ public class Continues {
 
 	public List<AppDTO> continues()
 	{
-		final Stream<AppApi> apps =
-				continues.continues()
-						.map(AppApiApp::new);
+		final Stream<AppApi> apps = continues.continues()
+			.map(AppApiApp::new);
 
 		return new AppsDTO(
-				apps,
-				apiAppSettings.limit(), queries).jsonable();
+			apps,
+			apiAppSettings.limit(), queries).jsonable();
 	}
 
-	@NonNull
 	private final AppSettings apiAppSettings;
 
 	private final TagsQueries queries;
 
-	@NonNull
 	private final ContinuesRooster continues;
 }
