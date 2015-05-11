@@ -1,28 +1,28 @@
 package br.com.arbo.steamside.app.main;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-import br.com.arbo.steamside.app.injection.SpringApplicationFactory;
-import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
+import br.com.arbo.org.springframework.boot.builder.Sources;
+import br.com.arbo.steamside.app.launch.SourcesCustomizer;
 
 public class ExampleRunSteamsideForTheFirstTime {
 
 	public static void main(final String[] args)
 	{
 		SpringApplicationFactory.buildWith(
-			SourcesFactory.newInstance().replaceWithConfiguration(
-				WebApplicationContextTweak.class, Singletons.class))
+			SourcesFactory.newInstance().sources(FirstRunCustomize.class))
 			.run(args);
 	}
 
-	@Configuration
-	public static class Singletons {
+	@Component
+	public static class FirstRunCustomize implements SourcesCustomizer {
 
-		@Bean
-		public static WebApplicationContextTweak tweak()
+		@Override
+		public void customize(Sources sources)
 		{
-			return new FirstRun();
+			FirstRun.customize(sources);
 		}
+
 	}
+
 }

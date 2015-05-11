@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.app.injection;
+package br.com.arbo.steamside.app.main;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

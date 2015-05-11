@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.arbo.steamside.collections.TagsData;
-import br.com.arbo.steamside.steam.client.apps.NotFound;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
-import br.com.arbo.steamside.steam.client.rungame.Timeout;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -32,7 +29,6 @@ public class AppController {
 	@RequestMapping("{appid}/" + br.com.arbo.steamside.mapping.App.run)
 	public void run(
 		@PathVariable String appid)
-			throws NotAvailableOnThisPlatform, Timeout, NotFound
 	{
 		rungame.askSteamToRunGameAndWaitUntilItsUp(new AppId(appid));
 		letLoadingAnimationRunForJustALittleLonger();
@@ -41,7 +37,7 @@ public class AppController {
 	@RequestMapping("{appid}/tag/{collection}")
 	public void tag(
 		@PathVariable String appid,
-		@PathVariable String collection) throws Exception
+		@PathVariable String collection)
 	{
 		tags.tagRemember(new CollectionName(collection), new AppId(appid));
 	}

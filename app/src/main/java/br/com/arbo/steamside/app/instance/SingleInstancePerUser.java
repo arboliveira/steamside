@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
-import br.com.arbo.steamside.app.jetty.LocalWebserver;
+import br.com.arbo.steamside.app.launch.LocalWebserver;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 
 public class SingleInstancePerUser {

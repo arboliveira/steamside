@@ -18,12 +18,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 public class Cloud {
 
 	private static HttpResponse client_execute(
-			HttpClient client, HttpUriRequest post)
+		HttpClient client, HttpUriRequest post)
 	{
 		try
 		{
@@ -41,7 +41,7 @@ public class Cloud {
 
 	private static HttpResponse execute(HttpUriRequest post)
 	{
-		HttpClient client = new DefaultHttpClient();
+		HttpClient client = HttpClientBuilder.create().build();
 		HttpResponse response = client_execute(client, post);
 		return response;
 	}
@@ -62,8 +62,8 @@ public class Cloud {
 	{
 		post.setHeader("User-Agent", USER_AGENT);
 		post.setHeader(
-				"Content-Type",
-				"application/x-www-form-urlencoded;charset=UTF-8");
+			"Content-Type",
+			"application/x-www-form-urlencoded;charset=UTF-8");
 	}
 
 	@Inject
@@ -83,9 +83,8 @@ public class Cloud {
 		HttpResponse response = execute(get);
 
 		log.info(
-				"Response Code : "
-						+ response.getStatusLine().getStatusCode()
-				);
+			"Response Code : "
+				+ response.getStatusLine().getStatusCode());
 
 		final HttpEntity entity = response.getEntity();
 		final InputStream in = getContent(entity);
@@ -106,9 +105,8 @@ public class Cloud {
 		HttpResponse response = execute(post);
 
 		log.info(
-				"Response Code : "
-						+ response.getStatusLine().getStatusCode()
-				);
+			"Response Code : "
+				+ response.getStatusLine().getStatusCode());
 	}
 
 	private void addURLParameters(String in, HttpPost post)
@@ -160,9 +158,9 @@ public class Cloud {
 		}
 	}
 
+	private static final String USER_AGENT = "Mozilla/5.0";
+
 	private final Host host;
 
 	private final Log log = LogFactory.getLog(this.getClass());
-
-	private static final String USER_AGENT = "Mozilla/5.0";
 }

@@ -10,7 +10,7 @@ import br.com.arbo.org.springframework.boot.builder.Sources;
 @Configuration
 public class DifferentUser {
 
-	public static Sources modify(Sources s)
+	public static Sources customize(Sources s)
 	{
 		return s.replaceWithConfiguration(User.class, DifferentUser.class);
 	}

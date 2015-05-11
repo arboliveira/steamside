@@ -14,6 +14,6 @@ public class AppTagDTO {
 	}
 
 	@JsonProperty
-	final String name;
+	public final String name;
 
 }

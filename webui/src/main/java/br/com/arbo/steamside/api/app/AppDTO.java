@@ -24,17 +24,17 @@ public class AppDTO {
 	}
 
 	@JsonProperty
-	final String appid;
+	public final String appid;
 	@JsonProperty
-	final String name;
+	public final String name;
 	@JsonProperty
-	final String link;
+	public final String link;
 	@JsonProperty
-	final String image;
+	public final String image;
 	@JsonProperty
-	final String store;
+	public final String store;
 	@JsonProperty
-	final List<AppTagDTO> tags;
+	public final List<AppTagDTO> tags;
 	@JsonProperty
-	String unavailable;
+	public String unavailable;
 }

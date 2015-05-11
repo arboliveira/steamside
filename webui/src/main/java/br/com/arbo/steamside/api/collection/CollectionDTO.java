@@ -4,7 +4,6 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
@@ -28,13 +27,12 @@ public class CollectionDTO {
 	}
 
 	@JsonProperty
-	final String name;
+	public final String name;
 
 	@JsonProperty
-	@Nullable
-	String system;
+	public String system;
 
 	@JsonProperty
-	final String count;
+	public final String count;
 
 }

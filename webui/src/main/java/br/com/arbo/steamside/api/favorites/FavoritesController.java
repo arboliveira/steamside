@@ -13,7 +13,6 @@ import br.com.arbo.steamside.api.app.AppSettings;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.TagsData;
-import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.library.Library;
@@ -33,7 +32,7 @@ public class FavoritesController {
 
 	@RequestMapping(value = "set/{name}")
 	public void set(
-		@PathVariable String name) throws NotFound
+		@PathVariable String name)
 	{
 		CollectionsData c = tags.collections();
 		CollectionI in = c.find(new CollectionName(name));

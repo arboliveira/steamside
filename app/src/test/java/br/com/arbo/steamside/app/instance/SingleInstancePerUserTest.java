@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
-import br.com.arbo.steamside.app.jetty.LocalWebserver;
+import br.com.arbo.steamside.app.launch.LocalWebserver;
 
 public class SingleInstancePerUserTest {
 

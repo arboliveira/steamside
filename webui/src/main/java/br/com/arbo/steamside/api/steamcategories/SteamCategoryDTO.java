@@ -12,23 +12,25 @@ import br.com.arbo.steamside.steam.client.types.SteamCategory;
 @JsonAutoDetect
 public class SteamCategoryDTO {
 
-	public static List<SteamCategoryDTO> valueOf(Stream<SteamCategory> categories)
+	public static List<SteamCategoryDTO> valueOf(
+		Stream<SteamCategory> categories)
 	{
 		final List<SteamCategoryDTO> dto;
 		dto = categories
-				.map(SteamCategoryDTO::new)
-				.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+			.map(SteamCategoryDTO::new)
+			.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 		return dto;
 	}
 
 	public SteamCategoryDTO(
-			final SteamCategory category) {
+		final SteamCategory category)
+	{
 		this.name = category.category;
 		this.link = "/favorites/setsteam/" + this.name;
 	}
 
 	@JsonProperty
-	final String name;
+	public final String name;
 	@JsonProperty
-	final String link;
+	public final String link;
 }

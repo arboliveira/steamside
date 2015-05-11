@@ -30,8 +30,7 @@ public class SessionDTO {
 	}
 
 	public SessionDTO(
-			final User username, final KidsMode kidsmode,
-			final String gamesOwned)
+		User username, KidsMode kidsmode, String gamesOwned)
 	{
 		this.userName = username.username();
 		this.kidsMode = isKidsModeOn(kidsmode);

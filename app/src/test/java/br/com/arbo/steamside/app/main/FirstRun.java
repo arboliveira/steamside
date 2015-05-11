@@ -4,25 +4,23 @@ import java.io.FileNotFoundException;
 
 import javax.xml.bind.JAXB;
 
-import br.com.arbo.steamside.app.injection.ContainerWeb;
-import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
+import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.cloud.CloudSettings;
 import br.com.arbo.steamside.settings.file.LoadFile;
 import br.com.arbo.steamside.settings.file.SaveFile;
 import br.com.arbo.steamside.xml.SteamsideXml;
 
-public class FirstRun implements WebApplicationContextTweak {
+public class FirstRun {
 
-	@Override
-	public void tweak(ContainerWeb cx)
+	public static Sources customize(Sources s)
 	{
-		cx.replaceComponent(CloudSettings.class, MockCloudSettings.class);
-		cx.replaceComponent(LoadFile.class, MockLoadFile.class);
-		cx.replaceComponent(SaveFile.class, MockSaveFile.class);
+		return s
+			.replaceImplementor(CloudSettings.class, MockCloudSettings.class)
+			.replaceImplementor(LoadFile.class, MockLoadFile.class)
+			.replaceImplementor(SaveFile.class, MockSaveFile.class);
 	}
 
-	static class MockCloudSettings
-			implements CloudSettings {
+	static class MockCloudSettings implements CloudSettings {
 
 		@Override
 		public boolean isEnabled()

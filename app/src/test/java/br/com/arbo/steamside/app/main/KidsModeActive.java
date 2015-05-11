@@ -1,34 +1,33 @@
 package br.com.arbo.steamside.app.main;
 
-import org.mockito.Mockito;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
-import br.com.arbo.steamside.app.injection.ContainerWeb;
-import br.com.arbo.steamside.app.jetty.WebApplicationContextTweak;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.kids.KidsMode.NotInKidsMode;
 import br.com.arbo.steamside.types.CollectionName;
 
-class KidsModeActive implements WebApplicationContextTweak, KidsMode {
+@Configuration
+public class KidsModeActive {
 
-	@Override
-	public void tweak(ContainerWeb cx)
+	public static Sources customize(Sources s)
 	{
-		cx.replaceComponent(KidsMode.class, KidsModeActive.class);
+		return s.replaceWithConfiguration(KidsMode.class, KidsModeActive.class);
 	}
 
-	@Override
-	public Kid kid() throws NotInKidsMode
+	@Bean
+	public static KidsMode mockKidsModeActive() throws NotInKidsMode
 	{
-		return kid;
-	}
-
-	private final Kid kid;
-
-	KidsModeActive()
-	{
-		kid = Mockito.mock(Kid.class);
-		Mockito.when(kid.getCollection())
-				.thenReturn(new CollectionName("+a-Ongoing"));
+		Kid kid = mock(Kid.class);
+		doReturn(new CollectionName("+a-Ongoing")).when(kid).getCollection();
+		KidsMode kidsMode = mock(KidsMode.class);
+		doReturn(kid).when(kidsMode).kid();
+		return kidsMode;
 	}
 
 }
