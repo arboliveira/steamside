@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
 import br.com.arbo.steamside.app.launch.LocalWebserver;
+import br.com.arbo.steamside.app.launch.Running;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 
 public class SingleInstancePerUser {
@@ -37,14 +38,14 @@ public class SingleInstancePerUser {
 		}
 		catch (SteamsideUpAndRunning e)
 		{
-			// all right!
+			this.running = e.running;
 		}
 	}
 
 	@PreDestroy
 	public void stop()
 	{
-		this.webserver.stop();
+		this.running.stop();
 	}
 
 	private void attemptRepeatedly() throws SteamsideUpAndRunning, AllPortsTaken
@@ -74,7 +75,7 @@ public class SingleInstancePerUser {
 				getLogger()
 					.info("Found Steamside already running on " + p + ".");
 				browser.landing(p);
-				throw new SteamsideUpAndRunning();
+				throw new SteamsideUpAndRunning(new CantStop());
 			case RunningOnDifferentUser:
 				getLogger()
 					.info("Another user running Steamside on " + p + ".");
@@ -100,9 +101,11 @@ public class SingleInstancePerUser {
 		{
 			final int port = firstfreefound.orElseThrow(AllPortsTaken::new);
 
+			Running launched;
+
 			try
 			{
-				webserver.launch(port);
+				launched = webserver.launch(port);
 			}
 			catch (final PortAlreadyInUse e)
 			{
@@ -112,7 +115,7 @@ public class SingleInstancePerUser {
 
 			browser.landing(port);
 
-			throw new SteamsideUpAndRunning();
+			throw new SteamsideUpAndRunning(launched);
 		}
 
 		private void sweepPortCandidates() throws SteamsideUpAndRunning
@@ -125,8 +128,20 @@ public class SingleInstancePerUser {
 		}
 
 		private Optional<Integer> firstfreefound = Optional.empty();
+
 	}
 
+	static class CantStop implements Running {
+
+		@Override
+		public void stop()
+		{
+			// you can't
+		}
+
+	}
+
+	private Running running;
 	final DetectSteamside detect;
 	final LimitPossiblePorts rangesize;
 	final WebBrowser browser;
