@@ -48,11 +48,14 @@ public class SpringBoot implements LocalWebserver {
 			sourcesCustomizers.forEach(
 				customizer -> customizer.customize(sources));
 
-		context = sources
+		SpringApplication app = sources
 			.sources(ApiServlet.class, CustomizePort.class, Welcome.class)
 			.apply(new SpringApplicationBuilder())
-			.build()
-			.run();
+			.build();
+
+		app.addListeners(new BannerPrepare());
+
+		context = app.run();
 	}
 
 	@Autowired(required = false)

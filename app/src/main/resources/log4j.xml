@@ -7,15 +7,6 @@
 			<param name="ConversionPattern" value="%5p (%F:%L) %m%n"/>
 		</layout>
 	</appender>
-	<appender name="CONSOLE-PLAIN" class="org.apache.log4j.ConsoleAppender">
-		<layout class="org.apache.log4j.PatternLayout">
-		</layout>
-	</appender>
-
-	<logger name="Instructions">
-		<level value="debug" />
-		<appender-ref ref="CONSOLE-PLAIN" />
-	</logger>
 
 	<logger name="jndi">
 		<level value="info" />
