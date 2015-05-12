@@ -17,10 +17,10 @@ public class SingleInstancePerUserTest {
 	public void before()
 	{
 		singleinstance = new SingleInstancePerUser(
-				detect,
-				new LimitPossiblePorts(2),
-				webserver,
-				browser);
+			detect,
+			new LimitPossiblePorts(2),
+			webserver,
+			browser);
 	}
 
 	@Test
@@ -36,26 +36,27 @@ public class SingleInstancePerUserTest {
 	}
 
 	@Test
-	public void secondTimeSameUser_shouldNotLaunchJustOpenBrowserOnSamePort()
-	{
-		doReturn(Situation.AlreadyRunningForThisUser)
-		.when(detect).detect(42424);
-
-		singleinstance.start();
-
-		verify(browser).landing(42424);
-	}
-
-	@Test
 	public void secondTimeDifferentUser_shouldSweepThenLaunchOnNextFreePort()
 	{
-		doReturn(Situation.RunningOnDifferentUser).when(detect).detect(42424);
+		doReturn(Situation.RunningOnDifferentUser)
+			.when(detect).detect(42424);
 		doReturn(Situation.NotHere).when(detect).detect(42425);
 
 		singleinstance.start();
 
 		verify(webserver).launch(42425);
 		verify(browser).landing(42425);
+	}
+
+	@Test
+	public void secondTimeSameUser_shouldNotLaunchJustOpenBrowserOnSamePort()
+	{
+		doReturn(Situation.AlreadyRunningForThisUser)
+			.when(detect).detect(42424);
+
+		singleinstance.start();
+
+		verify(browser).landing(42424);
 	}
 
 	final WebBrowser browser = Mockito.mock(WebBrowser.class);

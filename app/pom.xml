@@ -10,9 +10,9 @@
 	<name>Executable</name>
 	<dependencies>
 		<dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-web</artifactId>
-	    </dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>br.com.arbo.steamside</groupId>
 			<artifactId>steamside-webui</artifactId>

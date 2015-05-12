@@ -6,6 +6,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.apache.log4j.Logger;
+
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
 import br.com.arbo.steamside.app.launch.LocalWebserver;
@@ -61,15 +63,21 @@ public class SingleInstancePerUser {
 
 		private void consider(final int p) throws SteamsideUpAndRunning
 		{
-			final Situation situation = detect.detect(p);
+			getLogger().info("Looking for a free port on " + p + "...");
+			Situation situation = detect.detect(p);
 			switch (situation) {
 			case NotHere:
+				getLogger().info("Found a free port on " + p + ".");
 				freefound(p);
 				return;
 			case AlreadyRunningForThisUser:
+				getLogger()
+					.info("Found Steamside already running on " + p + ".");
 				browser.landing(p);
 				throw new SteamsideUpAndRunning();
 			case RunningOnDifferentUser:
+				getLogger()
+					.info("Another user running Steamside on " + p + ".");
 				return;
 			default:
 				throw new IllegalStateException();
@@ -80,6 +88,11 @@ public class SingleInstancePerUser {
 		{
 			if (!this.firstfreefound.isPresent())
 				this.firstfreefound = Optional.of(p);
+		}
+
+		private Logger getLogger()
+		{
+			return Logger.getLogger(this.getClass());
 		}
 
 		private void notRunningSteamsideTryOnFirstFreeFound()
@@ -114,11 +127,11 @@ public class SingleInstancePerUser {
 		private Optional<Integer> firstfreefound = Optional.empty();
 	}
 
-	private static final int RANGE_BEGIN = 42424;
 	final DetectSteamside detect;
 	final LimitPossiblePorts rangesize;
 	final WebBrowser browser;
-
 	final LocalWebserver webserver;
+
+	private static final int RANGE_BEGIN = 42424;
 
 }

@@ -39,7 +39,8 @@ public class SourcesFactory {
 		@Bean
 		public static LimitPossiblePorts limitPossiblePorts()
 		{
-			return new LimitPossiblePorts(10);
+			int dadAndTwoKids = 3;
+			return new LimitPossiblePorts(dadAndTwoKids);
 		}
 
 	}
