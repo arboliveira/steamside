@@ -13,7 +13,7 @@ public class MockContinues {
 
 	public static Sources customize(Sources s)
 	{
-		return s.replaceImplementor(ContinuesRooster.class, Mock.class);
+		return s.replaceWithImplementor(ContinuesRooster.class, Mock.class);
 	}
 
 	public static class Mock implements ContinuesRooster {

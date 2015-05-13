@@ -4,21 +4,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
-
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.Configuration;
+import java.util.stream.Stream;
 
 import com.google.common.base.Preconditions;
 
 public class Sources {
-
-	private static void checkConfiguration(Class< ? > configuration)
-	{
-		Preconditions.checkArgument(
-			configuration.isAnnotationPresent(Configuration.class),
-			"Not a " + Configuration.class + ": " + configuration);
-	}
 
 	private static <T> void checkInterface(Class<T> anInterface)
 	{
@@ -27,17 +19,30 @@ public class Sources {
 			"Not an interface: " + anInterface);
 	}
 
-	public SpringApplicationBuilder apply(SpringApplicationBuilder builder)
+	public <T> Sources registerSingleton(
+		Class<T> anInterface,
+		T singleton)
 	{
-		Set<Class< ? >> all = new HashSet<>(
-			classes.size() + implementors.size());
-		all.addAll(classes);
-		all.addAll(implementors.values());
-		builder.sources(all.toArray(new Class< ? >[] {}));
-		return builder;
+		checkInterface(anInterface);
+		this.put(anInterface, new Singleton(singleton));
+		return this;
 	}
 
-	public <T> Sources replaceImplementor(
+	public <T> Sources registerSingleton(T singleton)
+	{
+		this.put(singleton.getClass(), new Singleton(singleton));
+		return this;
+	}
+
+	public Stream<Object> registerSingleton_args()
+	{
+		return implementations.values().stream()
+			.map(Source::getSingletonToRegister)
+			.filter(Optional::isPresent)
+			.map(Optional::get);
+	}
+
+	public <T> Sources replaceWithImplementor(
 		Class<T> anInterface,
 		Class< ? extends T> implementor)
 	{
@@ -46,23 +51,13 @@ public class Sources {
 		return sourceImplementor(anInterface, implementor);
 	}
 
-	public <T> Sources replaceWithConfiguration(
+	public <T> Sources replaceWithSingleton(
 		Class<T> anInterface,
-		Class< ? > configuration)
+		T singleton)
 	{
 		checkInterface(anInterface);
 		remove(anInterface);
-		return sourceConfiguration(anInterface, configuration);
-	}
-
-	public <T> Sources sourceConfiguration(
-		Class<T> anInterface,
-		Class< ? > configuration)
-	{
-		checkInterface(anInterface);
-		checkConfiguration(configuration);
-		this.put(anInterface, configuration);
-		return this;
+		return registerSingleton(anInterface, singleton);
 	}
 
 	public <T> Sources sourceImplementor(
@@ -70,7 +65,7 @@ public class Sources {
 		Class< ? extends T> implementor)
 	{
 		checkInterface(anInterface);
-		this.put(anInterface, implementor);
+		this.put(anInterface, new Implementor(implementor));
 		return this;
 	}
 
@@ -80,33 +75,103 @@ public class Sources {
 		return this;
 	}
 
+	public Class< ? >[] sources_arg()
+	{
+		int size = classes.size() + implementations.size();
+		Set<Class< ? >> all = new HashSet<>(size);
+		all.addAll(classes);
+		implementorsToSource().forEach(all::add);
+		return all.toArray(new Class< ? >[size]);
+	}
+
 	private void checkExists(Class< ? > key)
 	{
 		Preconditions.checkState(
-			implementors.containsKey(key),
+			implementations.containsKey(key),
 			"Never registered: " + key);
 	}
 
 	private void checkNotDuplicate(Class< ? > key)
 	{
 		Preconditions.checkState(
-			!implementors.containsKey(key),
+			!implementations.containsKey(key),
 			"Registering twice: " + key);
 	}
 
-	private void put(Class< ? > key, Class< ? > value)
+	private Stream<Class< ? >> implementorsToSource()
+	{
+		return implementations.values().stream()
+			.map(Source::getClassToSource)
+			.filter(Optional::isPresent)
+			.map(Optional::get);
+	}
+
+	private void put(Class< ? > key, Source source)
 	{
 		checkNotDuplicate(key);
-		implementors.put(key, value);
+		implementations.put(key, source);
 	}
 
 	private void remove(Class< ? > key)
 	{
 		checkExists(key);
-		implementors.remove(key);
+		implementations.remove(key);
 	}
 
-	private final Map<Class< ? >, Class< ? >> implementors = new HashMap<>(20);
+	static class Implementor implements Source {
+
+		Implementor(Class< ? > classToSource)
+		{
+			this.classToSource = classToSource;
+		}
+
+		@Override
+		public Optional<Class< ? >> getClassToSource()
+		{
+			return Optional.of(this.classToSource);
+		}
+
+		@Override
+		public Optional<Object> getSingletonToRegister()
+		{
+			return Optional.empty();
+		}
+
+		private Class< ? > classToSource;
+
+	}
+
+	static class Singleton implements Source {
+
+		Singleton(Object singleton)
+		{
+			this.singleton = singleton;
+		}
+
+		@Override
+		public Optional<Class< ? >> getClassToSource()
+		{
+			return Optional.empty();
+		}
+
+		@Override
+		public Optional<Object> getSingletonToRegister()
+		{
+			return Optional.of(singleton);
+		}
+
+		private Object singleton;
+
+	}
+
+	interface Source {
+
+		Optional<Class< ? >> getClassToSource();
+
+		Optional<Object> getSingletonToRegister();
+	}
+
+	private final Map<Class< ? >, Source> implementations = new HashMap<>(20);
 
 	private final Set<Class< ? >> classes = new HashSet<>(20);
 

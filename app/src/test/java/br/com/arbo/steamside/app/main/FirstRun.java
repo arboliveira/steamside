@@ -15,9 +15,9 @@ public class FirstRun {
 	public static Sources customize(Sources s)
 	{
 		return s
-			.replaceImplementor(CloudSettings.class, MockCloudSettings.class)
-			.replaceImplementor(LoadFile.class, MockLoadFile.class)
-			.replaceImplementor(SaveFile.class, MockSaveFile.class);
+			.replaceWithImplementor(CloudSettings.class, MockCloudSettings.class)
+			.replaceWithImplementor(LoadFile.class, MockLoadFile.class)
+			.replaceWithImplementor(SaveFile.class, MockSaveFile.class);
 	}
 
 	static class MockCloudSettings implements CloudSettings {

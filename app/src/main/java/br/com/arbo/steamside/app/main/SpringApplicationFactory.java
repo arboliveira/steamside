@@ -10,11 +10,9 @@ public class SpringApplicationFactory {
 
 	public static SpringApplication buildWith(Sources sources)
 	{
-		return SpringApplicationBuilderUtil.sources(
-			new SpringApplicationBuilder()
-				.web(false)
-				.headless(false),
-			sources).build();
+		return SpringApplicationBuilderUtil.build(
+			new SpringApplicationBuilder().web(false).headless(false),
+			sources);
 	}
 
 }

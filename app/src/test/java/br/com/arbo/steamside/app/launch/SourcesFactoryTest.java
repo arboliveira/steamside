@@ -5,8 +5,6 @@ import org.mockito.Mockito;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import br.com.arbo.opersys.username.FromJava;
 import br.com.arbo.org.springframework.boot.builder.Sources;
@@ -28,31 +26,19 @@ public class SourcesFactoryTest {
 			Mockito.mock(Exit.class))
 				.newInstance()
 				.sources(Api.class)
-				.replaceWithConfiguration(
-					CloudSettings.class, MockCloudSettings.class);
+				.replaceWithSingleton(
+					CloudSettings.class, Mockito.mock(CloudSettings.class));
 
-		SpringApplicationBuilder builder = SpringApplicationBuilderUtil.sources(
-			new SpringApplicationBuilder(), sources)
-			.web(false);
-
-		SpringApplication app = builder.build();
+		SpringApplication app =
+			SpringApplicationBuilderUtil.build(
+				new SpringApplicationBuilder().web(false),
+				sources);
 
 		try (ConfigurableApplicationContext context = app.run())
 		{
 			context.getBean(RunGameCommand.class);
 			context.getBean(ExitController.class);
 		}
-	}
-
-	@Configuration
-	public static class MockCloudSettings {
-
-		@Bean
-		public static CloudSettings mockCloudSettings()
-		{
-			return Mockito.mock(CloudSettings.class);
-		}
-
 	}
 
 }

@@ -4,7 +4,7 @@ public interface KidsMode {
 
 	Kid kid() throws NotInKidsMode;
 
-	public class NotInKidsMode extends Exception {
+	public class NotInKidsMode extends RuntimeException {
 
 		public NotInKidsMode(Throwable cause)
 		{

@@ -11,6 +11,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.org.springframework.boot.builder.Sources;
+import br.com.arbo.org.springframework.boot.builder.SpringApplicationBuilderUtil;
 import br.com.arbo.steamside.app.launch.LaunchSequence;
 import br.com.arbo.steamside.app.launch.LocalWebserver;
 import br.com.arbo.steamside.app.launch.Running;
@@ -25,14 +26,11 @@ public class SpringBoot implements LocalWebserver {
 	@Override
 	public Running launch(int port) throws PortAlreadyInUse
 	{
-		Port portInUse = new Port(port);
-		return LaunchSequence.launch(portInUse, exit, this::doStart);
+		return LaunchSequence.launch(new Port(port), exit, this::doStart);
 	}
 
 	private Running doStart(Port portInUse)
 	{
-		CustomizePort.portDirtyHack = portInUse.port;
-
 		Sources sources =
 			new SourcesFactory(username, exit).newInstanceLive();
 
@@ -40,10 +38,12 @@ public class SpringBoot implements LocalWebserver {
 			sourcesCustomizers.forEach(
 				customizer -> customizer.customize(sources));
 
-		SpringApplication app = sources
-			.sources(ApiServlet.class, CustomizePort.class, Welcome.class)
-			.apply(new SpringApplicationBuilder())
-			.build();
+		SpringApplication app =
+			SpringApplicationBuilderUtil.build(
+				new SpringApplicationBuilder(),
+				sources
+					.sources(ApiServlet.class, Welcome.class)
+					.registerSingleton(new PortCustomize(portInUse.port)));
 
 		app.addListeners(new BannerPrepare());
 
