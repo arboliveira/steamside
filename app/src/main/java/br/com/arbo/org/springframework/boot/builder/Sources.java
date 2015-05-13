@@ -81,7 +81,7 @@ public class Sources {
 		Set<Class< ? >> all = new HashSet<>(size);
 		all.addAll(classes);
 		implementorsToSource().forEach(all::add);
-		return all.toArray(new Class< ? >[size]);
+		return all.toArray(new Class< ? >[all.size()]);
 	}
 
 	private void checkExists(Class< ? > key)
