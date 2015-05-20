@@ -20,7 +20,7 @@ public class Libraries {
 		SteamLocation steamDir =
 				SteamLocations.fromSteamPhysicalFiles();
 
-		Dir_userid dir_userid = Dirs_userid.from_Dir_userid();
+		Dir_userid dir_userid = Dirs_userid.fromSteamPhysicalFiles();
 
 		final AppsHome appsHome;
 

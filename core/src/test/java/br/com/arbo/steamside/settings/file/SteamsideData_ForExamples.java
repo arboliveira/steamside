@@ -4,9 +4,7 @@ import java.io.FileNotFoundException;
 
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.collections.InMemoryTagsHome;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
-import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dirs_userid;
 import br.com.arbo.steamside.xml.SteamsideXml;
 
 public class SteamsideData_ForExamples {
@@ -15,10 +13,7 @@ public class SteamsideData_ForExamples {
 	{
 		File_steamside_xml file_steamside_xml =
 				new File_steamside_xml(
-						new Dir_userid(
-								new Dir_userdata(
-										SteamLocations
-												.fromSteamPhysicalFiles())));
+						Dirs_userid.fromSteamPhysicalFiles());
 
 		SteamsideXml xml = load(file_steamside_xml);
 		InMemoryCollectionsHome collections = new InMemoryCollectionsHome();

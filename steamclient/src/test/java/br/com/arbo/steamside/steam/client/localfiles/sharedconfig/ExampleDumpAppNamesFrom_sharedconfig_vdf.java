@@ -50,7 +50,7 @@ class ExampleDumpAppNamesFrom_sharedconfig_vdf {
 		this.appnameFactory = newAppNameFactory();
 
 		File_sharedconfig_vdf file_sharedconfig_vdf = new File_sharedconfig_vdf(
-				Dirs_userid.from_Dir_userid());
+				Dirs_userid.fromSteamPhysicalFiles());
 
 		Data_sharedconfig_vdf data = data(file_sharedconfig_vdf);
 
