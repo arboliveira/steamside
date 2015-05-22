@@ -22,7 +22,7 @@ import br.com.arbo.steamside.cloud.Host;
 public class Dontpad implements Host {
 
 	private static UrlEncodedFormEntity newUrlEncodedFormEntity(
-			List<NameValuePair> urlParameters)
+		List<NameValuePair> urlParameters)
 			throws UnsupportedEncodingException
 	{
 		return new UrlEncodedFormEntity(urlParameters, "UTF-8");
@@ -34,14 +34,14 @@ public class Dontpad implements Host {
 	}
 
 	@Inject
-	public Dontpad(DontpadSettings settings)
+	public Dontpad(DontpadSettingsFactory settingsFactory)
 	{
-		this.settings = settings;
+		this.settingsFactory = settingsFactory;
 	}
 
 	@Override
 	public void addURLParameters(HttpPost post, String text)
-			throws UnsupportedEncodingException
+		throws UnsupportedEncodingException
 	{
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		urlParameters.add(new BasicNameValuePair("text", text));
@@ -52,8 +52,8 @@ public class Dontpad implements Host {
 	public URI buildHttpGetURI() throws URISyntaxException
 	{
 		return new URIBuilder(url() + ".body.json")
-				.addParameter("lastUpdate", "0")
-				.build();
+			.addParameter("lastUpdate", "0")
+			.build();
 	}
 
 	@Override
@@ -71,11 +71,11 @@ public class Dontpad implements Host {
 
 	private String url()
 	{
-		return settings.url();
+		return settingsFactory.read().url();
 	}
 
-	private static ObjectMapper jackson = new ObjectMapper();
+	private final DontpadSettingsFactory settingsFactory;
 
-	private final DontpadSettings settings;
+	private static ObjectMapper jackson = new ObjectMapper();
 
 }

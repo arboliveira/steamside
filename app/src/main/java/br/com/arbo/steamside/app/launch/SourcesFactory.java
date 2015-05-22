@@ -11,7 +11,7 @@ import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.api.app.RunGameCommand;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.cloud.Cloud;
-import br.com.arbo.steamside.cloud.CloudSettings;
+import br.com.arbo.steamside.cloud.CloudSettingsFactory;
 import br.com.arbo.steamside.cloud.CloudSettingsFromLocalSettings;
 import br.com.arbo.steamside.cloud.Host;
 import br.com.arbo.steamside.cloud.LoadCloud;
@@ -19,7 +19,7 @@ import br.com.arbo.steamside.cloud.Uploader;
 import br.com.arbo.steamside.cloud.autoupload.AutoUpload;
 import br.com.arbo.steamside.cloud.autoupload.ParallelUpload;
 import br.com.arbo.steamside.cloud.dontpad.Dontpad;
-import br.com.arbo.steamside.cloud.dontpad.DontpadSettings;
+import br.com.arbo.steamside.cloud.dontpad.DontpadSettingsFactory;
 import br.com.arbo.steamside.cloud.dontpad.DontpadSettingsFromLocalSettings;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.TagsData;
@@ -46,6 +46,9 @@ import br.com.arbo.steamside.settings.file.File_steamside_xml;
 import br.com.arbo.steamside.settings.file.LoadFile;
 import br.com.arbo.steamside.settings.file.LoadSteamsideXml;
 import br.com.arbo.steamside.settings.file.SaveFile;
+import br.com.arbo.steamside.settings.local.File_steamside_local_xml;
+import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
+import br.com.arbo.steamside.settings.local.LocalSettingsLoad;
 import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
 import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.library.LibraryImpl;
@@ -69,78 +72,82 @@ public class SourcesFactory {
 	private static Sources addComponents(Sources container)
 	{
 		container
-		.sources(AutoStartup.class)
-		.sourceImplementor(Settings.class, SettingsImpl.class)
-		.sourceImplementor(
-			br.com.arbo.steamside.api.app.AppSettings.class,
-			br.com.arbo.steamside.api.app.AppSettingsImpl.class);
+			.sources(AutoStartup.class)
+			.sourceImplementor(Settings.class, SettingsImpl.class)
+			.sourceImplementor(
+				br.com.arbo.steamside.api.app.AppSettings.class,
+				br.com.arbo.steamside.api.app.AppSettingsImpl.class);
 
 		container
-		.sourceImplementor(Library.class, LibraryImpl.class)
-		.sourceImplementor(
-			AppsHomeFactory.class, ParallelAppsHomeFactory.class);
+			.sourceImplementor(Library.class, LibraryImpl.class)
+			.sourceImplementor(
+				AppsHomeFactory.class, ParallelAppsHomeFactory.class);
 
 		container
-		.sources(Monitor.class)
-		.sourceImplementor(ChangeListener.class, DigestOnChange.class);
+			.sources(Monitor.class)
+			.sourceImplementor(ChangeListener.class, DigestOnChange.class);
 
 		container
-		.sourceImplementor(
-			SteamsideData.class, AutowireSteamsideData.class)
+			.sourceImplementor(
+				SteamsideData.class, AutowireSteamsideData.class)
 			.sourceImplementor(
 				CollectionsData.class, AutowireCollectionsData.class)
-				.sourceImplementor(
-					TagsData.class, AutowireTagsData.class)
-					.sourceImplementor(
-						KidsData.class, AutowireKidsData.class);
-
-		container
-		.sourceImplementor(LoadFile.class, LoadSteamsideXml.class)
-		.sourceImplementor(InitialLoad.class, FromCloudAndFile.class)
-		.sources(
-			File_steamside_xml.class,
-			ParallelSave.class,
-			Autowire.class);
-
-		container
-		.sources(
-			LoadCloud.class,
-			Cloud.class)
 			.sourceImplementor(
-				CloudSettings.class,
-				CloudSettingsFromLocalSettings.class)
-				.sourceImplementor(Host.class, Dontpad.class)
-				.sourceImplementor(
-					DontpadSettings.class,
-					DontpadSettingsFromLocalSettings.class);
+				TagsData.class, AutowireTagsData.class)
+			.sourceImplementor(
+				KidsData.class, AutowireKidsData.class);
 
 		container
-		.sources(
-			ParallelUpload.class,
-			Uploader.class)
+			.sourceImplementor(LoadFile.class, LoadSteamsideXml.class)
+			.sourceImplementor(InitialLoad.class, FromCloudAndFile.class)
+			.sources(
+				File_steamside_xml.class,
+				ParallelSave.class,
+				Autowire.class);
+
+		container
+			.sourceImplementor(
+				LocalSettingsFactory.class,
+				LocalSettingsLoad.class)
+			.sources(
+				File_steamside_local_xml.class,
+				LoadCloud.class,
+				Cloud.class)
+			.sourceImplementor(
+				CloudSettingsFactory.class,
+				CloudSettingsFromLocalSettings.class)
+			.sourceImplementor(Host.class, Dontpad.class)
+			.sourceImplementor(
+				DontpadSettingsFactory.class,
+				DontpadSettingsFromLocalSettings.class);
+
+		container
+			.sources(
+				ParallelUpload.class,
+				Uploader.class)
 			.sourceImplementor(SaveFile.class, AutoUpload.class);
 
 		container
-		.sources(
-			File_sharedconfig_vdf.class,
-			File_localconfig_vdf.class,
-			File_appinfo_vdf.class,
-			Dir_userid.class,
-			Dir_userdata.class);
+			.sources(
+				File_sharedconfig_vdf.class,
+				File_localconfig_vdf.class,
+				File_appinfo_vdf.class,
+				Dir_userid.class,
+				Dir_userdata.class);
 
 		container
-		.sourceImplementor(KidsMode.class, FromUsername.class);
+			.sourceImplementor(KidsMode.class, FromUsername.class);
 
 		container
-		.sources(
-			SteamBrowserProtocol.class,
-			RunGameCommand.class);
+			.sources(
+				SteamBrowserProtocol.class,
+				RunGameCommand.class);
 
 		container
-		.sources(Continues.class)
-		.sourceImplementor(
-			ContinuesRooster.class,
-			ContinuesFromSteamClientLocalfiles.class)
+			.sources(Continues.class)
+			.sourceImplementor(
+				ContinuesRooster.class,
+				ContinuesFromSteamClientLocalfiles.class)
 			.sourceImplementor(FavoritesOfUser.class, FromSettings.class);
 
 		registerSteamLocation(container);
@@ -153,24 +160,24 @@ public class SourcesFactory {
 		if (SystemUtils.IS_OS_WINDOWS)
 		{
 			container
-			.sourceImplementor(SteamLocation.class, Windows.class)
-			.sourceImplementor(ProgramFiles.class, FromWindowsUtils.class);
+				.sourceImplementor(SteamLocation.class, Windows.class)
+				.sourceImplementor(ProgramFiles.class, FromWindowsUtils.class);
 			return;
 		}
 
 		if (SystemUtils.IS_OS_LINUX)
 		{
 			container
-			.sourceImplementor(SteamLocation.class, Linux.class)
-			.sourceImplementor(UserHome.class, FromSystemUtils.class);
+				.sourceImplementor(SteamLocation.class, Linux.class)
+				.sourceImplementor(UserHome.class, FromSystemUtils.class);
 			return;
 		}
 
 		if (SystemUtils.IS_OS_MAC_OSX)
 		{
 			container
-			.sourceImplementor(SteamLocation.class, MacOSX.class)
-			.sourceImplementor(UserHome.class, FromSystemUtils.class);
+				.sourceImplementor(SteamLocation.class, MacOSX.class)
+				.sourceImplementor(UserHome.class, FromSystemUtils.class);
 			return;
 		}
 

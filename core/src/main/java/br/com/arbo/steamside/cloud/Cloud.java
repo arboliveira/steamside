@@ -23,7 +23,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 public class Cloud {
 
 	private static HttpResponse client_execute(
-		HttpClient client, HttpUriRequest post)
+		HttpClient client, HttpUriRequest post) throws Unavailable
 	{
 		try
 		{
@@ -40,6 +40,7 @@ public class Cloud {
 	}
 
 	private static HttpResponse execute(HttpUriRequest post)
+		throws Unavailable
 	{
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpResponse response = client_execute(client, post);
@@ -72,7 +73,7 @@ public class Cloud {
 		this.host = host;
 	}
 
-	public String download()
+	public String download() throws Unavailable
 	{
 		URI uri = buildHttpGetURI();
 		HttpGet get = new HttpGet(uri);
@@ -92,7 +93,7 @@ public class Cloud {
 		return content;
 	}
 
-	public void upload(String in)
+	public void upload(String in) throws Unavailable
 	{
 		URI uri = buildHttpPostURI();
 		HttpPost post = new HttpPost(uri);
@@ -158,9 +159,9 @@ public class Cloud {
 		}
 	}
 
-	private static final String USER_AGENT = "Mozilla/5.0";
-
 	private final Host host;
 
 	private final Log log = LogFactory.getLog(this.getClass());
+
+	private static final String USER_AGENT = "Mozilla/5.0";
 }

@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 
 import javax.inject.Inject;
 
+import br.com.arbo.steamside.cloud.CloudSettingsFactory.Missing;
 import br.com.arbo.steamside.cloud.LoadCloud;
 import br.com.arbo.steamside.cloud.LoadCloud.Disabled;
 import br.com.arbo.steamside.cloud.Unavailable;
@@ -45,7 +46,13 @@ public class FromCloudAndFile implements InitialLoad {
 		}
 		catch (Unavailable e)
 		{
-			// TODO Notify the outside world we could not sync with the cloud
+			// TODO Send Warning to User Alert Bus: can't sync to the cloud
+			e.printStackTrace();
+			throw new NotLoaded(e);
+		}
+		catch (Missing e)
+		{
+			// TODO Send Suggestion to User Alert Bus: configure sync?
 			e.printStackTrace();
 			throw new NotLoaded(e);
 		}

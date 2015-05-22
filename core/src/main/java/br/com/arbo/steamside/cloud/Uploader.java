@@ -7,6 +7,8 @@ import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
 
+import br.com.arbo.steamside.cloud.CloudSettingsFactory.Missing;
+
 public class Uploader {
 
 	private static String read(File file)
@@ -22,15 +24,17 @@ public class Uploader {
 	}
 
 	@Inject
-	public Uploader(Cloud cloud, CloudSettings settings)
+	public Uploader(Cloud cloud, CloudSettingsFactory settings)
 	{
 		this.cloud = cloud;
-		this.settings = settings;
+		this.settingsFactory = settings;
 	}
 
-	public void upload(File file)
+	public void upload(File file) throws Missing, Unavailable
 	{
-		if (!this.settings.isEnabled()) return;
+		final CloudSettings read = this.settingsFactory.read();
+
+		if (!read.isEnabled()) return;
 
 		String content = read(file);
 		cloud.upload(content);
@@ -38,5 +42,5 @@ public class Uploader {
 
 	private final Cloud cloud;
 
-	private final CloudSettings settings;
+	private final CloudSettingsFactory settingsFactory;
 }

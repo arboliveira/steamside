@@ -1,11 +1,49 @@
 package br.com.arbo.steamside.cloud.dontpad;
 
-public class DontpadSettingsFromLocalSettings implements DontpadSettings {
+import javax.inject.Inject;
+
+import br.com.arbo.steamside.settings.local.LocalSettings;
+import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
+
+public class DontpadSettingsFromLocalSettings
+	implements DontpadSettingsFactory {
+
+	@Inject
+	public DontpadSettingsFromLocalSettings(LocalSettingsFactory local)
+	{
+		this.local = local;
+	}
 
 	@Override
-	public String url()
+	public DontpadSettings read() throws Missing
 	{
-		return "CLOUD_URL";
+		final LocalSettings from = readFrom();
+
+		class ToDontpadSettings implements DontpadSettings {
+
+			@Override
+			public String url()
+			{
+				return from.dontpadUrl();
+			}
+
+		}
+
+		return new ToDontpadSettings();
 	}
+
+	private LocalSettings readFrom() throws Missing
+	{
+		try
+		{
+			return local.read();
+		}
+		catch (br.com.arbo.steamside.settings.local.LocalSettingsFactory.Missing e)
+		{
+			throw new Missing(e);
+		}
+	}
+
+	private final LocalSettingsFactory local;
 
 }

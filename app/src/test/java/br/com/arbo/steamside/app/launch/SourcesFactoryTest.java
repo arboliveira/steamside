@@ -1,7 +1,8 @@
 package br.com.arbo.steamside.app.launch;
 
+import static org.mockito.Mockito.mock;
+
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,7 +13,7 @@ import br.com.arbo.org.springframework.boot.builder.SpringApplicationBuilderUtil
 import br.com.arbo.steamside.api.Api;
 import br.com.arbo.steamside.api.app.RunGameCommand;
 import br.com.arbo.steamside.api.exit.ExitController;
-import br.com.arbo.steamside.cloud.CloudSettings;
+import br.com.arbo.steamside.cloud.CloudSettingsFactory;
 import br.com.arbo.steamside.exit.Exit;
 
 public class SourcesFactoryTest {
@@ -23,11 +24,12 @@ public class SourcesFactoryTest {
 	{
 		Sources sources = new SourcesFactory(
 			new FromJava(),
-			Mockito.mock(Exit.class))
+			mock(Exit.class))
 				.newInstance()
 				.sources(Api.class)
 				.replaceWithSingleton(
-					CloudSettings.class, Mockito.mock(CloudSettings.class));
+					CloudSettingsFactory.class,
+					mock(CloudSettingsFactory.class));
 
 		SpringApplication app =
 			SpringApplicationBuilderUtil.build(

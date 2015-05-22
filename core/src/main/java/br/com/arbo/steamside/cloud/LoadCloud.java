@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import javax.inject.Inject;
 import javax.xml.bind.JAXB;
 
+import br.com.arbo.steamside.cloud.CloudSettingsFactory.Missing;
 import br.com.arbo.steamside.xml.SteamsideXml;
 
 public class LoadCloud {
@@ -34,7 +35,7 @@ public class LoadCloud {
 		}
 		catch (IOException e)
 		{
-			// never happens with a ByteArrayInputStream, "close" API fail 
+			// never happens with a ByteArrayInputStream, "close" API fail
 			throw new RuntimeException(e);
 		}
 	}
@@ -45,15 +46,17 @@ public class LoadCloud {
 	}
 
 	@Inject
-	public LoadCloud(Cloud cloud, CloudSettings settings)
+	public LoadCloud(Cloud cloud, CloudSettingsFactory settings)
 	{
 		this.cloud = cloud;
-		this.settings = settings;
+		this.settingsFactory = settings;
 	}
 
-	public SteamsideXml load()
+	public SteamsideXml load() throws Missing, Unavailable
 	{
-		if (!settings.isEnabled()) throw new Disabled();
+		final CloudSettings read = settingsFactory.read();
+
+		if (!read.isEnabled()) throw new Disabled();
 
 		String xml = cloud.download();
 
@@ -66,5 +69,5 @@ public class LoadCloud {
 
 	private final Cloud cloud;
 
-	private final CloudSettings settings;
+	private final CloudSettingsFactory settingsFactory;
 }
