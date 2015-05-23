@@ -15,7 +15,7 @@ import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_appticket;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-class Combine {
+class AppsHomeFromLocalFiles {
 
 	private static void executable(final AppImpl.Builder b, AppInfo appInfo)
 	{
@@ -32,14 +32,33 @@ class Combine {
 		b.executable(executable);
 	}
 
-	Combine(
-			Data_appinfo_vdf d_appinfo,
-			Data_localconfig_vdf d_localconfig,
-			Data_sharedconfig_vdf d_sharedconfig)
+	AppsHomeFromLocalFiles(
+		Data_appinfo_vdf d_appinfo,
+		Data_localconfig_vdf d_localconfig,
+		Data_sharedconfig_vdf d_sharedconfig)
 	{
 		this.d_appinfo = d_appinfo;
 		this.d_localconfig = d_localconfig;
 		this.d_sharedconfig = d_sharedconfig;
+	}
+
+	AppsHome combine()
+	{
+		Stream<AppId> appidsFrom_localconfig = d_localconfig.apptickets()
+			.all().map(KV_appticket::appid);
+
+		Stream<AppId> appidsFrom_sharedconfig = d_sharedconfig.apps()
+			.streamAppId();
+
+		final Stream<AppId> appidsToGoIntoLibrary = Stream
+			.concat(appidsFrom_localconfig, appidsFrom_sharedconfig);
+
+		HashSet<AppId> appids = new HashSet<>();
+		appidsToGoIntoLibrary.forEach(appid -> appids.add(appid));
+
+		appids.forEach(this::eachAppId);
+
+		return home;
 	}
 
 	void eachAppId(AppId appid)
@@ -54,29 +73,10 @@ class Combine {
 		eachAppId(appid);
 	}
 
-	AppsHome reduce()
-	{
-		Stream<AppId> appidsFrom_localconfig = d_localconfig.apptickets()
-				.all().map(KV_appticket::appid);
-
-		Stream<AppId> appidsFrom_sharedconfig = d_sharedconfig.apps()
-				.streamAppId();
-
-		final Stream<AppId> appidsToGoIntoLibrary = Stream
-				.concat(appidsFrom_localconfig, appidsFrom_sharedconfig);
-
-		HashSet<AppId> appids = new HashSet<>();
-		appidsToGoIntoLibrary.forEach(appid -> appids.add(appid));
-
-		appids.forEach(this::eachAppId);
-
-		return home;
-	}
-
 	private AppImpl buildFromAppId(AppId appid)
 	{
 		final AppImpl.Builder b = new AppImpl.Builder()
-				.appid(appid.appid());
+			.appid(appid.appid());
 
 		from_localconfig_apps(appid, b);
 		from_appinfo(appid, b);
@@ -106,22 +106,19 @@ class Combine {
 	private void from_localconfig_apps(AppId appid, final AppImpl.Builder b)
 	{
 		d_localconfig.apps().get(appid).ifPresent(
-				app -> app.lastPlayed().ifPresent(
-						lastPlayed -> b.lastPlayed(lastPlayed.value)));
+			app -> app.lastPlayed().ifPresent(
+				lastPlayed -> b.lastPlayed(lastPlayed.value)));
 	}
 
 	private void from_sharedconfig(AppId appid, final AppImpl.Builder b)
 	{
 		d_sharedconfig.get(appid).ifPresent(
-				each -> each.accept(tag -> b.addCategory(tag)));
+			each -> each.accept(tag -> b.addCategory(tag)));
 	}
 
 	private final Data_appinfo_vdf d_appinfo;
-
 	private final Data_localconfig_vdf d_localconfig;
-
 	private final Data_sharedconfig_vdf d_sharedconfig;
-
 	private final InMemoryAppsHome home = new InMemoryAppsHome();
 
 }

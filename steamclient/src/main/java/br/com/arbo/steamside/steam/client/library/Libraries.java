@@ -1,9 +1,12 @@
 package br.com.arbo.steamside.steam.client.library;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import br.com.arbo.steamside.steam.client.apps.AppsHome;
+import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.digest.Digester;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
@@ -17,30 +20,51 @@ public class Libraries {
 
 	public static Library fromSteamPhysicalFiles()
 	{
+		return new LibraryImpl(appsHomeFactory());
+	}
+
+	private static AppsHome appsHome()
+		throws InterruptedException, ExecutionException
+	{
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try
+		{
+			Future<AppsHome> digest = digest(executorService);
+			return digest.get();
+		}
+		finally
+		{
+			executorService.shutdown();
+		}
+	}
+
+	private static AppsHomeFactory appsHomeFactory()
+	{
+		try
+		{
+			AppsHome appsHome = appsHome();
+			return () -> appsHome;
+		}
+		catch (InterruptedException | ExecutionException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static Future<AppsHome> digest(ExecutorService executorService)
+	{
 		SteamLocation steamDir =
-				SteamLocations.fromSteamPhysicalFiles();
+			SteamLocations.fromSteamPhysicalFiles();
 
 		Dir_userid dir_userid = Dirs_userid.fromSteamPhysicalFiles();
 
-		final AppsHome appsHome;
+		Digester digester = new Digester(
+			new File_appinfo_vdf(steamDir),
+			new File_localconfig_vdf(dir_userid),
+			new File_sharedconfig_vdf(dir_userid),
+			executorService, executorService);
 
-		ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			Digester digester = new Digester(
-					new File_appinfo_vdf(steamDir),
-					new File_localconfig_vdf(dir_userid),
-					new File_sharedconfig_vdf(dir_userid),
-					executorService
-					);
-
-			appsHome = digester.digest();
-		}
-		finally {
-			executorService.shutdown();
-		}
-
-		return new LibraryImpl(() -> appsHome);
+		return digester.digest();
 	}
 
 }

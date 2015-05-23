@@ -36,10 +36,10 @@ public class InMemory_appinfo_vdf implements Data_appinfo_vdf {
 	public AppInfo get(final AppId appid) throws MissingFrom_appinfo_vdf
 	{
 		return Optional
-				.ofNullable(
-						map.get(appid.appid))
-				.orElseThrow(
-						() -> MissingFrom_appinfo_vdf.appid(appid));
+			.ofNullable(
+				map.get(appid.appid))
+			.orElseThrow(
+				() -> MissingFrom_appinfo_vdf.appid(appid));
 	}
 
 	private FileInputStream open_File_appinfo_vdf()
@@ -56,21 +56,16 @@ public class InMemory_appinfo_vdf implements Data_appinfo_vdf {
 
 	private void populate() throws IOException
 	{
-		final FileInputStream f = open_File_appinfo_vdf();
-		try
+		try (FileInputStream f = open_File_appinfo_vdf())
 		{
 			populateFrom(new Content_appinfo_vdf(f));
-		}
-		finally
-		{
-			f.close();
 		}
 	}
 
 	private void populateFrom(final Content_appinfo_vdf content)
 	{
 		new Parse_appinfo_vdf(content,
-				(appid, appinfo) -> map.put(appid, appinfo)).parse();
+			(appid, appinfo) -> map.put(appid, appinfo)).parse();
 	}
 
 	private final File_appinfo_vdf file_appinfo_vdf;

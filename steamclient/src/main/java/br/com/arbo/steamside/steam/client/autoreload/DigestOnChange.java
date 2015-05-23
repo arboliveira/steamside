@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.container;
+package br.com.arbo.steamside.steam.client.autoreload;
 
 import javax.inject.Inject;
 

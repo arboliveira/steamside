@@ -2,8 +2,8 @@ package br.com.arbo.steamside.app.launch;
 
 import javax.inject.Inject;
 
-import br.com.arbo.steamside.container.ParallelAppsHomeFactory;
 import br.com.arbo.steamside.data.autowire.Autowire;
+import br.com.arbo.steamside.steam.client.autoreload.ParallelAppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Monitor;
 
 public class AutoStartup {
@@ -21,7 +21,7 @@ public class AutoStartup {
 
 	public void start()
 	{
-		parallelAppsHomeFactory.start();
+		parallelAppsHomeFactory.submit();
 		monitor.start();
 		loadData.start();
 	}
@@ -29,7 +29,7 @@ public class AutoStartup {
 	public void stop()
 	{
 		monitor.stop();
-		parallelAppsHomeFactory.stop();
+		parallelAppsHomeFactory.shutdown();
 	}
 
 	private ParallelAppsHomeFactory parallelAppsHomeFactory;
