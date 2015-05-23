@@ -5,12 +5,14 @@ import br.com.arbo.steamside.steam.client.types.AppName;
 
 public class App {
 
-	public final AppId appid;
-	public final AppName name;
-
-	public App(final AppId appid, final AppName name) {
+	public App(final AppId appid, final AppName name)
+	{
 		this.appid = appid;
 		this.name = name;
 	}
+
+	public final AppId appid;
+
+	public final AppName name;
 
 }

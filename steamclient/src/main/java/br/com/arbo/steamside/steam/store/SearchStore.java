@@ -19,14 +19,14 @@ import br.com.arbo.steamside.steam.client.types.AppName;
 public class SearchStore {
 
 	public static void search(String term,
-			final SearchResultVisitor visitor)
+		final SearchResultVisitor visitor)
 	{
 		final String content = storeSearchResults(term);
 		accept(content, visitor);
 	}
 
 	private static void accept(final String content,
-			final SearchResultVisitor visitor)
+		final SearchResultVisitor visitor)
 	{
 		final Pattern pattern = pattern();
 		final Matcher matcher = pattern.matcher(content);
@@ -38,28 +38,28 @@ public class SearchStore {
 	}
 
 	private static App extractOne(
-			final Matcher matcher)
+		final Matcher matcher)
 	{
 		final String appid = matcher.group(1);
 		final String name = StringEscapeUtils.unescapeHtml4(matcher
-				.group(2));
+			.group(2));
 		final App app = new App(
-				new AppId(Objects.requireNonNull(appid)),
-				new AppName(name));
+			new AppId(Objects.requireNonNull(appid)),
+			new AppName(name));
 		return app;
 	}
 
 	private static Pattern pattern()
 	{
 		final String aopen = Pattern
-				.quote("<a href=\"http://store.steampowered.com/app/");
+			.quote("<a href=\"http://store.steampowered.com/app/");
 		final String appidgroup = "\\d+";
 		final String anything = ".*?";
 		final String nameopen = Pattern.quote("<span class=\"title\">");
 		final String namegroup = ".+?";
 		final String nameclose = Pattern.quote("</span>");
 		final String regex = aopen + "(" + appidgroup + ")"
-				+ anything + nameopen + "(" + namegroup + ")" + nameclose;
+			+ anything + nameopen + "(" + namegroup + ")" + nameclose;
 		final Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
 		return pattern;
 	}
@@ -84,7 +84,7 @@ public class SearchStore {
 		try
 		{
 			return new URI(p.scheme, p.authority, p.path,
-					p.query, p.fragment).toURL();
+				p.query, p.fragment).toURL();
 		}
 		catch (final MalformedURLException e)
 		{

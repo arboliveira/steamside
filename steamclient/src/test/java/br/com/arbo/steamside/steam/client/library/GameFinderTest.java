@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.api.collection;
+package br.com.arbo.steamside.steam.client.library;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -10,8 +10,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import br.com.arbo.steamside.steam.client.apps.NotFound;
-import br.com.arbo.steamside.steam.client.library.GameFinder;
-import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class GameFinderTest {
