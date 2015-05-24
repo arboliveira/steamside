@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.demo.main;
 
-import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
 import br.com.arbo.steamside.steam.client.apps.AppsHome;
@@ -12,10 +11,18 @@ import br.com.arbo.steamside.steam.client.types.AppType;
 
 class DemoAppsHome {
 
-	static void customize(Sources sources)
+	static AppsHomeFactory demoAppsHomeFactory()
 	{
-		sources.replaceWithSingleton(
-			AppsHomeFactory.class, demoAppsHomeFactory());
+		AppsHome appsHome = newInstance();
+		return () -> appsHome;
+	}
+
+	private static void add(InMemoryAppsHome appsHome, Appx... appxs)
+	{
+		for (Appx appx : appxs)
+		{
+			appsHome.add(app(appx));
+		}
 	}
 
 	private static App app(Appx appx)
@@ -29,36 +36,6 @@ class DemoAppsHome {
 			.make();
 	}
 
-	private static App appPapersPlease()
-	{
-		return app(new Appx() {
-
-			{
-				name = "Papers, Please";
-				appid = "239030";
-				lastPlayed = 1;
-			}
-		});
-	}
-
-	private static App appWindosill()
-	{
-		return app(new Appx() {
-
-			{
-				name = "Windosill";
-				appid = "37600";
-				lastPlayed = 2;
-			}
-		});
-	}
-
-	private static AppsHomeFactory demoAppsHomeFactory()
-	{
-		AppsHome appsHome = newInstance();
-		return () -> appsHome;
-	}
-
 	private static AppsHome newInstance()
 	{
 		InMemoryAppsHome appsHome = new InMemoryAppsHome();
@@ -68,15 +45,76 @@ class DemoAppsHome {
 
 	private static void populate(InMemoryAppsHome appsHome)
 	{
-		appsHome.add(appWindosill());
-		appsHome.add(appPapersPlease());
+		/* @formatter:off */
+		add(appsHome,
+			new Appx() {{
+				name = "Half-Life";
+				appid = "70";
+			}},
+			new Appx() {{
+				name = "Portal";
+				appid = "400";
+			}},
+			new Appx() {{
+				name = "Grand Theft Auto V";
+				appid = "271590";
+			}},
+			new Appx() {{
+				name = "Windosill";
+				appid = "37600";
+			}},
+			new Appx() {{
+				name = "Counter-Strike: Global Offensive";
+				appid = "730";
+			}},
+			new Appx() {{
+				name = "The Elder Scrolls V: Skyrim";
+				appid = "72850";
+			}},
+			new Appx() {{
+				name = "Papers, Please";
+				appid = "239030";
+			}},
+			new Appx() {{
+				name = "Spec Ops: The Line";
+				appid = "50300";
+			}},
+			new Appx() {{
+				name = "Scribblenauts Unlimited";
+				appid = "218680";
+			}},
+			new Appx() {{
+				name = "LEGO MARVEL Super Heroes";
+				appid = "249130";
+			}},
+			new Appx() {{
+				name = "FUEL";
+				appid = "12800";
+			}},
+			new Appx() {{
+				name = "FEZ";
+				appid = "224760";
+			}},
+			new Appx() {{
+				name = "The Path";
+				appid = "27000";
+			}}
+		);
+		/* @formatter:on */
 	}
 
 	static class Appx {
 
+		Appx()
+		{
+			lastPlayed = i--;
+		}
+
 		String appid;
 		long lastPlayed;
 		String name;
+
+		static long i = 1000;
 
 	}
 
