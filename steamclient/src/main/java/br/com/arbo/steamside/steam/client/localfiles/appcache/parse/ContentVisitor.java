@@ -43,7 +43,7 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 
 		if (SystemUtils.IS_OS_WINDOWS)
 			if (builder.executable_missing()
-					&& this.lastseen_executable.isPresent())
+				&& this.lastseen_executable.isPresent())
 				builder.executable(this.lastseen_executable);
 
 		parsevisitor.each(appid, builder.build());
@@ -56,7 +56,7 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 		if (is_key_name(key))
 			builder.name(new AppName(v));
 		if (is_key_type(key))
-			builder.type(new AppType(v));
+			builder.type(AppType.valueOf(v));
 		if (is_key_executable(key))
 			this.lastseen_executable = Optional.of(v);
 		if (is_key_oslist(key))
@@ -83,10 +83,10 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "executable";
 		if (key.named(wanted)
-				.underDeep("4/" + appid + "/launch").matches())
+			.underDeep("4/" + appid + "/launch").matches())
 			return true;
 		if (key.named(wanted)
-				.underDeep("4/config/launch").matches())
+			.underDeep("4/config/launch").matches())
 			return true;
 		return false;
 	}
@@ -95,10 +95,10 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "name";
 		if (key.named(wanted)
-				.under("2/" + appid).matches())
+			.under("2/" + appid).matches())
 			return true;
 		if (key.named(wanted)
-				.under("2/common").matches())
+			.under("2/common").matches())
 			return true;
 		return false;
 	}
@@ -107,10 +107,10 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "oslist";
 		if (key.named(wanted)
-				.underDeep("4/" + appid + "/launch").matches())
+			.underDeep("4/" + appid + "/launch").matches())
 			return true;
 		if (key.named(wanted)
-				.underDeep("4/config/launch").matches())
+			.underDeep("4/config/launch").matches())
 			return true;
 		return false;
 	}
@@ -119,10 +119,10 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "type";
 		if (key.named(wanted)
-				.under("2/" + appid).matches())
+			.under("2/" + appid).matches())
 			return true;
 		if (key.named(wanted)
-				.under("2/common").matches())
+			.under("2/common").matches())
 			return true;
 		return false;
 	}

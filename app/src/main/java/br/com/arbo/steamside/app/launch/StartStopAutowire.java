@@ -5,22 +5,24 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
 @EnableAutoConfiguration
-public class StartStop {
+@ConditionalOnBean(AutowireConditional.class)
+public class StartStopAutowire {
 
 	@PostConstruct
 	public void start()
 	{
-		autoStartup.start();
+		auto.autowire.start();
 	}
 
 	@PreDestroy
 	public void stop()
 	{
-		autoStartup.stop();
+		auto.autowire.stop();
 	}
 
-	public @Inject AutoStartup autoStartup;
+	public @Inject AutowireConditional auto;
 
 }

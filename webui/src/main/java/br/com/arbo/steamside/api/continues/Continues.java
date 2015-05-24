@@ -8,10 +8,11 @@ import javax.inject.Inject;
 import br.com.arbo.steamside.api.app.AppApi;
 import br.com.arbo.steamside.api.app.AppApiApp;
 import br.com.arbo.steamside.api.app.AppDTO;
+import br.com.arbo.steamside.api.app.AppDTOListBuilder;
 import br.com.arbo.steamside.api.app.AppSettings;
-import br.com.arbo.steamside.api.app.AppsDTO;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.continues.ContinuesRooster;
+import br.com.arbo.steamside.steam.client.apps.App;
 
 public class Continues {
 
@@ -28,12 +29,15 @@ public class Continues {
 
 	public List<AppDTO> continues()
 	{
-		final Stream<AppApi> apps = continues.continues()
-			.map(AppApiApp::new);
+		Stream<App> apps = continues.continues();
 
-		return new AppsDTO(
-			apps,
-			apiAppSettings.limit(), queries).jsonable();
+		Stream<AppApi> cards = apps.map(AppApiApp::new);
+
+		AppDTOListBuilder builder = new AppDTOListBuilder();
+		builder.cards(cards);
+		builder.limit(apiAppSettings.limit());
+		builder.tagsQueries(queries);
+		return builder.build();
 	}
 
 	private final AppSettings apiAppSettings;

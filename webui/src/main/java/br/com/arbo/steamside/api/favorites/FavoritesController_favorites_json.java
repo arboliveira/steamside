@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.api.app.AppApiApp;
 import br.com.arbo.steamside.api.app.AppDTO;
-import br.com.arbo.steamside.api.app.AppsDTO;
+import br.com.arbo.steamside.api.app.AppDTOListBuilder;
 import br.com.arbo.steamside.api.app.Limit;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
@@ -21,9 +21,9 @@ import br.com.arbo.steamside.types.CollectionName;
 class FavoritesController_favorites_json {
 
 	FavoritesController_favorites_json(
-			FavoritesOfUser ofUser,
-			Library library, Settings settings, Limit limit,
-			TagsQueries queries)
+		FavoritesOfUser ofUser,
+		Library library, Settings settings, Limit limit,
+		TagsQueries queries)
 	{
 		this.ofUser = ofUser;
 		this.library = library;
@@ -39,8 +39,8 @@ class FavoritesController_favorites_json {
 		final Stream< ? extends Tag> appsOf = queries.appsOf(collection);
 
 		Stream<App> apps =
-				new MissingFromLibrary(library)
-						.narrow(appsOf.map(Tag::appid));
+			new MissingFromLibrary(library)
+				.narrow(appsOf.map(Tag::appid));
 
 		Stream<App> filtered = new AppCriteria() {
 
@@ -50,9 +50,11 @@ class FavoritesController_favorites_json {
 			}
 		}.filter(apps);
 
-		return new AppsDTO(
-				filtered.map(AppApiApp::new),
-				limit, queries).jsonable();
+		AppDTOListBuilder builder = new AppDTOListBuilder();
+		builder.cards(filtered.map(AppApiApp::new));
+		builder.limit(limit);
+		builder.tagsQueries(queries);
+		return builder.build();
 	}
 
 	private CollectionName determineCollection()

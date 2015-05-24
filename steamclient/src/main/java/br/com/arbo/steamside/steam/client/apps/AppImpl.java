@@ -11,32 +11,33 @@ import org.eclipse.jdt.annotation.Nullable;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.AppName;
+import br.com.arbo.steamside.steam.client.types.AppNameTypes;
 import br.com.arbo.steamside.steam.client.types.AppType;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 public class AppImpl implements App {
 
 	AppImpl(
-			final AppId appId,
-			@Nullable AppName name,
-			Optional<AppType> type,
-			@Nullable String executable,
-			final Collection<String> categories,
-			final Optional<String> lastPlayed,
-			@Nullable final String cloudEnabled,
-			Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform,
-			Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf)
-			{
+		AppId appId,
+		@Nullable AppName name,
+		AppType type,
+		@Nullable String executable,
+		Collection<String> categories,
+		Optional<String> lastPlayed,
+		@Nullable final String cloudEnabled,
+		Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform,
+		Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf)
+	{
 		this.appid = Objects.requireNonNull(appId);
 		this.name = name;
-		this.type = type;
+		this.type = Objects.requireNonNull(type);
 		this.executable = executable;
 		this.categories = categories;
 		this.lastPlayed = lastPlayed;
 		this.cloudEnabled = cloudEnabled;
 		this.notAvailableOnThisPlatform = notAvailableOnThisPlatform;
 		this.missingFrom_appinfo_vdf = missingFrom_appinfo_vdf;
-			}
+	}
 
 	@Override
 	public AppId appid()
@@ -51,7 +52,7 @@ public class AppImpl implements App {
 
 	@Override
 	public String executable()
-			throws NotAvailableOnThisPlatform, MissingFrom_appinfo_vdf
+		throws NotAvailableOnThisPlatform, MissingFrom_appinfo_vdf
 	{
 		guard_notAvailableOnThisPlatform();
 		guard_missingFrom_appinfo_vdf();
@@ -62,8 +63,8 @@ public class AppImpl implements App {
 	public void forEachCategory(final Consumer<SteamCategory> visitor)
 	{
 		categories.stream().map(
-				one -> new SteamCategory(one))
-				.forEach(visitor);
+			one -> new SteamCategory(one))
+			.forEach(visitor);
 	}
 
 	@Override
@@ -94,35 +95,29 @@ public class AppImpl implements App {
 	@Override
 	public String toString()
 	{
-		String s = appid.toString() + ":" + String.valueOf(name);
-
-		String t = type
-				.filter(_type -> !_type.isGame())
-				.map(_type -> " (" + _type + ")")
-				.orElse("");
-
-		return s + t;
+		return appid.toString() + ":" +
+			AppNameTypes.appnametype(name, type);
 	}
 
 	@Override
 	public AppType type()
 	{
 		guard_missingFrom_appinfo_vdf();
-		return type.orElseThrow(NullPointerException::new);
+		return type;
 	}
 
 	private void guard_missingFrom_appinfo_vdf()
 	{
 		missingFrom_appinfo_vdf.ifPresent(m -> {
 			throw m;
-		} );
+		});
 	}
 
 	private void guard_notAvailableOnThisPlatform()
 	{
 		notAvailableOnThisPlatform.ifPresent(n -> {
 			throw n;
-		} );
+		});
 	}
 
 	public static class Builder {
@@ -158,11 +153,11 @@ public class AppImpl implements App {
 		public AppImpl make()
 		{
 			return new AppImpl(
-					newAppId(), this.name,
-					this.type, this.executable,
-					this.categories, this.lastPlayed, this.cloudEnabled,
-					this.notAvailableOnThisPlatform,
-					this.missingFrom_appinfo_vdf);
+				newAppId(), this.name,
+				this.type.orElse(AppType.GAME), this.executable,
+				this.categories, this.lastPlayed, this.cloudEnabled,
+				this.notAvailableOnThisPlatform,
+				this.missingFrom_appinfo_vdf);
 		}
 
 		public void missingFrom_appinfo_vdf(MissingFrom_appinfo_vdf e)
@@ -181,9 +176,10 @@ public class AppImpl implements App {
 			this.notAvailableOnThisPlatform = Optional.of(e);
 		}
 
-		public void type(AppType type)
+		public Builder type(AppType type)
 		{
 			this.type = Optional.of(type);
+			return this;
 		}
 
 		private AppId newAppId()
@@ -201,13 +197,14 @@ public class AppImpl implements App {
 
 		private Optional<String> lastPlayed = Optional.empty();
 
-		private Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf = Optional
+		private Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf =
+			Optional
 				.empty();
 
 		private AppName name;
 
-		private Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform = Optional
-				.empty();
+		private Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform =
+			Optional.empty();
 
 		private Optional<AppType> type = Optional.empty();
 	}
@@ -231,6 +228,6 @@ public class AppImpl implements App {
 
 	private final Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform;
 
-	private final Optional<AppType> type;
+	private final AppType type;
 
 }

@@ -15,6 +15,7 @@ import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.digest.Digester;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.monitoring.Monitor;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 
 public class ParallelAppsHomeFactory implements AppsHomeFactory {
@@ -26,13 +27,18 @@ public class ParallelAppsHomeFactory implements AppsHomeFactory {
 	}
 
 	@Inject
-	public ParallelAppsHomeFactory(File_appinfo_vdf file_appinfo_vdf,
+	public ParallelAppsHomeFactory(
+		File_appinfo_vdf file_appinfo_vdf,
 		File_localconfig_vdf file_localconfig_vdf,
 		File_sharedconfig_vdf file_sharedconfig_vdf)
 	{
 		this.file_appinfo_vdf = file_appinfo_vdf;
 		this.file_localconfig_vdf = file_localconfig_vdf;
 		this.file_sharedconfig_vdf = file_sharedconfig_vdf;
+
+		this.monitor = new Monitor(
+			file_localconfig_vdf, file_sharedconfig_vdf, file_appinfo_vdf,
+			this::reload);
 
 		ThreadFactory threadFactory = newDaemonThreadFactory();
 		divideExecutor = newFixedThreadPool(3, threadFactory);
@@ -59,13 +65,20 @@ public class ParallelAppsHomeFactory implements AppsHomeFactory {
 		}
 	}
 
-	public void shutdown()
+	public void start()
 	{
+		reload();
+		monitor.start();
+	}
+
+	public void stop()
+	{
+		monitor.stop();
 		divideExecutor.shutdown();
 		conquerExecutor.shutdown();
 	}
 
-	public void submit()
+	void reload()
 	{
 		this.appsHomeFuture = this.digest();
 	}
@@ -92,6 +105,7 @@ public class ParallelAppsHomeFactory implements AppsHomeFactory {
 	private final File_appinfo_vdf file_appinfo_vdf;
 	private final File_localconfig_vdf file_localconfig_vdf;
 	private final File_sharedconfig_vdf file_sharedconfig_vdf;
+	private final Monitor monitor;
 	private final ExecutorService divideExecutor;
 	private final ExecutorService conquerExecutor;
 	private Future<AppsHome> appsHomeFuture;

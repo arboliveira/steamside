@@ -4,10 +4,9 @@ public class AppNameTypes {
 
 	public static String appnametype(AppName name, AppType type)
 	{
-		final String n = name.name;
-		final String t = type.type;
-		if ("game".equals(t)) return n;
-		return n + " (" + t + ")";
+		String n = name.name;
+		if (type.isGame()) return n;
+		return n + " (" + type.type + ")";
 	}
 
 }

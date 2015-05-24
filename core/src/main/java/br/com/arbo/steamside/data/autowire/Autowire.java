@@ -1,7 +1,5 @@
 package br.com.arbo.steamside.data.autowire;
 
-import javax.inject.Inject;
-
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.data.InMemorySteamsideData;
@@ -24,11 +22,10 @@ public class Autowire {
 		return new InMemorySteamsideData(c, t, k);
 	}
 
-	@Inject
 	public Autowire(
-			InitialLoad initialLoad,
-			AutowireSteamsideData data,
-			ParallelSave parallelSave)
+		InitialLoad initialLoad,
+		AutowireSteamsideData data,
+		ParallelSave parallelSave)
 	{
 		this.initialLoad = initialLoad;
 		this.data = data;
@@ -40,6 +37,11 @@ public class Autowire {
 		SteamsideData initial = loadInitialSteamsideData();
 		SteamsideData withAutosave = connectParallelAutosave(initial);
 		data.set(withAutosave);
+	}
+
+	public void stop()
+	{
+		//
 	}
 
 	private ObservableSteamsideData connectParallelAutosave(SteamsideData in)
@@ -65,9 +67,7 @@ public class Autowire {
 	}
 
 	private final AutowireSteamsideData data;
-
 	private final InitialLoad initialLoad;
-
 	private final ParallelSave parallelSave;
 
 }

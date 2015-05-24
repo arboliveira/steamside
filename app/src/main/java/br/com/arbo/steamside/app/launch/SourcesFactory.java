@@ -26,7 +26,6 @@ import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.data.SteamsideData;
-import br.com.arbo.steamside.data.autowire.Autowire;
 import br.com.arbo.steamside.data.autowire.AutowireCollectionsData;
 import br.com.arbo.steamside.data.autowire.AutowireKidsData;
 import br.com.arbo.steamside.data.autowire.AutowireSteamsideData;
@@ -49,14 +48,11 @@ import br.com.arbo.steamside.settings.local.File_steamside_local_xml;
 import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
 import br.com.arbo.steamside.settings.local.LocalSettingsLoad;
 import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
-import br.com.arbo.steamside.steam.client.autoreload.DigestOnChange;
 import br.com.arbo.steamside.steam.client.autoreload.ParallelAppsHomeFactory;
 import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.library.LibraryImpl;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.monitoring.ChangeListener;
-import br.com.arbo.steamside.steam.client.localfiles.monitoring.Monitor;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
@@ -72,7 +68,6 @@ public class SourcesFactory {
 	private static Sources addComponents(Sources container)
 	{
 		container
-			.sources(AutoStartup.class)
 			.sourceImplementor(Settings.class, SettingsImpl.class)
 			.sourceImplementor(
 				br.com.arbo.steamside.api.app.AppSettings.class,
@@ -84,10 +79,6 @@ public class SourcesFactory {
 				AppsHomeFactory.class, ParallelAppsHomeFactory.class);
 
 		container
-			.sources(Monitor.class)
-			.sourceImplementor(ChangeListener.class, DigestOnChange.class);
-
-		container
 			.sourceImplementor(
 				SteamsideData.class, AutowireSteamsideData.class)
 			.sourceImplementor(
@@ -95,15 +86,15 @@ public class SourcesFactory {
 			.sourceImplementor(
 				TagsData.class, AutowireTagsData.class)
 			.sourceImplementor(
-				KidsData.class, AutowireKidsData.class);
+				KidsData.class, AutowireKidsData.class)
+			.sources(AutowireConditional.class);
 
 		container
 			.sourceImplementor(LoadFile.class, LoadSteamsideXml.class)
 			.sourceImplementor(InitialLoad.class, FromCloudAndFile.class)
 			.sources(
 				File_steamside_xml.class,
-				ParallelSave.class,
-				Autowire.class);
+				ParallelSave.class);
 
 		container
 			.sourceImplementor(
@@ -194,7 +185,8 @@ public class SourcesFactory {
 
 	public Sources newInstanceLive()
 	{
-		return newInstance().sources(StartStop.class);
+		return newInstance().sources(
+			StartStopAutowire.class, StartStopParallelAppsHomeFactory.class);
 	}
 
 	Sources newInstance()

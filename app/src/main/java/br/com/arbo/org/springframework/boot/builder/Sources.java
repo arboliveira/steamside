@@ -42,12 +42,26 @@ public class Sources {
 			.map(Optional::get);
 	}
 
+	public void removeImplementation(Class< ? > anInterface)
+	{
+		checkInterface(anInterface);
+		checkExistsImplementation(anInterface);
+		implementations.remove(anInterface);
+	}
+
+	public void removeSources(Class< ? >... sources)
+	{
+		for (Class< ? > source : sources)
+			checkExistsSource(source);
+		classes.removeAll(Arrays.asList(sources));
+	}
+
 	public <T> Sources replaceWithImplementor(
 		Class<T> anInterface,
 		Class< ? extends T> implementor)
 	{
 		checkInterface(anInterface);
-		remove(anInterface);
+		removeImplementation(anInterface);
 		return sourceImplementor(anInterface, implementor);
 	}
 
@@ -56,7 +70,7 @@ public class Sources {
 		T singleton)
 	{
 		checkInterface(anInterface);
-		remove(anInterface);
+		removeImplementation(anInterface);
 		return registerSingleton(anInterface, singleton);
 	}
 
@@ -84,11 +98,18 @@ public class Sources {
 		return all.toArray(new Class< ? >[all.size()]);
 	}
 
-	private void checkExists(Class< ? > key)
+	private void checkExistsImplementation(Class< ? > key)
 	{
 		Preconditions.checkState(
 			implementations.containsKey(key),
 			"Never registered: " + key);
+	}
+
+	private void checkExistsSource(Class< ? > source)
+	{
+		Preconditions.checkState(
+			classes.contains(source),
+			"Never registered: " + source);
 	}
 
 	private void checkNotDuplicate(Class< ? > key)
@@ -112,12 +133,6 @@ public class Sources {
 		implementations.put(key, source);
 	}
 
-	private void remove(Class< ? > key)
-	{
-		checkExists(key);
-		implementations.remove(key);
-	}
-
 	static class Implementor implements Source {
 
 		Implementor(Class< ? > classToSource)
@@ -137,7 +152,7 @@ public class Sources {
 			return Optional.empty();
 		}
 
-		private Class< ? > classToSource;
+		private final Class< ? > classToSource;
 
 	}
 
@@ -160,7 +175,7 @@ public class Sources {
 			return Optional.of(singleton);
 		}
 
-		private Object singleton;
+		private final Object singleton;
 
 	}
 

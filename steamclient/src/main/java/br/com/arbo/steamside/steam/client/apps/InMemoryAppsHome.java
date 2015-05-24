@@ -36,34 +36,35 @@ public class InMemoryAppsHome implements AppsHome {
 	public App find(final AppId appid) throws NotFound
 	{
 		return Optional
-				.ofNullable(
-						apps.get(appid.appid))
-				.orElseThrow(
-						() -> NotFound.appid(appid.appid));
+			.ofNullable(
+				apps.get(appid.appid))
+			.orElseThrow(
+				() -> NotFound.appid(appid.appid));
 	}
 
 	@Override
 	public Stream<App> findIn(SteamCategory category)
 	{
 		return Optional
-				.ofNullable(
-						categories.get(category.category))
-				.map(
-						List::stream)
-				.orElseThrow(
-						() -> new SteamCategory.NotFound());
+			.ofNullable(
+				categories.get(category.category))
+			.map(
+				List::stream)
+			.orElseThrow(
+				() -> new SteamCategory.NotFound());
 	}
 
 	@Override
 	public Stream<App> stream(AppCriteria criteria)
 	{
-		final Stream<App> stream = apps.values().stream();
-		if (AppCriteria.isAll(criteria)) return stream;
+		Stream<App> stream = apps.values().stream();
+		if (AppCriteria.isAll(criteria))
+			return stream;
 		return criteria.filter(stream);
 	}
 
 	final ArrayListMultimap<String, App> categories = ArrayListMultimap
-			.<String, App> create();
+		.<String, App> create();
 
 	private final Map<String, App> apps = new HashMap<String, App>();
 

@@ -101,14 +101,9 @@ public class SearchStore {
 		final URL store = storeSearch(term);
 		try
 		{
-			final InputStream stream = store.openStream();
-			try
+			try (InputStream stream = store.openStream())
 			{
 				return IOUtils.toString(stream);
-			}
-			finally
-			{
-				stream.close();
 			}
 		}
 		catch (final IOException e)
