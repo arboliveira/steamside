@@ -23,10 +23,10 @@
 	margin-right: 1em;
 }
 .logo {
-	font-family: Jura, sans-serif; font-size: 60px;
+	font-family: Jura, sans-serif; font-size: 80px;
 }
 .slogan { 
-	font-family: Arvo; font-size: 18px;
+	font-family: Arvo; font-size: 22px;
 	text-align: center;
 	margin-top: 0;
 	margin-bottom: 0;
@@ -35,16 +35,23 @@
 	color: crimson;
 }
 .button {
-	float: left;
 	text-align: center;
 	font-family: Arvo;
+	display: inline-block;
+	/*
+	float: left;
 	margin-left: 0.75em;
 	margin-right: 0;
+	margin-bottom: 0.75em;
+	*/
+	margin: 0.5em;
 	border-radius: 10px;
 	border-color: LightSteelBlue;
 	border-style: solid;
 	background: LightYellow;
 	padding: 1em;	/* distance from text to border */
+	padding-left: 1.5em;
+	padding-right: 1.5em;
 }
 .button a {
     text-decoration: none;	/* hide link underline */
@@ -53,40 +60,40 @@
 .button a:active {
 	color: #000;
 }
-.learn {
-	font-family: Arvo; font-size: 18px;
-	text-align: center;
-	margin: 1em;
-}
-.features {
-	font-family: Arvo; font-size: 12px;
-	text-align: left;
-	width:70%;
-}
-.features a {
-	text-decoration: none;	/* hide link underline */
-}
-.feature {
-	vertical-align: middle;
-	margin-bottom: 0.2em;
-	margin-top: 0.2em;
-	margin-left: 4em;
-}
-.feature-bullet {
-	background-image: url('steamside.png'); background-repeat: no-repeat; background-size: 1.5em;
-	padding-right: 1.5em;
-	padding-bottom: 2em;
-}
 .run {
-	font-size: 20px;
+	font-size: 24px;
 }
 .requires {
 	margin-top: 0;
 	padding-top: 0;
 	font-size: small;
 }
+.learn {
+	font-family: Arvo; font-size: 20px;
+	text-align: center;
+	margin: 1em;
+}
+.features {
+	font-family: Arvo; font-size: 16px;
+	text-align: left;
+}
+.features a {
+	text-decoration: none;	/* hide link underline */
+}
+.feature {
+	vertical-align: middle;
+	margin-bottom: 0.5em;
+	margin-top: 0.5em;
+	margin-left: 4em;
+	margin-right: 6em;
+}
+.feature-bullet {
+	background-image: url('steamside.png'); background-repeat: no-repeat; background-size: 1.5em;
+	padding-right: 1.5em;
+	padding-bottom: 2em;
+}
 .made {
-	font-size: x-small;
+	font-size: 12px;
 }
 </style>
 
@@ -105,9 +112,12 @@
 			 data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" />
 	</a>
 
-<div style='float:left; width: 450px '>
-	<div style='float:left; width: 100px'>
-		<p style="margin: 0"><img src='steamside.png' alt="Steamside" style="width: 100%; height: 100%" /></p>
+<div style='float:left; margin: 1em;'>
+	<div style='float:left; width: 120px'>
+		<p style="margin: 0">
+			<img src='steamside.png' alt="Steamside"
+				 style="width: 100%; height: 100%" />
+		</p>
 	</div>
 	<div style='float:left; margin-left: 1em'>
 		<div style='margin-top:0px'>
@@ -119,7 +129,7 @@
 	</div>
 </div>
 
-<div style='clear:both; float:right; margin: 0.5em; margin-right: 8em'>
+<div style='clear:both; text-align:right; margin: 0.5em; margin-right: 8em'>
 	<div class='button'>
 		<a href="https://github.com/arboliveira/steamside/releases/download/v1.0-201505260311-alpha/steamside-app-1.0-SNAPSHOT.jar"><span class="run">Run Steamside</span></a>
 		<br/>
@@ -179,7 +189,8 @@ Some cool things you'll be able to do...
 	</p>
 </div>
 
-<div class="made" style="clear: both; float: right; margin-top: 2em; position: absolute; bottom: 0; right: 0; margin: 2em" >
+<div class="made"
+	 style="clear: both; text-align: right; position: absolute; bottom: 0; right: 0; margin: 3em; margin-left: 12em" >
 	Made with love by <a href="https://github.com/arboliveira" target="_blank">Arbo</a>.
 	Steamside is an open source fan work not affiliated with, sponsored, or endorsed by
 		<a href="http://www.valvesoftware.com/" target="_blank">Valve</a>.
