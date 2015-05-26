@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.demo.main;
 
-import br.com.arbo.steamside.app.main.SpringApplicationFactory;
+import br.com.arbo.steamside.app.context.SpringApplicationFactory;
+import br.com.arbo.steamside.demo.context.SourcesFactory;
 
 public class Main {
 

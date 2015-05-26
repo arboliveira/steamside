@@ -5,7 +5,7 @@
 	<artifactId>steamside</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>SteamSide</name>
+	<name>Steamside</name>
 	<description>Your companion on Steam</description>
 	<parent>
 	    <groupId>org.springframework.boot</groupId>
@@ -16,6 +16,7 @@
 		<module>steamclient</module>
 		<module>core</module>
 		<module>webui</module>
+		<module>main</module>
 		<module>app</module>
 		<module>demo</module>
 	</modules>
