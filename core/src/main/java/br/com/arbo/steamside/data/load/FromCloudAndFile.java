@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.data.load;
 
 import java.io.FileNotFoundException;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -8,10 +9,15 @@ import br.com.arbo.steamside.cloud.CloudSettingsFactory.Missing;
 import br.com.arbo.steamside.cloud.LoadCloud;
 import br.com.arbo.steamside.cloud.LoadCloud.Disabled;
 import br.com.arbo.steamside.cloud.Unavailable;
+import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
+import br.com.arbo.steamside.collections.InMemoryTagsHome;
+import br.com.arbo.steamside.data.InMemorySteamsideData;
+import br.com.arbo.steamside.data.SteamsideData;
+import br.com.arbo.steamside.kids.InMemoryKids;
 import br.com.arbo.steamside.settings.file.LoadFile;
-import br.com.arbo.steamside.xml.SteamsideXml;
 
-public class FromCloudAndFile implements InitialLoad {
+public class FromCloudAndFile implements InitialLoad
+{
 
 	@Inject
 	public FromCloudAndFile(LoadCloud cloud, LoadFile file)
@@ -21,55 +27,61 @@ public class FromCloudAndFile implements InitialLoad {
 	}
 
 	@Override
-	public SteamsideXml loadSteamsideXml()
+	public SteamsideData loadSteamsideData()
 	{
-		try
-		{
-			return fromCloud();
-		}
-		catch (NotLoaded notFromCloud)
-		{
-			return fromFile();
-		}
+		return fromCloud().orElseGet(
+			() -> fromFile().orElseGet(
+				() -> fromSteam()));
 	}
 
-	private SteamsideXml fromCloud()
+	private Optional<SteamsideData> fromCloud()
 	{
 		try
 		{
-			return cloud.load();
+			return Optional.of(cloud.load().toSteamsideData());
+			// TODO Success? Enqueue save to file
 		}
 		catch (Disabled e)
 		{
 			// Oh well, you know what you're doing, probably
-			throw new NotLoaded(e);
+			return Optional.empty();
 		}
 		catch (Unavailable e)
 		{
 			// TODO Send Warning to User Alert Bus: can't sync to the cloud
 			e.printStackTrace();
-			throw new NotLoaded(e);
+			return Optional.empty();
 		}
 		catch (Missing e)
 		{
 			// TODO Send Suggestion to User Alert Bus: configure sync?
 			e.printStackTrace();
-			throw new NotLoaded(e);
+			return Optional.empty();
 		}
 	}
 
-	private SteamsideXml fromFile()
+	private Optional<SteamsideData> fromFile()
 	{
 		try
 		{
-			return file.load();
+			return Optional.of(file.load().toSteamsideData());
 		}
 		catch (FileNotFoundException e)
 		{
 			// TODO Notify the outside world. First time?
 			e.printStackTrace();
-			throw new NotLoaded(e);
+			return Optional.empty();
 		}
+	}
+
+	@SuppressWarnings("static-method")
+	private SteamsideData fromSteam()
+	{
+		// TODO Copy ALL the Steam!
+		InMemoryCollectionsHome c = new InMemoryCollectionsHome();
+		InMemoryTagsHome t = new InMemoryTagsHome(c);
+		InMemoryKids k = new InMemoryKids();
+		return new InMemorySteamsideData(c, t, k);
 	}
 
 	private final LoadCloud cloud;

@@ -1,26 +1,13 @@
 package br.com.arbo.steamside.data.autowire;
 
-import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
-import br.com.arbo.steamside.collections.InMemoryTagsHome;
-import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.data.ObservableSteamsideData;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.data.load.InitialLoad;
-import br.com.arbo.steamside.data.load.InitialLoad.NotLoaded;
-import br.com.arbo.steamside.kids.InMemoryKids;
-import br.com.arbo.steamside.xml.SteamsideXml;
 import br.com.arbo.steamside.xml.autosave.AutoSave;
 import br.com.arbo.steamside.xml.autosave.ParallelSave;
 
-public class Autowire {
-
-	private static SteamsideData newSteamsideData()
-	{
-		InMemoryCollectionsHome c = new InMemoryCollectionsHome();
-		InMemoryTagsHome t = new InMemoryTagsHome(c);
-		InMemoryKids k = new InMemoryKids();
-		return new InMemorySteamsideData(c, t, k);
-	}
+public class Autowire
+{
 
 	public Autowire(
 		InitialLoad initialLoad,
@@ -53,17 +40,7 @@ public class Autowire {
 
 	private SteamsideData loadInitialSteamsideData()
 	{
-		try
-		{
-			SteamsideXml xml = initialLoad.loadSteamsideXml();
-			return xml.toSteamsideData();
-		}
-		catch (NotLoaded e)
-		{
-			// TODO Notify the outside world. First time?
-			e.printStackTrace();
-			return newSteamsideData();
-		}
+		return initialLoad.loadSteamsideData();
 	}
 
 	private final AutowireSteamsideData data;
