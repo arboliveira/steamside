@@ -21,6 +21,7 @@ import br.com.arbo.steamside.collections.CombineCollections.Operation;
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
+import br.com.arbo.steamside.data.copy.CopyAllSteamCategories;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.Library;

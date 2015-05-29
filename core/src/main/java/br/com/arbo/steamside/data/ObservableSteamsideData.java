@@ -27,10 +27,11 @@ import br.com.arbo.steamside.kids.KidsWrites;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class ObservableSteamsideData implements SteamsideData {
+public class ObservableSteamsideData implements SteamsideData
+{
 
 	static Object invokeMethod(Object obj, Method method, Object[] args)
-			throws IllegalAccessException, InvocationTargetException
+		throws IllegalAccessException, InvocationTargetException
 	{
 		try
 		{
@@ -78,12 +79,12 @@ public class ObservableSteamsideData implements SteamsideData {
 		return new ChangeAwareTagsData();
 	}
 
-	<T> T newChangeAwareProxy(Class<T> intf, Supplier< ? extends T> target)
+	<T> T newChangeAwareProxy(Class<T> intf, Supplier<? extends T> target)
 	{
 		return newProxyInstance(intf, new ChangeAware<T>(target));
 	}
 
-	<T> T newImmediateProxy(Class<T> intf, Supplier< ? extends T> target)
+	<T> T newImmediateProxy(Class<T> intf, Supplier<? extends T> target)
 	{
 		return newProxyInstance(intf, new Immediate<T>(target));
 	}
@@ -107,38 +108,41 @@ public class ObservableSteamsideData implements SteamsideData {
 	private <T> T newProxyInstance(Class<T> intf, final InvocationHandler h)
 	{
 		return (T) Proxy.newProxyInstance(
-				this.getClass().getClassLoader(),
-				new Class[] { intf },
-				h);
+			this.getClass().getClassLoader(),
+			new Class[] { intf },
+			h);
 	}
 
-	public interface ChangeObserver {
+	public interface ChangeObserver
+	{
 
 		void onChange();
 
 	}
 
-	class ChangeAware<T> implements InvocationHandler {
+	class ChangeAware<T> implements InvocationHandler
+	{
 
-		ChangeAware(final Supplier< ? extends T> target)
+		ChangeAware(final Supplier<? extends T> target)
 		{
 			this.target = target;
 		}
 
 		@Override
 		public Object invoke(Object proxy, Method method, Object[] args)
-				throws Throwable
+			throws Throwable
 		{
 			Object ret = invokeMethod(target.get(), method, args);
 			changed();
 			return ret;
 		}
 
-		private final Supplier< ? extends T> target;
+		private final Supplier<? extends T> target;
 
 	}
 
-	class ChangeAwareCollectionsData implements CollectionsData {
+	class ChangeAwareCollectionsData implements CollectionsData
+	{
 
 		ChangeAwareCollectionsData()
 		{
@@ -154,7 +158,7 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public Stream< ? extends CollectionI> all()
+		public Stream<? extends CollectionI> all()
 		{
 			return reads.all();
 		}
@@ -187,7 +191,8 @@ public class ObservableSteamsideData implements SteamsideData {
 		private final CollectionsWrites writes;
 	}
 
-	class ChangeAwareKidsData implements KidsData {
+	class ChangeAwareKidsData implements KidsData
+	{
 
 		ChangeAwareKidsData()
 		{
@@ -220,7 +225,8 @@ public class ObservableSteamsideData implements SteamsideData {
 
 	}
 
-	class ChangeAwareTagsData implements TagsData {
+	class ChangeAwareTagsData implements TagsData
+	{
 
 		ChangeAwareTagsData()
 		{
@@ -230,13 +236,13 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public Stream< ? extends WithTags> allWithTags()
+		public Stream<? extends WithTags> allWithTags()
 		{
 			return reads.allWithTags();
 		}
 
 		@Override
-		public Stream< ? extends Tag> apps(CollectionI collection)
+		public Stream<? extends Tag> apps(CollectionI collection)
 		{
 			return reads.apps(collection);
 		}
@@ -260,7 +266,7 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
-		public Stream< ? extends WithCount> recent()
+		public Stream<? extends WithCount> recent()
 		{
 			return reads.recent();
 		}
@@ -272,13 +278,19 @@ public class ObservableSteamsideData implements SteamsideData {
 		}
 
 		@Override
+		public void tagn(Stream<WithApps> withApps) throws NotFound
+		{
+			writes.tagn(withApps);
+		}
+
+		@Override
 		public void tagRemember(CollectionI c, AppId appid)
 		{
 			writes.tagRemember(c, appid);
 		}
 
 		@Override
-		public Stream< ? extends CollectionI> tags(AppId app)
+		public Stream<? extends CollectionI> tags(AppId app)
 		{
 			return reads.tags(app);
 		}
@@ -294,25 +306,27 @@ public class ObservableSteamsideData implements SteamsideData {
 		private final TagsWrites writes;
 	}
 
-	static final class Immediate<T> implements InvocationHandler {
+	static final class Immediate<T> implements InvocationHandler
+	{
 
-		Immediate(final Supplier< ? extends T> target)
+		Immediate(final Supplier<? extends T> target)
 		{
 			this.target = target;
 		}
 
 		@Override
 		public Object invoke(Object proxy, Method method, Object[] args)
-				throws Throwable
+			throws Throwable
 		{
 			return invokeMethod(target.get(), method, args);
 		}
 
-		private final Supplier< ? extends T> target;
+		private final Supplier<? extends T> target;
 
 	}
 
-	final CollectionsData autoSaveCollections = new ChangeAwareCollectionsData();
+	final CollectionsData autoSaveCollections =
+		new ChangeAwareCollectionsData();
 
 	private final ArrayList<ChangeObserver> listeners = new ArrayList<>(1);
 

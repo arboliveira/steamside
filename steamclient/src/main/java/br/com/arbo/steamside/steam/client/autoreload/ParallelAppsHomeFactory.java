@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 
 import javax.inject.Inject;
@@ -18,7 +19,8 @@ import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfi
 import br.com.arbo.steamside.steam.client.localfiles.monitoring.Monitor;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
 
-public class ParallelAppsHomeFactory implements AppsHomeFactory {
+public class ParallelAppsHomeFactory implements AppsHomeFactory
+{
 
 	private static ExecutorService newFixedThreadPool(
 		int nThreads, ThreadFactory threadFactory)
@@ -50,6 +52,7 @@ public class ParallelAppsHomeFactory implements AppsHomeFactory {
 	{
 		try
 		{
+			waitUntilAvailable();
 			return appsHomeFuture.get();
 		}
 		catch (final InterruptedException e)
@@ -81,6 +84,7 @@ public class ParallelAppsHomeFactory implements AppsHomeFactory {
 	void reload()
 	{
 		this.appsHomeFuture = this.digest();
+		available.release();
 	}
 
 	private Future<AppsHome> digest()
@@ -91,7 +95,7 @@ public class ParallelAppsHomeFactory implements AppsHomeFactory {
 			file_sharedconfig_vdf,
 			divideExecutor,
 			conquerExecutor)
-				.digest();
+		.digest();
 	}
 
 	private BasicThreadFactory newDaemonThreadFactory()
@@ -102,6 +106,12 @@ public class ParallelAppsHomeFactory implements AppsHomeFactory {
 			.build();
 	}
 
+	private void waitUntilAvailable() throws InterruptedException
+	{
+		available.acquire();
+		available.release();
+	}
+
 	private final File_appinfo_vdf file_appinfo_vdf;
 	private final File_localconfig_vdf file_localconfig_vdf;
 	private final File_sharedconfig_vdf file_sharedconfig_vdf;
@@ -109,5 +119,6 @@ public class ParallelAppsHomeFactory implements AppsHomeFactory {
 	private final ExecutorService divideExecutor;
 	private final ExecutorService conquerExecutor;
 	private Future<AppsHome> appsHomeFuture;
+	private final Semaphore available = new Semaphore(0);
 
 }

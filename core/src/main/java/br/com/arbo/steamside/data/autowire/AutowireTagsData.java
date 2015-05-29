@@ -11,7 +11,8 @@ import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class AutowireTagsData implements TagsData {
+public class AutowireTagsData implements TagsData
+{
 
 	@Inject
 	public AutowireTagsData(AutowireSteamsideData steamside)
@@ -20,13 +21,13 @@ public class AutowireTagsData implements TagsData {
 	}
 
 	@Override
-	public Stream< ? extends WithTags> allWithTags()
+	public Stream<? extends WithTags> allWithTags()
 	{
 		return reloadable().allWithTags();
 	}
 
 	@Override
-	public Stream< ? extends Tag> apps(CollectionI collection)
+	public Stream<? extends Tag> apps(CollectionI collection)
 	{
 		return reloadable().apps(collection);
 	}
@@ -50,7 +51,7 @@ public class AutowireTagsData implements TagsData {
 	}
 
 	@Override
-	public Stream< ? extends WithCount> recent()
+	public Stream<? extends WithCount> recent()
 	{
 		return reloadable().recent();
 	}
@@ -62,21 +63,27 @@ public class AutowireTagsData implements TagsData {
 	}
 
 	@Override
+	public void tagn(Stream<WithApps> withApps) throws NotFound
+	{
+		reloadable().tagn(withApps);
+	}
+
+	@Override
 	public void tagRemember(CollectionI c, AppId appid)
-			throws NotFound
+		throws NotFound
 	{
 		reloadable().tagRemember(c, appid);
 	}
 
 	@Override
-	public Stream< ? extends CollectionI> tags(AppId app)
+	public Stream<? extends CollectionI> tags(AppId app)
 	{
 		return reloadable().tags(app);
 	}
 
 	@Override
 	public void untag(CollectionI c, AppId appid)
-			throws NotFound
+		throws NotFound
 	{
 		reloadable().untag(c, appid);
 	}

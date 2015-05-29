@@ -12,7 +12,8 @@ import org.apache.commons.io.IOUtils;
 
 import br.com.arbo.opersys.username.User;
 
-public class FromURL implements DetectSteamside {
+public class FromURL implements DetectSteamside
+{
 
 	private static String fetch_username_txt(URL proof)
 		throws IOException
@@ -56,7 +57,7 @@ public class FromURL implements DetectSteamside {
 				? Situation.AlreadyRunningForThisUser
 				: Situation.RunningOnDifferentUser;
 		}
-		catch (@SuppressWarnings("unused") SteamsideNotRunningInThisPort e)
+		catch (SteamsideNotRunningInThisPort e)
 		{
 			return Situation.NotHere;
 		}
@@ -75,7 +76,7 @@ public class FromURL implements DetectSteamside {
 		{
 			throw new SteamsideNotRunningInThisPort();
 		}
-		catch (@SuppressWarnings("unused") IOException e1)
+		catch (IOException e1)
 		{
 			try
 			{
@@ -89,7 +90,8 @@ public class FromURL implements DetectSteamside {
 		}
 	}
 
-	static class SteamsideNotRunningInThisPort extends Exception {
+	static class SteamsideNotRunningInThisPort extends Exception
+	{
 
 		SteamsideNotRunningInThisPort()
 		{

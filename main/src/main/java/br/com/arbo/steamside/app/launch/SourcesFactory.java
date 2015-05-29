@@ -26,6 +26,8 @@ import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.continues.ContinuesFromSteamClientLocalfiles;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.data.SteamsideData;
+import br.com.arbo.steamside.data.SteamsideDataExecutor;
+import br.com.arbo.steamside.data.SteamsideDataExecutorImpl;
 import br.com.arbo.steamside.data.autowire.AutowireCollectionsData;
 import br.com.arbo.steamside.data.autowire.AutowireKidsData;
 import br.com.arbo.steamside.data.autowire.AutowireSteamsideData;
@@ -63,7 +65,8 @@ import br.com.arbo.steamside.steam.client.localfiles.steamlocation.Windows;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.xml.autosave.ParallelSave;
 
-public class SourcesFactory {
+public class SourcesFactory
+{
 
 	private static Sources addComponents(Sources container)
 	{
@@ -88,6 +91,11 @@ public class SourcesFactory {
 			.sourceImplementor(
 				KidsData.class, AutowireKidsData.class)
 			.sources(AutowireConditional.class);
+
+		container
+			.sourceImplementor(
+				SteamsideDataExecutor.class,
+				SteamsideDataExecutorImpl.class);
 
 		container
 			.sourceImplementor(LoadFile.class, LoadSteamsideXml.class)

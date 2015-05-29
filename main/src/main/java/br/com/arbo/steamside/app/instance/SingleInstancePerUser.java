@@ -14,7 +14,8 @@ import br.com.arbo.steamside.app.launch.LocalWebserver;
 import br.com.arbo.steamside.app.launch.Running;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 
-public class SingleInstancePerUser {
+public class SingleInstancePerUser
+{
 
 	@Inject
 	public SingleInstancePerUser(
@@ -48,13 +49,15 @@ public class SingleInstancePerUser {
 		this.running.stop();
 	}
 
-	private void attemptRepeatedly() throws SteamsideUpAndRunning, AllPortsTaken
+	private void attemptRepeatedly() throws SteamsideUpAndRunning,
+		AllPortsTaken
 	{
 		while (true)
 			new Attempt().attempt();
 	}
 
-	class Attempt {
+	class Attempt
+	{
 
 		void attempt() throws SteamsideUpAndRunning, AllPortsTaken
 		{
@@ -67,23 +70,23 @@ public class SingleInstancePerUser {
 			getLogger().info("Looking for a free port on " + p + "...");
 			Situation situation = detect.detect(p);
 			switch (situation)
-			{
-				case NotHere:
-					getLogger().info("Found a free port on " + p + ".");
-					freefound(p);
-					return;
-				case AlreadyRunningForThisUser:
-					getLogger()
-					.info("Found Steamside already running on " + p + ".");
-					browser.landing(p);
-					throw new SteamsideUpAndRunning(new CantStop());
-				case RunningOnDifferentUser:
-					getLogger()
-					.info("Another user running Steamside on " + p + ".");
-					return;
-				default:
-					throw new IllegalStateException();
-			}
+				{
+			case NotHere:
+				getLogger().info("Found a free port on " + p + ".");
+				freefound(p);
+				return;
+			case AlreadyRunningForThisUser:
+				getLogger()
+						.info("Found Steamside already running on " + p + ".");
+				browser.landing(p);
+				throw new SteamsideUpAndRunning(new CantStop());
+			case RunningOnDifferentUser:
+				getLogger()
+						.info("Another user running Steamside on " + p + ".");
+				return;
+			default:
+				throw new IllegalStateException();
+				}
 		}
 
 		private void freefound(final int p)
@@ -108,7 +111,7 @@ public class SingleInstancePerUser {
 			{
 				launched = webserver.launch(port);
 			}
-			catch (@SuppressWarnings("unused") PortAlreadyInUse e)
+			catch (PortAlreadyInUse e)
 			{
 				// do nothing... come back to attempt one more sweep
 				return;
@@ -132,7 +135,8 @@ public class SingleInstancePerUser {
 
 	}
 
-	static class CantStop implements Running {
+	static class CantStop implements Running
+	{
 
 		@Override
 		public void stop()

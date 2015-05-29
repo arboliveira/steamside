@@ -13,6 +13,7 @@ import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.data.SteamsideData;
+import br.com.arbo.steamside.data.SteamsideDataExecutor;
 import br.com.arbo.steamside.kids.InMemoryKids;
 import br.com.arbo.steamside.settings.file.LoadFile;
 
@@ -20,10 +21,13 @@ public class FromCloudAndFile implements InitialLoad
 {
 
 	@Inject
-	public FromCloudAndFile(LoadCloud cloud, LoadFile file)
+	public FromCloudAndFile(
+		LoadCloud cloud, LoadFile file,
+		SteamsideDataExecutor dataExecutor)
 	{
 		this.cloud = cloud;
 		this.file = file;
+		this.dataExecutor = dataExecutor;
 	}
 
 	@Override
@@ -74,17 +78,19 @@ public class FromCloudAndFile implements InitialLoad
 		}
 	}
 
-	@SuppressWarnings("static-method")
 	private SteamsideData fromSteam()
 	{
-		// TODO Copy ALL the Steam!
+		dataExecutor.enqueueCopyAllSteamCategories();
 		InMemoryCollectionsHome c = new InMemoryCollectionsHome();
 		InMemoryTagsHome t = new InMemoryTagsHome(c);
 		InMemoryKids k = new InMemoryKids();
-		return new InMemorySteamsideData(c, t, k);
+		InMemorySteamsideData d = new InMemorySteamsideData(c, t, k);
+		return d;
 	}
 
 	private final LoadCloud cloud;
+
+	private final SteamsideDataExecutor dataExecutor;
 
 	private final LoadFile file;
 }
