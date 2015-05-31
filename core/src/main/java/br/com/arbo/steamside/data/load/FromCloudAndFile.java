@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import br.com.arbo.steamside.bootstrap.Bootstrap;
 import br.com.arbo.steamside.cloud.CloudSettingsFactory.Missing;
 import br.com.arbo.steamside.cloud.LoadCloud;
 import br.com.arbo.steamside.cloud.LoadCloud.Disabled;
@@ -13,29 +14,44 @@ import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.data.SteamsideData;
-import br.com.arbo.steamside.data.SteamsideDataExecutor;
+import br.com.arbo.steamside.firstrun.InitialLoadDetectedFirstRunEver;
 import br.com.arbo.steamside.kids.InMemoryKids;
 import br.com.arbo.steamside.settings.file.LoadFile;
 
 public class FromCloudAndFile implements InitialLoad
 {
 
+	private static SteamsideData empty()
+	{
+		InMemoryCollectionsHome c = new InMemoryCollectionsHome();
+		InMemoryTagsHome t = new InMemoryTagsHome(c);
+		InMemoryKids k = new InMemoryKids();
+		InMemorySteamsideData d = new InMemorySteamsideData(c, t, k);
+		return d;
+	}
+
 	@Inject
 	public FromCloudAndFile(
-		LoadCloud cloud, LoadFile file,
-		SteamsideDataExecutor dataExecutor)
+		LoadCloud cloud, LoadFile file, Bootstrap bootstrap)
 	{
 		this.cloud = cloud;
 		this.file = file;
-		this.dataExecutor = dataExecutor;
+		this.bootstrap = bootstrap;
 	}
 
 	@Override
 	public SteamsideData loadSteamsideData()
 	{
-		return fromCloud().orElseGet(
-			() -> fromFile().orElseGet(
-				() -> fromSteam()));
+		Optional<SteamsideData> fromCloud = fromCloud();
+		if (fromCloud.isPresent())
+			return fromCloud.get();
+
+		Optional<SteamsideData> fromFile = fromFile();
+		if (fromFile.isPresent())
+			return fromFile.get();
+
+		bootstrap.fireEvent(new InitialLoadDetectedFirstRunEver());
+		return empty();
 	}
 
 	private Optional<SteamsideData> fromCloud()
@@ -78,19 +94,7 @@ public class FromCloudAndFile implements InitialLoad
 		}
 	}
 
-	private SteamsideData fromSteam()
-	{
-		dataExecutor.enqueueCopyAllSteamCategories();
-		InMemoryCollectionsHome c = new InMemoryCollectionsHome();
-		InMemoryTagsHome t = new InMemoryTagsHome(c);
-		InMemoryKids k = new InMemoryKids();
-		InMemorySteamsideData d = new InMemorySteamsideData(c, t, k);
-		return d;
-	}
-
+	private final Bootstrap bootstrap;
 	private final LoadCloud cloud;
-
-	private final SteamsideDataExecutor dataExecutor;
-
 	private final LoadFile file;
 }

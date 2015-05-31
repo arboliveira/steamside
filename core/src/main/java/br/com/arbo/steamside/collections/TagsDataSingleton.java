@@ -1,21 +1,18 @@
-package br.com.arbo.steamside.data.autowire;
+package br.com.arbo.steamside.collections;
 
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import br.com.arbo.steamside.collections.CollectionI;
-import br.com.arbo.steamside.collections.CollectionsData;
-import br.com.arbo.steamside.collections.Tag;
-import br.com.arbo.steamside.collections.TagsData;
+import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class AutowireTagsData implements TagsData
+public class TagsDataSingleton implements TagsData
 {
 
 	@Inject
-	public AutowireTagsData(AutowireSteamsideData steamside)
+	public TagsDataSingleton(SteamsideData steamside)
 	{
 		this.steamside = steamside;
 	}
@@ -23,76 +20,76 @@ public class AutowireTagsData implements TagsData
 	@Override
 	public Stream<? extends WithTags> allWithTags()
 	{
-		return reloadable().allWithTags();
+		return actual().allWithTags();
 	}
 
 	@Override
 	public Stream<? extends Tag> apps(CollectionI collection)
 	{
-		return reloadable().apps(collection);
+		return actual().apps(collection);
 	}
 
 	@Override
 	public CollectionsData collections()
 	{
-		return reloadable().collections();
+		return actual().collections();
 	}
 
 	@Override
 	public boolean isCollected(AppId appid)
 	{
-		return reloadable().isCollected(appid);
+		return actual().isCollected(appid);
 	}
 
 	@Override
 	public boolean isTagged(AppId appid, CollectionI collection)
 	{
-		return reloadable().isTagged(appid, collection);
+		return actual().isTagged(appid, collection);
 	}
 
 	@Override
 	public Stream<? extends WithCount> recent()
 	{
-		return reloadable().recent();
+		return actual().recent();
 	}
 
 	@Override
 	public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
 	{
-		reloadable().tag(c, apps);
+		actual().tag(c, apps);
 	}
 
 	@Override
 	public void tagn(Stream<WithApps> withApps) throws NotFound
 	{
-		reloadable().tagn(withApps);
+		actual().tagn(withApps);
 	}
 
 	@Override
 	public void tagRemember(CollectionI c, AppId appid)
 		throws NotFound
 	{
-		reloadable().tagRemember(c, appid);
+		actual().tagRemember(c, appid);
 	}
 
 	@Override
 	public Stream<? extends CollectionI> tags(AppId app)
 	{
-		return reloadable().tags(app);
+		return actual().tags(app);
 	}
 
 	@Override
 	public void untag(CollectionI c, AppId appid)
 		throws NotFound
 	{
-		reloadable().untag(c, appid);
+		actual().untag(c, appid);
 	}
 
-	private TagsData reloadable()
+	private TagsData actual()
 	{
 		return steamside.tags();
 	}
 
-	private final AutowireSteamsideData steamside;
+	private final SteamsideData steamside;
 
 }

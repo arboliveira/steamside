@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import br.com.arbo.org.springframework.boot.builder.Sources;
-import br.com.arbo.steamside.app.launch.AutowireConditional;
-import br.com.arbo.steamside.app.launch.StartStopAutowire;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
@@ -23,7 +21,8 @@ import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-class DemoSteamsideData {
+class DemoSteamsideData
+{
 
 	static void customize(Sources sources, AppsHomeFactory appsHomeFactory)
 	{
@@ -74,13 +73,10 @@ class DemoSteamsideData {
 		populateTags();
 
 		sources
-		.replaceWithSingleton(SteamsideData.class, s)
-		.replaceWithSingleton(CollectionsData.class, c)
-		.replaceWithSingleton(TagsData.class, t)
-		.replaceWithSingleton(KidsData.class, k);
-
-		sources.removeSources(
-			StartStopAutowire.class, AutowireConditional.class);
+			.replaceWithSingleton(SteamsideData.class, s)
+			.replaceWithSingleton(CollectionsData.class, c)
+			.replaceWithSingleton(TagsData.class, t)
+			.replaceWithSingleton(KidsData.class, k);
 	}
 
 	private void populateCollections()
@@ -113,7 +109,8 @@ class DemoSteamsideData {
 			"FUEL");
 	}
 
-	static class Tag {
+	static class Tag
+	{
 
 		String name;
 	}

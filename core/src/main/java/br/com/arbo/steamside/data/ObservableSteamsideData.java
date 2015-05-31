@@ -28,7 +28,7 @@ public class ObservableSteamsideData implements SteamsideData
 
 	public void addObserver(ChangeObserver listener)
 	{
-		listeners.add(listener);
+		observers.add(listener);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class ObservableSteamsideData implements SteamsideData
 
 	<T> T changed(T value)
 	{
-		listeners.forEach(ChangeObserver::onChange);
+		observers.forEach(ChangeObserver::onChange);
 		return value;
 	}
 
@@ -105,6 +105,6 @@ public class ObservableSteamsideData implements SteamsideData
 
 	private final CollectionsData collections;
 	private final KidsData kids;
-	private final ArrayList<ChangeObserver> listeners = new ArrayList<>(1);
+	private final ArrayList<ChangeObserver> observers = new ArrayList<>(1);
 	private final TagsData tags;
 }

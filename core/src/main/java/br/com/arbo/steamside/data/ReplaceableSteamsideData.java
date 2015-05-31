@@ -1,43 +1,50 @@
-package br.com.arbo.steamside.data.autowire;
+package br.com.arbo.steamside.data;
 
 import java.util.concurrent.Semaphore;
 
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.TagsData;
-import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.kids.KidsData;
 
-public class AutowireSteamsideData implements SteamsideData
+public class ReplaceableSteamsideData implements SteamsideData
 {
 
 	@Override
 	public CollectionsData collections()
 	{
-		return reloadable().collections();
+		return actual().collections();
 	}
 
 	@Override
 	public KidsData kids()
 	{
-		return reloadable().kids();
+		return actual().kids();
 	}
 
-	public void set(SteamsideData reloaded)
+	public void replace(SteamsideData implementation)
 	{
-		this.reloadable = reloaded;
-		available.release();
+		synchronized (this)
+		{
+			this.actual = implementation;
+			makeAvailable();
+		}
 	}
 
 	@Override
 	public TagsData tags()
 	{
-		return reloadable().tags();
+		return actual().tags();
 	}
 
-	private SteamsideData reloadable()
+	private SteamsideData actual()
 	{
 		waitUntilAvailable();
-		return reloadable;
+		return actual;
+	}
+
+	private void makeAvailable()
+	{
+		available.release();
 	}
 
 	private void waitUntilAvailable()
@@ -45,15 +52,16 @@ public class AutowireSteamsideData implements SteamsideData
 		try
 		{
 			available.acquire();
+			available.release();
 		}
 		catch (InterruptedException e)
 		{
 			throw new RuntimeException(e);
 		}
-		available.release();
 	}
+
+	private SteamsideData actual;
 
 	private final Semaphore available = new Semaphore(0);
 
-	private SteamsideData reloadable;
 }

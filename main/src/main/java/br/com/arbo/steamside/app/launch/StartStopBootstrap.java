@@ -7,22 +7,26 @@ import javax.inject.Inject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
+import br.com.arbo.steamside.bootstrap.BootstrapImpl;
+
 @EnableAutoConfiguration
-@ConditionalOnBean(AutowireConditional.class)
-public class StartStopAutowire {
+@ConditionalOnBean(BootstrapImpl.class)
+public class StartStopBootstrap
+{
 
 	@PostConstruct
 	public void start()
 	{
-		auto.autowire.start();
+		target.start();
 	}
 
 	@PreDestroy
 	public void stop()
 	{
-		auto.autowire.stop();
+		target.stop();
 	}
 
-	public @Inject AutowireConditional auto;
+	@Inject
+	public BootstrapImpl target;
 
 }

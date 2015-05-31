@@ -1,20 +1,18 @@
-package br.com.arbo.steamside.data.autowire;
+package br.com.arbo.steamside.collections;
 
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import br.com.arbo.steamside.collections.CollectionI;
-import br.com.arbo.steamside.collections.CollectionsData;
-import br.com.arbo.steamside.collections.FavoriteNotSet;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
+import br.com.arbo.steamside.data.singleton.SteamsideDataSingleton;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class AutowireCollectionsData implements CollectionsData {
+public class CollectionsDataSingleton implements CollectionsData {
 
 	@Inject
-	public AutowireCollectionsData(AutowireSteamsideData steamside)
+	public CollectionsDataSingleton(SteamsideDataSingleton steamside)
 	{
 		this.steamside = steamside;
 	}
@@ -22,44 +20,44 @@ public class AutowireCollectionsData implements CollectionsData {
 	@Override
 	public void add(CollectionI in) throws Duplicate
 	{
-		reloadable().add(in);
+		actual().add(in);
 	}
 
 	@Override
 	public Stream< ? extends CollectionI> all()
 	{
-		return reloadable().all();
+		return actual().all();
 	}
 
 	@Override
 	public void delete(CollectionI in)
 	{
-		reloadable().delete(in);
+		actual().delete(in);
 	}
 
 	@Override
 	public CollectionI favorite() throws FavoriteNotSet
 	{
-		return reloadable().favorite();
+		return actual().favorite();
 	}
 
 	@Override
 	public void favorite(CollectionI in)
 	{
-		reloadable().favorite(in);
+		actual().favorite(in);
 	}
 
 	@Override
 	public CollectionI find(CollectionName name) throws NotFound
 	{
-		return reloadable().find(name);
+		return actual().find(name);
 	}
 
-	private CollectionsData reloadable()
+	private CollectionsData actual()
 	{
 		return steamside.collections();
 	}
 
-	private final AutowireSteamsideData steamside;
+	private final SteamsideDataSingleton steamside;
 
 }
