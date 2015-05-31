@@ -3,5 +3,6 @@
     "versionOfSteamside": "0.142857",
     "gamesOwned": "42",
 	"userName": "gaben",
-	"kidsMode": "false"
+	"kidsMode": "false",
+  	"executable": "http://arboliveira.github.io/steamside"
 } 

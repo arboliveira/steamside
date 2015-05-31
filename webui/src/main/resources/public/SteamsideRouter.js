@@ -82,7 +82,8 @@ var SteamsideRouter = Backbone.Router.extend(
 		this.exitView = new World({
 			worldActions:new ExitWorld(
 				{
-					backend: this.backend
+					backend: this.backend,
+					sessionModel: options.sessionModel
 				}
 			)
 		});

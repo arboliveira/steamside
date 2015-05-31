@@ -51,6 +51,7 @@ var ExitWorld = WorldActions.extend(
 		initialize: function(options)
 		{
 			this.backend = options.backend;
+			this.sessionModel = options.sessionModel;
 		},
 
 		tileLoad: function(whenDone)
@@ -62,6 +63,7 @@ var ExitWorld = WorldActions.extend(
 		{
 			return new ExitView({
 				el: tile.clone(),
+				sessionModel: this.sessionModel,
 				backend: this.backend
 			}).render();
 		}

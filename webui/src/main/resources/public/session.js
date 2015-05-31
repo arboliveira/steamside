@@ -29,6 +29,11 @@ var SessionModel = Backbone.Model.extend(
 		return this.booleanValue(this.get('kidsMode'));
     },
 
+	executable: function()
+	{
+		return this.get('executable');
+	},
+
 	booleanValue: function(v)
 	{
 		if (v === true) return true;
