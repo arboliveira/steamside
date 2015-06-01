@@ -1,16 +1,26 @@
 [
-	{
-  "appid" : "72850",
-  "name" : "Skyrim",
-  "link" : "server-action-placeholder.js",
-		"image": "http://cdn.akamai.steamstatic.com/steam/apps/72850/header.jpg",
-		"store": "http://store.steampowered.com/app/72850/"
+  {
+"appid" : "239030",
+"name" : "Papers, Please",
+"link" : "api/app/239030/run",
+"image" : "http://cdn.akamai.steamstatic.com/steam/apps/239030/header.jpg",
+"store" : "http://store.steampowered.com/app/239030",
+"tags" : [ {
+"name" : "Indie"
+}, {
+"name" : "favorite"
+} ]
 },
-	{
-  "appid" : "47500",
-  "name" : "Mishap",
-  "link" : "server-action-placeholder.js",
-		"image": "http://cdn.akamai.steamstatic.com/steam/apps/47500/header.jpg",
-		"store": "http://store.steampowered.com/app/47500/"
-}
+  {
+    "appid" : "12800",
+    "name" : "FUEL",
+    "link" : "api/app/12800/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/12800/header.jpg",
+    "store" : "http://store.steampowered.com/app/12800",
+    "tags" : [ {
+      "name" : "Open world"
+    }, {
+      "name" : "Racing"
+    } ]
+  }
 ]

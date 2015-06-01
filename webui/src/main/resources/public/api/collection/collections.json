@@ -1,1 +1,27 @@
-[{"name":"Arbo","count":"8"},{"name":"Art","count":"15"},{"name":"Must check these out later!","count":"2"},{"name":"Favorites","count":"0"},{"name":"Kids","count":"5"},{"name":"z-Awaiting","count":"28"},{"name":"3d-1-excellent","count":"1"},{"name":"x-3-Indie","count":"31"},{"name":"z-Forsaken","count":"32"},{"name":"+a++Ongoing","count":"25"},{"name":"Casual","count":"14"},{"name":"x-4-Sequels","count":"46"},{"name":"3d-0-user-recommended","count":"7"},{"name":"+e-Casual","count":"7"},{"name":"+a+Ongoing","count":"12"},{"name":"3d-5-not-recommended","count":"1"},{"name":"+Favorites","count":"95"},{"name":"z-redundant","count":"9"},{"name":"+recommended-by-friends","count":"7"},{"name":"x-1-A+awaiting","count":"17"},{"name":"+check-it-out-3d","count":"13"},{"name":"3d-2-good","count":"1"},{"name":"x-1-A++awaiting","count":"17"},{"name":"Ongoing","count":"2"},{"name":"3d-3-fair","count":"1"},{"name":"favorite","count":"34"},{"name":"+a-Ongoing","count":"16"},{"name":"z-Finished","count":"8"},{"name":"Overlord","count":"4"},{"name":"RACE","count":"3"},{"name":"Wizardry","count":"3"},{"name":"Adventure","count":"6"},{"name":"Arma","count":"2"},{"name":"Simulation","count":"1"},{"name":"RPG","count":"4"},{"name":"Racing","count":"8"},{"name":"Wargame","count":"1"},{"name":"Unplayed","count":"14"},{"name":"Open World","count":"2"},{"name":"Railroad","count":"1"},{"name":"Space","count":"1"},{"name":"Strategy","count":"1"},{"name":"Hack n' Slash","count":"1"},{"name":"Emotional","count":"3"},{"name":"(uncollected)","system":"Y","count":"12"},{"name":"(everything)","system":"Y","count":"454"}]
+[ {
+  "name" : "favorite",
+  "count" : "4"
+}, {
+  "name" : "Indie",
+  "count" : "3"
+}, {
+  "name" : "Action",
+  "count" : "4"
+}, {
+  "name" : "Racing",
+  "count" : "1"
+}, {
+  "name" : "Open world",
+  "count" : "3"
+}, {
+  "name" : "Kids",
+  "count" : "3"
+}, {
+  "name" : "(uncollected)",
+  "system" : "Y",
+  "count" : "1"
+}, {
+  "name" : "(everything)",
+  "system" : "Y",
+  "count" : "13"
+} ]

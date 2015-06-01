@@ -1,15 +1,17 @@
 package br.com.arbo.steamside.api.app;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
-@JsonSerialize(include = Inclusion.NON_NULL)
-public class AppDTO {
+@JsonInclude(NON_NULL)
+public class AppDTO
+{
 
 	public AppDTO(AppApi app, List<AppTagDTO> tags)
 	{

@@ -1,12 +1,13 @@
 package br.com.arbo.steamside.api.app;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import br.com.arbo.steamside.types.CollectionName;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @JsonAutoDetect
-public class AppTagDTO {
+public class AppTagDTO
+{
 
 	public AppTagDTO(final CollectionName name)
 	{

@@ -15,11 +15,13 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import br.com.arbo.steamside.cloud.Host;
 
-public class Dontpad implements Host {
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class Dontpad implements Host
+{
 
 	private static UrlEncodedFormEntity newUrlEncodedFormEntity(
 		List<NameValuePair> urlParameters)

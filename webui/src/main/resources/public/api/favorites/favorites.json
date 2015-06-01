@@ -1,22 +1,45 @@
 [ {
-  "appid" : "12800",
-  "name" : "FUEL™",
-    "image": "http://cdn.akamai.steamstatic.com/steam/apps/12800/header.jpg",
-  "link" : "server-action-placeholder.js"
-}, {
-  "appid" : "80300",
-  "name" : "Puzzle Bots",
-  "link" : "server-action-placeholder.js"
-}, {
-  "appid" : "29160",
-  "name" : "Blueberry Garden",
-  "link" : "server-action-placeholder.js"
+  "appid" : "400",
+  "name" : "Portal",
+  "link" : "api/app/400/run",
+  "image" : "http://cdn.akamai.steamstatic.com/steam/apps/400/header.jpg",
+  "store" : "http://store.steampowered.com/app/400",
+  "tags" : [ {
+    "name" : "favorite"
+  } ]
 }, {
   "appid" : "37600",
   "name" : "Windosill",
-  "link" : "server-action-placeholder.js"
+  "link" : "api/app/37600/run",
+  "image" : "http://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
+  "store" : "http://store.steampowered.com/app/37600",
+  "tags" : [ {
+    "name" : "Indie"
+  }, {
+    "name" : "favorite"
+  }, {
+    "name" : "Kids"
+  } ]
 }, {
-  "appid" : "80300",
-  "name" : "Puzzle Bots",
-  "link" : "server-action-placeholder.js"
+  "appid" : "72850",
+  "name" : "The Elder Scrolls V: Skyrim",
+  "link" : "api/app/72850/run",
+  "image" : "http://cdn.akamai.steamstatic.com/steam/apps/72850/header.jpg",
+  "store" : "http://store.steampowered.com/app/72850",
+  "tags" : [ {
+    "name" : "favorite"
+  }, {
+    "name" : "Open world"
+  } ]
+}, {
+  "appid" : "239030",
+  "name" : "Papers, Please",
+  "link" : "api/app/239030/run",
+  "image" : "http://cdn.akamai.steamstatic.com/steam/apps/239030/header.jpg",
+  "store" : "http://store.steampowered.com/app/239030",
+  "tags" : [ {
+    "name" : "Indie"
+  }, {
+    "name" : "favorite"
+  } ]
 } ]

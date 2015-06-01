@@ -1,16 +1,17 @@
 package br.com.arbo.steamside.api.collection;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @JsonAutoDetect
-@JsonSerialize(include = Inclusion.NON_NULL)
-public class CollectionDTO {
+@JsonInclude(NON_NULL)
+public class CollectionDTO
+{
 
 	static CollectionDTO valueOf(WithCount w)
 	{
