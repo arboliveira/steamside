@@ -28,7 +28,8 @@
 	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
 
     <script src="GameCardDeck.js" type="text/javascript"></script>
-	<script src="tileset.js" type="text/javascript"></script>
+    <script src="spritesheet.js" type="text/javascript"></script>
+    <script src="SteamsideSpriteSheet.js" type="text/javascript"></script>
 	<script src="WorldChange.js" type="text/javascript"></script>
 	<script src="Search.js" type="text/javascript"></script>
 	<script src="CommandBox.js" type="text/javascript"></script>
@@ -45,12 +46,14 @@
 
 			render_page: function ()
 			{
-				var p = GameTilePromise.buildCardTemplatePromise(
-						SteamsideTileset.tileset);
+				var steamsideSpriteSheet = new SteamsideSpriteSheet();
+
+				var p = steamsideSpriteSheet.card.sprite_promise();
 
 				new CollectionEditView({
 					el: '#tile-collection-edit',
 					cardTemplatePromise: p,
+					spriteMoreButton: steamsideSpriteSheet.moreButton,
 					collection_name: "Testing"
 				}).render()
 			}
@@ -87,11 +90,16 @@
         </div>
 
         <div class="content content-at-left">
+
+            <div id="CollectionView">
+
             <div class="collection-name">
                 <span id="display-collection-name" class="display-collection-name">This is the collection name</span>
             </div>
 
             <div id="games-in-collection-deck"></div>
+
+            </div>
 
             <div id="CombineView">
                 <span id="CombineCommandHint" class="command-hint">

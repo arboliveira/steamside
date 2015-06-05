@@ -53,6 +53,9 @@ var World = Backbone.Model.extend(
 	{
 		view: null,
 
+		/**
+		 * @type WorldActions
+		 */
 		worldActions: null,
 
 		initialize: function(options) {
@@ -61,19 +64,11 @@ var World = Backbone.Model.extend(
 
 		submitForView: function(whenViewReady)
 		{
-			var that = this;
-
-			var tileLoadDone = function(tile)
+			if (this.view == null)
 			{
-				if (that.view == null)
-				{
-					that.view = that.newView(tile);
-				}
-
-				whenViewReady(that.view);
-			};
-
-			that.tileLoad(tileLoadDone);
+				this.view = this.newView().render();
+			}
+			this.view.whenRendered.done(whenViewReady);
 		},
 
 		respawn: function()
@@ -81,14 +76,9 @@ var World = Backbone.Model.extend(
 			this.view = null;
 		},
 
-		tileLoad: function (whenDone)
+		newView: function(el)
 		{
-			return this.worldActions.tileLoad(whenDone);
-		},
-
-		newView: function(tile)
-		{
-			return this.worldActions.newView(tile);
+			return this.worldActions.newView(el);
 		},
 
 		isFront: function() {
@@ -99,8 +89,6 @@ var World = Backbone.Model.extend(
 var WorldActions = Backbone.Model.extend(
 	{
 		newView: function(){},
-
-		tileLoad: function(){},
 
 		isFront: function()
 		{

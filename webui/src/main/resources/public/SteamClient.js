@@ -1,15 +1,5 @@
 "use strict";
 
-var SteamClientTile = {
-	tile: new Tile(
-		{url: 'SteamClient.html', selector: "#steam-client"}),
-
-	ajaxTile: function (callback) {
-		this.tile.ajaxTile(callback);
-	}
-};
-
-
 var SteamClientStatusModel = Backbone.Model.extend(
 {
 	url: "api/steamclient/status.json",
@@ -39,6 +29,17 @@ var SteamClientView = Backbone.View.extend({
 	},
 
 	render: function () {
+		var that = this;
+		this.whenRendered =
+			SteamClientView.sprite.sprite_promise().then(function(el) {
+				that.render_el(el.clone());
+				return that;
+			});
+		return this;
+    },
+
+	render_el: function(el) {
+		this.$el.append(el);
 
 		var model = new SteamClientStatusModel();
 
@@ -49,9 +50,7 @@ var SteamClientView = Backbone.View.extend({
 				that.renderModel(model);
 			}
 		);
-
-        return this;
-    },
+	},
 
 	renderModel: function(modelSteamClientStatus) {
 		var running = modelSteamClientStatus.running();
@@ -96,6 +95,31 @@ var SteamClientView = Backbone.View.extend({
         var jLink = $(e.target);
         var aUrl = jLink.attr( "href" );
 		this.backend.ajax_ajax_promise(aUrl);
-    }
+    },
+
+	whenRendered: null
+
+}, {
+
+	/**
+	 * @public
+	 * @type Sprite
+	 */
+	sprite: new SpriteBuilder({url: 'SteamClient.html', selector: "#steam-client"}).build()
+
 });
+
+
+var SteamClientWorld = WorldActions.extend(
+	{
+		newView: function()
+		{
+			return new SteamClientView(
+				{
+					backend: this.attributes.backend
+				}
+			);
+		}
+	}
+);
 

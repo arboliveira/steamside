@@ -29,6 +29,11 @@ var SteamsideRouter = Backbone.Router.extend(
 
 	cardTemplatePromise: null,
 
+	/**
+	 * @type Sprite
+	 */
+	spriteMoreButton: null,
+
 	backend: null,
 
 	initialize: function(options)
@@ -40,21 +45,23 @@ var SteamsideRouter = Backbone.Router.extend(
 			throw new Error("cardTemplatePromise is required");
 		}
 		this.cardTemplatePromise = options.cardTemplatePromise;
-
+		this.spriteMoreButton = options.spriteMoreButton;
 		this.backend = options.backend;
 
 		this.worldchanger = new Worldchanger({worldbed_el: worldbed_el});
 
+		var spritesCollectionEdit = new CollectionEditSpriteSheet();
+
 		this.homeView = new World({
-			worldActions:this.newHomeView(
-				options.sessionModel, options.kidsTileset)
+			worldActions: this.newHomeView(
+				options.sessionModel, spritesCollectionEdit)
 		});
 
 		this.switch_favoritesView = new World({worldActions:this.newSwitch_favoritesView()});
 
 		this.collections_newView = new World(
 			{
-				worldActions:new CollectionsNewWorld(
+				worldActions: new CollectionsNewWorld(
 					{
 						backend: this.backend
 					}
@@ -64,14 +71,16 @@ var SteamsideRouter = Backbone.Router.extend(
 
 		this.worldCollectionsEdit = new CollectionsEditWorld(
 			{
+				spritesCollectionEdit: spritesCollectionEdit,
 				cardTemplatePromise: this.cardTemplatePromise,
+				spriteMoreButton: this.spriteMoreButton,
 				backend: this.backend
 			});
 		this.collections_editView = new World({worldActions:this.worldCollectionsEdit});
 
 		this.steamclientView = new World(
 			{
-				worldActions:new SteamClientWorld(
+				worldActions: new SteamClientWorld(
 					{
 						backend: this.backend
 					}
@@ -138,12 +147,14 @@ var SteamsideRouter = Backbone.Router.extend(
 		this.worldchanger.goWorld(this.exitView);
 	},
 
-	newHomeView: function(sessionModel, kidsTileset)
+	newHomeView: function(sessionModel, spritesCollectionEdit)
 	{
 		return new HomeWorld(
 		{
 			sessionModel: sessionModel,
 			cardTemplatePromise: this.cardTemplatePromise,
+			spriteMoreButton: this.spriteMoreButton,
+			spritesCollectionEdit: spritesCollectionEdit,
 			backend: this.backend
 		});
 	},

@@ -1,20 +1,5 @@
 "use strict";
 
-var GameTilePromise =
-{
-	buildCardTemplatePromise: function(steamsideTileset)
-	{
-		var cardTile = new Tile(
-			{
-				tileset: steamsideTileset,
-				selector: ".game-tile"
-			}
-		);
-
-		return cardTile.el_promise;
-	}
-};
-
 var Game = Backbone.Model.extend({
 
 	initialize: function(){
@@ -326,6 +311,11 @@ var DeckView = Backbone.View.extend(
 	on_GameCard_render: null,
 	on_tag: null,
 
+	/**
+	 * @type Sprite
+	 */
+	spriteMoreButton: null,
+
 	initialize: function(options)
 	{
         /*
@@ -339,6 +329,7 @@ var DeckView = Backbone.View.extend(
 		}
 
 		this.cardTemplatePromise = options.cardTemplatePromise;
+		this.spriteMoreButton = options.spriteMoreButton;
 
 		this.kidsMode = options.kidsMode === true;
 		this.alwaysVisible = this.kidsMode;
@@ -473,7 +464,8 @@ var DeckView = Backbone.View.extend(
 
 		new MoreButtonView(
 			{
-				deck: that
+				deck: that,
+				spriteMoreButton: that.spriteMoreButton
 			}
 		).render().whenRendered.done(function(view)
 			{

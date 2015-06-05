@@ -1,38 +1,5 @@
 "use strict";
 
-var TagTile = {
-	tile: new Tile(
-		{url: 'Tag.html', selector: "#TagTile"}),
-
-	whenLoaded: function (callback)
-	{
-		this.tile.ajaxTile(callback);
-	},
-
-	on_tag: function(game, segmentWithGameCard, backend)
-	{
-		TagTile.whenLoaded(function(tile)
-		{
-			var clone = tile.clone();
-
-			var view = new TagView({
-				el: clone,
-				game: game,
-				backend: backend
-			});
-
-			view.render();
-
-			view.$el.hide();
-			view.$el.slideDown();
-
-			segmentWithGameCard.after(clone);
-
-			$('html, body').scrollTop(view.$el.offset().top);
-		});
-	}
-};
-
 var TagSuggestion = Backbone.Model.extend({
 	name: function() {
 		return this.get('name');
@@ -55,15 +22,30 @@ var TagView = Backbone.View.extend({
 
 	initialize: function(options) {
 		this.game = options.game;
+		this.segmentWithGameCard = options.segmentWithGameCard;
 		this.backend = options.backend;
 	},
 
 	render: function() {
+		var that = this;
+		this.whenRendered =
+			TagView.sprite.sprite_promise().then(function(el) {
+				that.render_el(el.clone());
+				return that;
+			});
+		return this;
+	},
+
+	render_el: function(el) {
+		var that = this;
+
+		this.$el.append(el);
+
+		this.$el.hide();
+
 		this.$("#game-name").text(this.game.name());
 
 		this.renderCommandHints();
-
-		var that = this;
 
 		var viewCommandBox = new CommandBoxView(
 			{
@@ -74,9 +56,9 @@ var TagView = Backbone.View.extend({
 			}
 		).render();
 		viewCommandBox.whenRendered.done(function(view)
-			{
-				that.on_CommandBox_TileLoaded(view);
-			});
+		{
+			that.on_CommandBox_whenRendered(view);
+		});
 
 		this.viewCommandBox = viewCommandBox;
 
@@ -90,9 +72,11 @@ var TagView = Backbone.View.extend({
 			}).render();
 		});
 
-		// this.on_tag_done();
+		this.$el.slideDown();
 
-		return this;
+		this.segmentWithGameCard.after(this.$el);
+
+		$('html, body').scrollTop(this.$el.offset().top);
 	},
 
 	renderCommandHints: function () {
@@ -111,7 +95,7 @@ var TagView = Backbone.View.extend({
 		return el;
 	},
 
-	on_CommandBox_TileLoaded: function(viewCommandBox) {
+	on_CommandBox_whenRendered: function(viewCommandBox) {
 		var targetEl = this.$('#div-command-box');
 		targetEl.empty();
 		targetEl.append(viewCommandBox.el);
@@ -178,7 +162,17 @@ var TagView = Backbone.View.extend({
 
 	on_tag_suggestion_select: function(model) {
 		this.viewCommandBox.input_query_setval(model.name());
-	}
+	},
+
+	whenRendered: null
+
+}, {
+
+	/**
+	 * @public
+	 * @type Sprite
+	 */
+	sprite: new SpriteBuilder({url: 'Tag.html', selector: "#TagTile"}).build()
 
 });
 

@@ -5,6 +5,16 @@ var HomeWorld = WorldActions.extend(
 		sessionModel: null,
 		cardTemplatePromise: null,
 
+		/**
+		 * @type CollectionEditSpriteSheet
+		 */
+		spritesCollectionEdit: null,
+
+		/**
+		 * @type Sprite
+		 */
+		spriteMoreButton: null,
+
 		initialize: function(options)
 		{
 			this.sessionModel = options.sessionModel;
@@ -14,23 +24,22 @@ var HomeWorld = WorldActions.extend(
 				throw new Error("cardTemplatePromise is required");
 			}
 			this.cardTemplatePromise = options.cardTemplatePromise;
+			this.spritesCollectionEdit = options.spritesCollectionEdit;
+			this.spriteMoreButton = options.spriteMoreButton;
+
 			this.backend = options.backend;
 		},
 
-		tileLoad: function(whenDone)
-		{
-			// HomeTile.whenLoaded(whenDone);
-			whenDone(null);
-		},
-
-		newView: function(/*tile*/)
+		newView: function(/*_el*/)
 		{
 			return new HomeView({
-				// el: tile.clone(),
+				// el: _el.clone(),
 				sessionModel: this.sessionModel,
 				cardTemplatePromise: this.cardTemplatePromise,
+				spritesCollectionEdit: this.spritesCollectionEdit,
+				spriteMoreButton: this.spriteMoreButton,
 				backend: this.backend
-			}).render();
+			});
 		},
 
 		isFront: function()
@@ -45,7 +54,22 @@ var HomeView = Backbone.View.extend(
 	el: "#primary-view",
 
 	sessionModel: null,
+
 	cardTemplatePromise: null,
+
+	/**
+	 * @type CollectionEditSpriteSheet
+	 */
+	spritesCollectionEdit: null,
+
+	/**
+	 * @type Sprite
+	 */
+	spriteMoreButton: null,
+
+	backend: null,
+
+	whenRendered: null,
 
 	initialize: function(options)
 	{
@@ -55,6 +79,8 @@ var HomeView = Backbone.View.extend(
 			throw new Error("cardTemplatePromise is required");
 		}
 		this.cardTemplatePromise = options.cardTemplatePromise;
+		this.spritesCollectionEdit = options.spritesCollectionEdit;
+		this.spriteMoreButton = options.spriteMoreButton;
 
 		this.backend = options.backend;
 	},
@@ -62,52 +88,103 @@ var HomeView = Backbone.View.extend(
 	render: function ()
 	{
 		var continues = new ContinueGames();
-
-		var that = this;
-
 		var kidsMode = this.sessionModel.kidsMode();
+
+		var viewFavorites = this.renderFavoritesView(kidsMode, continues);
 
 		if (!kidsMode)
 		{
-			new DeckView({
-				el: $('#continues-deck'),
-				cardTemplatePromise: that.cardTemplatePromise,
-				collection: continues,
-				continues: continues,
-				kidsMode: kidsMode,
-				on_tag: that.on_tag,
-				backend: that.backend
-			});
-
-			new SearchView(
-				{
-					el: $('#search-segment'),
-					cardTemplatePromise: this.cardTemplatePromise,
-					continues: continues,
-					on_tag: that.on_tag,
-					backend: that.backend
-				}
-			).render();
+			this.createContinuesDeck(continues);
+			this.renderSearchSegment(continues);
+			if (false)
+				this.renderRecentTagged(viewFavorites.$el, continues);
 		}
 
 		this.backend.fetch_promise(continues);
 
-		new FavoritesView(
-			{
-				cardTemplatePromise: this.cardTemplatePromise,
-				backend: this.backend,
-				on_tag: this.on_tag,
-				kidsMode: kidsMode,
-				continues: continues
-			}
-		).render();
+		var already = $.Deferred();
+		already.resolve(this);
+		this.whenRendered = already;
 
 		return this;
 	},
 
-	on_tag: function(game, segmentWithGameCard)
+	renderFavoritesView: function (kidsMode, continues) {
+		var that = this;
+
+		return new FavoritesView(
+			{
+				cardTemplatePromise: that.cardTemplatePromise,
+				spriteMoreButton: that.spriteMoreButton,
+				backend: that.backend,
+				on_tag: that.on_game_card_tag,
+				kidsMode: kidsMode,
+				continues: continues
+			}
+		).render();
+	},
+
+	createContinuesDeck: function (continues) {
+		var that = this;
+
+		new DeckView({
+			el: $('#continues-deck'),
+			cardTemplatePromise: that.cardTemplatePromise,
+			spriteMoreButton: that.spriteMoreButton,
+			collection: continues,
+			continues: continues,
+			kidsMode: false,
+			on_tag: that.on_game_card_tag,
+			backend: that.backend
+		});
+	},
+
+	renderSearchSegment: function (continues) {
+		var that = this;
+
+		new SearchView(
+			{
+				el: $('#search-segment'),
+				cardTemplatePromise: that.cardTemplatePromise,
+				continues: continues,
+				on_tag: that.on_game_card_tag,
+				backend: that.backend
+			}
+		).render();
+	},
+
+	renderRecentTagged: function (segmentBeforeRecentTagged, continues) {
+		var that = this;
+
+		that.spritesCollectionEdit.view.sprite_promise().done(function(_el)
+		{
+			var clone = _el.clone();
+
+			var view = new CollectionEditView({
+				el: clone,
+				cardTemplatePromise: that.cardTemplatePromise,
+				spriteMoreButton: that.spriteMoreButton,
+				collection_name: "RECENT TAGGED",
+				backend: that.backend
+			});
+
+			view.render();
+
+			view.$el.hide();
+			view.$el.slideDown();
+
+			segmentBeforeRecentTagged.after(clone);
+		});
+	},
+
+	on_game_card_tag: function(game, segmentWithGameCard)
 	{
-		TagTile.on_tag(game, segmentWithGameCard, this.backend);
+		var that = this;
+		new TagView({
+			game: game,
+			segmentWithGameCard: segmentWithGameCard,
+			backend: that.backend
+		}).render();
 	}
 });
 
@@ -118,6 +195,11 @@ var FavoritesView = Backbone.View.extend(
 	el: "#favorites-segment",
 
 	favorites: null,
+
+	/**
+	 * @type Sprite
+	 */
+	spriteMoreButton: null,
 
 	events:
 	{
@@ -130,7 +212,7 @@ var FavoritesView = Backbone.View.extend(
 			throw new Error("cardTemplatePromise is required");
 		}
 		this.cardTemplatePromise = options.cardTemplatePromise;
-
+		this.spriteMoreButton = options.spriteMoreButton;
 		this.backend = options.backend;
 		this.on_tag = options.on_tag;
 		this.kidsMode = options.kidsMode;
@@ -139,6 +221,8 @@ var FavoritesView = Backbone.View.extend(
 
 	render: function()
 	{
+		var that = this;
+
 		this.switch_purpose_el = this.$("#SwitchPurposeView");
 		this.switch_purpose_el.remove();
 
@@ -147,6 +231,7 @@ var FavoritesView = Backbone.View.extend(
 		new DeckView({
 			el: $('#favorites-deck'),
 			cardTemplatePromise: this.cardTemplatePromise,
+			spriteMoreButton: that.spriteMoreButton,
 			collection: this.favorites,
 			continues: this.continues,
 			kidsMode: this.kidsMode,

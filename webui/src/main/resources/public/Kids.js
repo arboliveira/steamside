@@ -1,31 +1,38 @@
 "use strict";
 
-var KidsTilePromise =
-{
-	buildCardTemplatePromise: function(kidsTileset)
+var KidsSpriteSheet = Backbone.Model.extend(
 	{
-		var cardTile = new Tile(
-			{
-				tileset: kidsTileset,
-				selector: "#KidsGameCard"
-			}
-		);
+		/**
+		 * @type Sprite
+		 */
+		card: null,
 
-		return cardTile.el_promise;
+		/**
+		 * @type Sprite
+		 */
+		greeting: null,
+
+		initialize: function () {
+			var sheet = new SpriteSheet({url: 'Kids.html'});
+			this.card = sheet.sprite("#KidsGameCard");
+			this.greeting = sheet.sprite("#KidsGreetingView");
+		}
 	}
-}
+);
 
 var KidsView = Backbone.View.extend({
 
-	tileset: null,
+	spritesKids: null,
 
 	initialize: function(options)
 	{
-		this.tileset = options.tileset;
+		this.spritesKids = options.spritesKids;
 	},
 
 	render: function ()
 	{
+		var that = this;
+
 		this.$el
 			.removeClass("steamside-body-background")
 			.addClass("steamside-kids-body-background");
@@ -33,26 +40,16 @@ var KidsView = Backbone.View.extend({
 		this.$("#page-header-navigation-bar").hide();
 		this.$("#search-segment").hide();
 		this.$("#continues-segment").hide();
-		//this.$("#favorites-segment").hide();
 		this.$("#collections-segment").hide();
-
 		this.$(".side-links").hide();
 
-		var that = this;
-
-		this.tileset.promise.done(function(xml)
+		this.spritesKids.greeting.sprite_promise().done(function(el)
 		{
-			that.on_tileset_done($(xml));
+			that.$("#PageHeaderBannerSection").append(el.clone());
 		});
 
 		return this;
-	},
-
-	on_tileset_done: function($xml)
-	{
-		var greetings = new Tile({selector: "#KidsGreetingView"});
-		var tile_el = greetings.chomp_el($xml).clone();
-		this.$("#PageHeaderBannerSection").append(tile_el);
 	}
+
 });
 

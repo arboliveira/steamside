@@ -1,19 +1,48 @@
 "use strict";
 
-var CollectionEditTile = {
-	tile: new Tile(
-		{url: 'CollectionEdit.html', selector: "#tile-collection-edit"}),
+var CollectionEditSpriteSheet = Backbone.Model.extend(
+	{
+		/**
+		 * @public
+		 * @type Sprite
+		 */
+		edit: null,
 
-	whenLoaded: function (callback) {
-		this.tile.ajaxTile(callback);
+		/**
+		 * @public
+		 * @type Sprite
+		 */
+		view: null,
+
+		initialize: function () {
+			var sheet = new SpriteSheet({url: 'CollectionEdit.html'});
+			try {
+				this.edit = sheet.sprite("#tile-collection-edit");
+				this.view = sheet.sprite("#CollectionView");
+			}
+			finally {
+				sheet.dispose();
+			}
+		}
 	}
-};
+);
+
 
 var CollectionsEditWorld = WorldActions.extend(
 	{
 		collection_name: null,
 
+		/**
+		 * @type CollectionEditSpriteSheet
+		 */
+		spritesCollectionEdit: null,
+
 		cardTemplatePromise: null,
+
+		/**
+		 * @type Sprite
+		 */
+		spriteMoreButton: null,
 
 		initialize: function(options)
 		{
@@ -21,7 +50,9 @@ var CollectionsEditWorld = WorldActions.extend(
 			{
 				throw new Error("cardTemplatePromise is required");
 			}
+			this.spritesCollectionEdit = options.spritesCollectionEdit;
 			this.cardTemplatePromise = options.cardTemplatePromise;
+			this.spriteMoreButton = options.spriteMoreButton;
 			this.backend = options.backend;
 		},
 
@@ -29,21 +60,17 @@ var CollectionsEditWorld = WorldActions.extend(
 			this.collection_name = collection_name;
 		},
 
-		tileLoad: function(whenDone)
-		{
-			CollectionEditTile.whenLoaded(whenDone);
-		},
-
-		newView: function(tile)
+		newView: function()
 		{
 			return new CollectionEditView(
 				{
-					el: tile.clone(),
+					spritesCollectionEdit: this.spritesCollectionEdit,
 					cardTemplatePromise: this.cardTemplatePromise,
+					spriteMoreButton: this.spriteMoreButton,
 					collection_name: this.collection_name,
 					backend: this.backend
 				}
-			).render();
+			);
 		}
 	}
 );
@@ -65,10 +92,24 @@ var CollectionEditView = Backbone.View.extend({
 
 	cardTemplatePromise: null,
 
+	/**
+	 * @type CollectionEditSpriteSheet
+	 */
+	spritesCollectionEdit: null,
+
+	/**
+	 * @type Sprite
+	 */
+	spriteMoreButton: null,
+
     combineView: null,
 	combine_purpose_el: null,
 
     collection_name: null,
+
+	whenRendered: null,
+
+	backend: null,
 
 	initialize: function(options)
 	{
@@ -76,12 +117,26 @@ var CollectionEditView = Backbone.View.extend({
 			throw new Error("cardTemplatePromise is required");
 		}
 		this.cardTemplatePromise = options.cardTemplatePromise;
+		this.spritesCollectionEdit = options.spritesCollectionEdit;
+		this.spriteMoreButton = options.spriteMoreButton;
 		this.collection_name = options.collection_name;
 		this.backend = options.backend;
 	},
 
-	render: function()
+	render: function () {
+		var that = this;
+		this.whenRendered =
+			this.spritesCollectionEdit.edit.sprite_promise().then(function(el) {
+				that.render_el(el.clone());
+				return that;
+			});
+		return this;
+	},
+
+	render_el: function(el)
 	{
+		this.$el.append(el);
+
 		var that = this;
 
         this.combineView = new CombineView({
@@ -114,11 +169,11 @@ var CollectionEditView = Backbone.View.extend({
 		new DeckView({
 			el: this.$('#collection-edit-search-results-deck'),
 			cardTemplatePromise: this.cardTemplatePromise,
+			spriteMoreButton: that.spriteMoreButton,
 			collection: collectionEditSearchResults,
 			continues: continues,
 			on_GameCard_render: function(viewGameCard) { that.on_SearchResults_GameCard_render(viewGameCard) },
-			on_tag: function(game, segmentWithGameCard)
-				{ TagTile.on_tag(game, segmentWithGameCard, that.backend) },
+			on_tag: function(game, segmentWithGameCard) { that.on_game_card_tag(game, segmentWithGameCard) },
 			backend: this.backend
 		});
 
@@ -132,19 +187,25 @@ var CollectionEditView = Backbone.View.extend({
 		new DeckView({
             el: this.$('#games-in-collection-deck'),
 			cardTemplatePromise: this.cardTemplatePromise,
+			spriteMoreButton: that.spriteMoreButton,
             collection: inCollection,
 			continues: continues,
 			on_GameCard_render: function(viewGameCard) { that.on_GamesInCollection_GameCard_render(viewGameCard) },
-			on_tag: function(game, segmentWithGameCard)
-				{ TagTile.on_tag(game, segmentWithGameCard, that.backend)
-				},
+			on_tag: function(game, segmentWithGameCard) { that.on_game_card_tag(game, segmentWithGameCard) },
 			backend: this.backend
         });
 
 		this.backend.fetch_fetch_json(inCollection);
-
-        return this;
     },
+
+	on_game_card_tag: function(game, segmentWithGameCard) {
+		var that = this;
+		new TagView({
+			game: game,
+			segmentWithGameCard: segmentWithGameCard,
+			backend: that.backend
+		}).render();
+	},
 
 	render_search_CommandBox: function(viewCommandBox) {
 		var view_el = viewCommandBox.el;

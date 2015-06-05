@@ -38,10 +38,9 @@ var Test_Kids_html = Backbone.Model.extend({
 	{
 		var that = this;
 
-		var kidsTileset = new Tileset({url: 'Kids.html'});
+		var kidsSpriteSheet = new KidsSpriteSheet();
 
-		var cardTemplatePromise =
-			KidsTilePromise.buildCardTemplatePromise(kidsTileset);
+		var cardTemplatePromise = kidsSpriteSheet.card.sprite_promise();
 
 		cardTemplatePromise.done(function(template_el) {
 			that.testLoading_done_cardTemplateLoaded(template_el, done);

@@ -1,32 +1,34 @@
 "use strict";
 
-var MoreButtonTile =
-{
-	tile: new Tile(
-		{tileset: SteamsideTileset.tileset, selector: ".more-button"})
-};
-
 var MoreButtonView = Backbone.View.extend(
 {
 	hiding: true,
 	deck: null,
+
+	/**
+	 * @type Sprite
+	 */
+	spriteMoreButton: null,
+
+	whenRendered: null,
 
 	events:
 	{
 		"click" : "moreClicked"
 	},
 
-	initialize: function(options)
+	initialize: function(a)
 	{
-		this.deck = options.deck;
+		this.deck = a.deck;
+		this.spriteMoreButton = a.spriteMoreButton;
 	},
 
 	render: function()
 	{
 		var that = this;
 		this.whenRendered =
-			MoreButtonTile.tile.el_promise.then(function(tile) {
-				that.render_el(tile.clone());
+			this.spriteMoreButton.sprite_promise().then(function(el) {
+				that.render_el(el.clone());
 				return that;
 			});
 		return this;

@@ -25,6 +25,7 @@ var SearchResults = Backbone.Collection.extend(
 var SearchView = Backbone.View.extend(
 {
 	cardTemplatePromise: null,
+	spriteMoreButton: null,
 	searchResults: null,
 	continues: null,
 	on_tag: null,
@@ -37,6 +38,7 @@ var SearchView = Backbone.View.extend(
 	initialize: function(options)
 	{
 		this.cardTemplatePromise = options.cardTemplatePromise;
+		this.spriteMoreButton = options.spriteMoreButton;
 		this.continues = options.continues;
 		this.on_tag = options.on_tag;
 		this.backend = options.backend;
@@ -54,22 +56,23 @@ var SearchView = Backbone.View.extend(
 
 		new DeckView({
 			el: $('#search-results-deck'),
-			cardTemplatePromise: this.cardTemplatePromise,
+			cardTemplatePromise: that.cardTemplatePromise,
+			spriteMoreButton: that.spriteMoreButton,
 			collection: searchResults,
 			continues: this.continues,
 			on_tag: this.on_tag,
 			backend: this.backend
 		});
 
-		var tileSearchCommandHint = this.$('#search-command-hint');
-		tileSearchCommandHint.remove();
-		this.tileSearchHintContinueA = tileSearchCommandHint.clone();
-		this.tileSearchHintContinueB = tileSearchCommandHint.clone();
-		this.tileSearchHintSearchA = tileSearchCommandHint.clone();
-		this.tileSearchHintSearchB = tileSearchCommandHint.clone();
+		var elSearchCommandHint = this.$('#search-command-hint');
+		elSearchCommandHint.remove();
+		this.elSearchHintContinueA = elSearchCommandHint.clone();
+		this.elSearchHintContinueB = elSearchCommandHint.clone();
+		this.elSearchHintSearchA = elSearchCommandHint.clone();
+		this.elSearchHintSearchB = elSearchCommandHint.clone();
 		var selectorVerb = '#search-command-hint-verb';
-		this.tileSearchHintSearchA.find(selectorVerb).text("search");
-		this.tileSearchHintSearchB.find(selectorVerb).text("play first result for");
+		this.elSearchHintSearchA.find(selectorVerb).text("search");
+		this.elSearchHintSearchB.find(selectorVerb).text("play first result for");
 
 		new CommandBoxView(
 			{
@@ -89,10 +92,10 @@ var SearchView = Backbone.View.extend(
 	rendered_search_CommandBox: function(viewCommandBox){
 		var viewCommandBox_el = viewCommandBox.el;
 		viewCommandBox.emptyCommandHints();
-		viewCommandBox.appendCommandHint(this.tileSearchHintContinueA);
-		viewCommandBox.appendCommandHint(this.tileSearchHintSearchA);
-		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintContinueB);
-		viewCommandBox.appendCommandHintAlternate(this.tileSearchHintSearchB);
+		viewCommandBox.appendCommandHint(this.elSearchHintContinueA);
+		viewCommandBox.appendCommandHint(this.elSearchHintSearchA);
+		viewCommandBox.appendCommandHintAlternate(this.elSearchHintContinueB);
+		viewCommandBox.appendCommandHintAlternate(this.elSearchHintSearchB);
 
 		var searchEl = $('#search-command-box');
 		searchEl.empty();
@@ -103,18 +106,18 @@ var SearchView = Backbone.View.extend(
 	on_search_input_changed: function(view) {
 		var input = view.input_query_val();
 		if (input == '') {
-			this.tileSearchHintContinueA.show();
-			this.tileSearchHintContinueB.show();
-			this.tileSearchHintSearchA.hide();
-			this.tileSearchHintSearchB.hide();
+			this.elSearchHintContinueA.show();
+			this.elSearchHintContinueB.show();
+			this.elSearchHintSearchA.hide();
+			this.elSearchHintSearchB.hide();
 		} else {
-			this.tileSearchHintContinueA.hide();
-			this.tileSearchHintContinueB.hide();
-			this.tileSearchHintSearchA.show();
-			this.tileSearchHintSearchB.show();
+			this.elSearchHintContinueA.hide();
+			this.elSearchHintContinueB.hide();
+			this.elSearchHintSearchA.show();
+			this.elSearchHintSearchB.show();
 			var selector = '#search-command-hint-subject';
-			this.tileSearchHintSearchA.find(selector).text(input);
-			this.tileSearchHintSearchB.find(selector).text(input);
+			this.elSearchHintSearchA.find(selector).text(input);
+			this.elSearchHintSearchB.find(selector).text(input);
 		}
 	},
 
@@ -150,8 +153,8 @@ var SearchView = Backbone.View.extend(
 		var gameA = this.continues.at(0);
 		var gameB = this.continues.at(1);
 		var selector = '#search-command-hint-subject';
-		this.tileSearchHintContinueA.find(selector).text(gameA.name());
-		this.tileSearchHintContinueB.find(selector).text(gameB.name());
+		this.elSearchHintContinueA.find(selector).text(gameA.name());
+		this.elSearchHintContinueB.find(selector).text(gameB.name());
 	}
 
 });

@@ -1,18 +1,7 @@
 "use strict";
 
-var CollectionPickTile = {
-	tile: new Tile(
-		{
-			url: 'CollectionPick.html',
-			selector: "#collection-pick-collections-segment"
-		}
-	)
-};
-
 var CollectionPickView = Backbone.View.extend(
 {
-	on_collection_pick: null,
-
 	initialize: function(options)
 	{
 		this.on_collection_pick = options.on_collection_pick;
@@ -23,9 +12,9 @@ var CollectionPickView = Backbone.View.extend(
 	{
 		var that = this;
 		this.whenRendered =
-			CollectionPickTile.tile.el_promise.then(function(tile)
+			CollectionPickView.sprite.sprite_promise().then(function(_el)
 				{
-					var el = tile.clone();
+					var el = _el.clone();
 					that.render_el(el);
 					that.$el.append(el);
 					return that;
@@ -57,7 +46,20 @@ var CollectionPickView = Backbone.View.extend(
 		});
 
 		return this;
-	}
+	},
+
+	on_collection_pick: null,
+	whenRendered: null,
+	backend: null
+
+}, {
+
+	/**
+	 * @public
+	 * @type Sprite
+	 */
+	sprite: new SpriteBuilder({url: 'CollectionPick.html', selector: "#collection-pick-collections-segment"}).build()
+
 });
 
 var SteamsideCollectionInfo = Backbone.Model.extend(

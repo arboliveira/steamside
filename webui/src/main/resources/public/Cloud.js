@@ -54,7 +54,9 @@ var CloudView = Backbone.View.extend(
 
 	on_cloud_command_confirm: function (input) {
 
-	}
+	},
+
+	whenRendered: null
 });
 
 var Cloud_html =

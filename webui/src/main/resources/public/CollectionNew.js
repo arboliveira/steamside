@@ -1,13 +1,5 @@
 "use strict";
 
-var CollectionNewTile = {
-	tile: new Tile(
-		{url: 'CollectionNew.html', selector: "#collection-new"}),
-
-	whenLoaded: function (callback) {
-		this.tile.ajaxTile(callback);
-	}
-};
 
 var CollectionNewView = Backbone.View.extend({
 
@@ -16,8 +8,19 @@ var CollectionNewView = Backbone.View.extend({
 		this.backend = options.backend;
 	},
 
-	render: function ()
-	{
+	render: function () {
+		var that = this;
+		this.whenRendered =
+			CollectionNewView.sprite.sprite_promise().then(function(el) {
+				that.render_el(el.clone());
+				return that;
+			});
+		return this;
+	},
+
+	render_el: function(el) {
+		this.$el.append(el);
+
 		new CollectionNewEmptyView({
 			el: this.$('#collection-new-empty-segment'),
 			backend: this.backend
@@ -27,8 +30,6 @@ var CollectionNewView = Backbone.View.extend({
 			el: this.$('#collection-copy-all-categories-segment'),
 			backend: this.backend
 		}).render();
-
-		return this;
 	}
 });
 
@@ -45,10 +46,10 @@ var CollectionNewEmptyView = Backbone.View.extend({
 	render: function() {
 		var that = this;
 
-		var tileEmptyCommandHint = this.$('#empty-command-hint');
-		tileEmptyCommandHint.remove();
-		this.elCommandHintA = tileEmptyCommandHint.clone();
-		this.elCommandHintB = tileEmptyCommandHint.clone();
+		var $emptyCommandHint = this.$('#empty-command-hint');
+		$emptyCommandHint.remove();
+		this.elCommandHintA = $emptyCommandHint.clone();
+		this.elCommandHintB = $emptyCommandHint.clone();
 		var selectorAfterwards = '#empty-command-hint-afterwards';
 		this.elCommandHintA.find(selectorAfterwards).text("add games");
 		this.elCommandHintB.find(selectorAfterwards).text("stay here");
@@ -164,4 +165,25 @@ var CollectionCopyAllCategoriesView = Backbone.View.extend({
 					{trigger: true});
 			});
 	}
+}, {
+
+	/**
+	 * @public
+	 * @type Sprite
+	 */
+	sprite: new SpriteBuilder({url: 'CollectionNew.html', selector: "#collection-new"}).build(),
+
 });
+
+
+
+var CollectionsNewWorld = WorldActions.extend(
+	{
+		newView: function()
+		{
+			return new CollectionNewView({
+				backend: this.attributes.backend
+			});
+		}
+	}
+);

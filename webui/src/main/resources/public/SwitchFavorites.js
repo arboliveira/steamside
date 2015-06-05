@@ -1,40 +1,17 @@
 "use strict";
 
-var SwitchFavoritesCollectionsTile =
-{
-	tile: new Tile(
-		{
-			url: 'SwitchFavorites.html',
-			selector: "#switch-favorites-tile"
-		})
-};
-
 var SwitchFavoritesWorld = WorldActions.extend(
 {
-	on_category_change: null,
-
-	initialize: function(options)
-	{
-		this.on_category_change = options.on_category_change;
-		this.backend = options.backend;
-	},
-
-	tileLoad: function(whenDone)
-	{
-		SwitchFavoritesCollectionsTile.tile.el_promise.done(whenDone);
-	},
-
-	newView: function(tile)
+	newView: function()
 	{
 		var that = this;
 
 		return new SwitchFavoritesView(
 			{
-				el: tile.clone(),
-				on_category_change: function() {that.on_category_change();},
-				backend: that.backend
+				on_category_change: function() {that.attributes.on_category_change();},
+				backend: that.attributes.backend
 			}
-		).render();
+		);
 	}
 });
 
@@ -49,8 +26,19 @@ var SwitchFavoritesView = Backbone.View.extend(
 		this.backend = options.backend;
 	},
 
-	render: function()
-	{
+	render: function () {
+		var that = this;
+		this.whenRendered =
+			SwitchFavoritesView.sprite.sprite_promise().then(function(el) {
+				that.render_el(el.clone());
+				return that;
+			});
+		return this;
+	},
+
+	render_el: function(el) {
+		this.$el.append(el);
+
 		var that = this;
 
 		new CollectionPickView(
@@ -62,12 +50,20 @@ var SwitchFavoritesView = Backbone.View.extend(
 				view.$('#PurposeView').hide();
 				that.$("#CollectionPickView").append(view.el);
 			});
-
-		return this;
 	},
 
 	backButtonClicked: function (e) {
 		e.preventDefault();
 		history.back();
 	}
-});
+
+}, {
+
+	/**
+	 * @public
+	 * @type Sprite
+	 */
+	sprite: new SpriteBuilder({url: 'SwitchFavorites.html', selector: "#switch-favorites-tile"}).build(),
+
+}
+);

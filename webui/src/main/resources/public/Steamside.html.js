@@ -24,12 +24,12 @@ var SteamsideView = Backbone.View.extend({
 	el: "body",
 
 	sessionModel: null,
-	kidsTileset: null,
+	spritesKids: null,
 
 	initialize: function(options)
 	{
 		this.sessionModel = options.sessionModel;
-		this.kidsTileset = options.kidsTileset;
+		this.spritesKids = options.spritesKids;
 	},
 
 	render: function ()
@@ -55,7 +55,7 @@ var SteamsideView = Backbone.View.extend({
 		new KidsView({
 			el: this.$el,
 			username: this.sessionModel.userName(),
-			tileset: this.kidsTileset
+			spritesKids: this.spritesKids
 		}).render();
 	}
 });
@@ -74,24 +74,29 @@ var Steamside_html =
 
 		var sessionModel = new SessionModel();
 
-		var that = this;
-
 		backend.fetch_promise(sessionModel).done(function()
 		{
 			backend.set_backoff(sessionModel.backoff());
 
-			var kidsTileset = new Tileset({url: 'Kids.html'});
-
-			var steamsideTileset = SteamsideTileset.tileset;
+			var spritesKids = new KidsSpriteSheet();
 
 			var kidsMode = sessionModel.kidsMode();
 
-			var cardTemplatePromise = that.buildCardTemplatePromise(kidsMode, kidsTileset, steamsideTileset);
+			var spritesSteamside = new SteamsideSpriteSheet();
+
+			var cardTemplatePromise;
+			if (kidsMode)
+			{
+				cardTemplatePromise = spritesKids.card.sprite_promise();
+			}
+			else {
+				cardTemplatePromise =  spritesSteamside.card.sprite_promise();
+			}
 
 			new SteamsideRouter({
 				sessionModel: sessionModel,
 				cardTemplatePromise: cardTemplatePromise,
-				kidsTileset: kidsTileset,
+				spriteMoreButton: spritesSteamside.moreButton,
 				backend: backend
 			});
 
@@ -101,19 +106,9 @@ var Steamside_html =
 			new SteamsideView({
 				sessionModel: sessionModel,
 				cardTemplatePromise: cardTemplatePromise,
-				kidsTileset: kidsTileset
+				spritesKids: spritesKids
 			}).render();
 		}
 		);
-    },
-
-	buildCardTemplatePromise: function(kidsMode, kidsTileset, steamsideTileset)
-	{
-		if (kidsMode)
-		{
-			return KidsTilePromise.buildCardTemplatePromise(kidsTileset);
-		}
-
-		return GameTilePromise.buildCardTemplatePromise(steamsideTileset);
-	}
+    }
 };

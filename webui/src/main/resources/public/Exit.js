@@ -1,20 +1,9 @@
 "use strict";
 
-var ExitTile =
-{
-    tile: new Tile(
-        {url: 'Exit.html', selector: "#exit"}),
-
-    ajaxTile: function (callback)
-	{
-        this.tile.ajaxTile(callback);
-    }
-};
-
 var ExitView = Backbone.View.extend(
 {
 	events: {
-		"click #TryAgain": "clickTryAgain",
+		"click #TryAgain": "clickTryAgain"
 	},
 
 	initialize: function(options)
@@ -24,11 +13,21 @@ var ExitView = Backbone.View.extend(
 	},
 
 	render: function () {
+		var that = this;
+		this.whenRendered =
+			ExitView.sprite.sprite_promise().then(function(el) {
+				that.render_el(el.clone());
+				return that;
+			});
+		return this;
+    },
+
+	render_el: function(el) {
+		this.$el.append(el);
 		var input = this.$("#CommandLine");
 		input.val(this.sessionModel.executable());
 		this.backend.ajax_ajax_promise('api/exit');
-        return this;
-    },
+	},
 
 	clickTryAgain: function(e) {
 		e.preventDefault();
@@ -37,7 +36,31 @@ var ExitView = Backbone.View.extend(
 		input.focus();
 		input.select();
 		this.$("#TryAgain").text("Copy to your command line:");
+	},
+
+	whenRendered: null
+
+}, {
+
+	/**
+	 * @public
+	 * @type Sprite
+	 */
+	sprite: new SpriteBuilder({url: 'Exit.html', selector: "#exit"}).build()
+}
+);
+
+var ExitWorld = WorldActions.extend(
+	{
+		/**
+		 * @override
+		 */
+		newView: function()
+		{
+			return new ExitView({
+				sessionModel: this.attributes.sessionModel,
+				backend: this.attributes.backend
+			});
+		}
 	}
-
-});
-
+);

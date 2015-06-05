@@ -1,11 +1,5 @@
 "use strict";
 
-var CommandBoxTile =
-{
-	tile: new Tile(
-		{url: 'CommandBox.html', selector: "#tile-command-box"})
-};
-
 var CommandBoxView = Backbone.View.extend({
 
 	events: {
@@ -30,8 +24,8 @@ var CommandBoxView = Backbone.View.extend({
 	render: function() {
 		var that = this;
 		this.whenRendered =
-			CommandBoxTile.tile.el_promise.then(function(tile) {
-				that.render_el(tile.clone());
+			CommandBoxView.sprite.sprite_promise().then(function(el) {
+				that.render_el(el.clone());
 				return that;
 			});
 		return this;
@@ -142,7 +136,16 @@ var CommandBoxView = Backbone.View.extend({
 		var span = this.$("#command-trouble");
 		span.text(error.status + ' ' + error.statusText);
 		span.show();
-	}
+	},
+
+	whenRendered: null
+
+}, {
+
+	/**
+	 * @public
+	 * @type Sprite
+	 */
+	sprite: new SpriteBuilder({url: 'CommandBox.html', selector: "#tile-command-box"}).build()
 
 });
-
