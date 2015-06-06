@@ -1,12 +1,5 @@
 package br.com.arbo.steamside.app.launch;
 
-import org.apache.commons.lang3.SystemUtils;
-
-import br.com.arbo.opersys.userhome.FromSystemUtils;
-import br.com.arbo.opersys.userhome.FromWindowsUtils;
-import br.com.arbo.opersys.userhome.ProgramFiles;
-import br.com.arbo.opersys.userhome.UserHome;
-import br.com.arbo.opersys.username.User;
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.api.app.RunGameCommand;
 import br.com.arbo.steamside.api.continues.Continues;
@@ -34,7 +27,6 @@ import br.com.arbo.steamside.data.load.FromCloudAndFile;
 import br.com.arbo.steamside.data.load.InitialLoad;
 import br.com.arbo.steamside.data.singleton.SteamsideDataBootstrap;
 import br.com.arbo.steamside.data.singleton.SteamsideDataSingleton;
-import br.com.arbo.steamside.exit.Exit;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
 import br.com.arbo.steamside.favorites.FromSettings;
 import br.com.arbo.steamside.firstrun.FirstRunObserver;
@@ -57,17 +49,27 @@ import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.library.LibraryImpl;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userdata;
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dir_userid;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.steamlocation.Linux;
-import br.com.arbo.steamside.steam.client.localfiles.steamlocation.MacOSX;
-import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocation;
-import br.com.arbo.steamside.steam.client.localfiles.steamlocation.Windows;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 
 public class SourcesFactory
 {
+
+	public static Sources newInstance()
+	{
+		return newInstanceInert().sources(
+			StartStopBootstrap.class, StartStopParallelAppsHomeFactory.class);
+	}
+
+	public static Sources populate(Sources container)
+	{
+		return addComponents(container);
+	}
+
+	static Sources newInstanceInert()
+	{
+		return populate(new Sources());
+	}
 
 	private static Sources addComponents(Sources container)
 	{
@@ -128,9 +130,7 @@ public class SourcesFactory
 		.sources(
 			File_sharedconfig_vdf.class,
 			File_localconfig_vdf.class,
-			File_appinfo_vdf.class,
-			Dir_userid.class,
-			Dir_userdata.class);
+			File_appinfo_vdf.class);
 
 		container
 		.sourceImplementor(KidsMode.class, FromUsername.class);
@@ -147,67 +147,7 @@ public class SourcesFactory
 			ContinuesFromSteamClientLocalfiles.class)
 			.sourceImplementor(FavoritesOfUser.class, FromSettings.class);
 
-		registerSteamLocation(container);
-
 		return container;
 	}
-
-	private static void registerSteamLocation(Sources container)
-	{
-		if (SystemUtils.IS_OS_WINDOWS)
-		{
-			container
-			.sourceImplementor(SteamLocation.class, Windows.class)
-			.sourceImplementor(ProgramFiles.class, FromWindowsUtils.class);
-			return;
-		}
-
-		if (SystemUtils.IS_OS_LINUX)
-		{
-			container
-			.sourceImplementor(SteamLocation.class, Linux.class)
-			.sourceImplementor(UserHome.class, FromSystemUtils.class);
-			return;
-		}
-
-		if (SystemUtils.IS_OS_MAC_OSX)
-		{
-			container
-			.sourceImplementor(SteamLocation.class, MacOSX.class)
-			.sourceImplementor(UserHome.class, FromSystemUtils.class);
-			return;
-		}
-
-		throw new UnsupportedOperationException();
-	}
-
-	public SourcesFactory(
-		User username,
-		Exit exit)
-	{
-		this.username = username;
-		this.exit = exit;
-	}
-
-	public Sources newInstanceLive()
-	{
-		return newInstance().sources(
-			StartStopBootstrap.class, StartStopParallelAppsHomeFactory.class);
-	}
-
-	Sources newInstance()
-	{
-		return finish(addComponents(new Sources()));
-	}
-
-	private Sources finish(Sources s)
-	{
-		return s
-			.registerSingleton(User.class, this.username)
-			.registerSingleton(Exit.class, this.exit);
-	}
-
-	private final Exit exit;
-	private final User username;
 
 }

@@ -1,18 +1,21 @@
 package br.com.arbo.steamside.app.context;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.org.springframework.boot.builder.SpringApplicationBuilderUtil;
 
-public class SpringApplicationFactory {
+public class SpringApplicationFactory
+{
 
-	public static SpringApplication buildWith(Sources sources)
+	public static ConfigurableApplicationContext run(Sources sources,
+		String... args)
 	{
-		return SpringApplicationBuilderUtil.build(
-			new SpringApplicationBuilder().web(false).headless(false),
-			sources);
+		final SpringApplicationBuilder builder =
+			new SpringApplicationBuilder().web(false).headless(false);
+		return SpringApplicationBuilderUtil.run(
+			builder, sources, args);
 	}
 
 }

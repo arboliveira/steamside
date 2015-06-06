@@ -2,6 +2,7 @@ package br.com.arbo.steamside.app.instance;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,8 @@ import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
 import br.com.arbo.steamside.app.launch.LocalWebserver;
 
-public class SingleInstancePerUserTest {
+public class SingleInstancePerUserTest
+{
 
 	@Before
 	public void before()
@@ -32,7 +34,7 @@ public class SingleInstancePerUserTest {
 		singleinstance.start();
 
 		verify(webserver).launch(42424);
-		verify(browser).landing(42424);
+		verify(browser).loading(42424);
 	}
 
 	@Test
@@ -45,7 +47,7 @@ public class SingleInstancePerUserTest {
 		singleinstance.start();
 
 		verify(webserver).launch(42425);
-		verify(browser).landing(42425);
+		verify(browser).loading(42425);
 	}
 
 	@Test
@@ -56,11 +58,12 @@ public class SingleInstancePerUserTest {
 
 		singleinstance.start();
 
+		verifyZeroInteractions(webserver);
 		verify(browser).landing(42424);
 	}
 
 	final WebBrowser browser = Mockito.mock(WebBrowser.class);
-	final LocalWebserver webserver = Mockito.mock(LocalWebserver.class);
 	final DetectSteamside detect = Mockito.mock(DetectSteamside.class);
+	final LocalWebserver webserver = Mockito.mock(LocalWebserver.class);
 	private SingleInstancePerUser singleinstance;
 }

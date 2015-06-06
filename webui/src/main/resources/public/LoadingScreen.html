@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xml:lang="en" lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+
+	<title>Steamside - Your companion on Steam</title>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<!-- ======================================================================= -->
+
+	<link rel="icon" type="image/png" href="steamside.png"/>
+
+	<link href='http://fonts.googleapis.com/css?family=Jura' rel='stylesheet' type='text/css'>
+	<link href="http://fonts.googleapis.com/css?family=Arvo" rel="stylesheet" type="text/css" />
+
+	<!-- ======================================================================= -->
+
+	<style type="text/css">
+		.body {
+			margin: 3em;
+			margin-left: 4em;
+			font-family: Arvo, Verdana, Arial, sans-serif;
+		}
+		.logo {
+			font-family: Jura, sans-serif; font-size: 80px;
+		}
+		.slogan {
+			font-family: Arvo, Verdana, Arial, sans-serif; font-size: 22px;
+			text-align: center;
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+		.companion {
+			color: crimson;
+		}
+		#loading {
+			font-size: 4em; font-weight: bold; color: crimson; margin: 2em;
+		}
+	</style>
+
+<!-- ======================================================================= -->
+
+</head>
+
+<body class="body">
+
+<!-- ======================================================================= -->
+
+<div style="">
+	<div style='float:left; width: 120px'>
+		<p style="margin: 0">
+			<img src='steamside.png' alt="Steamside"
+				 style="width: 100%; height: 100%" />
+		</p>
+	</div>
+	<div style='float:left; margin-left: 1em'>
+		<div style='margin-top:0'>
+			<span class='logo companion'>Steamside</span>
+		</div>
+		<div>
+			<h2 class='slogan'>Your <span class="companion">companion</span> on Steam</h2>
+		</div>
+	</div>
+</div>
+
+<div style="text-align: right; clear: both; margin: 2em; border: solid; border-color: transparent">
+<p id="loading">
+</p>
+</div>
+
+<!-- ======================================================================= -->
+
+<script type="application/javascript">
+
+	var urlSession = "http://localhost:63342/steamside/steamside-webui/public/api/session/session.json";
+	var urlLanding = "http://localhost:63342/steamside/steamside-webui/public/Steamside.html";
+
+	// Returns a random integer between min and max
+	// Using Math.round() will give you a non-uniform distribution!
+	function getRandomInt(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	}
+
+	function loading() {
+		var steps = [
+			"Creating game world",
+			"Get ready",
+			"Initializing menus",
+			"Loading textures",
+			"Please stand by",
+			"Reticulating splines"
+		];
+		var i = getRandomInt(1, steps.length);
+		var step = steps[i - 1];
+		var step_span = document.getElementById("loading");
+		step_span.innerHTML = step + "...";
+	}
+
+	function attempt() {
+		var xhr = new XMLHttpRequest();
+
+		xhr.onload = function() {
+			if (xhr.readyState === 4) {
+				if (xhr.status === 200) {
+					relocate();
+				} else {
+					tryAgain();
+				}
+			}
+		};
+
+		xhr.onerror = function () {
+			tryAgain();
+		};
+
+		xhr.open("GET", urlSession, true);
+
+		xhr.send(null);
+	}
+
+	function relocate() {
+		window.location = urlLanding;
+	}
+
+	function tryAgain() {
+		setTimeout(function(){ location.reload(); }, 3000);
+	}
+
+	loading();
+	attempt();
+</script>
+
+<!-- ======================================================================= -->
+
+</body>
+
+</html>

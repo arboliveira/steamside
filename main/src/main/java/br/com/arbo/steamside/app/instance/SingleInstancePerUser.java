@@ -2,8 +2,6 @@ package br.com.arbo.steamside.app.instance;
 
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
@@ -30,7 +28,6 @@ public class SingleInstancePerUser
 		this.rangesize = rangesize;
 	}
 
-	@PostConstruct
 	public void start() throws AllPortsTaken
 	{
 		try
@@ -43,7 +40,6 @@ public class SingleInstancePerUser
 		}
 	}
 
-	@PreDestroy
 	public void stop()
 	{
 		this.running.stop();
@@ -70,23 +66,23 @@ public class SingleInstancePerUser
 			getLogger().info("Looking for a free port on " + p + "...");
 			Situation situation = detect.detect(p);
 			switch (situation)
-				{
+			{
 			case NotHere:
 				getLogger().info("Found a free port on " + p + ".");
 				freefound(p);
 				return;
 			case AlreadyRunningForThisUser:
 				getLogger()
-						.info("Found Steamside already running on " + p + ".");
+					.info("Found Steamside already running on " + p + ".");
 				browser.landing(p);
 				throw new SteamsideUpAndRunning(new CantStop());
 			case RunningOnDifferentUser:
 				getLogger()
-						.info("Another user running Steamside on " + p + ".");
+					.info("Another user running Steamside on " + p + ".");
 				return;
 			default:
 				throw new IllegalStateException();
-				}
+			}
 		}
 
 		private void freefound(final int p)
@@ -105,6 +101,8 @@ public class SingleInstancePerUser
 		{
 			final int port = firstfreefound.orElseThrow(AllPortsTaken::new);
 
+			browser.loading(port);
+
 			Running launched;
 
 			try
@@ -116,8 +114,6 @@ public class SingleInstancePerUser
 				// do nothing... come back to attempt one more sweep
 				return;
 			}
-
-			browser.landing(port);
 
 			throw new SteamsideUpAndRunning(launched);
 		}
@@ -146,12 +142,12 @@ public class SingleInstancePerUser
 
 	}
 
+	private static final int RANGE_BEGIN = 42424;
 	final WebBrowser browser;
 	final DetectSteamside detect;
 	final LimitPossiblePorts rangesize;
 	final LocalWebserver webserver;
-	private Running running;
 
-	private static final int RANGE_BEGIN = 42424;
+	private Running running;
 
 }

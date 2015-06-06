@@ -14,6 +14,12 @@ import br.com.arbo.steamside.bootstrap.BootstrapImpl;
 public class StartStopBootstrap
 {
 
+	@Inject
+	public StartStopBootstrap(BootstrapImpl target)
+	{
+		this.target = target;
+	}
+
 	@PostConstruct
 	public void start()
 	{
@@ -26,7 +32,6 @@ public class StartStopBootstrap
 		target.stop();
 	}
 
-	@Inject
-	public BootstrapImpl target;
+	private final BootstrapImpl target;
 
 }

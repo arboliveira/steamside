@@ -14,6 +14,12 @@ import br.com.arbo.steamside.steam.client.autoreload.ParallelAppsHomeFactory;
 public class StartStopParallelAppsHomeFactory
 {
 
+	@Inject
+	public StartStopParallelAppsHomeFactory(ParallelAppsHomeFactory target)
+	{
+		this.target = target;
+	}
+
 	@PostConstruct
 	public void start()
 	{
@@ -26,6 +32,5 @@ public class StartStopParallelAppsHomeFactory
 		target.stop();
 	}
 
-	@Inject
-	public ParallelAppsHomeFactory target;
+	private final ParallelAppsHomeFactory target;
 }

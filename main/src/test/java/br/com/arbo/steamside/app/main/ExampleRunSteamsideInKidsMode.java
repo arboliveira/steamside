@@ -7,19 +7,20 @@ import br.com.arbo.steamside.app.context.SourcesFactory;
 import br.com.arbo.steamside.app.context.SpringApplicationFactory;
 import br.com.arbo.steamside.app.launch.SourcesCustomizer;
 
-class ExampleRunSteamsideInKidsMode {
+class ExampleRunSteamsideInKidsMode
+{
 
 	public static void main(final String[] args)
 	{
 		SpringApplicationFactory
-			.buildWith(
-				SourcesFactory.newInstance()
-					.sources(KidsModeActiveCustomize.class))
-			.run(args);
+		.run(
+			SourcesFactory.newInstance()
+			.sources(KidsModeActiveCustomize.class), args);
 	}
 
 	@Component
-	public static class KidsModeActiveCustomize implements SourcesCustomizer {
+	public static class KidsModeActiveCustomize implements SourcesCustomizer
+	{
 
 		@Override
 		public void customize(Sources sources)

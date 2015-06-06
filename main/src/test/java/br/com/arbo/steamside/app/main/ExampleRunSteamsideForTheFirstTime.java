@@ -7,17 +7,20 @@ import br.com.arbo.steamside.app.context.SourcesFactory;
 import br.com.arbo.steamside.app.context.SpringApplicationFactory;
 import br.com.arbo.steamside.app.launch.SourcesCustomizer;
 
-public class ExampleRunSteamsideForTheFirstTime {
+public class ExampleRunSteamsideForTheFirstTime
+{
 
 	public static void main(final String[] args)
 	{
-		SpringApplicationFactory.buildWith(
-			SourcesFactory.newInstance().sources(FirstRunCustomize.class))
-			.run(args);
+		SpringApplicationFactory
+			.run(
+				SourcesFactory.newInstance().sources(FirstRunCustomize.class),
+				args);
 	}
 
 	@Component
-	public static class FirstRunCustomize implements SourcesCustomizer {
+	public static class FirstRunCustomize implements SourcesCustomizer
+	{
 
 		@Override
 		public void customize(Sources sources)

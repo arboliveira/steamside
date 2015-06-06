@@ -11,18 +11,19 @@ import br.com.arbo.steamside.app.launch.SourcesCustomizer;
  * Demonstrates Steamside will open on a different port
  * when launched under a different user.
  */
-class ExampleRunSteamsideAsDifferentUser {
+class ExampleRunSteamsideAsDifferentUser
+{
 
 	public static void main(final String[] args)
 	{
 		SpringApplicationFactory
-			.buildWith(SourcesFactory.newInstance()
-				.sources(DifferentUserCustomize.class))
-			.run(args);
+		.run(SourcesFactory.newInstance()
+			.sources(DifferentUserCustomize.class), args);
 	}
 
 	@Component
-	public static class DifferentUserCustomize implements SourcesCustomizer {
+	public static class DifferentUserCustomize implements SourcesCustomizer
+	{
 
 		@Override
 		public void customize(Sources sources)

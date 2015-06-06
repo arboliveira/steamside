@@ -3,12 +3,12 @@ package br.com.arbo.steamside.app.main;
 import br.com.arbo.steamside.app.context.SourcesFactory;
 import br.com.arbo.steamside.app.context.SpringApplicationFactory;
 
-public class Main {
+public class Main
+{
 
-	public static void main(final String... args) throws Exception
+	public static void main(String... args) throws Exception
 	{
-		SpringApplicationFactory.buildWith(SourcesFactory.newInstance())
-			.run(args);
+		SpringApplicationFactory.run(SourcesFactory.newInstance(), args);
 	}
 
 }
