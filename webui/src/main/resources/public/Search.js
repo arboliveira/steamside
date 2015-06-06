@@ -74,14 +74,16 @@ var SearchView = Backbone.View.extend(
 		this.elSearchHintSearchA.find(selectorVerb).text("search");
 		this.elSearchHintSearchB.find(selectorVerb).text("play first result for");
 
-		new CommandBoxView(
+		this.viewCommandBox = new CommandBoxView(
 			{
 				placeholder_text: 'game or command',
 				on_change_input: function(input) { that.on_search_input_changed(input) },
 				on_command: function(input) { that.on_search_command(input) },
 				on_command_alternate: function(input) { that.on_search_command_alternate(input) }
 			}
-		).render().whenRendered.done(function(view)
+		).render();
+
+		this.whenRendered = this.viewCommandBox.whenRendered.then(function(view)
 			{
 				that.rendered_search_CommandBox(view);
 			});
@@ -100,7 +102,12 @@ var SearchView = Backbone.View.extend(
 		var searchEl = $('#search-command-box');
 		searchEl.empty();
 		searchEl.append(viewCommandBox_el);
-		viewCommandBox.input_query_focus();
+
+		return this;
+	},
+
+	command_box_input_query_focus: function() {
+		this.viewCommandBox.input_query_focus();
 	},
 
 	on_search_input_changed: function(view) {
@@ -155,7 +162,14 @@ var SearchView = Backbone.View.extend(
 		var selector = '#search-command-hint-subject';
 		this.elSearchHintContinueA.find(selector).text(gameA.name());
 		this.elSearchHintContinueB.find(selector).text(gameB.name());
-	}
+	},
+
+	whenRendered: null,
+
+	/**
+	 * @type CommandBoxView
+	 */
+	viewCommandBox: null
 
 });
 

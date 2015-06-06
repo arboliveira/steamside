@@ -101,6 +101,15 @@ var SteamsideRouter = Backbone.Router.extend(
 	home: function()
 	{
 		this.worldchanger.goWorld(this.homeView);
+
+		var searchView = this.homeView.view.searchView;
+		if (searchView != null)
+		{
+			searchView.whenRendered.done(function(view)
+			{
+				searchView.command_box_input_query_focus();
+			});
+		}
     },
 
 	switch_favorites: function()

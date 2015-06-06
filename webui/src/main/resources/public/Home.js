@@ -30,10 +30,9 @@ var HomeWorld = WorldActions.extend(
 			this.backend = options.backend;
 		},
 
-		newView: function(/*_el*/)
+		newView: function()
 		{
 			return new HomeView({
-				// el: _el.clone(),
 				sessionModel: this.sessionModel,
 				cardTemplatePromise: this.cardTemplatePromise,
 				spritesCollectionEdit: this.spritesCollectionEdit,
@@ -95,7 +94,7 @@ var HomeView = Backbone.View.extend(
 		if (!kidsMode)
 		{
 			this.createContinuesDeck(continues);
-			this.renderSearchSegment(continues);
+			this.searchView = this.renderSearchSegment(continues);
 			if (false)
 				this.renderRecentTagged(viewFavorites.$el, continues);
 		}
@@ -142,7 +141,7 @@ var HomeView = Backbone.View.extend(
 	renderSearchSegment: function (continues) {
 		var that = this;
 
-		new SearchView(
+		return new SearchView(
 			{
 				el: $('#search-segment'),
 				cardTemplatePromise: that.cardTemplatePromise,
@@ -185,7 +184,12 @@ var HomeView = Backbone.View.extend(
 			segmentWithGameCard: segmentWithGameCard,
 			backend: that.backend
 		}).render();
-	}
+	},
+
+	/**
+	 * @type SearchView
+	 */
+	searchView: null
 });
 
 
