@@ -1,5 +1,10 @@
 .search-text-input {
 	width: 100%; font-size:24px;
+	padding-left: 0.25em;
+}
+
+.search-text-input:focus {
+	background-color: Aquamarine;
 }
 
 .command-button {
@@ -18,21 +23,19 @@
 	border-radius:3px;
 	display:inline-block;
 	margin:0 0.1em;
+	margin-right: 0;
 	text-shadow:0 1px 0 #fff;
 	line-height:1.4;
 	white-space:nowrap;
-	/*
-	font-family: monospace;
-	font-size: small;
-	font-weight: bold;
-	border-radius: 1px;
-	*/
 }
 
 .command-hint {
+	background-color: PaleTurquoise;
+	padding: 0.2em;
     font-family: "Karla";
 	font-size: x-small;
 	border-width: 1pt;
+	margin-left: 0;
 }
 
 .command-hint-special {

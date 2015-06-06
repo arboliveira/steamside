@@ -1,7 +1,7 @@
 .steamside-body-background
 {
     background-size: 100%;
-    background-image: url( 'http://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/27000/2605a0e86e1d2eeb79d8ccc6174d466311baa656.jpg' );
+    background-image: url( 'http://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/232430/e3df58e7dab4daad07342aa274e09b21ff4dd8a4.jpg' );
 }
 
 .page-header
@@ -110,10 +110,12 @@
     clear: both;
     overflow: auto;
     padding: 0;
-    background-color: PaleTurquoise ;
+    background-color: transparent;
     margin: 10px auto;
+    /*
     border: 1px;
     border-style: outset;
+    */
     border-color: navy;
     border-bottom-color: khaki;
     box-shadow: 2px 1px 5px 0px rgba(50, 50, 50, 0.75);
@@ -125,6 +127,7 @@
     padding: 0.8em;
     padding-top: 0.6em;
     padding-bottom: 0.4em;
+    background-color: PaleTurquoise;
 }
 
 .side-header-at-left
@@ -139,7 +142,9 @@
 .side-header-at-left {
     float: left;
     text-align: right;
-    border-right: 1px solid gray;
+    #border-right: 1px solid gray;
+	border-top-right-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
 }
 
 .side-header-at-right {
@@ -153,6 +158,8 @@
 .side-header-at-right {
     float: right;
     text-align: right;
+	border-top-left-radius: 0.5em;
+	border-bottom-left-radius: 0.5em;
     /*
     Can't get it right just yet...
     for now, relying on content-at-left.border-right :-p
@@ -195,7 +202,7 @@
 }
 
 .content-at-left {
-    border-right: 1px solid gray;
+    #border-right: 1px solid gray;
     padding-right: 20px;
     /* float: left; // this makes the right border finish midways :-p */
 }
@@ -208,7 +215,7 @@
 }
 
 .content-at-right {
-    border-left: 1px solid gray;
+    #border-left: 1px solid gray;
     padding-left: 20px;
     /*	float: right;  // this pushes content down somehow :-p */
 }
@@ -285,4 +292,10 @@ a.instructions-and-explanations
 {
 	-webkit-animation-duration: 0.5s;
 	-moz-animation-duration: 0.5s;
+}
+
+.floatingpad {
+	background-color: PowderBlue;
+	padding: 0.5em;
+	border-radius: 0.1em;
 }
