@@ -22,5 +22,24 @@
     }, {
       "name" : "Racing"
     } ]
-  }
+  },
+  {
+    "appid" : "70",
+    "name" : "Half-Life",
+    "link" : "api/app/70/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/70/header.jpg",
+    "store" : "http://store.steampowered.com/app/70",
+    "tags" : [ {
+      "name" : "Action"
+    } ]
+  }, {
+  "appid" : "400",
+  "name" : "Portal",
+  "link" : "api/app/400/run",
+  "image" : "http://cdn.akamai.steamstatic.com/steam/apps/400/header.jpg",
+  "store" : "http://store.steampowered.com/app/400",
+  "tags" : [ {
+    "name" : "favorite"
+  } ]
+}
 ]

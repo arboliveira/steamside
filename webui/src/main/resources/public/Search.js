@@ -31,14 +31,18 @@ var SearchView = Backbone.View.extend(
 	on_tag: null,
 	player: null,
 
-	events: {
-		//'submit #form-tag': 'event_form_submit'
-	},
-
 	initialize: function(options)
 	{
+		if (options.cardTemplatePromise == null) {
+			throw new Error("cardTemplatePromise is required");
+		}
 		this.cardTemplatePromise = options.cardTemplatePromise;
+
+		if (options.spriteMoreButton == null) {
+			throw new Error("spriteMoreButton is required");
+		}
 		this.spriteMoreButton = options.spriteMoreButton;
+
 		this.continues = options.continues;
 		this.on_tag = options.on_tag;
 		this.backend = options.backend;
@@ -136,7 +140,7 @@ var SearchView = Backbone.View.extend(
 		} else {
 			var searchResults = this.searchResults;
 			searchResults.query = input;
-			this.backend.fetch_fetch_json(searchResults);
+			this.backend.fetch_promise(searchResults);
 		}
 	},
 
@@ -149,7 +153,7 @@ var SearchView = Backbone.View.extend(
 		} else {
 			var searchResults = this.searchResults;
 			searchResults.query = input;
-			this.backend.fetch_fetch_json(searchResults, function() {
+			this.backend.fetch_promise(searchResults).done(function() {
 				var first = searchResults.at(0);
 				that.player.play(first);
 			});

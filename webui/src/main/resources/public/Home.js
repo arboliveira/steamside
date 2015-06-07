@@ -6,11 +6,6 @@ var HomeWorld = WorldActions.extend(
 		cardTemplatePromise: null,
 
 		/**
-		 * @type CollectionEditSpriteSheet
-		 */
-		spritesCollectionEdit: null,
-
-		/**
 		 * @type Sprite
 		 */
 		spriteMoreButton: null,
@@ -24,18 +19,19 @@ var HomeWorld = WorldActions.extend(
 				throw new Error("cardTemplatePromise is required");
 			}
 			this.cardTemplatePromise = options.cardTemplatePromise;
-			this.spritesCollectionEdit = options.spritesCollectionEdit;
 			this.spriteMoreButton = options.spriteMoreButton;
 
 			this.backend = options.backend;
 		},
 
+		/**
+		 * @override
+		 */
 		newView: function()
 		{
 			return new HomeView({
 				sessionModel: this.sessionModel,
 				cardTemplatePromise: this.cardTemplatePromise,
-				spritesCollectionEdit: this.spritesCollectionEdit,
 				spriteMoreButton: this.spriteMoreButton,
 				backend: this.backend
 			});
@@ -57,17 +53,15 @@ var HomeView = Backbone.View.extend(
 	cardTemplatePromise: null,
 
 	/**
-	 * @type CollectionEditSpriteSheet
-	 */
-	spritesCollectionEdit: null,
-
-	/**
 	 * @type Sprite
 	 */
 	spriteMoreButton: null,
 
 	backend: null,
 
+	/**
+	 * @type Deferred
+	 */
 	whenRendered: null,
 
 	initialize: function(options)
@@ -78,7 +72,6 @@ var HomeView = Backbone.View.extend(
 			throw new Error("cardTemplatePromise is required");
 		}
 		this.cardTemplatePromise = options.cardTemplatePromise;
-		this.spritesCollectionEdit = options.spritesCollectionEdit;
 		this.spriteMoreButton = options.spriteMoreButton;
 
 		this.backend = options.backend;
@@ -86,24 +79,35 @@ var HomeView = Backbone.View.extend(
 
 	render: function ()
 	{
+		var that = this;
+
 		var continues = new ContinueGames();
 		var kidsMode = this.sessionModel.kidsMode();
 
 		var viewFavorites = this.renderFavoritesView(kidsMode, continues);
 
+		var promiseRenderRecentTagged = null;
+
 		if (!kidsMode)
 		{
 			this.createContinuesDeck(continues);
 			this.searchView = this.renderSearchSegment(continues);
-			if (false)
+			promiseRenderRecentTagged =
 				this.renderRecentTagged(viewFavorites.$el, continues);
 		}
 
 		this.backend.fetch_promise(continues);
 
-		var already = $.Deferred();
-		already.resolve(this);
-		this.whenRendered = already;
+		if (promiseRenderRecentTagged != null)
+		{
+			this.whenRendered = promiseRenderRecentTagged.then(
+				function() { return that; }
+			);
+		}
+		else
+		{
+			this.whenRendered = $.when(this);
+		}
 
 		return this;
 	},
@@ -145,6 +149,7 @@ var HomeView = Backbone.View.extend(
 			{
 				el: $('#search-segment'),
 				cardTemplatePromise: that.cardTemplatePromise,
+				spriteMoreButton: that.spriteMoreButton,
 				continues: continues,
 				on_tag: that.on_game_card_tag,
 				backend: that.backend
@@ -155,25 +160,37 @@ var HomeView = Backbone.View.extend(
 	renderRecentTagged: function (segmentBeforeRecentTagged, continues) {
 		var that = this;
 
-		that.spritesCollectionEdit.view.sprite_promise().done(function(_el)
-		{
-			var clone = _el.clone();
+		var suggestions = new TagSuggestionsCollection();
 
-			var view = new CollectionEditView({
-				el: clone,
-				cardTemplatePromise: that.cardTemplatePromise,
-				spriteMoreButton: that.spriteMoreButton,
-				collection_name: "RECENT TAGGED",
-				backend: that.backend
+		return this.backend.fetch_promise(suggestions).then(function () {
+			suggestions.each( function(oneTagSuggestion) {
+				var view = that.renderRecentTaggedOne(
+					oneTagSuggestion, segmentBeforeRecentTagged);
 			});
-
-			view.render();
-
-			view.$el.hide();
-			view.$el.slideDown();
-
-			segmentBeforeRecentTagged.after(clone);
 		});
+	},
+
+	/**
+	 * @param oneTagSuggestion TagSuggestion
+	 */
+	renderRecentTaggedOne: function(
+		oneTagSuggestion, segmentBeforeRecentTagged
+	)
+	{
+		var that = this;
+		new CollectionEditView({
+			collection_name: oneTagSuggestion.name(),
+			cardTemplatePromise: that.cardTemplatePromise,
+			spriteMoreButton: that.spriteMoreButton,
+			backend: that.backend,
+			simplified: true
+		}).render().whenRendered.done(function(view)
+			{
+				view.$el.hide();
+				segmentBeforeRecentTagged.after(view.$el);
+				view.$el.slideDown();
+			}
+		);
 	},
 
 	on_game_card_tag: function(game, segmentWithGameCard)

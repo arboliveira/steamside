@@ -50,11 +50,8 @@ var SteamsideRouter = Backbone.Router.extend(
 
 		this.worldchanger = new Worldchanger({worldbed_el: worldbed_el});
 
-		var spritesCollectionEdit = new CollectionEditSpriteSheet();
-
 		this.homeView = new World({
-			worldActions: this.newHomeView(
-				options.sessionModel, spritesCollectionEdit)
+			worldActions: this.newHomeView(options.sessionModel)
 		});
 
 		this.switch_favoritesView = new World({worldActions:this.newSwitch_favoritesView()});
@@ -71,7 +68,6 @@ var SteamsideRouter = Backbone.Router.extend(
 
 		this.worldCollectionsEdit = new CollectionsEditWorld(
 			{
-				spritesCollectionEdit: spritesCollectionEdit,
 				cardTemplatePromise: this.cardTemplatePromise,
 				spriteMoreButton: this.spriteMoreButton,
 				backend: this.backend
@@ -100,16 +96,20 @@ var SteamsideRouter = Backbone.Router.extend(
 
 	home: function()
 	{
-		this.worldchanger.goWorld(this.homeView);
+		var that = this;
 
-		var searchView = this.homeView.view.searchView;
-		if (searchView != null)
-		{
-			searchView.whenRendered.done(function(view)
+		this.worldchanger.goWorld(this.homeView,
+			function()
 			{
-				searchView.command_box_input_query_focus();
-			});
-		}
+				var searchView = that.homeView.view.searchView;
+				if (searchView == null) return;
+
+				searchView.whenRendered.done(function(view)
+				{
+					searchView.command_box_input_query_focus();
+				});
+			}
+		);
     },
 
 	switch_favorites: function()
@@ -156,14 +156,13 @@ var SteamsideRouter = Backbone.Router.extend(
 		this.worldchanger.goWorld(this.exitView);
 	},
 
-	newHomeView: function(sessionModel, spritesCollectionEdit)
+	newHomeView: function(sessionModel)
 	{
 		return new HomeWorld(
 		{
 			sessionModel: sessionModel,
 			cardTemplatePromise: this.cardTemplatePromise,
 			spriteMoreButton: this.spriteMoreButton,
-			spritesCollectionEdit: spritesCollectionEdit,
 			backend: this.backend
 		});
 	},

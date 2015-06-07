@@ -327,8 +327,11 @@ var DeckView = Backbone.View.extend(
 		if (options.cardTemplatePromise == null) {
 			throw new Error("cardTemplatePromise is required");
 		}
-
 		this.cardTemplatePromise = options.cardTemplatePromise;
+
+		if (options.spriteMoreButton == null) {
+			throw new Error("spriteMoreButton is required");
+		}
 		this.spriteMoreButton = options.spriteMoreButton;
 
 		this.kidsMode = options.kidsMode === true;
@@ -353,6 +356,7 @@ var DeckView = Backbone.View.extend(
 			this.yRow = 0;
 			this.first_row = null;
 			this.current_row = null;
+			this.tailVisibility = false;
 
 			this.collection.each(function (oneResult) {
 				that.renderOneCell(oneResult);

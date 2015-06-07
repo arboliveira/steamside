@@ -32,11 +32,6 @@ var CollectionsEditWorld = WorldActions.extend(
 	{
 		collection_name: null,
 
-		/**
-		 * @type CollectionEditSpriteSheet
-		 */
-		spritesCollectionEdit: null,
-
 		cardTemplatePromise: null,
 
 		/**
@@ -50,7 +45,6 @@ var CollectionsEditWorld = WorldActions.extend(
 			{
 				throw new Error("cardTemplatePromise is required");
 			}
-			this.spritesCollectionEdit = options.spritesCollectionEdit;
 			this.cardTemplatePromise = options.cardTemplatePromise;
 			this.spriteMoreButton = options.spriteMoreButton;
 			this.backend = options.backend;
@@ -60,11 +54,13 @@ var CollectionsEditWorld = WorldActions.extend(
 			this.collection_name = collection_name;
 		},
 
+		/**
+		 * @override
+		 */
 		newView: function()
 		{
 			return new CollectionEditView(
 				{
-					spritesCollectionEdit: this.spritesCollectionEdit,
 					cardTemplatePromise: this.cardTemplatePromise,
 					spriteMoreButton: this.spriteMoreButton,
 					collection_name: this.collection_name,
@@ -93,11 +89,6 @@ var CollectionEditView = Backbone.View.extend({
 	cardTemplatePromise: null,
 
 	/**
-	 * @type CollectionEditSpriteSheet
-	 */
-	spritesCollectionEdit: null,
-
-	/**
 	 * @type Sprite
 	 */
 	spriteMoreButton: null,
@@ -107,17 +98,17 @@ var CollectionEditView = Backbone.View.extend({
 
     collection_name: null,
 
-	whenRendered: null,
-
 	backend: null,
+
+	simplified: false,
 
 	initialize: function(options)
 	{
 		if (options.cardTemplatePromise == null) {
 			throw new Error("cardTemplatePromise is required");
 		}
+		this.simplified = options.simplified;
 		this.cardTemplatePromise = options.cardTemplatePromise;
-		this.spritesCollectionEdit = options.spritesCollectionEdit;
 		this.spriteMoreButton = options.spriteMoreButton;
 		this.collection_name = options.collection_name;
 		this.backend = options.backend;
@@ -126,11 +117,51 @@ var CollectionEditView = Backbone.View.extend({
 	render: function () {
 		var that = this;
 		this.whenRendered =
-			this.spritesCollectionEdit.edit.sprite_promise().then(function(el) {
+			CollectionEditView.sprite.sprite_promise().then(function(el) {
 				that.render_el(el.clone());
 				return that;
 			});
 		return this;
+	},
+
+	renderSearch: function (continues) {
+		var that = this;
+
+		var collectionEditSearchResults = new SearchResults();
+		this.collectionEditSearchResults = collectionEditSearchResults;
+
+		new CommandBoxView(
+			{
+				placeholder_text: 'search for games',
+				on_change_input: function (input) {
+					that.on_search_input_changed(input)
+				},
+				on_command: function (input) {
+					that.on_search_command(input)
+				},
+				on_command_alternate: function (input) {
+					that.on_search_command_alternate(input)
+				}
+			}
+		).render()
+			.whenRendered.done(function (view) {
+				that.render_search_CommandBox(view);
+			});
+
+		new DeckView({
+			el: this.$('#collection-edit-search-results-deck'),
+			cardTemplatePromise: this.cardTemplatePromise,
+			spriteMoreButton: that.spriteMoreButton,
+			collection: collectionEditSearchResults,
+			continues: continues,
+			on_GameCard_render: function (viewGameCard) {
+				that.on_SearchResults_GameCard_render(viewGameCard)
+			},
+			on_tag: function (game, segmentWithGameCard) {
+				that.on_game_card_tag(game, segmentWithGameCard)
+			},
+			backend: this.backend
+		});
 	},
 
 	render_el: function(el)
@@ -139,7 +170,10 @@ var CollectionEditView = Backbone.View.extend({
 
 		var that = this;
 
-        this.combineView = new CombineView({
+		// TODO Reuse same continues collection as front page?
+		var continues = new ContinueGames();
+
+		this.combineView = new CombineView({
 			backend: that.backend,
             el: that.$('#CombineView'),
             collection_editing: that.collection_name
@@ -147,35 +181,6 @@ var CollectionEditView = Backbone.View.extend({
 
 		this.combine_purpose_el = this.$("#CombinePurposeView");
 		this.combine_purpose_el.remove();
-
-        var collectionEditSearchResults = new SearchResults();
-		this.collectionEditSearchResults = collectionEditSearchResults;
-
-		new CommandBoxView(
-			{
-				placeholder_text: 'search for games',
-				on_change_input: function(input) { that.on_search_input_changed(input) },
-				on_command: function(input) { that.on_search_command(input) },
-				on_command_alternate: function(input) { that.on_search_command_alternate(input) }
-			}
-		).render()
-			.whenRendered.done(function(view)
-				{
-					that.render_search_CommandBox(view);
-				});
-
-		// TODO Reuse same continues collection as front page?
-		var continues = new ContinueGames();
-		new DeckView({
-			el: this.$('#collection-edit-search-results-deck'),
-			cardTemplatePromise: this.cardTemplatePromise,
-			spriteMoreButton: that.spriteMoreButton,
-			collection: collectionEditSearchResults,
-			continues: continues,
-			on_GameCard_render: function(viewGameCard) { that.on_SearchResults_GameCard_render(viewGameCard) },
-			on_tag: function(game, segmentWithGameCard) { that.on_game_card_tag(game, segmentWithGameCard) },
-			backend: this.backend
-		});
 
         var name = that.collection_name;
         this.$("#display-collection-name").text(name);
@@ -196,7 +201,16 @@ var CollectionEditView = Backbone.View.extend({
         });
 
 		this.backend.fetch_fetch_json(inCollection);
-    },
+
+		if (this.simplified)
+		{
+			this.$("#add-games-segment").remove();
+		}
+		else
+		{
+			this.renderSearch(continues);
+		}
+	},
 
 	on_game_card_tag: function(game, segmentWithGameCard) {
 		var that = this;
@@ -386,7 +400,19 @@ var CollectionEditView = Backbone.View.extend({
 	on_collection_combine: function(collection)
 	{
         this.combineView.renderCommandBox(collection.name());
-	}
+	},
+
+	whenRendered: null
+
+}, {
+
+	/**
+	 * @public
+	 * @type Sprite
+	 */
+	sprite: new SpriteBuilder({
+		url: 'CollectionEdit.html', selector: "#tile-collection-edit"
+	}).build()
 
 });
 

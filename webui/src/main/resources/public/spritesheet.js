@@ -57,6 +57,7 @@ var Sprite = Backbone.Model.extend(
 
 		/**
 		 * @public
+		 * @return Deferred
 		 */
 		sprite_promise: function() {
 			return this._promise;

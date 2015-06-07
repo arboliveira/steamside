@@ -20,6 +20,10 @@ var MoreButtonView = Backbone.View.extend(
 	initialize: function(a)
 	{
 		this.deck = a.deck;
+
+		if (a.spriteMoreButton == null) {
+			throw new Error("spriteMoreButton is required");
+		}
 		this.spriteMoreButton = a.spriteMoreButton;
 	},
 

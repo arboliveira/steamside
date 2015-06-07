@@ -63,13 +63,8 @@ var TagView = Backbone.View.extend({
 		this.viewCommandBox = viewCommandBox;
 
 		var suggestions = new TagSuggestionsCollection();
-		this.backend.fetch_fetch_json(suggestions, function () {
-			new TagSuggestionsView({
-				el: that.$("#TagSuggestionsView"),
-				collection: suggestions,
-				on_tag_suggestion_select:
-					function(model){that.on_tag_suggestion_select(model)}
-			}).render();
+		this.backend.fetch_promise(suggestions).done(function () {
+			this.renderTagSuggestionsView(that, suggestions);
 		});
 
 		this.$el.slideDown();
@@ -77,6 +72,17 @@ var TagView = Backbone.View.extend({
 		this.segmentWithGameCard.after(this.$el);
 
 		$('html, body').scrollTop(this.$el.offset().top);
+	},
+
+	renderTagSuggestionsView: function (suggestions) {
+		var that = this;
+		new TagSuggestionsView({
+			el: that.$("#TagSuggestionsView"),
+			collection: suggestions,
+			on_tag_suggestion_select: function (model) {
+				that.on_tag_suggestion_select(model)
+			}
+		}).render();
 	},
 
 	renderCommandHints: function () {
@@ -217,14 +223,19 @@ var TagSuggestionsView = Backbone.View.extend({
 
 		var that = this;
 		this.collection.each( function(one) {
-			var view = new TagSuggestionView({
-				model: one,
-				el: one_el.clone(),
-				on_tag_suggestion_select: that.on_tag_suggestion_select
-			});
-			container.append(view.render().el);
+			var view = this.renderTagSuggestionView(one, one_el.clone());
+			container.append(view.el);
 		});
 		return this;
+	},
+
+	renderTagSuggestionView: function (oneTagSuggestion, el) {
+		var that = this;
+		return new TagSuggestionView({
+			model: oneTagSuggestion,
+			el: el,
+			on_tag_suggestion_select: that.on_tag_suggestion_select
+		}).render();
 	}
 });
 

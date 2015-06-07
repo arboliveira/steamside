@@ -10,7 +10,7 @@ var Worldchanger = Backbone.Model.extend(
 
 		worldview: null,
 
-		goWorld: function(world) {
+		goWorld: function(world, afterwards) {
 			$("body").show();
 
 			var that = this;
@@ -24,11 +24,11 @@ var Worldchanger = Backbone.Model.extend(
 
 			world.submitForView(function(view)
 			{
-				that.setWorldview(view);
+				that.setWorldview(view, afterwards);
 			});
 		},
 
-		setWorldview:  function(view) {
+		setWorldview: function(view, afterwards) {
 			if (this.worldview != null)
 			{
 				var $wel = this.worldview.$el;
@@ -42,7 +42,11 @@ var Worldchanger = Backbone.Model.extend(
 				$vel.show();
 			}
 
-			sideshow(view.$el);
+			view.whenRendered.then(function()
+			{
+				sideshow(view.$el);
+			}
+			).then(afterwards);
 
 			this.worldview = view;
 		}
