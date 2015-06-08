@@ -48,11 +48,10 @@
 			{
 				var steamsideSpriteSheet = new SteamsideSpriteSheet();
 
-				var p = steamsideSpriteSheet.card.sprite_promise();
-
 				new CollectionEditView({
 					el: '#tile-collection-edit',
-					cardTemplatePromise: p,
+					cardTemplatePromise:
+                            steamsideSpriteSheet.card.sprite_promise(),
 					spriteMoreButton: steamsideSpriteSheet.moreButton,
 					collection_name: "Testing"
 				}).render()

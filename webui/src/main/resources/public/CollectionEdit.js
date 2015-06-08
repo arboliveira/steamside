@@ -216,9 +216,14 @@ var CollectionEditView = Backbone.View.extend({
 		var that = this;
 		new TagView({
 			game: game,
-			segmentWithGameCard: segmentWithGameCard,
 			backend: that.backend
-		}).render();
+		}
+		).render().whenRendered.done(function(view)
+		{
+			segmentWithGameCard.after(view.$el);
+			view.viewCommandBox.input_query_focus();
+			$('html, body').scrollTop(view.$el.offset().top);
+		});
 	},
 
 	render_search_CommandBox: function(viewCommandBox) {

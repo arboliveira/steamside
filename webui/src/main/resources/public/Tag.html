@@ -4,6 +4,53 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<title>Tag</title>
+
+	<link href="steamside.css" rel="stylesheet" type="text/css" />
+	<link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
+
+	<link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
+
+	<script src="jquery-2.1.1.js" type="text/javascript"></script>
+	<script src="underscore.js" type="text/javascript"></script>
+	<script src="backbone.js" type="text/javascript"></script>
+
+	<script src="spritesheet.js" type="text/javascript"></script>
+	<script src="Backend.js" type="text/javascript"></script>
+	<script src="GameCardDeck.js" type="text/javascript"></script>
+
+	<script src="Tag.js" type="text/javascript"></script>
+
+	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
+	<script src="CommandBox.js" type="text/javascript"></script>
+
+	<script type="application/javascript">
+
+		var Tag_html = {
+
+			render_page: function ()
+			{
+				var game = new Game({
+					name: "You just opened this file in a browser, didn't you?"
+				});
+
+				new TagView({
+					game: game,
+					backend: new Backend()
+				}
+				).render().whenRendered.done(function(view)
+				{
+					$("#TagTile").after(view.$el);
+				});
+
+			}
+		};
+
+
+		$(function() {
+			Tag_html.render_page();
+		});
+
+	</script>
 </head>
 <body>
 
@@ -46,10 +93,6 @@
 				<a href="" id="tag-name"
 				   class="display-collection-name"
 				   >[Tag 1]</a>
-				<!--
-				<a href="" id="tag-name"
-				   class="display-collection-name collection-name">[Tag 1]</a>
-				   -->
 			</div>
 		</div>
 

@@ -2,45 +2,12 @@
 
 var TestRunner = Backbone.Model.extend(
 {
-	loadPage: function (testsuite, done)
-	{
-		var load = this.loadPageToTest(testsuite.pageToTest());
-
-		load.done(function()
-		{
-			var is_loaded = function () {
-				return testsuite.isPageLoaded();
-			};
-
-			var ok_loaded = function () {
-				done();
-			};
-
-			var no_loaded = function() {
-				throw new Error('page never loaded?!');
-			};
-
-			Insisting.seen(is_loaded, ok_loaded, no_loaded, 3000);
-		})
-	},
-
-	loadPageToTest: function (pageToTest)
-	{
-		var load = $.ajax(
-			{
-				url: pageToTest,
-				dataType: 'html'
-			});
-
-		var append = load.then(function(page)
-		{
-			var testbed = $('#page-to-test');
-			testbed.empty();
-			testbed.append($(page));
-		});
-
-		return append;
+	replaceTestableUI: function (el) {
+		var testbed = $('#page-to-test');
+		testbed.empty();
+		testbed.append(el);
 	}
+
 });
 
 var Insisting =
@@ -61,15 +28,25 @@ var Insisting =
 
 		var check = function()
 		{
-			if (quit) {
-				failure();
-				return;
-			}
-
-			if (condition())
+			try
 			{
+				condition();
 				success();
 				return;
+			}
+			catch(e)
+			{
+				if (e instanceof chai.AssertionError)
+				{
+					if (quit)
+					{
+						failure(e);
+						return;
+					}
+				}
+				else {
+					throw e;
+				}
 			}
 
 			setTimeout(check, interval);

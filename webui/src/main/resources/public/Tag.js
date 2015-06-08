@@ -22,7 +22,6 @@ var TagView = Backbone.View.extend({
 
 	initialize: function(options) {
 		this.game = options.game;
-		this.segmentWithGameCard = options.segmentWithGameCard;
 		this.backend = options.backend;
 	},
 
@@ -64,14 +63,10 @@ var TagView = Backbone.View.extend({
 
 		var suggestions = new TagSuggestionsCollection();
 		this.backend.fetch_promise(suggestions).done(function () {
-			this.renderTagSuggestionsView(that, suggestions);
+			that.renderTagSuggestionsView(suggestions);
 		});
 
 		this.$el.slideDown();
-
-		this.segmentWithGameCard.after(this.$el);
-
-		$('html, body').scrollTop(this.$el.offset().top);
 	},
 
 	renderTagSuggestionsView: function (suggestions) {
@@ -223,7 +218,7 @@ var TagSuggestionsView = Backbone.View.extend({
 
 		var that = this;
 		this.collection.each( function(one) {
-			var view = this.renderTagSuggestionView(one, one_el.clone());
+			var view = that.renderTagSuggestionView(one, one_el.clone());
 			container.append(view.el);
 		});
 		return this;

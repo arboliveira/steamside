@@ -1,18 +1,17 @@
 "use strict";
 
-var Test_Kids_html = Backbone.Model.extend({
+var Test_Kids = Backbone.Model.extend({
 
-	pageToTest: function()
+	renderTestableUIPromise: function()
 	{
-		return 'Kids.html';
+		var pageToTest = 'Kids.html';
+		return $.ajax({
+				url: pageToTest, dataType: 'html' }
+		).then(function(page) {
+				return $(page);	});
 	},
 
-	isPageLoaded: function()
-	{
-		return true;
-	},
-
-	addTests: function (pageLoader)
+	addTests: function (theTestRunner)
 	{
 		var that = this;
 		var before = global.before;
@@ -23,7 +22,11 @@ var Test_Kids_html = Backbone.Model.extend({
 
 			before(function(done)
 			{
-				pageLoader.loadPage(that, done);
+				that.renderTestableUIPromise().done(function(el)
+				{
+					theTestRunner.replaceTestableUI(el);
+					done();
+				});
 			});
 
 			describe("Game Card", function () {
@@ -61,7 +64,7 @@ var Test_Kids_html = Backbone.Model.extend({
 
 		var MockBackend = Backbone.Model.extend(
 			{
-				ajax_ajax_promise: function(aUrl)
+				ajax_ajax_promise_2: function(aUrl)
 				{
 					expect(aUrl).to.equal('would be URL');
 					return backend_invoked;

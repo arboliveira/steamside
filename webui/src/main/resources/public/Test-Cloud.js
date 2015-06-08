@@ -1,18 +1,17 @@
 "use strict";
 
-var Test_Cloud_html = Backbone.Model.extend(
+var Test_Cloud = Backbone.Model.extend(
 {
-	pageToTest: function()
+	renderTestableUIPromise: function()
 	{
-		return 'Cloud.html';
+		var pageToTest = 'Cloud.html';
+		return $.ajax({
+				url: pageToTest, dataType: 'html' }
+		).then(function(page) {
+				return $(page);	});
 	},
 
-	isPageLoaded: function()
-	{
-		return true;
-	},
-
-	addTests: function (pageLoader)
+	addTests: function (theTestRunner)
 	{
 		var that = this;
 		var before = global.before;
@@ -23,7 +22,11 @@ var Test_Cloud_html = Backbone.Model.extend(
 
 			before(function(done)
 			{
-				pageLoader.loadPage(that, done);
+				that.renderTestableUIPromise().done(function(el)
+				{
+					theTestRunner.replaceTestableUI(el);
+					done();
+				});
 			});
 
 			describe("Just started", function ()
