@@ -18,7 +18,8 @@ import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-class CollectionController_collection_json {
+class CollectionController_collection_json
+{
 
 	CollectionController_collection_json(
 		String name, Limit limit, SystemCollectionsHome sys,
@@ -36,8 +37,9 @@ class CollectionController_collection_json {
 	List<AppDTO> jsonable()
 	{
 		boolean _gamesOnly = gamesOnly;
-		final Stream< ? extends Tag> appsOf =
-			sys.appsOf(new CollectionName(name), new AppCriteria() {
+		Stream< ? extends Tag> appsOf =
+			sys.appsOf(new CollectionName(name), new AppCriteria()
+			{
 
 				{
 					this.gamesOnly = _gamesOnly;

@@ -1,20 +1,23 @@
 package br.com.arbo.steamside.steam.client.types;
 
-public class AppType {
+public class AppType
+{
 
 	public static AppType valueOf(String name)
 	{
-		switch (name) {
+		String normalized = name.toLowerCase();
+		switch (normalized)
+		{
 		case "game":
 			return GAME;
 		default:
-			return new AppType(name);
+			return new AppType(normalized);
 		}
 	}
 
-	private AppType(final String name)
+	private AppType(String name)
 	{
-		this.type = name.toLowerCase();
+		this.type = name;
 	}
 
 	public boolean isGame()
@@ -28,7 +31,7 @@ public class AppType {
 		return type;
 	}
 
-	public static final AppType GAME = new AppType("game");
-
 	public final String type;
+
+	public static final AppType GAME = new AppType("game");
 }
