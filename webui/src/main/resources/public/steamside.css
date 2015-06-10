@@ -68,7 +68,7 @@
 	text-align: center;
 	font-family: Arvo;
 	font-size: 1em;
-	width: 16%;
+	width: 1%;
 	float: none;
 }
 
@@ -298,4 +298,9 @@ a.instructions-and-explanations
 	background-color: PowderBlue;
 	padding: 0.5em;
 	border-radius: 0.1em;
+}
+
+.free-form-text {
+    font-size: 0.9em;
+    font-family: Karla;
 }
