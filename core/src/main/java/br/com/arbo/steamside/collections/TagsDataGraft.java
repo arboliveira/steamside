@@ -2,7 +2,6 @@ package br.com.arbo.steamside.collections;
 
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class TagsDataGraft implements TagsData
@@ -59,15 +58,15 @@ public class TagsDataGraft implements TagsData
 	}
 
 	@Override
-	public void tagn(Stream<WithApps> withApps) throws NotFound
-	{
-		writes.tagn(withApps);
-	}
-
-	@Override
 	public void tagRemember(CollectionI c, AppId appid)
 	{
 		writes.tagRemember(c, appid);
+	}
+
+	@Override
+	public void tagRememberBulk(Stream<TagTeam> tags)
+	{
+		writes.tagRememberBulk(tags);
 	}
 
 	@Override

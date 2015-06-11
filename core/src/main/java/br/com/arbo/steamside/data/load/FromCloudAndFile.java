@@ -10,25 +10,13 @@ import br.com.arbo.steamside.cloud.CloudSettingsFactory.Missing;
 import br.com.arbo.steamside.cloud.LoadCloud;
 import br.com.arbo.steamside.cloud.LoadCloud.Disabled;
 import br.com.arbo.steamside.cloud.Unavailable;
-import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
-import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.firstrun.InitialLoadDetectedFirstRunEver;
-import br.com.arbo.steamside.kids.InMemoryKids;
 import br.com.arbo.steamside.settings.file.LoadFile;
 
 public class FromCloudAndFile implements InitialLoad
 {
-
-	private static SteamsideData empty()
-	{
-		InMemoryCollectionsHome c = new InMemoryCollectionsHome();
-		InMemoryTagsHome t = new InMemoryTagsHome(c);
-		InMemoryKids k = new InMemoryKids();
-		InMemorySteamsideData d = new InMemorySteamsideData(c, t, k);
-		return d;
-	}
 
 	@Inject
 	public FromCloudAndFile(
@@ -51,7 +39,8 @@ public class FromCloudAndFile implements InitialLoad
 			return fromFile.get();
 
 		bootstrap.fireEvent(new InitialLoadDetectedFirstRunEver());
-		return empty();
+
+		return InMemorySteamsideData.newInstance();
 	}
 
 	private Optional<SteamsideData> fromCloud()

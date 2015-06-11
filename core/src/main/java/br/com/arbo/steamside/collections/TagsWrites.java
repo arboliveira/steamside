@@ -13,20 +13,20 @@ public interface TagsWrites
 		CollectionI c,
 		Stream<AppId> apps) throws NotFound;
 
-	void tagn(
-		Stream<WithApps> withApps) throws NotFound;
-
 	void tagRemember(
 		CollectionI c,
 		AppId appid) throws NotFound;
+
+	void tagRememberBulk(Stream<TagTeam> tags);
 
 	void untag(
 		CollectionI c,
 		AppId appid) throws NotFound;
 
-	public interface WithApps
+	public interface TagTeam
 	{
-		Stream<AppId> apps();
+
+		AppId app();
 
 		CollectionName collection();
 	}

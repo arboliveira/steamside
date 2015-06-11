@@ -54,14 +54,14 @@ public class InMemoryTagsHome implements TagsData, DeleteListener
 	}
 
 	@Override
-	public Stream<? extends WithTags> allWithTags()
+	public Stream< ? extends WithTags> allWithTags()
 	{
 		return tagsByCollection.map.entrySet().stream().map(
 			e -> withTags(e));
 	}
 
 	@Override
-	public Stream<? extends Tag> apps(CollectionI c)
+	public Stream< ? extends Tag> apps(CollectionI c)
 	{
 		final CollectionImpl stored = stored(c);
 		return appsIn(stored);
@@ -96,7 +96,7 @@ public class InMemoryTagsHome implements TagsData, DeleteListener
 	}
 
 	@Override
-	public Stream<? extends WithCount> recent()
+	public Stream< ? extends WithCount> recent()
 	{
 		return recent.values().stream().map(this::withCount);
 	}
@@ -119,18 +119,8 @@ public class InMemoryTagsHome implements TagsData, DeleteListener
 	@Override
 	public void tag(CollectionI c, Stream<AppId> apps) throws NotFound
 	{
-		doTag(c, apps);
-	}
-
-	@Override
-	public void tagn(
-		Stream<WithApps> withApps) throws NotFound
-	{
-		withApps.forEach(e -> {
-			CollectionName name = e.collection();
-			CollectionI c = collections().addIfAbsent(name);
-			doTag(c, e.apps());
-		});
+		CollectionImpl stored = stored(c);
+		doTag(stored, apps);
 	}
 
 	@Override
@@ -144,7 +134,15 @@ public class InMemoryTagsHome implements TagsData, DeleteListener
 	}
 
 	@Override
-	public Stream<? extends CollectionI> tags(AppId app)
+	public void tagRememberBulk(Stream<TagTeam> tags)
+	{
+		tags.forEach(e -> {
+			doTagRemember(e);
+		});
+	}
+
+	@Override
+	public Stream< ? extends CollectionI> tags(AppId app)
 	{
 		return collectionsByApp.collections(app);
 	}
@@ -201,10 +199,18 @@ public class InMemoryTagsHome implements TagsData, DeleteListener
 		recent.tagged(stored);
 	}
 
-	private void doTag(CollectionI c, Stream<AppId> apps)
+	private void doTag(CollectionImpl stored, Stream<AppId> apps)
 	{
-		CollectionImpl stored = stored(c);
 		apps.forEach(appid -> doTag(stored, appid));
+	}
+
+	private void doTagRemember(TagTeam tag)
+	{
+		CollectionName name = tag.collection();
+		CollectionI c = collections().addIfAbsent(name);
+		CollectionImpl stored = stored(c);
+		doTag(stored, tag.app());
+		doRememberRecentTag(stored);
 	}
 
 	private CollectionImpl stored(CollectionI c)

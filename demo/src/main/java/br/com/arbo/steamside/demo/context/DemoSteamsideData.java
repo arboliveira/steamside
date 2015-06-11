@@ -42,10 +42,10 @@ class DemoSteamsideData
 		this.sources = sources;
 		this.nameVsAppId = index(appsHomeFactory);
 
-		c = new InMemoryCollectionsHome();
-		t = new InMemoryTagsHome(c);
-		k = new InMemoryKids();
-		s = new InMemorySteamsideData(c, t, k);
+		this.s = InMemorySteamsideData.newInstance();
+		this.c = s.collections();
+		this.k = s.kids();
+		this.t = s.tags();
 	}
 
 	private void addCollections(String... names)
@@ -73,10 +73,10 @@ class DemoSteamsideData
 		populateTags();
 
 		sources
-			.replaceWithSingleton(SteamsideData.class, s)
-			.replaceWithSingleton(CollectionsData.class, c)
-			.replaceWithSingleton(TagsData.class, t)
-			.replaceWithSingleton(KidsData.class, k);
+		.replaceWithSingleton(SteamsideData.class, s)
+		.replaceWithSingleton(CollectionsData.class, c)
+		.replaceWithSingleton(TagsData.class, t)
+		.replaceWithSingleton(KidsData.class, k);
 	}
 
 	private void populateCollections()

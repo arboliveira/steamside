@@ -7,7 +7,8 @@ import br.com.arbo.steamside.kids.InMemoryKids;
 import br.com.arbo.steamside.kids.KidImpl;
 import br.com.arbo.steamside.kids.Kids;
 
-public class KidsXml {
+public class KidsXml
+{
 
 	public static KidsXml valueOf(Kids kids)
 	{
@@ -16,17 +17,22 @@ public class KidsXml {
 		return xml;
 	}
 
-	public InMemoryKids toKids()
+	public void toKidsHome(InMemoryKids mem)
 	{
-		return new ToKids().convert();
+		new ToKidsHome(mem).convert();
 	}
 
-	class ToKids {
+	class ToKidsHome
+	{
 
-		InMemoryKids convert()
+		ToKidsHome(InMemoryKids mem)
+		{
+			this.mem = mem;
+		}
+
+		void convert()
 		{
 			kid.stream().forEach(this::add);
-			return mem;
 		}
 
 		private void add(KidXml xml) throws Duplicate
@@ -35,7 +41,7 @@ public class KidsXml {
 			mem.add(c);
 		}
 
-		InMemoryKids mem = new InMemoryKids();
+		InMemoryKids mem;
 	}
 
 	public final LinkedList<KidXml> kid = new LinkedList<>();

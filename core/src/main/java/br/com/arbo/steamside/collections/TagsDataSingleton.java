@@ -18,13 +18,13 @@ public class TagsDataSingleton implements TagsData
 	}
 
 	@Override
-	public Stream<? extends WithTags> allWithTags()
+	public Stream< ? extends WithTags> allWithTags()
 	{
 		return actual().allWithTags();
 	}
 
 	@Override
-	public Stream<? extends Tag> apps(CollectionI collection)
+	public Stream< ? extends Tag> apps(CollectionI collection)
 	{
 		return actual().apps(collection);
 	}
@@ -48,7 +48,7 @@ public class TagsDataSingleton implements TagsData
 	}
 
 	@Override
-	public Stream<? extends WithCount> recent()
+	public Stream< ? extends WithCount> recent()
 	{
 		return actual().recent();
 	}
@@ -60,12 +60,6 @@ public class TagsDataSingleton implements TagsData
 	}
 
 	@Override
-	public void tagn(Stream<WithApps> withApps) throws NotFound
-	{
-		actual().tagn(withApps);
-	}
-
-	@Override
 	public void tagRemember(CollectionI c, AppId appid)
 		throws NotFound
 	{
@@ -73,7 +67,13 @@ public class TagsDataSingleton implements TagsData
 	}
 
 	@Override
-	public Stream<? extends CollectionI> tags(AppId app)
+	public void tagRememberBulk(Stream<TagTeam> tags)
+	{
+		actual().tagRememberBulk(tags);
+	}
+
+	@Override
+	public Stream< ? extends CollectionI> tags(AppId app)
 	{
 		return actual().tags(app);
 	}
