@@ -93,8 +93,17 @@
 	padding-bottom: 2em;
 }
 .made {
+	/*
+	position: absolute; bottom: 0; right: 0;
+	*/
+}
+.made-text {
 	font-size: 12px;
 }
+	.screenshot-img {
+		width: 90%;
+		margin: 3em;
+	}
 </style>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -189,13 +198,47 @@ Some cool things you'll be able to do...
 	</p>
 </div>
 
-<div class="made"
-	 style="clear: both; text-align: right; position: absolute; bottom: 0; right: 0; margin: 3em; margin-left: 12em" >
+	<div style='clear:both; float:right;'>
+		<p class='learn'>
+			Screenshots
+		</p>
+	</div>
+
+
+	<div>
+		<a href="screenshots/steamside-screenshot-01.gif">
+			<img class="screenshot-img"
+			 src="screenshots/steamside-screenshot-01.gif"/>
+		</a>
+	</div>
+	<div>
+		<a href="screenshots/steamside-screenshot-02.gif">
+		<img class="screenshot-img" src="screenshots/steamside-screenshot-02.gif"/>
+			</a>
+	</div>
+	<div>
+		<a href="screenshots/steamside-screenshot-03.gif">
+		<img class="screenshot-img" src="screenshots/steamside-screenshot-03.gif"/>
+			</a>
+	</div>
+	<div>
+		<a href="screenshots/steamside-screenshot-04.gif">
+		<img class="screenshot-img" src="screenshots/steamside-screenshot-04.gif"/>
+			</a>
+	</div>
+	<div>
+		<a href="screenshots/steamside-screenshot-05.gif">
+		<img class="screenshot-img" src="screenshots/steamside-screenshot-05.gif"/>
+			</a>
+	</div>
+
+	<div class="made made-text"
+	 style="clear: both; text-align: right; margin: 3em; margin-left: 12em" >
 	Made with love by <a href="https://github.com/arboliveira" target="_blank">Arbo</a>.
 	Steamside is an open source fan work not affiliated with, sponsored, or endorsed by
 		<a href="http://www.valvesoftware.com/" target="_blank">Valve</a>.
 	Have fun and
-	<a href="mailto:andre@arbo.com.br">ask me anything</a>
+	<a href="mailto:steamside@arbo.com.br">ask me anything</a>
 </div>
 
 </div>
