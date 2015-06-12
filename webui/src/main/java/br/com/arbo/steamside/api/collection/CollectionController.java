@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.api.collection;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -30,16 +30,15 @@ import br.com.arbo.steamside.types.CollectionName;
 
 @RestController
 @RequestMapping("collection")
-public class CollectionController {
+public class CollectionController
+{
 
-	private static LinkedList<CollectionDTO> jsonify(
+	private static List<CollectionDTO> jsonify(
 		Stream< ? extends WithCount> all)
 	{
 		return all
 			.map(CollectionDTO::valueOf)
-			.collect(
-				LinkedList::new, LinkedList::add,
-				LinkedList::addAll);
+			.collect(Collectors.toList());
 	}
 
 	@Inject
@@ -72,7 +71,7 @@ public class CollectionController {
 	{
 		new CombineCollections(
 			name, collection, combined, Operation.Copy, tags)
-				.combine();
+			.combine();
 	}
 
 	@RequestMapping(value = "{name}/combine/{collection}/into/{combined}/move")
@@ -83,7 +82,7 @@ public class CollectionController {
 	{
 		new CombineCollections(
 			name, collection, combined, Operation.Move, tags)
-				.combine();
+			.combine();
 	}
 
 	@RequestMapping(value = "copy-all-steam-categories")
@@ -112,7 +111,8 @@ public class CollectionController {
 	@RequestMapping(value = "collections.json")
 	public List<CollectionDTO> jsonCollections()
 	{
-		AppCriteria criteria = new AppCriteria() {
+		AppCriteria criteria = new AppCriteria()
+		{
 
 			{
 				this.gamesOnly = settings.gamesOnly();

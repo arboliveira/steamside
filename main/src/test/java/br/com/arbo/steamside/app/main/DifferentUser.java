@@ -5,7 +5,8 @@ import org.mockito.Mockito;
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.org.springframework.boot.builder.Sources;
 
-public class DifferentUser {
+public class DifferentUser
+{
 
 	public static Sources customize(Sources s)
 	{

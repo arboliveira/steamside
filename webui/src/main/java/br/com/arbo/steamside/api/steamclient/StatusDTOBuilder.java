@@ -2,20 +2,25 @@ package br.com.arbo.steamside.api.steamclient;
 
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import br.com.arbo.opersys.processes.seek.Criteria;
 import br.com.arbo.opersys.processes.seek.UsernameNot;
 import br.com.arbo.opersys.processes.seek.windows.WinProcessX;
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.steam.client.executable.SteamExeFindProcess;
 
-public class StatusDTOBuilder {
+public class StatusDTOBuilder implements SteamClientController_status
+{
 
-	StatusDTOBuilder(User user)
+	@Inject
+	public StatusDTOBuilder(User user)
 	{
 		this.user = user;
 	}
 
-	public StatusDTO build()
+	@Override
+	public StatusDTO status()
 	{
 		findThere();
 		if (dto.running) return dto;

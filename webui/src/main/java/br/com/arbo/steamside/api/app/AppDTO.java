@@ -13,6 +13,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AppDTO
 {
 
+	public AppDTO()
+	{
+		super();
+	}
+
 	public AppDTO(AppApi app, List<AppTagDTO> tags)
 	{
 		this.appid = app.appid().appid;
@@ -26,17 +31,17 @@ public class AppDTO
 	}
 
 	@JsonProperty
-	public final String appid;
+	public String appid;
 	@JsonProperty
-	public final String name;
+	public String name;
 	@JsonProperty
-	public final String link;
+	public String link;
 	@JsonProperty
-	public final String image;
+	public String image;
 	@JsonProperty
-	public final String store;
+	public String store;
 	@JsonProperty
-	public final List<AppTagDTO> tags;
+	public List<AppTagDTO> tags;
 	@JsonProperty
 	public String unavailable;
 }

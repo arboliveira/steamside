@@ -3,6 +3,12 @@ package br.com.arbo.steamside.app.launch;
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.api.app.RunGameCommand;
 import br.com.arbo.steamside.api.continues.Continues;
+import br.com.arbo.steamside.api.favorites.FavoritesController_favorites;
+import br.com.arbo.steamside.api.favorites.FavoritesController_favorites_json;
+import br.com.arbo.steamside.api.session.SessionController_session;
+import br.com.arbo.steamside.api.session.SessionController_session_json;
+import br.com.arbo.steamside.api.steamclient.StatusDTOBuilder;
+import br.com.arbo.steamside.api.steamclient.SteamClientController_status;
 import br.com.arbo.steamside.bootstrap.Bootstrap;
 import br.com.arbo.steamside.bootstrap.BootstrapImpl;
 import br.com.arbo.steamside.cloud.Cloud;
@@ -147,6 +153,17 @@ public class SourcesFactory
 				ContinuesRooster.class,
 				ContinuesFromSteamClientLocalfiles.class)
 			.sourceImplementor(FavoritesOfUser.class, FromSettings.class);
+
+		container
+			.sourceImplementor(
+				FavoritesController_favorites.class,
+				FavoritesController_favorites_json.class)
+			.sourceImplementor(
+				SteamClientController_status.class,
+				StatusDTOBuilder.class)
+				.sourceImplementor(
+					SessionController_session.class,
+					SessionController_session_json.class);
 
 		return container;
 	}

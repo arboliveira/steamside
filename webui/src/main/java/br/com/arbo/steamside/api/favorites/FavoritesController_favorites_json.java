@@ -3,9 +3,12 @@ package br.com.arbo.steamside.api.favorites;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import br.com.arbo.steamside.api.app.AppApiApp;
 import br.com.arbo.steamside.api.app.AppDTO;
 import br.com.arbo.steamside.api.app.AppDTOListBuilder;
+import br.com.arbo.steamside.api.app.AppSettings;
 import br.com.arbo.steamside.api.app.Limit;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
@@ -18,21 +21,26 @@ import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.library.MissingFromLibrary;
 import br.com.arbo.steamside.types.CollectionName;
 
-class FavoritesController_favorites_json {
+public class FavoritesController_favorites_json
+	implements FavoritesController_favorites
+{
 
-	FavoritesController_favorites_json(
+	@Inject
+	public FavoritesController_favorites_json(
 		FavoritesOfUser ofUser,
-		Library library, Settings settings, Limit limit,
+		Library library, Settings settings,
+		AppSettings apiAppSettings,
 		TagsQueries queries)
 	{
 		this.ofUser = ofUser;
 		this.library = library;
 		this.settings = settings;
-		this.limit = limit;
+		this.limit = apiAppSettings.limit();
 		this.queries = queries;
 	}
 
-	List<AppDTO> jsonable()
+	@Override
+	public List<AppDTO> jsonable()
 	{
 		final CollectionName collection = determineCollection();
 
@@ -42,7 +50,8 @@ class FavoritesController_favorites_json {
 			new MissingFromLibrary(library)
 				.narrow(appsOf.map(Tag::appid));
 
-		Stream<App> filtered = new AppCriteria() {
+		Stream<App> filtered = new AppCriteria()
+		{
 
 			{
 				gamesOnly = settings.gamesOnly();
@@ -77,6 +86,6 @@ class FavoritesController_favorites_json {
 
 	private final FavoritesOfUser ofUser;
 
-	Library library;
+	private final Library library;
 
 }

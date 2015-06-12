@@ -4,19 +4,43 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.mockito.Mockito;
+
 import br.com.arbo.org.springframework.boot.builder.Sources;
+import br.com.arbo.steamside.api.steamclient.StatusDTO;
+import br.com.arbo.steamside.api.steamclient.SteamClientController_status;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
 
-public class MockContinues {
+public class MockContinues
+{
 
 	public static Sources customize(Sources s)
 	{
-		return s.replaceWithImplementor(ContinuesRooster.class, Mock.class);
+		s.replaceWithImplementor(ContinuesRooster.class, Mock.class);
+		s.replaceWithSingleton(
+			SteamClientController_status.class, mockStatus());
+		return s;
 	}
 
-	public static class Mock implements ContinuesRooster {
+	private static SteamClientController_status mockStatus()
+	{
+		// @formatter:off
+		StatusDTO dto = new StatusDTO() {{
+			running = true;
+			here = false;
+		}};
+		// @formatter:on
+
+		SteamClientController_status mock =
+			Mockito.mock(SteamClientController_status.class);
+		Mockito.doReturn(dto).when(mock).status();
+		return mock;
+	}
+
+	public static class Mock implements ContinuesRooster
+	{
 
 		@Override
 		public Stream<App> continues()
