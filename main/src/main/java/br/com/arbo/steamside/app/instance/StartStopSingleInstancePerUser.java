@@ -1,14 +1,18 @@
 package br.com.arbo.steamside.app.instance;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextStartedEvent;
+
 public class StartStopSingleInstancePerUser
+	implements
+	ApplicationListener<ContextStartedEvent>
 {
 
-	@PostConstruct
-	public void start()
+	@Override
+	public void onApplicationEvent(ContextStartedEvent event)
 	{
 		target.start();
 	}

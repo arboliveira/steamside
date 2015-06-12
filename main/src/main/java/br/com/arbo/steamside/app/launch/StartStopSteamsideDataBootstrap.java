@@ -8,17 +8,17 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextStartedEvent;
 
-import br.com.arbo.steamside.bootstrap.BootstrapImpl;
+import br.com.arbo.steamside.data.singleton.SteamsideDataBootstrap;
 
 @EnableAutoConfiguration
-@ConditionalOnBean(BootstrapImpl.class)
-public class StartStopBootstrap
+@ConditionalOnBean(SteamsideDataBootstrap.class)
+public class StartStopSteamsideDataBootstrap
 	implements
 	ApplicationListener<ContextStartedEvent>
 {
 
 	@Inject
-	public StartStopBootstrap(BootstrapImpl target)
+	public StartStopSteamsideDataBootstrap(SteamsideDataBootstrap target)
 	{
 		this.target = target;
 	}
@@ -35,6 +35,6 @@ public class StartStopBootstrap
 		target.stop();
 	}
 
-	private final BootstrapImpl target;
+	private final SteamsideDataBootstrap target;
 
 }

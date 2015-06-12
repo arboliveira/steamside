@@ -58,7 +58,8 @@ public class SourcesFactory
 	public static Sources newInstance()
 	{
 		return newInstanceInert().sources(
-			StartStopBootstrap.class, StartStopParallelAppsHomeFactory.class);
+			StartStopBootstrap.class, StartStopParallelAppsHomeFactory.class,
+			StartStopSteamsideDataBootstrap.class);
 	}
 
 	public static Sources populate(Sources container)
@@ -74,77 +75,77 @@ public class SourcesFactory
 	private static Sources addComponents(Sources container)
 	{
 		container
-		.sourceImplementor(Bootstrap.class, BootstrapImpl.class)
-		.sources(FirstRunObserver.class);
+			.sourceImplementor(Bootstrap.class, BootstrapImpl.class)
+			.sources(FirstRunObserver.class);
 
 		container
-		.sourceImplementor(Settings.class, SettingsImpl.class)
-		.sourceImplementor(
-			br.com.arbo.steamside.api.app.AppSettings.class,
-			br.com.arbo.steamside.api.app.AppSettingsImpl.class);
+			.sourceImplementor(Settings.class, SettingsImpl.class)
+			.sourceImplementor(
+				br.com.arbo.steamside.api.app.AppSettings.class,
+				br.com.arbo.steamside.api.app.AppSettingsImpl.class);
 
 		container
-		.sourceImplementor(Library.class, LibraryImpl.class)
-		.sourceImplementor(
-			AppsHomeFactory.class, ParallelAppsHomeFactory.class);
+			.sourceImplementor(Library.class, LibraryImpl.class)
+			.sourceImplementor(
+				AppsHomeFactory.class, ParallelAppsHomeFactory.class);
 
 		container
-		.sourceImplementor(
-			SteamsideData.class, SteamsideDataSingleton.class)
+			.sourceImplementor(
+				SteamsideData.class, SteamsideDataSingleton.class)
 			.sourceImplementor(
 				CollectionsData.class, CollectionsDataSingleton.class)
-				.sourceImplementor(
-					TagsData.class, TagsDataSingleton.class)
-					.sourceImplementor(
-						KidsData.class, KidsDataSingleton.class)
-						.sources(SteamsideDataBootstrap.class);
+			.sourceImplementor(
+				TagsData.class, TagsDataSingleton.class)
+			.sourceImplementor(
+				KidsData.class, KidsDataSingleton.class)
+			.sources(SteamsideDataBootstrap.class);
 
 		container
-		.sourceImplementor(LoadFile.class, LoadSteamsideXml.class)
-		.sourceImplementor(InitialLoad.class, FromCloudAndFile.class)
-		.sources(File_steamside_xml.class);
+			.sourceImplementor(LoadFile.class, LoadSteamsideXml.class)
+			.sourceImplementor(InitialLoad.class, FromCloudAndFile.class)
+			.sources(File_steamside_xml.class);
 
 		container
-		.sourceImplementor(
-			LocalSettingsFactory.class,
-			LocalSettingsLoad.class)
+			.sourceImplementor(
+				LocalSettingsFactory.class,
+				LocalSettingsLoad.class)
 			.sources(
 				File_steamside_local_xml.class,
 				LoadCloud.class,
 				Cloud.class)
-				.sourceImplementor(
-					CloudSettingsFactory.class,
-					CloudSettingsFromLocalSettings.class)
-					.sourceImplementor(Host.class, Dontpad.class)
-					.sourceImplementor(
-						DontpadSettingsFactory.class,
-						DontpadSettingsFromLocalSettings.class);
+			.sourceImplementor(
+				CloudSettingsFactory.class,
+				CloudSettingsFromLocalSettings.class)
+			.sourceImplementor(Host.class, Dontpad.class)
+			.sourceImplementor(
+				DontpadSettingsFactory.class,
+				DontpadSettingsFromLocalSettings.class);
 
 		container
-		.sources(
-			ParallelUpload.class,
-			Uploader.class)
+			.sources(
+				ParallelUpload.class,
+				Uploader.class)
 			.sourceImplementor(SaveFile.class, AutoUpload.class);
 
 		container
-		.sources(
-			File_sharedconfig_vdf.class,
-			File_localconfig_vdf.class,
-			File_appinfo_vdf.class);
+			.sources(
+				File_sharedconfig_vdf.class,
+				File_localconfig_vdf.class,
+				File_appinfo_vdf.class);
 
 		container
-		.sourceImplementor(KidsMode.class, FromUsername.class);
+			.sourceImplementor(KidsMode.class, FromUsername.class);
 
 		container
-		.sources(
-			SteamBrowserProtocol.class,
-			RunGameCommand.class);
+			.sources(
+				SteamBrowserProtocol.class,
+				RunGameCommand.class);
 
 		container
-		.sources(Continues.class)
-		.sourceImplementor(
-			ContinuesRooster.class,
-			ContinuesFromSteamClientLocalfiles.class)
+			.sources(Continues.class)
+			.sourceImplementor(
+				ContinuesRooster.class,
+				ContinuesFromSteamClientLocalfiles.class)
 			.sourceImplementor(FavoritesOfUser.class, FromSettings.class);
 
 		return container;

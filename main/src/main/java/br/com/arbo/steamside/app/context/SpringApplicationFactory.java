@@ -12,10 +12,21 @@ public class SpringApplicationFactory
 	public static ConfigurableApplicationContext run(Sources sources,
 		String... args)
 	{
-		final SpringApplicationBuilder builder =
+		SpringApplicationBuilder builder =
 			new SpringApplicationBuilder().web(false).headless(false);
-		return SpringApplicationBuilderUtil.run(
-			builder, sources, args);
+
+		return start(builder, sources, args);
+	}
+
+	private static ConfigurableApplicationContext start(
+		SpringApplicationBuilder builder, Sources sources, String... args)
+	{
+		ConfigurableApplicationContext context =
+			SpringApplicationBuilderUtil.run(builder, sources, args);
+
+		context.start();
+
+		return context;
 	}
 
 }

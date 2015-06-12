@@ -1,13 +1,14 @@
 package br.com.arbo.steamside.app.embedded;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import br.com.arbo.steamside.app.launch.Running;
 
-public class EmbeddedRunning implements Running {
+public class EmbeddedRunning implements Running
+{
 
-	public EmbeddedRunning(ApplicationContext context)
+	public EmbeddedRunning(ConfigurableApplicationContext context)
 	{
 		this.context = context;
 	}
@@ -15,9 +16,10 @@ public class EmbeddedRunning implements Running {
 	@Override
 	public void stop()
 	{
+		context.stop();
 		SpringApplication.exit(context);
 	}
 
-	private final ApplicationContext context;
+	private final ConfigurableApplicationContext context;
 
 }

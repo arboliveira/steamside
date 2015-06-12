@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.org.springframework.boot.builder.Sources;
@@ -24,6 +25,18 @@ import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocation
 
 public class SpringBoot implements LocalWebserver
 {
+
+	@SuppressWarnings("resource")
+	private static Running start(
+		Sources sources, SpringApplicationBuilder builder)
+	{
+		ConfigurableApplicationContext context =
+			SpringApplicationBuilderUtil.run(builder, sources);
+
+		context.start();
+
+		return new EmbeddedRunning(context);
+	}
 
 	@Override
 	public Running launch(int port) throws PortAlreadyInUse
@@ -49,8 +62,7 @@ public class SpringBoot implements LocalWebserver
 			.sources(ApiServlet.class, SimpleCORSFilter.class, Welcome.class)
 			.registerSingleton(new PortCustomize(portInUse.port));
 
-		return new EmbeddedRunning(SpringApplicationBuilderUtil.run(
-			builder, sources));
+		return start(sources, builder);
 	}
 
 	private void reuseFromParent(Sources sources)
