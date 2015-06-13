@@ -37,12 +37,13 @@ var KidsView = Backbone.View.extend({
 			.removeClass("steamside-body-background")
 			.addClass("steamside-kids-body-background");
 
-		this.$("#page-header-navigation-bar").hide();
+		this.$("#WelcomeToSteamside").hide();
 		this.$("#search-segment").hide();
 		this.$("#continues-segment").hide();
 		this.$("#collections-segment").hide();
 		this.$(".side-links").hide();
 
+		this.$("#PageHeaderBannerMenu").hide();
 		this.spritesKids.greeting.sprite_promise().done(function(el)
 		{
 			that.$("#PageHeaderBannerSection").append(el.clone());
