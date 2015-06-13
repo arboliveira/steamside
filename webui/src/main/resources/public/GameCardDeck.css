@@ -120,14 +120,15 @@
 
     padding: 0.25em;
     padding-left: 0.5em;
-    padding-right: 2em;
+    padding-right: 0.75em;
     background-color: linen;
-    border-top-right-radius: 1em;
-    border-bottom-right-radius: 1em;
-    border-top: 1px solid #999;
-    border-right: 2px solid #555;
-    border-bottom: 1px solid #555;
-    border-left: 16px outset #999;
+
+	border-left: 4px outset #999;
+	border-top: 1px solid #999;
+	border-right: 2px solid #555;
+	border-bottom: 1px solid #555;
+	border-top-right-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
 }
 a.display-collection-name {
 	text-decoration: none;	/* hide link underline */
@@ -143,17 +144,11 @@ a.display-collection-name {
     margin: 3px;
 	font-size: x-small;
 	padding: 2px;
-	
-	/*
-	border-radius: 3px;
-    border: 1px solid;
-    border-color: LightBlue;
-    */
-    
-    border-top-right-radius: 1em;
-    border-bottom-right-radius: 1em;
-    border-top: 1px solid #999;
-    border-right: 1px solid #555;
-    border-bottom: 1px solid #555;
-    border-left: 2px outset #999;
+
+	border-left: 2px outset #999;
+	border-top: 1px solid #999;
+	border-right: 1px solid #555;
+	border-bottom: 1px solid #555;
+	border-top-right-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
 }

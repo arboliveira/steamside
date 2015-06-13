@@ -4,7 +4,7 @@ var SteamsideRouter = Backbone.Router.extend(
 {
     routes: {
         "": "home",
-        "favorites/switch": "switch_favorites",
+        "mygames": "my_games",
         "collections/new": "collections_new",
         "collections/:name/edit": "collections_edit",
         "steamclient": "steam_client",
@@ -15,7 +15,7 @@ var SteamsideRouter = Backbone.Router.extend(
 
 	homeView: null,
 
-	switch_favoritesView: null,
+	my_gamesView: null,
 
 	collections_newView: null,
 
@@ -54,7 +54,7 @@ var SteamsideRouter = Backbone.Router.extend(
 			worldActions: this.newHomeView(options.sessionModel)
 		});
 
-		this.switch_favoritesView = new World({worldActions:this.newSwitch_favoritesView()});
+		this.my_gamesView = new World({worldActions:this.newMy_gamesView()});
 
 		this.collections_newView = new World(
 			{
@@ -112,9 +112,9 @@ var SteamsideRouter = Backbone.Router.extend(
 		);
     },
 
-	switch_favorites: function()
+	my_games: function()
 	{
-		this.worldchanger.goWorld(this.switch_favoritesView);
+		this.worldchanger.goWorld(this.my_gamesView);
 	},
 
 	collections_new: function()
@@ -167,18 +167,12 @@ var SteamsideRouter = Backbone.Router.extend(
 		});
 	},
 
-	newSwitch_favoritesView: function()
+	newMy_gamesView: function()
 	{
 		var router = this;
 
-		return new SwitchFavoritesWorld(
+		return new MyGamesWorld(
 		{
-			on_category_change: function()
-			{
-				router.navigate("", {trigger: true});
-				// TODO Refresh favorites
-			},
-
 			backend: router.backend
 		});
 	}
