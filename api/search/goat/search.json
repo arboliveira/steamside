@@ -1,0 +1,50 @@
+[
+  {
+"appid" : "265930",
+"name" : "Goat Simulator",
+"link" : "api/app/265930/run",
+"image" : "http://cdn.akamai.steamstatic.com/steam/apps/265930/header.jpg",
+"store" : "http://store.steampowered.com/app/265930",
+"tags" : [
+  {
+"name" : "Indie"
+},
+  {"name" : "Simulation"},
+  {
+"name" : "favorite"
+} ]
+},
+  {
+    "appid" : "251370",
+    "name" : "Escape Goat",
+    "link" : "api/app/251370/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/251370/header.jpg",
+    "store" : "http://store.steampowered.com/app/251370",
+    "tags" : [ {
+      "name" : "Indie"
+    }, {
+      "name" : "Puzzle Platformer"
+    } ]
+  },
+  {
+    "appid" : "2878980",
+    "name" : "NBA 2K25",
+    "link" : "api/app/2878980/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/2878980/header.jpg",
+    "store" : "http://store.steampowered.com/app/2878980",
+    "tags" : [ {
+      "name" : "Basketball"
+    },
+      {"name" : "Simulation"}
+    ]
+  }, {
+  "appid" : "1363080",
+  "name" : "Manor Lords",
+  "link" : "api/app/1363080/run",
+  "image" : "http://cdn.akamai.steamstatic.com/steam/apps/1363080/header.jpg",
+  "store" : "http://store.steampowered.com/app/1363080",
+  "tags" : [
+    {"name" : "Simulation"}
+  ]
+}
+]

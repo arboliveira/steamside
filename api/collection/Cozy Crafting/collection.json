@@ -1,0 +1,36 @@
+[
+  {
+      "appid": "105600",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg",
+      "link": "api/app/105600/run",
+      "name": "Terraria",
+      "store": "http://store.steampowered.com/app/105600",
+      "tags": [
+      ]
+  },
+  {
+      "appid": "219740",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/219740/header.jpg",
+      "link": "api/app/219740/run",
+      "name": "Don't Starve",
+      "store": "http://store.steampowered.com/app/219740",
+      "tags": [
+      ]
+  },
+  {
+      "appid": "211820",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/211820/header.jpg",
+      "link": "api/app/211820/run",
+      "name": "Starbound",
+      "store": "http://store.steampowered.com/app/211820",
+      "tags": []
+  },
+  {
+      "appid": "413150",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/413150/header.jpg",
+      "link": "api/app/413150/run",
+      "name": "Stardew Valley",
+      "store": "http://store.steampowered.com/app/413150",
+      "tags": []
+  }
+]

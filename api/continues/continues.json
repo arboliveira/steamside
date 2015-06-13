@@ -1,0 +1,90 @@
+[
+    {
+        "appid": "289070",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/289070/header.jpg",
+        "link": "api/app/289070/run",
+        "name": "Sid Meier’s Civilization® VI",
+        "store": "http://store.steampowered.com/app/289070",
+        "tags": []
+    },
+    {
+        "appid": "607080",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/607080/header.jpg",
+        "link": "api/app/607080/run",
+        "name": "Psychonauts 2",
+        "store": "http://store.steampowered.com/app/607080",
+        "tags": []
+    },
+    {
+        "appid": "275850",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/275850/header.jpg",
+        "link": "api/app/275850/run",
+        "name": "No Man's Sky",
+        "store": "http://store.steampowered.com/app/275850",
+        "tags": []
+    },
+    {
+            "appid": "1659040",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/1659040/header.jpg",
+            "link": "api/app/1659040/run",
+            "name": "HITMAN World of Assassination",
+            "store": "http://store.steampowered.com/app/1659040",
+            "tags": []
+    },
+    {
+            "appid": "379720",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/379720/header.jpg",
+            "link": "api/app/379720/run",
+            "name": "DOOM",
+            "store": "http://store.steampowered.com/app/379720",
+            "tags": []
+    },
+    {
+        "appid": "2138710",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/2138710/header.jpg",
+        "link": "api/app/2138710/run",
+        "name": "Sifu",
+        "store": "http://store.steampowered.com/app/2138710",
+        "tags": []
+    },
+    {
+            "appid": "1237970",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/1237970/header.jpg",
+            "link": "api/app/1237970/run",
+            "name": "Titanfall® 2",
+            "store": "http://store.steampowered.com/app/1237970",
+            "tags": []
+    },
+    {
+            "appid": "1850570",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/1850570/header.jpg",
+            "link": "api/app/1850570/run",
+            "name": "DEATH STRANDING DIRECTOR'S CUT",
+            "store": "http://store.steampowered.com/app/1850570",
+            "tags": []
+    },
+    {
+            "appid": "870780",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/870780/header.jpg",
+            "link": "api/app/870780/run",
+            "name": "Control Ultimate Edition",
+            "store": "http://store.steampowered.com/app/870780",
+            "tags": []
+    },
+    {
+            "appid": "1551360",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/1551360/header.jpg",
+            "link": "api/app/1551360/run",
+            "name": "Forza Horizon 5",
+            "store": "http://store.steampowered.com/app/1551360",
+            "tags": []
+    },
+    {
+            "appid": "225540",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/225540/header.jpg",
+            "link": "api/app/225540/run",
+            "name": "Just Cause™ 3",
+            "store": "http://store.steampowered.com/app/225540",
+            "tags": []
+    }
+]

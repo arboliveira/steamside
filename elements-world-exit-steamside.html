@@ -1,0 +1,34 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<div style="text-align: center">
+
+    <div
+            style="font-family: Jura; padding: 1em; width: 60%; margin-top: 2em; margin-left:auto; margin-right:auto; "
+            class="game-over-banner"
+    >
+        <p style="font-size: 8em; margin: 0.2em">
+            Game Over
+        </p>
+        <p style="font-size: 2em">
+            Thanks for playing!
+        </p>
+    </div>
+
+    <div style="padding: 0.5em">
+        <p class="instructions-and-explanations">
+            <a id="TryAgain" class="target-button" href="#">${this.try_again_text}</a>
+            <br/>
+            <if-- condition="this.command_line_visible">
+            <input id="CommandLine"
+                   style="width:60%; font-size:16px"
+                   type="text"
+                   value="${this.command_line}" />
+            </if-->
+        </p>
+
+    </div>
+
+</div>

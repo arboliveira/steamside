@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <!-- ======================================================================= -->
+  <title>
+
+    cloud-steamside
+
+  </title>
+
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+<!-- ======================================================================= -->
+
+  <link href="steamside.css" rel="stylesheet" type="text/css" />
+  <link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
+  <link href="Forms.css" rel="stylesheet" type="text/css" />
+  <link href="CommandBox.css" rel="stylesheet" type="text/css" />
+  <link href="Tag.css" rel="stylesheet" type="text/css" />
+  <link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
+
+
+  <!-- ======================================================================= -->
+
+  <link href="animate.css" rel="stylesheet" type="text/css" />
+
+  <!-- ======================================================================= -->
+
+  <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
+  <link href="http://fonts.googleapis.com/css?family=Karla:regular" rel="stylesheet" type="text/css" />
+  <link href="http://fonts.googleapis.com/css?family=Jura:regular, bold" rel="stylesheet" type="text/css" />
+
+  <!-- ======================================================================= -->
+
+</head>
+<body>
+<!-- ======================================================================= -->
+
+<elements-world-settings-cloud-steamside></elements-world-settings-cloud-steamside>
+
+<!-- ======================================================================= -->
+
+<script type="importmap">
+  {
+    "imports": {
+      "#customary": "./../node_modules/customary/src/now.js",
+      "#customary/": "./../node_modules/customary/src/",
+      "#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+      "#steamside/": "./"
+    }
+  }
+</script>
+
+<script type="module">
+  import {Customary} from "#customary";
+  import {WorldSettingsCloudElement} from "#steamside/elements-world-settings-cloud-steamside.js";
+
+  await Customary.untilDefined(WorldSettingsCloudElement);
+  const el = document.querySelector('elements-world-settings-cloud-steamside');
+
+  el.__cloudSettings = {
+    cloud: true,
+    cloudSyncedLocation: "RANDOM_SUGGESTION",
+  };
+</script>
+
+</body>
+</html>

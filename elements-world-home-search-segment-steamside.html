@@ -1,0 +1,33 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<div id="search-segment" class="segment">
+
+    <div class="side-header side-header-at-right">
+        <p class="side-header-paragraph">
+			<span class="side-text side-text-at-right">
+			Search<br/>
+			&amp; do
+			</span>
+        </p>
+        <p class="side-links"><a class="vaporware" href="">Aliases...</a></p>
+        <p class="side-links"><a class="vaporware" href="">Clear</a></p>
+    </div>
+
+    <div class="content content-at-left">
+        <elements-world-home-search-command-box-steamside
+                last_played_name_1="${this.last_played_name_1}"
+                last_played_name_2="${this.last_played_name_2}"
+        ></elements-world-home-search-command-box-steamside>
+
+        <div id="search-results-deck"
+             style="margin-top: 10px;">
+            <elements-game-card-deck-steamside
+                    .collection="${this.searchResults}"
+            ></elements-game-card-deck-steamside>
+        </div>
+    </div>
+
+</div>

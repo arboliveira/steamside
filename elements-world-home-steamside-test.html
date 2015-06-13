@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html><head>
+<!-- ======================================================================= -->
+<title>
+
+    world-home-steamside
+
+</title>
+
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+
+    <link href="steamside.css" rel="stylesheet" type="text/css" />
+
+
+<!-- ======================================================================= -->
+</head>
+
+<body>
+
+<h1 style="background-color: forestgreen; color: greenyellow">
+
+    world-home-steamside test
+
+</h1>
+
+    <elements-world-home-steamside></elements-world-home-steamside>
+
+<script type="importmap">
+    {
+        "imports": {
+            "sinon": "../node_modules/sinon/pkg/sinon-esm.js",
+            "#customary": "./../node_modules/customary/src/now.js",
+            "#customary/": "./../node_modules/customary/src/",
+            "#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+            "#steamside/": "./"
+        }
+    }
+</script>
+
+<script type="module">
+    import "#steamside/elements-world-home-steamside.js";
+</script>
+
+</body></html>

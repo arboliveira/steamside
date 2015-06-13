@@ -1,0 +1,81 @@
+	<link href="steamside.css" rel="stylesheet" type="text/css" />
+	<link href="Forms.css" rel="stylesheet" type="text/css" />
+	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
+	<link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
+	<link href="KidsSettings.css" rel="stylesheet" type="text/css" />
+	<link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
+	<link href="Tag.css" rel="stylesheet" type="text/css" />
+
+	<link href="animate.css" rel="stylesheet" type="text/css" />
+
+	<!-- ======================================================================= -->
+
+	<!--
+				$.mockjax({
+					url: 'api/kids/kid',
+					type: 'POST',
+					response: function(settings)
+						{
+							this.responseText = JSON.parse(settings.data);
+							this.responseText.id = this.responseText.name;
+						}
+				});
+
+				$.mockjax({
+					url: 'api/kids/kid/Keen.json',
+					type: 'PUT',
+					responseText: {}
+				});
+
+				$.mockjax({
+					url: 'api/kids/kid/Lucius.json',
+					type: 'DELETE',
+					responseText: {}
+				});
+-->
+
+<!-- ======================================================================= -->
+
+<div id="KidsSettingsView">
+
+<!-- ======================================================================= -->
+
+<div id="kids-segment" class="segment">
+
+	<div class="side-header side-header-at-left">
+		<p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+				Kids
+			</span>
+		</p>
+		<div class="side-links">
+			<ul>
+				<li><a id="AddKid" href="#">Add a kid...</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="content content-at-right">
+
+		<div id="KidsCollectionView">
+			<for-- items="this.__kidsData_view" value="kid_view" index="index">
+			<div id="KidView" class="kid-container" data-customary-index="${index}">
+				<div id="Name">${kid_view.name}</div>
+				<div id="User">${kid_view.user}</div>
+				<div id="Inventory" class="collection-name">
+					<elements-tag-sticker-steamside
+							.tag="${kid_view.inventory_tag_for_sticker}"
+					>
+					</elements-tag-sticker-steamside>
+				</div>
+			</div>
+			</for-->
+		</div>
+
+	</div>
+
+</div>
+
+<!-- ======================================================================= -->
+
+</div>

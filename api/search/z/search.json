@@ -1,0 +1,46 @@
+[
+  {
+"appid" : "239030",
+"name" : "Papers, Please",
+"link" : "api/app/239030/run",
+"image" : "http://cdn.akamai.steamstatic.com/steam/apps/239030/header.jpg",
+"store" : "http://store.steampowered.com/app/239030",
+"tags" : [ {
+"name" : "Indie"
+}, {
+"name" : "favorite"
+} ]
+},
+  {
+    "appid" : "12800",
+    "name" : "FUEL",
+    "link" : "api/app/12800/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/12800/header.jpg",
+    "store" : "http://store.steampowered.com/app/12800",
+    "unavailable" : "Y",
+    "tags" : [ {
+      "name" : "Open world"
+    }, {
+      "name" : "Racing"
+    } ]
+  },
+  {
+    "appid" : "70",
+    "name" : "Half-Life",
+    "link" : "api/app/70/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/70/header.jpg",
+    "store" : "http://store.steampowered.com/app/70",
+    "tags" : [ {
+      "name" : "Action"
+    } ]
+  }, {
+  "appid" : "400",
+  "name" : "Portal",
+  "link" : "api/app/400/run",
+  "image" : "http://cdn.akamai.steamstatic.com/steam/apps/400/header.jpg",
+  "store" : "http://store.steampowered.com/app/400",
+  "tags" : [ {
+    "name" : "favorite"
+  } ]
+}
+]

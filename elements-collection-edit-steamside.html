@@ -1,0 +1,53 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<link href="Forms.css" rel="stylesheet" type="text/css" />
+<link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<div id="collection-segment" class="segment">
+
+    <div class="side-header side-header-at-right">
+        <p class="side-header-paragraph">
+                <span class="side-text side-text-at-right">
+                Collec<br/>
+                tion<br/>
+                </span>
+        </p>
+        <div class="side-links">
+            <ul>
+                <li><a class="vaporware" href="">Rename...</a></li>
+                <li><a id="side-link-combine" href="#">Combine...</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content content-at-left">
+
+        <div id="CollectionView">
+            <elements-tag-sticker-steamside
+                    .tag="${this._tag}"
+            >
+            </elements-tag-sticker-steamside>
+
+            <elements-game-card-deck-steamside
+                    .collection="${this._inventory}"
+                    include_action_button_remove="true"
+            ></elements-game-card-deck-steamside>
+        </div>
+
+        <if-- condition="this.combine_collection_picker_visible">
+            <elements-collection-edit-combine-steamside
+                    .__tag="${this._tag}"
+            ></elements-collection-edit-combine-steamside>
+        </if-->
+
+    </div>
+
+<if-- condition="this.add_games_segment_visible">
+    <elements-collection-edit-add-games-steamside>
+    </elements-collection-edit-add-games-steamside>
+</if-->
+
+
+</div>

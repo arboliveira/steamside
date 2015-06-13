@@ -1,0 +1,197 @@
+.page-header-separator
+{
+	clear: both;
+	height: 0px;
+}
+
+.vaporware
+{
+	color: transparent;
+	text-shadow: 0 0 1px rgba(0,0,0,0.5);
+}
+
+.segment
+{
+    display: table;
+    table-layout: fixed;
+    width: 98%;
+    clear: both;
+    overflow: auto;
+    padding: 0;
+    backdrop-filter: blur(2px) hue-rotate(-0.25turn);
+    --top-and-bottom: 80px;
+    --left-and-right: auto;
+    margin: var(--top-and-bottom) var(--left-and-right);
+    --offset-x: 0.3em;
+    --offset-y: 0.1em;
+    --blur-radius: 1em;
+    --color: lightgreen;
+    box-shadow: var(--offset-x) var(--offset-y) var(--blur-radius) var(--color);
+}
+
+.side-header
+{
+    margin: 0;
+    padding: 0.8em;
+    padding-top: 0.6em;
+    padding-bottom: 0.4em;
+    background-color: PaleTurquoise;
+}
+
+.side-header-at-left
+{
+    /*
+    side-header-at-left.width + GAP = content-at-right.margin-left
+    */
+    width: 80px;
+    display: table-cell;
+}
+
+.side-header-at-left {
+    float: left;
+    text-align: right;
+	border-top-right-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+}
+
+.side-header-at-right {
+    /*
+     side-header-at-right.width + GAP = content-at-left.margin-right
+    */
+    width: 80px;
+    display: table-cell;
+}
+
+.side-header-at-right {
+    float: right;
+    text-align: right;
+	border-top-left-radius: 0.5em;
+	border-bottom-left-radius: 0.5em;
+    /*
+    Can't get it right just yet...
+    for now, relying on content-at-left.border-right :-p
+    */
+    /* border-left: 1px solid gray; */
+}
+
+.side-header-paragraph {
+    margin: 0 0 0.6em 0;
+}
+
+.side-text { font-family: Arvo; font-size: 20px; font-weight: bold; color: darkred; }
+
+.side-text-at-left  {text-shadow: -0.2em 0.2em 0.2em gray}
+.side-text-at-right {text-shadow: 0.2em 0.2em 0.2em gray}
+
+.side-links {
+    font-size: 0.75em;
+    font-family: Karla;
+    margin-top: 1.5em;
+    margin-bottom: 0em;
+}
+.side-links ul {
+    padding-left: 0px;
+    list-style:none;
+}
+.side-links a {
+    text-decoration: none;	/* hide link underline */
+}
+
+.content {
+    padding: 10px;
+}
+
+.content:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+.content-at-left {
+    padding-right: 20px;
+    /* float: left; // this makes the right border finish midways :-p */
+}
+
+.content-at-left {
+    /*
+    see: .side-header-at-right.width
+    */
+    margin-right: 106px;
+}
+
+.content-at-right {
+    padding-left: 20px;
+    /*	float: right;  // this pushes content down somehow :-p */
+}
+
+.content-at-right {
+    /*
+    see: .side-header-at-left.width
+    */
+    margin-left: 106px;
+}
+
+.indicator {
+	background: aquamarine;
+	border-radius: 4px;
+	padding: 3px;	/* distance from text to border */
+}
+
+a.indicator {
+    text-decoration: none;	/* hide link underline */
+}
+
+.instructions-and-explanations {
+    font-family: Arvo;
+}
+
+.purpose-of-this-section {
+    font-family: Arvo;
+    font-size: x-large;
+    font-weight: bold;
+    color: coral;
+}
+
+a.target-button
+{
+    font-family: Arvo;
+    display: inline-block;
+    border-radius: 10px;
+    border-color: Gray;
+    border-style: solid;
+    background: #f7f7f7;
+    margin: 1px;
+    padding: 8px;	/* distance from text to border */
+    text-decoration: none;	/* hide link underline */
+    outline: none; /* hide dotted outline in Firefox */
+}
+a.target-button:focus, a.target-button:hover
+{
+	border-color: LightSteelBlue;
+	background: LightYellow;
+}
+
+a.instructions-and-explanations
+{
+	text-decoration: none;	/* hide link underline */
+}
+
+.steamside-animated
+{
+	-webkit-animation-duration: 0.5s;
+	-moz-animation-duration: 0.5s;
+}
+
+.floatingpad {
+	background-color: PowderBlue;
+	padding: 0.5em;
+	border-radius: 0.1em;
+}
+
+.question
+{
+    color: darkslategray;
+}
+
+

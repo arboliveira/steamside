@@ -1,0 +1,26 @@
+[
+  {
+    "appid":"204240",
+    "image":"http://cdn.akamai.steamstatic.com/steam/apps/204240/header.jpg",
+    "link":"api/app/204240/run",
+    "name":"The Bridge",
+    "store":"http://store.steampowered.com/app/204240",
+    "tags":[
+      {"name":"Arbo"},
+      {"name":"Unplayed"},
+      {"name":"Beautiful"},
+      {"name":"Hand drawn"}
+    ]
+  },
+  {
+    "appid":"29160",
+    "image":"http://cdn.akamai.steamstatic.com/steam/apps/29160/header.jpg",
+    "link":"api/app/29160/run",
+    "name":"Blueberry Garden",
+    "store":"https://store.steampowered.com/app/29160",
+    "tags":[
+      {"name":"favorite"},
+      {"name":"Hand drawn"}
+    ]
+  }
+]

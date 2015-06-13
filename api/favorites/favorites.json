@@ -1,0 +1,44 @@
+[
+  {
+    "appid" : "70",
+    "name" : "Half-Life",
+    "link" : "api/app/70/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/70/header.jpg",
+    "store" : "http://store.steampowered.com/app/70",
+    "tags" : [ {"name" : "Action"},{"name" : "Groundbreaking"} ]
+  },
+  {
+    "appid" : "37600",
+    "name" : "Windosill",
+    "link" : "api/app/37600/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
+    "store" : "http://store.steampowered.com/app/37600",
+    "tags" : [ {"name" : "Indie"}, {"name" : "Meaningful"} ]
+  }, {
+  "appid" : "12800",
+  "name" : "FUEL",
+  "link" : "api/app/12800/run",
+  "image" : "http://cdn.akamai.steamstatic.com/steam/apps/12800/header.jpg",
+  "store" : "http://store.steampowered.com/app/12800",
+  "tags" : [ {
+    "name" : "Open world"
+  }, {
+    "name" : "Racing"
+  }, {"name" : "Formative"},{"name" : "3 screens"} ]
+},
+  {
+    "appid" : "239030",
+    "name" : "Papers, Please",
+    "link" : "api/app/239030/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/239030/header.jpg",
+    "store" : "http://store.steampowered.com/app/239030",
+    "tags" : [ {"name" : "Dark Humor"}, {"name" : "Indie"} ]
+  }, {
+  "appid" : "72850",
+  "name" : "The Elder Scrolls V: Skyrim",
+  "link" : "api/app/72850/run",
+  "image" : "http://cdn.akamai.steamstatic.com/steam/apps/72850/header.jpg",
+  "store" : "http://store.steampowered.com/app/72850",
+  "tags" : [ {"name" : "Open world"},{"name" : "Immersive"},{"name" : "3 screens"} ]
+}
+]

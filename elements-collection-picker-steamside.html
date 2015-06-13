@@ -1,0 +1,37 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<link href="Forms.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<div id="collection-pick-collections-segment" class="segment">
+
+    <div class="side-header side-header-at-left">
+        <p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+			Inven<br/>
+			tories<br/>
+			</span>
+        </p>
+        <div class="side-links">
+            <ul>
+                <li><a target="_blank" href="./CollectionNew.html">New...</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content content-at-right">
+
+        <div id="PurposeView">
+            <slot name="purpose"></slot>
+        </div>
+
+        <elements-tag-stickers-steamside
+                click_event_on_stickers="${this.click_event_on_stickers}"
+                .tags_collection="${this.tags}"
+        >
+        </elements-tag-stickers-steamside>
+    </div>
+
+</div>
+

@@ -1,0 +1,20 @@
+.steamside-body-background
+{
+    background-size: 100% 100%;
+    background-image: url( 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/232430/e3df58e7dab4daad07342aa274e09b21ff4dd8a4.jpg' );
+}
+
+.steamside-kids-body-background {
+
+    /*
+    http://lea.verou.me/css3patterns/#zig-zag
+    */
+
+    background:
+            linear-gradient(135deg, white 25%, transparent 25%) -50px 0,
+            linear-gradient(225deg, white 25%, transparent 25%) -50px 0,
+            linear-gradient(315deg, white 25%, transparent 25%),
+            linear-gradient(45deg, white 25%, transparent 25%);
+    background-size: 100px 100px;
+    background-color: #EC173A;
+}

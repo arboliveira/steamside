@@ -1,0 +1,27 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="Forms.css" rel="stylesheet" type="text/css" />
+
+<elements-command-box-steamside
+        placeholder_text="game or command"
+>
+            <span slot="command-hint">
+                <elements-command-hint-with-verb-and-subject-steamside
+                        class="viewHintA"
+                        verb="${this.verbA}"
+                        subject="${this.subjectA}">
+                </elements-command-hint-with-verb-and-subject-steamside>
+			</span>
+            <span slot="command-hint-alternate">
+                <elements-command-hint-with-verb-and-subject-steamside
+                        class="viewHintB"
+                        verb="${this.verbB}"
+                        subject="${this.subjectB}">
+                </elements-command-hint-with-verb-and-subject-steamside>
+			</span>
+</elements-command-box-steamside>
+
+<div class="form-text form-block">Searched recently:
+    <a class="target-button searched-recently" target="#">
+        goat
+    </a>
+</div>

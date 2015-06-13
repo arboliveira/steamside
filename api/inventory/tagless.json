@@ -1,0 +1,10 @@
+[
+    {
+        "appid": "379720",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/379720/header.jpg",
+        "link": "api/app/379720/run",
+        "name": "DOOM",
+        "store": "http://store.steampowered.com/app/379720",
+        "tags": []
+    }
+]

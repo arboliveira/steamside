@@ -1,0 +1,34 @@
+[
+  {
+      "appid": "701160",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/701160/header.jpg",
+      "link": "api/app/701160/run",
+      "name": "Kingdom Two Crowns",
+      "store": "http://store.steampowered.com/app/701160",
+      "tags": []
+  },
+  {
+      "appid": "289070",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/289070/header.jpg",
+      "link": "api/app/289070/run",
+      "name": "Sid Meier’s Civilization® VI",
+      "store": "http://store.steampowered.com/app/289070",
+      "tags": []
+  },
+  {
+      "appid": "1178220",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/1178220/header.jpg",
+      "link": "api/app/1178220/run",
+      "name": "ICBM",
+      "store": "http://store.steampowered.com/app/1178220",
+      "tags": []
+  },
+  {
+      "appid": "448510",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/448510/header.jpg",
+      "link": "api/app/448510/run",
+      "name": "Overcooked",
+      "store": "http://store.steampowered.com/app/448510",
+      "tags": []
+  }
+]

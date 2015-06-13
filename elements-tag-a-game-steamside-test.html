@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html><head>
+    <!-- ======================================================================= -->
+    <title>
+
+        tag-a-game-steamside
+
+    </title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <!-- ======================================================================= -->
+</head>
+
+<body style="background-color: lightseagreen">
+
+<elements-tag-a-game-steamside></elements-tag-a-game-steamside>
+
+</body>
+
+<script type="importmap">
+    {
+        "imports": {
+            "sinon": "../node_modules/sinon/pkg/sinon-esm.js",
+            "#customary": "./../node_modules/customary/src/now.js",
+            "#customary/": "./../node_modules/customary/src/",
+            "#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+            "#steamside/": "./"
+        }
+    }
+</script>
+
+<script type="module">
+	import {Customary} from "#customary";
+    import {TagAGameElement} from "#steamside/elements-tag-a-game-steamside.js";
+
+	const game = {
+		"appid" : "37600",
+		"name" : "Windosill",
+		"link" : "api/app/37600/run",
+		"image" : "http://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
+		"store" : "http://store.steampowered.com/app/37600",
+		"tags" : [ {
+			"name" : "Indie"
+		}, {
+			"name" : "favorite"
+		}, {
+			"name" : "Kids"
+		} ]
+	};
+
+	await Customary.untilDefined(TagAGameElement);
+	const el = document.querySelector('elements-tag-a-game-steamside');
+    el.game = game;
+
+</script>
+</html>

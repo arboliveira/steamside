@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html><head>
+    <!-- ======================================================================= -->
+    <title>
+
+        world-collection-new-steamside
+
+    </title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <!-- ======================================================================= -->
+</head>
+
+<body style="background-color: lightseagreen">
+
+<elements-world-collection-new-steamside></elements-world-collection-new-steamside>
+
+</body>
+
+<script type="importmap">
+    {
+        "imports": {
+            "sinon": "../node_modules/sinon/pkg/sinon-esm.js",
+            "#customary": "./../node_modules/customary/src/now.js",
+            "#customary/": "./../node_modules/customary/src/",
+            "#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+            "#steamside/": "./"
+        }
+    }
+</script>
+
+<script type="module">
+    import "#steamside/elements-world-collection-new-steamside.js";
+</script>
+</html>

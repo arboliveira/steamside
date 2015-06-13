@@ -1,0 +1,166 @@
+.game-deck {
+    float: left; /* otherwise game deck refuses to coexist horizontally with side header  */
+}
+
+.game-row {
+	float: right;
+	clear: both;
+	width: 100%;
+}
+
+.game-cell-filler {
+	float: left;
+}
+
+.game-tile {
+    background-color: snow;
+	border-top: 1px solid #999;
+	border-right: 2px solid #555;
+	border-bottom: 2px solid #555;
+	border-left: 1px solid #999;
+	border-radius: 0.4em;
+	font-family: "Karla";
+}
+
+.game-tile a {
+	font-weight: lighter;
+	text-decoration: none;	/* hide link underline */
+}
+
+.game-tile-in-deck {
+	/* This is the style that makes the card tall enough for tags to appear inside */
+	float: left;
+	position: relative;
+	margin: 5px;
+}
+
+.game-tile-large {
+	/* */
+}
+
+.game-tile-regular {
+	font-size: 75%;
+}
+
+.game-tile-inner {
+	padding: 10px;
+	padding-bottom: 4px;
+}
+
+.game-tile-inner-blurred {
+	opacity: 0.2;
+}
+
+.game-tile-inner-loading-overlay {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	text-align: center;
+	z-index: 10;
+}
+
+.what-will-happen {
+	background-color: springgreen;
+}
+
+.game-img {
+	border-top: 2px solid #555;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+	border-left: 2px solid #555;
+	width: 100%;
+}
+.game-tile-caption {
+	text-align: left;
+	margin-top: 2px;
+}
+.game-tile-command-bar {
+	font-size: x-small;
+	text-align: left;
+	padding-top: 6px;
+	padding-left: 6px;
+	padding-bottom: 5px;
+	border-top: dotted 1px crimson;
+	background-color: whitesmoke;
+}
+.game-tile-command {
+	border-top: dotted 1px lightgray;
+	border-left: dotted 1px lightgray;
+	border-bottom: inset gray 1px;
+	border-right: inset gray 1px;
+	padding: 2px;
+	border-radius: 3px;
+}
+
+.game-unavailable {
+	background-color: lightgray;
+}
+
+.more-button {
+	float: right;
+}
+
+.more-button-text {
+	font-family: monospace !important;
+	font-size: small !important;
+}
+
+.collection-name {
+    font-family: "Arvo";
+    font-size: large;
+    font-weight: bolder;
+    color: crimson;
+    text-align: left;
+    margin-top: 0.25em;
+    margin-left: 0.25em;
+    margin-bottom: 0.5em;
+}
+
+.display-collection-name {
+	float: left;
+	margin: 4px;
+
+    padding: 0.25em;
+    padding-left: 0.5em;
+    padding-right: 0.75em;
+
+	border-left: 4px outset #999;
+	border-top: 1px solid #999;
+	border-right: 2px solid #555;
+	border-bottom: 1px solid #555;
+	border-top-right-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+}
+a.display-collection-name {
+	text-decoration: none;	/* hide link underline */
+}
+
+.tag-outer-div {
+}
+
+.game-tag {
+	/* FIXME Should not be float (inverts order). Instead game-tag-list should be a flex */
+    float: right;
+
+    background-color: linen;    
+    margin: 3px;
+	font-size: x-small;
+	padding: 2px;
+
+	border-left: 2px outset #999;
+	border-top: 1px solid #999;
+	border-right: 1px solid #555;
+	border-bottom: 1px solid #555;
+	border-top-right-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+}
+
+.sticker-curated {
+	background-color: linen;
+}
+
+.sticker-builtin {
+	background-color: darkseagreen;
+}

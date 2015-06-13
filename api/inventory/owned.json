@@ -1,0 +1,18 @@
+[
+    {
+        "appid": "1850570",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/1850570/header.jpg",
+        "link": "api/app/1850570/run",
+        "name": "DEATH STRANDING DIRECTOR'S CUT",
+        "store": "http://store.steampowered.com/app/1850570",
+        "tags": []
+    },
+{
+    "appid" : "37600",
+    "name" : "Windosill",
+    "link" : "api/app/37600/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
+    "store" : "http://store.steampowered.com/app/37600",
+    "tags" : []
+}
+]

@@ -1,0 +1,41 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<link href="Forms.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<div id="favorites-segment" class="segment">
+
+    <div class="side-header side-header-at-left">
+        <p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+			Favor<br/>
+			ites<br/>
+			</span>
+        </p>
+        <if-- condition="this.kids_mode!=='true'" >
+            <p class="side-links">
+            <a id="side-link-favorite-switch" href="">Switch...</a>
+        </p>
+        </if-->
+    </div>
+
+    <div class="content content-at-right">
+        <elements-game-card-deck-steamside
+                .collection="${this.favorites}"
+                kids_mode="${this.kids_mode}"
+        ></elements-game-card-deck-steamside>
+    </div>
+
+    <if-- condition="this.collectionPicker_visible">
+        <elements-collection-picker-steamside>
+                <span slot="purpose">
+                    <div id="CombinePurposeView" class="form-block form-text purpose-of-this-section">
+                        Pick a Collection to be used as your Favorites.
+                    </div>
+                </span>
+        </elements-collection-picker-steamside>
+    </if-->
+
+</div>
+

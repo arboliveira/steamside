@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <!-- ======================================================================= -->
+  <title>
+
+    steam-client-steamside
+
+  </title>
+
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+<!-- ======================================================================= -->
+
+  <link href="steamside.css" rel="stylesheet" type="text/css" />
+  <link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
+  <link href="Forms.css" rel="stylesheet" type="text/css" />
+  <link href="CommandBox.css" rel="stylesheet" type="text/css" />
+  <link href="Tag.css" rel="stylesheet" type="text/css" />
+  <link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+  <link href="animate.css" rel="stylesheet" type="text/css" />
+
+  <!-- ======================================================================= -->
+
+  <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
+  <link href="http://fonts.googleapis.com/css?family=Karla:regular" rel="stylesheet" type="text/css" />
+  <link href="http://fonts.googleapis.com/css?family=Jura:regular, bold" rel="stylesheet" type="text/css" />
+
+  <!-- ======================================================================= -->
+
+</head>
+<body style="background-color: lightseagreen">
+<!-- ======================================================================= -->
+
+<div id="element-to-test"></div>
+
+<!-- ======================================================================= -->
+
+<script type="importmap">
+  {
+    "imports": {
+      "sinon": "../node_modules/sinon/pkg/sinon-esm.js",
+      "#customary": "./../node_modules/customary/src/now.js",
+      "#customary/": "./../node_modules/customary/src/",
+      "#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+      "#steamside/": "./"
+    }
+  }
+</script>
+
+<script type="module">
+  import * as sinon from 'sinon';
+  import {Customary} from "#customary";
+  import {
+    WorldSteamClientElement, StatusBackend, SteamBrowserProtocolBackend
+  } from "#steamside/elements-world-steam-client-steamside.js";
+
+  const statusBackend = sinon.createStubInstance(StatusBackend);
+  statusBackend.fetchStatus.resolves({running: true, here: true});
+  const steamBrowserProtocolBackend = sinon.createStubInstance(SteamBrowserProtocolBackend);
+
+  await Customary.untilDefined(WorldSteamClientElement);
+  const worldSteamClientElement = new WorldSteamClientElement();
+  worldSteamClientElement.statusBackend = statusBackend;
+  worldSteamClientElement.steamBrowserProtocolBackend = steamBrowserProtocolBackend;
+  document.getElementById('element-to-test').replaceChildren(worldSteamClientElement);
+</script>
+
+</body>
+</html>
