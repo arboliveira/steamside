@@ -3,98 +3,104 @@
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-	<head>
-<!-- ======================================================================= -->
-		<title>Steamside :: Steam Client</title>
 
-<link href="steamside.css" rel="stylesheet" type="text/css" />
-<link rel="icon" 
-      type="image/png" 
-      href="steamside.png"/>
+<head>
+
+<!-- ======================================================================= -->
+
+<title>Steamside :: Steam Client</title>
+
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 
-        <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular, bold" rel="stylesheet" type='text/css' />
-        <link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
-        <link href="http://fonts.googleapis.com/css?family=Montserrat+Alternates:regular" rel="stylesheet" type="text/css" />
-        <link href="http://fonts.googleapis.com/css?family=Karla:regular" rel="stylesheet" type="text/css" />
-        <link href="http://fonts.googleapis.com/css?family=Jura:regular, bold" rel="stylesheet" type="text/css" />
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link rel="icon" type="image/png" href="steamside.png"/>
 
-	</head>
+<link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
+<link href="http://fonts.googleapis.com/css?family=Karla:regular" rel="stylesheet" type="text/css" />
 
-	<body>
+<!-- ======================================================================= -->
 
-    <div id="steam-client">
+</head>
 
-    <div id="status-segment" class="segment">
+<body>
 
-        <div class="side-header side-header-at-left">
-            <p class="side-header-paragraph">
-			<span class="side-text side-text-at-left">
-			Status
+<div id="steam-client">
+
+<!-- ======================================================================= -->
+
+<div id="status-segment" class="segment">
+
+	<div class="side-header side-header-at-left">
+		<p class="side-header-paragraph">
+		<span class="side-text side-text-at-left">
+		Status
+		</span>
+		</p>
+	</div>
+
+	<div class="content content-at-right">
+
+		<div>
+			<p id="SteamClientStatusView" class="instructions-and-explanations">
+				<span class="floatingpad">
+					<span id="SteamClientStatusMessage">Looking for the Steam Client...</span>
+					<span id="SteamClientAnotherUserMessage" style="display: none">
+						Another user is running Steam.
+					</span>
+				</span>
+				<a href="api/steamclient/open/main"
+				   id="ButtonOpenSteamClient"
+				   class="button-steam-browser-protocol target-button"
+				   style="display: none">
+					Open Steam Client
+				</a>
+			</p>
+		</div>
+
+	</div>
+
+</div>
+
+<!-- ======================================================================= -->
+
+<div id="browser-protocol-segment"  class="segment">
+
+	<div class="side-header side-header-at-right">
+		<p class="side-header-paragraph">
+			<span class="side-text side-text-at-right">
+			Steam<br/>
+			Browser<br/>
+			Protocol<br/>
 			</span>
-            </p>
-        </div>
+		</p>
+		<div class="side-links">
+			<ul>
+				<li><a href="https://developer.valvesoftware.com/wiki/Steam_browser_protocol" target="_blank">Learn about it</a></li>
+			</ul>
+		</div>
+	</div>
 
-        <div class="content content-at-right">
+	<div class="content content-at-left">
 
-            <div>
-                <p id="SteamClientStatusView" class="instructions-and-explanations">
-                    <span class="floatingpad">
-                        <span id="SteamClientStatusMessage">Looking for the Steam Client...</span>
-					    <span id="SteamClientAnotherUserMessage" style="display: none">
-						    Another user is running Steam.
-					    </span>
-                    </span>
-                    <a href="api/steamclient/open/main"
-					   id="ButtonOpenSteamClient"
-					   class="button-steam-browser-protocol target-button"
-					   style="display: none">
-						Open Steam Client
-					</a>
-				</p>
-            </div>
+		<div>
+			<p class="instructions-and-explanations">
+				<a href="api/steamclient/open/activateproduct" class="button-steam-browser-protocol target-button">Activate a Product on Steam</a>
+				<a href="api/steamclient/open/downloads" class="button-steam-browser-protocol target-button">Downloads</a>
+				<a href="api/steamclient/settings" class="button-steam-browser-protocol target-button">Settings</a>
+				<a href="api/steamclient/url/CommunityHome" class="button-steam-browser-protocol target-button">Community Home</a>
+				<a href="api/steamclient/url/StoreFrontPage" class="button-steam-browser-protocol target-button">Store</a>
+				<a href="api/steamclient/ExitSteam" class="button-steam-browser-protocol target-button">Exit Steam</a>
+				<a href="api/steamclient/AddNonSteamGame" class="button-steam-browser-protocol target-button">Add non-Steam game</a>
+				<a href="api/steamclient/browsemedia" class="button-steam-browser-protocol target-button">Browse media</a>
+				<a href="api/steamclient/open/friends" class="button-steam-browser-protocol target-button">Friends</a>
+				<a href="api/steamclient/guestpasses" class="button-steam-browser-protocol target-button">Gifts</a>
+			</p>
+		</div>
 
-        </div>
+	</div>
+</div>
 
-    </div>
-
-
-    <div id="browser-protocol-segment"  class="segment">
-
-        <div class="side-header side-header-at-right">
-            <p class="side-header-paragraph">
-                <span class="side-text side-text-at-right">
-                Steam<br/>
-                Browser<br/>
-                Protocol<br/>
-                </span>
-            </p>
-            <div class="side-links">
-                <ul>
-                    <li><a href="https://developer.valvesoftware.com/wiki/Steam_browser_protocol" target="_blank">Learn about it</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="content content-at-left">
-
-            <div>
-                <p class="instructions-and-explanations">
-                    <a href="api/steamclient/open/activateproduct" class="button-steam-browser-protocol target-button">Activate a Product on Steam</a>
-                    <a href="api/steamclient/open/downloads" class="button-steam-browser-protocol target-button">Downloads</a>
-                    <a href="api/steamclient/settings" class="button-steam-browser-protocol target-button">Settings</a>
-                    <a href="api/steamclient/url/CommunityHome" class="button-steam-browser-protocol target-button">Community Home</a>
-                    <a href="api/steamclient/url/StoreFrontPage" class="button-steam-browser-protocol target-button">Store</a>
-                    <a href="api/steamclient/ExitSteam" class="button-steam-browser-protocol target-button">Exit Steam</a>
-                    <a href="api/steamclient/AddNonSteamGame" class="button-steam-browser-protocol target-button">Add non-Steam game</a>
-                    <a href="api/steamclient/browsemedia" class="button-steam-browser-protocol target-button">Browse media</a>
-                    <a href="api/steamclient/open/friends" class="button-steam-browser-protocol target-button">Friends</a>
-                    <a href="api/steamclient/guestpasses" class="button-steam-browser-protocol target-button">Gifts</a>
-                </p>
-            </div>
-
-        </div>
-    </div>
+<!-- ======================================================================= -->
 
 </div>
 

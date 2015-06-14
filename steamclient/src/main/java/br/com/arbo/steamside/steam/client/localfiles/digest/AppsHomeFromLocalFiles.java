@@ -1,6 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.digest;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
@@ -15,7 +17,8 @@ import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_appticket;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-class AppsHomeFromLocalFiles {
+class AppsHomeFromLocalFiles
+{
 
 	private static void executable(final AppImpl.Builder b, AppInfo appInfo)
 	{
@@ -44,39 +47,51 @@ class AppsHomeFromLocalFiles {
 
 	AppsHome combine()
 	{
-		Stream<AppId> appidsFrom_localconfig = d_localconfig.apptickets()
-			.all().map(KV_appticket::appid);
+		Stream<AppId> appidsFrom_localconfig = appidsFrom_localconfig();
+		Stream<AppId> appidsFrom_sharedconfig = appidsFrom_sharedconfig();
+		Stream<AppId> appidsFrom_appinfo = appidsFrom_appinfo();
 
-		Stream<AppId> appidsFrom_sharedconfig = d_sharedconfig.apps()
-			.streamAppId();
+		List<Stream<AppId>> all = Arrays.asList(
+			appidsFrom_localconfig, appidsFrom_sharedconfig,
+			appidsFrom_appinfo);
 
-		final Stream<AppId> appidsToGoIntoLibrary = Stream
-			.concat(appidsFrom_localconfig, appidsFrom_sharedconfig);
+		HashSet<AppId> uniques = new HashSet<>();
 
-		HashSet<AppId> appids = new HashSet<>();
-		appidsToGoIntoLibrary.forEach(appid -> appids.add(appid));
+		for (Stream<AppId> appidsToGoIntoLibrary : all)
+		{
+			appidsToGoIntoLibrary.forEach(uniques::add);
+		}
 
-		appids.forEach(this::eachAppId);
+		uniques.forEach(this::eachAppId);
 
 		return home;
 	}
 
 	void eachAppId(AppId appid)
 	{
-		final AppImpl make = buildFromAppId(appid);
+		AppImpl make = buildFromAppId(appid);
 		home.add(make);
 	}
 
-	void eachAppticket(KV_appticket each)
+	private Stream<AppId> appidsFrom_appinfo()
 	{
-		AppId appid = each.appid();
-		eachAppId(appid);
+		return d_appinfo.streamAppId();
+	}
+
+	private Stream<AppId> appidsFrom_localconfig()
+	{
+		return d_localconfig.apptickets()
+			.all().map(KV_appticket::appid);
+	}
+
+	private Stream<AppId> appidsFrom_sharedconfig()
+	{
+		return d_sharedconfig.apps().streamAppId();
 	}
 
 	private AppImpl buildFromAppId(AppId appid)
 	{
-		final AppImpl.Builder b = new AppImpl.Builder()
-			.appid(appid.appid());
+		AppImpl.Builder b = new AppImpl.Builder().appid(appid.appid());
 
 		from_localconfig_apps(appid, b);
 		from_appinfo(appid, b);
