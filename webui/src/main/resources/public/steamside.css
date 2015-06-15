@@ -159,7 +159,6 @@
 .side-header-at-left {
     float: left;
     text-align: right;
-    #border-right: 1px solid gray;
 	border-top-right-radius: 0.5em;
 	border-bottom-right-radius: 0.5em;
 }
@@ -219,7 +218,6 @@
 }
 
 .content-at-left {
-    #border-right: 1px solid gray;
     padding-right: 20px;
     /* float: left; // this makes the right border finish midways :-p */
 }
@@ -232,7 +230,6 @@
 }
 
 .content-at-right {
-    #border-left: 1px solid gray;
     padding-left: 20px;
     /*	float: right;  // this pushes content down somehow :-p */
 }
@@ -278,26 +275,27 @@ a.indicator {
     color: coral;
 }
 
-a.target-button {
+a.target-button
+{
+    font-family: Arvo;
     display: inline-block;
     border-radius: 10px;
-    border-color: LightSteelBlue;
+    border-color: Gray;
     border-style: solid;
-    background: LightYellow;
+    background: #f7f7f7;
     margin: 1px;
     padding: 8px;	/* distance from text to border */
     text-decoration: none;	/* hide link underline */
     outline: none; /* hide dotted outline in Firefox */
 }
+a.target-button:focus, a.target-button:hover
+{
+	border-color: LightSteelBlue;
+	background: LightYellow;
+}
 
 #tag-segment {
     display: none;
-}
-
-.attention
-{
-	background-color: lightgoldenrodyellow;
-	padding: 1em;
 }
 
 a.instructions-and-explanations
@@ -322,5 +320,15 @@ a.instructions-and-explanations
     font-family: Karla;
 }
 
+.attention
+{
+    background-color: lightgoldenrodyellow;
+    padding: 1em;
+}
+
+.question
+{
+    color: darkslategray;
+}
 
 

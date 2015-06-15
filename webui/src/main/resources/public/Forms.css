@@ -1,0 +1,36 @@
+.form-block
+{
+	display: inline-block;
+	border-style: outset;
+	border-width: 1px;
+	padding-top: 0.1em;
+	padding-bottom: 0.2em;
+	padding-left: 0.25em;
+	padding-right: 1em;
+	border-radius: 0.8em;
+}
+
+.form-block p
+{
+	margin: 0.5em;
+}
+
+.form-text
+{
+	font-size: 0.9em;
+	font-family: Karla;
+	background-color: turquoise; /*rgba(210,180,140,0.9);*/ /*tan;*/
+	text-shadow: white 1px 1px 0px;
+}
+
+.form-break
+{
+	clear: both;
+	margin: 1px;
+}
+
+.form-label
+{
+	font-weight: bold;
+	color: crimson;
+}

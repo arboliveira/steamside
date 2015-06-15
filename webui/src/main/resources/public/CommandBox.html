@@ -10,13 +10,16 @@
 <body>
 <div id="tile-command-box">
 
-<div id="command-box">
+<div id="command-box" class="command-box">
 	<form id="form-command-box">
+		<label>
+			<span id="CommandLabel" class="form-label" style="display: none;">
+				Command label<br/></span>
 			<input type="text" name="query" id="input-text-command-box"
-				   class="search-text-input"
+				   class="command-text-input"
 				   placeholder="placeholder_text"
 					/>
-			<br/>
+			<span id="command-button-strip">
 			<input id="command-button" class="command-button"
 				type="button" value="Enter"/>
 			<span id="command-hint" class="command-hint">
@@ -33,7 +36,9 @@
 					<span id="command-confirm-what">Yes, do it already</span>
 				</span>
 			</span>
+			</span>
 			<span id="command-trouble" class="command-trouble">(trouble)</span>
+		</label>
 	</form>
 </div>
 

@@ -2,6 +2,8 @@ package br.com.arbo.steamside.app.launch;
 
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.api.app.RunGameCommand;
+import br.com.arbo.steamside.api.cloud.CloudController_cloud;
+import br.com.arbo.steamside.api.cloud.CloudController_cloud_json;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.api.favorites.FavoritesController_favorites;
 import br.com.arbo.steamside.api.favorites.FavoritesController_favorites_json;
@@ -49,6 +51,8 @@ import br.com.arbo.steamside.settings.file.SaveFile;
 import br.com.arbo.steamside.settings.local.File_steamside_local_xml;
 import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
 import br.com.arbo.steamside.settings.local.LocalSettingsLoad;
+import br.com.arbo.steamside.settings.local.LocalSettingsPersistence;
+import br.com.arbo.steamside.settings.local.LocalSettingsSave;
 import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
 import br.com.arbo.steamside.steam.client.autoreload.ParallelAppsHomeFactory;
 import br.com.arbo.steamside.steam.client.library.Library;
@@ -115,10 +119,13 @@ public class SourcesFactory
 			.sourceImplementor(
 				LocalSettingsFactory.class,
 				LocalSettingsLoad.class)
-			.sources(
-				File_steamside_local_xml.class,
-				LoadCloud.class,
-				Cloud.class)
+			.sourceImplementor(
+				LocalSettingsPersistence.class,
+				LocalSettingsSave.class)
+				.sources(
+					File_steamside_local_xml.class,
+					LoadCloud.class,
+					Cloud.class)
 			.sourceImplementor(
 				CloudSettingsFactory.class,
 				CloudSettingsFromLocalSettings.class)
@@ -161,9 +168,12 @@ public class SourcesFactory
 			.sourceImplementor(
 				SteamClientController_status.class,
 				StatusDTOBuilder.class)
-				.sourceImplementor(
-					SessionController_session.class,
-					SessionController_session_json.class);
+			.sourceImplementor(
+				SessionController_session.class,
+				SessionController_session_json.class)
+			.sourceImplementor(
+				CloudController_cloud.class,
+						CloudController_cloud_json.class);
 
 		return container;
 	}

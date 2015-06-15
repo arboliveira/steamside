@@ -1,9 +1,15 @@
-.search-text-input {
-	width: 100%; font-size:24px;
+.command-box
+{
+	padding: 0.25em;
+}
+
+.command-text-input {
+	font-size:24px;
+	width: 99%;
 	padding-left: 0.25em;
 }
 
-.search-text-input:focus {
+.command-text-input:focus {
 	background-color: Aquamarine;
 }
 
@@ -30,7 +36,6 @@
 }
 
 .command-hint {
-	background-color: PaleTurquoise;
 	padding: 0.2em;
     font-family: "Karla";
 	font-size: x-small;
@@ -55,4 +60,11 @@
 {
 	color: red;
 	font-weight: bold;
+}
+
+.command-label-span
+{
+	padding: 0.2em;
+	padding-top: 0.1em;
+	padding-bottom: 0;
 }

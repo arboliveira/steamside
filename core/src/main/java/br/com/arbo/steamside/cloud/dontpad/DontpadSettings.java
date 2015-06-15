@@ -1,7 +1,8 @@
 package br.com.arbo.steamside.cloud.dontpad;
 
-public interface DontpadSettings {
+public interface DontpadSettings
+{
 
-	String url();
+	DontpadAddress address();
 
 }

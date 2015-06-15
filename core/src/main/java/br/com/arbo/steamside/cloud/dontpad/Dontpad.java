@@ -73,11 +73,11 @@ public class Dontpad implements Host
 
 	private String url()
 	{
-		return settingsFactory.read().url();
+		return settingsFactory.read().address().url();
 	}
 
-	private final DontpadSettingsFactory settingsFactory;
-
 	private static ObjectMapper jackson = new ObjectMapper();
+
+	private final DontpadSettingsFactory settingsFactory;
 
 }

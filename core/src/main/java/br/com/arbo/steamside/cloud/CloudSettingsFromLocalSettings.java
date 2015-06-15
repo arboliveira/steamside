@@ -5,7 +5,8 @@ import javax.inject.Inject;
 import br.com.arbo.steamside.settings.local.LocalSettings;
 import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
 
-public class CloudSettingsFromLocalSettings implements CloudSettingsFactory {
+public class CloudSettingsFromLocalSettings implements CloudSettingsFactory
+{
 
 	@Inject
 	public CloudSettingsFromLocalSettings(LocalSettingsFactory local)
@@ -18,7 +19,8 @@ public class CloudSettingsFromLocalSettings implements CloudSettingsFactory {
 	{
 		final LocalSettings from = readFrom();
 
-		class ToCloudSettings implements CloudSettings {
+		class ToCloudSettings implements CloudSettings
+		{
 
 			@Override
 			public boolean isEnabled()

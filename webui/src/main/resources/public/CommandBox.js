@@ -66,6 +66,11 @@ var CommandBoxView = Backbone.View.extend({
 		this.$('#command-confirm').show();
 	},
 
+	hideCommandButtonStrip: function ()
+	{
+		this.$('#command-button-strip').hide();
+	},
+
 	hideCommandHintConfirm: function ()
 	{
 		this.emptyCommandHintConfirm();
@@ -88,6 +93,18 @@ var CommandBoxView = Backbone.View.extend({
 		input_el.val(val);
 		input_el.focus();
 		this.change_input();
+	},
+
+	label_el: function()
+	{
+		return this.$('#CommandLabel');
+	},
+
+	label_text: function( v )
+	{
+		var label_el = this.label_el();
+		label_el.text(v);
+		label_el.show();
 	},
 
 	doCommand: function () {
@@ -133,8 +150,18 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	trouble: function (error) {
+		var message;
+		if (error.responseJSON != undefined)
+		{
+			message = error.responseJSON.message;
+		}
+		if (message == null)
+		{
+			message = error.status + ' ' + error.statusText;
+		}
+
 		var span = this.$("#command-trouble");
-		span.text(error.status + ' ' + error.statusText);
+		span.text(message);
 		span.show();
 	},
 
@@ -146,6 +173,7 @@ var CommandBoxView = Backbone.View.extend({
 	 * @public
 	 * @type Sprite
 	 */
-	sprite: new SpriteBuilder({url: 'CommandBox.html', selector: "#tile-command-box"}).build()
+	sprite: new SpriteBuilder({
+		url: 'CommandBox.html', selector: "#tile-command-box"}).build()
 
 });

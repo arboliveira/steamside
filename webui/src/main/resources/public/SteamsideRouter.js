@@ -8,6 +8,7 @@ var SteamsideRouter = Backbone.Router.extend(
         "collections/new": "collections_new",
         "collections/:name/edit": "collections_edit",
         "steamclient": "steam_client",
+		"settings": "settings",
         "exit": "exit"
     },
 
@@ -24,7 +25,7 @@ var SteamsideRouter = Backbone.Router.extend(
 	collections_editView: null,
 
 	steamclientView: null,
-
+	settingsWorld: null,
 	exitView: null,
 
 	cardTemplatePromise: null,
@@ -77,6 +78,16 @@ var SteamsideRouter = Backbone.Router.extend(
 		this.steamclientView = new World(
 			{
 				worldActions: new SteamClientWorld(
+					{
+						backend: this.backend
+					}
+				)
+			}
+		);
+
+		this.settingsWorld = new World(
+			{
+				worldActions: new SettingsWorld(
 					{
 						backend: this.backend
 					}
@@ -149,6 +160,11 @@ var SteamsideRouter = Backbone.Router.extend(
 	steam_client:  function()
 	{
 		this.worldchanger.goWorld(this.steamclientView);
+	},
+
+	settings:  function()
+	{
+		this.worldchanger.goWorld(this.settingsWorld);
 	},
 
 	exit:  function()

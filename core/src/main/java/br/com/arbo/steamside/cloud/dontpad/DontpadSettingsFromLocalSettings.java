@@ -6,7 +6,8 @@ import br.com.arbo.steamside.settings.local.LocalSettings;
 import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
 
 public class DontpadSettingsFromLocalSettings
-	implements DontpadSettingsFactory {
+implements DontpadSettingsFactory
+{
 
 	@Inject
 	public DontpadSettingsFromLocalSettings(LocalSettingsFactory local)
@@ -19,12 +20,13 @@ public class DontpadSettingsFromLocalSettings
 	{
 		final LocalSettings from = readFrom();
 
-		class ToDontpadSettings implements DontpadSettings {
+		class ToDontpadSettings implements DontpadSettings
+		{
 
 			@Override
-			public String url()
+			public DontpadAddress address()
 			{
-				return from.dontpadUrl();
+				return new DontpadAddress(from.dontpadUrl());
 			}
 
 		}

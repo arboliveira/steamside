@@ -2,13 +2,38 @@
 
 var Test_Cloud = Backbone.Model.extend(
 {
-	renderTestableUIPromise: function()
+	cloudView: null,
+
+	randomSuggestion: "RANDOM_SUGGESTION",
+
+	renderTestableView_promise: function()
 	{
-		var pageToTest = 'Cloud.html';
-		return $.ajax({
-				url: pageToTest, dataType: 'html' }
-		).then(function(page) {
-				return $(page);	});
+		var that = this;
+
+		var MockCloudModel = Backbone.View.extend(
+			{
+				cloudEnabled: function()
+				{
+					return true;
+				},
+
+				dontpadUrl: function()
+				{
+					return that.randomSuggestion;
+				},
+
+				fetch: function()
+				{
+					return $.Deferred().resolve();
+				}
+			});
+
+		return new CloudView(
+			{
+				cloudModel: new MockCloudModel(),
+				backend: new Backend()
+			}
+		).render().whenRendered;
 	},
 
 	addTests: function (theTestRunner)
@@ -22,65 +47,51 @@ var Test_Cloud = Backbone.Model.extend(
 
 			before(function(done)
 			{
-				that.renderTestableUIPromise().done(function(el)
+				that.renderTestableView_promise().done(function(view)
 				{
-					theTestRunner.replaceTestableUI(el);
+					theTestRunner.replaceTestableUI(view.$el);
+					that.cloudView = view;
 					done();
 				});
 			});
 
 			describe("Just started", function ()
 			{
-				it('random suggestion', function(done)
-				{
-					that.testRandomSuggestion(done);
-					done();
+				it('displays initial values', function(done) {
+					that.testInitialValues(done);
 				})
 			});
 
 
 			describe("Sync to the cloud", function ()
 			{
-				it('Yes please', function(done)
-				{
-					// TO DO
-					done();
+				it('saves', function(done) {
+					that.testSave(done);
 				})
 			});
 
 		});
 	},
 
-	testRandomSuggestion: function (done)
+	testInitialValues: function (done)
 	{
+		var that = this;
 		var expect = global.expect;
 
-		var randomSuggestion = "RANDOM_SUGGESTION";
+		var $input = that.cloudView.$('#input-text-command-box');
+		var val = $input.val();
 
-		var MockCloudModel = Backbone.View.extend(
-		{
-			randomSuggestion: function()
-			{
-				return randomSuggestion;
-			}
-		});
+		expect(val).to.equal(that.randomSuggestion);
 
-		var cloudView = new CloudView(
-			{
-				el: $('#CloudView'),
-				cloudModel: new MockCloudModel()
-			}
-		).render();
+		done();
+	},
 
-		cloudView.whenRendered.done(function()
-		{
-			var $input = cloudView.$('#input-text-command-box');
-			var val = $input.val();
+	testSave: function (done) {
+		var that = this;
 
-			expect(val).to.equal(randomSuggestion);
+		// TODO
+		// that.cloudView.$("#SaveButton").click();
 
-			done();
-		});
-
+		done();
 	}
 });

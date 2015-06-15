@@ -84,7 +84,7 @@ var Test_Home = Backbone.Model.extend({
 
 	testSearch: function (done) {
 		var segment = $('#search-segment');
-		var input = segment.find('.search-text-input');
+		var input = segment.find('.command-text-input');
 		input.val('anything');
 		var button = segment.find('.command-button').get(0);
 		button.click();

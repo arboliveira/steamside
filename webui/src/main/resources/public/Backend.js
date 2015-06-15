@@ -4,6 +4,10 @@ var Backend = Backbone.Model.extend(
 {
 	backoff: false,
 
+	/**
+	 * @param {Model | Collection} fetchable
+	 * @return {Deferred}
+	 */
 	fetch_promise: function(fetchable)
 	{
 		var promise = fetchable.fetch({
