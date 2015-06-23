@@ -2,15 +2,7 @@
 
 var MoreButtonView = Backbone.View.extend(
 {
-	hiding: true,
 	deck: null,
-
-	/**
-	 * @type Sprite
-	 */
-	spriteMoreButton: null,
-
-	whenRendered: null,
 
 	events:
 	{
@@ -19,48 +11,32 @@ var MoreButtonView = Backbone.View.extend(
 
 	initialize: function(a)
 	{
+		var that = this;
+
 		this.deck = a.deck;
 
 		if (a.spriteMoreButton == null) {
 			throw new Error("spriteMoreButton is required");
 		}
-		this.spriteMoreButton = a.spriteMoreButton;
+
+		a.spriteMoreButton.sprite_promise().then(function(el) {
+			that.$el.append(el.clone());
+			that.render();
+		});
 	},
 
 	render: function()
 	{
-		var that = this;
-		this.whenRendered =
-			this.spriteMoreButton.sprite_promise().then(function(el) {
-				that.render_el(el.clone());
-				return that;
-			});
-		return this;
-	},
-
-	render_el: function(el)
-	{
-		this.$el.append(el);
-		this.textRefresh();
+		var showing = this.deck.tailVisibility;
+		this.$('.more-button-text').text(!showing ? 'more...' : 'less...');
 		this.$el.fadeIn();
+		return this;
 	},
 
 	moreClicked: function(e)
 	{
 		e.preventDefault();
-		this.toggle();
-	},
-
-	toggle: function()
-	{
 		this.deck.toggleVisibility();
-		this.hiding = !this.hiding;
-		this.textRefresh();
-	},
-
-	textRefresh: function()
-	{
-		this.$('.more-button-text').text(this.hiding ? 'more...' : 'less...');
+		this.render();
 	}
 });
-

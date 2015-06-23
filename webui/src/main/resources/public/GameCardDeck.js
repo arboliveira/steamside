@@ -485,15 +485,14 @@ var DeckView = Backbone.View.extend(
 
 		var that = this;
 
-		new MoreButtonView(
+		var moreButtonView = new MoreButtonView(
 			{
 				deck: that,
 				spriteMoreButton: that.spriteMoreButton
 			}
-		).render().whenRendered.done(function(view)
-			{
-				that.first_row.append(view.el);
-			});
+		);
+		that.first_row.append(moreButtonView.el);
+		moreButtonView.render();
 	},
 
 	startNewRow: function()
