@@ -46,15 +46,14 @@ var MyGamesView = Backbone.View.extend(
 	render_el: function() {
 		var that = this;
 
-		new CollectionPickView(
-			{
-				backend: that.backend
-			}
-		).render().whenRendered.done(function(view)
-			{
-				view.$('#PurposeView').hide();
-				that.$("#CollectionPickView").append(view.el);
-			});
+		that.$("#CollectionPickView").append(
+			new CollectionPickView(
+				{
+					backend: that.backend,
+					purposeless: true
+				}
+			).render().el
+		);
 	}
 
 }, {

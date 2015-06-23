@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import br.com.arbo.opersys.username.Username;
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
@@ -14,6 +15,8 @@ import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.kids.InMemoryKids;
+import br.com.arbo.steamside.kids.KidImpl;
+import br.com.arbo.steamside.kids.KidName;
 import br.com.arbo.steamside.kids.KidsData;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
@@ -71,18 +74,35 @@ class DemoSteamsideData
 	{
 		populateCollections();
 		populateTags();
+		populateKids();
 
 		sources
-		.replaceWithSingleton(SteamsideData.class, s)
-		.replaceWithSingleton(CollectionsData.class, c)
-		.replaceWithSingleton(TagsData.class, t)
-		.replaceWithSingleton(KidsData.class, k);
+			.replaceWithSingleton(SteamsideData.class, s)
+			.replaceWithSingleton(CollectionsData.class, c)
+			.replaceWithSingleton(TagsData.class, t)
+			.replaceWithSingleton(KidsData.class, k);
 	}
 
 	private void populateCollections()
 	{
 		addCollections(
 			"favorite", "Kids", "Indie", "Open world", "Racing", "Action");
+	}
+
+	private void populateKids()
+	{
+		k.add(new KidImpl(
+			new KidName("Keen"),
+			new Username("commander"),
+			new CollectionName("Keen's games")));
+		k.add(new KidImpl(
+			new KidName("Giana"),
+			new Username("sisters"),
+			new CollectionName("Giana and Maria")));
+		k.add(new KidImpl(
+			new KidName("Lucius"),
+			new Username("lucius"),
+			new CollectionName("Games Lucius play")));
 	}
 
 	private void populateTags()

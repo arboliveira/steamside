@@ -7,6 +7,8 @@ import br.com.arbo.steamside.api.cloud.CloudController_cloud_json;
 import br.com.arbo.steamside.api.continues.Continues;
 import br.com.arbo.steamside.api.favorites.FavoritesController_favorites;
 import br.com.arbo.steamside.api.favorites.FavoritesController_favorites_json;
+import br.com.arbo.steamside.api.kids.KidsController_kids;
+import br.com.arbo.steamside.api.kids.KidsController_kids_json;
 import br.com.arbo.steamside.api.session.SessionController_session;
 import br.com.arbo.steamside.api.session.SessionController_session_json;
 import br.com.arbo.steamside.api.steamclient.StatusDTOBuilder;
@@ -173,7 +175,10 @@ public class SourcesFactory
 				SessionController_session_json.class)
 			.sourceImplementor(
 				CloudController_cloud.class,
-						CloudController_cloud_json.class);
+				CloudController_cloud_json.class)
+			.sourceImplementor(
+				KidsController_kids.class,
+							KidsController_kids_json.class);
 
 		return container;
 	}

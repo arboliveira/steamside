@@ -1,0 +1,16 @@
+[ {
+  "id" : "Keen",
+  "name" : "Keen",
+  "user" : "commander",
+  "inventory" : "Keen's games"
+}, {
+  "id" : "Giana",
+  "name" : "Giana",
+  "user" : "sisters",
+  "inventory" : "Giana and Maria"
+}, {
+  "id" : "Lucius",
+  "name" : "Lucius",
+  "user" : "lucius",
+  "inventory" : "Games Lucius play"
+} ]

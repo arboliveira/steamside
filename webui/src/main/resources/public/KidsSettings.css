@@ -1,0 +1,31 @@
+.kid-container
+{
+    display: inline-block;
+    border: dashed 1px maroon;
+	box-shadow: orange 4px -2px 4px -2px;
+    margin: 0.5em;
+	padding: 1em;
+	cursor: pointer;
+	background-color: snow;
+}
+
+.kid-container:hover
+{
+	background-color: lightgoldenrodyellow;
+}
+
+#KidView
+{
+    font-family: Karla;
+}
+#KidView #Name
+{
+    font-family: Arvo;
+    font-size: x-large;
+}
+#KidView #User
+{
+    font-family: Jura;
+    font-size: x-large;
+}
+

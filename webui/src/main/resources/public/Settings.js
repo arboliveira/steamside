@@ -5,12 +5,7 @@ var SettingsView = Backbone.View.extend({
 	initialize: function(options)
 	{
 		var that = this;
-		this.backend = options.backend;
-		this.whenReadyToRender =
-			SettingsView.sprite.sprite_promise().then(function(el) {
-				that.$el.append(el);
-				return that;
-			});
+		this._backend = options.backend;
 	},
 
 	render_promise: function()
@@ -20,14 +15,23 @@ var SettingsView = Backbone.View.extend({
 
 	render: function () {
 		var that = this;
-		this.whenRendered = this.whenReadyToRender.then(function(view) {
-			view.render_el();
-			return view;
-		});
+		this.whenRendered =
+			SettingsView.sprite.sprite_promise().then(function(el) {
+				that.$el.append(el);
+				that.render_el();
+				return that;
+			});
 		return this;
 	},
 
-	render_el: function() {
+	render_el: function()
+	{
+		this.renderCloud();
+		this.renderKids();
+		return this;
+	},
+
+	renderCloud: function () {
 		var that = this;
 
 		var model = new CloudModel();
@@ -42,17 +46,34 @@ var SettingsView = Backbone.View.extend({
 			);
 	},
 
+	renderKids: function () {
+		var that = this;
+
+		var kidsCollection = new KidsCollection();
+
+		that._backend.fetch_promise(kidsCollection);
+
+		that.$("#KidsSettingsView-goes-here")
+			.append(
+				new KidsSettingsView({
+					collection: kidsCollection,
+					backend: that._backend
+				})
+					.render().el
+			);
+
+		return that;
+	},
+
 	/**
 	 * @type Backend
 	 */
-	backend: null,
+	_backend: null,
 
 	/**
 	 * @type Deferred
 	 */
-	whenRendered: null,
-
-	whenReadyToRender: null
+	whenRendered: null
 
 }, {
 

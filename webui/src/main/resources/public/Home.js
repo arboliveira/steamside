@@ -296,33 +296,22 @@ var FavoritesView = Backbone.View.extend(
 
 		var that = this;
 
+		var el_switch_purpose = that.switch_purpose_el.clone();
+
 		var viewCollectionPick = new CollectionPickView(
 			{
+				purpose_el: el_switch_purpose,
 				on_collection_pick: function(modelCollection)
 				{
 					viewCollectionPick.remove();
 					that.on_switch_favorites_collection_pick(modelCollection);
 				},
 				backend: that.backend
-			});
+			}
+		).render();
 
-		viewCollectionPick.render().whenRendered.done(function(view)
-		{
-			that.rendered_SwitchFavoritesCollectionPickView(view);
-		});
-	},
-
-	rendered_SwitchFavoritesCollectionPickView: function(view)
-	{
-		var el_switch_purpose = this.switch_purpose_el.clone();
-
-		var el_purpose = view.$('#PurposeView');
-		el_purpose.empty();
-		el_purpose.append(el_switch_purpose);
-
-		this.$el.after(view.el);
-
-		$('html, body').scrollTop(view.$el.offset().top);
+		this.$el.after(viewCollectionPick.el);
+		$('html, body').scrollTop(viewCollectionPick.$el.offset().top);
 	},
 
 	on_switch_favorites_collection_pick: function(modelCollection)

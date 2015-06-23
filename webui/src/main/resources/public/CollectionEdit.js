@@ -377,34 +377,30 @@ var CollectionEditView = Backbone.View.extend({
 
 		var that = this;
 
-		var viewCollectionPick = new CollectionPickView(
-			{
-				on_collection_pick: function(collection)
+		that.$("#collection-segment")
+			.after(
+				new CollectionPickView(
 				{
-					viewCollectionPick.remove();
-					that.on_collection_combine(collection);
-				},
-				backend: that.backend
-			});
-
-		viewCollectionPick.render().whenRendered.done(function(view)
-			{
-				that.rendered_CollectionPickView(view);
-			});
+					purpose_el: that.build_combine_purpose(),
+					on_collection_pick: function(collection)
+					{
+						viewCollectionPick.remove();
+						that.on_collection_combine(collection);
+					},
+					backend: that.backend
+				})
+					.render().el
+			);
 	},
 
-	rendered_CollectionPickView: function(view)
+	build_combine_purpose: function()
 	{
 		var el_combine_purpose = this.combine_purpose_el.clone();
 
 		el_combine_purpose.find('#CombineCollectionName')
 			.text(this.collection_name);
 
-		var el_purpose = view.$('#PurposeView');
-		el_purpose.empty();
-		el_purpose.append(el_combine_purpose);
-
-		this.$("#collection-segment").after(view.el);
+		return el_combine_purpose;
 	},
 
 	on_collection_combine: function(collection)

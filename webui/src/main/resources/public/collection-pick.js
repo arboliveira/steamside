@@ -6,31 +6,35 @@ var CollectionPickView = Backbone.View.extend(
 	{
 		this.on_collection_pick = options.on_collection_pick;
 		this.backend = options.backend;
+		this._purposeless = options.purposeless;
+		this._purpose_text = options.purpose_text;
+		this._purpose_el = options.purpose_el;
 	},
 
 	render: function()
 	{
 		var that = this;
 		this.whenRendered =
-			CollectionPickView.sprite.sprite_promise().then(function(_el)
+			CollectionPickView.sprite.sprite_promise().then(function(el)
 				{
-					var el = _el.clone();
-					that.render_el(el);
-					that.$el.append(el);
+					that.$el.append(el.clone());
+					that.render_el();
 					return that;
 				});
 		return this;
 	},
 
-	render_el: function(el)
+	render_el: function()
 	{
 		var that = this;
+
+		that.renderPurpose();
 
 		var collections = new SteamsideCollectionInfoCollection();
 
 		this.backend.fetch_promise(collections).done(function()
 		{
-			var el_list = el.find("#SteamsideCollectionInfoListView");
+			var el_list = that.$("#SteamsideCollectionInfoListView");
 			/**
 			 * @type SteamsideCollectionInfoListView
 			 */
@@ -45,11 +49,30 @@ var CollectionPickView = Backbone.View.extend(
 
 			if (collections.length > 0)
 			{
-				el.find("#no-collections-yet").hide();
+				that.$("#no-collections-yet").hide();
 			}
 		});
 
 		return this;
+	},
+
+	renderPurpose: function () {
+		var that = this;
+
+		if (that._purposeless) {
+			that.$('#PurposeView').hide();
+		}
+
+		if (that._purpose_text != undefined) {
+			that.$('#InnerPurpose').text(that._purpose_text);
+		}
+
+		if (that._purpose_el != undefined) {
+			var el_purpose = that.$('#InnerPurpose');
+			el_purpose.empty();
+			el_purpose.append(that._purpose_el);
+		}
+		return that;
 	},
 
 	on_collection_pick: null,
@@ -147,15 +170,14 @@ var SteamsideCollectionInfoListView = Backbone.View.extend(
         var that = this;
         this.collection.each( function(one)
 		{
-			/**
-			 * @type SteamsideCollectionInfoView
-			 */
-            var view = new SteamsideCollectionInfoView({
-                model: one,
-                el: one_el.clone(),
-                on_collection_pick: that.on_collection_pick
-            });
-            container.append(view.render().el);
+			container.append(
+				new SteamsideCollectionInfoView({
+					model: one,
+					el: one_el.clone(),
+					on_collection_pick: that.on_collection_pick
+				})
+					.render().el
+			);
         });
         return this;
     }

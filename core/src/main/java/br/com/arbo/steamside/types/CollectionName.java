@@ -1,10 +1,13 @@
 package br.com.arbo.steamside.types;
 
-public class CollectionName {
+import java.util.Objects;
+
+public class CollectionName
+{
 
 	public CollectionName(String value)
 	{
-		this.value = value;
+		this.value = Objects.requireNonNull(value);
 	}
 
 	public boolean equalsCollectionName(CollectionName name)
