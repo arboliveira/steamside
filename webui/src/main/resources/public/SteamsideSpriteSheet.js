@@ -16,8 +16,8 @@ var SteamsideSpriteSheet = Backbone.Model.extend(
 
 		initialize: function () {
 			var sheet = new SpriteSheet({url: 'tileset.html'});
-			this.card = sheet.sprite(".game-tile");
-			this.moreButton = sheet.sprite(".more-button");
+			this.card = sheet.sprite("#game-tile");
+			this.moreButton = sheet.sprite("#MoreButton");
 		}
 	}
 );

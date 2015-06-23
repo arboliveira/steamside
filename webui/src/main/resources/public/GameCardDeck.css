@@ -13,9 +13,6 @@
 }
 
 .game-tile {
-	float: left;
-	position: relative;
-    margin: 5px;
     background-color: snow;
 	border-top: 1px solid #999;
 	border-right: 2px solid #555;
@@ -28,6 +25,12 @@
 .game-tile a {
 	font-weight: lighter;
 	text-decoration: none;	/* hide link underline */
+}
+
+.game-tile-in-deck {
+	float: left;
+	position: relative;
+	margin: 5px;
 }
 
 .game-tile-large {

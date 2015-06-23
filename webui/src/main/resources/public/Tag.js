@@ -16,12 +16,13 @@ var TagSuggestionsCollection = Backbone.Collection.extend({
 
 var TagView = Backbone.View.extend({
 
-	game: null,
-
-	viewCommandBox: null,
-
 	initialize: function(options) {
 		this.game = options.game;
+		if (options.cardTemplatePromise == undefined)
+		{
+			throw new Error("cardTemplatePromise is required");
+		}
+		this.cardTemplatePromise = options.cardTemplatePromise;
 		this.backend = options.backend;
 	},
 
@@ -29,37 +30,34 @@ var TagView = Backbone.View.extend({
 		var that = this;
 		this.whenRendered =
 			TagView.sprite.sprite_promise().then(function(el) {
-				that.render_el(el.clone());
+				that.$el.append(el.clone());
+				that.render_el();
 				return that;
 			});
 		return this;
 	},
 
-	render_el: function(el) {
+	render_el: function() {
 		var that = this;
-
-		this.$el.append(el);
 
 		this.$el.hide();
 
-		this.$("#game-name").text(this.game.name());
-
+		this.renderGameCard();
 		this.renderCommandHints();
 
-		var viewCommandBox = new CommandBoxView(
+		this.viewCommandBox = new CommandBoxView(
 			{
 				placeholder_text: 'Collection for ' + this.game.name(),
 				on_command: function(input) { that.on_tag_command(input) },
 				on_command_alternate: function(input) { that.on_tag_command_alternate(input) },
 				on_change_input: function(input) { that.on_tag_change_input(input); }
 			}
-		).render();
-		viewCommandBox.whenRendered.done(function(view)
+		);
+		that.$('#div-command-box').empty().append(this.viewCommandBox.el);
+		this.viewCommandBox.render_commandBox_promise().done(function(view)
 		{
 			that.on_CommandBox_whenRendered(view);
 		});
-
-		this.viewCommandBox = viewCommandBox;
 
 		var suggestions = new TagSuggestionsCollection();
 		this.backend.fetch_promise(suggestions).done(function () {
@@ -69,19 +67,43 @@ var TagView = Backbone.View.extend({
 		this.$el.slideDown();
 	},
 
+	renderGameCard: function()
+	{
+		var that = this;
+
+		var enormityRegular = {
+			styleClass: 'game-tile-regular',
+			width: 30
+		};
+
+		this.viewGameCard = new GameCardView({
+			el: this.$("#GameCardView").empty(),
+			cardTemplatePromise: that.cardTemplatePromise,
+			model: that.game,
+			enormity: enormityRegular,
+			backend: this.backend,
+			kidsMode: this.kidsMode,
+			continues: this.continues,
+			on_render: this.on_GameCard_render,
+			on_tag: function (game) {
+				that.on_tag_deck(game);
+			}
+		});
+		this.viewGameCard.render();
+	},
+
 	renderTagSuggestionsView: function (suggestions) {
 		var that = this;
 		/**
 		 * @type TagSuggestionsView
 		 */
-		var tagSuggestionsView = new TagSuggestionsView({
+		new TagSuggestionsView({
 			el: that.$("#TagSuggestionsView"),
 			collection: suggestions,
 			on_tag_suggestion_select: function (model) {
 				that.on_tag_suggestion_select(model)
 			}
-		});
-		tagSuggestionsView.render();
+		}).render();
 	},
 
 	renderCommandHints: function () {
@@ -101,10 +123,6 @@ var TagView = Backbone.View.extend({
 	},
 
 	on_CommandBox_whenRendered: function(viewCommandBox) {
-		var targetEl = this.$('#div-command-box');
-		targetEl.empty();
-		targetEl.append(viewCommandBox.el);
-
 		viewCommandBox.emptyCommandHints();
 		viewCommandBox.appendCommandHint(this.elCommandHintA);
 		viewCommandBox.appendCommandHintAlternate(this.elCommandHintB);
@@ -146,6 +164,9 @@ var TagView = Backbone.View.extend({
 
 	on_tag_done: function() {
 		this.viewCommandBox.input_query_setval('');
+
+		// TODO update the Game model in this view, otherwise tags don't change
+		this.viewGameCard.viewGame_Tag_List.render();
 	},
 
 	nameForCollection: function(input) {
@@ -168,6 +189,21 @@ var TagView = Backbone.View.extend({
 	on_tag_suggestion_select: function(model) {
 		this.viewCommandBox.input_query_setval(model.name());
 	},
+
+	/**
+	 * @type Game
+	 */
+	game: null,
+
+	/**
+	 * @type CommandBoxView
+	 */
+	viewCommandBox: null,
+
+	/**
+	 * @type GameCardView
+	 */
+	viewGameCard: null,
 
 	whenRendered: null
 

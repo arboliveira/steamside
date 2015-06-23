@@ -2,6 +2,23 @@
 
 var Test_Tag = Backbone.Model.extend({
 
+	viewBeingTested: null,
+
+	initialize: function() {
+		var game = new Game({
+			name: "Test Game"
+		});
+
+		var spritesSteamside = new SteamsideSpriteSheet();
+		var cardTemplatePromise =  spritesSteamside.card.sprite_promise();
+
+		this.viewBeingTested = new TagView({
+			game: game,
+			cardTemplatePromise: cardTemplatePromise,
+			backend: new Backend()
+		}).render();
+	},
+
 	addTests: function (theTestRunner) {
 		var that = this;
 		var before = global.before;
@@ -12,10 +29,16 @@ var Test_Tag = Backbone.Model.extend({
 
 			before(function(done)
 			{
-				that.renderTestableUIPromise().done(function(el)
-				{
-					theTestRunner.replaceTestableUI(el);
-					done();
+				theTestRunner.replaceTestableUI(that.viewBeingTested.$el);
+
+				Insisting.assertRetry({
+					done: done,
+					condition: function()
+					{
+						var tagView = $("#TagView");
+						expect(tagView).to.have.length(1);
+						expect(tagView.is(':visible')).to.equal(true);
+					}
 				});
 			});
 
@@ -29,43 +52,20 @@ var Test_Tag = Backbone.Model.extend({
 
 	},
 
-	renderTestableUIPromise: function()
-	{
-		var pageToTest = 'Tag.html';
-		return $.ajax({
-				url: pageToTest, dataType: 'html' }
-		).then(function(page) {
-				return $(page);	});
-	},
-
 	testTagSuggestions: function (done)
 	{
 		var that = this;
 
-		var game = new Game({
-			name: "Test Game"
-		});
-
-		new TagView({
-			game: game,
-			backend: new Backend()
-		}
-		).render().whenRendered.done(function(view) {
-			$("#TagTile").after(view.$el);
-			that.testTagSuggestions_whenRendered(view, done);
-		});
-	},
-
-	testTagSuggestions_whenRendered: function(view, done) {
-		Insisting.seen(
-			function ()
+		Insisting.assertRetry({
+			done: done,
+			condition: function ()
 			{
-				var tagSuggestions = view.$("#TagSuggestionView");
-				expect(tagSuggestions.length).to.equal(2);
-			},
-			function() { done(); },
-			function(error) { done(error); throw error; }
-		);
+				var tags = that.viewBeingTested.$(".display-collection-name");
+				expect(tags).to.have.length(2);
+				expect(tags[0].text).to.equal("Unplayed");
+				expect(tags[1].text).to.equal("Favorites");
+			}
+		});
 	}
 
 });

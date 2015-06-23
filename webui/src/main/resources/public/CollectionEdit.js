@@ -220,6 +220,7 @@ var CollectionEditView = Backbone.View.extend({
 		var that = this;
 		new TagView({
 			game: game,
+			cardTemplatePromise: that.cardTemplatePromise,
 			backend: that.backend
 		}
 		).render().whenRendered.done(function(view)

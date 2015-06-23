@@ -45,13 +45,6 @@ var Test_Kids = Backbone.Model.extend({
 
 		var cardTemplatePromise = kidsSpriteSheet.card.sprite_promise();
 
-		cardTemplatePromise.done(function(template_el) {
-			that.testLoading_done_cardTemplateLoaded(template_el, done);
-		});
-	},
-
-	testLoading_done_cardTemplateLoaded: function(template_el, done)
-	{
 		var expect = global.expect;
 
 		var oneResult = new Game();
@@ -84,7 +77,7 @@ var Test_Kids = Backbone.Model.extend({
 		};
 
 		var card_view = new GameCardView({
-			el: template_el.clone(),
+			cardTemplatePromise: cardTemplatePromise,
 			model: oneResult,
 			enormity: enormity,
 			kidsMode: true,

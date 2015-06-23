@@ -211,13 +211,14 @@ var HomeView = Backbone.View.extend(
 	on_game_card_tag: function(game, segmentWithGameCard)
 	{
 		var that = this;
-		new TagView({
+		var tagView = new TagView({
 			game: game,
+			cardTemplatePromise: that.cardTemplatePromise,
 			backend: that.backend
-		}
-		).render().whenRendered.done(function(view)
+		});
+		segmentWithGameCard.after(tagView.$el);
+		tagView.render().whenRendered.done(function(view)
 		{
-			segmentWithGameCard.after(view.$el);
 			view.viewCommandBox.input_query_focus();
 			$('html, body').scrollTop(view.$el.offset().top);
 		});

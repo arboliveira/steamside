@@ -152,12 +152,6 @@ var Game_Tag_ListView = Backbone.View.extend({
 
 
 var GameCardView = Backbone.View.extend({
-	continues: null,
-    enormity: null,
-	width: 0,
-	on_render: null,
-	on_tag: null,
-	player: null,
 
 	events: {
 		"mouseenter .game-link": "mouseenter_hot_zone",
@@ -169,26 +163,43 @@ var GameCardView = Backbone.View.extend({
 
 	initialize: function(options)
 	{
+		this.cardTemplatePromise = options.cardTemplatePromise;
 		this.continues = options.continues;
 		this.enormity = options.enormity;
 		this.on_render = options.on_render;
 		this.on_tag = options.on_tag;
 		this.backend = options.backend;
+
 		this.player = new Game_Player({ backend: options.backend });
 
 		this.listenTo(this.model, 'game:play:beforeSend', this.game_play_beforeSend);
 		this.listenTo(this.model, 'game:play:complete', this.game_play_complete);
 	},
 
-	render: function ()
+	render: function() {
+		var that = this;
+		this.cardTemplatePromise.done(function(template_el) {
+			that.$el.append(template_el.clone());
+			that.render_el();
+		});
+	},
+
+	render_el: function ()
 	{
 		var name = this.model.name();
 		var link = this.model.link();
 		var img = this.model.image();
         var store = this.model.store();
 
-		this.$el.addClass(this.enormity.styleClass);
-		this.$el.width(this.enormity.width.toString() + "%");
+		var outermost = this.$el;
+		outermost.addClass(this.enormity.styleClass);
+		outermost.width(this.enormity.width.toString() + "%");
+		outermost.addClass("game-tile-in-deck");
+		outermost.addClass("game-tile");
+
+		var gameTile = this.$("#game-tile");
+		gameTile.removeClass("game-tile");
+
 		this.$('.game-name').text(name);
 		this.$('.game-img').attr('src', img);
 		this.$('.game-link').attr('href', link);
@@ -196,7 +207,7 @@ var GameCardView = Backbone.View.extend({
 
         if (this.model.unavailable())
 		{
-        	this.$el.addClass('game-unavailable');
+        	gameTile.addClass('game-unavailable');
         	this.$('.game-tile-play').hide();
         }
 		else
@@ -205,14 +216,11 @@ var GameCardView = Backbone.View.extend({
 		}
 
 		var tags = this.model.tagsCollection();
-		/**
-		 * @type Game_Tag_ListView
-		 */
-		var gameTagListView = new Game_Tag_ListView({
+
+		this.viewGame_Tag_List = new Game_Tag_ListView({
 			el: this.$("#game-tag-list"),
 			collection: tags
-		});
-		gameTagListView.render();
+		}).render();
 
 		if (this.on_render != null) this.on_render(this);
 
@@ -290,7 +298,19 @@ var GameCardView = Backbone.View.extend({
 
     redisplay_continues: function () {
         this.backend.fetch_fetch_json(this.continues);
-    }
+    },
+
+	continues: null,
+	enormity: null,
+	width: 0,
+	on_render: null,
+	on_tag: null,
+	player: null,
+
+	/**
+	 * @type Game_Tag_ListView
+	 */
+	viewGame_Tag_List: null
 });
 
 var FillerCellView = Backbone.View.extend({
@@ -446,35 +466,31 @@ var DeckView = Backbone.View.extend(
 
 		var that = this;
 
-		this.cardTemplatePromise.done(function(template_el) {
-			that.renderGameCard(template_el, oneResult, enormity, rowForCell);
-		});
+		that.renderGameCard(oneResult, enormity, rowForCell);
 	},
 
-	renderGameCard: function(template_el, oneResult, enormity, rowForCell)
+	renderGameCard: function(oneResult, enormity, rowForCell)
 	{
 		var that = this;
-		var on_tag_deck = function(game)
-		{
-			that.on_tag_deck(game);
-		};
 
 		/**
 		 * @type GameCardView
 		 */
-		var card_view = new GameCardView(
+		var card_view = new GameCardView({
+			cardTemplatePromise: that.cardTemplatePromise,
+			model: oneResult,
+			enormity: enormity,
+			backend: this.backend,
+			kidsMode: this.kidsMode,
+			continues: this.continues,
+			on_render: this.on_GameCard_render,
+			on_tag: function(game)
 			{
-				el: template_el.clone(),
-				model: oneResult,
-				enormity: enormity,
-				kidsMode: this.kidsMode,
-				continues: this.continues,
-				on_render: this.on_GameCard_render,
-				on_tag: on_tag_deck,
-				backend: this.backend
-			});
-		var card_el = card_view.render().el;
-		rowForCell.append(card_el);
+				that.on_tag_deck(game);
+			}
+		});
+		rowForCell.append(card_view.el);
+		card_view.render();
 	},
 
 	renderMoreButton: function ()
