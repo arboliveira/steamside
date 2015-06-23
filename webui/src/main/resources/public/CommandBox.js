@@ -21,18 +21,23 @@ var CommandBoxView = Backbone.View.extend({
 		this.on_change_input = options.on_change_input;
 	},
 
+	render_commandBox_promise: function()
+	{
+		return this.render().whenRendered;
+	},
+
 	render: function() {
 		var that = this;
 		this.whenRendered =
 			CommandBoxView.sprite.sprite_promise().then(function(el) {
-				that.render_el(el.clone());
+				that.$el.append(el.clone());
+				that.render_el();
 				return that;
 			});
 		return this;
 	},
 
-	render_el: function(el) {
-		this.$el.append(el);
+	render_el: function() {
 		this.input_query_el().attr('placeholder', this.placeholder_text);
 		this.$('#command-confirm').hide();
 		this.change_input();
@@ -177,3 +182,41 @@ var CommandBoxView = Backbone.View.extend({
 		url: 'CommandBox.html', selector: "#tile-command-box"}).build()
 
 });
+
+// ============================================================================
+
+var CommandHintWithVerbAndSubjectView = Backbone.View.extend({
+	initialize: function(options)
+	{
+		this._verb = options.verb;
+	},
+
+	render: function() {
+		var that = this;
+
+		if (this._visible)
+			this.$el.show();
+		else
+			this.$el.hide();
+
+		this.$('#search-command-hint-verb').text(this._verb);
+
+		this.$('#search-command-hint-subject').text(
+			this._subject == null ? "" : this._subject);
+
+		return this;
+	},
+
+	subject_set: function(v) {
+		this._subject = v;
+	},
+
+	show: function(){this._visible = true;},
+	hide: function(){this._visible = false;},
+
+	_verb: null,
+	_subject: null,
+	_visible: true
+
+});
+

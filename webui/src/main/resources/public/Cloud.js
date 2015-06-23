@@ -86,20 +86,21 @@ var CloudView = Backbone.View.extend(
 	{
 		var that = this;
 
-		var whenCommandBox = new CommandBoxView(
-			{
-				placeholder_text: 'http://dontpad.com/(address to sync your Steamside data)',
-				on_change_input: function(input) { that.on_cloud_change_input(input); },
-				on_command: function(view) { that.on_cloud_command(view) },
-				on_command_alternate: function(view) { that.on_cloud_command_alternate(view) },
-				on_command_confirm: function(view) { that.on_cloud_command_confirm(view) }
-			}
-		).render().whenRendered.then(function(view)
-			{
-				that.rendered_cloud_CommandBox(view);
-				that.$("#CloudAddressCommandBoxView").append(view.el);
-				return view;
-			});
+		this.cloud_CommandBox = new CommandBoxView({
+			placeholder_text: 'http://dontpad.com/(address to sync your Steamside data)',
+			on_change_input: function(input) { that.on_cloud_change_input(input); },
+			on_command: function(view) { that.on_cloud_command(view) },
+			on_command_alternate: function(view) { that.on_cloud_command_alternate(view) },
+			on_command_confirm: function(view) { that.on_cloud_command_confirm(view) }
+		});
+
+		that.$("#CloudAddressCommandBoxView").append(this.cloud_CommandBox.el);
+
+		this.cloud_CommandBox
+			.render_commandBox_promise().done(function(view)
+				{
+					that.rendered_cloud_CommandBox(view);
+				});
 
 		that.whenModel.done(function(model) {
 			that.editBegin();
@@ -144,7 +145,6 @@ var CloudView = Backbone.View.extend(
 	 * @param {CommandBoxView} commandBoxView
 	 */
 	rendered_cloud_CommandBox: function(commandBoxView) {
-		this.cloud_CommandBox = commandBoxView;
 		commandBoxView.label_text('Cloud address');
 		commandBoxView.input_query_el().attr("data-bind", "value: dontpadUrl");
 		// TODO Enter Visit url

@@ -59,7 +59,7 @@ var SearchView = Backbone.View.extend(
 		this.searchResults = searchResults;
 
 		new DeckView({
-			el: $('#search-results-deck'),
+			el: that.$('#search-results-deck'),
 			cardTemplatePromise: that.cardTemplatePromise,
 			spriteMoreButton: that.spriteMoreButton,
 			collection: searchResults,
@@ -70,13 +70,23 @@ var SearchView = Backbone.View.extend(
 
 		var elSearchCommandHint = this.$('#search-command-hint');
 		elSearchCommandHint.remove();
-		this.elSearchHintContinueA = elSearchCommandHint.clone();
-		this.elSearchHintContinueB = elSearchCommandHint.clone();
-		this.elSearchHintSearchA = elSearchCommandHint.clone();
-		this.elSearchHintSearchB = elSearchCommandHint.clone();
-		var selectorVerb = '#search-command-hint-verb';
-		this.elSearchHintSearchA.find(selectorVerb).text("search");
-		this.elSearchHintSearchB.find(selectorVerb).text("play first result for");
+
+		this.viewHintContinueA = new CommandHintWithVerbAndSubjectView({
+			el: elSearchCommandHint.clone(),
+			verb: "continue"
+		}).render();
+		this.viewHintContinueB = new CommandHintWithVerbAndSubjectView({
+			el: elSearchCommandHint.clone(),
+			verb: "continue"
+		}).render();
+		this.viewHintSearchA = new CommandHintWithVerbAndSubjectView({
+			el: elSearchCommandHint.clone(),
+			verb: "search"
+		}).render();
+		this.viewHintSearchB = new CommandHintWithVerbAndSubjectView({
+			el: elSearchCommandHint.clone(),
+			verb: "play first result for"
+		}).render();
 
 		this.viewCommandBox = new CommandBoxView(
 			{
@@ -85,29 +95,28 @@ var SearchView = Backbone.View.extend(
 				on_command: function(input) { that.on_search_command(input) },
 				on_command_alternate: function(input) { that.on_search_command_alternate(input) }
 			}
-		).render();
+		);
 
-		this.whenRendered = this.viewCommandBox.whenRendered.then(function(view)
-			{
-				that.rendered_search_CommandBox(view);
-				return that;
-			});
+		var searchEl = that.$('#search-command-box');
+		searchEl.empty();
+		searchEl.append(this.viewCommandBox.el);
+
+		this.whenRendered = this.viewCommandBox
+			.render_commandBox_promise().then(function(view)
+				{
+					that.rendered_search_CommandBox(view);
+					return that;
+				});
 
 		return this;
 	},
 
 	rendered_search_CommandBox: function(viewCommandBox){
-		var viewCommandBox_el = viewCommandBox.el;
 		viewCommandBox.emptyCommandHints();
-		viewCommandBox.appendCommandHint(this.elSearchHintContinueA);
-		viewCommandBox.appendCommandHint(this.elSearchHintSearchA);
-		viewCommandBox.appendCommandHintAlternate(this.elSearchHintContinueB);
-		viewCommandBox.appendCommandHintAlternate(this.elSearchHintSearchB);
-
-		var searchEl = $('#search-command-box');
-		searchEl.empty();
-		searchEl.append(viewCommandBox_el);
-
+		viewCommandBox.appendCommandHint(this.viewHintContinueA.el);
+		viewCommandBox.appendCommandHint(this.viewHintSearchA.el);
+		viewCommandBox.appendCommandHintAlternate(this.viewHintContinueB.el);
+		viewCommandBox.appendCommandHintAlternate(this.viewHintSearchB.el);
 		return this;
 	},
 
@@ -117,20 +126,26 @@ var SearchView = Backbone.View.extend(
 
 	on_search_input_changed: function(view) {
 		var input = view.input_query_val();
+
 		if (input == '') {
-			this.elSearchHintContinueA.show();
-			this.elSearchHintContinueB.show();
-			this.elSearchHintSearchA.hide();
-			this.elSearchHintSearchB.hide();
-		} else {
-			this.elSearchHintContinueA.hide();
-			this.elSearchHintContinueB.hide();
-			this.elSearchHintSearchA.show();
-			this.elSearchHintSearchB.show();
-			var selector = '#search-command-hint-subject';
-			this.elSearchHintSearchA.find(selector).text(input);
-			this.elSearchHintSearchB.find(selector).text(input);
+			this.viewHintContinueA.show();
+			this.viewHintContinueB.show();
+			this.viewHintSearchA.hide();
+			this.viewHintSearchB.hide();
 		}
+		else {
+			this.viewHintContinueA.hide();
+			this.viewHintContinueB.hide();
+			this.viewHintSearchA.show();
+			this.viewHintSearchB.show();
+			this.viewHintSearchA.subject_set(input);
+			this.viewHintSearchB.subject_set(input);
+		}
+
+		this.viewHintContinueA.render();
+		this.viewHintContinueB.render();
+		this.viewHintSearchA.render();
+		this.viewHintSearchB.render();
 	},
 
 	on_search_command: function(view) {
@@ -164,9 +179,11 @@ var SearchView = Backbone.View.extend(
 	continues_reset: function() {
 		var gameA = this.continues.at(0);
 		var gameB = this.continues.at(1);
-		var selector = '#search-command-hint-subject';
-		this.elSearchHintContinueA.find(selector).text(gameA.name());
-		this.elSearchHintContinueB.find(selector).text(gameB.name());
+
+		this.viewHintContinueA.subject_set(gameA.name());
+		this.viewHintContinueA.render();
+		this.viewHintContinueB.subject_set(gameB.name());
+		this.viewHintContinueB.render();
 	},
 
 	whenRendered: null,

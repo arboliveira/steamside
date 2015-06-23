@@ -1,39 +1,39 @@
 "use strict";
 
+var MockCloudModel = CloudModel.extend(
+{
+	fetch: function()
+	{
+		return $.Deferred().resolve();
+	},
+
+	save: function()
+	{
+		return $.Deferred().resolve();
+	}
+});
+
+
 var Test_Cloud = Backbone.Model.extend(
 {
-	cloudView: null,
+	viewBeingTested: null,
 
 	randomSuggestion: "RANDOM_SUGGESTION",
 
-	renderTestableView_promise: function()
+	initialize: function()
 	{
 		var that = this;
 
-		var MockCloudModel = Backbone.View.extend(
+		var model = new MockCloudModel();
+		model.cloudEnabled_set(true);
+		model.dontpadUrl_set(that.randomSuggestion);
+
+		this.viewBeingTested = new CloudView(
 			{
-				cloudEnabled: function()
-				{
-					return true;
-				},
-
-				dontpadUrl: function()
-				{
-					return that.randomSuggestion;
-				},
-
-				fetch: function()
-				{
-					return $.Deferred().resolve();
-				}
-			});
-
-		return new CloudView(
-			{
-				cloudModel: new MockCloudModel(),
+				cloudModel: model,
 				backend: new Backend()
 			}
-		).render().whenRendered;
+		).render();
 	},
 
 	addTests: function (theTestRunner)
@@ -47,11 +47,14 @@ var Test_Cloud = Backbone.Model.extend(
 
 			before(function(done)
 			{
-				that.renderTestableView_promise().done(function(view)
-				{
-					theTestRunner.replaceTestableUI(view.$el);
-					that.cloudView = view;
-					done();
+				theTestRunner.replaceTestableUI(that.viewBeingTested.$el);
+
+				Insisting.assertRetry({
+					done: done,
+					condition: function()
+					{
+						expect($("#CloudView")).to.have.length(1);
+					}
 				});
 			});
 
@@ -78,7 +81,7 @@ var Test_Cloud = Backbone.Model.extend(
 		var that = this;
 		var expect = global.expect;
 
-		var $input = that.cloudView.$('#input-text-command-box');
+		var $input = that.viewBeingTested.$('#input-text-command-box');
 		var val = $input.val();
 
 		expect(val).to.equal(that.randomSuggestion);
@@ -89,8 +92,9 @@ var Test_Cloud = Backbone.Model.extend(
 	testSave: function (done) {
 		var that = this;
 
-		// TODO
-		// that.cloudView.$("#SaveButton").click();
+		that.viewBeingTested.$("#SaveButton").click();
+
+		expect($(".tooltipster-content")).to.have.length(1);
 
 		done();
 	}
