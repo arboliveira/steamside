@@ -8,6 +8,11 @@ var CollectionNewView = Backbone.View.extend({
 		this.backend = options.backend;
 	},
 
+	render_promise: function()
+	{
+		return this.render().whenRendered;
+	},
+
 	render: function () {
 		var that = this;
 		this.whenRendered =
@@ -21,16 +26,32 @@ var CollectionNewView = Backbone.View.extend({
 	render_el: function(el) {
 		this.$el.append(el);
 
-		new CollectionNewEmptyView({
+		/**
+		 * @type CollectionNewEmptyView
+		 */
+		var collectionNewEmptyView = new CollectionNewEmptyView({
 			el: this.$('#collection-new-empty-segment'),
 			backend: this.backend
-		}).render();
+		});
+		collectionNewEmptyView.render();
 
-		new CollectionCopyAllCategoriesView({
+		/**
+		 * @type CollectionCopyAllCategoriesView
+		 */
+		var collectionCopyAllCategoriesView = new CollectionCopyAllCategoriesView({
 			el: this.$('#collection-copy-all-categories-segment'),
 			backend: this.backend
-		}).render();
+		});
+		collectionCopyAllCategoriesView.render();
 	}
+}, {
+
+	/**
+	 * @public
+	 * @type Sprite
+	 */
+	sprite: new SpriteBuilder({url: 'CollectionNew.html', selector: "#collection-new"}).build(),
+
 });
 
 var CollectionNewEmptyView = Backbone.View.extend({
@@ -165,25 +186,24 @@ var CollectionCopyAllCategoriesView = Backbone.View.extend({
 					{trigger: true});
 			});
 	}
-}, {
-
-	/**
-	 * @public
-	 * @type Sprite
-	 */
-	sprite: new SpriteBuilder({url: 'CollectionNew.html', selector: "#collection-new"}).build(),
-
 });
 
 
 
 var CollectionsNewWorld = WorldActions.extend(
+{
+	initialize: function()
 	{
-		newView: function()
-		{
-			return new CollectionNewView({
-				backend: this.attributes.backend
-			});
-		}
-	}
-);
+		this._view_promise = new CollectionNewView({
+			backend: this.attributes.backend
+		}).render_promise();
+	},
+
+	view_render_promise: function()
+	{
+		return this._view_promise;
+	},
+
+	_view_promise: null
+
+});

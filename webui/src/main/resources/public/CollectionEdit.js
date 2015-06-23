@@ -50,24 +50,23 @@ var CollectionsEditWorld = WorldActions.extend(
 			this.backend = options.backend;
 		},
 
-		respawnWithCollection: function(collection_name) {
-			this.collection_name = collection_name;
-		},
-
-		/**
-		 * @override
-		 */
-		newView: function()
-		{
-			return new CollectionEditView(
+		resetWithCollection: function(collection_name) {
+			this._view_promise = new CollectionEditView(
 				{
+					collection_name: collection_name,
 					cardTemplatePromise: this.cardTemplatePromise,
 					spriteMoreButton: this.spriteMoreButton,
-					collection_name: this.collection_name,
 					backend: this.backend
 				}
-			);
-		}
+			).render_promise();
+		},
+
+		view_render_promise: function()
+		{
+			return this._view_promise;
+		},
+
+		_view_promise: null
 	}
 );
 
@@ -112,6 +111,11 @@ var CollectionEditView = Backbone.View.extend({
 		this.spriteMoreButton = options.spriteMoreButton;
 		this.collection_name = options.collection_name;
 		this.backend = options.backend;
+	},
+
+	render_promise: function()
+	{
+		return this.render().whenRendered;
 	},
 
 	render: function () {
@@ -645,13 +649,17 @@ var CombineView = Backbone.View.extend({
 			collection_combine: collection_combine
 		});
 
-		new CombineCommandBoxView(
+		/**
+		 * @type CombineCommandBoxView
+		 */
+		var combineCommandBoxView = new CombineCommandBoxView(
 			{
 				backend: that.backend,
 				combine: that.combine,
 				combineCommandHintTemplate: that.combineCommandHintTemplate
 			}
-		).render().whenRendered.done(function(view)
+		);
+		combineCommandBoxView.render().whenRendered.done(function(view)
         {
             that.render_combine_CommandBox(view);
         });

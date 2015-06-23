@@ -68,21 +68,12 @@ var World = Backbone.Model.extend(
 
 		submitForView: function(whenViewReady)
 		{
-			if (this.view == null)
-			{
-				this.view = this.newView().render();
-			}
-			this.view.whenRendered.done(whenViewReady);
+			this.worldActions.view_render_promise().done(whenViewReady);
 		},
 
 		respawn: function()
 		{
 			this.view = null;
-		},
-
-		newView: function(el)
-		{
-			return this.worldActions.newView(el);
 		},
 
 		isFront: function() {
@@ -92,8 +83,6 @@ var World = Backbone.Model.extend(
 
 var WorldActions = Backbone.Model.extend(
 	{
-		newView: function(){},
-
 		isFront: function()
 		{
 			return false;

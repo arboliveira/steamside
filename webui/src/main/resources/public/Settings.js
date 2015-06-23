@@ -13,6 +13,11 @@ var SettingsView = Backbone.View.extend({
 			});
 	},
 
+	render_promise: function()
+	{
+		return this.render().whenRendered;
+	},
+
 	render: function () {
 		var that = this;
 		this.whenRendered = this.whenReadyToRender.then(function(view) {
@@ -62,15 +67,22 @@ var SettingsView = Backbone.View.extend({
 
 
 var SettingsWorld = WorldActions.extend(
+{
+	initialize: function()
 	{
-		newView: function()
-		{
-			return new SettingsView(
+		this._view_promise =
+			new SettingsView(
 				{
 					backend: this.attributes.backend
 				}
-			);
-		}
-	}
-);
+			).render_promise();
+	},
+
+	view_render_promise: function()
+	{
+		return this._view_promise;
+	},
+
+	_view_promise: null
+});
 

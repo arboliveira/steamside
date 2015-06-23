@@ -31,13 +31,17 @@ var CollectionPickView = Backbone.View.extend(
 		this.backend.fetch_promise(collections).done(function()
 		{
 			var el_list = el.find("#SteamsideCollectionInfoListView");
-			new SteamsideCollectionInfoListView(
+			/**
+			 * @type SteamsideCollectionInfoListView
+			 */
+			var steamsideCollectionInfoListView = new SteamsideCollectionInfoListView(
 				{
 					el: el_list,
 					collection: collections,
 					on_collection_pick: that.on_collection_pick
 				}
-			).render();
+			);
+			steamsideCollectionInfoListView.render();
 
 			if (collections.length > 0)
 			{
@@ -143,6 +147,9 @@ var SteamsideCollectionInfoListView = Backbone.View.extend(
         var that = this;
         this.collection.each( function(one)
 		{
+			/**
+			 * @type SteamsideCollectionInfoView
+			 */
             var view = new SteamsideCollectionInfoView({
                 model: one,
                 el: one_el.clone(),

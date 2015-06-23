@@ -7,6 +7,7 @@
 	font-size:24px;
 	width: 99%;
 	padding-left: 0.25em;
+	margin-top: 1px;
 }
 
 .command-text-input:focus {

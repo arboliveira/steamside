@@ -90,6 +90,7 @@ var SearchView = Backbone.View.extend(
 		this.whenRendered = this.viewCommandBox.whenRendered.then(function(view)
 			{
 				that.rendered_search_CommandBox(view);
+				return that;
 			});
 
 		return this;

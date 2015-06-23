@@ -71,13 +71,17 @@ var TagView = Backbone.View.extend({
 
 	renderTagSuggestionsView: function (suggestions) {
 		var that = this;
-		new TagSuggestionsView({
+		/**
+		 * @type TagSuggestionsView
+		 */
+		var tagSuggestionsView = new TagSuggestionsView({
 			el: that.$("#TagSuggestionsView"),
 			collection: suggestions,
 			on_tag_suggestion_select: function (model) {
 				that.on_tag_suggestion_select(model)
 			}
-		}).render();
+		});
+		tagSuggestionsView.render();
 	},
 
 	renderCommandHints: function () {
@@ -226,11 +230,15 @@ var TagSuggestionsView = Backbone.View.extend({
 
 	renderTagSuggestionView: function (oneTagSuggestion, el) {
 		var that = this;
-		return new TagSuggestionView({
+		/**
+		 * @type TagSuggestionView
+		 */
+		var tagSuggestionView = new TagSuggestionView({
 			model: oneTagSuggestion,
 			el: el,
 			on_tag_suggestion_select: that.on_tag_suggestion_select
-		}).render();
+		});
+		return tagSuggestionView.render();
 	}
 });
 

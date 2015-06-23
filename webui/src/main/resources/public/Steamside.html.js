@@ -38,7 +38,11 @@ var SteamsideView = Backbone.View.extend({
 
 		this.applyKidsMode();
 
-		new SessionView({model: sessionModel}).render();
+		/**
+		 * @type SessionView
+		 */
+		var sessionView = new SessionView({model: sessionModel});
+		sessionView.render();
 
 		return this;
 	},
@@ -103,11 +107,15 @@ var Steamside_html =
 			// Start Backbone history a necessary step for bookmarkable URL's
 			Backbone.history.start();
 
-			new SteamsideView({
+			/**
+			 * @type SteamsideView
+			 */
+			var steamsideView = new SteamsideView({
 				sessionModel: sessionModel,
 				cardTemplatePromise: cardTemplatePromise,
 				spritesKids: spritesKids
-			}).render();
+			});
+			steamsideView.render();
 		}
 		);
     }

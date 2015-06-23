@@ -85,7 +85,12 @@ var FavoritesCollection = Backbone.Collection.extend({
 });
 
 var DeckRow = Backbone.View.extend({
-	className: 'game-row'
+	className: 'game-row',
+
+	render: function()
+	{
+		return this;
+	}
 });
 
 var Game_Tag_View = Backbone.View.extend({
@@ -130,6 +135,9 @@ var Game_Tag_ListView = Backbone.View.extend({
 		container.empty();
 
 		this.collection.each( function(one) {
+			/**
+			 * @type Game_Tag_View
+			 */
 			var view = new Game_Tag_View({
 				model: one,
 				el: one_el.clone()
@@ -197,10 +205,14 @@ var GameCardView = Backbone.View.extend({
 		}
 
 		var tags = this.model.tagsCollection();
-		new Game_Tag_ListView({
+		/**
+		 * @type Game_Tag_ListView
+		 */
+		var gameTagListView = new Game_Tag_ListView({
 			el: this.$("#game-tag-list"),
 			collection: tags
-		}).render();
+		});
+		gameTagListView.render();
 
 		if (this.on_render != null) this.on_render(this);
 
@@ -409,6 +421,9 @@ var DeckView = Backbone.View.extend(
 
 		if (this.xCell === 1 && this.yRow > 1)
 		{
+			/**
+			 * @type FillerCellView
+			 */
 			var filler_view =
 				new FillerCellView(
 					{
@@ -443,6 +458,10 @@ var DeckView = Backbone.View.extend(
 		{
 			that.on_tag_deck(game);
 		};
+
+		/**
+		 * @type GameCardView
+		 */
 		var card_view = new GameCardView(
 			{
 				el: template_el.clone(),
@@ -479,7 +498,11 @@ var DeckView = Backbone.View.extend(
 
 	startNewRow: function()
 	{
-		var row_view = new DeckRow().render();
+		/**
+		 * @type DeckRow
+		 */
+		var deckRow = new DeckRow();
+		var row_view = deckRow.render();
 		var row_el = row_view.el;
 		var row = row_view.$el;
 

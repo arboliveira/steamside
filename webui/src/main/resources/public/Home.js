@@ -1,48 +1,48 @@
 "use strict";
 
 var HomeWorld = WorldActions.extend(
+{
+	sessionModel: null,
+	cardTemplatePromise: null,
+
+	/**
+	 * @type Sprite
+	 */
+	spriteMoreButton: null,
+
+	initialize: function(options)
 	{
-		sessionModel: null,
-		cardTemplatePromise: null,
+		this.sessionModel = options.sessionModel;
 
-		/**
-		 * @type Sprite
-		 */
-		spriteMoreButton: null,
-
-		initialize: function(options)
+		if (options.cardTemplatePromise == null)
 		{
-			this.sessionModel = options.sessionModel;
-
-			if (options.cardTemplatePromise == null)
-			{
-				throw new Error("cardTemplatePromise is required");
-			}
-			this.cardTemplatePromise = options.cardTemplatePromise;
-			this.spriteMoreButton = options.spriteMoreButton;
-
-			this.backend = options.backend;
-		},
-
-		/**
-		 * @override
-		 */
-		newView: function()
-		{
-			return new HomeView({
-				sessionModel: this.sessionModel,
-				cardTemplatePromise: this.cardTemplatePromise,
-				spriteMoreButton: this.spriteMoreButton,
-				backend: this.backend
-			});
-		},
-
-		isFront: function()
-		{
-			return true;
+			throw new Error("cardTemplatePromise is required");
 		}
-	}
-);
+		this.cardTemplatePromise = options.cardTemplatePromise;
+		this.spriteMoreButton = options.spriteMoreButton;
+
+		this.backend = options.backend;
+
+		this._view_promise = new HomeView({
+			sessionModel: this.sessionModel,
+			cardTemplatePromise: this.cardTemplatePromise,
+			spriteMoreButton: this.spriteMoreButton,
+			backend: this.backend
+		}).render_promise();
+	},
+
+	view_render_promise: function()
+	{
+		return this._view_promise;
+	},
+
+	isFront: function()
+	{
+		return true;
+	},
+
+	_view_promise: null
+});
 
 var HomeView = Backbone.View.extend(
 {
@@ -75,6 +75,11 @@ var HomeView = Backbone.View.extend(
 		this.spriteMoreButton = options.spriteMoreButton;
 
 		this.backend = options.backend;
+	},
+
+	render_promise: function ()
+	{
+		return this.render().whenRendered;
 	},
 
 	render: function ()
@@ -115,7 +120,10 @@ var HomeView = Backbone.View.extend(
 	renderFavoritesView: function (kidsMode, continues) {
 		var that = this;
 
-		return new FavoritesView(
+		/**
+		 * @type FavoritesView
+		 */
+		var favoritesView = new FavoritesView(
 			{
 				cardTemplatePromise: that.cardTemplatePromise,
 				spriteMoreButton: that.spriteMoreButton,
@@ -124,7 +132,8 @@ var HomeView = Backbone.View.extend(
 				kidsMode: kidsMode,
 				continues: continues
 			}
-		).render();
+		);
+		return favoritesView.render();
 	},
 
 	createContinuesDeck: function (continues) {
@@ -155,6 +164,12 @@ var HomeView = Backbone.View.extend(
 				backend: that.backend
 			}
 		).render();
+	},
+
+	searchView_whenRendered: function(what)
+	{
+		if (this.searchView == null) return;
+		this.searchView.whenRendered.done(what);
 	},
 
 	renderRecentTagged: function (segmentBeforeRecentTagged, continues) {

@@ -2,16 +2,22 @@
 
 var MyGamesWorld = WorldActions.extend(
 {
-	newView: function()
+	initialize: function()
 	{
-		var that = this;
+		this._view_promise =
+			new MyGamesView(
+				{
+					backend: this.attributes.backend
+				}
+			).render_promise();
+	},
 
-		return new MyGamesView(
-			{
-				backend: that.attributes.backend
-			}
-		);
-	}
+	view_render_promise: function()
+	{
+		return this._view_promise;
+	},
+
+	_view_promise: null
 });
 
 var MyGamesView = Backbone.View.extend(
@@ -19,6 +25,11 @@ var MyGamesView = Backbone.View.extend(
 	initialize: function(options)
 	{
 		this.backend = options.backend;
+	},
+
+	render_promise: function()
+	{
+		return this.render().whenRendered;
 	},
 
 	render: function () {
@@ -44,7 +55,7 @@ var MyGamesView = Backbone.View.extend(
 				view.$('#PurposeView').hide();
 				that.$("#CollectionPickView").append(view.el);
 			});
-	},
+	}
 
 }, {
 
@@ -52,7 +63,8 @@ var MyGamesView = Backbone.View.extend(
 	 * @public
 	 * @type Sprite
 	 */
-	sprite: new SpriteBuilder({url: 'MyGames.html', selector: "#MyGamesView"}).build(),
+	sprite: new SpriteBuilder(
+		{url: 'MyGames.html', selector: "#MyGamesView"}).build()
 
 }
 );

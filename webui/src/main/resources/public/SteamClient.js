@@ -28,6 +28,11 @@ var SteamClientView = Backbone.View.extend({
 		this.backend = options.backend;
 	},
 
+	render_promise: function()
+	{
+		return this.render().whenRendered;
+	},
+
 	render: function () {
 		var that = this;
 		this.whenRendered =
@@ -111,15 +116,22 @@ var SteamClientView = Backbone.View.extend({
 
 
 var SteamClientWorld = WorldActions.extend(
+{
+	initialize: function()
 	{
-		newView: function()
-		{
-			return new SteamClientView(
+		this._view_promise =
+			new SteamClientView(
 				{
 					backend: this.attributes.backend
 				}
-			);
-		}
-	}
-);
+			).render_promise();
+	},
+
+	view_render_promise: function()
+	{
+		return this._view_promise;
+	},
+
+	_view_promise: null
+});
 

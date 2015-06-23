@@ -12,6 +12,11 @@ var ExitView = Backbone.View.extend(
 		this.sessionModel = options.sessionModel;
 	},
 
+	render_promise: function() {
+		this.render();
+		return this.whenRendered;
+	},
+
 	render: function () {
 		var that = this;
 		this.whenRendered =
@@ -26,6 +31,10 @@ var ExitView = Backbone.View.extend(
 		this.$el.append(el);
 		var input = this.$("#CommandLine");
 		input.val(this.sessionModel.executable());
+	},
+
+	exit: function()
+	{
 		this.backend.ajax_ajax_promise('api/exit');
 	},
 
@@ -51,16 +60,28 @@ var ExitView = Backbone.View.extend(
 );
 
 var ExitWorld = WorldActions.extend(
+{
+	initialize: function() {
+		this._view_promise = new ExitView({
+			sessionModel: this.attributes.sessionModel,
+			backend: this.attributes.backend
+		}).render_promise();
+	},
+
+	view_render_promise: function()
 	{
-		/**
-		 * @override
-		 */
-		newView: function()
-		{
-			return new ExitView({
-				sessionModel: this.attributes.sessionModel,
-				backend: this.attributes.backend
-			});
-		}
-	}
-);
+		return this._view_promise;
+	},
+
+	exit: function()
+	{
+		this._view_promise.done(function(exitView){
+			exitView.exit();
+		});
+	},
+
+	/**
+	 * @private
+	 */
+	_view_promise: null
+});
