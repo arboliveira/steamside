@@ -7,8 +7,8 @@ var Test_Steamside =
 		var tests =
 			[
 				new Test_Tag(),
-				new Test_Kids(),
 				new Test_Cloud(),
+				new Test_KidsHome(),
 				new Test_Home(),
 				null
 			];

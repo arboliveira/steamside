@@ -13,7 +13,7 @@ var KidsSpriteSheet = Backbone.Model.extend(
 		greeting: null,
 
 		initialize: function () {
-			var sheet = new SpriteSheet({url: 'Kids.html'});
+			var sheet = new SpriteSheet({url: 'KidsHome.html'});
 			this.card = sheet.sprite("#KidsGameCard");
 			this.greeting = sheet.sprite("#KidsGreetingView");
 		}

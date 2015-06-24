@@ -1,14 +1,10 @@
 "use strict";
 
-var Test_Kids = Backbone.Model.extend({
+var Test_KidsHome = Backbone.Model.extend({
 
-	renderTestableUIPromise: function()
+	initialize: function()
 	{
-		var pageToTest = 'Kids.html';
-		return $.ajax({
-				url: pageToTest, dataType: 'html' }
-		).then(function(page) {
-				return $(page);	});
+
 	},
 
 	addTests: function (theTestRunner)
@@ -22,25 +18,19 @@ var Test_Kids = Backbone.Model.extend({
 
 			before(function(done)
 			{
-				that.renderTestableUIPromise().done(function(el)
-				{
-					theTestRunner.replaceTestableUI(el);
-					done();
-				});
+				done();
 			});
 
 			describe("Game Card", function () {
 				it('Loading overlay', function(done){
-					that.testLoading(done);
+					that.testLoading(done, theTestRunner);
 				})
 			});
 		});
 	},
 
-	testLoading: function (done)
+	testLoading: function (done, theTestRunner)
 	{
-		var that = this;
-
 		var kidsSpriteSheet = new KidsSpriteSheet();
 
 		var cardTemplatePromise = kidsSpriteSheet.card.sprite_promise();
@@ -50,8 +40,6 @@ var Test_Kids = Backbone.Model.extend({
 		var oneResult = new Game();
 		oneResult.set("name", "Game of Kids");
 		oneResult.set("link", "would be URL");
-
-		var cardHolder = $("#test-space");
 
 		var backend_invoked = $.Deferred();
 
@@ -86,31 +74,48 @@ var Test_Kids = Backbone.Model.extend({
 			on_tag: null,
 			backend: backend
 		});
+		card_view.render();
 
-		var card_el = card_view.render().el;
-		var $card_el = $(card_el);
-		$card_el.show();
+		theTestRunner.replaceTestableUI(card_view.$el);
 
-		cardHolder.append(card_el);
+		Insisting.assertRetry({
+			done: done,
+			condition: function()
+			{
+				card_view.$el.show();
+				expect($("#KidsGameCard")).to.have.length(1);
+			},
+			success: function()
+			{
+				var game_link = card_view.$('.game-link');
 
-		var game_link = $card_el.find('.game-link');
+				// No asserts, just don't crash on mouseenter and mouseleave
+				game_link.trigger('mouseenter');
+				game_link.trigger('mouseleave');
 
-		// No asserts, just don't crash on mouseenter and mouseleave
-		game_link.trigger('mouseenter');
-		game_link.trigger('mouseleave');
+				game_link.trigger('click');
 
-		game_link.trigger('click');
+				Insisting.assertRetry({
+					done: done,
+					condition: function () {
+						var loadingOverlay = card_view.$('.game-tile-inner-loading-overlay');
+						expect(loadingOverlay.is(':visible')).to.equal(true);
+					},
+					success: function() {
+						backend_invoked.done(function()
+						{
+							var loadingOverlay = card_view.$('.game-tile-inner-loading-overlay');
+							expect(loadingOverlay.is(':visible')).to.equal(false);
+							done();
+						});
 
-		var loadingOverlay = $card_el.find('.game-tile-inner-loading-overlay');
-		expect(loadingOverlay.is(':visible')).to.equal(true);
-
-		backend_invoked.done(function()
-		{
-			expect(loadingOverlay.is(':visible')).to.equal(false);
-			done();
+						backend_invoked.resolve();
+					}
+				});
+			}
 		});
 
-		backend_invoked.resolve();
+
 	}
 
 });
