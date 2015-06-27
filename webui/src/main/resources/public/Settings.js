@@ -30,15 +30,16 @@ var SettingsView = Backbone.View.extend({
 	render_el: function() {
 		var that = this;
 
-		var cloudModel = new CloudModel();
+		var model = new CloudModel();
 
-		new CloudView({
-			cloudModel: cloudModel,
-			backend: that.backend
-		}
-		).render().whenRendered.done(function(view) {
-				that.$("#CloudView-goes-here").append(view.el);
-			});
+		that.$("#CloudView-goes-here")
+			.append(
+				new CloudView({
+					model: model,
+					backend: that._backend
+				})
+					.render().el
+			);
 	},
 
 	/**

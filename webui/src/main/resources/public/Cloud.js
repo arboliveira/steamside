@@ -46,31 +46,26 @@ var CloudView = Backbone.View.extend(
 	initialize: function(options)
 	{
 		var that = this;
-		this.backend = options.backend;
-		this.cloudModel = options.cloudModel;
 
-		var saveAction;
-		if (options.saveAction == undefined)
-		{
-			saveAction = function(model)
-			{
-				return model.save();
-			}
-		}
-		else
-		{
-			saveAction = options.saveAction;
-		}
-		this.saveAction = saveAction;
+		this.backend = options.backend;
+		this.model = options.model;
 
 		this.cloudEdit = new CloudEdit(this);
+
+		this.cloud_CommandBox = new CommandBoxView({
+			placeholder_text: 'http://dontpad.com/(address to sync your Steamside data)',
+			on_change_input: function(input) { that.on_cloud_change_input(input); },
+			on_command: function(view) { that.on_cloud_command(view) },
+			on_command_alternate: function(view) { that.on_cloud_command_alternate(view) },
+			on_command_confirm: function(view) { that.on_cloud_command_confirm(view) }
+		});
 
 		this.whenSprite =
 			CloudView.sprite.sprite_promise().then(function(el) {
 				that.$el.append(el);
 				return that;
 			});
-		this.whenModel = this.backend.fetch_promise(this.cloudModel);
+		this.whenModel = this.backend.fetch_promise(this.model);
 	},
 
 	render: function () {
@@ -86,14 +81,6 @@ var CloudView = Backbone.View.extend(
 	{
 		var that = this;
 
-		this.cloud_CommandBox = new CommandBoxView({
-			placeholder_text: 'http://dontpad.com/(address to sync your Steamside data)',
-			on_change_input: function(input) { that.on_cloud_change_input(input); },
-			on_command: function(view) { that.on_cloud_command(view) },
-			on_command_alternate: function(view) { that.on_cloud_command_alternate(view) },
-			on_command_confirm: function(view) { that.on_cloud_command_confirm(view) }
-		});
-
 		that.$("#CloudAddressCommandBoxView").append(this.cloud_CommandBox.el);
 
 		this.cloud_CommandBox
@@ -102,43 +89,13 @@ var CloudView = Backbone.View.extend(
 					that.rendered_cloud_CommandBox(view);
 				});
 
-		that.whenModel.done(function(model) {
+		that.whenModel.done(function() {
 			that.editBegin();
 		});
 
 		this.tooltips_prepare();
 
 		return this;
-	},
-
-	editBegin: function()
-	{
-		var that = this;
-
-		ko.applyBindings(that.cloudEdit, that.el);
-
-		that.cloudEdit.cloudEnabled(that.cloudModel.cloudEnabled());
-		that.cloudEdit.dontpadUrl(that.cloudModel.dontpadUrl());
-	},
-
-	editSave: function()
-	{
-		var that = this;
-
-		that.tooltip_saved_hide();
-
-		that.cloudModel.cloudEnabled_set(that.cloudEdit.cloudEnabled());
-		that.cloudModel.dontpadUrl_set(that.cloudEdit.dontpadUrl());
-
-		that.saveAction(that.cloudModel)
-			.done(function()
-				{
-					that.tooltip_saved_show();
-				})
-			.fail(function(error)
-				{
-		            that.cloud_CommandBox.trouble(error);
-				});
 	},
 
 	/**
@@ -149,6 +106,46 @@ var CloudView = Backbone.View.extend(
 		commandBoxView.input_query_el().attr("data-bind", "value: dontpadUrl");
 		// TODO Enter Visit url
 		commandBoxView.hideCommandButtonStrip();
+	},
+
+	editBegin: function()
+	{
+		var that = this;
+
+		ko.applyBindings(that.cloudEdit, that.el);
+
+		that.cloudEdit.cloudEnabled(that.model.cloudEnabled());
+		that.cloudEdit.dontpadUrl(that.model.dontpadUrl());
+	},
+
+	editSave: function()
+	{
+		var that = this;
+
+		that.tooltip_saved_hide();
+
+		that.model.cloudEnabled_set(that.cloudEdit.cloudEnabled());
+		that.model.dontpadUrl_set(that.cloudEdit.dontpadUrl());
+
+		that.model.save()
+			.done(function()
+				{
+					that.save_done();
+				})
+			.fail(function(error)
+				{
+		            that.save_fail(error);
+				});
+	},
+
+	save_done: function()
+	{
+		this.tooltip_saved_show();
+	},
+
+	save_fail: function(error)
+	{
+		this.cloud_CommandBox.trouble(error);
 	},
 
 	tooltip_saved_hide: function () {
@@ -188,7 +185,7 @@ var CloudView = Backbone.View.extend(
 	/**
 	 * @type CloudModel
 	 */
-	cloudModel: null,
+	model: null,
 
 	/**
 	 * @type CloudEdit
@@ -199,8 +196,6 @@ var CloudView = Backbone.View.extend(
 	 * @type Backend
 	 */
 	backend: null,
-
-	saveAction: null,
 
 	/**
 	 * @type Deferred
@@ -215,7 +210,12 @@ var CloudView = Backbone.View.extend(
 	/**
 	 * @type Deferred
 	 */
-	whenSprite: null
+	whenSprite: null,
+
+	/**
+	 * @type CommandBoxView
+	 */
+	cloud_CommandBox: null
 
 }, {
 

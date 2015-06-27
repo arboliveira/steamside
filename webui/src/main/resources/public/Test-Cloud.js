@@ -30,7 +30,7 @@ var Test_Cloud = Backbone.Model.extend(
 
 		this.viewBeingTested = new CloudView(
 			{
-				cloudModel: model,
+				model: model,
 				backend: new Backend()
 			}
 		).render();
