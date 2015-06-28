@@ -186,42 +186,35 @@ var HomeView = Backbone.View.extend(
 	},
 
 	/**
-	 * @param oneTagSuggestion TagSuggestion
+	 * @param oneTagSuggestion Tag
 	 */
 	renderRecentTaggedOne: function(
 		oneTagSuggestion, segmentBeforeRecentTagged
 	)
 	{
 		var that = this;
-		new CollectionEditView({
-			collection_name: oneTagSuggestion.name(),
-			cardTemplatePromise: that.cardTemplatePromise,
-			spriteMoreButton: that.spriteMoreButton,
-			backend: that.backend,
-			simplified: true
-		}).render().whenRendered.done(function(view)
-			{
-				view.$el.hide();
-				segmentBeforeRecentTagged.after(view.$el);
-				view.$el.slideDown();
-			}
+		segmentBeforeRecentTagged.after(
+			new CollectionEditView({
+				collection_name: oneTagSuggestion.name(),
+				cardTemplatePromise: that.cardTemplatePromise,
+				spriteMoreButton: that.spriteMoreButton,
+				backend: that.backend,
+				simplified: true
+			})
+				.render().el
 		);
 	},
 
 	on_game_card_tag: function(game, segmentWithGameCard)
 	{
 		var that = this;
-		var tagView = new TagView({
+		var tagView = new TagAGameView({
 			game: game,
 			cardTemplatePromise: that.cardTemplatePromise,
 			backend: that.backend
-		});
+		}).render();
 		segmentWithGameCard.after(tagView.$el);
-		tagView.render().whenRendered.done(function(view)
-		{
-			view.viewCommandBox.input_query_focus();
-			$('html, body').scrollTop(view.$el.offset().top);
-		});
+		$('html, body').scrollTop(tagView.$el.offset().top);
 	},
 
 	/**

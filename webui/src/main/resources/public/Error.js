@@ -15,6 +15,8 @@ var ErrorHandler =
 
 	explode: function (e)
 	{
+		console.log(e);
+
 		var trace = printStackTrace({e: e});
 		
 		$("#ErrorMessageView").text(e + " #### " +trace);

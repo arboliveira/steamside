@@ -142,11 +142,11 @@ var Test_Home = Backbone.Model.extend({
 
 		this.insist(function ()
 			{
-				var listView = $("#SteamsideCollectionInfoListView");
+				var listView = $("#TagStickersView");
 				expect(listView.length).to.equal(1);
 
-				var info = listView.find("#SteamsideCollectionInfoView");
-				assert.equal(info.length > 0, true, 'category buttons');
+				var info = listView.find("#TagStickerView");
+				assert.equal(info.length > 0, true, 'tag stickers');
 			},
 			function()
 			{

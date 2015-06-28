@@ -293,7 +293,7 @@ var KidEditView = Backbone.View.extend(
 	},
 
 	/**
-	 * @param modelInventory SteamsideCollectionInfo
+	 * @param modelInventory TagSticker
 	 */
 	on_switch_inventory_pick: function(modelInventory)
 	{

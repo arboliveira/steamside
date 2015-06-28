@@ -12,7 +12,7 @@ var Test_Tag = Backbone.Model.extend({
 		var spritesSteamside = new SteamsideSpriteSheet();
 		var cardTemplatePromise =  spritesSteamside.card.sprite_promise();
 
-		this.viewBeingTested = new TagView({
+		this.viewBeingTested = new TagAGameView({
 			game: game,
 			cardTemplatePromise: cardTemplatePromise,
 			backend: new Backend()
@@ -35,7 +35,7 @@ var Test_Tag = Backbone.Model.extend({
 					done: done,
 					condition: function()
 					{
-						var tagView = $("#TagView");
+						var tagView = $("#TagAGameView");
 						expect(tagView).to.have.length(1);
 						expect(tagView.is(':visible')).to.equal(true);
 					}

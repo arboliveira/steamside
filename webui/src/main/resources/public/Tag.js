@@ -1,22 +1,31 @@
 "use strict";
 
-var TagSuggestion = Backbone.Model.extend({
+var Tag = Backbone.Model.extend({
 	name: function() {
 		return this.get('name');
+	},
+	count: function() {
+		return this.get('count');
 	}
 });
 
+var TagsCollection = Backbone.Collection.extend(
+{
+	model: Tag,
+	url: 'api/collection/collections.json'
+});
 
-
-var TagSuggestionsCollection = Backbone.Collection.extend({
-	model: TagSuggestion,
+var TagSuggestionsCollection = Backbone.Collection.extend(
+{
+	model: Tag,
 	url: 'api/collection/tag-suggestions.json'
 });
 
 
-var TagView = Backbone.View.extend({
+var TagAGameView = Backbone.View.extend({
 
 	initialize: function(options) {
+		var that = this;
 		this.game = options.game;
 		if (options.cardTemplatePromise == undefined)
 		{
@@ -24,27 +33,6 @@ var TagView = Backbone.View.extend({
 		}
 		this.cardTemplatePromise = options.cardTemplatePromise;
 		this.backend = options.backend;
-	},
-
-	render: function() {
-		var that = this;
-		this.whenRendered =
-			TagView.sprite.sprite_promise().then(function(el) {
-				that.$el.append(el.clone());
-				that.render_el();
-				return that;
-			});
-		return this;
-	},
-
-	render_el: function() {
-		var that = this;
-
-		this.$el.hide();
-
-		this.renderGameCard();
-		this.renderCommandHints();
-
 		this.viewCommandBox = new CommandBoxView(
 			{
 				placeholder_text: 'Collection for ' + this.game.name(),
@@ -53,18 +41,25 @@ var TagView = Backbone.View.extend({
 				on_change_input: function(input) { that.on_tag_change_input(input); }
 			}
 		);
-		that.$('#div-command-box').empty().append(this.viewCommandBox.el);
-		this.viewCommandBox.render_commandBox_promise().done(function(view)
-		{
-			that.on_CommandBox_whenRendered(view);
-		});
+		this.suggestions = new TagSuggestionsCollection();
+	},
 
-		var suggestions = new TagSuggestionsCollection();
-		this.backend.fetch_promise(suggestions).done(function () {
-			that.renderTagSuggestionsView(suggestions);
-		});
+	render: function() {
+		var that = this;
+		this.whenRendered =
+			TagAGameView.sprite.sprite_promise().then(function(el) {
+				that.$el.append(el.clone());
+				that.render_el();
+				return that;
+			});
+		return this;
+	},
 
-		this.$el.slideDown();
+	render_el: function() {
+		this.renderGameCard();
+		this.renderCommandHints();
+		this.renderCommandBox();
+		this.renderTagSuggestions();
 	},
 
 	renderGameCard: function()
@@ -92,20 +87,6 @@ var TagView = Backbone.View.extend({
 		this.viewGameCard.render();
 	},
 
-	renderTagSuggestionsView: function (suggestions) {
-		var that = this;
-		/**
-		 * @type TagSuggestionsView
-		 */
-		new TagSuggestionsView({
-			el: that.$("#TagSuggestionsView"),
-			collection: suggestions,
-			on_tag_suggestion_select: function (model) {
-				that.on_tag_suggestion_select(model)
-			}
-		}).render();
-	},
-
 	renderCommandHints: function () {
 		var template = this.$('#tag-command-hint');
 		template.remove();
@@ -122,6 +103,14 @@ var TagView = Backbone.View.extend({
 		return el;
 	},
 
+	renderCommandBox: function () {
+		var that = this;
+		that.$('#div-command-box').empty().append(this.viewCommandBox.el);
+		this.viewCommandBox.render_commandBox_promise().done(function (view) {
+			that.on_CommandBox_whenRendered(view);
+		});
+	},
+
 	on_CommandBox_whenRendered: function(viewCommandBox) {
 		viewCommandBox.emptyCommandHints();
 		viewCommandBox.appendCommandHint(this.elCommandHintA);
@@ -131,6 +120,19 @@ var TagView = Backbone.View.extend({
 		this.updateWithInputValue("");
 
 		viewCommandBox.input_query_focus();
+	},
+
+	renderTagSuggestions: function () {
+		var that = this;
+		this.backend.fetch_promise(that.suggestions);
+		that.$("#TagSuggestionsView").empty().append(
+			new TagStickersView({
+				collection: that.suggestions,
+				on_tag_clicked: function (model) {
+					that.on_tag_suggestion_select(model)
+				}
+			}).render().el
+		);
 	},
 
 	on_tag_command: function(view) {
@@ -218,63 +220,122 @@ var TagView = Backbone.View.extend({
 });
 
 
-var TagSuggestionView = Backbone.View.extend({
-	on_tag_suggestion_select: null,
+var TagStickerView = Backbone.View.extend(
+	{
+		events: {
+			"click": "on_click"
+		},
 
-	events: {
-		"click": "tagClicked"
-	},
+		initialize: function(options)
+		{
+			this._on_clicked = options.on_clicked;
+		},
 
-	initialize: function(options) {
-		this.on_tag_suggestion_select = options.on_tag_suggestion_select;
-	},
+		render: function()
+		{
+			var that = this;
+			CollectionPickSpriteSheetSingleton.sprites.sticker
+				.sprite_promise().done(function(el){
+					that.$el.append(el.clone());
+					that.render_el();
+				});
+			return that;
+		},
 
-	render: function() {
-		var choose_el = this.$el.find("#tag-name");
-		var name_text = this.model.name();
-		choose_el.text(name_text);
-		return this;
-	},
+		render_el: function()
+		{
+			var name_el = this.$el.find("#collection-pick-one-name");
+			var name_text = this.model.name();
+			name_el.text(name_text);
 
-	tagClicked: function(e) {
-		e.preventDefault();
+			var fragment = '#/collections/' + name_text + '/edit';
+			this.link_el().attr('href', fragment);
 
-		this.on_tag_suggestion_select(this.model);
+			var $count = this.$("#count");
+			var count = this.model.count();
+			if (count != undefined)
+			{
+				$count.text(count);
+			}
+			else
+			{
+				$count.remove();
+			}
+
+			return this;
+		},
+
+		link_el: function () {
+			return this.$el.find("#collection-pick-one-link");
+		},
+
+		on_click: function(e)
+		{
+			e.preventDefault();
+
+			if (this._on_clicked != null)
+			{
+				this._on_clicked(this.model);
+				return;
+			}
+
+			var fragment = this.link_el().attr('href');
+
+			Backbone.history.navigate(fragment, {trigger: true});
+		},
+
+		_on_clicked: null
+
+	});
+
+var TagStickersView = Backbone.View.extend(
+	{
+		initialize: function(options)
+		{
+			this._on_tag_clicked = options.on_tag_clicked;
+
+			this.listenTo(this.collection, 'reset', this.render);
+		},
+
+		render: function()
+		{
+			var that = this;
+			CollectionPickSpriteSheetSingleton.sprites.stickers
+				.sprite_promise().done(function(el){
+					that.$el.append(el.clone());
+					that.render_el();
+				});
+			return that;
+		},
+
+		render_el: function()
+		{
+			var that = this;
+
+			if (that.collection.length == 0)
+			{
+				that.$("#TagStickerView").remove();
+				that.$("#no-collections-yet").show();
+				return that;
+			}
+
+			that.$el.empty();
+
+			that.collection.each( function(one)
+			{
+				that.$el.append(
+					new TagStickerView({
+						model: one,
+						on_clicked: that._on_tag_clicked
+					})
+						.render().el
+				);
+			});
+
+			return that;
+		},
+
+		_on_tag_clicked: null
 	}
-});
-
-
-var TagSuggestionsView = Backbone.View.extend({
-
-	initialize: function(options) {
-		this.on_tag_suggestion_select = options.on_tag_suggestion_select;
-	},
-
-	render: function() {
-		var container = this.$el;
-
-		var one_el = this.$("#TagSuggestionView");
-		container.empty();
-
-		var that = this;
-		this.collection.each( function(one) {
-			var view = that.renderTagSuggestionView(one, one_el.clone());
-			container.append(view.el);
-		});
-		return this;
-	},
-
-	renderTagSuggestionView: function (oneTagSuggestion, el) {
-		var that = this;
-		/**
-		 * @type TagSuggestionView
-		 */
-		var tagSuggestionView = new TagSuggestionView({
-			model: oneTagSuggestion,
-			el: el,
-			on_tag_suggestion_select: that.on_tag_suggestion_select
-		});
-		return tagSuggestionView.render();
-	}
-});
+);
 
