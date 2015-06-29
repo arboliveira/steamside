@@ -7,7 +7,7 @@ public class CollectionName
 
 	public CollectionName(String value)
 	{
-		this.value = Objects.requireNonNull(value);
+		this.value = Objects.requireNonNull(value, "Tag name can't be empty");
 	}
 
 	public boolean equalsCollectionName(CollectionName name)

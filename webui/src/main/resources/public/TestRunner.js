@@ -26,7 +26,10 @@ var Insisting =
 
 		if (failure == undefined)
 		{
-			failure = function(error) { done(error); throw error; };
+			failure = function(error) {
+				done(error);
+				throw error;
+			};
 		}
 
 		Insisting.seen(condition, success, failure);

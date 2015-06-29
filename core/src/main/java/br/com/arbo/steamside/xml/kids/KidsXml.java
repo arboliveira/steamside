@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.kids.InMemoryKids;
+import br.com.arbo.steamside.kids.KidCheck;
 import br.com.arbo.steamside.kids.KidImpl;
 import br.com.arbo.steamside.kids.Kids;
 
@@ -37,8 +38,9 @@ public class KidsXml
 
 		private void add(KidXml xml) throws Duplicate
 		{
-			final KidImpl c = xml.toKid();
-			mem.add(c);
+			KidImpl in = xml.toKid();
+			KidCheck preapproved = () -> in;
+			mem.add(preapproved);
 		}
 
 		InMemoryKids mem;

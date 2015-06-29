@@ -1,11 +1,19 @@
 "use strict";
 
 var Tag = Backbone.Model.extend({
-	name: function() {
+	name: function()
+	{
 		return this.get('name');
-	},
-	count: function() {
+	}
+	,
+	count: function()
+	{
 		return this.get('count');
+	}
+	,
+	name_set: function( v )
+	{
+		return this.set('name', v);
 	}
 });
 
@@ -228,17 +236,24 @@ var TagStickerView = Backbone.View.extend(
 
 		initialize: function(options)
 		{
+			var that = this;
+
 			this._on_clicked = options.on_clicked;
+
+			this._el_ready = CollectionPickSpriteSheetSingleton.sprites.sticker
+				.sprite_promise().then(function(el){
+					that.$el.append(el.clone());
+				});
+
+			this.listenTo(this.model, "change", this.render);
 		},
 
 		render: function()
 		{
 			var that = this;
-			CollectionPickSpriteSheetSingleton.sprites.sticker
-				.sprite_promise().done(function(el){
-					that.$el.append(el.clone());
-					that.render_el();
-				});
+			that._el_ready.done(function(){
+				that.render_el();
+			});
 			return that;
 		},
 
@@ -248,7 +263,8 @@ var TagStickerView = Backbone.View.extend(
 			var name_text = this.model.name();
 			name_el.text(name_text);
 
-			var fragment = '#/collections/' + name_text + '/edit';
+			var encoded = encodeURIComponent(name_text);
+			var fragment = '#/collections/' + encoded + '/edit';
 			this.link_el().attr('href', fragment);
 
 			var $count = this.$("#count");

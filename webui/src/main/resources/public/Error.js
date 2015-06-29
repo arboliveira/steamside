@@ -26,6 +26,17 @@ var ErrorHandler =
 		$box.show();
 		
 		$('html, body').scrollTop($box.offset().top);
-	}
+	},
+
+	toString: function (error) {
+		var message;
+		if (error.responseJSON != undefined)
+		{
+			return error.responseJSON.message;
+		}
+		return error.status + ' ' + error.statusText + '\n' + error.responseText;
+	},
+
+
 };
 

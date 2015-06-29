@@ -17,7 +17,7 @@ public class KidsDataSingleton implements KidsData
 	}
 
 	@Override
-	public void add(Kid kid) throws Duplicate
+	public void add(KidCheck kid) throws DuplicateName, DuplicateUser
 	{
 		actual().add(kid);
 	}
@@ -29,9 +29,27 @@ public class KidsDataSingleton implements KidsData
 	}
 
 	@Override
+	public void delete(Kid kid) throws NotFound
+	{
+		actual().delete(kid);
+	}
+
+	@Override
+	public Kid find(KidName kidName) throws NotFound
+	{
+		return actual().find(kidName);
+	}
+
+	@Override
 	public Kid find(User user) throws NotFound
 	{
 		return actual().find(user);
+	}
+
+	@Override
+	public void update(Kid target, KidCheck with) throws NotFound
+	{
+		actual().update(target, with);
 	}
 
 	private KidsData actual()

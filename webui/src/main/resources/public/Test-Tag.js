@@ -62,8 +62,10 @@ var Test_Tag = Backbone.Model.extend({
 			{
 				var tags = that.viewBeingTested.$(".display-collection-name");
 				expect(tags).to.have.length(2);
-				expect(tags[0].text).to.equal("Unplayed");
-				expect(tags[1].text).to.equal("Favorites");
+				var n0 = $(tags[0]).find(".tag-sticker-name");
+				expect(n0.text()).to.equal("Unplayed");
+				var n1 = $(tags[1]).find(".tag-sticker-name");
+				expect(n1.text()).to.equal("Favorites");
 			}
 		});
 	}

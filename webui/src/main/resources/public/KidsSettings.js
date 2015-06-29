@@ -15,13 +15,7 @@ var KidsSettingsView = Backbone.View.extend(
 
 		this._backend = options.backend;
 
-		this._viewKidsCollection = new KidsCollectionView({
-			collection: this.collection,
-			kidsSettingsView: this
-		});
-
 		KidsSettingsView.sprite.sprite_promise().done(function(el) {
-			that._viewKidsCollection._elOneKid = el.find("#KidView").remove();
 			that._elEditKid = el.find("#kid-edit-segment").remove();
 		});
 	},
@@ -42,6 +36,12 @@ var KidsSettingsView = Backbone.View.extend(
 	},
 
 	renderKidsCollection: function () {
+		var that = this;
+		this._viewKidsCollection = new KidsCollectionView({
+			collection: this.collection,
+			kidsSettingsView: this
+		});
+		this._viewKidsCollection._elOneKid = that.$el.find("#KidView").remove();
 		this.$('#KidsCollectionView').append(this._viewKidsCollection.el);
 	},
 
@@ -154,8 +154,13 @@ var KidView = Backbone.View.extend(
 		var that = this;
 		that.$("#Name").text(that.model.name());
 		that.$("#User").text(that.model.user());
-		that.$("#Inventory").text(that.model.inventory());
-		return this;
+		that.$("#Inventory").empty().append(
+			new TagStickerView({
+				model: new Tag({name: that.model.inventory()})
+			})
+				.render().el
+		);
+		return that;
 	},
 
 	onClick: function(e)
@@ -181,6 +186,14 @@ var KidEditView = Backbone.View.extend(
 	{
 		var that = this;
 		this._backend = options.backend;
+		this._modelTag = new Tag({name: that.model.inventory()});
+		this._viewTagSticker =
+			new TagStickerView({
+				model: that._modelTag,
+				on_clicked: function(){that.on_InventoryInput_click();}
+			});
+		that.$("#InventoryInput").empty().append(
+			that._viewTagSticker.el);
 	},
 
 	render: function ()
@@ -189,11 +202,13 @@ var KidEditView = Backbone.View.extend(
 
 		that.$("#NameInput").val(that.model.name());
 		that.$("#UserInput").val(that.model.user());
-		that.$("#InventoryInput").val(that.model.inventory());
+		that._viewTagSticker.render();
 
 		setTimeout(function(){
 			that.$("#NameInput").focus();
 		}, 0);
+
+		this.tooltips_prepare();
 
 		return this;
 	},
@@ -210,6 +225,11 @@ var KidEditView = Backbone.View.extend(
 		this.switchInventory();
 	},
 
+	on_InventoryInput_click: function()
+	{
+		this.switchInventory();
+	},
+
 	on_DeleteKid_click: function(e)
 	{
 		e.preventDefault();
@@ -220,9 +240,11 @@ var KidEditView = Backbone.View.extend(
 	{
 		var that = this;
 
+		that.tooltip_save_fail_hide();
+
 		that.model.name_set(that.$("#NameInput").val());
 		that.model.user_set(that.$("#UserInput").val());
-		that.model.inventory_set(that.$("#InventoryInput").val());
+		that.model.inventory_set(that._modelTag.name());
 
 		that.model.save()
 			.done(function()
@@ -243,7 +265,29 @@ var KidEditView = Backbone.View.extend(
 	save_fail: function(error)
 	{
 		// TODO save_fail
+		this.tooltip_save_fail_show(error);
 		console.log(error);
+	},
+
+	tooltip_save_fail_hide: function () {
+		var button = this.$('#SaveButton');
+		button.tooltipster('hide');
+	},
+
+	tooltip_save_fail_show: function (error) {
+		var button = this.$('#SaveButton');
+		button.tooltipster('content', ErrorHandler.toString(error));
+		button.tooltipster('show');
+	},
+
+	tooltips_prepare: function ()
+	{
+		this.$('#SaveButton').tooltipster({
+			content: 'Saved successfully!',
+			position: 'right',
+			trigger: 'custom',
+			interactive: 'true'
+		});
 	},
 
 	delete: function()
@@ -282,8 +326,8 @@ var KidEditView = Backbone.View.extend(
 				backend: that._backend,
 				on_collection_pick: function(modelInventory)
 				{
+					that._modelTag.name_set(modelInventory.name());
 					viewInventorySwitch.remove();
-					that.on_switch_inventory_pick(modelInventory);
 				}
 			}
 		).render();
@@ -297,7 +341,7 @@ var KidEditView = Backbone.View.extend(
 	 */
 	on_switch_inventory_pick: function(modelInventory)
 	{
-		this.$("#InventoryInput").val(modelInventory.name());
+		this.model.inventory_set(modelInventory.name());
 	},
 
 	/**

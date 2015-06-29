@@ -14,7 +14,7 @@ public class KidsDataGraft implements KidsData
 	}
 
 	@Override
-	public void add(Kid kid) throws br.com.arbo.steamside.kids.Duplicate
+	public void add(KidCheck kid) throws DuplicateName, DuplicateUser
 	{
 		writes.add(kid);
 	}
@@ -26,9 +26,27 @@ public class KidsDataGraft implements KidsData
 	}
 
 	@Override
+	public void delete(Kid kid) throws NotFound
+	{
+		writes.delete(kid);
+	}
+
+	@Override
+	public Kid find(KidName kidName) throws NotFound
+	{
+		return reads.find(kidName);
+	}
+
+	@Override
 	public Kid find(User user) throws br.com.arbo.steamside.kids.NotFound
 	{
 		return reads.find(user);
+	}
+
+	@Override
+	public void update(Kid target, KidCheck with) throws NotFound
+	{
+		writes.update(target, with);
 	}
 
 	private final Kids reads;

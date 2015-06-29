@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import br.com.arbo.opersys.username.User;
 import br.com.arbo.opersys.username.Username;
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.collections.CollectionI;
@@ -61,6 +62,11 @@ class DemoSteamsideData
 		}
 	}
 
+	private void addKid(KidName name, User user, CollectionName collection)
+	{
+		k.add(() -> new KidImpl(name, user, collection));
+	}
+
 	private void addTags(CollectionName coll, String... names)
 	{
 		for (String name : names)
@@ -77,10 +83,10 @@ class DemoSteamsideData
 		populateKids();
 
 		sources
-			.replaceWithSingleton(SteamsideData.class, s)
-			.replaceWithSingleton(CollectionsData.class, c)
-			.replaceWithSingleton(TagsData.class, t)
-			.replaceWithSingleton(KidsData.class, k);
+		.replaceWithSingleton(SteamsideData.class, s)
+		.replaceWithSingleton(CollectionsData.class, c)
+		.replaceWithSingleton(TagsData.class, t)
+		.replaceWithSingleton(KidsData.class, k);
 	}
 
 	private void populateCollections()
@@ -91,18 +97,18 @@ class DemoSteamsideData
 
 	private void populateKids()
 	{
-		k.add(new KidImpl(
+		addKid(
 			new KidName("Keen"),
 			new Username("commander"),
-			new CollectionName("Keen's games")));
-		k.add(new KidImpl(
+			new CollectionName("Keen's games"));
+		addKid(
 			new KidName("Giana"),
 			new Username("sisters"),
-			new CollectionName("Giana and Maria")));
-		k.add(new KidImpl(
+			new CollectionName("Giana and Maria"));
+		addKid(
 			new KidName("Lucius"),
 			new Username("lucius"),
-			new CollectionName("Games Lucius play")));
+			new CollectionName("Games Lucius play"));
 	}
 
 	private void populateTags()

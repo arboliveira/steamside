@@ -1,6 +1,13 @@
 package br.com.arbo.steamside.kids;
 
-public interface KidsWrites {
+public interface KidsWrites
+{
 
-	void add(Kid kid) throws Duplicate;
+	void add(KidCheck kid) throws DuplicateName, DuplicateUser;
+
+	void delete(Kid kid) throws NotFound;
+
+	void update(Kid target, KidCheck with)
+		throws NotFound, DuplicateName, DuplicateUser;
+
 }

@@ -7,7 +7,8 @@ public class Username implements User
 
 	public Username(String username)
 	{
-		this.username = Objects.requireNonNull(username);
+		this.username =
+			Objects.requireNonNull(username, "User name can't be empty");
 	}
 
 	@Override
