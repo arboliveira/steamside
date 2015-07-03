@@ -7,7 +7,12 @@ public interface LocalSettingsFactory
 
 	public static class Missing extends RuntimeException
 	{
-		//
+
+		Missing(Throwable cause)
+		{
+			super(cause);
+		}
+
 	}
 
 }

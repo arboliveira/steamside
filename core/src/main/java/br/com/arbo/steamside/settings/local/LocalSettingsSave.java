@@ -9,7 +9,7 @@ public class LocalSettingsSave implements LocalSettingsPersistence
 {
 
 	@Inject
-	public LocalSettingsSave(File_steamside_local_xml file)
+	public LocalSettingsSave(File_steamside_local_xml_Supplier file)
 	{
 		this.file_steamside_local_xml = file;
 	}
@@ -22,6 +22,6 @@ public class LocalSettingsSave implements LocalSettingsPersistence
 		JAXB.marshal(xml, file);
 	}
 
-	private final File_steamside_local_xml file_steamside_local_xml;
+	private final File_steamside_local_xml_Supplier file_steamside_local_xml;
 
 }

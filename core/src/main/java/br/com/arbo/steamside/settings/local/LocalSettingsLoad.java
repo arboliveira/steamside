@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.settings.local;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -8,7 +9,8 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.xml.bind.JAXB;
 
-public class LocalSettingsLoad implements LocalSettingsFactory {
+public class LocalSettingsLoad implements LocalSettingsFactory
+{
 
 	static SteamsideLocalXml unmarshal(final InputStream stream)
 	{
@@ -16,17 +18,18 @@ public class LocalSettingsLoad implements LocalSettingsFactory {
 	}
 
 	@Inject
-	public LocalSettingsLoad(File_steamside_local_xml file)
+	public LocalSettingsLoad(File_steamside_local_xml_Supplier file)
 	{
 		this.file_steamside_local_xml = file;
 	}
 
 	@Override
-	public LocalSettings read()
+	public LocalSettings read() throws Missing
 	{
 		final SteamsideLocalXml from = load();
 
-		class ToLocalSettings implements LocalSettings {
+		class ToLocalSettings implements LocalSettings
+		{
 
 			@Override
 			public boolean cloudEnabled()
@@ -45,7 +48,7 @@ public class LocalSettingsLoad implements LocalSettingsFactory {
 		return new ToLocalSettings();
 	}
 
-	private SteamsideLocalXml load()
+	private SteamsideLocalXml load() throws Missing
 	{
 		synchronized (this)
 		{
@@ -55,20 +58,24 @@ public class LocalSettingsLoad implements LocalSettingsFactory {
 		}
 	}
 
-	private SteamsideLocalXml loadFromFile()
+	private SteamsideLocalXml loadFromFile() throws Missing
 	{
 		try (InputStream stream = new FileInputStream(
 			file_steamside_local_xml.steamside_local_xml()))
 		{
 			return unmarshal(stream);
 		}
-		catch (final IOException e)
+		catch (FileNotFoundException e)
+		{
+			throw new Missing(e);
+		}
+		catch (IOException e)
 		{
 			throw new RuntimeException(e);
 		}
 	}
 
-	SteamsideLocalXml xml;
+	private final File_steamside_local_xml_Supplier file_steamside_local_xml;
 
-	private final File_steamside_local_xml file_steamside_local_xml;
+	private SteamsideLocalXml xml;
 }

@@ -51,6 +51,7 @@ import br.com.arbo.steamside.settings.file.LoadFile;
 import br.com.arbo.steamside.settings.file.LoadSteamsideXml;
 import br.com.arbo.steamside.settings.file.SaveFile;
 import br.com.arbo.steamside.settings.local.File_steamside_local_xml;
+import br.com.arbo.steamside.settings.local.File_steamside_local_xml_Supplier;
 import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
 import br.com.arbo.steamside.settings.local.LocalSettingsLoad;
 import br.com.arbo.steamside.settings.local.LocalSettingsPersistence;
@@ -124,10 +125,12 @@ public class SourcesFactory
 			.sourceImplementor(
 				LocalSettingsPersistence.class,
 				LocalSettingsSave.class)
-				.sources(
-					File_steamside_local_xml.class,
-					LoadCloud.class,
-					Cloud.class)
+			.sourceImplementor(
+				File_steamside_local_xml_Supplier.class,
+				File_steamside_local_xml.class)
+			.sources(
+				LoadCloud.class,
+				Cloud.class)
 			.sourceImplementor(
 				CloudSettingsFactory.class,
 				CloudSettingsFromLocalSettings.class)
@@ -178,7 +181,7 @@ public class SourcesFactory
 				CloudController_cloud_json.class)
 			.sourceImplementor(
 				KidsController_kids.class,
-							KidsController_kids_json.class);
+				KidsController_kids_json.class);
 
 		return container;
 	}
