@@ -95,27 +95,11 @@ var DeckRow = Backbone.View.extend({
 
 var Game_Tag_View = Backbone.View.extend({
 
-	events:
-	{
-		//"click .game-tag-link": "tagClicked"
-	},
-
 	render: function()
 	{
 		this.$(".game-tag-name").text(this.model.name());
 		this.$(".game-tag-link").attr('href', this.collection_url());
 		return this;
-	},
-
-	tagClicked: function(e)
-	{
-		e.preventDefault();
-
-		/*
-		Backbone.history.navigate(
-				,
-			{trigger: true});
-			*/
 	},
 
 	collection_url: function()
@@ -338,7 +322,6 @@ var DeckView = Backbone.View.extend(
 	current_row: null,
 	cardTemplatePromise: null,
     continues: null,
-	kidsMode: false,
 	tailVisibility: false,
 	on_GameCard_render: null,
 	on_tag: null,
@@ -366,8 +349,7 @@ var DeckView = Backbone.View.extend(
 		}
 		this.spriteMoreButton = options.spriteMoreButton;
 
-		this.kidsMode = options.kidsMode === true;
-		this.alwaysVisible = this.kidsMode;
+		this.alwaysVisible = options.alwaysVisible === true;
 		this.continues = options.continues;
 		this.on_GameCard_render = options.on_GameCard_render;
 		this.on_tag = options.on_tag;
@@ -481,7 +463,6 @@ var DeckView = Backbone.View.extend(
 			model: oneResult,
 			enormity: enormity,
 			backend: this.backend,
-			kidsMode: this.kidsMode,
 			continues: this.continues,
 			on_render: this.on_GameCard_render,
 			on_tag: function(game)

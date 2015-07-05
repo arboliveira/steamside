@@ -1,31 +1,32 @@
 "use strict";
 
+Steamside.CollectionsNewWorld =
+{
+	nameController: 'CollectionsNewController',
+
+	htmlWorld: 'CollectionNew.html',
+
+	controller: function($scope, theBackend)
+	{
+		new CollectionNewView(
+			{
+				backend: theBackend
+			}
+		).render();
+	}
+};
+
 
 var CollectionNewView = Backbone.View.extend({
+
+	el: "#collection-new",
 
 	initialize: function(options)
 	{
 		this.backend = options.backend;
 	},
 
-	render_promise: function()
-	{
-		return this.render().whenRendered;
-	},
-
 	render: function () {
-		var that = this;
-		this.whenRendered =
-			CollectionNewView.sprite.sprite_promise().then(function(el) {
-				that.render_el(el.clone());
-				return that;
-			});
-		return this;
-	},
-
-	render_el: function(el) {
-		this.$el.append(el);
-
 		/**
 		 * @type CollectionNewEmptyView
 		 */
@@ -43,16 +44,11 @@ var CollectionNewView = Backbone.View.extend({
 			backend: this.backend
 		});
 		collectionCopyAllCategoriesView.render();
+
+		return this;
 	}
-}, {
-
-	/**
-	 * @public
-	 * @type Sprite
-	 */
-	sprite: new SpriteBuilder({url: 'CollectionNew.html', selector: "#collection-new"}).build(),
-
-});
+}
+);
 
 var CollectionNewEmptyView = Backbone.View.extend({
 
@@ -138,9 +134,8 @@ var CollectionNewEmptyView = Backbone.View.extend({
 						input_el.focus();
 						that.on_empty_change_input('');
 					} else {
-						Backbone.history.navigate(
-							"#/collections/" + name + "/edit",
-							{trigger: true});
+						// TODO AngularJS $location service
+						$location.path("/collections/" + name + "/edit");
 					}
 				});
 	},
@@ -181,29 +176,9 @@ var CollectionCopyAllCategoriesView = Backbone.View.extend({
 		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 			{
-				Backbone.history.navigate(
-						"#/favorites/switch",
-					{trigger: true});
+				// TODO AngularJS $location service
+				$location.path("/mygames");
 			});
 	}
 });
 
-
-
-var CollectionsNewWorld = WorldActions.extend(
-{
-	initialize: function()
-	{
-		this._view_promise = new CollectionNewView({
-			backend: this.attributes.backend
-		}).render_promise();
-	},
-
-	view_render_promise: function()
-	{
-		return this._view_promise;
-	},
-
-	_view_promise: null
-
-});

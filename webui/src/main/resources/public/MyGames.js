@@ -1,49 +1,32 @@
 "use strict";
 
-var MyGamesWorld = WorldActions.extend(
+Steamside.MyGamesWorld =
 {
-	initialize: function()
-	{
-		this._view_promise =
-			new MyGamesView(
-				{
-					backend: this.attributes.backend
-				}
-			).render_promise();
-	},
+	nameController: 'MyGamesController',
 
-	view_render_promise: function()
-	{
-		return this._view_promise;
-	},
+	htmlWorld: 'MyGames.html',
 
-	_view_promise: null
-});
+	controller: function($scope, theBackend)
+	{
+		new MyGamesView(
+			{
+				backend: theBackend
+			}
+		).render();
+	}
+};
+
 
 var MyGamesView = Backbone.View.extend(
 {
+	el: "#MyGamesView",
+
 	initialize: function(options)
 	{
 		this.backend = options.backend;
 	},
 
-	render_promise: function()
-	{
-		return this.render().whenRendered;
-	},
-
 	render: function () {
-		var that = this;
-		this.whenRendered =
-			MyGamesView.sprite.sprite_promise().then(function(el) {
-				that.$el.append(el.clone());
-				that.render_el();
-				return that;
-			});
-		return this;
-	},
-
-	render_el: function() {
 		var that = this;
 
 		that.$("#CollectionPickView").append(
@@ -54,16 +37,15 @@ var MyGamesView = Backbone.View.extend(
 				}
 			).render().el
 		);
+
+		that.sideshow();
+
+		return this;
+	},
+
+	sideshow: function()
+	{
+		sideshow(this.$el);
 	}
-
-}, {
-
-	/**
-	 * @public
-	 * @type Sprite
-	 */
-	sprite: new SpriteBuilder(
-		{url: 'MyGames.html', selector: "#MyGamesView"}).build()
-
 }
 );

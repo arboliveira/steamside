@@ -1,6 +1,27 @@
 "use strict";
 
+
+Steamside.SettingsWorld =
+{
+	nameController: 'SettingsController',
+
+	htmlWorld: 'Settings.html',
+
+	controller: function($scope, theBackend)
+	{
+		new SettingsView(
+			{
+				backend: theBackend
+			}
+		).render();
+	}
+};
+
+
+
 var SettingsView = Backbone.View.extend({
+
+	el: "#SettingsView",
 
 	initialize: function(options)
 	{
@@ -8,26 +29,11 @@ var SettingsView = Backbone.View.extend({
 		this._backend = options.backend;
 	},
 
-	render_promise: function()
-	{
-		return this.render().whenRendered;
-	},
-
-	render: function () {
-		var that = this;
-		this.whenRendered =
-			SettingsView.sprite.sprite_promise().then(function(el) {
-				that.$el.append(el);
-				that.render_el();
-				return that;
-			});
-		return this;
-	},
-
-	render_el: function()
+	render: function ()
 	{
 		this.renderCloud();
 		this.renderKids();
+		this.sideshow();
 		return this;
 	},
 
@@ -65,46 +71,14 @@ var SettingsView = Backbone.View.extend({
 		return that;
 	},
 
+	sideshow: function()
+	{
+		sideshow(this.$el);
+	},
+
 	/**
 	 * @type Backend
 	 */
-	_backend: null,
-
-	/**
-	 * @type Deferred
-	 */
-	whenRendered: null
-
-}, {
-
-	/**
-	 * @public
-	 * @type Sprite
-	 */
-	sprite: new SpriteBuilder(
-		{url: 'Settings.html', selector: "#SettingsView"}).build()
-
-});
-
-
-
-var SettingsWorld = WorldActions.extend(
-{
-	initialize: function()
-	{
-		this._view_promise =
-			new SettingsView(
-				{
-					backend: this.attributes.backend
-				}
-			).render_promise();
-	},
-
-	view_render_promise: function()
-	{
-		return this._view_promise;
-	},
-
-	_view_promise: null
-});
-
+	_backend: null
+}
+);

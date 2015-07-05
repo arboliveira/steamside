@@ -194,15 +194,15 @@ var CommandHintWithVerbAndSubjectView = Backbone.View.extend({
 	render: function() {
 		var that = this;
 
-		if (this._visible)
-			this.$el.show();
+		if (that._visible)
+			that.$el.show();
 		else
-			this.$el.hide();
+			that.$el.hide();
 
-		this.$('#search-command-hint-verb').text(this._verb);
+		that.$('#search-command-hint-verb').text(that._verb);
 
-		this.$('#search-command-hint-subject').text(
-			this._subject == null ? "" : this._subject);
+		that.$('#search-command-hint-subject').text(
+			that._subject == null ? "" : that._subject);
 
 		return this;
 	},

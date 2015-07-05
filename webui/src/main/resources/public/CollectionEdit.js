@@ -26,52 +26,11 @@ var CollectionEditSpriteSheet = Backbone.Model.extend(
 	}
 });
 
+
 var CollectionEditSpriteSheetSingleton = {
 	sprites: new CollectionEditSpriteSheet()
 };
 
-
-var CollectionsEditWorld = WorldActions.extend(
-	{
-		collection_name: null,
-
-		cardTemplatePromise: null,
-
-		/**
-		 * @type Sprite
-		 */
-		spriteMoreButton: null,
-
-		initialize: function(options)
-		{
-			if (options.cardTemplatePromise == null)
-			{
-				throw new Error("cardTemplatePromise is required");
-			}
-			this.cardTemplatePromise = options.cardTemplatePromise;
-			this.spriteMoreButton = options.spriteMoreButton;
-			this.backend = options.backend;
-		},
-
-		resetWithCollection: function(collection_name) {
-			this._view_promise = new CollectionEditView(
-				{
-					collection_name: collection_name,
-					cardTemplatePromise: this.cardTemplatePromise,
-					spriteMoreButton: this.spriteMoreButton,
-					backend: this.backend
-				}
-			).render_promise();
-		},
-
-		view_render_promise: function()
-		{
-			return this._view_promise;
-		},
-
-		_view_promise: null
-	}
-);
 
 var SteamsideCollectionApps = Backbone.Collection.extend({
     model: Game,
@@ -80,6 +39,7 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 		return "api/collection/collection.json?name=" + encodeURIComponent(this.collection_name);
 	}
 });
+
 
 var CollectionEditView = Backbone.View.extend({
 
@@ -98,11 +58,6 @@ var CollectionEditView = Backbone.View.extend({
 		this.spriteMoreButton = options.spriteMoreButton;
 		this.collection_name = options.collection_name;
 		this.backend = options.backend;
-	},
-
-	render_promise: function()
-	{
-		return this.render().whenRendered;
 	},
 
 	render: function () {
@@ -421,6 +376,7 @@ var CollectionEditView = Backbone.View.extend({
 	sprite: CollectionEditSpriteSheetSingleton.sprites.edit
 
 });
+
 
 var Combine = Backbone.Model.extend({
 

@@ -1,5 +1,27 @@
 "use strict";
 
+Steamside.SteamClientWorld =
+{
+	nameController: 'SteamClientController',
+
+	htmlWorld: 'SteamClient.html',
+
+	controller: function($scope, theBackend)
+	{
+		var model = new SteamClientStatusModel();
+
+		new SteamClientView(
+			{
+				model: model,
+				backend: theBackend
+			}
+		);
+
+		theBackend.fetch_promise(model);
+	}
+};
+
+
 var SteamClientStatusModel = Backbone.Model.extend(
 {
 	url: "api/steamclient/status.json",
@@ -15,8 +37,9 @@ var SteamClientStatusModel = Backbone.Model.extend(
 });
 
 
-
 var SteamClientView = Backbone.View.extend({
+
+	el: "#steam-client",
 
     events: {
 		// any Steam Protocol button
@@ -26,38 +49,15 @@ var SteamClientView = Backbone.View.extend({
 	initialize: function(options)
 	{
 		this.backend = options.backend;
-	},
 
-	render_promise: function()
-	{
-		return this.render().whenRendered;
+		this.listenTo(this.model, 'sync', this.render);
 	},
 
 	render: function () {
 		var that = this;
-		this.whenRendered =
-			SteamClientView.sprite.sprite_promise().then(function(el) {
-				that.render_el(el.clone());
-				return that;
-			});
-		return this;
-    },
 
-	render_el: function(el) {
-		this.$el.append(el);
+		var modelSteamClientStatus = this.model;
 
-		var model = new SteamClientStatusModel();
-
-		var that = this;
-
-		this.backend.fetch_promise(model).done(function()
-			{
-				that.renderModel(model);
-			}
-		);
-	},
-
-	renderModel: function(modelSteamClientStatus) {
 		var running = modelSteamClientStatus.running();
 
 		var status = this.$('#SteamClientStatusMessage');
@@ -93,6 +93,10 @@ var SteamClientView = Backbone.View.extend({
 		button.show();
 
 		button.text(buttonText);
+
+		that.sideshow();
+
+		return that;
 	},
 
     buttonSteamBrowserProtocolClicked: function (e) {
@@ -102,36 +106,9 @@ var SteamClientView = Backbone.View.extend({
 		this.backend.ajax_ajax_promise(aUrl);
     },
 
-	whenRendered: null
-
-}, {
-
-	/**
-	 * @public
-	 * @type Sprite
-	 */
-	sprite: new SpriteBuilder({url: 'SteamClient.html', selector: "#steam-client"}).build()
-
-});
-
-
-var SteamClientWorld = WorldActions.extend(
-{
-	initialize: function()
+	sideshow: function()
 	{
-		this._view_promise =
-			new SteamClientView(
-				{
-					backend: this.attributes.backend
-				}
-			).render_promise();
-	},
-
-	view_render_promise: function()
-	{
-		return this._view_promise;
-	},
-
-	_view_promise: null
-});
-
+		sideshow(this.$el);
+	}
+}
+);

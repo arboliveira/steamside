@@ -26,33 +26,21 @@ var CloudModel = Backbone.Model.extend(
 
 });
 
-/**
- * @param {CloudView} cloudView
- */
-function CloudEdit(cloudView)
-{
-	var self = this;
-
-	self.cloudEnabled = ko.observable();
-	self.dontpadUrl = ko.observable();
-
-	self.apply = function() {
-		cloudView.editSave();
-	}
-}
-
 var CloudView = Backbone.View.extend(
 {
+	events:
+	{
+		"click #SaveButton": "editSave"
+	},
+
 	initialize: function(options)
 	{
 		var that = this;
 
-		this.backend = options.backend;
-		this.model = options.model;
+		that.backend = options.backend;
+		that.model = options.model;
 
-		this.cloudEdit = new CloudEdit(this);
-
-		this.cloud_CommandBox = new CommandBoxView({
+		that.cloud_CommandBox = new CommandBoxView({
 			placeholder_text: 'http://dontpad.com/(address to sync your Steamside data)',
 			on_change_input: function(input) { that.on_cloud_change_input(input); },
 			on_command: function(view) { that.on_cloud_command(view) },
@@ -60,30 +48,30 @@ var CloudView = Backbone.View.extend(
 			on_command_confirm: function(view) { that.on_cloud_command_confirm(view) }
 		});
 
-		this.whenSprite =
+		that.whenSprite =
 			CloudView.sprite.sprite_promise().then(function(el) {
 				that.$el.append(el);
+				that.$("#CloudAddressCommandBoxView").empty().append(
+					that.cloud_CommandBox.el);
 				return that;
 			});
-		this.whenModel = this.backend.fetch_promise(this.model);
+		that.whenModel = that.backend.fetch_promise(that.model);
 	},
 
 	render: function () {
 		var that = this;
-		this.whenRendered = this.whenSprite.then(function(view) {
+		that.whenRendered = this.whenSprite.then(function(view) {
 			view.render_el();
 			return view;
 		});
-		return this;
+		return that;
 	},
 
 	render_el: function()
 	{
 		var that = this;
 
-		that.$("#CloudAddressCommandBoxView").append(this.cloud_CommandBox.el);
-
-		this.cloud_CommandBox
+		that.cloud_CommandBox
 			.render_commandBox_promise().done(function(view)
 				{
 					that.rendered_cloud_CommandBox(view);
@@ -112,10 +100,10 @@ var CloudView = Backbone.View.extend(
 	{
 		var that = this;
 
-		ko.applyBindings(that.cloudEdit, that.el);
+		that.$("#CloudEnabledCheckbox")
+			.prop("checked", that.model.cloudEnabled());
 
-		that.cloudEdit.cloudEnabled(that.model.cloudEnabled());
-		that.cloudEdit.dontpadUrl(that.model.dontpadUrl());
+		that.cloud_CommandBox.input_query_setval(that.model.dontpadUrl());
 	},
 
 	editSave: function()
@@ -124,8 +112,10 @@ var CloudView = Backbone.View.extend(
 
 		that.tooltip_saved_hide();
 
-		that.model.cloudEnabled_set(that.cloudEdit.cloudEnabled());
-		that.model.dontpadUrl_set(that.cloudEdit.dontpadUrl());
+		that.model.cloudEnabled_set(
+			that.$("#CloudEnabledCheckbox")
+				.prop("checked"));
+		that.model.dontpadUrl_set(that.cloud_CommandBox.input_query_val());
 
 		that.model.save()
 			.done(function()
@@ -186,11 +176,6 @@ var CloudView = Backbone.View.extend(
 	 * @type CloudModel
 	 */
 	model: null,
-
-	/**
-	 * @type CloudEdit
-	 */
-	cloudEdit: null,
 
 	/**
 	 * @type Backend

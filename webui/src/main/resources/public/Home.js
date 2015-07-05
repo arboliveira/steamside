@@ -1,54 +1,46 @@
 "use strict";
 
-var HomeWorld = WorldActions.extend(
+Steamside.HomeWorld =
 {
-	sessionModel: null,
-	cardTemplatePromise: null,
+	nameController: 'HomeController',
 
-	/**
-	 * @type Sprite
-	 */
-	spriteMoreButton: null,
+	htmlWorld: 'Home.html',
 
-	initialize: function(options)
+	controller: function(
+		$scope, theBackend, theSessionModel, theKidsMode,
+		theSpritesKids, theSpritesSteamside)
 	{
-		this.sessionModel = options.sessionModel;
-
-		if (options.cardTemplatePromise == null)
+		window.onerror = function errorHandler(msg, url, line, col, error)
 		{
-			throw new Error("cardTemplatePromise is required");
-		}
-		this.cardTemplatePromise = options.cardTemplatePromise;
-		this.spriteMoreButton = options.spriteMoreButton;
+			ErrorHandler.explode(error);
+			throw error;
+		};
 
-		this.backend = options.backend;
+		new SteamsideView({
+			sessionModel: theSessionModel,
+			kidsMode: theKidsMode,
+			spritesKids: theSpritesKids
+		}).render();
 
-		this._view_promise = new HomeView({
-			sessionModel: this.sessionModel,
-			cardTemplatePromise: this.cardTemplatePromise,
-			spriteMoreButton: this.spriteMoreButton,
-			backend: this.backend
-		}).render_promise();
-	},
+		new HomeView({
+			sessionModel: theSessionModel,
+			kidsMode: theKidsMode,
+			spritesKids: theSpritesKids,
+			spritesSteamside: theSpritesSteamside,
+			backend: theBackend
+		});
 
-	view_render_promise: function()
-	{
-		return this._view_promise;
-	},
+		theBackend.fetch_promise(theSessionModel);
+	}
+};
 
-	isFront: function()
-	{
-		return true;
-	},
-
-	_view_promise: null
-});
 
 var HomeView = Backbone.View.extend(
 {
-	el: "#primary-view",
+	el: "#HomeView",
 
 	sessionModel: null,
+	_kidsMode: null,
 
 	cardTemplatePromise: null,
 
@@ -67,27 +59,28 @@ var HomeView = Backbone.View.extend(
 	initialize: function(options)
 	{
 		this.sessionModel = options.sessionModel;
+		this._kidsMode = options.kidsMode;
 
-		if (options.cardTemplatePromise == null) {
-			throw new Error("cardTemplatePromise is required");
-		}
-		this.cardTemplatePromise = options.cardTemplatePromise;
-		this.spriteMoreButton = options.spriteMoreButton;
+		this.spritesKids = options.spritesKids;
+		this.spritesSteamside = options.spritesSteamside;
+		this.spriteMoreButton = options.spritesSteamside.moreButton;
 
 		this.backend = options.backend;
-	},
 
-	render_promise: function ()
-	{
-		return this.render().whenRendered;
+		this.listenTo(this._kidsMode, 'sync', this.render);
 	},
 
 	render: function ()
 	{
 		var that = this;
 
+		that.$el.hide();
+
+		that.cardTemplatePromise = this.decide_cardTemplatePromise();
+
 		var continues = new ContinueGames();
-		var kidsMode = this.sessionModel.kidsMode();
+
+		var kidsMode = this._kidsMode.kidsMode();
 
 		var viewFavorites = this.renderFavoritesView(kidsMode, continues);
 
@@ -103,18 +96,34 @@ var HomeView = Backbone.View.extend(
 
 		this.backend.fetch_promise(continues);
 
+		var sideshow_ready;
+
 		if (promiseRenderRecentTagged != null)
 		{
-			this.whenRendered = promiseRenderRecentTagged.then(
-				function() { return that; }
-			);
+			sideshow_ready = promiseRenderRecentTagged;
 		}
 		else
 		{
-			this.whenRendered = $.when(this);
+			sideshow_ready = $.when(this);
 		}
 
+		sideshow_ready.done(function(){
+			that.sideshow();
+		});
+
+		this.whenRendered = sideshow_ready;
+
 		return this;
+	},
+
+	decide_cardTemplatePromise: function()
+	{
+		var kidsMode = this._kidsMode.kidsMode();
+		if (kidsMode)
+		{
+			return this.spritesKids.card.sprite_promise();
+		}
+		return this.spritesSteamside.card.sprite_promise();
 	},
 
 	renderFavoritesView: function (kidsMode, continues) {
@@ -145,7 +154,6 @@ var HomeView = Backbone.View.extend(
 			spriteMoreButton: that.spriteMoreButton,
 			collection: continues,
 			continues: continues,
-			kidsMode: false,
 			on_tag: that.on_game_card_tag,
 			backend: that.backend
 		});
@@ -154,7 +162,7 @@ var HomeView = Backbone.View.extend(
 	renderSearchSegment: function (continues) {
 		var that = this;
 
-		return new SearchView(
+		var searchView = new SearchView(
 			{
 				el: $('#search-segment'),
 				cardTemplatePromise: that.cardTemplatePromise,
@@ -163,46 +171,32 @@ var HomeView = Backbone.View.extend(
 				on_tag: that.on_game_card_tag,
 				backend: that.backend
 			}
-		).render();
-	},
-
-	searchView_whenRendered: function(what)
-	{
-		if (this.searchView == null) return;
-		this.searchView.whenRendered.done(what);
-	},
-
-	renderRecentTagged: function (segmentBeforeRecentTagged, continues) {
-		var that = this;
-
-		var suggestions = new TagSuggestionsCollection();
-
-		return this.backend.fetch_promise(suggestions).then(function () {
-			suggestions.each( function(oneTagSuggestion) {
-				var view = that.renderRecentTaggedOne(
-					oneTagSuggestion, segmentBeforeRecentTagged);
-			});
-		});
-	},
-
-	/**
-	 * @param oneTagSuggestion Tag
-	 */
-	renderRecentTaggedOne: function(
-		oneTagSuggestion, segmentBeforeRecentTagged
-	)
-	{
-		var that = this;
-		segmentBeforeRecentTagged.after(
-			new CollectionEditView({
-				collection_name: oneTagSuggestion.name(),
-				cardTemplatePromise: that.cardTemplatePromise,
-				spriteMoreButton: that.spriteMoreButton,
-				backend: that.backend,
-				simplified: true
-			})
-				.render().el
 		);
+
+		searchView.render();
+
+		setTimeout(function(){
+			searchView.command_box_input_query_focus();
+		}, 0);
+
+		return searchView;
+	},
+
+	renderRecentTagged: function (segmentBeforeRecentTagged) {
+		var that = this;
+
+		var recentTagged = new TagSuggestionsCollection();
+
+		segmentBeforeRecentTagged.after(
+			new RecentTaggedView({
+				collection: recentTagged,
+				backend: that.backend,
+				spriteMoreButton: that.spriteMoreButton,
+				cardTemplatePromise: that.cardTemplatePromise
+			})
+				.el);
+
+		return this.backend.fetch_promise(recentTagged);
 	},
 
 	on_game_card_tag: function(game, segmentWithGameCard)
@@ -215,6 +209,13 @@ var HomeView = Backbone.View.extend(
 		}).render();
 		segmentWithGameCard.after(tagView.$el);
 		$('html, body').scrollTop(tagView.$el.offset().top);
+	},
+
+	sideshow: function()
+	{
+		this.$el.show();
+
+		sideshow(this.$el);
 	},
 
 	/**
@@ -269,7 +270,7 @@ var FavoritesView = Backbone.View.extend(
 			spriteMoreButton: that.spriteMoreButton,
 			collection: this.favorites,
 			continues: this.continues,
-			kidsMode: this.kidsMode,
+			alwaysVisible: this.kidsMode,
 			on_tag: this.on_tag,
 			backend: this.backend
 		});
@@ -342,3 +343,116 @@ var FavoritesView = Backbone.View.extend(
 	}
 
 });
+
+
+
+
+var SteamsideView = Backbone.View.extend({
+
+	el: "body",
+
+	sessionModel: null,
+	spritesKids: null,
+	_kidsMode: null,
+
+	initialize: function(options)
+	{
+		this.sessionModel = options.sessionModel;
+		this.spritesKids = options.spritesKids;
+		this._kidsMode = options.kidsMode;
+
+		this.listenTo(this._kidsMode, 'sync', this.applyKidsMode);
+	},
+
+	render: function ()
+	{
+		var sessionModel = this.sessionModel;
+
+		/**
+		 * @type SessionView
+		 */
+		var sessionView = new SessionView({model: sessionModel});
+		sessionView.render();
+
+		return this;
+	},
+
+	applyKidsMode: function()
+	{
+		var kids = this._kidsMode.kidsMode();
+
+		if (!kids) {
+			this.$("#KidsModeIndicator").hide();
+			return;
+		}
+
+		new KidsView({
+			el: this.$el,
+			username: this.sessionModel.userName(),
+			spritesKids: this.spritesKids
+		}).render();
+	}
+});
+
+
+
+var SessionView = Backbone.View.extend({
+	el : 'body',
+
+	initialize: function () {
+		this.listenTo(this.model, "change", this.render);
+	},
+
+	render: function ()
+	{
+		var m = this.model;
+
+		this.$('#userName').text(m.userName());
+		this.$('#version').text(m.versionOfSteamside());
+		this.$('#number-of-games').text(m.gamesOwned());
+
+		return this;
+	}
+});
+
+
+var RecentTaggedView = Backbone.View.extend(
+{
+	initialize: function(options)
+	{
+		if (options.cardTemplatePromise == null) {
+			throw new Error("cardTemplatePromise is required");
+		}
+		this.cardTemplatePromise = options.cardTemplatePromise;
+		this.spriteMoreButton = options.spriteMoreButton;
+		this.backend = options.backend;
+
+		this.listenTo(this.collection, 'reset', this.render);
+	},
+
+	render: function () {
+		var that = this;
+		that.collection.each( function(oneTagSuggestion) {
+			that.$el.after(
+				that.renderRecentTaggedOne(oneTagSuggestion)
+					.el);
+		});
+		return that;
+	},
+
+	/**
+	 * @param oneTagSuggestion Tag
+	 */
+	renderRecentTaggedOne: function(oneTagSuggestion)
+	{
+		var that = this;
+		return new CollectionEditView({
+			collection_name: oneTagSuggestion.name(),
+			cardTemplatePromise: that.cardTemplatePromise,
+			spriteMoreButton: that.spriteMoreButton,
+			backend: that.backend,
+			simplified: true
+		}).render();
+	}
+}
+);

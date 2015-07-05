@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 
-<html ng-app xmlns="http://www.w3.org/1999/xhtml"
+<html
+	ng-app="Steamside-ng-app" ng-strict-di
+	xmlns="http://www.w3.org/1999/xhtml"
 xml:lang="en" lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
 <!-- ======================================================================= -->
@@ -27,25 +29,22 @@ xml:lang="en" lang="en">
 
 	<script src="jquery-2.1.1.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-    <script src="jquery-ui-1.10.2.js" type="text/javascript"></script>
-
 	<link rel="stylesheet" type="text/css" href="tooltipster.css" />
 	<script type="text/javascript" src="jquery.tooltipster.js"></script>
 
     <script src="underscore.js" type="text/javascript"></script>
     <script src="backbone.js" type="text/javascript"></script>
 	<script src="stacktrace.js" type="text/javascript"></script>
-	<script src="knockout-3.3.0.debug.js" type="text/javascript"></script>
 
 	<script src="Backend.js" type="text/javascript"></script>
-	<script src="WorldChange.js" type="text/javascript"></script>
 	<script src="spritesheet.js" type="text/javascript"></script>
 
 	<script src="SteamsideSpriteSheet.js" type="text/javascript"></script>
 
 	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
 	<script src="CommandBox.js" type="text/javascript"></script>
+
+	<script src="Steamside.js" type="text/javascript"></script>
 
 	<script src="Kids.js" type="text/javascript"></script>
 	<script src="Home.js" type="text/javascript"></script>
@@ -71,6 +70,7 @@ xml:lang="en" lang="en">
     <script src="SteamClient.js" type="text/javascript"></script>
     <script src="CollectionNew.js" type="text/javascript"></script>
     <script src="CollectionEdit.js" type="text/javascript"></script>
+    <script src="InventoryWorld.js" type="text/javascript"></script>
     <script src="Exit.js" type="text/javascript"></script>
 	<script src="Cloud.js" type="text/javascript"></script>
 	<script src="Settings.js" type="text/javascript"></script>
@@ -79,7 +79,7 @@ xml:lang="en" lang="en">
 	<link href="KidsSettings.css" rel="stylesheet" type="text/css" />
 	<script src="KidsSettings.js" type="text/javascript"></script>
 
-	<script src="Steamside.html.js" type="text/javascript"></script>
+	<script src="Steamside-AngularJS.js" type="text/javascript"></script>
 
 <!-- ======================================================================= -->
 
@@ -91,16 +91,14 @@ xml:lang="en" lang="en">
 
 <script type="application/javascript">
 
-$(function() {
-    Steamside_html.render_page();
-});
+	Steamside_AngularJS.configureApplicationModule();
 
 </script>
 
 
 <!-- ======================================================================= -->
 </head>
-<body class="steamside-body-background" style="display: none;">
+<body class="steamside-body-background">
 <!-- ======================================================================= -->
 
 	<div id="page-header" class="page-header">
@@ -108,7 +106,7 @@ $(function() {
 	<div id="PageHeaderZone" >
 
 		<div class="page-header-logo-section page-header-stamp">
-			<a href="#">
+			<a href="#/">
 			<div class="page-header-logo">
 				<img src="steamside.png" height="45" width="45" />
 			</div>
@@ -149,152 +147,8 @@ $(function() {
     </div>
 </div>
 
-<div id="world">
-
-<div id="primary-view">
-
-  <div id="WelcomeToSteamside" class="floatingpad" style="margin:1em; display: table; width: 95%">
-	  <div style="float: left;">
-		<p class="purpose-of-this-section" style="margin: 0; display: table-cell;">
-			<span class="purpose-of-this-section">Thank you for using Steamside!</span>
-		</p>
-	  </div>
-	  <div style="float: right; display: table-cell">
-		  <p class="free-form-text" style="margin: 0; text-align: right">
-		  This is a <strong>pre-alpha version</strong>, meaning things are shaky and there's
-			  <a target="_blank" href="https://github.com/arboliveira/steamside">lots of work to do</a>.<br/>
-		  Please <a target="_blank" href="https://github.com/arboliveira/steamside/issues">suggest and vote</a>
-			  for the features you want, you might just see them implemented.
-		  Play nice and <a target="_blank" href="http://arboliveira.github.io/steamside/">have fun!</a>
-		  </p>
-	  </div>
-  </div>
-
-
-<div id="continues-segment" class="segment">
-
-	<div class="side-header side-header-at-left">
-		<p class="side-header-paragraph">
-			<span class="side-text side-text-at-left">
-			Con<br/>
-			tinue<br/>
-			</span>
-		</p>
-		<div class="side-links">
-			<ul>
-				<li><a class="vaporware" href="">History</a></li>
-				<li><a class="vaporware" href="">Statistics</a></li>
-				<li><a class="vaporware" href="">Kids mode...</a></li>
-			</ul>
-		</div>
-	</div>
-
-	<div class="content content-at-right">
-	    <div id="continues-deck" style="float:right;">
-	    </div>
-	</div>
-
-</div>
-
-
-
-
-<div id="search-segment" class="segment">
-
-	<div class="side-header side-header-at-right">
-		<p class="side-header-paragraph">
-			<span class="side-text side-text-at-right">
-			Search<br/>
-			&amp; do
-			</span>
-		</p>
-		<p class="side-links"><a class="vaporware" href="">Aliases...</a></p>
-		<p class="side-links"><a class="vaporware" href="">Clear</a></p>
-	</div>
-
-	<div class="content content-at-left">
-
-			<span id="search-command-hint" class="command-hint">
-				<span id="search-command-hint-verb">continue</span>
-				<span id="search-command-hint-subject" class="command-hint-special">Windosill</span>
-			</span>
-
-		<div id="search-command-box" class="form-block form-text" style="width: 95%">
-			<form action="">
-                <div>
-                <input type="text" name="text-search" id="input-id-text-search"
-                       class="command-text-input"
-                       placeholder="game or command"
-					/>
-                <br/>
-                <input class="command-button"  type="submit" value="Enter"/>
-					&nbsp;&nbsp;
-                <input class="command-button"  type="submit" value="Ctrl+Enter"/>
-					<span id="search-command-hint-2" class="command-hint">Windosill community hub</span>
-                </div>
-            </form>
-	    </div>
-
-	    <div id="search-results-deck">
-	    </div>
-	</div>
-
-</div>
-
-
-
-
-<div id="favorites-segment" class="segment">
-
-	<div class="side-header side-header-at-left">
-		<p class="side-header-paragraph">
-			<span class="side-text side-text-at-left">
-			Favor<br/>
-			ites<br/>
-			</span>
-		</p>
-		<p class="side-links">
-            <a id="side-link-favorite-switch" href="">Switch...</a>
-        </p>
-	</div>
-
-	<div class="content content-at-right">
-
-        <div id="favorites-deck">
-        </div>
-	</div>
-
-	<p id="SwitchPurposeView">
-		<span>Pick a Collection to be used as your Favorites.</span>
-	</p>
-
-</div>
-
-
-
-
-
-<div id="collections-segment"  class="segment">
-
-	<div class="side-header side-header-at-right">
-		<p class="side-header-paragraph">
-			<span class="side-text side-text-at-right">
-			High<br/>
-			scores<br/>
-			</span>
-		</p>
-		<p class="side-links"><a class="vaporware" href="">Share...</a></p>
-	</div>
-
-	<div class="content content-at-left">
-		<p><span class="floatingpad"><span id="number-of-games">101</span> games owned</span></p>
-  	</div>
-</div>
-
-
-
-</div>
-
+<div id="world" ng-view>
+	<p> </p>
 </div>
 
 <div id="page-footer" class="page-footer page-header-separator">

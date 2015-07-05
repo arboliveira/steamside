@@ -287,17 +287,11 @@ var TagStickerView = Backbone.View.extend(
 
 		on_click: function(e)
 		{
-			e.preventDefault();
-
 			if (this._on_clicked != null)
 			{
+				e.preventDefault();
 				this._on_clicked(this.model);
-				return;
 			}
-
-			var fragment = this.link_el().attr('href');
-
-			Backbone.history.navigate(fragment, {trigger: true});
 		},
 
 		_on_clicked: null

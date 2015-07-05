@@ -86,3 +86,12 @@ var Backend = Backbone.Model.extend(
 		return this.backoff;
 	}
 });
+
+var BackoffModel = Backbone.Model.extend(
+{
+	url: "api/session/session.json",
+
+	backoff: function () {
+		return this.get("backoff");
+	}
+});
