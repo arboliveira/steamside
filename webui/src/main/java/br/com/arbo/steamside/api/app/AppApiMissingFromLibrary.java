@@ -1,8 +1,7 @@
-package br.com.arbo.steamside.api.collection;
+package br.com.arbo.steamside.api.app;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import br.com.arbo.steamside.api.app.AppApi;
 import br.com.arbo.steamside.steam.client.apps.NeverPlayed;
 import br.com.arbo.steamside.steam.client.types.AppId;
 

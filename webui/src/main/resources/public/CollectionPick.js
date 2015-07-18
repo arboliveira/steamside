@@ -40,6 +40,11 @@ var CollectionPickSpriteSheetSingleton = {
 
 var CollectionPickView = Backbone.View.extend(
 {
+	events: {
+		"click #LinkTagless": "clickLinkTagless",
+		"click #LinkOwned": "clickLinkOwned"
+	},
+
 	initialize: function(options)
 	{
 		this._on_collection_pick = options.on_collection_pick;
@@ -104,6 +109,20 @@ var CollectionPickView = Backbone.View.extend(
 				})
 				.render().el
 		);
+	},
+
+	clickLinkTagless: function(e)
+	{
+
+		e.preventDefault();
+
+	},
+
+	clickLinkOwned: function(e)
+	{
+
+		e.preventDefault();
+
 	},
 
 	_on_collection_pick: null,

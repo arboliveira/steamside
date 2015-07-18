@@ -86,10 +86,12 @@ var HomeView = Backbone.View.extend(
 
 		var promiseRenderRecentTagged = null;
 
+		var searchView = null;
+
 		if (!kidsMode)
 		{
 			this.createContinuesDeck(continues);
-			this.searchView = this.renderSearchSegment(continues);
+			searchView = this.renderSearchSegment(continues);
 			promiseRenderRecentTagged =
 				this.renderRecentTagged(viewFavorites.$el, continues);
 		}
@@ -109,6 +111,12 @@ var HomeView = Backbone.View.extend(
 
 		sideshow_ready.done(function(){
 			that.sideshow();
+			if (searchView != null)
+			{
+				setTimeout(function () {
+					searchView.command_box_input_query_focus();
+				}, 0);
+			}
 		});
 
 		this.whenRendered = sideshow_ready;
@@ -175,10 +183,6 @@ var HomeView = Backbone.View.extend(
 
 		searchView.render();
 
-		setTimeout(function(){
-			searchView.command_box_input_query_focus();
-		}, 0);
-
 		return searchView;
 	},
 
@@ -216,12 +220,7 @@ var HomeView = Backbone.View.extend(
 		this.$el.show();
 
 		sideshow(this.$el);
-	},
-
-	/**
-	 * @type SearchView
-	 */
-	searchView: null
+	}
 });
 
 

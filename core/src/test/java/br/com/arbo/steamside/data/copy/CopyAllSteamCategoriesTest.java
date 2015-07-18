@@ -56,7 +56,8 @@ public class CopyAllSteamCategoriesTest
 		new CopyAllSteamCategories(tagsData, library).execute();
 
 		List<String> collect =
-			tagsData.recent().map(wc -> wc.collection().name().value)
+			tagsData.recent()
+				.map(wc -> wc.collection().value)
 				.collect(Collectors.toList());
 
 		Assert.assertThat(collect.toString(), equalTo("[c, b, d, a]"));

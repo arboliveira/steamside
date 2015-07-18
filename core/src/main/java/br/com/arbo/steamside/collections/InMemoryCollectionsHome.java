@@ -6,23 +6,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.collections.CollectionI.IsSystem;
 import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class InMemoryCollectionsHome implements CollectionsData {
-
-	private static void guardSystem(final CollectionI c)
-	{
-		if (c.isSystem() == IsSystem.YES)
-			throw new IllegalArgumentException();
-	}
+public class InMemoryCollectionsHome implements CollectionsData
+{
 
 	@Override
 	public void add(CollectionI in) throws Duplicate
 	{
-		guardSystem(in);
 		CollectionName name = in.name();
 		guardDuplicate(name);
 		objects.add(CollectionImpl.clone(in));
@@ -42,7 +35,6 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	@Override
 	public void delete(CollectionI in) throws Duplicate
 	{
-		guardSystem(in);
 		CollectionImpl stored = stored(in);
 		deleteListeners.forEach(l -> l.onDelete(stored));
 		objects.remove(stored);
@@ -58,7 +50,6 @@ public class InMemoryCollectionsHome implements CollectionsData {
 	@Override
 	public void favorite(CollectionI in)
 	{
-		guardSystem(in);
 		CollectionImpl stored = stored(in);
 		favorite.set(stored);
 	}
@@ -71,19 +62,18 @@ public class InMemoryCollectionsHome implements CollectionsData {
 
 	CollectionImpl stored(CollectionI c)
 	{
-		guardSystem(c);
 		return findOrCry(c.name());
 	}
 
 	private Optional<CollectionImpl> findMaybe(CollectionName name)
 	{
 		return objects.stream().parallel()
-				.filter(c -> c.name().equalsCollectionName(name))
-				.findAny();
+			.filter(c -> c.name().equalsCollectionName(name))
+			.findAny();
 	}
 
 	private CollectionImpl findOrCry(CollectionName name)
-			throws NotFound
+		throws NotFound
 	{
 		Optional<CollectionImpl> maybe = findMaybe(name);
 		return maybe.orElseThrow(() -> new NotFound(name));
@@ -95,7 +85,8 @@ public class InMemoryCollectionsHome implements CollectionsData {
 		if (maybe.isPresent()) throw new Duplicate();
 	}
 
-	interface DeleteListener {
+	interface DeleteListener
+	{
 
 		void onDelete(CollectionImpl c);
 

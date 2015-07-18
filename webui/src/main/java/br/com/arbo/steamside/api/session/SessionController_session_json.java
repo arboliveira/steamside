@@ -55,7 +55,8 @@ public class SessionController_session_json implements
 			{
 
 				{
-					gamesOnly = true;
+					gamesOnly = false;
+					owned = true;
 				}
 			});
 	}

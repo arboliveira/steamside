@@ -32,15 +32,6 @@ var CollectionEditSpriteSheetSingleton = {
 };
 
 
-var SteamsideCollectionApps = Backbone.Collection.extend({
-    model: Game,
-	collection_name: null,
-	url: function() {
-		return "api/collection/collection.json?name=" + encodeURIComponent(this.collection_name);
-	}
-});
-
-
 var CollectionEditView = Backbone.View.extend({
 
 	events:

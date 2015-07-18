@@ -4,7 +4,8 @@ import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.types.CollectionName;
 
 public interface CollectionsData
-extends CollectionsWrites, CollectionsQueries {
+	extends CollectionsWrites, CollectionsQueries
+{
 
 	default CollectionI addIfAbsent(CollectionName collection)
 	{
@@ -14,8 +15,7 @@ extends CollectionsWrites, CollectionsQueries {
 		}
 		catch (NotFound e)
 		{
-			CollectionImpl in = new CollectionImpl(collection,
-					CollectionI.IsSystem.NO);
+			CollectionImpl in = new CollectionImpl(collection);
 			this.add(in);
 			return in;
 		}

@@ -15,12 +15,14 @@ import br.com.arbo.steamside.steam.client.types.AppNameTypes;
 import br.com.arbo.steamside.steam.client.types.AppType;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
-public class AppImpl implements App {
+public class AppImpl implements App
+{
 
 	AppImpl(
 		AppId appId,
 		@Nullable AppName name,
 		AppType type,
+		boolean owned,
 		@Nullable String executable,
 		Collection<String> categories,
 		Optional<String> lastPlayed,
@@ -31,6 +33,7 @@ public class AppImpl implements App {
 		this.appid = Objects.requireNonNull(appId);
 		this.name = name;
 		this.type = Objects.requireNonNull(type);
+		this.owned = owned;
 		this.executable = executable;
 		this.categories = categories;
 		this.lastPlayed = lastPlayed;
@@ -71,6 +74,12 @@ public class AppImpl implements App {
 	public boolean isInCategory(final SteamCategory category)
 	{
 		return categories.contains(category.category);
+	}
+
+	@Override
+	public boolean isOwned()
+	{
+		return owned;
 	}
 
 	@Override
@@ -120,7 +129,8 @@ public class AppImpl implements App {
 		});
 	}
 
-	public static class Builder {
+	public static class Builder
+	{
 
 		public void addCategory(String category)
 		{
@@ -154,7 +164,7 @@ public class AppImpl implements App {
 		{
 			return new AppImpl(
 				newAppId(), this.name,
-				this.type.orElse(AppType.GAME), this.executable,
+				this.type.orElse(AppType.GAME), this.owned, this.executable,
 				this.categories, this.lastPlayed, this.cloudEnabled,
 				this.notAvailableOnThisPlatform,
 				this.missingFrom_appinfo_vdf);
@@ -176,6 +186,11 @@ public class AppImpl implements App {
 			this.notAvailableOnThisPlatform = Optional.of(e);
 		}
 
+		public void owned()
+		{
+			owned = true;
+		}
+
 		public Builder type(AppType type)
 		{
 			this.type = Optional.of(type);
@@ -186,6 +201,8 @@ public class AppImpl implements App {
 		{
 			return Objects.requireNonNull(appid);
 		}
+
+		private boolean owned;
 
 		private AppId appid;
 
@@ -208,6 +225,8 @@ public class AppImpl implements App {
 
 		private Optional<AppType> type = Optional.empty();
 	}
+
+	private final boolean owned;
 
 	private final AppId appid;
 

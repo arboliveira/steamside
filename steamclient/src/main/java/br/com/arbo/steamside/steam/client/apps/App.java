@@ -9,7 +9,8 @@ import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
-public interface App extends LastPlayed {
+public interface App extends LastPlayed
+{
 
 	AppId appid();
 
@@ -30,6 +31,8 @@ public interface App extends LastPlayed {
 	}
 
 	boolean isInCategory(final SteamCategory category);
+
+	boolean isOwned();
 
 	Optional<String> lastPlayed();
 

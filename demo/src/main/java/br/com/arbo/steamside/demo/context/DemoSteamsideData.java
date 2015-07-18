@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.opersys.username.Username;
 import br.com.arbo.org.springframework.boot.builder.Sources;
-import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
@@ -57,8 +56,7 @@ class DemoSteamsideData
 		for (String name : names)
 		{
 			c.add(new CollectionImpl(
-				new CollectionName(name),
-				CollectionI.IsSystem.NO));
+				new CollectionName(name)));
 		}
 	}
 

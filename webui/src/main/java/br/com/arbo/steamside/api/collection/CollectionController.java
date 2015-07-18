@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.arbo.steamside.api.app.AppDTO;
-import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CombineCollections;
@@ -96,8 +95,7 @@ public class CollectionController
 	{
 		collections.add(
 			new CollectionImpl(
-				new CollectionName(name),
-				CollectionI.IsSystem.NO));
+				new CollectionName(name)));
 	}
 
 	@RequestMapping(value = "collection.json", params = "name")

@@ -2,57 +2,50 @@ package br.com.arbo.steamside.collections.system;
 
 import java.util.stream.Stream;
 
-import br.com.arbo.steamside.collections.CollectionI;
-import br.com.arbo.steamside.collections.CollectionI.IsSystem;
-import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagImpl;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
-import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.types.CollectionName;
 
-class Everything {
+public class Everything
+{
 
 	public Everything(Library library)
 	{
 		this.library = library;
-		this.instance =
-				new CollectionImpl(new CollectionName("(everything)"),
-						IsSystem.YES);
 	}
 
-	public Stream< ? extends Tag> appsOf(
-			CollectionName collectionName, AppCriteria criteria)
+	public Stream< ? extends Tag> apps()
 	{
-		if (!instance.name().equalsCollectionName(collectionName))
-			throw new NotFound(collectionName);
+		AppCriteria criteria = AppCriteria.OWNED;
 
 		return library.allApps(criteria).map(app -> app.appid())
-				.map(TagImpl::new);
+			.map(TagImpl::new);
 	}
 
-	public WithCount withCount(AppCriteria criteria)
+	public WithCount withCount()
 	{
-		return new WithCount() {
+		return new WithCount()
+		{
 
 			@Override
-			public CollectionI collection()
+			public CollectionName collection()
 			{
-				return instance;
+				return new CollectionName("Games owned");
 			}
 
 			@Override
 			public int count()
 			{
+				AppCriteria criteria = AppCriteria.OWNED;
+
 				return library.count(criteria);
 			}
 
 		};
 	}
-
-	final CollectionImpl instance;
 
 	final Library library;
 }

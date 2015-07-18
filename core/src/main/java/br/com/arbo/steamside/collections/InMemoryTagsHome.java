@@ -98,7 +98,9 @@ public class InMemoryTagsHome implements TagsData, DeleteListener
 	@Override
 	public Stream< ? extends WithCount> recent()
 	{
-		return recent.values().stream().map(this::withCount);
+		return recent.values().stream()
+			.map(CollectionImpl::name)
+			.map(this::withCount);
 	}
 
 	public void rememberRecentTag(CollectionName collectionName)
@@ -174,13 +176,13 @@ public class InMemoryTagsHome implements TagsData, DeleteListener
 		tagsByCollection.untag(c, appid);
 	}
 
-	WithCount withCount(CollectionI c)
+	WithCount withCount(CollectionName c)
 	{
 		return new WithCount()
 		{
 
 			@Override
-			public CollectionI collection()
+			public CollectionName collection()
 			{
 				return c;
 			}

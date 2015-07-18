@@ -5,7 +5,8 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-public interface TagsQueries {
+public interface TagsQueries
+{
 
 	Stream< ? extends WithTags> allWithTags();
 
@@ -33,14 +34,16 @@ public interface TagsQueries {
 
 	Stream< ? extends CollectionI> tags(AppId app);
 
-	public static interface WithCount {
+	public static interface WithCount
+	{
 
-		CollectionI collection();
+		CollectionName collection();
 
 		int count();
 	}
 
-	public static interface WithTags {
+	public static interface WithTags
+	{
 
 		CollectionI collection();
 

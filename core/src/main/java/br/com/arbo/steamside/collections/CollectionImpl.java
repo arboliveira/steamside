@@ -2,25 +2,17 @@ package br.com.arbo.steamside.collections;
 
 import br.com.arbo.steamside.types.CollectionName;
 
-public class CollectionImpl implements CollectionI {
+public class CollectionImpl implements CollectionI
+{
 
 	public static CollectionImpl clone(CollectionI in)
 	{
-		final CollectionImpl clone = new CollectionImpl(in.name(),
-				in.isSystem());
-		return clone;
+		return new CollectionImpl(in.name());
 	}
 
-	public CollectionImpl(CollectionName name, IsSystem system)
+	public CollectionImpl(CollectionName name)
 	{
 		this.name = name;
-		this.system = system;
-	}
-
-	@Override
-	public IsSystem isSystem()
-	{
-		return system;
 	}
 
 	@Override
@@ -36,6 +28,4 @@ public class CollectionImpl implements CollectionI {
 	}
 
 	private final CollectionName name;
-
-	private final IsSystem system;
 }

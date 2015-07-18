@@ -121,14 +121,20 @@ class AppsHomeFromLocalFiles
 	private void from_localconfig_apps(AppId appid, final AppImpl.Builder b)
 	{
 		d_localconfig.apps().get(appid).ifPresent(
-			app -> app.lastPlayed().ifPresent(
-				lastPlayed -> b.lastPlayed(lastPlayed.value)));
+			app -> {
+				b.owned();
+				app.lastPlayed().ifPresent(
+					lastPlayed -> b.lastPlayed(lastPlayed.value));
+			});
 	}
 
 	private void from_sharedconfig(AppId appid, final AppImpl.Builder b)
 	{
 		d_sharedconfig.get(appid).ifPresent(
-			each -> each.accept(tag -> b.addCategory(tag)));
+			each -> {
+				b.owned();
+				each.accept(tag -> b.addCategory(tag));
+			});
 	}
 
 	private final Data_appinfo_vdf d_appinfo;

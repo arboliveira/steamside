@@ -7,78 +7,58 @@ import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.collections.TagsQueries.WithTags;
-import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.GameFinder;
 import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class SystemCollectionsHome {
+public class SystemCollectionsHome
+{
 
 	public SystemCollectionsHome(
-			Library library, TagsQueries tags)
+		Library library, TagsQueries tags)
 	{
 		this.tags = tags;
-		this.uncollected = new Uncollected(library, tags);
-		this.everything = new Everything(library);
 		this.gameFinder = new GameFinder(library);
 	}
 
 	public Stream< ? extends CollectionI> all()
 	{
-		return Stream.concat(
-				tags.collections().all(),
-				Stream.of(uncollected.instance, everything.instance));
+		return tags.collections().all();
 	}
 
 	public Stream< ? extends WithCount> allWithCount(AppCriteria criteria)
 	{
-		return Stream.concat(
-				this.withCount(criteria),
-				Stream.of(uncollected.withCount(criteria),
-						everything.withCount(criteria)));
+		return this.withCount(criteria);
 	}
 
 	public Stream< ? extends Tag> appsOf(
-			CollectionName collectionName,
-			AppCriteria criteria)
-	{
-		try
+		CollectionName collectionName,
+		AppCriteria criteria)
 		{
-			return uncollected.appsOf(collectionName, criteria);
+		return filter(tags.appsOf(collectionName), criteria);
 		}
-		catch (NotFound nf1)
-		{
-			try
-			{
-				return everything.appsOf(collectionName, criteria);
-			}
-			catch (NotFound nf2)
-			{
-				return filter(tags.appsOf(collectionName), criteria);
-			}
-		}
-	}
 
 	Stream< ? extends Tag> filter(
-			Stream< ? extends Tag> appsOf,
-			AppCriteria criteria)
-	{
+		Stream< ? extends Tag> appsOf,
+		AppCriteria criteria)
+		{
 		if (AppCriteria.isAll(criteria)) return appsOf;
 		Stream< ? extends Tag> s = appsOf;
 		if (criteria.gamesOnly) s = s.filter(this::isGame);
 		return s;
-	}
+		}
 
 	WithCount withCount(WithTags t, AppCriteria criteria)
 	{
-		return new WithCount() {
+		return new WithCount()
+		{
 
 			@Override
-			public CollectionI collection()
+			public CollectionName collection()
 			{
-				return t.collection();
+				return t.collection().name();
 			}
 
 			@Override
@@ -107,11 +87,6 @@ public class SystemCollectionsHome {
 		return withTags.map(t -> this.withCount(t, criteria));
 	}
 
-	private final Everything everything;
-
 	private final GameFinder gameFinder;
-
 	private final TagsQueries tags;
-
-	private final Uncollected uncollected;
 }

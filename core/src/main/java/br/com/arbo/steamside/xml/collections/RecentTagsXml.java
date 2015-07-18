@@ -7,7 +7,8 @@ import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class RecentTagsXml {
+public class RecentTagsXml
+{
 
 	public static RecentTagsXml valueOf(TagsQueries tags)
 	{
@@ -25,10 +26,11 @@ public class RecentTagsXml {
 
 	void add(WithCount w)
 	{
-		tag.add(w.collection().name().value);
+		tag.add(w.collection().value);
 	}
 
-	class ToTagsHome {
+	class ToTagsHome
+	{
 
 		public ToTagsHome(InMemoryTagsHome tags)
 		{
