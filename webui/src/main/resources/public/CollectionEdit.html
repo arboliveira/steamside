@@ -29,14 +29,17 @@
     <link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
 	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
 
+    <script src="spritesheet.js" type="text/javascript"></script>
     <script src="Backend.js" type="text/javascript"></script>
     <script src="Error.js" type="text/javascript"></script>
     <script src="GameCardDeck.js" type="text/javascript"></script>
+    <script src="CollectionPick.js" type="text/javascript"></script>
+    <script src="Tag.js" type="text/javascript"></script>
     <script src="MoreButton.js" type="text/javascript"></script>
-    <script src="spritesheet.js" type="text/javascript"></script>
     <script src="SteamsideSpriteSheet.js" type="text/javascript"></script>
 	<script src="Search.js" type="text/javascript"></script>
 	<script src="CommandBox.js" type="text/javascript"></script>
+	<script src="Inventory.js" type="text/javascript"></script>
 	<script src="CollectionEdit.js" type="text/javascript"></script>
 
 <!-- ======================================================================= -->
@@ -52,10 +55,16 @@
 			{
 				var steamsideSpriteSheet = new SteamsideSpriteSheet();
 
-				new CollectionEditView({
+                var name =
+                    "You just opened this file in a browser, didn't you?";
+
+                var inventory = new SteamsideCollectionApps();
+                inventory.collection_name = name;
+
+                new CollectionEditView({
 					el: '#tile-collection-edit',
-                    collection_name:
-						"You just opened this file in a browser, didn't you?",
+                    inventory: inventory,
+                    collection_name: name,
                     cardTemplatePromise:
 						steamsideSpriteSheet.card.sprite_promise(),
                     spriteMoreButton: steamsideSpriteSheet.moreButton,

@@ -52,6 +52,8 @@ var CollectionPickView = Backbone.View.extend(
 		this._purposeless = options.purposeless;
 		this._purpose_text = options.purpose_text;
 		this._purpose_el = options.purpose_el;
+		this._cardTemplatePromise = options.cardTemplatePromise;
+		this._spriteMoreButton = options.spriteMoreButton;
 	},
 
 	render: function()
@@ -113,9 +115,22 @@ var CollectionPickView = Backbone.View.extend(
 
 	clickLinkTagless: function(e)
 	{
-
 		e.preventDefault();
 
+		var that = this;
+
+		var inventory = new TaglessAppsInventory();
+
+		var inventoryView = new CollectionEditView({
+				inventory: inventory,
+				collection_name: "Tagless",
+				cardTemplatePromise: that._cardTemplatePromise,
+				spriteMoreButton: that._spriteMoreButton,
+				backend: that._backend,
+				simplified: true
+			}).render();
+
+		that.$el.after(inventoryView.$el);
 	},
 
 	clickLinkOwned: function(e)

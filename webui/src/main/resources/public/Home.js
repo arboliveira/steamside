@@ -445,8 +445,15 @@ var RecentTaggedView = Backbone.View.extend(
 	renderRecentTaggedOne: function(oneTagSuggestion)
 	{
 		var that = this;
+
+		var name = oneTagSuggestion.name();
+
+		var inventory = new SteamsideCollectionApps();
+		inventory.collection_name = name;
+
 		return new CollectionEditView({
-			collection_name: oneTagSuggestion.name(),
+			inventory: inventory,
+			collection_name: name,
 			cardTemplatePromise: that.cardTemplatePromise,
 			spriteMoreButton: that.spriteMoreButton,
 			backend: that.backend,

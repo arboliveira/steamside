@@ -49,6 +49,7 @@ var CollectionEditView = Backbone.View.extend({
 		this.spriteMoreButton = options.spriteMoreButton;
 		this.collection_name = options.collection_name;
 		this.backend = options.backend;
+		this._inventory = options.inventory;
 	},
 
 	render: function () {
@@ -91,9 +92,7 @@ var CollectionEditView = Backbone.View.extend({
 
         this.$("#display-collection-name").text(name);
 
-		var inCollection = new SteamsideCollectionApps();
-        this.inCollection = inCollection;
-        inCollection.collection_name = name;
+		var inCollection = that._inventory;
 
 		new DeckView({
             el: this.$('#games-in-collection-deck'),
@@ -286,7 +285,7 @@ var CollectionEditView = Backbone.View.extend({
 		that.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 			{
-                that.backend.fetch_promise(that.inCollection);
+                that.backend.fetch_promise(that._inventory);
 	        });
 	},
 
@@ -306,7 +305,7 @@ var CollectionEditView = Backbone.View.extend({
 		that.backend.ajax_ajax_promise(aUrl)
 			.done(function()
 			{
-				that.backend.fetch_promise(that.inCollection);
+				that.backend.fetch_promise(that._inventory);
 			});
 	},
 

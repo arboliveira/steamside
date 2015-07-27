@@ -8,7 +8,7 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 	}
 });
 
-var UntaggedAppsInventory = Backbone.Collection.extend({
+var TaglessAppsInventory = Backbone.Collection.extend({
 	model: Game,
 	url: function() {
 		return "api/inventory/tagless.json";

@@ -44,9 +44,13 @@ var InventoryWorldView = Backbone.View.extend(
 	render: function () {
 		var that = this;
 
+		var inventory = new SteamsideCollectionApps();
+		inventory.collection_name = this._inventory_name;
+
 		this.$el.append(
 			new CollectionEditView(
 				{
+					inventory: inventory,
 					collection_name: this._inventory_name,
 					cardTemplatePromise: this._cardTemplatePromise,
 					spriteMoreButton: this._spriteMoreButton,
