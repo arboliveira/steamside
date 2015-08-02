@@ -7,7 +7,8 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-class ExampleDumpAppNamesGivenIds {
+class ExampleDumpAppNamesGivenIds
+{
 
 	public static void main(final String[] args)
 	{
@@ -17,35 +18,24 @@ class ExampleDumpAppNamesGivenIds {
 	private static InMemory_appinfo_vdf newAppNameFactory()
 	{
 		return new InMemory_appinfo_vdf(
-				new File_appinfo_vdf(
-						SteamLocations
-								.fromSteamPhysicalFiles()));
-	}
-
-	{
-		appnameFactory = newAppNameFactory();
+			new File_appinfo_vdf(
+				SteamLocations
+					.fromSteamPhysicalFiles()));
 	}
 
 	private void execute()
 	{
 		final Stream<AppId> appids = Arrays.asList(
-				"22000", "9050", "12800", "10150", "35460", "204560"
-				)
-				.stream()
-				.map(AppId::new);
+			"22000", "9050", "12800", "10150", "35460", "204560")
+			.stream()
+			.map(AppId::new);
 
-		appids.map(
-				this::toInfo
-				).parallel().forEach(
-						System.out::println
-				);
+		new SysoutAppInfoLine(appnameFactory)
+			.forEach(appids, System.out::println);
 	}
 
-	private String toInfo(AppId appid)
 	{
-		return SysoutAppInfoLine.toInfo(
-				new AppInfoAppNameType(
-						appid, appnameFactory));
+		appnameFactory = newAppNameFactory();
 	}
 
 	private Data_appinfo_vdf appnameFactory;

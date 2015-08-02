@@ -10,7 +10,8 @@ import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
-public class ExampleDumpSteamCategoriesFrom_Library {
+public class ExampleDumpSteamCategoriesFrom_Library
+{
 
 	public static void main(final String[] args)
 	{
@@ -25,12 +26,14 @@ public class ExampleDumpSteamCategoriesFrom_Library {
 	void printCategory(final SteamCategory category)
 	{
 		Stream<App> apps = library.findIn(category);
-		final Stream<String> infos = apps.map(this::toInfo);
 
 		System.out.println(indent.on(category));
 
 		indent.increase();
+
+		Stream<String> infos = apps.map(this::toInfo);
 		infos.map(indent::on).parallel().forEach(System.out::println);
+
 		indent.decrease();
 	}
 

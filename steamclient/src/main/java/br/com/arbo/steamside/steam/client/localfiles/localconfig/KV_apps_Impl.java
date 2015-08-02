@@ -8,7 +8,8 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-class KV_apps_Impl implements KV_apps {
+class KV_apps_Impl implements KV_apps
+{
 
 	public void add(KV_app_Impl app)
 	{
@@ -34,6 +35,12 @@ class KV_apps_Impl implements KV_apps {
 	public Optional<KV_app> get(AppId appid)
 	{
 		return Optional.ofNullable(map.get(appid.appid));
+	}
+
+	@Override
+	public Stream<AppId> streamAppId()
+	{
+		return map.keySet().stream().map(key -> new AppId(key));
 	}
 
 	private void put(AppId appid, KV_app_Impl app)

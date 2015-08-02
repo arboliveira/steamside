@@ -6,7 +6,8 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class KV_apptickets_Impl implements KV_apptickets {
+public class KV_apptickets_Impl implements KV_apptickets
+{
 
 	public void add(KV_appticket_Impl app)
 	{
@@ -17,8 +18,7 @@ public class KV_apptickets_Impl implements KV_apptickets {
 	public Stream< ? extends KV_appticket> all()
 	{
 		@SuppressWarnings("unchecked")
-		final Stream< ? extends KV_appticket> all = map.values()
-				.stream();
+		Stream< ? extends KV_appticket> all = map.values().stream();
 		return all;
 	}
 
@@ -26,6 +26,12 @@ public class KV_apptickets_Impl implements KV_apptickets {
 	public void forEach(Consumer<KV_appticket> visitor)
 	{
 		map.values().forEach(visitor);
+	}
+
+	@Override
+	public Stream<AppId> streamAppId()
+	{
+		return map.keySet().stream().map(key -> new AppId(key));
 	}
 
 	private void put(AppId appid, KV_appticket_Impl app)
