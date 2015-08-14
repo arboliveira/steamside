@@ -5,45 +5,31 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.NotFound;
+import br.com.arbo.steamside.report.Report;
 import br.com.arbo.steamside.settings.file.SteamsideData_ForExamples;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.Libraries;
 import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
-import br.com.arbo.steamside.types.CollectionName;
 
-public class ExampleDumpUncollected {
+public class ExampleDumpUncollected
+{
 
 	public static void main(final String[] args) throws NotFound
 	{
 		new ExampleDumpUncollected().run();
 	}
 
-	void printTag(Tag tag)
-			throws br.com.arbo.steamside.steam.client.apps.NotFound
-	{
-		AppId appid = tag.appid();
-
-		System.out.println(library.find(appid));
-	}
-
 	void run()
 	{
-		final Stream< ? extends Tag> apps;
-		SystemCollectionsHome sys =
-				new SystemCollectionsHome(library, home);
-		apps = sys.appsOf(
-				new CollectionName("(uncollected)"),
-				new AppCriteria() {
+		Stream< ? extends Tag> apps = new Uncollected(library, tags).apps();
+		Stream<AppId> appids = apps.map(Tag::appid);
+		Stream<String> lines =
+			appids.map(appid -> library.find(appid).toString());
 
-					{
-						gamesOnly = true;
-					}
-				});
-		apps.forEach(this::printTag);
+		new Report("tagless", lines).print();
 	}
 
-	InMemoryTagsHome home = SteamsideData_ForExamples.fromXmlFile();
-
 	Library library = Libraries.fromSteamPhysicalFiles();
+
+	InMemoryTagsHome tags = SteamsideData_ForExamples.fromXmlFile();
 }

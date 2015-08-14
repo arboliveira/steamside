@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import br.com.arbo.steamside.report.Report;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
@@ -21,13 +21,6 @@ class ExampleDumpAppNamesFrom_localconfig_vdf
 	public static void main(final String[] args) throws IOException
 	{
 		new ExampleDumpAppNamesFrom_localconfig_vdf().execute();
-	}
-
-	private static void banner(String banner)
-	{
-		System.out.println("==============================");
-		System.out.println(banner);
-		System.out.println("==============================");
 	}
 
 	private static Data_localconfig_vdf data(File_localconfig_vdf vdf)
@@ -46,19 +39,14 @@ class ExampleDumpAppNamesFrom_localconfig_vdf
 	{
 		return new InMemory_appinfo_vdf(new File_appinfo_vdf(
 			SteamLocations
-				.fromSteamPhysicalFiles()));
+			.fromSteamPhysicalFiles()));
 	}
 
 	private void dump(String banner, final Stream<AppId> appids)
 	{
-		AtomicInteger i = new AtomicInteger();
-		banner(banner);
-		new SysoutAppInfoLine(appnameFactory)
-			.forEach(appids, (s) -> {
-				System.out.println(s);
-				i.incrementAndGet();
-			});
-		banner(i + " " + banner);
+		new Report(
+			banner, new SysoutAppInfoLine(appids, appnameFactory).lines())
+		.print();
 	}
 
 	private void execute() throws FileNotFoundException, IOException

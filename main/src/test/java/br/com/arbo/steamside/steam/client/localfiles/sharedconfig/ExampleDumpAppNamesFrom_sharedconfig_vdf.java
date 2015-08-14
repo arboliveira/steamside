@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import br.com.arbo.steamside.report.Report;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
@@ -45,15 +46,17 @@ class ExampleDumpAppNamesFrom_sharedconfig_vdf
 	{
 		this.appnameFactory = newAppNameFactory();
 
-		File_sharedconfig_vdf file_sharedconfig_vdf = new File_sharedconfig_vdf(
-			Dirs_userid.fromSteamPhysicalFiles());
+		File_sharedconfig_vdf file_sharedconfig_vdf =
+			new File_sharedconfig_vdf(
+				Dirs_userid.fromSteamPhysicalFiles());
 
 		Data_sharedconfig_vdf data = data(file_sharedconfig_vdf);
 
-		final Stream<AppId> appids = data.apps().streamAppId();
+		Stream<AppId> appids = data.apps().streamAppId();
 
-		new SysoutAppInfoLine(appnameFactory)
-			.forEach(appids, System.out::println);
+		new Report(
+			"apps", new SysoutAppInfoLine(appids, appnameFactory).lines())
+			.print();
 	}
 
 	private Data_appinfo_vdf appnameFactory;

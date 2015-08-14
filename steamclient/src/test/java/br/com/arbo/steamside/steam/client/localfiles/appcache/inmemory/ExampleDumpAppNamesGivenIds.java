@@ -20,7 +20,7 @@ class ExampleDumpAppNamesGivenIds
 		return new InMemory_appinfo_vdf(
 			new File_appinfo_vdf(
 				SteamLocations
-					.fromSteamPhysicalFiles()));
+				.fromSteamPhysicalFiles()));
 	}
 
 	private void execute()
@@ -30,8 +30,9 @@ class ExampleDumpAppNamesGivenIds
 			.stream()
 			.map(AppId::new);
 
-		new SysoutAppInfoLine(appnameFactory)
-			.forEach(appids, System.out::println);
+		new SysoutAppInfoLine(appids, appnameFactory)
+			.lines()
+			.forEach(System.out::println);
 	}
 
 	{

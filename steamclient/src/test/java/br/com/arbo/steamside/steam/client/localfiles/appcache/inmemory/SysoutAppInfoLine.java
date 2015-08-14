@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory;
 
-import java.util.function.Consumer;
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
@@ -27,21 +27,22 @@ public class SysoutAppInfoLine
 		}
 	}
 
-	public SysoutAppInfoLine(Data_appinfo_vdf appnameFactory)
+	public SysoutAppInfoLine(Stream<AppId> appids,
+		Data_appinfo_vdf appnameFactory)
 	{
+		this.appids = appids;
 		this.appnameFactory = appnameFactory;
 	}
 
-	public void forEach(Stream<AppId> appids, Consumer<String> action)
+	public Stream<String> lines()
 	{
-		appids.map(this::toInfo).parallel().forEach(action);
+		return appids
+			.map(appid -> new AppInfoAppNameType(appid, appnameFactory))
+			.sorted(Comparator.comparing(SysoutAppInfoLine::appnametype))
+			.map(appnametype -> SysoutAppInfoLine.toInfo(appnametype));
 	}
 
-	private String toInfo(AppId appid)
-	{
-		return SysoutAppInfoLine.toInfo(
-			new AppInfoAppNameType(appid, appnameFactory));
-	}
+	private final Stream<AppId> appids;
 
 	private final Data_appinfo_vdf appnameFactory;
 
