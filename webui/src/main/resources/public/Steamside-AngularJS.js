@@ -102,8 +102,9 @@ var Steamside_AngularJS =
 		var that = this;
 		that.moduleSteamside.controller(
 			Steamside.MyGamesWorld.nameController,
-			['$scope', Steamside_AngularJS.nameBackend, function ($scope, theBackend){
-				Steamside.MyGamesWorld.controller($scope, theBackend);
+				['$scope', Steamside_AngularJS.nameBackend, Steamside_AngularJS.nameSpritesSteamside,
+					function ($scope, theBackend, spritesSteamside){
+				Steamside.MyGamesWorld.controller($scope, theBackend, spritesSteamside);
 			}]);
 	},
 

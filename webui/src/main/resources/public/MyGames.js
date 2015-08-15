@@ -6,11 +6,16 @@ Steamside.MyGamesWorld =
 
 	htmlWorld: 'MyGames.html',
 
-	controller: function($scope, theBackend)
+	controller: function($scope, theBackend, spritesSteamside)
 	{
+		var spriteMoreButton = spritesSteamside.moreButton;
+		var cardTemplatePromise = spritesSteamside.card.sprite_promise();
+
 		new MyGamesView(
 			{
-				backend: theBackend
+				backend: theBackend,
+				cardTemplatePromise: cardTemplatePromise,
+				spriteMoreButton: spriteMoreButton
 			}
 		).render();
 	}
@@ -24,6 +29,8 @@ var MyGamesView = Backbone.View.extend(
 	initialize: function(options)
 	{
 		this.backend = options.backend;
+		this._cardTemplatePromise = options.cardTemplatePromise;
+		this._spriteMoreButton = options.spriteMoreButton;
 	},
 
 	render: function () {
@@ -32,6 +39,8 @@ var MyGamesView = Backbone.View.extend(
 		that.$("#CollectionPickView").append(
 			new CollectionPickView(
 				{
+					cardTemplatePromise: that._cardTemplatePromise,
+					spriteMoreButton: that._spriteMoreButton,
 					backend: that.backend,
 					purposeless: true
 				}

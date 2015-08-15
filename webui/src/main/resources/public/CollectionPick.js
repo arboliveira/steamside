@@ -123,7 +123,7 @@ var CollectionPickView = Backbone.View.extend(
 
 		var inventoryView = new CollectionEditView({
 				inventory: inventory,
-				collection_name: "Tagless",
+				collection_name: "Tagless so far",
 				cardTemplatePromise: that._cardTemplatePromise,
 				spriteMoreButton: that._spriteMoreButton,
 				backend: that._backend,
@@ -135,9 +135,22 @@ var CollectionPickView = Backbone.View.extend(
 
 	clickLinkOwned: function(e)
 	{
-
 		e.preventDefault();
 
+		var that = this;
+
+		var inventory = new OwnedAppsInventory();
+
+		var inventoryView = new CollectionEditView({
+			inventory: inventory,
+			collection_name: "Owned by you",
+			cardTemplatePromise: that._cardTemplatePromise,
+			spriteMoreButton: that._spriteMoreButton,
+			backend: that._backend,
+			simplified: true
+		}).render();
+
+		that.$el.after(inventoryView.$el);
 	},
 
 	_on_collection_pick: null,
