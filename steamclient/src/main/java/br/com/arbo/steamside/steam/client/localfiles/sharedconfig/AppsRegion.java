@@ -6,7 +6,8 @@ import java.util.function.Consumer;
 import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.steam.client.vdf.Region;
 
-class AppsRegion {
+class AppsRegion
+{
 
 	AppsRegion(final Region content)
 	{
@@ -16,24 +17,25 @@ class AppsRegion {
 	Data_sharedconfig_vdf parse()
 	{
 		final InMemory_sharedconfig_vdf a = new InMemory_sharedconfig_vdf();
-		this.forEachEntry_app(app -> a.add(app));
+		this.forEachEntry_app(a::add);
 		return a;
 	}
 
 	private void forEachEntry_app(final Consumer<Entry_app> visitor)
 	{
-		class ParseEveryAppSubRegion implements KeyValueVisitor {
+		class ParseEveryAppSubRegion implements KeyValueVisitor
+		{
 
 			@Override
 			public void onKeyValue(final String k, final String v)
-					throws Finished
+				throws Finished
 			{
 				// The "apps" region has no key/value pairs of itself.
 			}
 
 			@Override
 			public void onSubRegion(final String k, final Region r)
-					throws Finished
+				throws Finished
 			{
 				Objects.requireNonNull(k);
 				final AppRegion appRegion = new AppRegion(r);

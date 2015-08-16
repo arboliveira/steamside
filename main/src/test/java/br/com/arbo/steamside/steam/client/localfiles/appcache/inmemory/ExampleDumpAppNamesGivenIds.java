@@ -3,6 +3,7 @@ package br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import br.com.arbo.steamside.out.Out;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
 import br.com.arbo.steamside.steam.client.types.AppId;
@@ -20,24 +21,23 @@ class ExampleDumpAppNamesGivenIds
 		return new InMemory_appinfo_vdf(
 			new File_appinfo_vdf(
 				SteamLocations
-				.fromSteamPhysicalFiles()));
+					.fromSteamPhysicalFiles()));
+	}
+
+	private Data_appinfo_vdf appinfoFactory;
+
+	{
+		appinfoFactory = newAppNameFactory();
 	}
 
 	private void execute()
 	{
-		final Stream<AppId> appids = Arrays.asList(
+		Stream<AppId> appids = Arrays.asList(
 			"22000", "9050", "12800", "10150", "35460", "204560")
 			.stream()
 			.map(AppId::new);
 
-		new SysoutAppInfoLine(appids, appnameFactory)
-			.lines()
-			.forEach(System.out::println);
+		Stream<String> lines = SysoutAppInfoLine.lines(appids, appinfoFactory);
+		new Out("ids", lines).out();
 	}
-
-	{
-		appnameFactory = newAppNameFactory();
-	}
-
-	private Data_appinfo_vdf appnameFactory;
 }
