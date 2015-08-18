@@ -33,7 +33,7 @@ public class Everything
 			@Override
 			public CollectionName collection()
 			{
-				return new CollectionName("Games owned");
+				return new CollectionName(NAME);
 			}
 
 			@Override
@@ -48,4 +48,6 @@ public class Everything
 	}
 
 	final Library library;
+
+	private static final String NAME = "Owned by you";
 }

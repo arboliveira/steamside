@@ -61,10 +61,12 @@
                 var inventory = new SteamsideCollectionApps();
                 inventory.collection_name = name;
 
+                var tag = new Tag({name: name, count: 42});
+
                 new CollectionEditView({
 					el: '#tile-collection-edit',
                     inventory: inventory,
-                    collection_name: name,
+                    tag: tag,
                     cardTemplatePromise:
 						steamsideSpriteSheet.card.sprite_promise(),
                     spriteMoreButton: steamsideSpriteSheet.moreButton,

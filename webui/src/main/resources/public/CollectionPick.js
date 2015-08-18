@@ -121,9 +121,14 @@ var CollectionPickView = Backbone.View.extend(
 
 		var inventory = new TaglessAppsInventory();
 
+		var tag = new TaglessCount();
+		this._backend.fetch_promise(tag).done(function() {
+			tag.readonly_set(true);
+		});
+
 		var inventoryView = new CollectionEditView({
 				inventory: inventory,
-				collection_name: "Tagless so far",
+				tag: tag,
 				cardTemplatePromise: that._cardTemplatePromise,
 				spriteMoreButton: that._spriteMoreButton,
 				backend: that._backend,
@@ -141,9 +146,14 @@ var CollectionPickView = Backbone.View.extend(
 
 		var inventory = new OwnedAppsInventory();
 
+		var tag = new OwnedCount();
+		this._backend.fetch_promise(tag).done(function() {
+			tag.readonly_set(true);
+		});
+
 		var inventoryView = new CollectionEditView({
 			inventory: inventory,
-			collection_name: "Owned by you",
+			tag: tag,
 			cardTemplatePromise: that._cardTemplatePromise,
 			spriteMoreButton: that._spriteMoreButton,
 			backend: that._backend,

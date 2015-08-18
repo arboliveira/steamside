@@ -15,9 +15,18 @@ var TaglessAppsInventory = Backbone.Collection.extend({
 	}
 });
 
+var TaglessCount = Tag.extend({
+	url: "api/inventory/tagless-count.json"
+});
+
 var OwnedAppsInventory = Backbone.Collection.extend({
 	model: Game,
 	url: function() {
 		return "api/inventory/owned.json";
 	}
 });
+
+var OwnedCount = Tag.extend({
+	url: "api/inventory/owned-count.json"
+});
+

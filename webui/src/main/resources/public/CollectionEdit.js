@@ -47,9 +47,9 @@ var CollectionEditView = Backbone.View.extend({
 		this.simplified = options.simplified;
 		this.cardTemplatePromise = options.cardTemplatePromise;
 		this.spriteMoreButton = options.spriteMoreButton;
-		this.collection_name = options.collection_name;
 		this.backend = options.backend;
 		this._inventory = options.inventory;
+		this._tag = options.tag;
 	},
 
 	render: function () {
@@ -73,15 +73,13 @@ var CollectionEditView = Backbone.View.extend({
 		this.combineView = new CombineView({
 			backend: that.backend,
             el: that.$('#CombineView'),
-            collection_editing: that.collection_name
+            collection_editing: that._tag.name()
         });
 
 		this.combine_purpose_el = this.$("#CombinePurposeView");
 		this.combine_purpose_el.remove();
 
-        var name = that.collection_name;
-
-		var tag = new Tag({name: name});
+		var tag = that._tag;
 
 		this.$("#TagSticker").empty().append(
 			new TagStickerView({
@@ -90,7 +88,7 @@ var CollectionEditView = Backbone.View.extend({
 				.render().el
 		);
 
-        this.$("#display-collection-name").text(name);
+		//this.$("#display-collection-name").text(that._tag.name());
 
 		var inCollection = that._inventory;
 
@@ -271,7 +269,9 @@ var CollectionEditView = Backbone.View.extend({
 
 	on_add_click: function(appid)
 	{
-        var name = this.collection_name;
+		var that = this;
+
+		var name = that._tag.name();
         var aUrl = "api/collection/" + name + "/add/" + appid;
 
 		// TODO display 'adding...'
@@ -279,8 +279,6 @@ var CollectionEditView = Backbone.View.extend({
 		 beforeSend: function(){
 		 },
 		 */
-
-        var that = this;
 
 		that.backend.ajax_ajax_promise(aUrl)
 			.done(function()
@@ -291,7 +289,9 @@ var CollectionEditView = Backbone.View.extend({
 
 	on_remove_click: function(appid)
 	{
-		var name = this.collection_name;
+		var that = this;
+
+		var name = that._tag.name();
 		var aUrl = "api/collection/" + name + "/remove/" + appid;
 
 		// TODO display 'removing...'
@@ -299,8 +299,6 @@ var CollectionEditView = Backbone.View.extend({
 		 beforeSend: function(){
 		 },
 		 */
-
-		var that = this;
 
 		that.backend.ajax_ajax_promise(aUrl)
 			.done(function()
@@ -334,7 +332,7 @@ var CollectionEditView = Backbone.View.extend({
 		var el_combine_purpose = this.combine_purpose_el.clone();
 
 		el_combine_purpose.find('#CombineCollectionName')
-			.text(this.collection_name);
+			.text(this._tag.name());
 
 		return el_combine_purpose;
 	},
@@ -352,7 +350,8 @@ var CollectionEditView = Backbone.View.extend({
 	cardTemplatePromise: null,
 	combineView: null,
 	combine_purpose_el: null,
-	collection_name: null,
+	_inventory: null,
+	_tag: null,
 	backend: null,
 	simplified: false,
 	whenRendered: null

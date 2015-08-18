@@ -32,7 +32,7 @@ public class Uncollected
 			@Override
 			public CollectionName collection()
 			{
-				return new CollectionName("Games never tagged");
+				return new CollectionName(NAME);
 			}
 
 			@Override
@@ -52,5 +52,7 @@ public class Uncollected
 
 	private final Library library;
 	private final TagsQueries tags;
+
+	private static final String NAME = "Tagless so far";
 
 }

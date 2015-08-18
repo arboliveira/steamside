@@ -1,6 +1,7 @@
 "use strict";
 
-var Tag = Backbone.Model.extend({
+var Tag = Backbone.Model.extend(
+{
 	name: function()
 	{
 		return this.get('name');
@@ -9,6 +10,15 @@ var Tag = Backbone.Model.extend({
 	count: function()
 	{
 		return this.get('count');
+	}
+	,
+	readonly: function()
+	{
+		return this.get('readonly') == true;
+	}
+	,
+	readonly_set: function(v) {
+		return this.set('readonly', v);
 	}
 	,
 	name_set: function( v )
@@ -257,36 +267,59 @@ var TagStickerView = Backbone.View.extend(
 			return that;
 		},
 
-		render_el: function()
+		render_href: function()
+		{
+			if (this.model.readonly())
+			{
+				return;
+			}
+			var name_text = this.model.name();
+			var encoded = encodeURIComponent(name_text);
+			var fragment = '#/collections/' + encoded + '/edit';
+			this.link_el().attr('href', fragment);
+		},
+
+		render_name: function ()
 		{
 			var name_el = this.$el.find("#collection-pick-one-name");
 			var name_text = this.model.name();
 			name_el.text(name_text);
+		},
 
-			var encoded = encodeURIComponent(name_text);
-			var fragment = '#/collections/' + encoded + '/edit';
-			this.link_el().attr('href', fragment);
-
+		render_count: function ()
+		{
 			var $count = this.$("#count");
 			var count = this.model.count();
-			if (count != undefined)
-			{
-				$count.text(count);
+			if (count != undefined) {
+				$count.text("" + count);
+				$count.show();
 			}
-			else
-			{
-				$count.remove();
+			else {
+				$count.hide();
 			}
+		},
 
+		render_el: function()
+		{
+			this.render_name();
+			this.render_href();
+			this.render_count();
 			return this;
 		},
 
-		link_el: function () {
+		link_el: function ()
+		{
 			return this.$el.find("#collection-pick-one-link");
 		},
 
 		on_click: function(e)
 		{
+			if (this.model.readonly())
+			{
+				e.preventDefault();
+				return;
+			}
+
 			if (this._on_clicked != null)
 			{
 				e.preventDefault();

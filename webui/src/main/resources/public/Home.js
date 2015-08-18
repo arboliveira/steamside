@@ -453,7 +453,7 @@ var RecentTaggedView = Backbone.View.extend(
 
 		return new CollectionEditView({
 			inventory: inventory,
-			collection_name: name,
+			tag: oneTagSuggestion,
 			cardTemplatePromise: that.cardTemplatePromise,
 			spriteMoreButton: that.spriteMoreButton,
 			backend: that.backend,
