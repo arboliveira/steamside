@@ -16,6 +16,7 @@
 		<module>steamclient</module>
 		<module>core</module>
 		<module>webui</module>
+		<module>stats</module>
 		<module>main</module>
 		<module>app</module>
 		<module>demo</module>
