@@ -59,7 +59,9 @@ public class SpringBoot implements LocalWebserver
 		builder.listeners(new BannerPrepare());
 
 		sources
-			.sources(ApiServlet.class, SimpleCORSFilter.class, Welcome.class)
+			.sources(
+				ApiServlet.class, SimpleCORSFilter.class, Welcome.class,
+				ActuatorEndpoints.class)
 			.registerSingleton(new PortCustomize(portInUse.port));
 
 		return start(sources, builder);
