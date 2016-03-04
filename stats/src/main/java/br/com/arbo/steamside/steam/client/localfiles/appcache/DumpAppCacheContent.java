@@ -2,14 +2,12 @@ package br.com.arbo.steamside.steam.client.localfiles.appcache;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.function.Consumer;
 
-import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.lang3.StringUtils;
 
+import br.com.arbo.steamside.out.Dump;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
-import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
 import br.com.arbo.steamside.steam.client.vdf.DumpVdfStructure;
 import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.steam.client.vdf.Region;
@@ -19,11 +17,7 @@ public class DumpAppCacheContent
 
 	public void dump(Consumer<String> print)
 	{
-		try (FileInputStream f =
-			new FileInputStream(
-				new File_appinfo_vdf(
-					SteamLocations.fromSteamPhysicalFiles())
-						.appinfo_vdf()))
+		try (FileInputStream f = File_appinfo_vdf_Factory.newFileInputStream())
 		{
 			new Content_appinfo_vdf(f).accept(new AppOut(print));
 		}
@@ -35,12 +29,7 @@ public class DumpAppCacheContent
 
 	public String dumpToString()
 	{
-		StringBuilderWriter dump = new StringBuilderWriter();
-		try (PrintWriter p = new PrintWriter(dump))
-		{
-			dump(p::println);
-		}
-		return dump.getBuilder().toString();
+		return Dump.dumpToString(this::dump);
 	}
 
 	static class AppOut implements Content_appinfo_vdf_Visitor

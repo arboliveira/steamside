@@ -1,13 +1,10 @@
-package br.com.arbo.steamside.app.embedded;
+package br.com.arbo.steamside.app.embedded.actuate;
 
-import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.boot.actuate.endpoint.Endpoint;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
-import br.com.arbo.steamside.steam.client.localfiles.appcache.DumpAppCacheContent;
 
 @Configuration
 @ComponentScan
@@ -21,19 +18,10 @@ public class ActuatorEndpoints
 		return new AppinfoVdfEndpoint();
 	}
 
-	public static class AppinfoVdfEndpoint extends AbstractEndpoint<String>
+	@Bean
+	public static Endpoint<String> appinfo_vdf_apps()
 	{
-
-		@Override
-		public String invoke()
-		{
-			return new DumpAppCacheContent().dumpToString();
-		}
-
-		public AppinfoVdfEndpoint()
-		{
-			super("appinfo_vdf");
-		}
+		return new AppinfoVdfAppsEndpoint();
 	}
 
 }

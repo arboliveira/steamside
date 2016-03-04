@@ -2,19 +2,11 @@ package br.com.arbo.steamside.steam.client.localfiles.appcache.entry;
 
 import java.util.Optional;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
 
-public class AppInfo {
-
-	public AppInfo(AppName appName, AppType appType)
-	{
-		this.name = appName;
-		this.type = appType;
-	}
+public class AppInfo
+{
 
 	public String executable() throws NotAvailableOnThisPlatform
 	{
@@ -34,13 +26,18 @@ public class AppInfo {
 	@Override
 	public String toString()
 	{
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.SIMPLE_STYLE);
+		return type + "," + executable.orElse("(noexecutable)") + "," + name;
 	}
 
 	public AppType type()
 	{
 		return type;
+	}
+
+	public AppInfo(AppName appName, AppType appType)
+	{
+		this.name = appName;
+		this.type = appType;
 	}
 
 	private Optional<String> executable = Optional.empty();
