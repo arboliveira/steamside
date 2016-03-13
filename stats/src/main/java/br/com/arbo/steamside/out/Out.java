@@ -42,11 +42,11 @@ public class Out
 		i.incrementAndGet();
 	}
 
-	public Out(String name, Stream<String> lines)
+	public Out(String name, Stream<String> lines, Consumer<String> print)
 	{
 		this.name = name;
 		this.lines = lines;
-		this.print = System.out::println;
+		this.print = print;
 	}
 
 	private final AtomicInteger i = new AtomicInteger();

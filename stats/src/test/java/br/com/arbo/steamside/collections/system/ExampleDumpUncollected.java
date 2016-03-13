@@ -26,7 +26,7 @@ public class ExampleDumpUncollected
 		Stream<String> lines =
 			appids.map(appid -> library.find(appid).toString());
 
-		new Out("tagless", lines).out();
+		new Out("tagless", lines, System.out::println).out();
 	}
 
 	Library library = Libraries.fromSteamPhysicalFiles();

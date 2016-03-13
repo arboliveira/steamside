@@ -53,7 +53,7 @@ class ExampleDumpAppNamesFrom_sharedconfig_vdf
 
 		Stream<AppId> appids = data.apps().streamAppId();
 		Stream<String> lines = SysoutAppInfoLine.lines(appids, appinfoFactory);
-		new Out("apps", lines).out();
+		new Out("apps", lines, System.out::println).out();
 	}
 
 	private Data_appinfo_vdf appinfoFactory;

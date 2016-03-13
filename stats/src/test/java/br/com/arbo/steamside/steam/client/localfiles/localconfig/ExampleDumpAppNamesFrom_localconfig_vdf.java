@@ -45,7 +45,7 @@ class ExampleDumpAppNamesFrom_localconfig_vdf
 	private void dump(String banner, final Stream<AppId> appids)
 	{
 		Stream<String> lines = SysoutAppInfoLine.lines(appids, appinfoFactory);
-		new Out(banner, lines).out();
+		new Out(banner, lines, System.out::println).out();
 	}
 
 	private void execute() throws FileNotFoundException, IOException

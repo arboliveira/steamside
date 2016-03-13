@@ -13,8 +13,8 @@ public class AppinfoVdfAppsEndpoint extends AbstractEndpoint<String>
 		return new DumpAppCacheParse().dumpToString();
 	}
 
-	public AppinfoVdfAppsEndpoint()
+	public AppinfoVdfAppsEndpoint(String id)
 	{
-		super("appinfo_vdf_apps");
+		super(id);
 	}
 }

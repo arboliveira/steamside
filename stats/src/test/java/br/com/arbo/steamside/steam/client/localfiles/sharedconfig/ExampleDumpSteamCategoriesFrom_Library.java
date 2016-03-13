@@ -26,7 +26,7 @@ public class ExampleDumpSteamCategoriesFrom_Library
 	void printCategory(final SteamCategory category)
 	{
 		Stream<App> apps = library.findIn(category);
-		new Out(category.toString(), apps.map(this::toInfo)).out();
+		new Out(category.toString(), apps.map(this::toInfo), System.out::println).out();
 	}
 
 	private String toInfo(App app)
