@@ -12,9 +12,14 @@ public class File_appinfo_vdf_Factory
 		throws FileNotFoundException
 	{
 		return new FileInputStream(
-			new File_appinfo_vdf(
-				SteamLocations.fromSteamPhysicalFiles()
-			).appinfo_vdf());
+			fromSteamPhysicalFiles().appinfo_vdf());
+	}
+
+	public static File_appinfo_vdf fromSteamPhysicalFiles()
+	{
+		return new File_appinfo_vdf(
+			SteamLocations.fromSteamPhysicalFiles()
+		);
 	}
 
 }

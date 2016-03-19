@@ -2,9 +2,8 @@ package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
 import java.io.IOException;
 
-import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf_Factory;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dirs_userid;
-import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
 
 class ExampleDumpAppNamesFrom_localconfig_vdf
 {
@@ -14,10 +13,9 @@ class ExampleDumpAppNamesFrom_localconfig_vdf
 		new DumpAppNamesFrom_localconfig_vdf(
 			new File_localconfig_vdf(
 				Dirs_userid.fromSteamPhysicalFiles()),
-			new File_appinfo_vdf(
-				SteamLocations.fromSteamPhysicalFiles()))
-					.dump(
-						System.out::println);
+			File_appinfo_vdf_Factory.fromSteamPhysicalFiles())
+				.dump(
+					System.out::println);
 	}
 
 }

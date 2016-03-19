@@ -19,29 +19,14 @@ import br.com.arbo.steamside.steam.client.types.AppId;
 public class InMemory_appinfo_vdf implements Data_appinfo_vdf
 {
 
-	@Inject
-	public InMemory_appinfo_vdf(final File_appinfo_vdf file_appinfo_vdf)
-	{
-		this.file_appinfo_vdf = file_appinfo_vdf;
-		this.map = new HashMap<String, AppInfo>();
-		try
-		{
-			populate();
-		}
-		catch (final IOException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Override
 	public AppInfo get(final AppId appid) throws MissingFrom_appinfo_vdf
 	{
 		return Optional
 			.ofNullable(
 				map.get(appid.appid))
-				.orElseThrow(
-					() -> MissingFrom_appinfo_vdf.appid(appid));
+			.orElseThrow(
+				() -> MissingFrom_appinfo_vdf.appid(appid));
 	}
 
 	@Override
@@ -76,8 +61,23 @@ public class InMemory_appinfo_vdf implements Data_appinfo_vdf
 			(appid, appinfo) -> map.put(appid, appinfo)).parse();
 	}
 
-	private final File_appinfo_vdf file_appinfo_vdf;
+	@Inject
+	public InMemory_appinfo_vdf(File_appinfo_vdf file_appinfo_vdf)
+	{
+		this.file_appinfo_vdf = file_appinfo_vdf;
+		this.map = new HashMap<String, AppInfo>();
+		try
+		{
+			populate();
+		}
+		catch (final IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 
 	final HashMap<String, AppInfo> map;
+
+	private final File_appinfo_vdf file_appinfo_vdf;
 
 }
