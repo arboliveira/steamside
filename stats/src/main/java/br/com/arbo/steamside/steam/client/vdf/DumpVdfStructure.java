@@ -8,9 +8,9 @@ import br.com.arbo.steamside.indent.Indent;
 public class DumpVdfStructure implements KeyValueVisitor
 {
 
-	public static void dump(final InputStream in)
+	public static void dump(InputStream in, Consumer<String> print)
 	{
-		new Vdf(in).root().accept(new DumpVdfStructure(System.out::println));
+		new Vdf(in).root().accept(new DumpVdfStructure(print));
 	}
 
 	@Override
