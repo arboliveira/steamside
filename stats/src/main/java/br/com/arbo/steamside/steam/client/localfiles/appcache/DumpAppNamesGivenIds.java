@@ -3,47 +3,56 @@ package br.com.arbo.steamside.steam.client.localfiles.appcache;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import br.com.arbo.steamside.out.Dump;
 import br.com.arbo.steamside.out.Out;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.InMemory_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
-import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class DumpAppNamesGivenIds
 {
 
-	private static InMemory_appinfo_vdf newAppNameFactory()
+	public void dump(Consumer<String> print, String... ids)
 	{
-		return new InMemory_appinfo_vdf(
-			new File_appinfo_vdf(
-				SteamLocations
-					.fromSteamPhysicalFiles()));
+		new Ids(ids).dump(print);
 	}
 
-	public void dump(Consumer<String> print)
+	public String dumpToString(String... ids)
 	{
-		Stream<String> lines =
-			SysoutAppInfoLine.lines(appids, appinfoFactory);
-		new Out("ids", lines, print).out();
+		return Dump.dumpToString(new Ids(ids)::dump);
 	}
 
-	public String dumpToString()
+	private Data_appinfo_vdf newAppNameFactory()
 	{
-		return Dump.dumpToString(this::dump);
+		return new InMemory_appinfo_vdf(file_appinfo_vdf);
 	}
 
-	public DumpAppNamesGivenIds(String... ids)
+	@Inject
+	public DumpAppNamesGivenIds(File_appinfo_vdf file_appinfo_vdf)
 	{
-		this.appids = Stream.of(ids).map(AppId::new);
+		this.file_appinfo_vdf = file_appinfo_vdf;
 	}
 
-	private final Stream<AppId> appids;
+	private final File_appinfo_vdf file_appinfo_vdf;
 
-	private Data_appinfo_vdf appinfoFactory;
-
+	class Ids
 	{
-		appinfoFactory = newAppNameFactory();
+
+		void dump(Consumer<String> print)
+		{
+			Stream<String> lines =
+				SysoutAppInfoLine.lines(appids, newAppNameFactory());
+			new Out("ids", lines, print).out();
+		}
+
+		Ids(String... ids)
+		{
+			this.appids = Stream.of(ids).map(AppId::new);
+		}
+
+		private final Stream<AppId> appids;
 	}
 }

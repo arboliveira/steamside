@@ -6,7 +6,6 @@ import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.stereotype.Component;
 
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.DumpVdfStructureFrom_localconfig_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
 
 @Component
 public class VdfStructureFromLocalconfigEndpoint
@@ -16,18 +15,18 @@ public class VdfStructureFromLocalconfigEndpoint
 	@Override
 	public String invoke()
 	{
-		return new DumpVdfStructureFrom_localconfig_vdf(
-			file_localconfig_vdf)
-				.dumpToString();
+		return dumpVdfStructureFrom_localconfig_vdf.dumpToString();
 	}
 
 	@Inject
 	public VdfStructureFromLocalconfigEndpoint(
-		File_localconfig_vdf file_localconfig_vdf)
+		DumpVdfStructureFrom_localconfig_vdf dumpVdfStructureFrom_localconfig_vdf)
 	{
 		super("vdfstructure_from_localconfig");
-		this.file_localconfig_vdf = file_localconfig_vdf;
+		this.dumpVdfStructureFrom_localconfig_vdf =
+			dumpVdfStructureFrom_localconfig_vdf;
 	}
 
-	private final File_localconfig_vdf file_localconfig_vdf;
+	private final DumpVdfStructureFrom_localconfig_vdf dumpVdfStructureFrom_localconfig_vdf;
+
 }

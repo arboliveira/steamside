@@ -1,20 +1,28 @@
 package br.com.arbo.steamside.app.embedded.actuate;
 
+import javax.inject.Inject;
+
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
+import org.springframework.stereotype.Component;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.DumpAppCacheContent;
 
+@Component
 public class AppinfoVdfEndpoint extends AbstractEndpoint<String>
 {
 
 	@Override
 	public String invoke()
 	{
-		return new DumpAppCacheContent().dumpToString();
+		return dumpAppCacheContent.dumpToString();
 	}
 
-	public AppinfoVdfEndpoint(String id)
+	@Inject
+	public AppinfoVdfEndpoint(DumpAppCacheContent dumpAppCacheContent)
 	{
-		super(id);
+		super("appinfo_vdf");
+		this.dumpAppCacheContent = dumpAppCacheContent;
 	}
+
+	private final DumpAppCacheContent dumpAppCacheContent;
 }

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import br.com.arbo.steamside.out.Dump;
 import br.com.arbo.steamside.out.Out;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.File_appinfo_vdf;
@@ -59,6 +61,7 @@ public class DumpAppNamesFrom_localconfig_vdf
 		return new InMemory_appinfo_vdf(file_appinfo_vdf);
 	}
 
+	@Inject
 	public DumpAppNamesFrom_localconfig_vdf(
 		File_localconfig_vdf file_localconfig_vdf,
 		File_appinfo_vdf file_appinfo_vdf)

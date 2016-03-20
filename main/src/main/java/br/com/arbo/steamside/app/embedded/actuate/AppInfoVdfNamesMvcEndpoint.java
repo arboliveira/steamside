@@ -1,8 +1,10 @@
 package br.com.arbo.steamside.app.embedded.actuate;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.actuate.endpoint.Endpoint;
 import org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.arbo.steamside.steam.client.localfiles.appcache.DumpAppNamesGivenIds;
 
+@Component
 public class AppInfoVdfNamesMvcEndpoint extends EndpointMvcAdapter
 {
 
@@ -17,14 +20,19 @@ public class AppInfoVdfNamesMvcEndpoint extends EndpointMvcAdapter
 	@ResponseBody
 	public String filter(@RequestParam("ids") String ids)
 	{
-		return new DumpAppNamesGivenIds(StringUtils.split(ids, ','))
-			.dumpToString();
+		return dumpAppNamesGivenIds
+			.dumpToString(StringUtils.split(ids, ','));
 	}
 
+	@Inject
 	public AppInfoVdfNamesMvcEndpoint(
-		Endpoint< ? > delegate)
+		AppInfoVdfNamesEndpoint delegate,
+		DumpAppNamesGivenIds dumpAppNamesGivenIds)
 	{
 		super(delegate);
+		this.dumpAppNamesGivenIds = dumpAppNamesGivenIds;
 	}
+
+	private final DumpAppNamesGivenIds dumpAppNamesGivenIds;
 
 }

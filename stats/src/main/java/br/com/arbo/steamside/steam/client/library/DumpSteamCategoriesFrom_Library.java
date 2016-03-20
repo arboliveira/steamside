@@ -3,6 +3,8 @@ package br.com.arbo.steamside.steam.client.library;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import br.com.arbo.steamside.out.Dump;
 import br.com.arbo.steamside.out.Out;
 import br.com.arbo.steamside.steam.client.apps.App;
@@ -41,6 +43,7 @@ public class DumpSteamCategoriesFrom_Library
 		return SysoutAppInfoLine.toInfo(new AppAppNameType(app));
 	}
 
+	@Inject
 	public DumpSteamCategoriesFrom_Library(Library library)
 	{
 		this.library = library;

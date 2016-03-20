@@ -7,7 +7,9 @@ class ExampleDumpAppCacheContent
 
 	public static void main(final String[] args) throws IOException
 	{
-		new DumpAppCacheContent().dump(System.out::println);
+		new DumpAppCacheContent(
+			File_appinfo_vdf_Factory.fromSteamPhysicalFiles())
+				.dump(System.out::println);
 	}
 
 }

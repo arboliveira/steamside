@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.arbo.steamside.out.Dump;
@@ -17,7 +19,8 @@ public class DumpAppCacheContent
 
 	public void dump(Consumer<String> print)
 	{
-		try (FileInputStream f = File_appinfo_vdf_Factory.newFileInputStream())
+		try (FileInputStream f =
+			new FileInputStream(file_appinfo_vdf.appinfo_vdf()))
 		{
 			new Content_appinfo_vdf(f).accept(new AppOut(print));
 		}
@@ -31,6 +34,14 @@ public class DumpAppCacheContent
 	{
 		return Dump.dumpToString(this::dump);
 	}
+
+	@Inject
+	public DumpAppCacheContent(File_appinfo_vdf file_appinfo_vdf)
+	{
+		this.file_appinfo_vdf = file_appinfo_vdf;
+	}
+
+	private final File_appinfo_vdf file_appinfo_vdf;
 
 	static class AppOut implements Content_appinfo_vdf_Visitor
 	{
