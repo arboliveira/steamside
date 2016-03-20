@@ -1,11 +1,11 @@
 package br.com.arbo.steamside.steam.client.localfiles.digest;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
+import br.com.arbo.steamside.steam.client.apps.AppImpl.Builder;
 import br.com.arbo.steamside.steam.client.apps.AppsHome;
 import br.com.arbo.steamside.steam.client.apps.InMemoryAppsHome;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
@@ -16,6 +16,7 @@ import br.com.arbo.steamside.steam.client.localfiles.localconfig.Data_localconfi
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_appticket;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.types.LastPlayed;
 
 class AppsHomeFromLocalFiles
 {
@@ -35,14 +36,12 @@ class AppsHomeFromLocalFiles
 		b.executable(executable);
 	}
 
-	AppsHomeFromLocalFiles(
-		Data_appinfo_vdf d_appinfo,
-		Data_localconfig_vdf d_localconfig,
-		Data_sharedconfig_vdf d_sharedconfig)
+	public Builder contribute(AppImpl.Builder b, AppId appid)
 	{
-		this.d_appinfo = d_appinfo;
-		this.d_localconfig = d_localconfig;
-		this.d_sharedconfig = d_sharedconfig;
+		from_localconfig_apps(appid, b);
+		from_appinfo(appid, b);
+		from_sharedconfig(appid, b);
+		return b;
 	}
 
 	AppsHome combine()
@@ -51,16 +50,12 @@ class AppsHomeFromLocalFiles
 		Stream<AppId> appidsFrom_sharedconfig = appidsFrom_sharedconfig();
 		Stream<AppId> appidsFrom_appinfo = appidsFrom_appinfo();
 
-		List<Stream<AppId>> all = Arrays.asList(
-			appidsFrom_localconfig, appidsFrom_sharedconfig,
-			appidsFrom_appinfo);
+		Stream<AppId> all =
+			Stream.concat(
+				Stream.concat(appidsFrom_localconfig, appidsFrom_sharedconfig),
+				appidsFrom_appinfo);
 
-		HashSet<AppId> uniques = new HashSet<>();
-
-		for (Stream<AppId> appidsToGoIntoLibrary : all)
-		{
-			appidsToGoIntoLibrary.forEach(uniques::add);
-		}
+		Set<AppId> uniques = all.collect(Collectors.toSet());
 
 		uniques.forEach(this::eachAppId);
 
@@ -91,14 +86,10 @@ class AppsHomeFromLocalFiles
 
 	private AppImpl buildFromAppId(AppId appid)
 	{
-		AppImpl.Builder b = new AppImpl.Builder().appid(appid.appid());
-
-		from_localconfig_apps(appid, b);
-		from_appinfo(appid, b);
-		from_sharedconfig(appid, b);
-
-		final AppImpl make = b.make();
-		return make;
+		return contribute(
+			new AppImpl.Builder().appid(appid.appid()),
+			appid)
+				.make();
 	}
 
 	private void from_appinfo(AppId appid, final AppImpl.Builder b)
@@ -123,8 +114,10 @@ class AppsHomeFromLocalFiles
 		d_localconfig.apps().get(appid).ifPresent(
 			app -> {
 				b.owned();
-				app.lastPlayed().ifPresent(
-					lastPlayed -> b.lastPlayed(lastPlayed.value));
+				app.lastPlayed()
+					.map(LastPlayed::value)
+					.ifPresent(
+						b::lastPlayed);
 			});
 	}
 
@@ -133,8 +126,18 @@ class AppsHomeFromLocalFiles
 		d_sharedconfig.get(appid).ifPresent(
 			each -> {
 				b.owned();
-				each.accept(tag -> b.addCategory(tag));
+				each.accept(b::addCategory);
 			});
+	}
+
+	AppsHomeFromLocalFiles(
+		Data_appinfo_vdf d_appinfo,
+		Data_localconfig_vdf d_localconfig,
+		Data_sharedconfig_vdf d_sharedconfig)
+	{
+		this.d_appinfo = d_appinfo;
+		this.d_localconfig = d_localconfig;
+		this.d_sharedconfig = d_sharedconfig;
 	}
 
 	private final Data_appinfo_vdf d_appinfo;

@@ -7,18 +7,18 @@ import org.junit.Test;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
 import br.com.arbo.steamside.steam.client.apps.FilterPlatform;
-import br.com.arbo.steamside.steam.client.apps.AppImpl.Builder;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
 
-public class FilterPlatformTest {
+public class FilterPlatformTest
+{
 
 	@Test
-	public void notAvailable__mustReject() {
-		final Builder builder = new AppImpl.Builder();
-		builder.appid("142857");
-		builder.notAvailableOnThisPlatform(new NotAvailableOnThisPlatform());
-		final App app = builder.make();
-
+	public void notAvailable__mustReject()
+	{
+		App app = new AppImpl.Builder()
+			.appid("142857")
+			.notAvailableOnThisPlatform(new NotAvailableOnThisPlatform())
+			.make();
 		assertFalse(subject.test(app));
 	}
 

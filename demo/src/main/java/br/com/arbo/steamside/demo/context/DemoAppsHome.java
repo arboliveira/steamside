@@ -1,5 +1,10 @@
 package br.com.arbo.steamside.demo.context;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.apache.commons.lang3.StringUtils;
+
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
 import br.com.arbo.steamside.steam.client.apps.AppsHome;
@@ -9,7 +14,8 @@ import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailable
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
 
-class DemoAppsHome {
+class DemoAppsHome
+{
 
 	static AppsHomeFactory demoAppsHomeFactory()
 	{
@@ -19,10 +25,7 @@ class DemoAppsHome {
 
 	private static void add(InMemoryAppsHome appsHome, Appx... appxs)
 	{
-		for (Appx appx : appxs)
-		{
-			appsHome.add(app(appx));
-		}
+		Stream.of(appxs).map(DemoAppsHome::app).forEach(appsHome::add);
 	}
 
 	private static App app(Appx appx)
@@ -33,6 +36,10 @@ class DemoAppsHome {
 			.type(AppType.GAME)
 			.lastPlayed(String.valueOf(appx.lastPlayed))
 			.executable("!" + NotAvailableOnThisPlatform.class.getSimpleName())
+			.categories(
+				StringUtils.split(
+					Optional.ofNullable(appx.categories)
+						.orElse("")))
 			.make();
 	}
 
@@ -50,10 +57,12 @@ class DemoAppsHome {
 			new Appx() {{
 				name = "Half-Life";
 				appid = "70";
+				categories = "Valve";
 			}},
 			new Appx() {{
 				name = "Portal";
 				appid = "400";
+				categories = "Valve";
 			}},
 			new Appx() {{
 				name = "Grand Theft Auto V";
@@ -66,6 +75,7 @@ class DemoAppsHome {
 			new Appx() {{
 				name = "Counter-Strike: Global Offensive";
 				appid = "730";
+				categories = "Valve";
 			}},
 			new Appx() {{
 				name = "The Elder Scrolls V: Skyrim";
@@ -103,7 +113,10 @@ class DemoAppsHome {
 		/* @formatter:on */
 	}
 
-	static class Appx {
+	static class Appx
+	{
+
+		static long i = 1000;
 
 		Appx()
 		{
@@ -111,10 +124,10 @@ class DemoAppsHome {
 		}
 
 		String appid;
+		String categories;
 		long lastPlayed;
-		String name;
 
-		static long i = 1000;
+		String name;
 
 	}
 

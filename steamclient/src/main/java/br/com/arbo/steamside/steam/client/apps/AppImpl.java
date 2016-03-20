@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.steam.client.apps;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -17,30 +18,6 @@ import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 public class AppImpl implements App
 {
-
-	AppImpl(
-		AppId appId,
-		@Nullable AppName name,
-		AppType type,
-		boolean owned,
-		@Nullable String executable,
-		Collection<String> categories,
-		Optional<String> lastPlayed,
-		@Nullable final String cloudEnabled,
-		Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform,
-		Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf)
-	{
-		this.appid = Objects.requireNonNull(appId);
-		this.name = name;
-		this.type = Objects.requireNonNull(type);
-		this.owned = owned;
-		this.executable = executable;
-		this.categories = categories;
-		this.lastPlayed = lastPlayed;
-		this.cloudEnabled = cloudEnabled;
-		this.notAvailableOnThisPlatform = notAvailableOnThisPlatform;
-		this.missingFrom_appinfo_vdf = missingFrom_appinfo_vdf;
-	}
 
 	@Override
 	public AppId appid()
@@ -65,8 +42,8 @@ public class AppImpl implements App
 	@Override
 	public void forEachCategory(final Consumer<SteamCategory> visitor)
 	{
-		categories.stream().map(
-			one -> new SteamCategory(one))
+		categories.stream()
+			.map(SteamCategory::new)
 			.forEach(visitor);
 	}
 
@@ -129,6 +106,53 @@ public class AppImpl implements App
 		});
 	}
 
+	AppImpl(
+		AppId appId,
+		@Nullable AppName name,
+		AppType type,
+		boolean owned,
+		@Nullable String executable,
+		Collection<String> categories,
+		Optional<String> lastPlayed,
+		@Nullable final String cloudEnabled,
+		Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform,
+		Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf)
+	{
+		this.appid = Objects.requireNonNull(appId);
+		this.name = name;
+		this.type = Objects.requireNonNull(type);
+		this.owned = owned;
+		this.executable = executable;
+		this.categories = categories;
+		this.lastPlayed = lastPlayed;
+		this.cloudEnabled = cloudEnabled;
+		this.notAvailableOnThisPlatform = notAvailableOnThisPlatform;
+		this.missingFrom_appinfo_vdf = missingFrom_appinfo_vdf;
+	}
+
+	private final AppId appid;
+
+	private final Collection<String> categories;
+
+	@Nullable
+	private final String cloudEnabled;
+
+	@Nullable
+	private final String executable;
+
+	private final Optional<String> lastPlayed;
+
+	private final Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf;
+
+	@Nullable
+	private final AppName name;
+
+	private final Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform;
+
+	private final boolean owned;
+
+	private final AppType type;
+
 	public static class Builder
 	{
 
@@ -140,6 +164,12 @@ public class AppImpl implements App
 		public Builder appid(String k)
 		{
 			this.appid = new AppId(k);
+			return this;
+		}
+
+		public Builder categories(String... categories)
+		{
+			this.categories.addAll(Arrays.asList(categories));
 			return this;
 		}
 
@@ -181,9 +211,10 @@ public class AppImpl implements App
 			return this;
 		}
 
-		public void notAvailableOnThisPlatform(NotAvailableOnThisPlatform e)
+		public Builder notAvailableOnThisPlatform(NotAvailableOnThisPlatform e)
 		{
 			this.notAvailableOnThisPlatform = Optional.of(e);
+			return this;
 		}
 
 		public void owned()
@@ -201,8 +232,6 @@ public class AppImpl implements App
 		{
 			return Objects.requireNonNull(appid);
 		}
-
-		private boolean owned;
 
 		private AppId appid;
 
@@ -223,30 +252,9 @@ public class AppImpl implements App
 		private Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform =
 			Optional.empty();
 
+		private boolean owned;
+
 		private Optional<AppType> type = Optional.empty();
 	}
-
-	private final boolean owned;
-
-	private final AppId appid;
-
-	private final Collection<String> categories;
-
-	@Nullable
-	private final String cloudEnabled;
-
-	@Nullable
-	private final String executable;
-
-	private final Optional<String> lastPlayed;
-
-	private final Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf;
-
-	@Nullable
-	private final AppName name;
-
-	private final Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform;
-
-	private final AppType type;
 
 }

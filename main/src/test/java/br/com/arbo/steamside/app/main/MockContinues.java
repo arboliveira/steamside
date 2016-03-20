@@ -56,8 +56,9 @@ public class MockContinues
 				"220", // Half-Life 2
 				"215690" // Zeno Clash 2
 			);
-			final AppImpl.Builder b = new AppImpl.Builder();
-			return ids.stream().map(id -> b.appid(id).make());
+			return ids.stream()
+				.map(new AppImpl.Builder()::appid)
+				.map(AppImpl.Builder::make);
 		}
 	}
 

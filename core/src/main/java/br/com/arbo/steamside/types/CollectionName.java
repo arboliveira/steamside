@@ -5,11 +5,6 @@ import java.util.Objects;
 public class CollectionName
 {
 
-	public CollectionName(String value)
-	{
-		this.value = Objects.requireNonNull(value, "Tag name can't be empty");
-	}
-
 	public boolean equalsCollectionName(CollectionName name)
 	{
 		return value.equals(name.value);
@@ -19,6 +14,16 @@ public class CollectionName
 	public String toString()
 	{
 		return value;
+	}
+
+	public String value()
+	{
+		return value;
+	}
+
+	public CollectionName(String value)
+	{
+		this.value = Objects.requireNonNull(value, "Tag name can't be empty");
 	}
 
 	public final String value;

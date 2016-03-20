@@ -11,7 +11,8 @@ import com.google.common.collect.ArrayListMultimap;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
-public class InMemoryAppsHome implements AppsHome {
+public class InMemoryAppsHome implements AppsHome
+{
 
 	public void add(final App app)
 	{

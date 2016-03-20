@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import br.com.arbo.org.junit.Assert;
 import br.com.arbo.steamside.collections.TagsData;
+import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
@@ -19,6 +20,7 @@ import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
 import br.com.arbo.steamside.steam.client.apps.InMemoryAppsHome;
 import br.com.arbo.steamside.steam.client.library.LibraryImpl;
 import br.com.arbo.steamside.steam.client.types.AppName;
+import br.com.arbo.steamside.types.CollectionName;
 
 public class CopyAllSteamCategoriesTest
 {
@@ -26,11 +28,12 @@ public class CopyAllSteamCategoriesTest
 	private static App newApp(
 		String name, String category, Optional<String> lastPlayed)
 	{
-		Builder b = new AppImpl.Builder();
-		b.addCategory(category);
-		b.appid(name);
+		Builder b =
+			new AppImpl.Builder()
+				.categories(category)
+				.appid(name)
+				.name(new AppName(name));
 		lastPlayed.ifPresent(b::lastPlayed);
-		b.name(new AppName(name));
 		return b.make();
 	}
 
@@ -57,7 +60,8 @@ public class CopyAllSteamCategoriesTest
 
 		List<String> collect =
 			tagsData.recent()
-				.map(wc -> wc.collection().value)
+				.map(WithCount::collection)
+				.map(CollectionName::value)
 				.collect(Collectors.toList());
 
 		Assert.assertThat(collect.toString(), equalTo("[c, b, d, a]"));
