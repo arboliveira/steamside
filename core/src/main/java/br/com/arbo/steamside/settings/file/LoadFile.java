@@ -1,11 +1,20 @@
 package br.com.arbo.steamside.settings.file;
 
-import java.io.FileNotFoundException;
-
 import br.com.arbo.steamside.xml.SteamsideXml;
 
-public interface LoadFile {
+public interface LoadFile
+{
 
-	SteamsideXml load() throws FileNotFoundException;
+	SteamsideXml load() throws Missing;
+
+	public static class Missing extends RuntimeException
+	{
+
+		Missing(Throwable cause)
+		{
+			super(cause);
+		}
+
+	}
 
 }

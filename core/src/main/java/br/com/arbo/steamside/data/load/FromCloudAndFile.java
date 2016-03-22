@@ -1,6 +1,5 @@
 package br.com.arbo.steamside.data.load;
 
-import java.io.FileNotFoundException;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -17,15 +16,6 @@ import br.com.arbo.steamside.settings.file.LoadFile;
 
 public class FromCloudAndFile implements InitialLoad
 {
-
-	@Inject
-	public FromCloudAndFile(
-		LoadCloud cloud, LoadFile file, Bootstrap bootstrap)
-	{
-		this.cloud = cloud;
-		this.file = file;
-		this.bootstrap = bootstrap;
-	}
 
 	@Override
 	public SteamsideData loadSteamsideData()
@@ -75,12 +65,21 @@ public class FromCloudAndFile implements InitialLoad
 		{
 			return Optional.of(file.load().toSteamsideData());
 		}
-		catch (FileNotFoundException e)
+		catch (br.com.arbo.steamside.settings.file.LoadFile.Missing e)
 		{
 			// TODO Notify the outside world. First time?
 			e.printStackTrace();
 			return Optional.empty();
 		}
+	}
+
+	@Inject
+	public FromCloudAndFile(
+		LoadCloud cloud, LoadFile file, Bootstrap bootstrap)
+	{
+		this.cloud = cloud;
+		this.file = file;
+		this.bootstrap = bootstrap;
 	}
 
 	private final Bootstrap bootstrap;

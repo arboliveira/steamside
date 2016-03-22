@@ -3,8 +3,6 @@ package br.com.arbo.steamside.app.main;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
-import java.io.FileNotFoundException;
-
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.settings.file.LoadFile;
 import br.com.arbo.steamside.settings.file.SaveFile;
@@ -32,16 +30,10 @@ class FirstRun
 
 	private static LoadFile missingSteamsideXml()
 	{
-		try
-		{
-			LoadFile mock = mock(LoadFile.class);
-			doThrow(FileNotFoundException.class).when(mock).load();
-			return mock;
-		}
-		catch (FileNotFoundException e)
-		{
-			throw new RuntimeException(e);
-		}
+		LoadFile mock = mock(LoadFile.class);
+		doThrow(br.com.arbo.steamside.settings.file.LoadFile.Missing.class)
+			.when(mock).load();
+		return mock;
 	}
 
 }

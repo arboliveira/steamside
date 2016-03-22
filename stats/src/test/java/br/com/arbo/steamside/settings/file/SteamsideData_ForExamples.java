@@ -1,7 +1,5 @@
 package br.com.arbo.steamside.settings.file;
 
-import java.io.FileNotFoundException;
-
 import br.com.arbo.steamside.collections.InMemoryCollectionsHome;
 import br.com.arbo.steamside.collections.InMemoryTagsHome;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dirs_userid;
@@ -29,9 +27,15 @@ public class SteamsideData_ForExamples
 		{
 			return new LoadSteamsideXml(file_steamside_xml).load();
 		}
-		catch (FileNotFoundException e)
+		catch (br.com.arbo.steamside.settings.file.LoadFile.Missing e)
 		{
-			throw new RuntimeException(e);
+			throw new IllegalStateException(
+				"Can't load "
+					+ SteamsideXml.class.getSimpleName()
+					+ " data. "
+					+ "This machine has no steamside.xml file. "
+					+ "Perhaps Steamside never ran here?",
+				e);
 		}
 	}
 }
