@@ -11,12 +11,12 @@ import br.com.arbo.steamside.steam.client.library.Libraries;
 import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class ExampleDumpUncollected
+public class ExampleDumpSteamsideXmlUncollected
 {
 
 	public static void main(final String[] args) throws NotFound
 	{
-		new ExampleDumpUncollected().run();
+		new ExampleDumpSteamsideXmlUncollected().run();
 	}
 
 	void run()

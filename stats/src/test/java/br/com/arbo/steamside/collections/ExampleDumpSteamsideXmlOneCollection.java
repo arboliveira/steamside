@@ -12,12 +12,12 @@ import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class ExampleDumpOneCollection
+public class ExampleDumpSteamsideXmlOneCollection
 {
 
 	public static void main(final String[] args) throws NotFound
 	{
-		new ExampleDumpOneCollection().run();
+		new ExampleDumpSteamsideXmlOneCollection().run();
 	}
 
 	void printTag(Tag tag)
