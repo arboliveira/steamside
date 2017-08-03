@@ -70,12 +70,6 @@ public class DumpAppCacheContent
 		}
 
 		@Override
-		public void onSection(final byte section_number)
-		{
-			print.accept(">>>>" + section_number + ">>>>");
-		}
-
-		@Override
 		public void onSubRegion(final String k, final Region r)
 			throws Finished
 		{

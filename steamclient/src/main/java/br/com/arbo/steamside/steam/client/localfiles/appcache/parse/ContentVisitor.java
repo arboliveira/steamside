@@ -11,7 +11,8 @@ import br.com.arbo.steamside.steam.client.types.AppType;
 import br.com.arbo.steamside.steam.client.vdf.Candidate;
 import br.com.arbo.steamside.steam.client.vdf.Region;
 
-class ContentVisitor implements Content_appinfo_vdf_Visitor {
+class ContentVisitor implements Content_appinfo_vdf_Visitor
+{
 
 	static boolean osMatches(final String v)
 	{
@@ -22,13 +23,8 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 		throw new IllegalArgumentException();
 	}
 
-	public ContentVisitor(final ParseVisitor parsevisitor)
-	{
-		this.parsevisitor = parsevisitor;
-	}
-
 	@Override
-	public void onApp(final int app_id)
+	public void onApp(int app_id)
 	{
 		appid = String.valueOf(app_id);
 		builder = new Builder();
@@ -38,9 +34,6 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	@Override
 	public void onAppEnd()
 	{
-		final boolean noSectionsWereVisited = path.isEmpty();
-		if (noSectionsWereVisited) return;
-
 		if (SystemUtils.IS_OS_WINDOWS)
 			if (builder.executable_missing()
 				&& this.lastseen_executable.isPresent())
@@ -65,16 +58,10 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	}
 
 	@Override
-	public void onSection(final byte section_number)
-	{
-		path = String.valueOf(section_number);
-	}
-
-	@Override
 	public void onSubRegion(final String k, final Region r) throws Finished
 	{
-		final String pathbefore = path;
-		path += "/" + k;
+		String pathbefore = path;
+		path = pathbefore.isEmpty() ? k : pathbefore + "/" + k;
 		r.accept(this);
 		path = pathbefore;
 	}
@@ -83,10 +70,10 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "executable";
 		if (key.named(wanted)
-			.underDeep("4/" + appid + "/launch").matches())
+			.underDeep("appinfo/" + appid + "/launch").matches())
 			return true;
 		if (key.named(wanted)
-			.underDeep("4/config/launch").matches())
+			.underDeep("appinfo/config/launch").matches())
 			return true;
 		return false;
 	}
@@ -95,10 +82,10 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "name";
 		if (key.named(wanted)
-			.under("2/" + appid).matches())
+			.under("appinfo/" + appid).matches())
 			return true;
 		if (key.named(wanted)
-			.under("2/common").matches())
+			.under("appinfo/common").matches())
 			return true;
 		return false;
 	}
@@ -107,10 +94,10 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "oslist";
 		if (key.named(wanted)
-			.underDeep("4/" + appid + "/launch").matches())
+			.underDeep("appinfo/" + appid + "/launch").matches())
 			return true;
 		if (key.named(wanted)
-			.underDeep("4/config/launch").matches())
+			.underDeep("appinfo/config/launch").matches())
 			return true;
 		return false;
 	}
@@ -119,12 +106,17 @@ class ContentVisitor implements Content_appinfo_vdf_Visitor {
 	{
 		final String wanted = "type";
 		if (key.named(wanted)
-			.under("2/" + appid).matches())
+			.under("appinfo/" + appid).matches())
 			return true;
 		if (key.named(wanted)
-			.under("2/common").matches())
+			.under("appinfo/common").matches())
 			return true;
 		return false;
+	}
+
+	public ContentVisitor(final ParseVisitor parsevisitor)
+	{
+		this.parsevisitor = parsevisitor;
 	}
 
 	private String appid;

@@ -5,7 +5,8 @@ import java.util.Optional;
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
 
-public class Builder {
+public class Builder
+{
 
 	public AppInfo build()
 	{
@@ -44,8 +45,18 @@ public class Builder {
 	private AppInfo newEntry()
 	{
 		return new AppInfo(
-				appName.orElseThrow(InternalStructureChanged_appinfo_vdf::new),
-				appType.orElseThrow(InternalStructureChanged_appinfo_vdf::new));
+			appName.orElseGet(this::noName),
+			appType.orElseGet(this::noType));
+	}
+
+	private AppName noName()
+	{
+		return new AppName("(noname)");
+	}
+
+	private AppType noType()
+	{
+		return AppType.valueOf("(notype)");
 	}
 
 	private Optional<AppName> appName = Optional.empty();

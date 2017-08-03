@@ -24,7 +24,10 @@ public class KeyValues_cpp
 		while (true)
 		{
 			final byte type = buffer.getUnsignedChar();
-			if (type == TYPE_NUMTYPES) break;
+			if (type == TYPE_NUMTYPES)
+			{
+				break;
+			}
 			try
 			{
 				readNameValue(buffer, visitor, type);
