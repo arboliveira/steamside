@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 
 import javax.inject.Inject;
 
@@ -13,41 +12,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.HttpClientBuilder;
 
-public class Cloud {
+public class Cloud
+{
 
-	private static HttpResponse client_execute(
-		HttpClient client, HttpUriRequest post) throws Unavailable
-	{
-		try
-		{
-			return client.execute(post);
-		}
-		catch (UnknownHostException e)
-		{
-			throw new Unavailable(e);
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static HttpResponse execute(HttpUriRequest post)
-		throws Unavailable
-	{
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpResponse response = client_execute(client, post);
-		return response;
-	}
-
-	private static InputStream getContent(final HttpEntity entity)
+	private static InputStream getContent(HttpEntity entity)
 	{
 		try
 		{
@@ -67,12 +39,6 @@ public class Cloud {
 			"application/x-www-form-urlencoded;charset=UTF-8");
 	}
 
-	@Inject
-	public Cloud(Host host)
-	{
-		this.host = host;
-	}
-
 	public String download() throws Unavailable
 	{
 		URI uri = buildHttpGetURI();
@@ -81,7 +47,9 @@ public class Cloud {
 
 		log.info("Sending 'GET' request to URL : " + uri);
 
-		HttpResponse response = execute(get);
+		HttpClientExecute exec = new HttpClientExecuteSerious();
+
+		HttpResponse response = exec.execute(get);
 
 		log.info(
 			"Response Code : "
@@ -103,7 +71,7 @@ public class Cloud {
 		log.info("\nSending 'POST' request to URL : " + uri);
 		log.info("Post parameters : " + post.getEntity());
 
-		HttpResponse response = execute(post);
+		HttpResponse response = cloudUpload.upload(post);
 
 		log.info(
 			"Response Code : "
@@ -159,9 +127,18 @@ public class Cloud {
 		}
 	}
 
+	private static final String USER_AGENT = "Mozilla/5.0";
+
+	@Inject
+	public Cloud(Host host, CloudUpload cloudUpload)
+	{
+		this.host = host;
+		this.cloudUpload = cloudUpload;
+	}
+
+	private final CloudUpload cloudUpload;
+
 	private final Host host;
 
 	private final Log log = LogFactory.getLog(this.getClass());
-
-	private static final String USER_AGENT = "Mozilla/5.0";
 }

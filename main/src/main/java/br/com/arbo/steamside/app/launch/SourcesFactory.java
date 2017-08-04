@@ -18,6 +18,8 @@ import br.com.arbo.steamside.bootstrap.BootstrapImpl;
 import br.com.arbo.steamside.cloud.Cloud;
 import br.com.arbo.steamside.cloud.CloudSettingsFactory;
 import br.com.arbo.steamside.cloud.CloudSettingsFromLocalSettings;
+import br.com.arbo.steamside.cloud.CloudUpload;
+import br.com.arbo.steamside.cloud.CloudUploadSerious;
 import br.com.arbo.steamside.cloud.Host;
 import br.com.arbo.steamside.cloud.LoadCloud;
 import br.com.arbo.steamside.cloud.Uploader;
@@ -134,6 +136,9 @@ public class SourcesFactory
 			.sourceImplementor(
 				CloudSettingsFactory.class,
 				CloudSettingsFromLocalSettings.class)
+			.sourceImplementor(
+				CloudUpload.class,
+				CloudUploadSerious.class)
 			.sourceImplementor(Host.class, Dontpad.class)
 			.sourceImplementor(
 				DontpadSettingsFactory.class,
