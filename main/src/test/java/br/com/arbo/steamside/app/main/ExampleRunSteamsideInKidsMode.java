@@ -12,10 +12,9 @@ class ExampleRunSteamsideInKidsMode
 
 	public static void main(final String[] args)
 	{
-		Sources s = SourcesFactory.newInstance()
-			.sources(KidsModeActiveCustomize.class);
-
-		SpringApplicationFactory.run(s, args);
+		SpringApplicationFactory.run(
+			SourcesFactory.newInstance().sources(KidsModeActiveCustomize.class),
+			args);
 	}
 
 	@Component
