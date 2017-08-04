@@ -15,19 +15,6 @@ import br.com.arbo.steamside.app.port.PortAlreadyInUse;
 public class SingleInstancePerUser
 {
 
-	@Inject
-	public SingleInstancePerUser(
-		final DetectSteamside detect,
-		final LimitPossiblePorts rangesize,
-		final LocalWebserver webserver,
-		final WebBrowser browser)
-	{
-		this.webserver = webserver;
-		this.browser = browser;
-		this.detect = detect;
-		this.rangesize = rangesize;
-	}
-
 	public void start() throws AllPortsTaken
 	{
 		try
@@ -51,6 +38,28 @@ public class SingleInstancePerUser
 		while (true)
 			new Attempt().attempt();
 	}
+
+	private static final int RANGE_BEGIN = 42424;
+
+	@Inject
+	public SingleInstancePerUser(
+		final DetectSteamside detect,
+		final LimitPossiblePorts rangesize,
+		final LocalWebserver webserver,
+		final WebBrowser browser)
+	{
+		this.webserver = webserver;
+		this.browser = browser;
+		this.detect = detect;
+		this.rangesize = rangesize;
+	}
+
+	final WebBrowser browser;
+
+	final DetectSteamside detect;
+	final LimitPossiblePorts rangesize;
+	final LocalWebserver webserver;
+	private Running running;
 
 	class Attempt
 	{
@@ -109,7 +118,7 @@ public class SingleInstancePerUser
 			{
 				launched = webserver.launch(port);
 			}
-			catch (PortAlreadyInUse e)
+			catch (@SuppressWarnings("unused") PortAlreadyInUse e)
 			{
 				// do nothing... come back to attempt one more sweep
 				return;
@@ -141,13 +150,5 @@ public class SingleInstancePerUser
 		}
 
 	}
-
-	private static final int RANGE_BEGIN = 42424;
-	final WebBrowser browser;
-	final DetectSteamside detect;
-	final LimitPossiblePorts rangesize;
-	final LocalWebserver webserver;
-
-	private Running running;
 
 }

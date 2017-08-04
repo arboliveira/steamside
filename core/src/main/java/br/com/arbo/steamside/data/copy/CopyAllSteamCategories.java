@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.log4j.Logger;
+
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.collections.TagsWrites.TagTeam;
 import br.com.arbo.steamside.steam.client.library.Library;
@@ -46,14 +48,11 @@ public class CopyAllSteamCategories
 		};
 	}
 
-	public CopyAllSteamCategories(TagsData data, Library library)
-	{
-		this.data = data;
-		this.library = library;
-	}
-
 	public void execute()
 	{
+		getLogger().info(
+			"Creating Steamside tags from your Steam Library categories...");
+
 		ArrayList<TagTuple> tags = new ArrayList<>();
 
 		library.allSteamCategories().forEach(
@@ -63,7 +62,7 @@ public class CopyAllSteamCategories
 
 		List<TagTeam> teams =
 			chrono.map(tuple -> newTagTeam(tuple))
-			.collect(Collectors.toList());
+				.collect(Collectors.toList());
 
 		data.tagRememberBulk(teams.stream());
 	}
@@ -74,26 +73,41 @@ public class CopyAllSteamCategories
 		tags.addAll(toAdd.collect(Collectors.toList()));
 	}
 
+	private Logger getLogger()
+	{
+		return Logger.getLogger(this.getClass());
+	}
+
 	private Stream<TagTuple> toTags(SteamCategory category)
 	{
 		String cat = category.category;
 
 		Stream<TagTuple> soft =
 			library.findIn(category)
-			.map(_app -> new TagTuple()
-			{
-
+				.map(_app -> new TagTuple()
 				{
-					this.app = _app.appid();
-					this.lastPlayed = _app.lastPlayed();
-					this.category = cat;
-				}
-			});
+
+					{
+						this.app = _app.appid();
+						this.lastPlayed = _app.lastPlayed();
+						this.category = cat;
+					}
+				});
 
 		Stream<TagTuple> hard = soft.collect(Collectors.toList()).stream();
 
 		return hard;
 	}
+
+	public CopyAllSteamCategories(TagsData data, Library library)
+	{
+		this.data = data;
+		this.library = library;
+	}
+
+	private final TagsData data;
+
+	private final Library library;
 
 	static class TagTuple implements Comparable<TagTuple>
 	{
@@ -120,9 +134,5 @@ public class CopyAllSteamCategories
 		String category;
 		Optional<String> lastPlayed;
 	}
-
-	private final TagsData data;
-
-	private final Library library;
 
 }

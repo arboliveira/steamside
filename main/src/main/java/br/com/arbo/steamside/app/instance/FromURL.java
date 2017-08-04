@@ -42,12 +42,6 @@ public class FromURL implements DetectSteamside
 		}
 	}
 
-	@Inject
-	public FromURL(User username)
-	{
-		this.username = username;
-	}
-
 	@Override
 	public Situation detect(int port)
 	{
@@ -57,7 +51,7 @@ public class FromURL implements DetectSteamside
 				? Situation.AlreadyRunningForThisUser
 				: Situation.RunningOnDifferentUser;
 		}
-		catch (SteamsideNotRunningInThisPort e)
+		catch (@SuppressWarnings("unused") SteamsideNotRunningInThisPort e)
 		{
 			return Situation.NotHere;
 		}
@@ -76,7 +70,7 @@ public class FromURL implements DetectSteamside
 		{
 			throw new SteamsideNotRunningInThisPort();
 		}
-		catch (IOException e1)
+		catch (@SuppressWarnings("unused") IOException e1)
 		{
 			try
 			{
@@ -89,6 +83,14 @@ public class FromURL implements DetectSteamside
 
 		}
 	}
+
+	@Inject
+	public FromURL(User username)
+	{
+		this.username = username;
+	}
+
+	private final User username;
 
 	static class SteamsideNotRunningInThisPort extends Exception
 	{
@@ -103,7 +105,5 @@ public class FromURL implements DetectSteamside
 			super(e);
 		}
 	}
-
-	private final User username;
 
 }
