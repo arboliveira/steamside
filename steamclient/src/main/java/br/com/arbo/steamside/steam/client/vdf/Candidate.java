@@ -2,17 +2,12 @@ package br.com.arbo.steamside.steam.client.vdf;
 
 import java.util.Optional;
 
-public class Candidate {
-
-	public Candidate(final String incoming, String path)
-	{
-		this.incoming = incoming;
-		this.path = path;
-	}
+public class Candidate
+{
 
 	public boolean matches()
 	{
-		if (!wanted.equals(incoming))
+		if (!wanted.equalsIgnoreCase(incoming))
 			return false;
 		if (under.isPresent() && !path.equals(under.get()))
 			return false;
@@ -41,13 +36,19 @@ public class Candidate {
 		return this;
 	}
 
+	public Candidate(final String incoming, String path)
+	{
+		this.incoming = incoming;
+		this.path = path;
+	}
+
 	private final String incoming;
 
-	private String wanted;
+	private final String path;
 
 	private Optional<String> under = Optional.empty();
 
 	private Optional<String> underDeep = Optional.empty();
 
-	private final String path;
+	private String wanted;
 }

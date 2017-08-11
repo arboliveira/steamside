@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import org.mockito.Mockito;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +17,8 @@ import br.com.arbo.steamside.app.context.SpringApplicationFactory;
 import br.com.arbo.steamside.app.launch.SourcesCustomizer;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.steam.client.apps.App;
-import br.com.arbo.steamside.steam.client.apps.AppImpl;
+import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.types.AppId;
 
 class ExampleRunSteamsideWithMockContinues
 {
@@ -49,12 +52,14 @@ class ExampleRunSteamsideWithMockContinues
 		@Override
 		public void customize(Sources sources)
 		{
-			sources.replaceWithImplementor(ContinuesRooster.class, Mock.class)
+			sources
+				.replaceWithImplementor(ContinuesRooster.class,
+					MockContinues.class)
 				.replaceWithSingleton(
 					SteamClientController_status.class, mockStatus());
 		}
 
-		static class Mock implements ContinuesRooster
+		public static class MockContinues implements ContinuesRooster
 		{
 
 			@Override
@@ -64,17 +69,25 @@ class ExampleRunSteamsideWithMockContinues
 					"400", // Portal
 					"70", // Half-Life
 					//"262650", // RaySupreme 3D
-					"32000", // RayCatcher
-					"220200", // Kerbal Space Program
+					//"32000", // RayCatcher
+					//"220200", // Kerbal Space Program
 					"22200", // Zeno Clash
 					"620", // Portal 2
 					"220", // Half-Life 2
 					"215690" // Zeno Clash 2
 				);
 				return ids.stream()
-					.map(new AppImpl.Builder()::appid)
-					.map(AppImpl.Builder::make);
+					.map(AppId::new)
+					.map(library::find);
 			}
+
+			@Inject
+			public MockContinues(Library library)
+			{
+				this.library = library;
+			}
+
+			private final Library library;
 		}
 
 	}
