@@ -1,22 +1,18 @@
 package br.com.arbo.steamside.favorites;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import br.com.arbo.steamside.collections.CollectionsQueries;
 import br.com.arbo.steamside.collections.FavoriteNotSet;
+import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.kids.KidsMode.NotInKidsMode;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class FromSettings implements FavoritesOfUser {
-
-	@Inject
-	public FromSettings(
-			final CollectionsQueries collections, KidsMode kidsMode)
-	{
-		this.collections = collections;
-		this.kidsMode = kidsMode;
-	}
+public class FromSettings implements FavoritesOfUser
+{
 
 	@Override
 	public CollectionName favorites() throws NotSet
@@ -45,7 +41,17 @@ public class FromSettings implements FavoritesOfUser {
 
 	private CollectionName fromKid() throws NotInKidsMode
 	{
-		return kidsMode.kid().getCollection();
+		Optional<Kid> kid = kidsMode.kid();
+
+		return kid.orElseThrow(NotInKidsMode::new).getCollection();
+	}
+
+	@Inject
+	public FromSettings(
+		final CollectionsQueries collections, KidsMode kidsMode)
+	{
+		this.collections = collections;
+		this.kidsMode = kidsMode;
 	}
 
 	private final CollectionsQueries collections;

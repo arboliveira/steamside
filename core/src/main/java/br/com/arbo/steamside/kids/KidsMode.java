@@ -1,10 +1,19 @@
 package br.com.arbo.steamside.kids;
 
-public interface KidsMode {
+import java.util.Optional;
 
-	Kid kid() throws NotInKidsMode;
+public interface KidsMode
+{
 
-	public class NotInKidsMode extends RuntimeException {
+	Optional<Kid> kid() throws NotInKidsMode;
+
+	public class NotInKidsMode extends RuntimeException
+	{
+
+		public NotInKidsMode()
+		{
+			super();
+		}
 
 		public NotInKidsMode(Throwable cause)
 		{
