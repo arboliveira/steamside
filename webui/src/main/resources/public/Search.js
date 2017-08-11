@@ -31,8 +31,13 @@ var SearchView = Backbone.View.extend(
 	on_tag: null,
 	player: null,
 
+	continueACommandModel: null,
+    continueBCommandModel: null,
+
 	initialize: function(options)
 	{
+	    var that = this;
+
 		if (options.cardTemplatePromise == null) {
 			throw new Error("cardTemplatePromise is required");
 		}
@@ -46,9 +51,38 @@ var SearchView = Backbone.View.extend(
 		this.continues = options.continues;
 		this.on_tag = options.on_tag;
 		this.backend = options.backend;
+		this.$location = options.$location;
+
 		this.player = new Game_Player({ backend: options.backend });
 
-		this.listenTo(this.continues, 'reset', this.continues_reset);
+		this.continueACommandModel = new CommandHintWithVerbAndSubjectModel({
+            verb: "continue",
+            on_fire: function(commandBoxView) { that.on_continue_command(commandBoxView) }
+		});
+        this.continueBCommandModel = new CommandHintWithVerbAndSubjectModel({
+            verb: "continue",
+            on_fire: function(commandBoxView) { that.on_continue_command_alternate(commandBoxView) }
+        });
+        this.exploreACommandModel = new CommandHintWithVerbAndSubjectModel({
+            verb: "explore",
+            subject: "My games",
+            on_fire: function(commandBoxView) { that.on_explore_command(commandBoxView) }
+        });
+        this.exploreBCommandModel = new CommandHintWithVerbAndSubjectModel({
+            verb: "explore",
+            subject: "Steam Client",
+            on_fire: function(commandBoxView) { that.on_explore_command_alternate(commandBoxView) }
+        });
+        this.searchACommandModel = new CommandHintWithVerbAndSubjectModel({
+            verb: "search",
+            on_fire: function(commandBoxView) { that.on_search_command(commandBoxView) }
+        });
+        this.searchBCommandModel = new CommandHintWithVerbAndSubjectModel({
+            verb: "play first result for",
+            on_fire: function(commandBoxView) { that.on_search_command_alternate(commandBoxView) }
+        });
+
+        this.listenTo(this.continues, 'reset', this.on_continues_reset);
 	},
 
 	render: function() {
@@ -71,29 +105,25 @@ var SearchView = Backbone.View.extend(
 		var elSearchCommandHint = this.$('#search-command-hint');
 		elSearchCommandHint.remove();
 
-		this.viewHintContinueA = new CommandHintWithVerbAndSubjectView({
-			el: elSearchCommandHint.clone(),
-			verb: "continue"
-		}).render();
-		this.viewHintContinueB = new CommandHintWithVerbAndSubjectView({
-			el: elSearchCommandHint.clone(),
-			verb: "continue"
-		}).render();
-		this.viewHintSearchA = new CommandHintWithVerbAndSubjectView({
-			el: elSearchCommandHint.clone(),
-			verb: "search"
-		}).render();
-		this.viewHintSearchB = new CommandHintWithVerbAndSubjectView({
-			el: elSearchCommandHint.clone(),
-			verb: "play first result for"
-		}).render();
+        this.viewHintA = new CommandHintWithVerbAndSubjectView({
+            model: that.continueACommandModel,
+            el: elSearchCommandHint.clone()
+        });
+        this.viewHintB = new CommandHintWithVerbAndSubjectView({
+            model: that.continueBCommandModel,
+            el: elSearchCommandHint.clone()
+        });
 
 		this.viewCommandBox = new CommandBoxView(
 			{
 				placeholder_text: 'game or command',
 				on_change_input: function(input) { that.on_search_input_changed(input) },
-				on_command: function(input) { that.on_search_command(input) },
-				on_command_alternate: function(input) { that.on_search_command_alternate(input) }
+				on_command: function(commandBoxView) {
+				    that.viewHintA.model.on_fire(commandBoxView)
+                },
+				on_command_alternate: function(commandBoxView) {
+                    that.viewHintB.model.on_fire(commandBoxView)
+				}
 			}
 		);
 
@@ -113,10 +143,12 @@ var SearchView = Backbone.View.extend(
 
 	rendered_search_CommandBox: function(viewCommandBox){
 		viewCommandBox.emptyCommandHints();
-		viewCommandBox.appendCommandHint(this.viewHintContinueA.el);
-		viewCommandBox.appendCommandHint(this.viewHintSearchA.el);
-		viewCommandBox.appendCommandHintAlternate(this.viewHintContinueB.el);
-		viewCommandBox.appendCommandHintAlternate(this.viewHintSearchB.el);
+
+        viewCommandBox.appendCommandHint(this.viewHintA.el);
+        viewCommandBox.appendCommandHintAlternate(this.viewHintB.el);
+
+		this.refresh_command_hints();
+
 		return this;
 	},
 
@@ -124,66 +156,94 @@ var SearchView = Backbone.View.extend(
 		this.viewCommandBox.input_query_focus();
 	},
 
-	on_search_input_changed: function(view) {
-		var input = view.input_query_val();
+    on_continues_reset: function() {
+        this.refresh_command_hints();
+    },
 
-		if (input == '') {
-			this.viewHintContinueA.show();
-			this.viewHintContinueB.show();
-			this.viewHintSearchA.hide();
-			this.viewHintSearchB.hide();
-		}
-		else {
-			this.viewHintContinueA.hide();
-			this.viewHintContinueB.hide();
-			this.viewHintSearchA.show();
-			this.viewHintSearchB.show();
-			this.viewHintSearchA.subject_set(input);
-			this.viewHintSearchB.subject_set(input);
-		}
-
-		this.viewHintContinueA.render();
-		this.viewHintContinueB.render();
-		this.viewHintSearchA.render();
-		this.viewHintSearchB.render();
+    on_search_input_changed: function(view) {
+        this.refresh_command_hints();
 	},
 
-	on_search_command: function(view) {
-		var input = view.input_query_val();
-		if (input == '') {
-			var gameA = this.continues.at(0);
-			this.player.play(gameA);
-		} else {
-			var searchResults = this.searchResults;
-			searchResults.query = input;
-			this.backend.fetch_promise(searchResults);
-		}
-	},
-
-	on_search_command_alternate: function(view) {
+	refresh_command_hints: function() {
 		var that = this;
-		var input = view.input_query_val();
-		if (input == '') {
-			var gameB = this.continues.at(1);
-			this.player.play(gameB);
-		} else {
-			var searchResults = this.searchResults;
-			searchResults.query = input;
-			this.backend.fetch_promise(searchResults).done(function() {
-				var first = searchResults.at(0);
-				that.player.play(first);
-			});
-		}
+
+        var input = that.viewCommandBox.input_query_val();
+
+        if (input == '') {
+            if (that.continues.size() == 0) {
+                that.viewHintA.replaceModel(that.exploreACommandModel);
+                that.viewHintB.replaceModel(that.exploreBCommandModel);
+            }
+            else {
+                var gameA = this.continues.at(0);
+                var gameB = this.continues.at(1);
+
+                that.continueACommandModel.subject_set(gameA.name());
+
+                that.viewHintA.replaceModel(that.continueACommandModel);
+
+                if (gameB == undefined) {
+                    that.viewHintB.replaceModel(that.continueACommandModel);
+                }
+                else {
+                    that.continueBCommandModel.subject_set(gameB.name());
+
+                    that.viewHintB.replaceModel(that.continueBCommandModel);
+                }
+            }
+        }
+        else {
+            this.searchACommandModel.subject_set(input);
+            this.searchBCommandModel.subject_set(input);
+            this.viewHintA.replaceModel(that.searchACommandModel);
+            this.viewHintB.replaceModel(that.searchBCommandModel);
+        }
+
+        this.viewHintA.render();
+        this.viewHintB.render();
+    },
+
+    on_continue_command: function(commandBoxView) {
+        var gameA = this.continues.at(0);
+
+        this.player.play(gameA);
+    },
+
+    on_continue_command_alternate: function(commandBoxView) {
+        var gameB = this.continues.at(1);
+
+        this.player.play(gameB);
+    },
+
+    on_search_command: function(commandBoxView) {
+		var input = commandBoxView.input_query_val();
+
+		var searchResults = this.searchResults;
+		searchResults.query = input;
+		this.backend.fetch_promise(searchResults);
 	},
 
-	continues_reset: function() {
-		var gameA = this.continues.at(0);
-		var gameB = this.continues.at(1);
+	on_search_command_alternate: function(commandBoxView) {
+		var that = this;
 
-		this.viewHintContinueA.subject_set(gameA.name());
-		this.viewHintContinueA.render();
-		this.viewHintContinueB.subject_set(gameB.name());
-		this.viewHintContinueB.render();
+		var input = commandBoxView.input_query_val();
+
+		var searchResults = this.searchResults;
+		searchResults.query = input;
+		this.backend.fetch_promise(searchResults).done(function() {
+			var first = searchResults.at(0);
+			that.player.play(first);
+		});
+	},
+
+	on_explore_command: function() {
+		//this.$location.url('/mygames');
+		window.location.assign('/#/mygames');
+	},
+
+	on_explore_command_alternate: function() {
+        //this.$location.url('/steamclient');
+        window.location.assign('/#/steamclient');
 	},
 
 	whenRendered: null,

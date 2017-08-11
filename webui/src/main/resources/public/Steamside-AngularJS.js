@@ -83,16 +83,16 @@ var Steamside_AngularJS =
 		var that = this;
 		that.moduleSteamside.controller(
 			Steamside.HomeWorld.nameController,
-			['$scope',
+			['$scope', '$location',
 				Steamside_AngularJS.nameBackend,
 				Steamside_AngularJS.nameSessionModel,
 				Steamside_AngularJS.nameKidsMode,
 				Steamside_AngularJS.nameSpritesKids,
 				Steamside_AngularJS.nameSpritesSteamside,
-			function ($scope, theBackend, theSessionModel, theKidsMode,
+			function ($scope, $location, theBackend, theSessionModel, theKidsMode,
 				  		theSpritesKids, theSpritesSteamside){
 				Steamside.HomeWorld.controller(
-					$scope, theBackend, theSessionModel, theKidsMode,
+					$scope, $location, theBackend, theSessionModel, theKidsMode,
 					theSpritesKids, theSpritesSteamside);
 			}]);
 	},

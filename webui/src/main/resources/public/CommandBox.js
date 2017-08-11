@@ -183,40 +183,74 @@ var CommandBoxView = Backbone.View.extend({
 
 });
 
+
+// ============================================================================
+
+var CommandHintWithVerbAndSubjectModel = Backbone.Model.extend({
+
+    subject_set: function(v) {
+        this.set("subject", v);
+    },
+
+    verb_set: function(v) {
+        this.set("verb", v);
+    },
+
+    subject: function() {
+        return this.get("subject");
+    },
+
+    verb: function() {
+        return this.get("verb");
+	},
+
+	on_fire: function(commandBoxView) {
+    	return this.get("on_fire")(commandBoxView);
+	}
+
+});
+
 // ============================================================================
 
 var CommandHintWithVerbAndSubjectView = Backbone.View.extend({
 	initialize: function(options)
 	{
-		this._verb = options.verb;
+        this.listenTo(this.model, 'change', this.render);
 	},
 
 	render: function() {
 		var that = this;
 
-		if (that._visible)
-			that.$el.show();
-		else
-			that.$el.hide();
+		var modelCommandHintWithVerbAndSubject = that.model;
 
-		that.$('#search-command-hint-verb').text(that._verb);
+		that.$('#search-command-hint-verb').text(
+            modelCommandHintWithVerbAndSubject.verb());
+
+		var subject = modelCommandHintWithVerbAndSubject.subject();
 
 		that.$('#search-command-hint-subject').text(
-			that._subject == null ? "" : that._subject);
+			subject == null ? "" : subject);
 
 		return this;
 	},
 
-	subject_set: function(v) {
-		this._subject = v;
+	replaceModel: function(m) {
+		this.stopListening(this.model);
+		this.model = m;
+        this.listenTo(this.model, 'change', this.render);
+        this.render();
 	},
 
-	show: function(){this._visible = true;},
-	hide: function(){this._visible = false;},
+    show: function(){
+        var that = this;
 
-	_verb: null,
-	_subject: null,
-	_visible: true
+        that.$el.show();
+	},
+
+    hide: function(){
+        var that = this;
+
+        that.$el.hide();
+    }
 
 });
-

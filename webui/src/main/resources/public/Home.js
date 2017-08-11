@@ -7,7 +7,7 @@ Steamside.HomeWorld =
 	htmlWorld: 'Home.html',
 
 	controller: function(
-		$scope, theBackend, theSessionModel, theKidsMode,
+		$scope, $location, theBackend, theSessionModel, theKidsMode,
 		theSpritesKids, theSpritesSteamside)
 	{
 		window.onerror = function errorHandler(msg, url, line, col, error)
@@ -27,7 +27,8 @@ Steamside.HomeWorld =
 			kidsMode: theKidsMode,
 			spritesKids: theSpritesKids,
 			spritesSteamside: theSpritesSteamside,
-			backend: theBackend
+			backend: theBackend,
+			$location: $location
 		});
 
 		theBackend.fetch_promise(theSessionModel);
@@ -50,6 +51,7 @@ var HomeView = Backbone.View.extend(
 	spriteMoreButton: null,
 
 	backend: null,
+	$location: null,
 
 	/**
 	 * @type Deferred
@@ -66,6 +68,7 @@ var HomeView = Backbone.View.extend(
 		this.spriteMoreButton = options.spritesSteamside.moreButton;
 
 		this.backend = options.backend;
+		this.$location = options.$location;
 
 		this.listenTo(this._kidsMode, 'sync', this.render);
 	},
@@ -177,7 +180,8 @@ var HomeView = Backbone.View.extend(
 				spriteMoreButton: that.spriteMoreButton,
 				continues: continues,
 				on_tag: that.on_game_card_tag,
-				backend: that.backend
+				backend: that.backend,
+				$location: that.$location
 			}
 		);
 
