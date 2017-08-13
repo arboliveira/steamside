@@ -13,7 +13,6 @@ import br.com.arbo.steamside.api.app.Limit;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.favorites.FavoritesOfUser;
-import br.com.arbo.steamside.favorites.NotSet;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
@@ -24,20 +23,6 @@ import br.com.arbo.steamside.types.CollectionName;
 public class FavoritesController_favorites_json
 	implements FavoritesController_favorites
 {
-
-	@Inject
-	public FavoritesController_favorites_json(
-		FavoritesOfUser ofUser,
-		Library library, Settings settings,
-		AppSettings apiAppSettings,
-		TagsQueries queries)
-	{
-		this.ofUser = ofUser;
-		this.library = library;
-		this.settings = settings;
-		this.limit = apiAppSettings.limit();
-		this.queries = queries;
-	}
 
 	@Override
 	public List<AppDTO> jsonable()
@@ -68,14 +53,21 @@ public class FavoritesController_favorites_json
 
 	private CollectionName determineCollection()
 	{
-		try
-		{
-			return ofUser.favorites();
-		}
-		catch (final NotSet e)
-		{
-			return new CollectionName("favorite");
-		}
+		return ofUser.favorites().orElse(new CollectionName("favorite"));
+	}
+
+	@Inject
+	public FavoritesController_favorites_json(
+		FavoritesOfUser ofUser,
+		Library library, Settings settings,
+		AppSettings apiAppSettings,
+		TagsQueries queries)
+	{
+		this.ofUser = ofUser;
+		this.library = library;
+		this.settings = settings;
+		this.limit = apiAppSettings.limit();
+		this.queries = queries;
 	}
 
 	final Settings settings;

@@ -42,7 +42,7 @@ public class InMemoryCollectionsHome implements CollectionsData
 	}
 
 	@Override
-	public CollectionI favorite() throws FavoriteNotSet
+	public Optional< ? extends CollectionI> favorite()
 	{
 		return favorite.get();
 	}
@@ -85,16 +85,16 @@ public class InMemoryCollectionsHome implements CollectionsData
 		if (maybe.isPresent()) throw new Duplicate();
 	}
 
+	private final List<DeleteListener> deleteListeners = new ArrayList<>(1);
+
+	private final InMemoryFavoriteHome favorite = new InMemoryFavoriteHome();
+
+	private final List<CollectionImpl> objects = new LinkedList<>();
+
 	interface DeleteListener
 	{
 
 		void onDelete(CollectionImpl c);
 
 	}
-
-	private final List<DeleteListener> deleteListeners = new ArrayList<>(1);
-
-	private final InMemoryFavoriteHome favorite = new InMemoryFavoriteHome();
-
-	private final List<CollectionImpl> objects = new LinkedList<>();
 }

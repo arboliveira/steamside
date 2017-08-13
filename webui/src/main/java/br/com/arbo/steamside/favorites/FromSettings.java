@@ -4,58 +4,48 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsQueries;
-import br.com.arbo.steamside.collections.FavoriteNotSet;
 import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.KidsMode;
-import br.com.arbo.steamside.kids.KidsMode.NotInKidsMode;
+import br.com.arbo.steamside.kids.KidsModeDetector;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class FromSettings implements FavoritesOfUser
 {
 
 	@Override
-	public CollectionName favorites() throws NotSet
+	public Optional<CollectionName> favorites()
 	{
-		try
-		{
-			return fromKid();
-		}
-		catch (NotInKidsMode e)
-		{
-			return fromCollections();
-		}
+		Optional<CollectionName> fromKid = fromKid();
+
+		if (fromKid.isPresent()) return fromKid;
+
+		return fromCollections();
 	}
 
-	private CollectionName fromCollections() throws NotSet
+	private Optional<CollectionName> fromCollections()
 	{
-		try
-		{
-			return collections.favorite().name();
-		}
-		catch (FavoriteNotSet e)
-		{
-			throw new NotSet(e);
-		}
+		return collections.favorite().map(CollectionI::name);
 	}
 
-	private CollectionName fromKid() throws NotInKidsMode
+	private Optional<CollectionName> fromKid()
 	{
-		Optional<Kid> kid = kidsMode.kid();
+		Optional<KidsMode> kidsMode = kidsModeDetector.kidsMode();
 
-		return kid.orElseThrow(NotInKidsMode::new).getCollection();
+		return kidsMode.map(KidsMode::kid).map(Kid::getCollection);
 	}
 
 	@Inject
 	public FromSettings(
-		final CollectionsQueries collections, KidsMode kidsMode)
+		final CollectionsQueries collections, KidsModeDetector kidsModeDetector)
 	{
 		this.collections = collections;
-		this.kidsMode = kidsMode;
+		this.kidsModeDetector = kidsModeDetector;
 	}
 
 	private final CollectionsQueries collections;
 
-	private final KidsMode kidsMode;
+	private final KidsModeDetector kidsModeDetector;
 
 }

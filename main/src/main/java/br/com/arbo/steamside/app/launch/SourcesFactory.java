@@ -45,7 +45,7 @@ import br.com.arbo.steamside.firstrun.FirstRunObserver;
 import br.com.arbo.steamside.kids.FromUsername;
 import br.com.arbo.steamside.kids.KidsData;
 import br.com.arbo.steamside.kids.KidsDataSingleton;
-import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.kids.KidsModeDetector;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.settings.SettingsImpl;
 import br.com.arbo.steamside.settings.file.File_steamside_xml;
@@ -157,7 +157,7 @@ public class SourcesFactory
 				File_appinfo_vdf.class);
 
 		container
-			.sourceImplementor(KidsMode.class, FromUsername.class);
+			.sourceImplementor(KidsModeDetector.class, FromUsername.class);
 
 		container
 			.sources(

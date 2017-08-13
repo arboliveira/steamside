@@ -1,8 +1,11 @@
 package br.com.arbo.steamside.favorites;
 
+import java.util.Optional;
+
 import br.com.arbo.steamside.types.CollectionName;
 
-public interface FavoritesOfUser {
+public interface FavoritesOfUser
+{
 
-	CollectionName favorites() throws NotSet;
+	Optional<CollectionName> favorites();
 }

@@ -3,8 +3,7 @@ package br.com.arbo.steamside.api.session;
 import javax.inject.Inject;
 
 import br.com.arbo.opersys.username.User;
-import br.com.arbo.steamside.kids.KidsMode;
-import br.com.arbo.steamside.kids.KidsMode.NotInKidsMode;
+import br.com.arbo.steamside.kids.KidsModeDetector;
 import br.com.arbo.steamside.steam.client.apps.AppCriteria;
 import br.com.arbo.steamside.steam.client.library.Library;
 
@@ -12,28 +11,9 @@ public class SessionController_session_json implements
 	SessionController_session
 {
 
-	private static boolean isKidsModeOn(KidsMode kidsmode)
+	private static boolean isKidsModeOn(KidsModeDetector kidsModeDetector)
 	{
-		try
-		{
-			kidsmode.kid();
-		}
-		catch (NotInKidsMode e)
-		{
-			return false;
-		}
-		return true;
-	}
-
-	@Inject
-	public SessionController_session_json(
-		User username,
-		KidsMode kidsmode,
-		Library library)
-	{
-		this.username = username;
-		this.kidsmode = kidsmode;
-		this.library = library;
+		return kidsModeDetector.kidsMode().isPresent();
 	}
 
 	@Override
@@ -41,7 +21,7 @@ public class SessionController_session_json implements
 	{
 		SessionDTO dto = new SessionDTO();
 		dto.userName = username.username();
-		dto.kidsMode = isKidsModeOn(kidsmode);
+		dto.kidsMode = isKidsModeOn(kidsModeDetector);
 		dto.versionOfSteamside = new MavenBuild().readVersion();
 		dto.gamesOwned = String.valueOf(gamesOwned());
 		dto.executable = new ExecutableDetector().executable();
@@ -61,8 +41,19 @@ public class SessionController_session_json implements
 			});
 	}
 
+	@Inject
+	public SessionController_session_json(
+		User username,
+		KidsModeDetector kidsModeDetector,
+		Library library)
+	{
+		this.username = username;
+		this.kidsModeDetector = kidsModeDetector;
+		this.library = library;
+	}
+
 	private final Library library;
 	private final User username;
-	private final KidsMode kidsmode;
+	private final KidsModeDetector kidsModeDetector;
 
 }

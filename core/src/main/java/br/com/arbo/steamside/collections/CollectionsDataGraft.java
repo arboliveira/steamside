@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.collections;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.data.collections.Duplicate;
@@ -8,13 +9,6 @@ import br.com.arbo.steamside.types.CollectionName;
 
 public class CollectionsDataGraft implements CollectionsData
 {
-
-	public CollectionsDataGraft(
-		CollectionsQueries reads, CollectionsWrites writes)
-	{
-		this.reads = reads;
-		this.writes = writes;
-	}
 
 	@Override
 	public void add(CollectionI in) throws Duplicate
@@ -35,7 +29,7 @@ public class CollectionsDataGraft implements CollectionsData
 	}
 
 	@Override
-	public CollectionI favorite() throws FavoriteNotSet
+	public Optional< ? extends CollectionI> favorite()
 	{
 		return reads.favorite();
 	}
@@ -50,6 +44,13 @@ public class CollectionsDataGraft implements CollectionsData
 	public CollectionI find(CollectionName name) throws NotFound
 	{
 		return reads.find(name);
+	}
+
+	public CollectionsDataGraft(
+		CollectionsQueries reads, CollectionsWrites writes)
+	{
+		this.reads = reads;
+		this.writes = writes;
 	}
 
 	private final CollectionsQueries reads;

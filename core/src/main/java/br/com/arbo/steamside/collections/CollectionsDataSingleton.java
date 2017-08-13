@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.collections;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -9,13 +10,8 @@ import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.data.singleton.SteamsideDataSingleton;
 import br.com.arbo.steamside.types.CollectionName;
 
-public class CollectionsDataSingleton implements CollectionsData {
-
-	@Inject
-	public CollectionsDataSingleton(SteamsideDataSingleton steamside)
-	{
-		this.steamside = steamside;
-	}
+public class CollectionsDataSingleton implements CollectionsData
+{
 
 	@Override
 	public void add(CollectionI in) throws Duplicate
@@ -36,7 +32,7 @@ public class CollectionsDataSingleton implements CollectionsData {
 	}
 
 	@Override
-	public CollectionI favorite() throws FavoriteNotSet
+	public Optional< ? extends CollectionI> favorite()
 	{
 		return actual().favorite();
 	}
@@ -56,6 +52,12 @@ public class CollectionsDataSingleton implements CollectionsData {
 	private CollectionsData actual()
 	{
 		return steamside.collections();
+	}
+
+	@Inject
+	public CollectionsDataSingleton(SteamsideDataSingleton steamside)
+	{
+		this.steamside = steamside;
 	}
 
 	private final SteamsideDataSingleton steamside;

@@ -2,13 +2,14 @@ package br.com.arbo.steamside.continues;
 
 import org.mockito.Mockito;
 
-import br.com.arbo.steamside.kids.KidsMode;
+import br.com.arbo.steamside.kids.KidsModeDetector;
 import br.com.arbo.steamside.settings.SettingsImpl;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.library.Libraries;
 import br.com.arbo.steamside.steam.client.library.Library;
 
-public class ExampleDumpContinues {
+public class ExampleDumpContinues
+{
 
 	public static void main(final String[] args)
 	{
@@ -17,23 +18,21 @@ public class ExampleDumpContinues {
 
 	private void dumpContinues()
 	{
-		KidsMode nop = Mockito.mock(KidsMode.class);
+		KidsModeDetector nop = Mockito.mock(KidsModeDetector.class);
 
 		Library library = Libraries.fromSteamPhysicalFiles();
 
 		new ContinuesFromSteamClientLocalfiles(
-				nop, library, new SettingsImpl())
+			nop, library, new SettingsImpl())
 				.continues().forEach(
-						this::printApp
-				);
+					this::printApp);
 	}
 
 	private void printApp(App app)
 	{
 		System.out.println(
-				app.lastPlayed()
-						+ " :: " + app.name()
-						+ " :: " + app.appid()
-				);
+			app.lastPlayed()
+				+ " :: " + app.name()
+				+ " :: " + app.appid());
 	}
 }

@@ -2,15 +2,12 @@ package br.com.arbo.steamside.collections;
 
 import java.util.Optional;
 
-public class InMemoryFavoriteHome {
+public class InMemoryFavoriteHome
+{
 
+	public Optional<CollectionImpl> get()
 	{
-		clear();
-	}
-
-	public CollectionImpl get() throws FavoriteNotSet
-	{
-		return favorite.orElseThrow(FavoriteNotSet::new);
+		return favorite;
 	}
 
 	public void set(CollectionImpl stored)
@@ -21,8 +18,8 @@ public class InMemoryFavoriteHome {
 	public void unset(CollectionImpl stored)
 	{
 		favorite
-		.filter(value -> value == stored)
-		.ifPresent(value -> clear());
+			.filter(value -> value == stored)
+			.ifPresent(value -> clear());
 	}
 
 	private void clear()
@@ -31,4 +28,8 @@ public class InMemoryFavoriteHome {
 	}
 
 	private Optional<CollectionImpl> favorite;
+
+	{
+		clear();
+	}
 }
