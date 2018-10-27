@@ -2,9 +2,9 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.io.InputStream;
 
-import br.com.arbo.steamside.steam.client.vdf.NotFound;
-import br.com.arbo.steamside.steam.client.vdf.Region;
-import br.com.arbo.steamside.steam.client.vdf.Vdf;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.NotFound;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.Vdf;
 
 public class Parse_sharedconfig_vdf {
 

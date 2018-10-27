@@ -3,11 +3,11 @@ package br.com.arbo.steamside.steam.client.apps;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
+import br.com.arbo.steamside.steam.client.categories.category.SteamCategory;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
-import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 public interface App extends LastPlayed
 {

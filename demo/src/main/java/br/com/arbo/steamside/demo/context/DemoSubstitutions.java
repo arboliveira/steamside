@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.api.session.SessionController_session;
 import br.com.arbo.steamside.app.launch.SourcesCustomizer;
-import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 
 @Component
 public class DemoSubstitutions implements SourcesCustomizer
@@ -16,11 +16,11 @@ public class DemoSubstitutions implements SourcesCustomizer
 	{
 		DemoLocalSettingsFactory.customize(sources);
 
-		AppsHomeFactory demoAppsHomeFactory =
-			DemoAppsHome.demoAppsHomeFactory();
+		SteamClientHome demoAppsHomeFactory =
+			DemoAppsHome.newSteamClientHome();
 
 		sources.replaceWithSingleton(
-			AppsHomeFactory.class, demoAppsHomeFactory);
+			SteamClientHome.class, demoAppsHomeFactory);
 
 		DemoSteamsideData.customize(sources, demoAppsHomeFactory);
 

@@ -22,8 +22,8 @@ import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.collections.system.SystemCollectionsHome;
 import br.com.arbo.steamside.data.copy.CopyAllSteamCategories;
 import br.com.arbo.steamside.settings.Settings;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
-import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -31,28 +31,6 @@ import br.com.arbo.steamside.types.CollectionName;
 @RequestMapping("collection")
 public class CollectionController
 {
-
-	private static List<CollectionDTO> jsonify(
-		Stream< ? extends WithCount> all)
-	{
-		return all
-			.map(CollectionDTO::valueOf)
-			.collect(Collectors.toList());
-	}
-
-	@Inject
-	public CollectionController(
-		Library library, CollectionsData collections,
-		TagsData tags, Settings settings,
-		br.com.arbo.steamside.api.app.AppSettings apiAppSettings)
-	{
-		this.library = library;
-		this.collections = collections;
-		this.tags = tags;
-		this.settings = settings;
-		this.apiAppSettings = apiAppSettings;
-		this.sys = new SystemCollectionsHome(library, tags);
-	}
 
 	@RequestMapping(value = "{name}/add/{appid}")
 	public void add(
@@ -70,7 +48,7 @@ public class CollectionController
 	{
 		new CombineCollections(
 			name, collection, combined, Operation.Copy, tags)
-			.combine();
+				.combine();
 	}
 
 	@RequestMapping(value = "{name}/combine/{collection}/into/{combined}/move")
@@ -81,13 +59,13 @@ public class CollectionController
 	{
 		new CombineCollections(
 			name, collection, combined, Operation.Move, tags)
-			.combine();
+				.combine();
 	}
 
 	@RequestMapping(value = "copy-all-steam-categories")
 	public void copyAllSteamCategories()
 	{
-		new CopyAllSteamCategories(tags, library).execute();
+		new CopyAllSteamCategories(tags, steamClientHome).execute();
 	}
 
 	@RequestMapping(value = "{name}/create")
@@ -102,21 +80,14 @@ public class CollectionController
 	public List<AppDTO> json(@RequestParam String name)
 	{
 		return new CollectionController_collection_json(
-			name, apiAppSettings.limit(), sys, library, tags,
+			name, apiAppSettings.limit(), sys, steamClientHome, tags,
 			settings.gamesOnly()).jsonable();
 	}
 
 	@RequestMapping(value = "collections.json")
 	public List<CollectionDTO> jsonCollections()
 	{
-		AppCriteria criteria = new AppCriteria()
-		{
-
-			{
-				this.gamesOnly = settings.gamesOnly();
-			}
-		};
-		return jsonify(sys.allWithCount(criteria));
+		return jsonify(sys.allWithCount(new AppCriteria().gamesOnly(settings.gamesOnly())));
 	}
 
 	@RequestMapping(value = "tag-suggestions.json")
@@ -133,16 +104,38 @@ public class CollectionController
 		tags.untag(new CollectionName(name), new AppId(appid));
 	}
 
-	private final br.com.arbo.steamside.api.app.AppSettings apiAppSettings;
+	@Inject
+	public CollectionController(
+		SteamClientHome steamClientHome, CollectionsData collections,
+		TagsData tags, Settings settings,
+		br.com.arbo.steamside.api.app.AppSettings apiAppSettings)
+	{
+		this.steamClientHome = steamClientHome;
+		this.collections = collections;
+		this.tags = tags;
+		this.settings = settings;
+		this.apiAppSettings = apiAppSettings;
+		this.sys = new SystemCollectionsHome(steamClientHome, tags);
+	}
 
 	final Settings settings;
 
-	private final Library library;
+	private static List<CollectionDTO> jsonify(
+		Stream< ? extends WithCount> all)
+	{
+		return all
+			.map(CollectionDTO::valueOf)
+			.collect(Collectors.toList());
+	}
+
+	private final br.com.arbo.steamside.api.app.AppSettings apiAppSettings;
 
 	private final CollectionsData collections;
 
-	private final TagsData tags;
+	private final SteamClientHome steamClientHome;
 
 	private final SystemCollectionsHome sys;
+
+	private final TagsData tags;
 
 }

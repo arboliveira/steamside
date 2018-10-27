@@ -1,27 +1,23 @@
 package br.com.arbo.steamside.steam.client.library;
 
-import br.com.arbo.steamside.steam.client.apps.NotFound;
+import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class GameFinder {
-
-	public GameFinder(Library library)
-	{
-		this.library = library;
-	}
+public class GameFinder
+{
 
 	public boolean isGame(AppId appid)
 	{
-		try
-		{
-			return this.library.find(appid).isGame();
-		}
-		catch (NotFound notfound)
-		{
-			return true;
-		}
+		return this.steamClientHome.apps().find(appid).map(App::isGame)
+			.orElse(true);
 	}
 
-	private final Library library;
+	public GameFinder(SteamClientHome steamClientHome)
+	{
+		this.steamClientHome = steamClientHome;
+	}
+
+	private final SteamClientHome steamClientHome;
 
 }

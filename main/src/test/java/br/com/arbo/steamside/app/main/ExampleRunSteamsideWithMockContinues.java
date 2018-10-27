@@ -2,6 +2,7 @@ package br.com.arbo.steamside.app.main;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -17,7 +18,7 @@ import br.com.arbo.steamside.app.context.SpringApplicationFactory;
 import br.com.arbo.steamside.app.launch.SourcesCustomizer;
 import br.com.arbo.steamside.continues.ContinuesRooster;
 import br.com.arbo.steamside.steam.client.apps.App;
-import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 class ExampleRunSteamsideWithMockContinues
@@ -34,6 +35,17 @@ class ExampleRunSteamsideWithMockContinues
 	public static class MockContinuesCustomize implements SourcesCustomizer
 	{
 
+		@Override
+		public void customize(Sources sources)
+		{
+			sources
+				.replaceWithImplementor(
+					ContinuesRooster.class,
+					MockContinues.class)
+				.replaceWithSingleton(
+					SteamClientController_status.class, mockStatus());
+		}
+
 		private static SteamClientController_status mockStatus()
 		{
 			// @formatter:off
@@ -47,16 +59,6 @@ class ExampleRunSteamsideWithMockContinues
 				Mockito.mock(SteamClientController_status.class);
 			Mockito.doReturn(dto).when(mock).status();
 			return mock;
-		}
-
-		@Override
-		public void customize(Sources sources)
-		{
-			sources
-				.replaceWithImplementor(ContinuesRooster.class,
-					MockContinues.class)
-				.replaceWithSingleton(
-					SteamClientController_status.class, mockStatus());
 		}
 
 		public static class MockContinues implements ContinuesRooster
@@ -78,16 +80,17 @@ class ExampleRunSteamsideWithMockContinues
 				);
 				return ids.stream()
 					.map(AppId::new)
-					.map(library::find);
+					.map(appid -> steamClientHome.apps().find(appid))
+					.filter(Optional::isPresent).map(Optional::get);
 			}
 
 			@Inject
-			public MockContinues(Library library)
+			public MockContinues(SteamClientHome steamClientHome)
 			{
-				this.library = library;
+				this.steamClientHome = steamClientHome;
 			}
 
-			private final Library library;
+			private final SteamClientHome steamClientHome;
 		}
 
 	}

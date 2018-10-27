@@ -9,12 +9,12 @@ import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
+import br.com.arbo.steamside.steam.client.categories.category.SteamCategory;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppNameTypes;
 import br.com.arbo.steamside.steam.client.types.AppType;
-import br.com.arbo.steamside.steam.client.types.SteamCategory;
 
 public class AppImpl implements App
 {
@@ -92,20 +92,6 @@ public class AppImpl implements App
 		return type;
 	}
 
-	private void guard_missingFrom_appinfo_vdf()
-	{
-		missingFrom_appinfo_vdf.ifPresent(m -> {
-			throw m;
-		});
-	}
-
-	private void guard_notAvailableOnThisPlatform()
-	{
-		notAvailableOnThisPlatform.ifPresent(n -> {
-			throw n;
-		});
-	}
-
 	AppImpl(
 		AppId appId,
 		@Nullable AppName name,
@@ -128,6 +114,20 @@ public class AppImpl implements App
 		this.cloudEnabled = cloudEnabled;
 		this.notAvailableOnThisPlatform = notAvailableOnThisPlatform;
 		this.missingFrom_appinfo_vdf = missingFrom_appinfo_vdf;
+	}
+
+	private void guard_missingFrom_appinfo_vdf()
+	{
+		missingFrom_appinfo_vdf.ifPresent(m -> {
+			throw m;
+		});
+	}
+
+	private void guard_notAvailableOnThisPlatform()
+	{
+		notAvailableOnThisPlatform.ifPresent(n -> {
+			throw n;
+		});
 	}
 
 	private final AppId appid;
@@ -235,8 +235,6 @@ public class AppImpl implements App
 
 		private AppId appid;
 
-		private final Collection<String> categories = new HashSet<String>();
-
 		private String cloudEnabled;
 
 		private String executable;
@@ -244,8 +242,7 @@ public class AppImpl implements App
 		private Optional<String> lastPlayed = Optional.empty();
 
 		private Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf =
-			Optional
-				.empty();
+			Optional.empty();
 
 		private AppName name;
 
@@ -255,6 +252,8 @@ public class AppImpl implements App
 		private boolean owned;
 
 		private Optional<AppType> type = Optional.empty();
+
+		private final Collection<String> categories = new HashSet<String>();
 	}
 
 }

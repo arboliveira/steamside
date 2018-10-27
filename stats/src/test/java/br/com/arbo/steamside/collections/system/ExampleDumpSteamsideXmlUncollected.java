@@ -7,8 +7,8 @@ import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.out.Out;
 import br.com.arbo.steamside.settings.file.SteamsideData_ForExamples;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.library.Libraries;
-import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class ExampleDumpSteamsideXmlUncollected
@@ -21,15 +21,15 @@ public class ExampleDumpSteamsideXmlUncollected
 
 	void run()
 	{
-		Stream< ? extends Tag> apps = new Uncollected(library, tags).apps();
+		Stream< ? extends Tag> apps = new Uncollected(steamClientHome, tags).apps();
 		Stream<AppId> appids = apps.map(Tag::appid);
 		Stream<String> lines =
-			appids.map(appid -> library.find(appid).toString());
+			appids.map(appid -> steamClientHome.apps().find(appid).toString());
 
 		new Out("tagless", lines, System.out::println).out();
 	}
 
-	Library library = Libraries.fromSteamPhysicalFiles();
+	SteamClientHome steamClientHome = Libraries.fromSteamPhysicalFiles();
 
 	InMemoryTagsHome tags = SteamsideData_ForExamples.fromXmlFile();
 }

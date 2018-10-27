@@ -5,23 +5,18 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagImpl;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
-import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class Everything
 {
 
-	public Everything(Library library)
-	{
-		this.library = library;
-	}
-
 	public Stream< ? extends Tag> apps()
 	{
 		AppCriteria criteria = AppCriteria.OWNED;
 
-		return library.allApps(criteria).map(app -> app.appid())
+		return steamClientHome.apps().stream(criteria).map(app -> app.appid())
 			.map(TagImpl::new);
 	}
 
@@ -41,13 +36,18 @@ public class Everything
 			{
 				AppCriteria criteria = AppCriteria.OWNED;
 
-				return library.count(criteria);
+				return steamClientHome.apps().count(criteria);
 			}
 
 		};
 	}
 
-	final Library library;
+	public Everything(SteamClientHome steamClientHome)
+	{
+		this.steamClientHome = steamClientHome;
+	}
+
+	final SteamClientHome steamClientHome;
 
 	private static final String NAME = "Owned by you";
 }

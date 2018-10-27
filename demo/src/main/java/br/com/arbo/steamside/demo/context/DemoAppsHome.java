@@ -7,23 +7,39 @@ import org.apache.commons.lang3.StringUtils;
 
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
-import br.com.arbo.steamside.steam.client.apps.AppsHome;
-import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
-import br.com.arbo.steamside.steam.client.apps.InMemoryAppsHome;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
+import br.com.arbo.steamside.steam.client.internal.home.InMemorySteamClientHome;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
 
 class DemoAppsHome
 {
 
-	static AppsHomeFactory demoAppsHomeFactory()
+	static SteamClientHome newSteamClientHome()
 	{
-		AppsHome appsHome = newInstance();
-		return () -> appsHome;
+		return newInstance();
 	}
 
-	private static void add(InMemoryAppsHome appsHome, Appx... appxs)
+	static class Appx
+	{
+
+		Appx()
+		{
+			lastPlayed = i--;
+		}
+
+		static long i = 1000;
+
+		String appid;
+		String categories;
+		long lastPlayed;
+
+		String name;
+
+	}
+
+	private static void add(InMemorySteamClientHome appsHome, Appx... appxs)
 	{
 		Stream.of(appxs).map(DemoAppsHome::app).forEach(appsHome::add);
 	}
@@ -43,14 +59,14 @@ class DemoAppsHome
 			.make();
 	}
 
-	private static AppsHome newInstance()
+	private static InMemorySteamClientHome newInstance()
 	{
-		InMemoryAppsHome appsHome = new InMemoryAppsHome();
+		InMemorySteamClientHome appsHome = new InMemorySteamClientHome();
 		populate(appsHome);
 		return appsHome;
 	}
 
-	private static void populate(InMemoryAppsHome appsHome)
+	private static void populate(InMemorySteamClientHome appsHome)
 	{
 		/* @formatter:off */
 		add(appsHome,
@@ -111,24 +127,6 @@ class DemoAppsHome
 			}}
 			);
 		/* @formatter:on */
-	}
-
-	static class Appx
-	{
-
-		static long i = 1000;
-
-		Appx()
-		{
-			lastPlayed = i--;
-		}
-
-		String appid;
-		String categories;
-		long lastPlayed;
-
-		String name;
-
 	}
 
 }

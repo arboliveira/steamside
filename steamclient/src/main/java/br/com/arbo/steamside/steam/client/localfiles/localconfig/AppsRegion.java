@@ -2,9 +2,9 @@ package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
 import java.util.Objects;
 
+import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
 import br.com.arbo.steamside.steam.client.types.AppId;
-import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.steam.client.vdf.Region;
 
 class AppsRegion {
 

@@ -6,7 +6,7 @@ import br.com.arbo.steamside.kids.Kid;
 import br.com.arbo.steamside.kids.KidsMode;
 import br.com.arbo.steamside.kids.KidsModeDetector;
 import br.com.arbo.steamside.steam.client.apps.App;
-import br.com.arbo.steamside.steam.client.types.SteamCategory;
+import br.com.arbo.steamside.steam.client.categories.category.SteamCategory;
 
 public class FilterKidsMode implements Predicate<App>
 {

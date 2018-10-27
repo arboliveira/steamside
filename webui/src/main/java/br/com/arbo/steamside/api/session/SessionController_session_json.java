@@ -4,17 +4,12 @@ import javax.inject.Inject;
 
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.steamside.kids.KidsModeDetector;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
-import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 
 public class SessionController_session_json implements
 	SessionController_session
 {
-
-	private static boolean isKidsModeOn(KidsModeDetector kidsModeDetector)
-	{
-		return kidsModeDetector.kidsMode().isPresent();
-	}
 
 	@Override
 	public SessionDTO jsonable()
@@ -28,32 +23,30 @@ public class SessionController_session_json implements
 		return dto;
 	}
 
-	private int gamesOwned()
-	{
-		return library.count(
-			new AppCriteria()
-			{
-
-				{
-					gamesOnly = false;
-					owned = true;
-				}
-			});
-	}
-
 	@Inject
 	public SessionController_session_json(
 		User username,
 		KidsModeDetector kidsModeDetector,
-		Library library)
+		SteamClientHome steamClientHome)
 	{
 		this.username = username;
 		this.kidsModeDetector = kidsModeDetector;
-		this.library = library;
+		this.steamClientHome = steamClientHome;
 	}
 
-	private final Library library;
-	private final User username;
+	private int gamesOwned()
+	{
+		return steamClientHome.apps().count(
+			new AppCriteria().gamesOnly(false).owned(true));
+	}
+
+	private static boolean isKidsModeOn(KidsModeDetector kidsModeDetector)
+	{
+		return kidsModeDetector.kidsMode().isPresent();
+	}
+
 	private final KidsModeDetector kidsModeDetector;
+	private final SteamClientHome steamClientHome;
+	private final User username;
 
 }

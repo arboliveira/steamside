@@ -1,8 +1,8 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
+import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
 import br.com.arbo.steamside.steam.client.types.LastPlayed;
-import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.steam.client.vdf.Region;
 
 class AppRegion {
 

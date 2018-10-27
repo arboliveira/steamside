@@ -14,7 +14,7 @@ public class AppAppNameType implements AppNameType
 	}
 
 	@Override
-	public String appnametype() throws MissingFrom_appinfo_vdf
+	public String appnametype()
 	{
 		return AppNameTypes.appnametype(app.name(), app.type());
 	}

@@ -1,24 +1,16 @@
 package br.com.arbo.steamside.api.app;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
-import br.com.arbo.steamside.steam.client.apps.App;
-import br.com.arbo.steamside.steam.client.apps.NotFound;
-import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class AppDTO_json
 {
-
-	public AppDTO_json(TagsQueries queries, Library library, Limit limit)
-	{
-		this.limit = limit;
-		this.library = library;
-		this.queries = queries;
-	}
 
 	public List<AppDTO> jsonable(Stream< ? extends Tag> appsOf)
 	{
@@ -38,21 +30,25 @@ public class AppDTO_json
 		return builder.build();
 	}
 
-	private AppApi toAppApi(AppId appid)
+	public AppDTO_json(TagsQueries queries, SteamClientHome steamClientHome,
+		Limit limit)
 	{
-		try
-		{
-			final App app = library.find(appid);
-			return new AppApiApp(app);
-		}
-		catch (NotFound unavailable)
-		{
-			return new AppApiMissingFromLibrary(appid);
-		}
+		this.steamClientHome = steamClientHome;
+		this.limit = limit;
+		this.queries = queries;
 	}
 
-	private final Library library;
+	private AppApi toAppApi(AppId appid)
+	{
+		Optional<AppApi> map =
+			steamClientHome.apps().find(appid).map(AppApiApp::new);
+
+		return map.orElseGet(() -> new AppApiMissingFromLibrary(appid));
+	}
+
 	private final Limit limit;
+
 	private final TagsQueries queries;
+	private final SteamClientHome steamClientHome;
 
 }

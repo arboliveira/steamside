@@ -10,9 +10,8 @@ import br.com.arbo.steamside.apps.LastPlayedDescending;
 import br.com.arbo.steamside.kids.KidsModeDetector;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.App;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
-import br.com.arbo.steamside.steam.client.apps.FilterPlatform;
-import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 
 public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster
 {
@@ -23,26 +22,21 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster
 		// TODO Prioritize games launched by current user
 
 		@SuppressWarnings("resource")
-		final Stream<App> cont = library.allApps(new AppCriteria()
-		{
-
-			{
-				gamesOnly = true;
-			}
-		}).filter(continues);
-		final Stream<App> end = currentPlatformOnly
-			? cont.filter(new FilterPlatform())
-			: cont;
-		return end.sorted(new LastPlayedDescending());
+		final Stream<App> cont = steamClientHome.apps()
+			.stream(
+				new AppCriteria().gamesOnly(true)
+					.currentPlatformOnly(currentPlatformOnly))
+			.filter(continues);
+		return cont.sorted(new LastPlayedDescending());
 	}
 
 	@Inject
 	public ContinuesFromSteamClientLocalfiles(
 		KidsModeDetector kidsModeDetector,
-		Library library,
+		SteamClientHome steamClientHome,
 		Settings settings)
 	{
-		this.library = library;
+		this.steamClientHome = steamClientHome;
 		this.continues = new FilterContinues(kidsModeDetector);
 		this.currentPlatformOnly = settings.currentPlatformOnly();
 	}
@@ -52,6 +46,6 @@ public class ContinuesFromSteamClientLocalfiles implements ContinuesRooster
 
 	private final boolean currentPlatformOnly;
 
-	private final Library library;
+	private final SteamClientHome steamClientHome;
 
 }

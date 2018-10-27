@@ -1,17 +1,12 @@
 package br.com.arbo.steamside.api.app;
 
 import br.com.arbo.steamside.steam.client.apps.App;
-import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.apps.NeverPlayed;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class AppApiApp implements AppApi {
-
-	public AppApiApp(App app)
-	{
-		this.app = app;
-	}
+public class AppApiApp implements AppApi
+{
 
 	@Override
 	public AppId appid()
@@ -26,7 +21,7 @@ public class AppApiApp implements AppApi {
 	}
 
 	@Override
-	public String name() throws MissingFrom_appinfo_vdf
+	public String name()
 	{
 		return app.name().name;
 	}
@@ -43,6 +38,11 @@ public class AppApiApp implements AppApi {
 		{
 			return true;
 		}
+	}
+
+	public AppApiApp(App app)
+	{
+		this.app = app;
 	}
 
 	private final App app;

@@ -5,19 +5,13 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.collections.TagImpl;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
-import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class Uncollected
 {
-
-	public Uncollected(Library library, TagsQueries tags)
-	{
-		this.library = library;
-		this.tags = tags;
-	}
 
 	public Stream<TagImpl> apps()
 	{
@@ -43,16 +37,23 @@ public class Uncollected
 		};
 	}
 
+	public Uncollected(SteamClientHome steamClientHome, TagsQueries tags)
+	{
+		this.steamClientHome = steamClientHome;
+		this.tags = tags;
+	}
+
 	Stream<AppId> uncollectedIds()
 	{
 		AppCriteria criteria = AppCriteria.OWNED;
-		return library.allApps(criteria).map(app -> app.appid())
+		return steamClientHome.apps().stream(criteria).map(app -> app.appid())
 			.filter(appid -> !tags.isCollected(appid));
 	}
 
-	private final Library library;
-	private final TagsQueries tags;
-
 	private static final String NAME = "Tagless so far";
+
+	private final SteamClientHome steamClientHome;
+
+	private final TagsQueries tags;
 
 }

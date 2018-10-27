@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.stereotype.Component;
 
-import br.com.arbo.steamside.steam.client.library.DumpSteamCategoriesFrom_Library;
+import br.com.arbo.steamside.steam.client.home.DumpSteamCategoriesFrom_SteamClientHome;
 
 @Component
 public class SteamCategoriesEndpoint extends AbstractEndpoint<String>
@@ -19,12 +19,12 @@ public class SteamCategoriesEndpoint extends AbstractEndpoint<String>
 
 	@Inject
 	public SteamCategoriesEndpoint(
-		DumpSteamCategoriesFrom_Library dumpSteamCategoriesFrom_Library)
+		DumpSteamCategoriesFrom_SteamClientHome dumpSteamCategoriesFrom_Library)
 	{
 		super("steamcategories");
 		this.dumpSteamCategoriesFrom_Library = dumpSteamCategoriesFrom_Library;
 	}
 
-	private final DumpSteamCategoriesFrom_Library dumpSteamCategoriesFrom_Library;
+	private final DumpSteamCategoriesFrom_SteamClientHome dumpSteamCategoriesFrom_Library;
 
 }

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.arbo.org.springframework.boot.builder.Sources;
-import br.com.arbo.steamside.steam.client.library.DumpSteamCategoriesFrom_Library;
+import br.com.arbo.steamside.steam.client.home.DumpSteamCategoriesFrom_SteamClientHome;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.DumpAppCacheContent;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.DumpAppCacheParse;
 import br.com.arbo.steamside.steam.client.localfiles.appcache.DumpAppNamesGivenIds;
@@ -28,7 +28,7 @@ public class ActuatorEndpoints
 			DumpAppNamesGivenIds.class,
 			DumpAppNamesFrom_localconfig_vdf.class,
 			DumpAppNamesFrom_sharedconfig_vdf.class,
-			DumpSteamCategoriesFrom_Library.class,
+			DumpSteamCategoriesFrom_SteamClientHome.class,
 			DumpVdfStructureFrom_localconfig_vdf.class,
 			DumpVdfStructureFrom_sharedconfig_vdf.class);
 	}

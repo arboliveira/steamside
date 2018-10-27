@@ -10,11 +10,20 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import br.com.arbo.steamside.out.Dump;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.ParseVisitor;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.parse.Parse_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.ContentVisitor;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.Content_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.File_appinfo_vdf;
 
 public class DumpAppCacheParse
 {
+
+	private final File_appinfo_vdf file_appinfo_vdf;
+
+	@Inject
+	public DumpAppCacheParse(File_appinfo_vdf file_appinfo_vdf)
+	{
+		this.file_appinfo_vdf = file_appinfo_vdf;
+	}
 
 	public void dump(Consumer<String> print)
 	{
@@ -22,14 +31,11 @@ public class DumpAppCacheParse
 
 		getLogger().debug("Opening " + appinfo_vdf);
 
-		try (FileInputStream f = new FileInputStream(appinfo_vdf))
+		try (FileInputStream in = new FileInputStream(appinfo_vdf))
 		{
-			ParseVisitor parse =
-				(appid, appinfo) -> print.accept(appid + "=" + appinfo);
-
-			new Parse_appinfo_vdf(
-				new Content_appinfo_vdf(f), parse)
-					.parse();
+			new Content_appinfo_vdf(in).accept(
+				new ContentVisitor(
+					(appid, appinfo) -> print.accept(appid + "=" + appinfo)));
 		}
 		catch (IOException e)
 		{
@@ -46,13 +52,5 @@ public class DumpAppCacheParse
 	{
 		return Logger.getLogger(this.getClass());
 	}
-
-	@Inject
-	public DumpAppCacheParse(File_appinfo_vdf file_appinfo_vdf)
-	{
-		this.file_appinfo_vdf = file_appinfo_vdf;
-	}
-
-	private final File_appinfo_vdf file_appinfo_vdf;
 
 }

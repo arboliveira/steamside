@@ -10,7 +10,7 @@ import br.com.arbo.steamside.bootstrap.EventObserver;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.data.copy.CopyAllSteamCategories;
-import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class FirstRunObserver implements EventObserver
@@ -28,9 +28,22 @@ public class FirstRunObserver implements EventObserver
 		}
 	}
 
+	@Inject
+	public FirstRunObserver(
+		SteamsideData steamsideData, SteamClientHome steamClientHome,
+		Bootstrap bootstrap)
+	{
+		this.steamsideData = steamsideData;
+		this.steamClientHome = steamClientHome;
+		this.bootstrap = bootstrap;
+
+		bootstrap.addObserver(this);
+	}
+
 	private void copyAllSteamCategories()
 	{
-		new CopyAllSteamCategories(steamsideData.tags(), library).execute();
+		new CopyAllSteamCategories(steamsideData.tags(), steamClientHome)
+			.execute();
 		CollectionsData c = steamsideData.collections();
 		c.favorite(c.find(new CollectionName("favorite")));
 	}
@@ -40,19 +53,9 @@ public class FirstRunObserver implements EventObserver
 		return Logger.getLogger(this.getClass());
 	}
 
-	@Inject
-	public FirstRunObserver(
-		SteamsideData steamsideData, Library library, Bootstrap bootstrap)
-	{
-		this.steamsideData = steamsideData;
-		this.library = library;
-		this.bootstrap = bootstrap;
-
-		bootstrap.addObserver(this);
-	}
-
 	private final Bootstrap bootstrap;
-	private final Library library;
+
+	private final SteamClientHome steamClientHome;
 	private final SteamsideData steamsideData;
 
 }

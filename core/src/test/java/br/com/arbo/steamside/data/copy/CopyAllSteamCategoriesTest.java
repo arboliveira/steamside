@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import br.com.arbo.org.junit.Assert;
 import br.com.arbo.steamside.collections.TagsData;
@@ -16,35 +15,17 @@ import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
 import br.com.arbo.steamside.steam.client.apps.AppImpl.Builder;
-import br.com.arbo.steamside.steam.client.apps.AppsHomeFactory;
-import br.com.arbo.steamside.steam.client.apps.InMemoryAppsHome;
-import br.com.arbo.steamside.steam.client.library.LibraryImpl;
+import br.com.arbo.steamside.steam.client.internal.home.InMemorySteamClientHome;
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class CopyAllSteamCategoriesTest
 {
 
-	private static App newApp(
-		String name, String category, Optional<String> lastPlayed)
-	{
-		Builder b =
-			new AppImpl.Builder()
-				.categories(category)
-				.appid(name)
-				.name(new AppName(name));
-		lastPlayed.ifPresent(b::lastPlayed);
-		return b.make();
-	}
-
 	@Test
 	public void remembers()
 	{
-		appsHome = new InMemoryAppsHome();
-
-		AppsHomeFactory appsHomeFactory = Mockito.mock(AppsHomeFactory.class);
-		Mockito.doReturn(appsHome).when(appsHomeFactory).get();
-		LibraryImpl library = new LibraryImpl(appsHomeFactory);
+		steamClientHome = new InMemorySteamClientHome();
 
 		InMemorySteamsideData steamsideData =
 			InMemorySteamsideData.newInstance();
@@ -56,7 +37,7 @@ public class CopyAllSteamCategoriesTest
 		addApp("C", "c", Optional.empty());
 		addApp("D", "d", Optional.of("2"));
 
-		new CopyAllSteamCategories(tagsData, library).execute();
+		new CopyAllSteamCategories(tagsData, steamClientHome).execute();
 
 		List<String> collect =
 			tagsData.recent()
@@ -70,8 +51,20 @@ public class CopyAllSteamCategoriesTest
 	private void addApp(String name, String category,
 		Optional<String> lastPlayed)
 	{
-		appsHome.add(newApp(name, category, lastPlayed));
+		steamClientHome.add(newApp(name, category, lastPlayed));
 	}
 
-	private InMemoryAppsHome appsHome;
+	private static App newApp(
+		String name, String category, Optional<String> lastPlayed)
+	{
+		Builder b =
+			new AppImpl.Builder()
+				.categories(category)
+				.appid(name)
+				.name(new AppName(name));
+		lastPlayed.ifPresent(b::lastPlayed);
+		return b.make();
+	}
+
+	private InMemorySteamClientHome steamClientHome;
 }

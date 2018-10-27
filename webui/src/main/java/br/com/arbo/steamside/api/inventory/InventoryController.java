@@ -15,24 +15,12 @@ import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.system.Everything;
 import br.com.arbo.steamside.collections.system.Uncollected;
-import br.com.arbo.steamside.steam.client.library.Library;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 
 @RestController
 @RequestMapping("inventory")
 public class InventoryController
 {
-
-	@Inject
-	public InventoryController(
-		Library library, TagsQueries tags,
-		br.com.arbo.steamside.api.app.AppSettings apiAppSettings)
-	{
-		this.library = library;
-		this.tags = tags;
-		this.apiAppSettings = apiAppSettings;
-		this.tagless = new Uncollected(library, tags);
-		this.owned = new Everything(library);
-	}
 
 	@RequestMapping(value = "owned.json")
 	public List<AppDTO> owned()
@@ -58,16 +46,28 @@ public class InventoryController
 		return CollectionDTO.valueOf(tagless.withCount());
 	}
 
+	@Inject
+	public InventoryController(
+		SteamClientHome steamClientHome, TagsQueries tags,
+		br.com.arbo.steamside.api.app.AppSettings apiAppSettings)
+	{
+		this.steamClientHome = steamClientHome;
+		this.tags = tags;
+		this.apiAppSettings = apiAppSettings;
+		this.tagless = new Uncollected(steamClientHome, tags);
+		this.owned = new Everything(steamClientHome);
+	}
+
 	private List<AppDTO> jsonable(Stream< ? extends Tag> apps)
 	{
 		return new AppDTO_json(
-			tags, library, apiAppSettings.limit()).jsonable(apps);
+			tags, steamClientHome, apiAppSettings.limit()).jsonable(apps);
 	}
 
-	private final Everything owned;
-	private final Library library;
-	private final TagsQueries tags;
 	private final br.com.arbo.steamside.api.app.AppSettings apiAppSettings;
+	private final Everything owned;
+	private final SteamClientHome steamClientHome;
 	private final Uncollected tagless;
+	private final TagsQueries tags;
 
 }

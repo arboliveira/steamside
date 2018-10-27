@@ -4,6 +4,9 @@ import java.io.InputStream;
 import java.util.function.Consumer;
 
 import br.com.arbo.steamside.indent.Indent;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.Vdf;
 
 public class DumpVdfStructure implements KeyValueVisitor
 {

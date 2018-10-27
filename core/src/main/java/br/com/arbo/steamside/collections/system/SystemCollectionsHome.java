@@ -7,21 +7,14 @@ import br.com.arbo.steamside.collections.Tag;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.collections.TagsQueries.WithTags;
-import br.com.arbo.steamside.steam.client.apps.AppCriteria;
+import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.library.GameFinder;
-import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class SystemCollectionsHome
 {
-
-	public SystemCollectionsHome(
-		Library library, TagsQueries tags)
-	{
-		this.tags = tags;
-		this.gameFinder = new GameFinder(library);
-	}
 
 	public Stream< ? extends CollectionI> all()
 	{
@@ -36,19 +29,26 @@ public class SystemCollectionsHome
 	public Stream< ? extends Tag> appsOf(
 		CollectionName collectionName,
 		AppCriteria criteria)
-		{
+	{
 		return filter(tags.appsOf(collectionName), criteria);
-		}
+	}
+
+	public SystemCollectionsHome(
+		SteamClientHome steamClientHome, TagsQueries tags)
+	{
+		this.tags = tags;
+		this.gameFinder = new GameFinder(steamClientHome);
+	}
 
 	Stream< ? extends Tag> filter(
 		Stream< ? extends Tag> appsOf,
 		AppCriteria criteria)
-		{
+	{
 		if (AppCriteria.isAll(criteria)) return appsOf;
 		Stream< ? extends Tag> s = appsOf;
-		if (criteria.gamesOnly) s = s.filter(this::isGame);
+		if (criteria.gamesOnly()) s = s.filter(this::isGame);
 		return s;
-		}
+	}
 
 	WithCount withCount(WithTags t, AppCriteria criteria)
 	{

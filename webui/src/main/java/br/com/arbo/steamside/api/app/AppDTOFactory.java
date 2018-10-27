@@ -6,10 +6,10 @@ import java.util.stream.Stream;
 
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.TagsQueries;
-import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class AppDTOFactory {
+public class AppDTOFactory
+{
 
 	public static List<AppTagDTO> tags_jsonable(
 		final AppId appid,
@@ -23,10 +23,7 @@ public class AppDTOFactory {
 		return dtos.collect(Collectors.toList());
 	}
 
-	public static AppDTO valueOf(
-		final AppApi app,
-		TagsQueries queries)
-			throws MissingFrom_appinfo_vdf
+	public static AppDTO valueOf(AppApi app, TagsQueries queries)
 	{
 		final AppId appid = app.appid();
 

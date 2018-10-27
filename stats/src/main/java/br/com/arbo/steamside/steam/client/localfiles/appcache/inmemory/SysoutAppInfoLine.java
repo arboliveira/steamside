@@ -3,6 +3,7 @@ package br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.AppNameType;
 

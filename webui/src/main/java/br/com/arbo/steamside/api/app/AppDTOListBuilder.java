@@ -9,7 +9,8 @@ import br.com.arbo.steamside.apps.LastPlayedDescending;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 
-public class AppDTOListBuilder {
+public class AppDTOListBuilder
+{
 
 	public List<AppDTO> build()
 	{
@@ -26,19 +27,22 @@ public class AppDTOListBuilder {
 		return narrow.collect(Collectors.toList());
 	}
 
-	public void cards(Stream<AppApi> cards)
+	public AppDTOListBuilder cards(Stream<AppApi> cards)
 	{
 		this.cards = cards;
+		return this;
 	}
 
-	public void limit(Limit limit)
+	public AppDTOListBuilder limit(Limit limit)
 	{
 		this.limit = limit;
+		return this;
 	}
 
-	public void tagsQueries(TagsQueries tagsQueries)
+	public AppDTOListBuilder tagsQueries(TagsQueries tagsQueries)
 	{
 		this.tagsQueries = tagsQueries;
+		return this;
 	}
 
 	private Optional<AppDTO> toOptionalDTO(AppApi app)
@@ -53,10 +57,8 @@ public class AppDTOListBuilder {
 		}
 	}
 
-	private Limit limit;
-
 	private Stream<AppApi> cards;
-
+	private Limit limit;
 	private TagsQueries tagsQueries;
 
 }

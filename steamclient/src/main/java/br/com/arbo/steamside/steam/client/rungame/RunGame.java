@@ -1,46 +1,53 @@
 package br.com.arbo.steamside.steam.client.rungame;
 
-import br.com.arbo.steamside.steam.client.apps.NotFound;
-import br.com.arbo.steamside.steam.client.library.Library;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.entry.NotAvailableOnThisPlatform;
+import java.util.Optional;
+
+import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.apps.home.NotFound;
+import br.com.arbo.steamside.steam.client.home.SteamClientHome;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.protocol.C_rungameid;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class RunGame {
+public class RunGame
+{
 
-	private static void askSteamToRunGame(final AppId appid,
-			final SteamBrowserProtocol steam)
+	public void askSteamToRunGameAndWaitUntilItsUp(final AppId appid)
+		throws NotAvailableOnThisPlatform, NotFound, Timeout
 	{
-		steam.launch(new C_rungameid(appid));
+		askSteamToRunGame(appid, steam);
+		final Optional<String> exe = findExecutableName(appid);
+		new WaitForExecutable(
+			exe.orElseThrow(() -> NotFound.appid(appid.appid())),
+			executorFactory)
+				.waitFor();
 	}
 
 	public RunGame(
-			final SteamBrowserProtocol steam,
-			final Library library,
-			ScheduledExecutorServiceFactory executorFactory)
+		SteamBrowserProtocol steam,
+		SteamClientHome steamClientHome,
+		ScheduledExecutorServiceFactory executorFactory)
 	{
 		this.steam = steam;
-		this.library = library;
+		this.steamClientHome = steamClientHome;
 		this.executorFactory = executorFactory;
 	}
 
-	public void askSteamToRunGameAndWaitUntilItsUp(final AppId appid)
-			throws NotAvailableOnThisPlatform, NotFound, Timeout
+	private Optional<String> findExecutableName(final AppId appid)
+		throws NotAvailableOnThisPlatform
 	{
-		askSteamToRunGame(appid, steam);
-		final String exe = findExecutableName(appid);
-		new WaitForExecutable(exe, executorFactory).waitFor();
+		return steamClientHome.apps().find(appid).map(App::executable);
 	}
 
-	private String findExecutableName(final AppId appid)
-			throws NotAvailableOnThisPlatform, NotFound
+	private static void askSteamToRunGame(final AppId appid,
+		final SteamBrowserProtocol steam)
 	{
-		return library.find(appid).executable();
+		steam.launch(new C_rungameid(appid));
 	}
 
 	private final ScheduledExecutorServiceFactory executorFactory;
 
 	private final SteamBrowserProtocol steam;
-	private final Library library;
+	private final SteamClientHome steamClientHome;
 }

@@ -9,10 +9,12 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.arbo.steamside.out.Dump;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.Content_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.Content_appinfo_vdf.Content_appinfo_vdf_Visitor;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
 import br.com.arbo.steamside.steam.client.vdf.DumpVdfStructure;
-import br.com.arbo.steamside.steam.client.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.steam.client.vdf.Region;
 
 public class DumpAppCacheContent
 {
