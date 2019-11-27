@@ -8,6 +8,7 @@ import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
 import br.com.arbo.steamside.steam.client.apps.home.NotFound;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
+import br.com.arbo.steamside.steam.client.platform.PlatformFactory;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 import br.com.arbo.steamside.steam.client.rungame.RunGame;
 import br.com.arbo.steamside.steam.client.rungame.ScheduledExecutorServiceFactory;
@@ -25,14 +26,16 @@ public class RunGameCommand
 
 	@Inject
 	public RunGameCommand(
-		final SteamBrowserProtocol steam,
-		SteamClientHome steamClientHome)
+		SteamBrowserProtocol steam,
+		SteamClientHome steamClientHome,
+		PlatformFactory platformFactory)
 	{
 		ScheduledExecutorServiceFactory executorFactory =
 			(prefixForThreads -> Executors.newScheduledThreadPool(
 				1,
 				DaemonThreadFactory.withPrefix(prefixForThreads)));
-		this.runGame = new RunGame(steam, steamClientHome, executorFactory);
+		this.runGame = new RunGame(
+			steam, steamClientHome, executorFactory, platformFactory);
 	}
 
 	private final RunGame runGame;

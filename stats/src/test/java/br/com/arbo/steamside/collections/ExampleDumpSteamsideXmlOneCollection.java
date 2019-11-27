@@ -1,9 +1,13 @@
 package br.com.arbo.steamside.collections;
 
-import java.util.stream.Stream;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import org.junit.Test;
 
 import br.com.arbo.steamside.data.collections.NotFound;
 import br.com.arbo.steamside.settings.file.SteamsideData_ForExamples;
+import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.library.Libraries;
 import br.com.arbo.steamside.steam.client.types.AppId;
@@ -17,11 +21,24 @@ public class ExampleDumpSteamsideXmlOneCollection
 		new ExampleDumpSteamsideXmlOneCollection().run();
 	}
 
+	private Consumer<Object> print = System.out::println;
+
+	@Test
+	public void test()
+	{
+		print = null;
+
+		run();
+	}
+
 	void printTag(Tag tag)
 	{
 		AppId appid = tag.appid();
 
-		System.out.println(library.apps().find(appid));
+		Optional<App> find = library.apps().find(appid);
+
+		if (print != null)
+			print.accept(find);
 	}
 
 	void run()
@@ -31,8 +48,7 @@ public class ExampleDumpSteamsideXmlOneCollection
 		CollectionI collection = home.collections().find(
 			new CollectionName(name));
 
-		final Stream< ? extends Tag> apps = home.apps(collection);
-		apps.forEach(this::printTag);
+		home.apps(collection).forEach(this::printTag);
 	}
 
 	InMemoryTagsHome home = SteamsideData_ForExamples.fromXmlFile();

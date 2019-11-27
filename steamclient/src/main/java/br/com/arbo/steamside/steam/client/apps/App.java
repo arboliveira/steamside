@@ -1,43 +1,37 @@
 package br.com.arbo.steamside.steam.client.apps;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
 import br.com.arbo.steamside.steam.client.categories.category.SteamCategory;
-import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
+import br.com.arbo.steamside.steam.client.types.LastPlayed;
 
-public interface App extends LastPlayed
+public interface App
 {
 
 	AppId appid();
 
-	String executable() throws NotAvailableOnThisPlatform;
+	Optional<String> executable(Platform platform);
+
+	Map<String, String> executables();
 
 	void forEachCategory(final Consumer<SteamCategory> visitor);
-
-	default boolean isGame()
-	{
-		try
-		{
-			return type().isGame();
-		}
-		catch (MissingFrom_appinfo_vdf e)
-		{
-			return false;
-		}
-	}
 
 	boolean isInCategory(final SteamCategory category);
 
 	boolean isOwned();
 
-	Optional<String> lastPlayed();
+	Optional<LastPlayed> lastPlayed();
 
-	AppName name() throws MissingFrom_appinfo_vdf;
+	boolean matches(AppCriteria c);
 
-	AppType type() throws MissingFrom_appinfo_vdf;
+	AppName name();
+
+	AppType type();
 
 }

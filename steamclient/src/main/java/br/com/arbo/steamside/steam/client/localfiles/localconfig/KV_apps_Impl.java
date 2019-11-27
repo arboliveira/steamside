@@ -11,18 +11,15 @@ import br.com.arbo.steamside.steam.client.types.AppId;
 class KV_apps_Impl implements KV_apps
 {
 
-	public void add(KV_app_Impl app)
+	public void add(KV_app app)
 	{
-		this.put(app.appid, app);
+		this.put(app.appid(), app);
 	}
 
 	@Override
-	public Stream< ? extends KV_app> all()
+	public Stream<KV_app> all()
 	{
-		@SuppressWarnings("unchecked")
-		final Stream<KV_app_Impl> stream = map.values().stream();
-		final Stream< ? extends KV_app> all = stream;
-		return all;
+		return map.values().stream();
 	}
 
 	@Override
@@ -43,11 +40,11 @@ class KV_apps_Impl implements KV_apps
 		return map.keySet().stream().map(key -> new AppId(key));
 	}
 
-	private void put(AppId appid, KV_app_Impl app)
+	private void put(AppId appid, KV_app app)
 	{
 		this.map.put(appid.appid, app);
 	}
 
-	private final Map<String, KV_app_Impl> map = new HashMap<>();
+	private final Map<String, KV_app> map = new HashMap<>();
 
 }

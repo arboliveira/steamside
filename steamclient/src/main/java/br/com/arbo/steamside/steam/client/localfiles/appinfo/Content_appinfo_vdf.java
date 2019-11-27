@@ -19,7 +19,8 @@ import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
 public class Content_appinfo_vdf
 {
 
-	public void accept(final Content_appinfo_vdf_Visitor visitor)
+	public void accept(Content_appinfo_vdf_Visitor visitor,
+		KeyValueVisitor keyValueVisitor)
 	{
 		read__uint32_t("version: 0x07564427");
 		read__uint32_t("universe: enum EUniverse");
@@ -27,7 +28,7 @@ public class Content_appinfo_vdf
 		{
 			int app_id = read__uint32_t("app_id");
 			if (app_id == 0) break;
-			go_app_id(app_id, visitor);
+			go_app_id(app_id, visitor, keyValueVisitor);
 		}
 	}
 
@@ -62,7 +63,9 @@ public class Content_appinfo_vdf
 		return Logger.getLogger(this.getClass());
 	}
 
-	private void go_app_id(int app_id, Content_appinfo_vdf_Visitor visitor)
+	private void go_app_id(
+		int app_id, Content_appinfo_vdf_Visitor visitor,
+		KeyValueVisitor keyValueVisitor)
 	{
 		visitor.onApp(app_id);
 
@@ -73,7 +76,7 @@ public class Content_appinfo_vdf
 		read__uint8_t(20, "checksum: sha[20]");
 		read__uint32_t("change_number");
 
-		KeyValues_cpp.readAsBinary(buffer, visitor);
+		KeyValues_cpp.readAsBinary(buffer, keyValueVisitor);
 
 		visitor.onAppEnd();
 	}
@@ -125,7 +128,7 @@ public class Content_appinfo_vdf
 
 	private final ByteBufferX buffer;
 
-	public interface Content_appinfo_vdf_Visitor extends KeyValueVisitor
+	public interface Content_appinfo_vdf_Visitor //extends KeyValueVisitor
 	{
 
 		void onApp(int app_id);

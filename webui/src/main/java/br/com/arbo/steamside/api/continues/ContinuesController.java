@@ -7,14 +7,14 @@ import javax.inject.Inject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.arbo.steamside.api.app.AppDTO;
+import br.com.arbo.steamside.api.app.AppCardDTO;
 
 @RestController
 @RequestMapping("continues")
 public class ContinuesController {
 
 	@RequestMapping("continues.json")
-	public List<AppDTO> continues()
+	public List<AppCardDTO> continues()
 	{
 		return this.continues.continues();
 	}

@@ -55,14 +55,34 @@ import br.com.arbo.steamside.settings.local.LocalSettingsSave;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.internal.home.SteamClientHomeFromLocalFilesAutoReload;
 import br.com.arbo.steamside.steam.client.internal.library.LibraryImpl;
+import br.com.arbo.steamside.steam.client.internal.platform.PlatformFactoryImpl;
 import br.com.arbo.steamside.steam.client.library.Library;
 import br.com.arbo.steamside.steam.client.localfiles.appinfo.File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.platform.PlatformFactory;
 import br.com.arbo.steamside.steam.client.protocol.SteamBrowserProtocol;
 
 public class SourcesFactory
 {
+
+	public static Sources newInstance()
+	{
+		return newInstanceInert().sources(
+			StartStopBootstrap.class,
+			StartStopSteamClientHomeFromLocalFilesAutoReload.class,
+			StartStopSteamsideDataBootstrap.class);
+	}
+
+	public static Sources populate(Sources container)
+	{
+		return addComponents(container);
+	}
+
+	static Sources newInstanceInert()
+	{
+		return populate(new Sources());
+	}
 
 	private static Sources addComponents(Sources container)
 	{
@@ -80,7 +100,9 @@ public class SourcesFactory
 			.sourceImplementor(Library.class, LibraryImpl.class)
 			.sourceImplementor(
 				SteamClientHome.class,
-				SteamClientHomeFromLocalFilesAutoReload.class);
+				SteamClientHomeFromLocalFilesAutoReload.class)
+			.sourceImplementor(
+				PlatformFactory.class, PlatformFactoryImpl.class);
 
 		container
 			.sourceImplementor(
@@ -160,23 +182,6 @@ public class SourcesFactory
 				KidsController_kids_json.class);
 
 		return container;
-	}
-
-	public static Sources newInstance()
-	{
-		return newInstanceInert().sources(
-			StartStopBootstrap.class, StartStopSteamClientHomeFromLocalFilesAutoReload.class,
-			StartStopSteamsideDataBootstrap.class);
-	}
-
-	static Sources newInstanceInert()
-	{
-		return populate(new Sources());
-	}
-
-	public static Sources populate(Sources container)
-	{
-		return addComponents(container);
 	}
 
 }

@@ -1,8 +1,8 @@
 package br.com.arbo.steamside.steam.client.apps.home;
 
-import java.util.stream.Stream;
+import java.util.Optional;
 
-import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.apps.Platform;
 
 public class AppCriteria
 {
@@ -13,21 +13,9 @@ public class AppCriteria
 	public static boolean isAll(AppCriteria c)
 	{
 		if (c.gamesOnly) return false;
-		if (c.in != null) return false;
 		if (c.owned) return false;
-		if (c.currentPlatformOnly) return false;
+		if (c.platform != null) return false;
 		return true;
-	}
-
-	public boolean currentPlatformOnly()
-	{
-		return currentPlatformOnly;
-	}
-
-	public AppCriteria currentPlatformOnly(boolean currentPlatformOnly)
-	{
-		this.currentPlatformOnly = currentPlatformOnly;
-		return this;
 	}
 
 	public boolean gamesOnly()
@@ -41,14 +29,14 @@ public class AppCriteria
 		return this;
 	}
 
-	public Stream<AppId> in()
+	public boolean lastPlayedDescending()
 	{
-		return in;
+		return lastPlayedDescending;
 	}
 
-	public AppCriteria in(Stream<AppId> in)
+	public AppCriteria lastPlayedDescending(boolean b)
 	{
-		this.in = in;
+		lastPlayedDescending = b;
 		return this;
 	}
 
@@ -63,11 +51,26 @@ public class AppCriteria
 		return this;
 	}
 
-	private boolean currentPlatformOnly;
+	public AppCriteria platform(Optional<Platform> platform)
+	{
+		platform.ifPresent(this::platform);
+		return this;
+	}
+
+	public AppCriteria platform(Platform platform)
+	{
+		this.platform = platform;
+		return this;
+	}
+
+	public Platform platform()
+	{
+		return platform;
+	}
 
 	private boolean gamesOnly;
 
-	private Stream<AppId> in;
-
+	private boolean lastPlayedDescending;
 	private boolean owned;
+	private Platform platform;
 }

@@ -2,28 +2,34 @@ package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
 import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
 import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
-import br.com.arbo.steamside.steam.client.types.LastPlayed;
 
-class AppRegion {
+class AppRegion
+{
 
-	AppRegion(final Region content) {
+	AppRegion(final Region content)
+	{
 		this.content = content;
 	}
 
-	KV_app_Impl parse()
+	interface AppRegionVisitor
 	{
-		final Hydrate hydrate = new Hydrate();
-		content.accept(hydrate);
-		return hydrate.app;
+
+		void on_LastPlayed(String v);
 	}
 
-	static class DoNothing implements KeyValueVisitor {
+	void accept(AppRegionVisitor visitor)
+	{
+		content.accept(new Hydrate(visitor));
+	}
+
+	static class DoNothing implements KeyValueVisitor
+	{
 
 		@Override
 		public void onKeyValue(final String k, final String v)
 			throws Finished
 		{
-			// 
+			//
 		}
 
 		@Override
@@ -40,14 +46,22 @@ class AppRegion {
 
 	}
 
-	static final class Hydrate implements KeyValueVisitor {
+	static final class Hydrate implements KeyValueVisitor
+	{
+
+		private final AppRegionVisitor visitor;
+
+		public Hydrate(AppRegionVisitor visitor)
+		{
+			this.visitor = visitor;
+		}
 
 		@Override
 		public void onKeyValue(final String k, final String v)
 			throws Finished
 		{
 			if ("LastPlayed".equalsIgnoreCase(k))
-				app.lastPlayed = new LastPlayed(v);
+				visitor.on_LastPlayed(v);
 		}
 
 		@Override
@@ -57,7 +71,6 @@ class AppRegion {
 			r.accept(new DoNothing());
 		}
 
-		final KV_app_Impl app = new KV_app_Impl();
 	}
 
 	private final Region content;

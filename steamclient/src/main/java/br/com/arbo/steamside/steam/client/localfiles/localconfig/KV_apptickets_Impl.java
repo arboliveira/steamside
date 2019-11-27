@@ -1,6 +1,7 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -9,17 +10,15 @@ import br.com.arbo.steamside.steam.client.types.AppId;
 public class KV_apptickets_Impl implements KV_apptickets
 {
 
-	public void add(KV_appticket_Impl app)
+	public void add(KV_appticket app)
 	{
-		this.put(app.appid, app);
+		this.put(app.appid(), app);
 	}
 
 	@Override
-	public Stream< ? extends KV_appticket> all()
+	public Stream<KV_appticket> all()
 	{
-		@SuppressWarnings("unchecked")
-		Stream< ? extends KV_appticket> all = map.values().stream();
-		return all;
+		return map.values().stream();
 	}
 
 	@Override
@@ -31,14 +30,14 @@ public class KV_apptickets_Impl implements KV_apptickets
 	@Override
 	public Stream<AppId> streamAppId()
 	{
-		return map.keySet().stream().map(key -> new AppId(key));
+		return map.keySet().stream().map(AppId::new);
 	}
 
-	private void put(AppId appid, KV_appticket_Impl app)
+	private void put(AppId appid, KV_appticket app)
 	{
 		this.map.put(appid.appid, app);
 	}
 
-	private final HashMap<String, KV_appticket_Impl> map = new HashMap<>();
+	private final Map<String, KV_appticket> map = new HashMap<>();
 
 }

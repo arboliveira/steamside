@@ -34,7 +34,7 @@ class AppRegion {
 		public void onSubRegion(final String k, final Region r)
 				throws Finished {
 			if ("tags".equalsIgnoreCase(k))
-				app.tags = new TagsRegion(r).parse();
+				app.categories = new TagsRegion(r).parse();
 		}
 	}
 

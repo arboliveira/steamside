@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import br.com.arbo.opersys.username.FromJava;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
+import br.com.arbo.steamside.steam.client.internal.platform.PlatformFactoryImpl;
 import br.com.arbo.steamside.steam.client.library.Libraries;
 import br.com.arbo.steamside.steam.client.rungame.RunGame;
 import br.com.arbo.steamside.steam.client.types.AppId;
@@ -19,14 +20,17 @@ public class ExampleSuperHexagon
 		final FromJava user = new FromJava();
 		final SteamBrowserProtocol steam = new SteamBrowserProtocol(user);
 
-		final SteamClientHome steamClientHome = Libraries.fromSteamPhysicalFiles();
+		final SteamClientHome steamClientHome =
+			Libraries.fromSteamPhysicalFiles();
 
 		ScheduledExecutorService executorService =
 			Executors.newSingleThreadScheduledExecutor();
 		try
 		{
-			new RunGame(steam, steamClientHome, (prefix -> executorService))
-				.askSteamToRunGameAndWaitUntilItsUp(appid);
+			new RunGame(
+				steam, steamClientHome, prefix -> executorService,
+				new PlatformFactoryImpl())
+					.askSteamToRunGameAndWaitUntilItsUp(appid);
 		}
 		finally
 		{

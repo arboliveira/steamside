@@ -3,14 +3,13 @@ package br.com.arbo.steamside.steam.client.internal.apps.home;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
 import br.com.arbo.steamside.steam.client.apps.home.AppsHome;
 import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.types.LastPlayed;
 
 public class InMemoryAppsHome implements AppsHome
 {
@@ -34,42 +33,66 @@ public class InMemoryAppsHome implements AppsHome
 	}
 
 	@Override
-	public Optional<App> find(final AppId appid)
+	public Optional<App> find(AppId appid)
 	{
 		return Optional.ofNullable(apps.get(appid.appid));
 	}
 
 	@Override
-	public Stream<App> stream(AppCriteria criteria)
+	public Stream<App> find(AppCriteria criteria)
 	{
-		Stream<App> stream = apps.values().stream();
-
-		if (AppCriteria.isAll(criteria))
-			return stream;
-
-		return filter(stream, criteria);
+		return filter(apps.values().stream(), criteria);
 	}
 
-	private static Stream<App> filter(Stream<App> stream, AppCriteria c)
+	@Override
+	public Stream<App> find(
+		Stream<AppId> in, AppCriteria criteria)
 	{
-		Stream<App> s = stream;
+		return filter(
+			present(in).map(appid -> apps.get(appid.appid)), criteria);
+	}
 
-		if (c.gamesOnly())
-			s = s.filter(App::isGame);
+	@Override
+	public Map<AppId, Optional<App>> match(
+		Stream<AppId> in, AppCriteria criteria)
+	{
+		Map<AppId, Optional<App>> m = new HashMap<>();
 
-		if (c.in() != null)
+		present(in).forEach(
+			appid -> m.put(appid, match(appid, criteria)));
+
+		return m;
+	}
+
+	private Optional<App> match(AppId appid, AppCriteria criteria)
+	{
+		App app = apps.get(appid.appid);
+
+		return app.matches(criteria) ? Optional.of(app) : Optional.empty();
+	}
+
+	private Stream<AppId> present(Stream<AppId> in)
+	{
+		return in.filter(appid -> apps.containsKey(appid.appid));
+	}
+
+	private static Stream<App> filter(Stream<App> stream, AppCriteria criteria)
+	{
+		if (AppCriteria.isAll(criteria)) return stream;
+
+		return lastPlayedDescending(
+			stream.filter(app -> app.matches(criteria)), criteria);
+	}
+
+	private static Stream<App> lastPlayedDescending(
+		Stream<App> stream, AppCriteria criteria)
+	{
+		if (criteria.lastPlayedDescending())
 		{
-			Set<AppId> set = c.in().collect(Collectors.toSet());
-			s = s.filter(app -> set.contains(app.appid()));
+			return stream.sorted(LastPlayed.descending(App::lastPlayed));
 		}
 
-		if (c.owned())
-			s = s.filter(App::isOwned);
-
-		if (c.currentPlatformOnly())
-			s = s.filter(new FilterPlatform());
-
-		return s;
+		return stream;
 	}
 
 	private final Map<String, App> apps = new HashMap<String, App>();

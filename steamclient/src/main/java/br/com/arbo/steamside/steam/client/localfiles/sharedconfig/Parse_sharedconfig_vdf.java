@@ -2,15 +2,14 @@ package br.com.arbo.steamside.steam.client.localfiles.sharedconfig;
 
 import java.io.InputStream;
 
-import br.com.arbo.steamside.steam.client.localfiles.vdf.NotFound;
-import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
-import br.com.arbo.steamside.steam.client.localfiles.vdf.Vdf;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.VdfStructure;
 
-public class Parse_sharedconfig_vdf {
+public class Parse_sharedconfig_vdf
+{
 
 	public Parse_sharedconfig_vdf(InputStream in)
 	{
-		this.content = new Vdf(in);
+		this.vdfStructure = new VdfStructure(in);
 	}
 
 	public Data_sharedconfig_vdf parse()
@@ -22,20 +21,16 @@ public class Parse_sharedconfig_vdf {
 
 	private AppsRegion newAppsRegion()
 	{
-		try {
-			Region rUserRoamingConfigStore =
-					content.root().region("UserRoamingConfigStore");
-			Region rSoftware = rUserRoamingConfigStore.region("Software");
-			Region rValve = rSoftware.region("Valve");
-			Region rSteam = rValve.region("Steam");
-			Region rapps = rSteam.region("apps");
-			return new AppsRegion(rapps);
-		}
-		catch (final NotFound e) {
-			throw new RuntimeException(
-					"Not a valid sharedconfig.vdf file?!", e);
-		}
+		return vdfStructure.root().region("UserRoamingConfigStore")
+			.flatMap(r -> r.region("Software"))
+			.flatMap(r -> r.region("Valve"))
+			.flatMap(r -> r.region("Steam"))
+			.flatMap(r -> r.region("apps"))
+			.map(AppsRegion::new)
+			.orElseThrow(
+				() -> new RuntimeException(
+					"Not a valid sharedconfig.vdf file?!"));
 	}
 
-	private final Vdf content;
+	private final VdfStructure vdfStructure;
 }

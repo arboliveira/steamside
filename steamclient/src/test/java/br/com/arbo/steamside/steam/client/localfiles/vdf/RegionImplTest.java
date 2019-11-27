@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.StringReader;
 
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,18 +12,19 @@ import org.junit.Test;
 public class RegionImplTest
 {
 
-	@Test(expected = NotFound.class)
-	public void missingName__throwsException() throws NotFound
+	@Test
+	public void missingName__emptyOptional()
 	{
-		subject.region("Bogus");
+		Assert.assertFalse(subject.region("Bogus").isPresent());
 	}
 
 	@Test
-	public void nestedSubregion__isFound() throws NotFound
+	public void nestedSubregion__isFound()
 	{
-		Region region1 = subject.region("UserLocalConfigStore");
-		Region region2 = region1.region("Software");
-		Assert.assertThat(region2, IsNull.notNullValue());
+		Assert.assertTrue(
+			subject.region("UserLocalConfigStore")
+				.flatMap(r -> r.region("Software"))
+				.isPresent());
 	}
 
 	@Before

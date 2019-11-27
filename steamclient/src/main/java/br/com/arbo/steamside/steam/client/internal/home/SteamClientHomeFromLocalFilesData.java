@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.steam.client.internal.home;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
@@ -8,12 +9,10 @@ import br.com.arbo.steamside.steam.client.apps.MissingFrom_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.localfiles.appinfo.AppInfo;
 import br.com.arbo.steamside.steam.client.localfiles.appinfo.Data_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.Data_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.KV_appticket;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.types.AppId;
-import br.com.arbo.steamside.steam.client.types.LastPlayed;
 
 class SteamClientHomeFromLocalFilesData
 {
@@ -23,13 +22,25 @@ class SteamClientHomeFromLocalFilesData
 		InMemorySteamClientHome home =
 			new InMemorySteamClientHome();
 
-		Stream.concat(
-			Stream.concat(appidsFrom_localconfig(), appidsFrom_sharedconfig()),
-			appidsFrom_appinfo())
-			.distinct().map(this::buildFromAppId)
-			.forEach(home::add);
+		addToHome(home);
 
 		return home;
+	}
+
+	private void addToHome(InMemorySteamClientHome home)
+	{
+		Stream<AppId> c = Stream.concat(
+			Stream.concat(
+				appidsFrom_localconfig(),
+				appidsFrom_sharedconfig()),
+			appidsFrom_appinfo());
+
+		Stream<AppId> distinct = c
+			.distinct();
+
+		Stream<Optional<AppImpl>> map = distinct.map(this::buildFromAppId);
+
+		map.filter(o -> o.isPresent()).map(o -> o.get()).forEach(home::add);
 	}
 
 	SteamClientHomeFromLocalFilesData(
@@ -44,7 +55,7 @@ class SteamClientHomeFromLocalFilesData
 
 	private Stream<AppId> appidsFrom_appinfo()
 	{
-		return d_appinfo.streamAppId();
+		return d_appinfo.everyAppId();
 	}
 
 	private Stream<AppId> appidsFrom_localconfig()
@@ -58,7 +69,7 @@ class SteamClientHomeFromLocalFilesData
 		return d_sharedconfig.everyAppId();
 	}
 
-	private AppImpl buildFromAppId(AppId appid)
+	private Optional<AppImpl> buildFromAppId(AppId appid)
 	{
 		Builder builder = new AppImpl.Builder().appid(appid.appid());
 
@@ -71,30 +82,30 @@ class SteamClientHomeFromLocalFilesData
 
 	private void from_appinfo(AppId appid, final AppImpl.Builder b)
 	{
-		AppInfo appInfo;
-		try
+		Optional<AppInfo> optional = d_appinfo.get(appid);
+
+		if (optional.isPresent())
 		{
-			appInfo = d_appinfo.get(appid);
+			AppInfo appInfo = optional.get();
+			b.name(appInfo.name());
+			b.type(appInfo.type());
+			executables(b, appInfo);
 		}
-		catch (MissingFrom_appinfo_vdf e)
+		else
 		{
-			b.missingFrom_appinfo_vdf(e);
-			return;
+			if (WHY_APPINFO)
+				throw MissingFrom_appinfo_vdf.appid(appid);
 		}
-		b.name(appInfo.name());
-		b.type(appInfo.type());
-		executable(b, appInfo);
 	}
+
+	private static final boolean WHY_APPINFO = false;
 
 	private void from_localconfig_apps(AppId appid, AppImpl.Builder b)
 	{
 		d_localconfig.apps().get(appid).ifPresent(
 			kv_app -> {
 				b.owned();
-				kv_app.lastPlayed()
-					.map(LastPlayed::value)
-					.ifPresent(
-						b::lastPlayed);
+				kv_app.lastPlayed().ifPresent(b::lastPlayed);
 			});
 	}
 
@@ -107,19 +118,9 @@ class SteamClientHomeFromLocalFilesData
 			});
 	}
 
-	private static void executable(final AppImpl.Builder b, AppInfo appInfo)
+	private static void executables(AppImpl.Builder b, AppInfo appInfo)
 	{
-		final String executable;
-		try
-		{
-			executable = appInfo.executable();
-		}
-		catch (NotAvailableOnThisPlatform ex)
-		{
-			b.notAvailableOnThisPlatform(ex);
-			return;
-		}
-		b.executable(executable);
+		b.executables(appInfo.executables());
 	}
 
 	private final Data_appinfo_vdf d_appinfo;

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.arbo.org.springframework.boot.builder.Sources;
-import br.com.arbo.steamside.api.app.AppDTO;
+import br.com.arbo.steamside.api.app.AppCardDTO;
 import br.com.arbo.steamside.api.app.Image;
 import br.com.arbo.steamside.api.favorites.FavoritesController_favorites;
 import br.com.arbo.steamside.kids.Kid;
@@ -35,7 +35,7 @@ public class KidsModeActive
 		return kidsMode;
 	}
 
-	private static void add(List<AppDTO> apps, AppDTO appDTO)
+	private static void add(List<AppCardDTO> apps, AppCardDTO appDTO)
 	{
 		appDTO.image = Image.image(new AppId(appDTO.appid));
 		apps.add(appDTO);
@@ -43,7 +43,7 @@ public class KidsModeActive
 
 	private static FavoritesController_favorites mockFavorites()
 	{
-		List<AppDTO> apps = new ArrayList<>();
+		List<AppCardDTO> apps = new ArrayList<>();
 		populate(apps);
 		FavoritesController_favorites mock =
 			mock(FavoritesController_favorites.class);
@@ -51,38 +51,38 @@ public class KidsModeActive
 		return mock;
 	}
 
-	private static void populate(List<AppDTO> apps)
+	private static void populate(List<AppCardDTO> apps)
 	{
 		// @formatter:off
-		add(apps, new AppDTO() {{
+		add(apps, new AppCardDTO() {{
 			name = "Windosill";
 			appid = "37600";
 		}});
-		add(apps, new AppDTO() {{
+		add(apps, new AppCardDTO() {{
 			name = "VVVVVV";
 			appid = "70300";
 		}});
-		add(apps, new AppDTO() {{
+		add(apps, new AppCardDTO() {{
 			name = "Scribblenauts Unlimited";
 			appid = "218680";
 		}});
-		add(apps, new AppDTO() {{
+		add(apps, new AppCardDTO() {{
 			name = "FEZ";
 			appid = "224760";
 		}});
-		add(apps, new AppDTO() {{
+		add(apps, new AppCardDTO() {{
 			name = "ibb & obb";
 			appid = "95400";
 		}});
-		add(apps, new AppDTO() {{
+		add(apps, new AppCardDTO() {{
 			name = "LEGO MARVEL Super Heroes";
 			appid = "249130";
 		}});
-		add(apps, new AppDTO() {{
+		add(apps, new AppCardDTO() {{
 			name = "Super Toy Cars";
 			appid = "116100";
 		}});
-		add(apps, new AppDTO() {{
+		add(apps, new AppCardDTO() {{
 			name = "Psychonauts";
 			appid = "3830";
 		}});

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.arbo.steamside.api.app.AppDTO;
+import br.com.arbo.steamside.api.app.AppCardDTO;
 import br.com.arbo.steamside.collections.CollectionImpl;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CombineCollections;
@@ -24,6 +24,7 @@ import br.com.arbo.steamside.data.copy.CopyAllSteamCategories;
 import br.com.arbo.steamside.settings.Settings;
 import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
+import br.com.arbo.steamside.steam.client.platform.PlatformFactory;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.types.CollectionName;
 
@@ -77,17 +78,20 @@ public class CollectionController
 	}
 
 	@RequestMapping(value = "collection.json", params = "name")
-	public List<AppDTO> json(@RequestParam String name)
+	public List<AppCardDTO> json(@RequestParam String name)
 	{
 		return new CollectionController_collection_json(
-			name, apiAppSettings.limit(), sys, steamClientHome, tags,
-			settings.gamesOnly()).jsonable();
+			name, apiAppSettings.limit(), sys, steamClientHome,
+			platformFactory, tags, settings.gamesOnly())
+				.jsonable();
 	}
 
 	@RequestMapping(value = "collections.json")
 	public List<CollectionDTO> jsonCollections()
 	{
-		return jsonify(sys.allWithCount(new AppCriteria().gamesOnly(settings.gamesOnly())));
+		return jsonify(
+			sys.allWithCount(
+				new AppCriteria().gamesOnly(settings.gamesOnly())));
 	}
 
 	@RequestMapping(value = "tag-suggestions.json")
@@ -106,13 +110,15 @@ public class CollectionController
 
 	@Inject
 	public CollectionController(
-		SteamClientHome steamClientHome, CollectionsData collections,
-		TagsData tags, Settings settings,
+		SteamClientHome steamClientHome,
+		CollectionsData collections,
+		TagsData tags, PlatformFactory platformFactory, Settings settings,
 		br.com.arbo.steamside.api.app.AppSettings apiAppSettings)
 	{
 		this.steamClientHome = steamClientHome;
 		this.collections = collections;
 		this.tags = tags;
+		this.platformFactory = platformFactory;
 		this.settings = settings;
 		this.apiAppSettings = apiAppSettings;
 		this.sys = new SystemCollectionsHome(steamClientHome, tags);
@@ -131,6 +137,8 @@ public class CollectionController
 	private final br.com.arbo.steamside.api.app.AppSettings apiAppSettings;
 
 	private final CollectionsData collections;
+
+	private final PlatformFactory platformFactory;
 
 	private final SteamClientHome steamClientHome;
 

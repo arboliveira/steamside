@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.arbo.steamside.api.app.AppDTO;
+import br.com.arbo.steamside.api.app.AppCardDTO;
 import br.com.arbo.steamside.collections.CollectionI;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.TagsData;
@@ -20,7 +20,7 @@ public class FavoritesController
 {
 
 	@RequestMapping("favorites.json")
-	public List<AppDTO> favorites()
+	public List<AppCardDTO> favorites()
 	{
 		return favorites.jsonable();
 	}

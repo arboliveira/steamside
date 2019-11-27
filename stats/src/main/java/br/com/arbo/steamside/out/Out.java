@@ -46,7 +46,8 @@ public class Out
 	{
 		this.name = name;
 		this.lines = lines;
-		this.print = print;
+		this.print = print != null ? print : s -> {
+		};
 	}
 
 	private final AtomicInteger i = new AtomicInteger();

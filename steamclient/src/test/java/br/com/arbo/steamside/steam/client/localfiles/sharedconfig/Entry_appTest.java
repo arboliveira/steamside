@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Entry_app.TagVisitor;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Entry_app.CategoryVisitor;
 
 public class Entry_appTest {
 
@@ -22,6 +22,6 @@ public class Entry_appTest {
 	}
 
 	@Mock
-	TagVisitor tagVisitor;
+	CategoryVisitor tagVisitor;
 
 }

@@ -6,11 +6,12 @@ import static br.com.arbo.steamside.steam.client.localfiles.appinfo.KeyValues_h.
 import static br.com.arbo.steamside.steam.client.localfiles.appinfo.KeyValues_h.TYPE_STRING;
 import static br.com.arbo.steamside.steam.client.localfiles.appinfo.KeyValues_h.TYPE_UINT64;
 
+import java.util.Optional;
+
 import br.com.arbo.steamside.steam.client.localfiles.io.ByteBufferX;
 import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.steam.client.localfiles.vdf.NotFound;
-import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
 import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor.Finished;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
 
 /**
 https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/tier1/KeyValues.cpp
@@ -54,7 +55,7 @@ public class KeyValues_cpp
 			}
 
 			@Override
-			public Region region(String name) throws NotFound
+			public Optional<Region> region(String name)
 			{
 				throw new UnsupportedOperationException();
 			}

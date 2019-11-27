@@ -13,6 +13,7 @@ import br.com.arbo.steamside.collections.TagsWrites.TagTeam;
 import br.com.arbo.steamside.steam.client.categories.category.SteamCategory;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.types.LastPlayed;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class CopyAllSteamCategories
@@ -50,16 +51,14 @@ public class CopyAllSteamCategories
 		@Override
 		public int compareTo(TagTuple that)
 		{
-			boolean pthis = this.lastPlayed.isPresent();
-			boolean pthat = that.lastPlayed.isPresent();
+			if (this.lastPlayed.isPresent() && that.lastPlayed.isPresent())
+				return that.lastPlayed.get().value()
+					.compareTo(this.lastPlayed.get().value());
 
-			if (pthis && pthat)
-				return that.lastPlayed.get().compareTo(this.lastPlayed.get());
-
-			if (pthis && !pthat)
+			if (this.lastPlayed.isPresent())
 				return 1;
 
-			if (!pthis && pthat)
+			if (that.lastPlayed.isPresent())
 				return -1;
 
 			return 0;
@@ -67,7 +66,7 @@ public class CopyAllSteamCategories
 
 		AppId app;
 		String category;
-		Optional<String> lastPlayed;
+		Optional<LastPlayed> lastPlayed;
 	}
 
 	private void addTags(SteamCategory cat, ArrayList<TagTuple> tags)

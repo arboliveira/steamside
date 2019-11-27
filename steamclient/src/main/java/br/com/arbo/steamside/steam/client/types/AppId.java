@@ -1,11 +1,9 @@
 package br.com.arbo.steamside.steam.client.types;
 
-public class AppId {
+import java.util.Objects;
 
-	public AppId(String appid)
-	{
-		this.appid = appid;
-	}
+public class AppId
+{
 
 	public String appid()
 	{
@@ -33,6 +31,11 @@ public class AppId {
 	public String toString()
 	{
 		return appid;
+	}
+
+	public AppId(String appid)
+	{
+		this.appid = Objects.requireNonNull(appid);
 	}
 
 	public final String appid;

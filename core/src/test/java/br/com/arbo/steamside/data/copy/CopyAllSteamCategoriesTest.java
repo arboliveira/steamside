@@ -17,6 +17,7 @@ import br.com.arbo.steamside.steam.client.apps.AppImpl;
 import br.com.arbo.steamside.steam.client.apps.AppImpl.Builder;
 import br.com.arbo.steamside.steam.client.internal.home.InMemorySteamClientHome;
 import br.com.arbo.steamside.steam.client.types.AppName;
+import br.com.arbo.steamside.steam.client.types.LastPlayed;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class CopyAllSteamCategoriesTest
@@ -62,8 +63,8 @@ public class CopyAllSteamCategoriesTest
 				.categories(category)
 				.appid(name)
 				.name(new AppName(name));
-		lastPlayed.ifPresent(b::lastPlayed);
-		return b.make();
+		lastPlayed.map(LastPlayed::new).ifPresent(b::lastPlayed);
+		return b.make().get();
 	}
 
 	private InMemorySteamClientHome steamClientHome;

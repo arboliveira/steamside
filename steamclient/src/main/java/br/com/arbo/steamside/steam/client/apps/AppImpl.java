@@ -1,20 +1,24 @@
 package br.com.arbo.steamside.steam.client.apps;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
 import br.com.arbo.steamside.steam.client.categories.category.SteamCategory;
-import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppId;
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppNameTypes;
 import br.com.arbo.steamside.steam.client.types.AppType;
+import br.com.arbo.steamside.steam.client.types.LastPlayed;
 
 public class AppImpl implements App
 {
@@ -31,12 +35,15 @@ public class AppImpl implements App
 	}
 
 	@Override
-	public String executable()
-		throws NotAvailableOnThisPlatform, MissingFrom_appinfo_vdf
+	public Optional<String> executable(Platform platform)
 	{
-		guard_notAvailableOnThisPlatform();
-		guard_missingFrom_appinfo_vdf();
-		return Objects.requireNonNull(executable);
+		return Optional.ofNullable(executables.get(platform.os()));
+	}
+
+	@Override
+	public Map<String, String> executables()
+	{
+		return executables;
 	}
 
 	@Override
@@ -60,21 +67,27 @@ public class AppImpl implements App
 	}
 
 	@Override
-	public Optional<String> lastPlayed()
+	public Optional<LastPlayed> lastPlayed()
 	{
 		return lastPlayed;
 	}
 
 	@Override
-	public String lastPlayedOrCry() throws NeverPlayed
+	public boolean matches(AppCriteria c)
 	{
-		return lastPlayed.orElseThrow(() -> new NeverPlayed());
+		AppImpl app = this;
+
+		if (c.gamesOnly() && !app.type().isGame()) return false;
+		if (c.owned() && !app.isOwned()) return false;
+		if (c.platform() != null && !app.executable(c.platform()).isPresent())
+			return false;
+
+		return true;
 	}
 
 	@Override
-	public AppName name() throws MissingFrom_appinfo_vdf
+	public AppName name()
 	{
-		guard_missingFrom_appinfo_vdf();
 		return Objects.requireNonNull(name);
 	}
 
@@ -88,7 +101,6 @@ public class AppImpl implements App
 	@Override
 	public AppType type()
 	{
-		guard_missingFrom_appinfo_vdf();
 		return type;
 	}
 
@@ -97,38 +109,28 @@ public class AppImpl implements App
 		@Nullable AppName name,
 		AppType type,
 		boolean owned,
-		@Nullable String executable,
+		Map<String, String> executables,
 		Collection<String> categories,
-		Optional<String> lastPlayed,
-		@Nullable final String cloudEnabled,
-		Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform,
-		Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf)
+		Optional<LastPlayed> lastPlayed,
+		@Nullable final String cloudEnabled)
 	{
 		this.appid = Objects.requireNonNull(appId);
 		this.name = name;
 		this.type = Objects.requireNonNull(type);
 		this.owned = owned;
-		this.executable = executable;
-		this.categories = categories;
+		this.executables = nonNull(executables, Collections.emptyMap());
+		this.categories =
+			new HashSet<>(nonNull(categories, Collections.emptySet()));
 		this.lastPlayed = lastPlayed;
 		this.cloudEnabled = cloudEnabled;
-		this.notAvailableOnThisPlatform = notAvailableOnThisPlatform;
-		this.missingFrom_appinfo_vdf = missingFrom_appinfo_vdf;
 	}
 
-	private void guard_missingFrom_appinfo_vdf()
+	private static <T> T nonNull(T o, T deflt)
 	{
-		missingFrom_appinfo_vdf.ifPresent(m -> {
-			throw m;
-		});
+		return o != null ? o : deflt;
 	}
 
-	private void guard_notAvailableOnThisPlatform()
-	{
-		notAvailableOnThisPlatform.ifPresent(n -> {
-			throw n;
-		});
-	}
+	private final Map<String, String> executables;
 
 	private final AppId appid;
 
@@ -137,17 +139,10 @@ public class AppImpl implements App
 	@Nullable
 	private final String cloudEnabled;
 
-	@Nullable
-	private final String executable;
-
-	private final Optional<String> lastPlayed;
-
-	private final Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf;
+	private final Optional<LastPlayed> lastPlayed;
 
 	@Nullable
 	private final AppName name;
-
-	private final Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform;
 
 	private final boolean owned;
 
@@ -156,9 +151,10 @@ public class AppImpl implements App
 	public static class Builder
 	{
 
-		public void addCategory(String category)
+		public Builder addCategory(String category)
 		{
 			this.categories.add(category);
+			return this;
 		}
 
 		public Builder appid(String k)
@@ -169,7 +165,7 @@ public class AppImpl implements App
 
 		public Builder categories(String... categories)
 		{
-			this.categories.addAll(Arrays.asList(categories));
+			this.categories = Arrays.asList(categories);
 			return this;
 		}
 
@@ -178,42 +174,36 @@ public class AppImpl implements App
 			this.cloudEnabled = v;
 		}
 
-		public Builder executable(String executable)
+		public Builder executables(Map<String, String> executables)
 		{
-			this.executable = executable;
+			this.executables = executables;
 			return this;
 		}
 
-		public Builder lastPlayed(final String v)
+		public Builder lastPlayed(LastPlayed v)
 		{
 			this.lastPlayed = Optional.of(v);
 			return this;
 		}
 
-		public AppImpl make()
+		public Optional<AppImpl> make()
 		{
-			return new AppImpl(
-				newAppId(), this.name,
-				this.type.orElse(AppType.GAME), this.owned, this.executable,
-				this.categories, this.lastPlayed, this.cloudEnabled,
-				this.notAvailableOnThisPlatform,
-				this.missingFrom_appinfo_vdf);
-		}
+			if (this.name == null)
+			{
+				return Optional.empty();
+			}
 
-		public void missingFrom_appinfo_vdf(MissingFrom_appinfo_vdf e)
-		{
-			this.missingFrom_appinfo_vdf = Optional.of(e);
+			return Optional.of(
+				new AppImpl(
+					newAppId(), this.name,
+					this.type.orElse(AppType.GAME), this.owned,
+					this.executables,
+					this.categories, this.lastPlayed, this.cloudEnabled));
 		}
 
 		public Builder name(AppName name)
 		{
 			this.name = name;
-			return this;
-		}
-
-		public Builder notAvailableOnThisPlatform(NotAvailableOnThisPlatform e)
-		{
-			this.notAvailableOnThisPlatform = Optional.of(e);
 			return this;
 		}
 
@@ -237,23 +227,17 @@ public class AppImpl implements App
 
 		private String cloudEnabled;
 
-		private String executable;
+		private Map<String, String> executables;
 
-		private Optional<String> lastPlayed = Optional.empty();
-
-		private Optional<MissingFrom_appinfo_vdf> missingFrom_appinfo_vdf =
-			Optional.empty();
+		private Optional<LastPlayed> lastPlayed = Optional.empty();
 
 		private AppName name;
-
-		private Optional<NotAvailableOnThisPlatform> notAvailableOnThisPlatform =
-			Optional.empty();
 
 		private boolean owned;
 
 		private Optional<AppType> type = Optional.empty();
 
-		private final Collection<String> categories = new HashSet<String>();
+		private Collection<String> categories = new ArrayList<>();
 	}
 
 }

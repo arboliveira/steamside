@@ -142,7 +142,7 @@ class DemoSteamsideData
 		Map<String, AppId> index = new HashMap<>();
 
 		steamClientHome.apps().everyApp().forEach(
-			app -> index.put(app.name().name, app.appid()));
+			app -> index.put(app.name().name(), app.appid()));
 
 		return index;
 	}

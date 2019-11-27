@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import br.com.arbo.steamside.collections.TagImpl;
 import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
+import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.home.AppCriteria;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.types.AppId;
@@ -45,9 +46,15 @@ public class Uncollected
 
 	Stream<AppId> uncollectedIds()
 	{
-		AppCriteria criteria = AppCriteria.OWNED;
-		return steamClientHome.apps().stream(criteria).map(app -> app.appid())
-			.filter(appid -> !tags.isCollected(appid));
+		return steamClientHome.apps()
+			.find(AppCriteria.OWNED)
+			.map(App::appid)
+			.filter(this::isUncollected);
+	}
+
+	private boolean isUncollected(AppId appid)
+	{
+		return !tags.isCollected(appid);
 	}
 
 	private static final String NAME = "Tagless so far";

@@ -5,6 +5,7 @@ import org.mockito.Mockito;
 import br.com.arbo.steamside.kids.KidsModeDetector;
 import br.com.arbo.steamside.settings.SettingsImpl;
 import br.com.arbo.steamside.steam.client.apps.App;
+import br.com.arbo.steamside.steam.client.internal.platform.PlatformFactoryImpl;
 import br.com.arbo.steamside.steam.client.library.Libraries;
 
 public class ExampleDumpContinues
@@ -20,7 +21,8 @@ public class ExampleDumpContinues
 		KidsModeDetector nop = Mockito.mock(KidsModeDetector.class);
 
 		new ContinuesFromSteamClientLocalfiles(
-			nop, Libraries.fromSteamPhysicalFiles(), new SettingsImpl())
+			nop, Libraries.fromSteamPhysicalFiles(),
+			new PlatformFactoryImpl(), new SettingsImpl())
 				.continues().forEach(
 					this::printApp);
 	}

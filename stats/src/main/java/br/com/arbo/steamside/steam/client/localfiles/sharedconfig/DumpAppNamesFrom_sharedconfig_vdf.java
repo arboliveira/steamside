@@ -9,10 +9,10 @@ import javax.inject.Inject;
 
 import br.com.arbo.steamside.out.Dump;
 import br.com.arbo.steamside.out.Out;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
 import br.com.arbo.steamside.steam.client.localfiles.appinfo.Data_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appinfo.Data_appinfo_vdf_from_File_appinfo_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.appinfo.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.SysoutAppInfoLine;
 import br.com.arbo.steamside.steam.client.types.AppId;
 
 public class DumpAppNamesFrom_sharedconfig_vdf

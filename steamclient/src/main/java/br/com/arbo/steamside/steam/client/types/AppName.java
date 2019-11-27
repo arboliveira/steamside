@@ -1,15 +1,25 @@
 package br.com.arbo.steamside.steam.client.types;
 
-public class AppName {
+import java.util.Objects;
 
-	public final String name;
+public class AppName
+{
 
-	public AppName(final String name) {
-		this.name = name;
+	public String name()
+	{
+		return name;
 	}
 
 	@Override
-	public String toString() {
-		return name;
+	public String toString()
+	{
+		return name();
 	}
+
+	public AppName(String name)
+	{
+		this.name = Objects.requireNonNull(name);
+	}
+
+	private final String name;
 }

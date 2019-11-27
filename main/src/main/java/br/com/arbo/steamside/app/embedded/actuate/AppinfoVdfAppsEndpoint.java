@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.stereotype.Component;
 
-import br.com.arbo.steamside.steam.client.localfiles.appcache.DumpAppCacheParse;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.DumpAppinfoVdfParse;
 
 @Component
 public class AppinfoVdfAppsEndpoint extends AbstractEndpoint<String>
@@ -18,11 +18,11 @@ public class AppinfoVdfAppsEndpoint extends AbstractEndpoint<String>
 	}
 
 	@Inject
-	public AppinfoVdfAppsEndpoint(DumpAppCacheParse dumpAppCacheParse)
+	public AppinfoVdfAppsEndpoint(DumpAppinfoVdfParse dumpAppCacheParse)
 	{
 		super("appinfo_vdf_apps");
 		this.dumpAppCacheParse = dumpAppCacheParse;
 	}
 
-	private final DumpAppCacheParse dumpAppCacheParse;
+	private final DumpAppinfoVdfParse dumpAppCacheParse;
 }

@@ -14,9 +14,9 @@ public class Everything
 
 	public Stream< ? extends Tag> apps()
 	{
-		AppCriteria criteria = AppCriteria.OWNED;
-
-		return steamClientHome.apps().stream(criteria).map(app -> app.appid())
+		return steamClientHome.apps()
+			.find(AppCriteria.OWNED)
+			.map(app -> app.appid())
 			.map(TagImpl::new);
 	}
 
@@ -34,9 +34,7 @@ public class Everything
 			@Override
 			public int count()
 			{
-				AppCriteria criteria = AppCriteria.OWNED;
-
-				return steamClientHome.apps().count(criteria);
+				return steamClientHome.apps().count(AppCriteria.OWNED);
 			}
 
 		};

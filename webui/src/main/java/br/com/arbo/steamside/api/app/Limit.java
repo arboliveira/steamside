@@ -1,11 +1,17 @@
 package br.com.arbo.steamside.api.app;
 
-public class Limit {
+public class Limit
+{
+
+	public int limit()
+	{
+		return limit;
+	}
 
 	public Limit(int limit)
 	{
 		this.limit = limit;
 	}
 
-	final int limit;
+	private final int limit;
 }

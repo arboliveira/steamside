@@ -8,7 +8,7 @@ import br.com.arbo.steamside.steam.client.types.AppId;
 public interface KV_apptickets
 {
 
-	Stream< ? extends KV_appticket> all();
+	Stream<KV_appticket> all();
 
 	void forEach(Consumer<KV_appticket> visitor);
 

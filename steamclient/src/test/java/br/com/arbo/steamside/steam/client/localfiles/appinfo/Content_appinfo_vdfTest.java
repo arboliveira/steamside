@@ -5,15 +5,14 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.io.FileInputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.Test;
 
-import br.com.arbo.steamside.steam.client.localfiles.appinfo.AppInfo;
-import br.com.arbo.steamside.steam.client.localfiles.appinfo.ContentVisitor;
-import br.com.arbo.steamside.steam.client.localfiles.appinfo.Content_appinfo_vdf;
-import br.com.arbo.steamside.steam.client.localfiles.appinfo.File_appinfo_vdf;
+import br.com.arbo.steamside.steam.client.apps.Platform;
 import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
 
 public class Content_appinfo_vdfTest
 {
@@ -25,8 +24,13 @@ public class Content_appinfo_vdfTest
 			new File_appinfo_vdf(SteamLocations
 				.fromSteamPhysicalFiles()).appinfo_vdf()))
 		{
+			ContentVisitor contentVisitor =
+				new ContentVisitor(this::assert_app_id);
+
+			KeyValueVisitor keyValueVisitor = contentVisitor;
+
 			new Content_appinfo_vdf(in).accept(
-				new ContentVisitor(this::assert_app_id));
+				contentVisitor, keyValueVisitor);
 
 			if (!id_vs_name.isEmpty())
 				fail("Missing from appinfo.vdf: " + id_vs_name);
@@ -43,25 +47,27 @@ public class Content_appinfo_vdfTest
 		}
 
 		id_vs_name.remove(appid).ifPresent(
-			v -> assertThat(appinfo.name().name, equalTo(v)));
+			v -> assertThat(appinfo.name().name(), equalTo(v)));
 	}
 
 	private static void assertSuperHexagon(final AppInfo appinfo)
 	{
-		assertThat(appinfo.name().name, equalTo("Super Hexagon"));
-		final String expected_executable = executableSuperHexagon();
-		assertThat(appinfo.executable(), equalTo(expected_executable));
+		assertThat(appinfo.name().name(), equalTo("Super Hexagon"));
+		Map<String, String> expected_executables = executablesSuperHexagon();
+		assertThat(appinfo.executables(), equalTo(expected_executables));
 	}
 
-	private static String executableSuperHexagon()
+	private static Map<String, String> executablesSuperHexagon()
 	{
-		if (SystemUtils.IS_OS_WINDOWS)
-			return "superhexagon.exe";
-		if (SystemUtils.IS_OS_LINUX)
-			return "./SuperHexagon";
-		if (SystemUtils.IS_OS_MAC_OSX)
-			return "Super Hexagon.app";
-		throw new IllegalStateException();
+		return new HashMap<String, String>()
+		{
+
+			{
+				put(Platform.windows, "superhexagon.exe");
+				put(Platform.linux, "./SuperHexagon");
+				put(Platform.macos, "Super Hexagon.app");
+			}
+		};
 	}
 
 	private final KnownIdVsName id_vs_name = new KnownIdVsName();

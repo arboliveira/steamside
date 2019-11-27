@@ -1,9 +1,12 @@
 package br.com.arbo.steamside.steam.client.localfiles.vdf;
 
-public interface Region {
+import java.util.Optional;
 
-	void accept(final KeyValueVisitor visitor);
+public interface Region
+{
 
-	Region region(String name) throws NotFound;
+	void accept(KeyValueVisitor visitor);
+
+	Optional<Region> region(String name);
 
 }

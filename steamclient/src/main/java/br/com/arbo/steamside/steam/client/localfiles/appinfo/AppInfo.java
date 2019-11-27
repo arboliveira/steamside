@@ -1,5 +1,7 @@
 package br.com.arbo.steamside.steam.client.localfiles.appinfo;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import br.com.arbo.steamside.steam.client.types.AppName;
@@ -8,14 +10,14 @@ import br.com.arbo.steamside.steam.client.types.AppType;
 public class AppInfo
 {
 
-	public String executable() throws NotAvailableOnThisPlatform
+	public Map<String, String> executables()
 	{
-		return executable.orElseThrow(NotAvailableOnThisPlatform::new);
+		return executables;
 	}
 
-	public void executable(String executable)
+	public void executables(Map<String, String> executables)
 	{
-		this.executable = Optional.of(executable);
+		this.executables = executables;
 	}
 
 	public AppName name()
@@ -23,10 +25,19 @@ public class AppInfo
 		return name;
 	}
 
+	public boolean isPublicOnly()
+	{
+		return public_only != null;
+	}
+
 	@Override
 	public String toString()
 	{
-		return type + "," + executable.orElse("(noexecutable)") + "," + name;
+		if (public_only != null)
+		{
+			return "public_only[" + public_only + "]";
+		}
+		return type + "," + name + "," + toString_executables();
 	}
 
 	public AppType type()
@@ -34,16 +45,87 @@ public class AppInfo
 		return type;
 	}
 
-	public AppInfo(AppName appName, AppType appType)
+	AppInfo()
 	{
-		this.name = appName;
-		this.type = appType;
 	}
 
-	private Optional<String> executable = Optional.empty();
+	AppInfo(AppInfo o)
+	{
+		executables = new HashMap<>(o.executables);
+		name = o.name != null ? o.name : noName();
+		public_only = o.public_only;
+		type = o.type != null ? o.type : noType();
+	}
 
-	private final AppName name;
+	private static AppName noName()
+	{
+		return new AppName("(noname)");
+	}
 
-	private final AppType type;
+	private static AppType noType()
+	{
+		return AppType.valueOf("(notype)");
+	}
+
+	private String toString_executables()
+	{
+		return executables.isEmpty() ? "(noexecutable)"
+			: executables.toString();
+	}
+
+	Map<String, String> executables = new HashMap<>();
+
+	AppName name;
+
+	AppType type;
+
+	String public_only;
+
+	public static class Builder
+	{
+
+		public AppInfo build()
+		{
+			return new AppInfo(prototype);
+		}
+
+		public Builder executable(String os, Optional<String> executable)
+		{
+			executable.ifPresent(e -> prototype.executables.put(os, e));
+
+			return this;
+		}
+
+		public boolean executable_missing(String os)
+		{
+			return prototype.executables.get(os) == null;
+		}
+
+		public Builder name(AppName appName)
+		{
+			if (prototype.name != null) throw new TwoNames();
+			prototype.name = appName;
+
+			return this;
+		}
+
+		public Builder type(AppType appType)
+		{
+			if (prototype.type != null) throw new TwoNames();
+			prototype.type = appType;
+
+			return this;
+		}
+
+		public Builder public_only(String v)
+		{
+			prototype.public_only = v;
+
+			return this;
+		}
+
+		private final AppInfo prototype = new AppInfo();
+
+	}
 
 }

@@ -1,50 +1,34 @@
 package br.com.arbo.steamside.steam.client.localfiles.localconfig;
 
 import java.io.InputStream;
+import java.util.Optional;
 
 import br.com.arbo.steamside.steam.client.localfiles.vdf.Candidate;
 import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
-import br.com.arbo.steamside.steam.client.localfiles.vdf.NotFound;
 import br.com.arbo.steamside.steam.client.localfiles.vdf.Region;
-import br.com.arbo.steamside.steam.client.localfiles.vdf.Vdf;
+import br.com.arbo.steamside.steam.client.localfiles.vdf.VdfStructure;
 
-public class Parse_localconfig_vdf {
+public class Parse_localconfig_vdf
+{
 
-	public Parse_localconfig_vdf(final InputStream in)
+	interface Parse_localconfig_vdf_Visitor
 	{
-		this.content = new Vdf(in);
+
+		void on_App(KV_app app);
+
+		void on_Appticket(KV_appticket appticket);
 	}
 
-	public Data_localconfig_vdf parse()
+	static class UserLocalConfigStoreVisitor implements KeyValueVisitor
 	{
-		try
+
+		private final Parse_localconfig_vdf_Visitor visitor;
+
+		public UserLocalConfigStoreVisitor(
+			Parse_localconfig_vdf_Visitor visitor)
 		{
-			Region rUserLocalConfigStore = findRegion_UserLocalConfigStore();
-			rUserLocalConfigStore.accept(new UserLocalConfigStoreVisitor());
+			this.visitor = visitor;
 		}
-		catch (final NotFound e)
-		{
-			throw new RuntimeException("Not a valid localconfig.vdf file?!", e);
-		}
-		return data;
-	}
-
-	void parse_apps(Region r_apps)
-	{
-		new AppsRegion(r_apps, data.apps()).parse();
-	}
-
-	void parse_apptickets(Region r_apptickets)
-	{
-		new AppticketsRegion(r_apptickets, data.apptickets()).parse();
-	}
-
-	private Region findRegion_UserLocalConfigStore() throws NotFound
-	{
-		return content.root().region("UserLocalConfigStore");
-	}
-
-	class UserLocalConfigStoreVisitor implements KeyValueVisitor {
 
 		@Override
 		public void onKeyValue(String k, String v) throws Finished
@@ -59,13 +43,13 @@ public class Parse_localconfig_vdf {
 
 			if (c.named("apptickets").under("UserLocalConfigStore").matches())
 			{
-				parse_apptickets(r);
+				if (WHY_APPTICKETS) parse_apptickets(r);
 				return;
 			}
 
 			if (c.named("apps")
-					.under("UserLocalConfigStore/Software/Valve/Steam")
-					.matches())
+				.under("UserLocalConfigStore/Software/Valve/Steam")
+				.matches())
 			{
 				parse_apps(r);
 				return;
@@ -77,12 +61,68 @@ public class Parse_localconfig_vdf {
 			path = pathbefore;
 		}
 
+		void parse_apps(Region r_apps)
+		{
+			new AppsRegion(r_apps).accept(visitor::on_App);
+		}
+
+		void parse_apptickets(Region r_apptickets)
+		{
+			new AppticketsRegion(r_apptickets).accept(visitor::on_Appticket);
+		}
+
 		String path = "UserLocalConfigStore";
 	}
 
-	private final Vdf content;
+	public static final boolean WHY_APPTICKETS = true;
 
-	private final InMemory_localconfig_vdf data =
-			new InMemory_localconfig_vdf();
+	public Data_localconfig_vdf parse()
+	{
+		InMemory_localconfig_vdf data = new InMemory_localconfig_vdf();
+
+		Parse_localconfig_vdf_Visitor visitor =
+			new Parse_localconfig_vdf_Visitor()
+			{
+
+				@Override
+				public void on_App(KV_app app)
+				{
+					data.apps().add(app);
+				}
+
+				@Override
+				public void on_Appticket(KV_appticket appticket)
+				{
+					data.apptickets().add(appticket);
+				}
+
+			};
+
+		Optional<Region> region2 =
+			content.root().region("UserLocalConfigStore");
+
+		region2
+			.map(region -> visitRegion_UserLocalConfigStore(visitor, region))
+			.orElseThrow(
+				() -> new RuntimeException(
+					"Not a valid localconfig.vdf file?!"));
+
+		return data;
+	}
+
+	private static Object visitRegion_UserLocalConfigStore(
+		Parse_localconfig_vdf_Visitor visitor, Region region)
+	{
+		region.accept(new UserLocalConfigStoreVisitor(visitor));
+
+		return Boolean.TRUE;
+	}
+
+	public Parse_localconfig_vdf(final InputStream in)
+	{
+		this.content = new VdfStructure(in);
+	}
+
+	private final VdfStructure content;
 
 }

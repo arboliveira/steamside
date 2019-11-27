@@ -7,7 +7,8 @@ import java.util.Optional;
 
 import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor.Finished;
 
-public class RegionImpl implements Region {
+public class RegionImpl implements Region
+{
 
 	RegionImpl(final Reader reader)
 	{
@@ -33,20 +34,21 @@ public class RegionImpl implements Region {
 	}
 
 	@Override
-	public Region region(final String name) throws NotFound
+	public Optional<Region> region(final String name)
 	{
-		class Find implements KeyValueVisitor {
+		class Find implements KeyValueVisitor
+		{
 
 			@Override
 			public void onKeyValue(final String k, final String v)
-					throws Finished
+				throws Finished
 			{
 				// Do nothing
 			}
 
 			@Override
 			public void onSubRegion(final String k, final Region r)
-					throws Finished
+				throws Finished
 			{
 				if (k.equalsIgnoreCase(name))
 				{
@@ -60,25 +62,26 @@ public class RegionImpl implements Region {
 
 		}
 
-		final Find find = new Find();
+		Find find = new Find();
 		accept(find);
-		return find.found.orElseThrow(() -> NotFound.name(name));
+		return find.found;
 	}
 
 	void skipPastEndOfRegion()
 	{
-		class DoNothing implements KeyValueVisitor {
+		class DoNothing implements KeyValueVisitor
+		{
 
 			@Override
 			public void onKeyValue(final String k, final String v)
-					throws Finished
+				throws Finished
 			{
 				//
 			}
 
 			@Override
 			public void onSubRegion(final String k, final Region r)
-					throws Finished
+				throws Finished
 			{
 				skipPastEndOfRegion();
 			}
@@ -88,7 +91,7 @@ public class RegionImpl implements Region {
 	}
 
 	private void advance(final KeyValueVisitor visitor)
-			throws IOException, Finished
+		throws IOException, Finished
 	{
 		nextToken();
 		final Optional<String> key = sval();

@@ -8,7 +8,8 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
-public class Parse_localconfig_vdfTest {
+public class Parse_localconfig_vdfTest
+{
 
 	@Test
 	public void apps_before_apptickets() throws IOException
@@ -24,18 +25,9 @@ public class Parse_localconfig_vdfTest {
 
 	private Data_localconfig_vdf parse(final String name) throws IOException
 	{
-		Data_localconfig_vdf data;
-		InputStream in = this.getClass().getResourceAsStream(
-				name);
-		try
+		try (InputStream in = this.getClass().getResourceAsStream(name))
 		{
-			Parse_localconfig_vdf parse = new Parse_localconfig_vdf(in);
-			data = parse.parse();
+			return new Parse_localconfig_vdf(in).parse();
 		}
-		finally
-		{
-			in.close();
-		}
-		return data;
 	}
 }

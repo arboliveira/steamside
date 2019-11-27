@@ -9,9 +9,9 @@ import br.com.arbo.steamside.steam.client.apps.App;
 import br.com.arbo.steamside.steam.client.apps.AppImpl;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.steam.client.internal.home.InMemorySteamClientHome;
-import br.com.arbo.steamside.steam.client.localfiles.appinfo.NotAvailableOnThisPlatform;
 import br.com.arbo.steamside.steam.client.types.AppName;
 import br.com.arbo.steamside.steam.client.types.AppType;
+import br.com.arbo.steamside.steam.client.types.LastPlayed;
 
 class DemoAppsHome
 {
@@ -50,13 +50,12 @@ class DemoAppsHome
 			.name(new AppName(appx.name))
 			.appid(appx.appid)
 			.type(AppType.GAME)
-			.lastPlayed(String.valueOf(appx.lastPlayed))
-			.executable("!" + NotAvailableOnThisPlatform.class.getSimpleName())
+			.lastPlayed(new LastPlayed(String.valueOf(appx.lastPlayed)))
 			.categories(
 				StringUtils.split(
 					Optional.ofNullable(appx.categories)
 						.orElse("")))
-			.make();
+			.make().get();
 	}
 
 	private static InMemorySteamClientHome newInstance()

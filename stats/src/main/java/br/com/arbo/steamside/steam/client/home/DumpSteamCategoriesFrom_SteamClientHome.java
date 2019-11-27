@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.steam.client.home;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -8,9 +9,11 @@ import javax.inject.Inject;
 import br.com.arbo.steamside.out.Dump;
 import br.com.arbo.steamside.out.Out;
 import br.com.arbo.steamside.steam.client.apps.App;
-import br.com.arbo.steamside.steam.client.apps.AppAppNameType;
 import br.com.arbo.steamside.steam.client.categories.category.SteamCategory;
-import br.com.arbo.steamside.steam.client.localfiles.appcache.inmemory.SysoutAppInfoLine;
+import br.com.arbo.steamside.steam.client.localfiles.appinfo.SysoutAppInfoLine;
+import br.com.arbo.steamside.steam.client.types.AppId;
+import br.com.arbo.steamside.steam.client.types.AppNameType;
+import br.com.arbo.steamside.steam.client.types.AppNameTypes;
 
 public class DumpSteamCategoriesFrom_SteamClientHome
 {
@@ -51,5 +54,29 @@ public class DumpSteamCategoriesFrom_SteamClientHome
 	}
 
 	private final SteamClientHome steamClientHome;
+
+	public static class AppAppNameType implements AppNameType
+	{
+
+		@Override
+		public AppId appid()
+		{
+			return app.appid();
+		}
+
+		@Override
+		public Optional<String> appnametype()
+		{
+			return Optional
+				.of(AppNameTypes.appnametype(app.name(), app.type()));
+		}
+
+		public AppAppNameType(App app)
+		{
+			this.app = app;
+		}
+
+		private final App app;
+	}
 
 }

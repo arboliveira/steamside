@@ -9,14 +9,13 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import br.com.arbo.steamside.steam.client.types.AppId;
 
-public class Entry_app {
+public class Entry_app
+{
 
-	public void accept(TagVisitor visitor)
+	public void accept(CategoryVisitor visitor)
 	{
-		Optional.ofNullable(tags).ifPresent(t -> {
-			for (String tag : t)
-				visitor.each(tag);
-		} );
+		Optional.ofNullable(categories)
+			.ifPresent(t -> visitCategories(visitor, t));
 	}
 
 	@NonNull
@@ -25,10 +24,8 @@ public class Entry_app {
 		return new AppId(Objects.requireNonNull(id));
 	}
 
-	public interface TagVisitor {
-
-		void each(String tag);
-	}
+	@Nullable
+	Collection<String> categories;
 
 	String id;
 
@@ -36,6 +33,16 @@ public class Entry_app {
 
 	String sLastPlayed;
 
-	@Nullable
-	Collection<String> tags;
+	private static void visitCategories(CategoryVisitor visitor,
+		Collection<String> categories)
+	{
+		for (String category : categories)
+			visitor.each(category);
+	}
+
+	public interface CategoryVisitor
+	{
+
+		void each(String category);
+	}
 }
