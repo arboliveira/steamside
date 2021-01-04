@@ -1,14 +1,14 @@
-package br.com.arbo.steamside.cloud;
+package br.com.arbo.steamside.cloud.http;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import javax.inject.Inject;
-import javax.xml.bind.JAXB;
 
+import br.com.arbo.steamside.cloud.CloudSettings;
+import br.com.arbo.steamside.cloud.CloudSettingsFactory;
 import br.com.arbo.steamside.cloud.CloudSettingsFactory.Missing;
+import br.com.arbo.steamside.settings.xml.SteamsideXml_Unmarshal;
 import br.com.arbo.steamside.xml.SteamsideXml;
 
 public class LoadCloud {
@@ -25,26 +25,6 @@ public class LoadCloud {
 		}
 	}
 
-	private static SteamsideXml toSteamsideXml(String xmlFromCloud)
-	{
-		final byte[] bytes = getBytes(xmlFromCloud);
-
-		try (InputStream stream = new ByteArrayInputStream(bytes))
-		{
-			return unmarshal(stream);
-		}
-		catch (IOException e)
-		{
-			// never happens with a ByteArrayInputStream, "close" API fail
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static SteamsideXml unmarshal(final InputStream stream)
-	{
-		return JAXB.unmarshal(stream, SteamsideXml.class);
-	}
-
 	@Inject
 	public LoadCloud(Cloud cloud, CloudSettingsFactory settings)
 	{
@@ -54,13 +34,12 @@ public class LoadCloud {
 
 	public SteamsideXml load() throws Missing, Unavailable
 	{
-		final CloudSettings read = settingsFactory.read();
+		CloudSettings read = settingsFactory.read();
 
 		if (!read.isEnabled()) throw new Disabled();
 
-		String xml = cloud.download();
-
-		return toSteamsideXml(xml);
+		return SteamsideXml_Unmarshal.unmarshal(
+			() -> new ByteArrayInputStream(getBytes(cloud.download())));
 	}
 
 	public static class Disabled extends RuntimeException {

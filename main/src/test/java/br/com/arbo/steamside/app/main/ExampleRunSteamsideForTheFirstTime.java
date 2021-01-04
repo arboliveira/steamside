@@ -3,13 +3,13 @@ package br.com.arbo.steamside.app.main;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
-import br.com.arbo.steamside.cloud.CloudUpload;
 import org.springframework.stereotype.Component;
 
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.app.context.SourcesFactory;
 import br.com.arbo.steamside.app.context.SpringApplicationFactory;
 import br.com.arbo.steamside.app.launch.SourcesCustomizer;
+import br.com.arbo.steamside.cloud.CopySteamsideXmlToCloud;
 import br.com.arbo.steamside.settings.file.LoadFile;
 import br.com.arbo.steamside.settings.file.SaveFile;
 import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
@@ -52,7 +52,8 @@ class ExampleRunSteamsideForTheFirstTime
 					LocalSettingsFactory.class, missingLocalSettings())
 				.replaceWithSingleton(LoadFile.class, missingSteamsideXml())
 				.replaceWithImplementor(SaveFile.class, SaveToSysout.class)
-					.replaceWithImplementor(CloudUpload.class, UploadToSysout.class);
+				.replaceWithImplementor(
+					CopySteamsideXmlToCloud.class, UploadToSysout.class);
 		}
 
 	}

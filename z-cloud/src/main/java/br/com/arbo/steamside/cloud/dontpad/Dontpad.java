@@ -16,16 +16,17 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
-import br.com.arbo.steamside.cloud.Host;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.arbo.steamside.cloud.http.Host;
+import br.com.arbo.steamside.cloud.http.Misconfigured;
 
 public class Dontpad implements Host
 {
 
 	private static UrlEncodedFormEntity newUrlEncodedFormEntity(
 		List<NameValuePair> urlParameters)
-			throws UnsupportedEncodingException
+		throws UnsupportedEncodingException
 	{
 		return new UrlEncodedFormEntity(urlParameters, "UTF-8");
 	}
@@ -36,9 +37,9 @@ public class Dontpad implements Host
 	}
 
 	@Inject
-	public Dontpad(DontpadSettingsFactory settingsFactory)
+	public Dontpad(DontpadSettingsFactory dontpadSettingsFactory)
 	{
-		this.settingsFactory = settingsFactory;
+		this.settingsFactory = dontpadSettingsFactory;
 	}
 
 	@Override
@@ -51,17 +52,31 @@ public class Dontpad implements Host
 	}
 
 	@Override
-	public URI buildHttpGetURI() throws URISyntaxException
+	public URI buildHttpGetURI() throws Misconfigured
 	{
-		return new URIBuilder(url() + ".body.json")
-			.addParameter("lastUpdate", "0")
-			.build();
+		try
+		{
+			return new URIBuilder(url() + ".body.json")
+				.addParameter("lastUpdate", "0")
+				.build();
+		}
+		catch (URISyntaxException e)
+		{
+			throw new Misconfigured(e);
+		}
 	}
 
 	@Override
-	public URI buildHttpPostURI() throws URISyntaxException
+	public URI buildHttpPostURI() throws Misconfigured
 	{
-		return new URIBuilder(url()).build();
+		try
+		{
+			return new URIBuilder(url()).build();
+		}
+		catch (URISyntaxException e)
+		{
+			throw new Misconfigured(e);
+		}
 	}
 
 	@Override
@@ -71,9 +86,20 @@ public class Dontpad implements Host
 		return dont.body;
 	}
 
-	private String url()
+	private String url() throws Misconfigured
 	{
-		return settingsFactory.read().address().url();
+		return settingsFactory.read().address().orElseThrow(this::misconfigured)
+			.url();
+	}
+
+	private Misconfigured misconfigured()
+	{
+		return new Misconfigured(new AddressMissing());
+	}
+
+	public static class AddressMissing extends RuntimeException
+	{
+		//
 	}
 
 	private static ObjectMapper jackson = new ObjectMapper();

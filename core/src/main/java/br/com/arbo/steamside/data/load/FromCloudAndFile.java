@@ -5,14 +5,11 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import br.com.arbo.steamside.bootstrap.Bootstrap;
-import br.com.arbo.steamside.cloud.CloudSettingsFactory.Missing;
-import br.com.arbo.steamside.cloud.LoadCloud;
-import br.com.arbo.steamside.cloud.LoadCloud.Disabled;
-import br.com.arbo.steamside.cloud.Unavailable;
 import br.com.arbo.steamside.data.InMemorySteamsideData;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.firstrun.InitialLoadDetectedFirstRunEver;
 import br.com.arbo.steamside.settings.file.LoadFile;
+import br.com.arbo.steamside.xml.SteamsideXml_To_InMemorySteamsideData;
 
 public class FromCloudAndFile implements InitialLoad
 {
@@ -20,9 +17,7 @@ public class FromCloudAndFile implements InitialLoad
 	@Override
 	public SteamsideData loadSteamsideData()
 	{
-		Optional<SteamsideData> fromCloud = fromCloud();
-		if (fromCloud.isPresent())
-			return fromCloud.get();
+		checkForUpdatesFromTheCloud();
 
 		Optional<SteamsideData> fromFile = fromFile();
 		if (fromFile.isPresent())
@@ -33,37 +28,18 @@ public class FromCloudAndFile implements InitialLoad
 		return InMemorySteamsideData.newInstance();
 	}
 
-	private Optional<SteamsideData> fromCloud()
+	private void checkForUpdatesFromTheCloud()
 	{
-		try
-		{
-			return Optional.of(cloud.load().toSteamsideData());
-			// TODO Success? Enqueue save to file
-		}
-		catch (Disabled e)
-		{
-			// Oh well, you know what you're doing, probably
-			return Optional.empty();
-		}
-		catch (Unavailable e)
-		{
-			// TODO Send Warning to User Alert Bus: can't sync to the cloud
-			e.printStackTrace();
-			return Optional.empty();
-		}
-		catch (Missing e)
-		{
-			// TODO Send Suggestion to User Alert Bus: configure sync?
-			e.printStackTrace();
-			return Optional.empty();
-		}
+		// TODO check for updates from the cloud
 	}
 
 	private Optional<SteamsideData> fromFile()
 	{
 		try
 		{
-			return Optional.of(file.load().toSteamsideData());
+			return Optional.of(
+				SteamsideXml_To_InMemorySteamsideData
+					.toSteamsideData(loadFile.load()));
 		}
 		catch (br.com.arbo.steamside.settings.file.LoadFile.Missing e)
 		{
@@ -74,15 +50,12 @@ public class FromCloudAndFile implements InitialLoad
 	}
 
 	@Inject
-	public FromCloudAndFile(
-		LoadCloud cloud, LoadFile file, Bootstrap bootstrap)
+	public FromCloudAndFile(LoadFile file, Bootstrap bootstrap)
 	{
-		this.cloud = cloud;
-		this.file = file;
+		this.loadFile = file;
 		this.bootstrap = bootstrap;
 	}
 
 	private final Bootstrap bootstrap;
-	private final LoadCloud cloud;
-	private final LoadFile file;
+	private final LoadFile loadFile;
 }

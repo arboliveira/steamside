@@ -1,12 +1,15 @@
 package br.com.arbo.steamside.cloud.dontpad;
 
+import java.nio.file.Path;
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import br.com.arbo.steamside.settings.local.LocalSettings;
 import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
 
 public class DontpadSettingsFromLocalSettings
-implements DontpadSettingsFactory
+	implements DontpadSettingsFactory
 {
 
 	@Inject
@@ -24,9 +27,9 @@ implements DontpadSettingsFactory
 		{
 
 			@Override
-			public DontpadAddress address()
+			public Optional<DontpadAddress> address()
 			{
-				return new DontpadAddress(from.dontpadUrl());
+				return from.cloudSyncedLocation().map(Path::toString).map(DontpadAddress::new);
 			}
 
 		}

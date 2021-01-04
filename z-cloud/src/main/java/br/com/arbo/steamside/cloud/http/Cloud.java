@@ -1,10 +1,9 @@
-package br.com.arbo.steamside.cloud;
+package br.com.arbo.steamside.cloud.http;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
@@ -39,7 +38,7 @@ public class Cloud
 			"application/x-www-form-urlencoded;charset=UTF-8");
 	}
 
-	public String download() throws Unavailable
+	public String download() throws Misconfigured, Unavailable
 	{
 		URI uri = buildHttpGetURI();
 		HttpGet get = new HttpGet(uri);
@@ -91,28 +90,14 @@ public class Cloud
 		}
 	}
 
-	private URI buildHttpGetURI()
+	private URI buildHttpGetURI() throws Misconfigured
 	{
-		try
-		{
-			return host.buildHttpGetURI();
-		}
-		catch (URISyntaxException e)
-		{
-			throw new RuntimeException(e);
-		}
+		return host.buildHttpGetURI();
 	}
 
-	private URI buildHttpPostURI()
+	private URI buildHttpPostURI() throws Misconfigured
 	{
-		try
-		{
-			return host.buildHttpPostURI();
-		}
-		catch (URISyntaxException e)
-		{
-			throw new RuntimeException(e);
-		}
+		return host.buildHttpPostURI();
 	}
 
 	private String readGetContent(InputStream in)

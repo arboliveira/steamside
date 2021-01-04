@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.cloud;
+package br.com.arbo.steamside.cloud.http;
 
 public class Unavailable extends RuntimeException {
 

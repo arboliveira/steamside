@@ -1,9 +1,10 @@
-package br.com.arbo.steamside.cloud;
+package br.com.arbo.steamside.cloud.dontpad;
 
 import org.mockito.Mockito;
 
-import br.com.arbo.steamside.cloud.dontpad.Dontpad;
-import br.com.arbo.steamside.cloud.dontpad.DontpadSettingsFromLocalSettings;
+import br.com.arbo.steamside.cloud.http.Cloud;
+import br.com.arbo.steamside.cloud.http.CloudUpload;
+import br.com.arbo.steamside.cloud.http.Host;
 import br.com.arbo.steamside.settings.local.File_steamside_local_xml;
 import br.com.arbo.steamside.settings.local.LocalSettingsLoad;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Dirs_userid;

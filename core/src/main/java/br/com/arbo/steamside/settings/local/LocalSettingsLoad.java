@@ -4,7 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.xml.bind.JAXB;
@@ -38,9 +41,10 @@ public class LocalSettingsLoad implements LocalSettingsFactory
 			}
 
 			@Override
-			public String dontpadUrl()
+			public Optional<Path> cloudSyncedLocation()
 			{
-				return from.dontpad;
+				return Optional.ofNullable(from.cloudSyncedLocation)
+					.map(Paths::get);
 			}
 
 		}

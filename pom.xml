@@ -20,6 +20,7 @@
 		<module>main</module>
 		<module>app</module>
 		<module>demo</module>
+		<module>z-cloud</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

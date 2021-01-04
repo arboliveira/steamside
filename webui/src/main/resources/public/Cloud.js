@@ -9,9 +9,9 @@ var CloudModel = Backbone.Model.extend(
 		return this.get("cloud");
 	},
 
-	dontpadUrl: function()
+	cloudSyncedLocation: function()
 	{
-		return this.get("dontpad");
+		return this.get("cloudSyncedLocation");
 	},
 
 	cloudEnabled_set: function(v)
@@ -19,9 +19,9 @@ var CloudModel = Backbone.Model.extend(
 		this.set("cloud", v);
 	},
 
-	dontpadUrl_set: function(v)
+	cloudSyncedLocation_set: function(v)
 	{
-		return this.set("dontpad", v);
+		return this.set("cloudSyncedLocation", v);
 	}
 
 });
@@ -41,7 +41,7 @@ var CloudView = Backbone.View.extend(
 		that.model = options.model;
 
 		that.cloud_CommandBox = new CommandBoxView({
-			placeholder_text: 'http://dontpad.com/(address to sync your Steamside data)',
+			placeholder_text: '',
 			on_change_input: function(input) { that.on_cloud_change_input(input); },
 			on_command: function(view) { that.on_cloud_command(view) },
 			on_command_alternate: function(view) { that.on_cloud_command_alternate(view) },
@@ -90,8 +90,8 @@ var CloudView = Backbone.View.extend(
 	 * @param {CommandBoxView} commandBoxView
 	 */
 	rendered_cloud_CommandBox: function(commandBoxView) {
-		commandBoxView.label_text('Cloud address');
-		commandBoxView.input_query_el().attr("data-bind", "value: dontpadUrl");
+		commandBoxView.label_text('Mirror to directory');
+		commandBoxView.input_query_el().attr("data-bind", "value: cloudSyncedLocation");
 		// TODO Enter Visit url
 		commandBoxView.hideCommandButtonStrip();
 	},
@@ -103,7 +103,7 @@ var CloudView = Backbone.View.extend(
 		that.$("#CloudEnabledCheckbox")
 			.prop("checked", that.model.cloudEnabled());
 
-		that.cloud_CommandBox.input_query_setval(that.model.dontpadUrl());
+		that.cloud_CommandBox.input_query_setval(that.model.cloudSyncedLocation());
 	},
 
 	editSave: function()
@@ -115,7 +115,7 @@ var CloudView = Backbone.View.extend(
 		that.model.cloudEnabled_set(
 			that.$("#CloudEnabledCheckbox")
 				.prop("checked"));
-		that.model.dontpadUrl_set(that.cloud_CommandBox.input_query_val());
+		that.model.cloudSyncedLocation_set(that.cloud_CommandBox.input_query_val());
 
 		that.model.save()
 			.done(function()

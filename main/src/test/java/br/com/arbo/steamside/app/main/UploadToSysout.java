@@ -1,21 +1,18 @@
 package br.com.arbo.steamside.app.main;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.log4j.Logger;
 
-import br.com.arbo.steamside.cloud.CloudUpload;
-import br.com.arbo.steamside.cloud.Unavailable;
+import br.com.arbo.steamside.cloud.CopySteamsideXmlToCloud;
 
-public class UploadToSysout implements CloudUpload
+public class UploadToSysout implements CopySteamsideXmlToCloud
 {
 
 	@Override
-	public HttpResponse upload(HttpPost post) throws Unavailable
+	public void copy(String steamsideXmlContent)
 	{
-		getLogger().info("Not really uploading! Just printing to console...");
+		getLogger().info("Not really copying! Just printing to console...");
 
-		throw new Unavailable(null);
+		System.out.println(steamsideXmlContent);
 	}
 
 	private Logger getLogger()

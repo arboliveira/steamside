@@ -1,10 +1,11 @@
 package br.com.arbo.steamside.api.cloud;
 
+import java.nio.file.Paths;
+
 import javax.inject.Inject;
 
 import br.com.arbo.steamside.cloud.CloudSettingsFactory;
-import br.com.arbo.steamside.cloud.dontpad.DontpadAddress;
-import br.com.arbo.steamside.cloud.dontpad.DontpadSettingsFactory;
+import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
 import br.com.arbo.steamside.settings.local.LocalSettingsPersistence;
 import br.com.arbo.steamside.settings.local.SteamsideLocalXml;
 
@@ -14,11 +15,11 @@ public class CloudController_cloud_json implements CloudController_cloud
 	@Inject
 	public CloudController_cloud_json(
 		CloudSettingsFactory cloud,
-		DontpadSettingsFactory dontpad,
+		LocalSettingsFactory localSettingsFactory,
 		LocalSettingsPersistence persistence)
 	{
 		this.cloud = cloud;
-		this.dontpad = dontpad;
+		this.localSettingsFactory = localSettingsFactory;
 		this.persistence = persistence;
 	}
 
@@ -27,7 +28,7 @@ public class CloudController_cloud_json implements CloudController_cloud
 	{
 		CloudDTO dto = new CloudDTO();
 		dto.cloud = cloud();
-		dto.dontpad(dontpad);
+		dto.dontpad(localSettingsFactory);
 		return dto;
 	}
 
@@ -36,7 +37,7 @@ public class CloudController_cloud_json implements CloudController_cloud
 	{
 		SteamsideLocalXml xml = new SteamsideLocalXml();
 		xml.cloud = payload.cloud;
-		xml.dontpad(new DontpadAddress(payload.dontpad));
+		xml.cloudSyncedLocation(Paths.get(payload.dontpad));
 		persistence.write(xml);
 		return payload;
 	}
@@ -56,6 +57,6 @@ public class CloudController_cloud_json implements CloudController_cloud
 	private final LocalSettingsPersistence persistence;
 
 	CloudSettingsFactory cloud;
-	DontpadSettingsFactory dontpad;
+	LocalSettingsFactory localSettingsFactory;
 
 }

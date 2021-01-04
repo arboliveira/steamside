@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.cloud;
+package br.com.arbo.steamside.cloud.http;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;

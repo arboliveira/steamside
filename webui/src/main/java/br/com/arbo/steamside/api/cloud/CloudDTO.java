@@ -1,29 +1,31 @@
 package br.com.arbo.steamside.api.cloud;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import java.nio.file.Path;
+import java.util.Optional;
 
-import br.com.arbo.steamside.cloud.dontpad.DontpadSettingsFactory;
-import br.com.arbo.steamside.cloud.dontpad.DontpadSettingsFactory.Missing;
+import br.com.arbo.steamside.settings.local.LocalSettingsFactory;
+import br.com.arbo.steamside.settings.local.LocalSettingsFactory.Missing;
 
 public class CloudDTO
 {
 
-	private static String address(DontpadSettingsFactory dontpad)
+	private static Optional<String> cloudSyncedLocation(
+		LocalSettingsFactory localSettingsFactory)
 	{
 		try
 		{
-			return dontpad.read().address().url();
+			return localSettingsFactory.read().cloudSyncedLocation()
+				.map(Path::toString);
 		}
 		catch (Missing e)
 		{
-			return "http://dontpad.com/"
-				+ RandomStringUtils.randomAlphanumeric(5).toLowerCase();
+			return Optional.empty();
 		}
 	}
 
-	public void dontpad(DontpadSettingsFactory d)
+	public void dontpad(LocalSettingsFactory localSettingsFactory)
 	{
-		this.dontpad = address(d);
+		this.dontpad = cloudSyncedLocation(localSettingsFactory).orElse("");
 	}
 
 	public boolean cloud;

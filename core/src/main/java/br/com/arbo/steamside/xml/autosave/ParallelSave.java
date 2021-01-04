@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.settings.file.SaveFile;
-import br.com.arbo.steamside.xml.SteamsideXml;
+import br.com.arbo.steamside.xml.SteamsideXmlFactory;
 
 public class ParallelSave
 {
@@ -19,7 +19,7 @@ public class ParallelSave
 
 		// TODO Acquire Reader Lock for the duration of save, then release
 		executor.submit(
-			() -> save.save(SteamsideXml.valueOf(data)));
+			() -> save.save(SteamsideXmlFactory.valueOf(data)));
 	}
 
 	private Logger getLogger()

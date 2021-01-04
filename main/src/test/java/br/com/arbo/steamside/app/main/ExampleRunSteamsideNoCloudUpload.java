@@ -4,7 +4,7 @@ import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.steamside.app.context.SourcesFactory;
 import br.com.arbo.steamside.app.context.SpringApplicationFactory;
 import br.com.arbo.steamside.app.launch.SourcesCustomizer;
-import br.com.arbo.steamside.cloud.CloudUpload;
+import br.com.arbo.steamside.cloud.CopySteamsideXmlToCloud;
 
 class ExampleRunSteamsideNoCloudUpload
 {
@@ -22,7 +22,8 @@ class ExampleRunSteamsideNoCloudUpload
 		@Override
 		public void customize(Sources s)
 		{
-			s.replaceWithImplementor(CloudUpload.class, UploadToSysout.class);
+			s.replaceWithImplementor(
+				CopySteamsideXmlToCloud.class, UploadToSysout.class);
 		}
 
 	}

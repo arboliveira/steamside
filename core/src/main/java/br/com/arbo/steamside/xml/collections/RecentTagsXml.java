@@ -3,21 +3,11 @@ package br.com.arbo.steamside.xml.collections;
 import java.util.LinkedList;
 
 import br.com.arbo.steamside.collections.InMemoryTagsHome;
-import br.com.arbo.steamside.collections.TagsQueries;
 import br.com.arbo.steamside.collections.TagsQueries.WithCount;
 import br.com.arbo.steamside.types.CollectionName;
 
 public class RecentTagsXml
 {
-
-	public static RecentTagsXml valueOf(TagsQueries tags)
-	{
-		RecentTagsXml xml = new RecentTagsXml();
-
-		tags.recent().forEach(xml::add);
-
-		return xml;
-	}
 
 	public void toTagsHome(InMemoryTagsHome tags)
 	{

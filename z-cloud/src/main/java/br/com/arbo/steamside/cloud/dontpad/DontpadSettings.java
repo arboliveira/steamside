@@ -1,8 +1,10 @@
 package br.com.arbo.steamside.cloud.dontpad;
 
+import java.util.Optional;
+
 public interface DontpadSettings
 {
 
-	DontpadAddress address();
+	Optional<DontpadAddress> address();
 
 }

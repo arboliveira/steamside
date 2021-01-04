@@ -46,7 +46,7 @@
 				$.mockjax({
 					url: 'api/cloud/cloud.json',
 					type: 'POST',
-					data: '{"cloud":true,"dontpad":"http://dontpad-url/"}',
+					data: '{"cloud":true,"cloudSyncedLocation":"C:\\Program Files (x86)\\Steam\\userdata\\<id>\\Steamside\\steamside-cloud"}',
 					responseText: {}
 				});
 
@@ -100,11 +100,7 @@
 						   id="CloudEnabledCheckbox"
 						   data-bind="checked: cloudEnabled" />
 					<span class="form-label">
-						Enable Steamside cloud synchronization</span>
-					(powered by
-					<a href="http://dontpad.com"
-					   style="text-decoration: none;"
-					   target="_blank">Dontpad</a>)
+						Enable cloud synchronization (mirror a copy of your data to a directory you can sync)</span>
 				</label>
 				</p>
 			</div>
@@ -112,20 +108,19 @@
 			<div class="form-text form-block" style="width: 60%">
 				<p>
 					<span id="CloudAddressCommandBoxView">
-
 					</span>
 				</p>
 				<p>
 				<span class="question">
-					Done it before?
+					Full control?
 					</span>
-					Enter the same address you use on all your computers.
+					Enter a directory of your choice, and use your favorite cloud service to sync across your computers.
 				</p>
 				<p>
 				<span class="question">
-					First time?
+					Keep it simple?
 					</span>
-					Just accept the random suggestion, or substitute your own choice.
+					Leave it blank to use the default mirror directory, then just add it to your cloud service sync.
 				</p>
 			</div>
 

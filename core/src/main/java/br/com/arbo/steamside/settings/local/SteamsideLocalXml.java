@@ -1,20 +1,20 @@
 package br.com.arbo.steamside.settings.local;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.nio.file.Path;
 
-import br.com.arbo.steamside.cloud.dontpad.DontpadAddress;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "steamside-local")
 public class SteamsideLocalXml
 {
 
-	public void dontpad(DontpadAddress d)
+	public void cloudSyncedLocation(Path path)
 	{
-		dontpad = d.url();
+		cloudSyncedLocation = path.toString();
 	}
 
 	public boolean cloud;
 
-	public String dontpad;
+	public String cloudSyncedLocation;
 
 }

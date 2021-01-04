@@ -6,17 +6,9 @@ import br.com.arbo.steamside.data.collections.Duplicate;
 import br.com.arbo.steamside.kids.InMemoryKids;
 import br.com.arbo.steamside.kids.KidCheck;
 import br.com.arbo.steamside.kids.KidImpl;
-import br.com.arbo.steamside.kids.Kids;
 
 public class KidsXml
 {
-
-	public static KidsXml valueOf(Kids kids)
-	{
-		KidsXml xml = new KidsXml();
-		kids.all().map(KidXml::valueOf).forEach(xml.kid::add);
-		return xml;
-	}
 
 	public void toKidsHome(InMemoryKids mem)
 	{

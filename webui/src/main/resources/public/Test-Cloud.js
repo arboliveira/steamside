@@ -26,7 +26,7 @@ var Test_Cloud = Backbone.Model.extend(
 
 		var model = new MockCloudModel();
 		model.cloudEnabled_set(true);
-		model.dontpadUrl_set(that.randomSuggestion);
+		model.cloudSyncedLocation_set(that.randomSuggestion);
 
 		this.viewBeingTested = new CloudView(
 			{

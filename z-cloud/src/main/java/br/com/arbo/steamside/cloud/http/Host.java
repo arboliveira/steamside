@@ -1,21 +1,21 @@
-package br.com.arbo.steamside.cloud;
+package br.com.arbo.steamside.cloud.http;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.apache.http.client.methods.HttpPost;
 
-public interface Host {
+public interface Host
+{
 
 	void addURLParameters(HttpPost post, String in)
-			throws UnsupportedEncodingException;
+		throws UnsupportedEncodingException;
 
-	URI buildHttpGetURI() throws URISyntaxException;
+	URI buildHttpGetURI() throws Misconfigured;
 
-	URI buildHttpPostURI() throws URISyntaxException;
+	URI buildHttpPostURI() throws Misconfigured;
 
 	String readGetContent(InputStream in) throws IOException;
 

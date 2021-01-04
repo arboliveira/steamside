@@ -15,19 +15,13 @@ import br.com.arbo.steamside.api.steamclient.StatusDTOBuilder;
 import br.com.arbo.steamside.api.steamclient.SteamClientController_status;
 import br.com.arbo.steamside.bootstrap.Bootstrap;
 import br.com.arbo.steamside.bootstrap.BootstrapImpl;
-import br.com.arbo.steamside.cloud.Cloud;
 import br.com.arbo.steamside.cloud.CloudSettingsFactory;
 import br.com.arbo.steamside.cloud.CloudSettingsFromLocalSettings;
-import br.com.arbo.steamside.cloud.CloudUpload;
-import br.com.arbo.steamside.cloud.CloudUploadSerious;
-import br.com.arbo.steamside.cloud.Host;
-import br.com.arbo.steamside.cloud.LoadCloud;
+import br.com.arbo.steamside.cloud.CopySteamsideXmlToCloud;
+import br.com.arbo.steamside.cloud.CopySteamsideXmlToCloudImpl;
 import br.com.arbo.steamside.cloud.Uploader;
 import br.com.arbo.steamside.cloud.autoupload.AutoUpload;
 import br.com.arbo.steamside.cloud.autoupload.ParallelUpload;
-import br.com.arbo.steamside.cloud.dontpad.Dontpad;
-import br.com.arbo.steamside.cloud.dontpad.DontpadSettingsFactory;
-import br.com.arbo.steamside.cloud.dontpad.DontpadSettingsFromLocalSettings;
 import br.com.arbo.steamside.collections.CollectionsData;
 import br.com.arbo.steamside.collections.CollectionsDataSingleton;
 import br.com.arbo.steamside.collections.TagsData;
@@ -114,19 +108,12 @@ public class SourcesFactory
 			.sourceImplementor(
 				File_steamside_local_xml_Supplier.class,
 				File_steamside_local_xml.class)
-			.sources(
-				LoadCloud.class,
-				Cloud.class)
 			.sourceImplementor(
 				CloudSettingsFactory.class,
 				CloudSettingsFromLocalSettings.class)
 			.sourceImplementor(
-				CloudUpload.class,
-				CloudUploadSerious.class)
-			.sourceImplementor(Host.class, Dontpad.class)
-			.sourceImplementor(
-				DontpadSettingsFactory.class,
-				DontpadSettingsFromLocalSettings.class);
+				CopySteamsideXmlToCloud.class,
+				CopySteamsideXmlToCloudImpl.class);
 
 		container
 			.sources(

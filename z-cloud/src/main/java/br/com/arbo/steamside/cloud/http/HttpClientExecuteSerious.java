@@ -1,4 +1,4 @@
-package br.com.arbo.steamside.cloud;
+package br.com.arbo.steamside.cloud.http;
 
 import java.io.IOException;
 import java.net.UnknownHostException;

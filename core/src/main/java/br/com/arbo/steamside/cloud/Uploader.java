@@ -9,7 +9,8 @@ import org.apache.commons.io.FileUtils;
 
 import br.com.arbo.steamside.cloud.CloudSettingsFactory.Missing;
 
-public class Uploader {
+public class Uploader
+{
 
 	private static String read(File file)
 	{
@@ -24,23 +25,24 @@ public class Uploader {
 	}
 
 	@Inject
-	public Uploader(Cloud cloud, CloudSettingsFactory settings)
+	public Uploader(CopySteamsideXmlToCloud cloud,
+		CloudSettingsFactory settings)
 	{
 		this.cloud = cloud;
 		this.settingsFactory = settings;
 	}
 
-	public void upload(File file) throws Missing, Unavailable
+	public void upload(File file) throws Missing
 	{
 		final CloudSettings read = this.settingsFactory.read();
 
 		if (!read.isEnabled()) return;
 
 		String content = read(file);
-		cloud.upload(content);
+		cloud.copy(content);
 	}
 
-	private final Cloud cloud;
+	private final CopySteamsideXmlToCloud cloud;
 
 	private final CloudSettingsFactory settingsFactory;
 }

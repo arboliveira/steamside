@@ -1,9 +1,13 @@
 package br.com.arbo.steamside.settings.local;
 
-public interface LocalSettings {
+import java.nio.file.Path;
+import java.util.Optional;
+
+public interface LocalSettings
+{
 
 	boolean cloudEnabled();
 
-	String dontpadUrl();
+	Optional<Path> cloudSyncedLocation();
 
 }
