@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>
+
+    SteamSide frontend tests
+
+</title></head><body>
+
+<template data-customary-name="tests-steamside">
+    <tester-customary title="Steamside frontend"></tester-customary>
+</template>
+
+<tests-steamside></tests-steamside>
+
+<script type="importmap">
+    {
+        "imports": {
+            "chai": "./../node_modules/chai/chai.js",
+            "mocha": "./../node_modules/mocha/mocha.js",
+            "mocha.css": "./../node_modules/mocha/mocha.css",
+            "sinon": "../node_modules/sinon/pkg/sinon-esm.js",
+            "#customary-testing": "./../node_modules/customary-testing/src/index.js",
+            "#customary-testing/": "./../node_modules/customary-testing/src/",
+            "#customary": "./../node_modules/customary/src/now.js",
+            "#customary/": "./../node_modules/customary/src/",
+            "#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+            "#steamside/": "./"
+        }
+    }
+</script>
+
+<script type="module">
+    async function import_tests() {
+        await import('#steamside/test-elements-tag-test.js');
+        await import('#steamside/test-elements-cloud-test.js');
+        await import('#steamside/test-elements-kids-home-test.js');
+        await import('#steamside/test-elements-home-test.js');
+    }
+
+    const mocha_css = import.meta.resolve('mocha.css');
+
+    import {TesterCustomary} from '#customary-testing/tester-customary/tester-customary.js';
+
+    /**
+     * @type {CustomaryDeclaration}
+     */
+    globalThis['customary:tests-steamside'] = {hooks: {
+        requires: [TesterCustomary],
+        lifecycle: {
+            firstUpdated: el => TesterCustomary.attach(el, mocha_css, import_tests)
+        }
+    }};
+</script>
+
+</body></html>

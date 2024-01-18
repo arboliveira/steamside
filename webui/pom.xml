@@ -50,6 +50,12 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
+				<includes>
+					<include>public/**</include>
+				</includes>
+				<excludes>
+					<exclude>public/.idea/**</exclude>
+				</excludes>
 			</resource>
 			<resource>
 				<directory>src/main/resources-filtered</directory>

@@ -1,0 +1,34 @@
+{
+  "include": ["public/**/*.ts"],
+  "exclude": [
+    "public/_script/**/*",
+  ],
+  "compilerOptions": {
+    "rootDir": "public",
+    "outDir": "public/_script",
+    "paths": {
+      "#steamside/*": ["./public/*"],
+      "#customary-testing": ["./node_modules/customary-testing/src/index.ts"],
+      "#customary": ["./node_modules/customary/src/index.ts"],
+      "#customary/*": ["./node_modules/customary/src/*"],
+      "chai/*": ["./node_modules/chai/*"],
+      "mocha/*": ["./node_modules/mocha/*"]
+    },
+    // ---- BEGIN lit decorators: @property @state @query
+    // https://lit.dev/docs/components/decorators/#decorators-typescript
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    // ---- END lit decorators: @property @state @query
+    // ---- CODING STANDARDS TYPICAL FOR ALL PROJECTS START HERE ----
+    "allowJs": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2022",
+
+    "allowSyntheticDefaultImports": true   // js-cookie
+  }
+}
