@@ -5,3 +5,4 @@ target
 *.iml
 dependency-reduced-pom.xml
 Thumbs.db
+/steamclient/src/test/resources/br/com/arbo/steamside/steam/client/localfiles/copied_from_steam_directory/

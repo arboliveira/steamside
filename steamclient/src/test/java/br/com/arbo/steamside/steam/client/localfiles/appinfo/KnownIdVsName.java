@@ -21,6 +21,11 @@ public class KnownIdVsName {
 		return id_vs_name.isEmpty();
 	}
 
+	@Override
+	public String toString() {
+		return id_vs_name.toString();
+	}
+
 	Optional<String> remove(String appid)
 	{
 		return Optional.ofNullable(id_vs_name.remove(appid));

@@ -9,8 +9,8 @@ public class ByteBufferX {
 	public String read__null_terminated_string() {
 		int i = 0;
 		while (true) {
-			stringbuffer[i] = buffer.get();
-			if (stringbuffer[i] == 0) break;
+			string_buffer[i] = buffer.get();
+			if (string_buffer[i] == 0) break;
 			i++;
 		}
 		return newString(i);
@@ -32,21 +32,33 @@ public class ByteBufferX {
 		return buffer.getLong();
 	}
 
+	public long read__int64_t() {
+		return buffer.getLong();
+	}
+
+	public int position() {
+		return buffer.position();
+	}
+
+	public final void position(int newPosition) {
+		buffer.position(newPosition);
+	}
+
 	private String newString(final int i) {
 		try {
-			return new String(stringbuffer, 0, i, "UTF8");
+			return new String(string_buffer, 0, i, "UTF8");
 		} catch (final UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public ByteBufferX(final ByteBuffer buffer, final int stringbufferSize) {
+	public ByteBufferX(final ByteBuffer buffer, final int string_buffer_size) {
 		buffer.order(ByteOrder.LITTLE_ENDIAN);
 		this.buffer = buffer;
-		stringbuffer = new byte[stringbufferSize];
+		this.string_buffer = new byte[string_buffer_size];
 	}
 
 	private final ByteBuffer buffer;
-	private final byte[] stringbuffer;
+	private final byte[] string_buffer;
 
 }

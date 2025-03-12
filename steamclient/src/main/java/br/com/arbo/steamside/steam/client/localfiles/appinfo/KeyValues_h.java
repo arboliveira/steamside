@@ -1,7 +1,7 @@
 package br.com.arbo.steamside.steam.client.localfiles.appinfo;
 
 /**
-https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/public/tier1/KeyValues.h
+ https://github.com/ValveSoftware/source-sdk-2013/blob/a62efecf624923d3bacc67b8ee4b7f8a9855abfd/src/public/tier1/KeyValues.h#L235-L243
  */
 public class KeyValues_h
 {

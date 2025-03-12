@@ -15,8 +15,7 @@ public class Libraries
 
 	public static SteamClientHome fromSteamPhysicalFiles()
 	{
-		SteamLocation steamDir =
-			SteamLocations.fromSteamPhysicalFiles();
+		SteamLocation steamDir = SteamLocations.fromSteamPhysicalFiles();
 
 		Dir_userid dir_userid = Dirs_userid.fromSteamPhysicalFiles();
 

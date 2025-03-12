@@ -8,10 +8,11 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.arbo.steamside.steam.client.localfiles.copied_from_steam_directory.SteamLocationCopiedFromSteamDirectory;
+import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocation;
 import org.junit.Test;
 
 import br.com.arbo.steamside.steam.client.apps.Platform;
-import br.com.arbo.steamside.steam.client.localfiles.steamlocation.SteamLocations;
 import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
 
 public class Content_appinfo_vdfTest
@@ -20,9 +21,9 @@ public class Content_appinfo_vdfTest
 	@Test
 	public void idKnown_nameKnown() throws Exception
 	{
-		try (FileInputStream in = new FileInputStream(
-			new File_appinfo_vdf(SteamLocations
-				.fromSteamPhysicalFiles()).appinfo_vdf()))
+		SteamLocation steamLocation = new SteamLocationCopiedFromSteamDirectory();
+        try (FileInputStream in = new FileInputStream(
+			new File_appinfo_vdf(steamLocation).appinfo_vdf()))
 		{
 			ContentVisitor contentVisitor =
 				new ContentVisitor(this::assert_app_id);
