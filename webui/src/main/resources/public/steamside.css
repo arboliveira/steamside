@@ -127,15 +127,15 @@
     clear: both;
     overflow: auto;
     padding: 0;
-    background-color: transparent;
-    margin: 10px auto;
-    /*
-    border: 1px;
-    border-style: outset;
-    */
-    border-color: navy;
-    border-bottom-color: khaki;
-    box-shadow: 2px 1px 5px 0px rgba(50, 50, 50, 0.75);
+    backdrop-filter: blur(2px) hue-rotate(-0.25turn);
+    --top-and-bottom: 80px;
+    --left-and-right: auto;
+    margin: var(--top-and-bottom) var(--left-and-right);
+    --offset-x: 0.3em;
+    --offset-y: 0.1em;
+    --blur-radius: 1em;
+    --color: lightgreen;
+    box-shadow: var(--offset-x) var(--offset-y) var(--blur-radius) var(--color);
 }
 
 .side-header
