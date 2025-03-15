@@ -2,7 +2,7 @@ package br.com.arbo.steamside.demo.context;
 
 import static org.mockito.Mockito.mock;
 
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 
 import org.mockito.Mockito;
 

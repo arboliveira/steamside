@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.app.main;
 
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 
 import org.apache.log4j.Logger;
 

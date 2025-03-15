@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Supplier;
 
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 
 import br.com.arbo.steamside.xml.SteamsideXml;
 

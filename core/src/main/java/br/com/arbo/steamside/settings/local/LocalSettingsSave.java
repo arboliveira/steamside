@@ -3,7 +3,7 @@ package br.com.arbo.steamside.settings.local;
 import java.io.File;
 
 import javax.inject.Inject;
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 
 public class LocalSettingsSave implements LocalSettingsPersistence
 {

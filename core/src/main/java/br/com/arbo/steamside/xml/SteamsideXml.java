@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.xml;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import br.com.arbo.steamside.xml.collections.CollectionsXml;
 import br.com.arbo.steamside.xml.collections.FavoritesXml;

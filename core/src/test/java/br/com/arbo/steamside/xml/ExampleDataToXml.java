@@ -4,7 +4,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
 
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 
 import br.com.arbo.steamside.xml.collections.CollectionXml;
 import br.com.arbo.steamside.xml.collections.TagXml;

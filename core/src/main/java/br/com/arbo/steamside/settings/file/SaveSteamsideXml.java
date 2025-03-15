@@ -3,7 +3,7 @@ package br.com.arbo.steamside.settings.file;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 
 import br.com.arbo.steamside.xml.SteamsideXml;
 

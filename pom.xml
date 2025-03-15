@@ -25,6 +25,19 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<!--https://stackoverflow.com/questions/75936491/what-are-the-jaxb-jar-files-to-be-used-with-java-17-project-->
+				<groupId>jakarta.xml.bind</groupId>
+				<artifactId>jakarta.xml.bind-api</artifactId>
+				<version>4.0.2</version>
+			</dependency>
+			<dependency>
+				<!--https://stackoverflow.com/questions/75936491/what-are-the-jaxb-jar-files-to-be-used-with-java-17-project-->
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-impl</artifactId>
+				<version>4.0.5</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
 				<version>1.2.13</version>
@@ -62,6 +75,16 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<configuration>
 					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- https://stackoverflow.com/questions/75116023/unable-to-make-protected-final-java-lang-class-java-lang-classloader-defineclass -->
+					<argLine>
+						--add-opens java.base/java.lang=ALL-UNNAMED
+					</argLine>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.inject.Inject;
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 
 public class LocalSettingsLoad implements LocalSettingsFactory
 {
