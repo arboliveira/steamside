@@ -1,6 +1,6 @@
-"use strict";
+import {SessionModel} from "#steamside/session.js";
 
-Steamside.ExitWorld =
+export const Steamside_ExitWorld =
 {
 	nameController: 'ExitController',
 
@@ -8,9 +8,9 @@ Steamside.ExitWorld =
 
 	controller: function($scope, theBackend)
 	{
-		var sessionModel = new SessionModel();
+		const sessionModel = new SessionModel();
 
-		var view = new ExitView(
+		const view = new ExitView(
 			{
 				sessionModel: sessionModel,
 				backend: theBackend
@@ -24,7 +24,7 @@ Steamside.ExitWorld =
 };
 
 
-var ExitView = Backbone.View.extend(
+const ExitView = Backbone.View.extend(
 {
 	el: "#exit",
 
@@ -39,13 +39,13 @@ var ExitView = Backbone.View.extend(
 	},
 
 	render: function () {
-		var input = this.$("#CommandLine");
+		const input = this.$("#CommandLine");
 		input.val(this.sessionModel.executable());
 	},
 
 	clickTryAgain: function(e) {
 		e.preventDefault();
-		var input = this.$("#CommandLine");
+		const input = this.$("#CommandLine");
 		input.show();
 		input.focus();
 		input.select();

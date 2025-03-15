@@ -1,6 +1,7 @@
-"use strict";
+import {CommandBoxView} from "#steamside/CommandBox.js";
+import {SpriteBuilder} from "#steamside/spritesheet.js";
 
-var CloudModel = Backbone.Model.extend(
+export const CloudModel = Backbone.Model.extend(
 {
 	url: "api/cloud/cloud.json",
 
@@ -26,7 +27,7 @@ var CloudModel = Backbone.Model.extend(
 
 });
 
-var CloudView = Backbone.View.extend(
+export const CloudView = Backbone.View.extend(
 {
 	events:
 	{
@@ -35,7 +36,7 @@ var CloudView = Backbone.View.extend(
 
 	initialize: function(options)
 	{
-		var that = this;
+		const that = this;
 
 		that.backend = options.backend;
 		that.model = options.model;
@@ -59,7 +60,7 @@ var CloudView = Backbone.View.extend(
 	},
 
 	render: function () {
-		var that = this;
+		const that = this;
 		that.whenRendered = this.whenSprite.then(function(view) {
 			view.render_el();
 			return view;
@@ -69,7 +70,7 @@ var CloudView = Backbone.View.extend(
 
 	render_el: function()
 	{
-		var that = this;
+		const that = this;
 
 		that.cloud_CommandBox
 			.render_commandBox_promise().done(function(view)
@@ -98,7 +99,7 @@ var CloudView = Backbone.View.extend(
 
 	editBegin: function()
 	{
-		var that = this;
+		const that = this;
 
 		that.$("#CloudEnabledCheckbox")
 			.prop("checked", that.model.cloudEnabled());
@@ -108,7 +109,7 @@ var CloudView = Backbone.View.extend(
 
 	editSave: function()
 	{
-		var that = this;
+		const that = this;
 
 		that.tooltip_saved_hide();
 

@@ -1,6 +1,6 @@
-"use strict";
+import {sideshow} from "#steamside/Sideshow.js";
 
-Steamside.SteamClientWorld =
+export const Steamside_SteamClientWorld =
 {
 	nameController: 'SteamClientController',
 
@@ -8,7 +8,7 @@ Steamside.SteamClientWorld =
 
 	controller: function($scope, theBackend)
 	{
-		var model = new SteamClientStatusModel();
+		const model = new SteamClientStatusModel();
 
 		new SteamClientView(
 			{
@@ -22,22 +22,22 @@ Steamside.SteamClientWorld =
 };
 
 
-var SteamClientStatusModel = Backbone.Model.extend(
+const SteamClientStatusModel = Backbone.Model.extend(
 {
 	url: "api/steamclient/status.json",
 
 	running: function() {
-		var v = this.get("running");
+		const v = this.get("running");
 		return (v === true) || (v === "true");
 	},
 	here: function() {
-		var v = this.get("here");
+		const v = this.get("here");
 		return (v === true) || (v === "true");
 	}
 });
 
 
-var SteamClientView = Backbone.View.extend({
+const SteamClientView = Backbone.View.extend({
 
 	el: "#steam-client",
 
@@ -54,19 +54,19 @@ var SteamClientView = Backbone.View.extend({
 	},
 
 	render: function () {
-		var that = this;
+		const that = this;
 
-		var modelSteamClientStatus = this.model;
+		const modelSteamClientStatus = this.model;
 
-		var running = modelSteamClientStatus.running();
+		const running = modelSteamClientStatus.running();
 
-		var status = this.$('#SteamClientStatusMessage');
-		var anotherUser = this.$('#SteamClientAnotherUserMessage');
-		var button = this.$('#ButtonOpenSteamClient');
+		const status = this.$('#SteamClientStatusMessage');
+		const anotherUser = this.$('#SteamClientAnotherUserMessage');
+		const button = this.$('#ButtonOpenSteamClient');
 
-		var statusVisible = false;
-		var anotherVisible = false;
-		var buttonText = 'Open Steam Client';
+		let statusVisible = false;
+		let anotherVisible = false;
+		let buttonText = 'Open Steam Client';
 
 		if (running)
 		{
@@ -101,8 +101,8 @@ var SteamClientView = Backbone.View.extend({
 
     buttonSteamBrowserProtocolClicked: function (e) {
         e.preventDefault();
-        var jLink = $(e.target);
-        var aUrl = jLink.attr( "href" );
+        const jLink = $(e.target);
+        const aUrl = jLink.attr( "href" );
 		this.backend.ajax_ajax_promise(aUrl);
     },
 

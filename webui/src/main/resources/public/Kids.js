@@ -1,6 +1,4 @@
-"use strict";
-
-var Kid = Backbone.Model.extend({
+export const Kid = Backbone.Model.extend({
 	name: function() {
 		return this.get('name');
 	},
@@ -20,14 +18,13 @@ var Kid = Backbone.Model.extend({
 		return this.set('inventory', v);
 	},
 	url: function() {
-		var base = 'api/kids/kid';
+		const base = 'api/kids/kid';
 		if (this.isNew()) return base;
 		return base + '/' + encodeURIComponent(this.id) + '.json';
 	}
 });
 
-var KidsCollection = Backbone.Collection.extend({
+export const KidsCollection = Backbone.Collection.extend({
 	model: Kid,
 	url: 'api/kids/kids.json'
 });
-

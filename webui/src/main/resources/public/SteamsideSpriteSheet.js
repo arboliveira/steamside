@@ -1,6 +1,6 @@
-"use strict";
+import {SpriteSheet} from "#steamside/spritesheet.js";
 
-var SteamsideSpriteSheet = Backbone.Model.extend(
+export const SteamsideSpriteSheet = Backbone.Model.extend(
 	{
 		/**
 		 * @public
@@ -15,7 +15,7 @@ var SteamsideSpriteSheet = Backbone.Model.extend(
 		moreButton: null,
 
 		initialize: function () {
-			var sheet = new SpriteSheet({url: 'tileset.html'});
+			const sheet = new SpriteSheet({url: 'tileset.html'});
 			this.card = sheet.sprite("#game-tile");
 			this.moreButton = sheet.sprite("#MoreButton");
 		}

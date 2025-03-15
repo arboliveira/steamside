@@ -1,6 +1,7 @@
-"use strict";
+import {CollectionPickView} from "#steamside/CollectionPick.js";
+import {sideshow} from "#steamside/Sideshow.js";
 
-Steamside.MyGamesWorld =
+export const Steamside_MyGamesWorld =
 {
 	nameController: 'MyGamesController',
 
@@ -8,8 +9,8 @@ Steamside.MyGamesWorld =
 
 	controller: function($scope, theBackend, spritesSteamside)
 	{
-		var spriteMoreButton = spritesSteamside.moreButton;
-		var cardTemplatePromise = spritesSteamside.card.sprite_promise();
+		const spriteMoreButton = spritesSteamside.moreButton;
+		const cardTemplatePromise = spritesSteamside.card.sprite_promise();
 
 		new MyGamesView(
 			{
@@ -22,7 +23,7 @@ Steamside.MyGamesWorld =
 };
 
 
-var MyGamesView = Backbone.View.extend(
+const MyGamesView = Backbone.View.extend(
 {
 	el: "#MyGamesView",
 
@@ -34,7 +35,7 @@ var MyGamesView = Backbone.View.extend(
 	},
 
 	render: function () {
-		var that = this;
+		const that = this;
 
 		that.$("#CollectionPickView").append(
 			new CollectionPickView(

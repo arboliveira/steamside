@@ -1,6 +1,6 @@
 import 'mocha';
 import { CustomaryTesting as CT } from "#customary-testing";
-import { assert, expect } from "chai";
+import { expect } from "chai";
 
 const suite = {
     title: 'Tag',

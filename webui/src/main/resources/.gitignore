@@ -6,3 +6,4 @@
 /.dist/
 /public/**/*.d.ts
 /public/**/*.js.map
+/public/customary.js

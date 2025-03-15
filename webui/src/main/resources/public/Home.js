@@ -1,6 +1,15 @@
-"use strict";
+import {TagSuggestionsCollection} from "#steamside/Tag.js";
+import {SteamsideCollectionApps} from "#steamside/Inventory.js";
+import {CollectionEditView} from "#steamside/CollectionEdit.js";
+import {TagAGameView} from "#steamside/TagAGameView.js";
+import {SearchView} from "#steamside/Search.js";
+import {CollectionPickView} from "#steamside/CollectionPick.js";
+import {KidsView} from "#steamside/KidsHome.js";
+import {ErrorHandler} from "#steamside/Error.js";
+import {ContinueGames, DeckView, FavoritesCollection} from "#steamside/GameCardDeck.js";
+import {sideshow} from "#steamside/Sideshow.js";
 
-Steamside.HomeWorld =
+export const Steamside_HomeWorld =
 {
 	nameController: 'HomeController',
 
@@ -36,7 +45,7 @@ Steamside.HomeWorld =
 };
 
 
-var HomeView = Backbone.View.extend(
+const HomeView = Backbone.View.extend(
 {
 	el: "#HomeView",
 
@@ -75,21 +84,21 @@ var HomeView = Backbone.View.extend(
 
 	render: function ()
 	{
-		var that = this;
+		const that = this;
 
 		that.$el.hide();
 
 		that.cardTemplatePromise = this.decide_cardTemplatePromise();
 
-		var continues = new ContinueGames();
+		const continues = new ContinueGames();
 
-		var kidsMode = this._kidsMode.kidsMode();
+		const kidsMode = this._kidsMode.kidsMode();
 
-		var viewFavorites = this.renderFavoritesView(kidsMode, continues);
+		const viewFavorites = this.renderFavoritesView(kidsMode, continues);
 
-		var promiseRenderRecentTagged = null;
+		let promiseRenderRecentTagged = null;
 
-		var searchView = null;
+		let searchView = null;
 
 		if (!kidsMode)
 		{
@@ -101,7 +110,7 @@ var HomeView = Backbone.View.extend(
 
 		this.backend.fetch_promise(continues);
 
-		var sideshow_ready;
+		let sideshow_ready;
 
 		if (promiseRenderRecentTagged != null)
 		{
@@ -129,7 +138,7 @@ var HomeView = Backbone.View.extend(
 
 	decide_cardTemplatePromise: function()
 	{
-		var kidsMode = this._kidsMode.kidsMode();
+		const kidsMode = this._kidsMode.kidsMode();
 		if (kidsMode)
 		{
 			return this.spritesKids.card.sprite_promise();
@@ -138,12 +147,12 @@ var HomeView = Backbone.View.extend(
 	},
 
 	renderFavoritesView: function (kidsMode, continues) {
-		var that = this;
+		const that = this;
 
 		/**
 		 * @type FavoritesView
 		 */
-		var favoritesView = new FavoritesView(
+		const favoritesView = new FavoritesView(
 			{
 				cardTemplatePromise: that.cardTemplatePromise,
 				spriteMoreButton: that.spriteMoreButton,
@@ -157,7 +166,7 @@ var HomeView = Backbone.View.extend(
 	},
 
 	createContinuesDeck: function (continues) {
-		var that = this;
+		const that = this;
 
 		new DeckView({
 			el: $('#continues-deck'),
@@ -171,9 +180,9 @@ var HomeView = Backbone.View.extend(
 	},
 
 	renderSearchSegment: function (continues) {
-		var that = this;
+		const that = this;
 
-		var searchView = new SearchView(
+		const searchView = new SearchView(
 			{
 				el: $('#search-segment'),
 				cardTemplatePromise: that.cardTemplatePromise,
@@ -191,9 +200,9 @@ var HomeView = Backbone.View.extend(
 	},
 
 	renderRecentTagged: function (segmentBeforeRecentTagged) {
-		var that = this;
+		const that = this;
 
-		var recentTagged = new TagSuggestionsCollection();
+		const recentTagged = new TagSuggestionsCollection();
 
 		segmentBeforeRecentTagged.after(
 			new RecentTaggedView({
@@ -209,8 +218,8 @@ var HomeView = Backbone.View.extend(
 
 	on_game_card_tag: function(game, segmentWithGameCard)
 	{
-		var that = this;
-		var tagView = new TagAGameView({
+		const that = this;
+		const tagView = new TagAGameView({
 			game: game,
 			cardTemplatePromise: that.cardTemplatePromise,
 			backend: that.backend
@@ -229,7 +238,7 @@ var HomeView = Backbone.View.extend(
 
 
 
-var FavoritesView = Backbone.View.extend(
+const FavoritesView = Backbone.View.extend(
 {
 	el: "#favorites-segment",
 
@@ -260,7 +269,7 @@ var FavoritesView = Backbone.View.extend(
 
 	render: function()
 	{
-		var that = this;
+		const that = this;
 
 		this.switch_purpose_el = this.$("#SwitchPurposeView");
 		this.switch_purpose_el.remove();
@@ -291,11 +300,11 @@ var FavoritesView = Backbone.View.extend(
 	switchClicked: function(e) {
 		e.preventDefault();
 
-		var that = this;
+		const that = this;
 
-		var el_switch_purpose = that.switch_purpose_el.clone();
+		const el_switch_purpose = that.switch_purpose_el.clone();
 
-		var viewCollectionPick = new CollectionPickView(
+		const viewCollectionPick = new CollectionPickView(
 			{
 				purpose_el: el_switch_purpose,
 				on_collection_pick: function(modelCollection)
@@ -313,7 +322,7 @@ var FavoritesView = Backbone.View.extend(
 
 	on_switch_favorites_collection_pick: function(modelCollection)
 	{
-		var aUrl =
+		const aUrl =
 			"api/favorites/set/" +
 			encodeURIComponent(modelCollection.name());
 
@@ -324,7 +333,7 @@ var FavoritesView = Backbone.View.extend(
 		 },
 		 */
 
-		var that = this;
+		const that = this;
 
 		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()
@@ -350,7 +359,7 @@ var FavoritesView = Backbone.View.extend(
 
 
 
-var SteamsideView = Backbone.View.extend({
+const SteamsideView = Backbone.View.extend({
 
 	el: "body",
 
@@ -369,12 +378,12 @@ var SteamsideView = Backbone.View.extend({
 
 	render: function ()
 	{
-		var sessionModel = this.sessionModel;
+		const sessionModel = this.sessionModel;
 
 		/**
 		 * @type SessionView
 		 */
-		var sessionView = new SessionView({model: sessionModel});
+		const sessionView = new SessionView({model: sessionModel});
 		sessionView.render();
 
 		return this;
@@ -382,7 +391,7 @@ var SteamsideView = Backbone.View.extend({
 
 	applyKidsMode: function()
 	{
-		var kids = this._kidsMode.kidsMode();
+		const kids = this._kidsMode.kidsMode();
 
 		if (!kids) {
 			this.$("#KidsModeIndicator").hide();
@@ -399,7 +408,7 @@ var SteamsideView = Backbone.View.extend({
 
 
 
-var SessionView = Backbone.View.extend({
+const SessionView = Backbone.View.extend({
 	el : 'body',
 
 	initialize: function () {
@@ -408,7 +417,7 @@ var SessionView = Backbone.View.extend({
 
 	render: function ()
 	{
-		var m = this.model;
+		const m = this.model;
 
 		this.$('#userName').text(m.userName());
 		this.$('#version').text(m.versionOfSteamside());
@@ -419,7 +428,7 @@ var SessionView = Backbone.View.extend({
 });
 
 
-var RecentTaggedView = Backbone.View.extend(
+const RecentTaggedView = Backbone.View.extend(
 {
 	initialize: function(options)
 	{
@@ -434,7 +443,7 @@ var RecentTaggedView = Backbone.View.extend(
 	},
 
 	render: function () {
-		var that = this;
+		const that = this;
 		that.collection.each( function(oneTagSuggestion) {
 			that.$el.after(
 				that.renderRecentTaggedOne(oneTagSuggestion)
@@ -448,11 +457,11 @@ var RecentTaggedView = Backbone.View.extend(
 	 */
 	renderRecentTaggedOne: function(oneTagSuggestion)
 	{
-		var that = this;
+		const that = this;
 
-		var name = oneTagSuggestion.name();
+		const name = oneTagSuggestion.name();
 
-		var inventory = new SteamsideCollectionApps();
+		const inventory = new SteamsideCollectionApps();
 		inventory.collection_name = name;
 
 		return new CollectionEditView({

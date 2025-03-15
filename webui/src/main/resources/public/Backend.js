@@ -1,6 +1,6 @@
-"use strict";
+import {ErrorHandler} from "#steamside/Error.js";
 
-var Backend = Backbone.Model.extend(
+export const Backend = Backbone.Model.extend(
 {
 	backoff: false,
 
@@ -10,7 +10,7 @@ var Backend = Backbone.Model.extend(
 	 */
 	fetch_promise: function(fetchable)
 	{
-		var promise = fetchable.fetch({
+		const promise = fetchable.fetch({
 			reset: true,
 			mimeType: 'application/json',
 			cache: false
@@ -39,7 +39,7 @@ var Backend = Backbone.Model.extend(
 
 	ajax_ajax_promise: function(aUrl)
 	{
-		var promise = this.ajax_ajax_promise_2(aUrl);
+		const promise = this.ajax_ajax_promise_2(aUrl);
 	
 		promise.fail(function(jqXHR, textStatus, errorThrown)
 		{
@@ -52,7 +52,7 @@ var Backend = Backbone.Model.extend(
 
 	ajax_ajax_promise_2: function(aUrl)
 	{
-		var promise;
+		let promise;
 
 		if (this.is_backoff())
 		{
@@ -87,7 +87,7 @@ var Backend = Backbone.Model.extend(
 	}
 });
 
-var BackoffModel = Backbone.Model.extend(
+export const BackoffModel = Backbone.Model.extend(
 {
 	url: "api/session/session.json",
 

@@ -1,6 +1,8 @@
-"use strict";
+import {ErrorHandler} from "#steamside/Error.js";
+import {MoreButtonView} from "#steamside/MoreButton.js";
+import {heartbeat} from "#steamside/Heartbeat.js";
 
-var Game = Backbone.Model.extend({
+export const Game = Backbone.Model.extend({
 
 	initialize: function(){
 		this.tags = new Game_Tags();
@@ -23,7 +25,7 @@ var Game = Backbone.Model.extend({
         return this.get('store');
     },
     unavailable: function() {
-    	return this.get('unavailable') == 'Y';
+    	return this.get('unavailable') === 'Y';
     },
 
 	tagsCollection: function() {
@@ -32,15 +34,15 @@ var Game = Backbone.Model.extend({
 });
 
 
-var Game_Player = Backbone.Model.extend(
+export const Game_Player = Backbone.Model.extend(
 {
 	initialize: function(options) {
 		this.backend = options.backend;
 	},
 
 	play: function(game) {
-		var aUrl = game.link();
-		var that = game;
+		const aUrl = game.link();
+		const that = game;
 
 		that.trigger('game:play:beforeSend');
 
@@ -60,7 +62,7 @@ var Game_Player = Backbone.Model.extend(
 });
 
 
-var Game_Tag = Backbone.Model.extend({
+const Game_Tag = Backbone.Model.extend({
 
 	name: function() {
 		return this.get('name');
@@ -69,22 +71,22 @@ var Game_Tag = Backbone.Model.extend({
 });
 
 
-var Game_Tags = Backbone.Collection.extend({
+const Game_Tags = Backbone.Collection.extend({
 	model: Game_Tag
 });
 
 
-var ContinueGames = Backbone.Collection.extend({
+export const ContinueGames = Backbone.Collection.extend({
     model: Game,
     url: 'api/continues/continues.json'
 });
 
-var FavoritesCollection = Backbone.Collection.extend({
+export const FavoritesCollection = Backbone.Collection.extend({
     model: Game,
     url: 'api/favorites/favorites.json'
 });
 
-var DeckRow = Backbone.View.extend({
+const DeckRow = Backbone.View.extend({
 	className: 'game-row',
 
 	render: function()
@@ -93,7 +95,7 @@ var DeckRow = Backbone.View.extend({
 	}
 });
 
-var Game_Tag_View = Backbone.View.extend({
+const Game_Tag_View = Backbone.View.extend({
 
 	render: function()
 	{
@@ -104,25 +106,25 @@ var Game_Tag_View = Backbone.View.extend({
 
 	collection_url: function()
 	{
-		var name = this.model.name();
+		const name = this.model.name();
 		return "#/collections/" + name + "/edit";
 	}
 
 });
 
-var Game_Tag_ListView = Backbone.View.extend({
+const Game_Tag_ListView = Backbone.View.extend({
 
 	render: function() {
-		var container = this.$el;
+		const container = this.$el;
 
-		var one_el = this.$(".game-tag");
+		const one_el = this.$(".game-tag");
 		container.empty();
 
 		this.collection.each( function(one) {
 			/**
 			 * @type Game_Tag_View
 			 */
-			var view = new Game_Tag_View({
+			const view = new Game_Tag_View({
 				model: one,
 				el: one_el.clone()
 			});
@@ -135,7 +137,7 @@ var Game_Tag_ListView = Backbone.View.extend({
 
 
 
-var GameCardView = Backbone.View.extend({
+export const GameCardView = Backbone.View.extend({
 
 	events: {
 		"mouseenter .game-link": "mouseenter_hot_zone",
@@ -161,7 +163,7 @@ var GameCardView = Backbone.View.extend({
 	},
 
 	render: function() {
-		var that = this;
+		const that = this;
 		this.cardTemplatePromise.done(function(template_el) {
 			that.$el.append(template_el.clone());
 			that.render_el();
@@ -170,18 +172,18 @@ var GameCardView = Backbone.View.extend({
 
 	render_el: function ()
 	{
-		var name = this.model.name();
-		var link = this.model.link();
-		var img = this.model.image();
-        var store = this.model.store();
+		const name = this.model.name();
+		const link = this.model.link();
+		const img = this.model.image();
+        const store = this.model.store();
 
-		var outermost = this.$el;
+		const outermost = this.$el;
 		outermost.addClass(this.enormity.styleClass);
 		outermost.width(this.enormity.width.toString() + "%");
 		outermost.addClass("game-tile-in-deck");
 		outermost.addClass("game-tile");
 
-		var gameTile = this.$("#game-tile");
+		const gameTile = this.$("#game-tile");
 		gameTile.removeClass("game-tile");
 
 		this.$('.game-name').text(name);
@@ -199,7 +201,7 @@ var GameCardView = Backbone.View.extend({
 			this.$('.game-tile-play').attr('href', link);
 		}
 
-		var tags = this.model.tagsCollection();
+		const tags = this.model.tagsCollection();
 
 		this.viewGame_Tag_List = new Game_Tag_ListView({
 			el: this.$("#game-tag-list"),
@@ -212,21 +214,21 @@ var GameCardView = Backbone.View.extend({
 	},
 
 	littleCommandToLightUp: function () {
-		var $game = this.$('.game-tile-command');
-		if ($game.length == 0) return null;
+		const $game = this.$('.game-tile-command');
+		if ($game.length === 0) return null;
 		return $game.first();
 	},
 
 	mouseenter_hot_zone: function(e) {
         e.preventDefault();
-		var littleCommandToLightUp = this.littleCommandToLightUp();
+		const littleCommandToLightUp = this.littleCommandToLightUp();
 		if (littleCommandToLightUp == null) return;
 		littleCommandToLightUp.addClass('what-will-happen');
     },
 
     mouseleave_hot_zone: function(e) {
         e.preventDefault();
-		var littleCommandToLightUp = this.littleCommandToLightUp();
+		const littleCommandToLightUp = this.littleCommandToLightUp();
 		if (littleCommandToLightUp == null) return;
 		littleCommandToLightUp.removeClass('what-will-happen');
     },
@@ -234,7 +236,7 @@ var GameCardView = Backbone.View.extend({
     gameClicked: function(e)
 	{
 		e.preventDefault();
-		var w = this.littleCommandToLightUp();
+		const w = this.littleCommandToLightUp();
 		if (w != null)
 		{
 			w.click();
@@ -265,17 +267,17 @@ var GameCardView = Backbone.View.extend({
 	},
 
     showOverlay: function() {
-        var overlay = this.$('.game-tile-inner-loading-overlay');
-        var underlay = this.$('.game-tile-inner');
+        const overlay = this.$('.game-tile-inner-loading-overlay');
+        const underlay = this.$('.game-tile-inner');
         overlay.show();
         underlay.addClass('game-tile-inner-blurred');
-		var img = overlay.find('img');
+		const img = overlay.find('img');
 		heartbeat(img, false, 0, 15, 25);
     },
 
     hideOverlay: function() {
-        var overlay = this.$('.game-tile-inner-loading-overlay');
-        var underlay = this.$('.game-tile-inner');
+        const overlay = this.$('.game-tile-inner-loading-overlay');
+        const underlay = this.$('.game-tile-inner');
         overlay.hide();
         underlay.removeClass('game-tile-inner-blurred');
     },
@@ -297,7 +299,7 @@ var GameCardView = Backbone.View.extend({
 	viewGame_Tag_List: null
 });
 
-var FillerCellView = Backbone.View.extend({
+const FillerCellView = Backbone.View.extend({
 	width: 0,
 	
 	initialize: function(options)
@@ -313,7 +315,7 @@ var FillerCellView = Backbone.View.extend({
 	}
 });
 
-var DeckView = Backbone.View.extend(
+export const DeckView = Backbone.View.extend(
 {
     alwaysVisible: false,
 	xCell: 0,
@@ -360,7 +362,7 @@ var DeckView = Backbone.View.extend(
 
 	render: function()
 	{
-		var that = this;
+		const that = this;
 
 		try {
 			this.$el.empty();
@@ -388,18 +390,18 @@ var DeckView = Backbone.View.extend(
 	
 	renderOneCell: function(oneResult)
 	{
-		var cells_in_a_row = 3;
+		const cells_in_a_row = 3;
 
-        var enormityRegular = {
+        const enormityRegular = {
             styleClass: 'game-tile-regular',
             width: 30
         };
-        var enormityLarge = {
+        const enormityLarge = {
             styleClass: 'game-tile-large',
             width: 100 - 5 - enormityRegular.width * (cells_in_a_row - 1)
         };
 
-		var widthFiller = 100 - 5 - enormityRegular.width * cells_in_a_row;
+		const widthFiller = 100 - 5 - enormityRegular.width * cells_in_a_row;
 
 		this.xCell += 1;
 		if (this.xCell === 1) {
@@ -410,7 +412,7 @@ var DeckView = Backbone.View.extend(
 			}
 		}
 
-		var rowForCell;
+		let rowForCell;
 
 		if (this.xCell === 1)
 		{
@@ -426,17 +428,17 @@ var DeckView = Backbone.View.extend(
 			/**
 			 * @type FillerCellView
 			 */
-			var filler_view =
+			const filler_view =
 				new FillerCellView(
 					{
 						width: widthFiller
 					});
-			var filler_el = filler_view.render().el;
+			const filler_el = filler_view.render().el;
 			rowForCell.append(filler_el);
 		}
 
-		var enormity;
-        var topLeftIsLarger = this.xCell === 1 && this.yRow === 1;
+		let enormity;
+        const topLeftIsLarger = this.xCell === 1 && this.yRow === 1;
         if (topLeftIsLarger)
 		{
 			enormity = enormityLarge;
@@ -446,19 +448,19 @@ var DeckView = Backbone.View.extend(
 			enormity = enormityRegular;
 		}
 
-		var that = this;
+		const that = this;
 
 		that.renderGameCard(oneResult, enormity, rowForCell);
 	},
 
 	renderGameCard: function(oneResult, enormity, rowForCell)
 	{
-		var that = this;
+		const that = this;
 
 		/**
 		 * @type GameCardView
 		 */
-		var card_view = new GameCardView({
+		const card_view = new GameCardView({
 			cardTemplatePromise: that.cardTemplatePromise,
 			model: oneResult,
 			enormity: enormity,
@@ -476,13 +478,13 @@ var DeckView = Backbone.View.extend(
 
 	renderMoreButton: function ()
 	{
-		if (this.yRow == 1) return;
+		if (this.yRow === 1) return;
 		if (this.alwaysVisible) return;
 		if (this.first_row == null) /* zero games */ return;
 
-		var that = this;
+		const that = this;
 
-		var moreButtonView = new MoreButtonView(
+		const moreButtonView = new MoreButtonView(
 			{
 				deck: that,
 				spriteMoreButton: that.spriteMoreButton
@@ -497,10 +499,10 @@ var DeckView = Backbone.View.extend(
 		/**
 		 * @type DeckRow
 		 */
-		var deckRow = new DeckRow();
-		var row_view = deckRow.render();
-		var row_el = row_view.el;
-		var row = row_view.$el;
+		const deckRow = new DeckRow();
+		const row_view = deckRow.render();
+		const row_el = row_view.el;
+		const row = row_view.$el;
 
 		this.$el.append(row_el);
 
@@ -523,7 +525,7 @@ var DeckView = Backbone.View.extend(
 	{
 		this.tailVisibility = !this.tailVisibility;
 
-		var tails = this.$('.game-row-tail');
+		const tails = this.$('.game-row-tail');
 
 		if (this.tailVisibility)
 		{
@@ -537,7 +539,7 @@ var DeckView = Backbone.View.extend(
 
 	on_tag_deck: function(game)
 	{
-		var segment = this.$el.parent().parent();
+		const segment = this.$el.parent().parent();
 		if (this.on_tag != null) this.on_tag(game, segment);
 	}
 });

@@ -13,46 +13,25 @@
 
 <!-- ======================================================================= -->
 
-  <link href="animate.css" rel="stylesheet" type="text/css" />
-
   <link href="steamside.css" rel="stylesheet" type="text/css" />
   <link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
   <link href="Forms.css" rel="stylesheet" type="text/css" />
+  <link href="CommandBox.css" rel="stylesheet" type="text/css" />
+  <link href="Tag.css" rel="stylesheet" type="text/css" />
+  <link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
 
-<!-- ======================================================================= -->
+
+  <!-- ======================================================================= -->
 
   <script src="jquery-2.1.1.js" type="text/javascript"></script>
-
   <script src="underscore.js" type="text/javascript"></script>
   <script src="backbone.js" type="text/javascript"></script>
   <script src="stacktrace.js" type="text/javascript"></script>
 
-  <script src="Backend.js" type="text/javascript"></script>
-  <script src="spritesheet.js" type="text/javascript"></script>
-
-  <script src="SteamsideSpriteSheet.js" type="text/javascript"></script>
-
-  <link href="CommandBox.css" rel="stylesheet" type="text/css" />
-  <script src="CommandBox.js" type="text/javascript"></script>
-
-  <script src="MoreButton.js" type="text/javascript"></script>
-  <script src="Heartbeat.js" type="text/javascript"></script>
-  <script src="GameCardDeck.js" type="text/javascript"></script>
-  <script src="Search.js" type="text/javascript"></script>
-  <script src="session.js" type="text/javascript"></script>
-
-  <link href="Tag.css" rel="stylesheet" type="text/css" />
-  <script src="Tag.js" type="text/javascript"></script>
-
-  <link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
-  <script src="CollectionPick.js" type="text/javascript"></script>
-
-  <script src="Error.js" type="text/javascript"></script>
-  <script src="CollectionEdit.js" type="text/javascript"></script>
-
-  <script src="Cloud.js" type="text/javascript"></script>
   <link rel="stylesheet" type="text/css" href="tooltipster.css" />
   <script type="text/javascript" src="jquery.tooltipster.js"></script>
+
+  <link href="animate.css" rel="stylesheet" type="text/css" />
 
   <!-- ======================================================================= -->
 
@@ -70,7 +49,22 @@
 
 <!-- ======================================================================= -->
 
+<script type="importmap">
+  {
+    "imports": {
+      "#customary": "./../node_modules/customary/src/now.js",
+      "#customary/": "./../node_modules/customary/src/",
+      "#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+      "#steamside/": "./"
+    }
+  }
+</script>
+
 <script type="module">
+  import {CloudModel} from "#steamside/Cloud.js";
+  import {CloudView} from "#steamside/Cloud.js";
+  import {Backend} from "#steamside/Backend.js";
+
   const MockCloudModel = CloudModel.extend(
           {
             fetch: function()

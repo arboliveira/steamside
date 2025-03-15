@@ -1,6 +1,10 @@
-"use strict";
+import {OwnedAppsInventory, OwnedCount, TaglessAppsInventory, TaglessCount} from "#steamside/Inventory.js";
+import {CollectionEditView} from "#steamside/CollectionEdit.js";
+import {TagStickersView} from "#steamside/TagStickersView.js";
+import {TagsCollection} from "#steamside/Tag.js";
+import {SpriteSheet} from "#steamside/spritesheet.js";
 
-var CollectionPickSpriteSheet = Backbone.Model.extend(
+const CollectionPickSpriteSheet = Backbone.Model.extend(
 {
 	/**
 	 * @public
@@ -21,7 +25,7 @@ var CollectionPickSpriteSheet = Backbone.Model.extend(
 	sticker: null,
 
 	initialize: function () {
-		var sheet = new SpriteSheet({url: 'CollectionPick.html'});
+		const sheet = new SpriteSheet({url: 'CollectionPick.html'});
 		try {
 			this.room = sheet.sprite("#collection-pick-collections-segment");
 			this.stickers = sheet.sprite("#TagStickersView");
@@ -33,12 +37,12 @@ var CollectionPickSpriteSheet = Backbone.Model.extend(
 	}
 });
 
-var CollectionPickSpriteSheetSingleton = {
+export const CollectionPickSpriteSheetSingleton = {
 	sprites: new CollectionPickSpriteSheet()
 };
 
 
-var CollectionPickView = Backbone.View.extend(
+export const CollectionPickView = Backbone.View.extend(
 {
 	events: {
 		"click #LinkTagless": "clickLinkTagless",
@@ -58,7 +62,7 @@ var CollectionPickView = Backbone.View.extend(
 
 	render: function()
 	{
-		var that = this;
+		const that = this;
 		CollectionPickView.sprite.sprite_promise().done(function(el)
 			{
 				that.$el.append(el.clone());
@@ -69,7 +73,7 @@ var CollectionPickView = Backbone.View.extend(
 
 	render_el: function()
 	{
-		var that = this;
+		const that = this;
 		that.renderPurpose();
 		that.renderTagStickers();
 		return that;
@@ -77,18 +81,18 @@ var CollectionPickView = Backbone.View.extend(
 
 	renderPurpose: function ()
 	{
-		var that = this;
+		const that = this;
 
 		if (that._purposeless) {
 			that.$('#PurposeView').hide();
 		}
 
-		if (that._purpose_text != undefined) {
+		if (that._purpose_text !== undefined) {
 			that.$('#InnerPurpose').text(that._purpose_text);
 		}
 
-		if (that._purpose_el != undefined) {
-			var el_purpose = that.$('#InnerPurpose');
+		if (that._purpose_el !== undefined) {
+			const el_purpose = that.$('#InnerPurpose');
 			el_purpose.empty();
 			el_purpose.append(that._purpose_el);
 		}
@@ -97,9 +101,9 @@ var CollectionPickView = Backbone.View.extend(
 
 	renderTagStickers: function ()
 	{
-		var that = this;
+		const that = this;
 
-		var tags = new TagsCollection();
+		const tags = new TagsCollection();
 
 		that._backend.fetch_promise(tags);
 
@@ -117,16 +121,16 @@ var CollectionPickView = Backbone.View.extend(
 	{
 		e.preventDefault();
 
-		var that = this;
+		const that = this;
 
-		var inventory = new TaglessAppsInventory();
+		const inventory = new TaglessAppsInventory();
 
-		var tag = new TaglessCount();
+		const tag = new TaglessCount();
 		this._backend.fetch_promise(tag).done(function() {
 			tag.readonly_set(true);
 		});
 
-		var inventoryView = new CollectionEditView({
+		const inventoryView = new CollectionEditView({
 				inventory: inventory,
 				tag: tag,
 				cardTemplatePromise: that._cardTemplatePromise,
@@ -142,16 +146,16 @@ var CollectionPickView = Backbone.View.extend(
 	{
 		e.preventDefault();
 
-		var that = this;
+		const that = this;
 
-		var inventory = new OwnedAppsInventory();
+		const inventory = new OwnedAppsInventory();
 
-		var tag = new OwnedCount();
+		const tag = new OwnedCount();
 		this._backend.fetch_promise(tag).done(function() {
 			tag.readonly_set(true);
 		});
 
-		var inventoryView = new CollectionEditView({
+		const inventoryView = new CollectionEditView({
 			inventory: inventory,
 			tag: tag,
 			cardTemplatePromise: that._cardTemplatePromise,

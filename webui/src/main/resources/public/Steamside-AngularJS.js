@@ -1,14 +1,32 @@
-"use strict";
+import {Backend, BackoffModel} from "#steamside/Backend.js";
+import {Steamside_SettingsWorld} from "#steamside/Settings.js";
+import {Steamside_ExitWorld} from "#steamside/Exit.js";
+import {Steamside_InventoryWorld} from "#steamside/InventoryWorld.js";
+import {Steamside_CollectionsNewWorld} from "#steamside/CollectionNew.js";
+import {Steamside_SteamClientWorld} from "#steamside/SteamClient.js";
+import {Steamside_MyGamesWorld} from "#steamside/MyGames.js";
+import {Steamside_HomeWorld} from "#steamside/Home.js";
+import {SteamsideSpriteSheet} from "#steamside/SteamsideSpriteSheet.js";
+import {KidsSpriteSheet} from "#steamside/KidsHome.js";
+import {SessionModel} from "#steamside/session.js";
 
-var Steamside_AngularJS =
+const nameBackend = 'Backend';
+const nameSessionModel = 'SessionModel';
+const nameKidsMode = 'KidsMode';
+const nameSpritesKids = 'SpritesKids';
+const nameSpritesSteamside = 'SpritesSteamside';
+
+export class Steamside_AngularJS
 {
-	moduleSteamside: null,
-
-	configureApplicationModule: function ()
-	{
+	constructor() {
 		this.moduleSteamside = angular.module(
 			"Steamside-ng-app", ["ngRoute"]);
+	}
 
+	moduleSteamside;
+
+	configureApplicationModule()
+	{
 		this.constant_Backend();
 		this.constant_SpritesKids();
 		this.constant_SpritesSteamside();
@@ -25,151 +43,182 @@ var Steamside_AngularJS =
 		this.controller_CollectionsNewWorld();
 
 		this.config_routeProvider();
-	},
+	}
 
-	nameBackend: 'Backend',
-	nameSessionModel: 'SessionModel',
-	nameKidsMode: 'KidsMode',
-	nameSpritesKids: 'SpritesKids',
-	nameSpritesSteamside: 'SpritesSteamside',
-	nameCardTemplatePromise: 'CardTemplatePromise',
-
-	constant_Backend: function()
+	constant_Backend()
 	{
-		var that = this;
-		var backoffModel = new BackoffModel();
-		var backend = new Backend();
+		const that = this;
+		const backoffModel = new BackoffModel();
+		const backend = new Backend();
 		backend.fetch_promise(backoffModel).done(function() {
 			backend.set_backoff(backoffModel.backoff());
 		});
 		that.moduleSteamside.constant(
-			Steamside_AngularJS.nameBackend, backend);
-	},
+			nameBackend, backend);
+	}
 
-	constant_SpritesKids: function() {
-		var that = this;
+	constant_SpritesKids() {
+		const that = this;
 		that.moduleSteamside.constant(
-			Steamside_AngularJS.nameSpritesKids, new KidsSpriteSheet());
-	},
+			nameSpritesKids, new KidsSpriteSheet());
+	}
 
-	constant_SpritesSteamside: function() {
-		var that = this;
+	constant_SpritesSteamside() {
+		const that = this;
 		that.moduleSteamside.constant(
-			Steamside_AngularJS.nameSpritesSteamside, new SteamsideSpriteSheet());
-	},
+			nameSpritesSteamside, new SteamsideSpriteSheet());
+	}
 
-	factory_SessionModel: function()
+	factory_SessionModel()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.factory(
-			Steamside_AngularJS.nameSessionModel,
-			[Steamside_AngularJS.nameBackend, function(theBackend) {
+			nameSessionModel,
+			[nameBackend, function(_theBackend) {
 				return new SessionModel();
 			}]);
-	},
+	}
 
-	factory_KidsMode: function()
+	factory_KidsMode()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.factory(
-			Steamside_AngularJS.nameKidsMode,
-			[Steamside_AngularJS.nameSessionModel, function(theSessionModel) {
+			nameKidsMode,
+			[nameSessionModel, function(theSessionModel) {
 				return theSessionModel;
 			}]);
-	},
+	}
 
-	controller_HomeWorld: function()
+	controller_HomeWorld()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.controller(
-			Steamside.HomeWorld.nameController,
+			Steamside_HomeWorld.nameController,
 			['$scope', '$location',
-				Steamside_AngularJS.nameBackend,
-				Steamside_AngularJS.nameSessionModel,
-				Steamside_AngularJS.nameKidsMode,
-				Steamside_AngularJS.nameSpritesKids,
-				Steamside_AngularJS.nameSpritesSteamside,
+				nameBackend,
+				nameSessionModel,
+				nameKidsMode,
+				nameSpritesKids,
+				nameSpritesSteamside,
 			function ($scope, $location, theBackend, theSessionModel, theKidsMode,
 				  		theSpritesKids, theSpritesSteamside){
-				Steamside.HomeWorld.controller(
+				Steamside_HomeWorld.controller(
 					$scope, $location, theBackend, theSessionModel, theKidsMode,
 					theSpritesKids, theSpritesSteamside);
 			}]);
-	},
+	}
 
-	controller_MyGamesWorld: function()
+	controller_MyGamesWorld()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.controller(
-			Steamside.MyGamesWorld.nameController,
-				['$scope', Steamside_AngularJS.nameBackend, Steamside_AngularJS.nameSpritesSteamside,
+			Steamside_MyGamesWorld.nameController,
+				['$scope', nameBackend, nameSpritesSteamside,
 					function ($scope, theBackend, spritesSteamside){
-				Steamside.MyGamesWorld.controller($scope, theBackend, spritesSteamside);
+				Steamside_MyGamesWorld.controller($scope, theBackend, spritesSteamside);
 			}]);
-	},
+	}
 
-	controller_SteamClientWorld: function()
+	controller_SteamClientWorld()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.controller(
-			Steamside.SteamClientWorld.nameController,
-			['$scope', Steamside_AngularJS.nameBackend, function ($scope, theBackend){
-				Steamside.SteamClientWorld.controller($scope, theBackend);
+			Steamside_SteamClientWorld.nameController,
+			['$scope', nameBackend, function ($scope, theBackend){
+				Steamside_SteamClientWorld.controller($scope, theBackend);
 			}]);
-	},
+	}
 
-	controller_SettingsWorld: function()
+	controller_SettingsWorld()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.controller(
-			Steamside.SettingsWorld.nameController,
-			['$scope', Steamside_AngularJS.nameBackend, function ($scope, theBackend){
-				Steamside.SettingsWorld.controller($scope, theBackend);
+			Steamside_SettingsWorld.nameController,
+			['$scope', nameBackend, function ($scope, theBackend){
+				Steamside_SettingsWorld.controller($scope, theBackend);
 			}]);
-	},
+	}
 
-	controller_ExitWorld: function()
+	controller_ExitWorld()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.controller(
-			Steamside.ExitWorld.nameController,
-			['$scope', Steamside_AngularJS.nameBackend, function ($scope, theBackend){
-				Steamside.ExitWorld.controller($scope, theBackend);
+			Steamside_ExitWorld.nameController,
+			['$scope', nameBackend, function ($scope, theBackend){
+				Steamside_ExitWorld.controller($scope, theBackend);
 			}]);
-	},
+	}
 
-	controller_InventoryWorld: function()
+	controller_InventoryWorld()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.controller(
-			Steamside.InventoryWorld.nameController,
+			Steamside_InventoryWorld.nameController,
 			['$scope', '$routeParams',
-			Steamside_AngularJS.nameBackend,
-			Steamside_AngularJS.nameSpritesSteamside,
+			nameBackend,
+			nameSpritesSteamside,
 				function ($scope, $routeParams,
 						  theBackend, spritesSteamside){
-					Steamside.InventoryWorld.controller(
+					Steamside_InventoryWorld.controller(
 						$scope, $routeParams, theBackend,
 						spritesSteamside);
 				}]);
-	},
+	}
 
-	controller_CollectionsNewWorld: function()
+	controller_CollectionsNewWorld()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.controller(
-			Steamside.CollectionsNewWorld.nameController,
-			['$scope', Steamside_AngularJS.nameBackend, function ($scope, theBackend){
-				Steamside.CollectionsNewWorld.controller($scope, theBackend);
+			Steamside_CollectionsNewWorld.nameController,
+			['$scope', nameBackend, function ($scope, theBackend){
+				Steamside_CollectionsNewWorld.controller($scope, theBackend);
 			}]);
-	},
+	}
 
-	config_routeProvider: function()
+	config_routeProvider()
 	{
-		var that = this;
+		const that = this;
 		that.moduleSteamside.config(
 			['$routeProvider', function($routeProvider) {
-				Steamside.Router.config_routeProvider($routeProvider);
+				SteamsideRouter.config_routeProvider($routeProvider);
 			}]);
+	}
+}
+
+const SteamsideRouter =
+{
+	config_routeProvider: function($routeProvider) {
+		$routeProvider
+			.when('/', {
+				templateUrl: Steamside_HomeWorld.htmlWorld,
+				controller: Steamside_HomeWorld.nameController
+			})
+			.when('/mygames', {
+				templateUrl: Steamside_MyGamesWorld.htmlWorld,
+				controller: Steamside_MyGamesWorld.nameController
+			})
+			.when('/steamclient', {
+				templateUrl: Steamside_SteamClientWorld.htmlWorld,
+				controller: Steamside_SteamClientWorld.nameController
+			})
+			.when('/settings', {
+				templateUrl: Steamside_SettingsWorld.htmlWorld,
+				controller: Steamside_SettingsWorld.nameController
+			})
+			.when('/exit', {
+				templateUrl: Steamside_ExitWorld.htmlWorld,
+				controller: Steamside_ExitWorld.nameController
+			})
+			.when('/collections/:name/edit', {
+				templateUrl: Steamside_InventoryWorld.htmlWorld,
+				controller: Steamside_InventoryWorld.nameController
+			})
+			.when('/collections/new', {
+				templateUrl: Steamside_CollectionsNewWorld.htmlWorld,
+				controller: Steamside_CollectionsNewWorld.nameController
+			})
+			.otherwise({
+				redirectTo: '/'
+			});
 	}
 };

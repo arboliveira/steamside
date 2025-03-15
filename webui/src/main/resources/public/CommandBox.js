@@ -1,6 +1,6 @@
-"use strict";
+import {SpriteBuilder} from "#steamside/spritesheet.js";
 
-var CommandBoxView = Backbone.View.extend({
+export const CommandBoxView = Backbone.View.extend({
 
 	events: {
 		'keydown #input-text-command-box': 'event_keydown_input',
@@ -27,7 +27,7 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	render: function() {
-		var that = this;
+		const that = this;
 		this.whenRendered =
 			CommandBoxView.sprite.sprite_promise().then(function(el) {
 				that.$el.append(el.clone());
@@ -66,7 +66,7 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	showCommandHintConfirm: function (elHint) {
-		var el = this.emptyCommandHintConfirm();
+		const el = this.emptyCommandHintConfirm();
 		el.append(elHint);
 		this.$('#command-confirm').show();
 	},
@@ -84,7 +84,7 @@ var CommandBoxView = Backbone.View.extend({
 
 	emptyCommandHintConfirm: function ()
 	{
-		var el = this.$("#command-confirm-what");
+		const el = this.$("#command-confirm-what");
 		el.empty();
 		return el;
 	},
@@ -94,7 +94,7 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	input_query_setval: function (val) {
-		var input_el = this.input_query_el();
+		const input_el = this.input_query_el();
 		input_el.val(val);
 		input_el.focus();
 		this.change_input();
@@ -107,7 +107,7 @@ var CommandBoxView = Backbone.View.extend({
 
 	label_text: function( v )
 	{
-		var label_el = this.label_el();
+		const label_el = this.label_el();
 		label_el.text(v);
 		label_el.show();
 	},
@@ -155,8 +155,8 @@ var CommandBoxView = Backbone.View.extend({
 	},
 
 	trouble: function (error) {
-		var message;
-		if (error.responseJSON != undefined)
+		let message;
+		if (error.responseJSON !== undefined)
 		{
 			message = error.responseJSON.message;
 		}
@@ -165,7 +165,7 @@ var CommandBoxView = Backbone.View.extend({
 			message = error.status + ' ' + error.statusText;
 		}
 
-		var span = this.$("#command-trouble");
+		const span = this.$("#command-trouble");
 		span.text(message);
 		span.show();
 	},
@@ -186,7 +186,7 @@ var CommandBoxView = Backbone.View.extend({
 
 // ============================================================================
 
-var CommandHintWithVerbAndSubjectModel = Backbone.Model.extend({
+export const CommandHintWithVerbAndSubjectModel = Backbone.Model.extend({
 
     subject_set: function(v) {
         this.set("subject", v);
@@ -212,21 +212,21 @@ var CommandHintWithVerbAndSubjectModel = Backbone.Model.extend({
 
 // ============================================================================
 
-var CommandHintWithVerbAndSubjectView = Backbone.View.extend({
-	initialize: function(options)
+export const CommandHintWithVerbAndSubjectView = Backbone.View.extend({
+	initialize: function(_options)
 	{
         this.listenTo(this.model, 'change', this.render);
 	},
 
 	render: function() {
-		var that = this;
+		const that = this;
 
-		var modelCommandHintWithVerbAndSubject = that.model;
+		const modelCommandHintWithVerbAndSubject = that.model;
 
 		that.$('#search-command-hint-verb').text(
             modelCommandHintWithVerbAndSubject.verb());
 
-		var subject = modelCommandHintWithVerbAndSubject.subject();
+		const subject = modelCommandHintWithVerbAndSubject.subject();
 
 		that.$('#search-command-hint-subject').text(
 			subject == null ? "" : subject);
@@ -242,13 +242,13 @@ var CommandHintWithVerbAndSubjectView = Backbone.View.extend({
 	},
 
     show: function(){
-        var that = this;
+        const that = this;
 
         that.$el.show();
 	},
 
     hide: function(){
-        var that = this;
+        const that = this;
 
         that.$el.hide();
     }

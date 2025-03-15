@@ -1,6 +1,4 @@
-"use strict";
-
-var SpriteSheet = Backbone.Model.extend(
+export const SpriteSheet = Backbone.Model.extend(
 	{
 		initialize: function()
 		{
@@ -21,14 +19,14 @@ var SpriteSheet = Backbone.Model.extend(
 		 * @returns Sprite
 		 */
 		sprite: function(selector) {
-			var that = this;
-			var sprite_promise =
+			const that = this;
+			const sprite_promise =
 				this.promise.then(
 					function(document) {
-						var $xml = $(document);
-						var element = $xml.find(selector);
-						var outer = $('<div>').append(element.clone()).remove();
-						var full = outer.html();
+						const $xml = $(document);
+						const element = $xml.find(selector);
+						const outer = $('<div>').append(element.clone()).remove();
+						const full = outer.html();
 						return $(full);
 					}
 				);
@@ -43,7 +41,7 @@ var SpriteSheet = Backbone.Model.extend(
 	}
 );
 
-var Sprite = Backbone.Model.extend(
+const Sprite = Backbone.Model.extend(
 	{
 		/**
 		 * @private
@@ -65,13 +63,13 @@ var Sprite = Backbone.Model.extend(
 	}
 );
 
-var SpriteBuilder = Backbone.Model.extend(
+export const SpriteBuilder = Backbone.Model.extend(
 	{
 		/**
 		 * @returns Sprite
 		 */
 		build: function() {
-			var sheet = new SpriteSheet({url: this.attributes.url});
+			const sheet = new SpriteSheet({url: this.attributes.url});
 			try {
 				return sheet.sprite(this.attributes.selector);
 			}

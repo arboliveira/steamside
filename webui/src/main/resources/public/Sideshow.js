@@ -1,15 +1,13 @@
-"use strict";
-
-function sideshow(element)
+export function sideshow(element)
 {
-	var segments = element.find('.segment');
-	var left = true;
+	const segments = element.find('.segment');
+	let left = true;
 	segments.each(function(){
-		var segment = $(this);
-		var header = segment.find('.side-header');
+		const segment = $(this);
+		const header = segment.find('.side-header');
 		header.removeClass('side-header-at-left');
 		header.removeClass('side-header-at-right');
-		var content = segment.find('.content');
+		const content = segment.find('.content');
 		content.removeClass('content-at-right');
 		content.removeClass('content-at-left');
 		left = !left;

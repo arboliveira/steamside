@@ -1,8 +1,11 @@
-"use strict";
+import {Tag} from "#steamside/Tag.js";
+import {TagStickerView} from "#steamside/TagStickerView.js";
+import {ErrorHandler} from "#steamside/Error.js";
+import {SpriteBuilder} from "#steamside/spritesheet.js";
+import {CollectionPickView} from "#steamside/CollectionPick.js";
+import {Kid} from "#steamside/Kids.js";
 
-// ============================================================================
-
-var KidsSettingsView = Backbone.View.extend(
+export const KidsSettingsView = Backbone.View.extend(
 {
 	events:
 	{
@@ -11,7 +14,7 @@ var KidsSettingsView = Backbone.View.extend(
 
 	initialize: function (options)
 	{
-		var that = this;
+		const that = this;
 
 		this._backend = options.backend;
 
@@ -22,7 +25,7 @@ var KidsSettingsView = Backbone.View.extend(
 
 	render: function ()
 	{
-		var that = this;
+		const that = this;
 		KidsSettingsView.sprite.sprite_promise().done(function (el) {
 			that.$el.append(el);
 			that.render_el();
@@ -36,7 +39,7 @@ var KidsSettingsView = Backbone.View.extend(
 	},
 
 	renderKidsCollection: function () {
-		var that = this;
+		const that = this;
 		this._viewKidsCollection = new KidsCollectionView({
 			collection: this.collection,
 			kidsSettingsView: this
@@ -47,7 +50,7 @@ var KidsSettingsView = Backbone.View.extend(
 
 	addKid: function()
 	{
-		var kid = new Kid();
+		const kid = new Kid();
 		this.listenToOnce(kid, 'sync', this.addKidToCollection);
 		this.editKid(kid);
 	},
@@ -59,7 +62,7 @@ var KidsSettingsView = Backbone.View.extend(
 
 	editKid: function(kid)
 	{
-		var that = this;
+		const that = this;
 		that.segmentKids()
 			.after(
 				new KidEditView({
@@ -94,7 +97,7 @@ var KidsSettingsView = Backbone.View.extend(
 
 // ============================================================================
 
-var KidsCollectionView = Backbone.View.extend(
+const KidsCollectionView = Backbone.View.extend(
 {
 	initialize: function (options)
 	{
@@ -107,7 +110,7 @@ var KidsCollectionView = Backbone.View.extend(
 
 	render: function()
 	{
-		var that = this;
+		const that = this;
 		that.$el.empty();
 		that.collection.each(function (one) {
 			that.renderOne(one);
@@ -116,8 +119,8 @@ var KidsCollectionView = Backbone.View.extend(
 
 	renderOne: function( one )
 	{
-		var that = this;
-		var elOneKid = that._elOneKid;
+		const that = this;
+		const elOneKid = that._elOneKid;
 		that.$el
 			.append(
 			new KidView({
@@ -135,7 +138,7 @@ var KidsCollectionView = Backbone.View.extend(
 
 // ============================================================================
 
-var KidView = Backbone.View.extend(
+const KidView = Backbone.View.extend(
 {
 	events:
 	{
@@ -151,7 +154,7 @@ var KidView = Backbone.View.extend(
 
 	render: function ()
 	{
-		var that = this;
+		const that = this;
 		that.$("#Name").text(that.model.name());
 		that.$("#User").text(that.model.user());
 		that.$("#Inventory").empty().append(
@@ -173,7 +176,7 @@ var KidView = Backbone.View.extend(
 
 // ============================================================================
 
-var KidEditView = Backbone.View.extend(
+const KidEditView = Backbone.View.extend(
 {
 	events:
 	{
@@ -184,7 +187,7 @@ var KidEditView = Backbone.View.extend(
 
 	initialize: function (options)
 	{
-		var that = this;
+		const that = this;
 		this._backend = options.backend;
 		this._modelTag = new Tag({name: that.model.inventory()});
 		this._viewTagSticker =
@@ -198,7 +201,7 @@ var KidEditView = Backbone.View.extend(
 
 	render: function ()
 	{
-		var that = this;
+		const that = this;
 
 		that.$("#NameInput").val(that.model.name());
 		that.$("#UserInput").val(that.model.user());
@@ -238,7 +241,7 @@ var KidEditView = Backbone.View.extend(
 
 	save: function ()
 	{
-		var that = this;
+		const that = this;
 
 		that.tooltip_save_fail_hide();
 
@@ -270,13 +273,13 @@ var KidEditView = Backbone.View.extend(
 	},
 
 	tooltip_save_fail_hide: function () {
-		var button = this.$('#SaveButton');
+		const button = this.$('#SaveButton');
 		button.tooltipster('hide');
 	},
 
 	tooltip_save_fail_show: function (error) {
-		var button = this.$('#SaveButton');
-		button.tooltipster('content', ErrorHandler.toString(error));
+		const button = this.$('#SaveButton');
+		button.tooltipster('content', ErrorHandler.toErrorString(error));
 		button.tooltipster('show');
 	},
 
@@ -292,7 +295,7 @@ var KidEditView = Backbone.View.extend(
 
 	delete: function()
 	{
-		var that = this;
+		const that = this;
 		this.model.destroy({wait: true})
 			.done(function()
 			{
@@ -317,9 +320,9 @@ var KidEditView = Backbone.View.extend(
 
 	switchInventory: function()
 	{
-		var that = this;
+		const that = this;
 
-		var viewInventorySwitch = new CollectionPickView(
+		const viewInventorySwitch = new CollectionPickView(
 			{
 				purpose_text:
 					that.model.name() + ' is allowed to play...? (pick one)',

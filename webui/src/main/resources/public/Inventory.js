@@ -1,6 +1,7 @@
-"use strict";
+import {Tag} from "#steamside/Tag.js";
+import {Game} from "#steamside/GameCardDeck.js";
 
-var SteamsideCollectionApps = Backbone.Collection.extend({
+export const SteamsideCollectionApps = Backbone.Collection.extend({
 	model: Game,
 	collection_name: null,
 	url: function() {
@@ -8,25 +9,25 @@ var SteamsideCollectionApps = Backbone.Collection.extend({
 	}
 });
 
-var TaglessAppsInventory = Backbone.Collection.extend({
+export const TaglessAppsInventory = Backbone.Collection.extend({
 	model: Game,
 	url: function() {
 		return "api/inventory/tagless.json";
 	}
 });
 
-var TaglessCount = Tag.extend({
+export const TaglessCount = Tag.extend({
 	url: "api/inventory/tagless-count.json"
 });
 
-var OwnedAppsInventory = Backbone.Collection.extend({
+export const OwnedAppsInventory = Backbone.Collection.extend({
 	model: Game,
 	url: function() {
 		return "api/inventory/owned.json";
 	}
 });
 
-var OwnedCount = Tag.extend({
+export const OwnedCount = Tag.extend({
 	url: "api/inventory/owned-count.json"
 });
 

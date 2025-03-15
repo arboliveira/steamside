@@ -1,12 +1,10 @@
-"use strict";
-
-var ErrorHandler =
+export const ErrorHandler =
 {
 	calm: function (message)
 	{
 		$("#ErrorMessageView").text(message);
 		
-		var $box = $("#ErrorBoxView");
+		const $box = $("#ErrorBoxView");
 		
 		$box.show();
 		
@@ -17,20 +15,19 @@ var ErrorHandler =
 	{
 		console.log(e);
 
-		var trace = printStackTrace({e: e});
+		const trace = printStackTrace({e: e});
 		
 		$("#ErrorMessageView").text(e + " #### " +trace);
 		
-		var $box = $("#ErrorBoxView");
+		const $box = $("#ErrorBoxView");
 		
 		$box.show();
 		
 		$('html, body').scrollTop($box.offset().top);
 	},
 
-	toString: function (error) {
-		var message;
-		if (error.responseJSON != undefined)
+	toErrorString: function (error) {
+		if (error.responseJSON !== undefined)
 		{
 			return error.responseJSON.message;
 		}

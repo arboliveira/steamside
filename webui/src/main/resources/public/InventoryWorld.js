@@ -1,4 +1,9 @@
-Steamside.InventoryWorld =
+import {SteamsideCollectionApps} from "#steamside/Inventory.js";
+import {CollectionEditView} from "#steamside/CollectionEdit.js";
+import {Tag} from "#steamside/Tag.js";
+import {sideshow} from "#steamside/Sideshow.js";
+
+export const Steamside_InventoryWorld =
 {
 	nameController: 'InventoryWorldController',
 
@@ -7,15 +12,15 @@ Steamside.InventoryWorld =
 	controller: function(
 		$scope, $routeParams, theBackend, spritesSteamside)
 	{
-		var inventory_name = $routeParams.name;
+		const inventory_name = $routeParams.name;
 
-		var spriteMoreButton = spritesSteamside.moreButton;
-		var cardTemplatePromise = spritesSteamside.card.sprite_promise();
+		const spriteMoreButton = spritesSteamside.moreButton;
+		const cardTemplatePromise = spritesSteamside.card.sprite_promise();
 
 		/*
 		 https://github.com/jashkenas/backbone/issues/2566#issuecomment-26065829
 		 */
-		var workaroundFirefox = decodeURIComponent(inventory_name);
+		const workaroundFirefox = decodeURIComponent(inventory_name);
 
 		new InventoryWorldView(
 			{
@@ -29,7 +34,7 @@ Steamside.InventoryWorld =
 };
 
 
-var InventoryWorldView = Backbone.View.extend(
+const InventoryWorldView = Backbone.View.extend(
 {
 	el: "#CollectionEditView",
 
@@ -42,12 +47,12 @@ var InventoryWorldView = Backbone.View.extend(
 	},
 
 	render: function () {
-		var that = this;
+		const that = this;
 
-		var inventory = new SteamsideCollectionApps();
+		const inventory = new SteamsideCollectionApps();
 		inventory.collection_name = this._inventory_name;
 
-		var tag = new Tag({name: this._inventory_name});
+		const tag = new Tag({name: this._inventory_name});
 
 		this.$el.append(
 			new CollectionEditView(

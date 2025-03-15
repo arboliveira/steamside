@@ -1,6 +1,4 @@
-"use strict";
-
-var SessionModel = Backbone.Model.extend(
+export const SessionModel = Backbone.Model.extend(
 {
 	url: "api/session/session.json",
 

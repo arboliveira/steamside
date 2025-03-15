@@ -1,7 +1,9 @@
-"use strict";
+import {KidsSettingsView} from "#steamside/KidsSettings.js";
+import {CloudModel, CloudView} from "#steamside/Cloud.js";
+import {KidsCollection} from "#steamside/Kids.js";
+import {sideshow} from "#steamside/Sideshow.js";
 
-
-Steamside.SettingsWorld =
+export const Steamside_SettingsWorld =
 {
 	nameController: 'SettingsController',
 
@@ -19,13 +21,12 @@ Steamside.SettingsWorld =
 
 
 
-var SettingsView = Backbone.View.extend({
+const SettingsView = Backbone.View.extend({
 
 	el: "#SettingsView",
 
 	initialize: function(options)
 	{
-		var that = this;
 		this._backend = options.backend;
 	},
 
@@ -38,9 +39,9 @@ var SettingsView = Backbone.View.extend({
 	},
 
 	renderCloud: function () {
-		var that = this;
+		const that = this;
 
-		var model = new CloudModel();
+		const model = new CloudModel();
 
 		that.$("#CloudView-goes-here")
 			.append(
@@ -53,9 +54,9 @@ var SettingsView = Backbone.View.extend({
 	},
 
 	renderKids: function () {
-		var that = this;
+		const that = this;
 
-		var kidsCollection = new KidsCollection();
+		const kidsCollection = new KidsCollection();
 
 		that._backend.fetch_promise(kidsCollection);
 

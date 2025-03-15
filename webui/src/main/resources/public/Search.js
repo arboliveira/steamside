@@ -1,12 +1,17 @@
-"use strict";
+import {
+	CommandBoxView,
+	CommandHintWithVerbAndSubjectModel,
+	CommandHintWithVerbAndSubjectView
+} from "#steamside/CommandBox.js";
+import {DeckView, Game, Game_Player} from "#steamside/GameCardDeck.js";
 
-var SearchResults = Backbone.Collection.extend(
+export const SearchResults = Backbone.Collection.extend(
 {
 	model: Game,
 	query: null,
 	queryString: null,
 	url: function() {
-		var base = "api/search/search.json?";
+		const base = "api/search/search.json?";
 		if (this.queryString != null) return base + this.queryString;
 		return `api/search/${this.query}/search.json`;
 	},
@@ -22,7 +27,7 @@ var SearchResults = Backbone.Collection.extend(
     }
 });
 
-var SearchView = Backbone.View.extend(
+export const SearchView = Backbone.View.extend(
 {
 	cardTemplatePromise: null,
 	spriteMoreButton: null,
@@ -36,7 +41,7 @@ var SearchView = Backbone.View.extend(
 
 	initialize: function(options)
 	{
-	    var that = this;
+	    const that = this;
 
 		if (options.cardTemplatePromise == null) {
 			throw new Error("cardTemplatePromise is required");
@@ -86,9 +91,9 @@ var SearchView = Backbone.View.extend(
 	},
 
 	render: function() {
-		var that = this;
+		const that = this;
 
-		var searchResults = new SearchResults();
+		const searchResults = new SearchResults();
 
 		this.searchResults = searchResults;
 
@@ -102,7 +107,7 @@ var SearchView = Backbone.View.extend(
 			backend: this.backend
 		});
 
-		var elSearchCommandHint = this.$('#search-command-hint');
+		const elSearchCommandHint = this.$('#search-command-hint');
 		elSearchCommandHint.remove();
 
         this.viewHintA = new CommandHintWithVerbAndSubjectView({
@@ -127,7 +132,7 @@ var SearchView = Backbone.View.extend(
 			}
 		);
 
-		var searchEl = that.$('#search-command-box');
+		const searchEl = that.$('#search-command-box');
 		searchEl.empty();
 		searchEl.append(this.viewCommandBox.el);
 
@@ -165,24 +170,24 @@ var SearchView = Backbone.View.extend(
 	},
 
 	refresh_command_hints: function() {
-		var that = this;
+		const that = this;
 
-        var input = that.viewCommandBox.input_query_val();
+        const input = that.viewCommandBox.input_query_val();
 
-        if (input == '') {
-            if (that.continues.size() == 0) {
+        if (input === '') {
+            if (that.continues.size() === 0) {
                 that.viewHintA.replaceModel(that.exploreACommandModel);
                 that.viewHintB.replaceModel(that.exploreBCommandModel);
             }
             else {
-                var gameA = this.continues.at(0);
-                var gameB = this.continues.at(1);
+                const gameA = this.continues.at(0);
+                const gameB = this.continues.at(1);
 
                 that.continueACommandModel.subject_set(gameA.name());
 
                 that.viewHintA.replaceModel(that.continueACommandModel);
 
-                if (gameB == undefined) {
+                if (gameB === undefined) {
                     that.viewHintB.replaceModel(that.continueACommandModel);
                 }
                 else {
@@ -204,34 +209,34 @@ var SearchView = Backbone.View.extend(
     },
 
     on_continue_command: function(commandBoxView) {
-        var gameA = this.continues.at(0);
+        const gameA = this.continues.at(0);
 
         this.player.play(gameA);
     },
 
     on_continue_command_alternate: function(commandBoxView) {
-        var gameB = this.continues.at(1);
+        const gameB = this.continues.at(1);
 
         this.player.play(gameB);
     },
 
     on_search_command: function(commandBoxView) {
-		var input = commandBoxView.input_query_val();
+		const input = commandBoxView.input_query_val();
 
-		var searchResults = this.searchResults;
+		const searchResults = this.searchResults;
 		searchResults.query = input;
 		this.backend.fetch_promise(searchResults);
 	},
 
 	on_search_command_alternate: function(commandBoxView) {
-		var that = this;
+		const that = this;
 
-		var input = commandBoxView.input_query_val();
+		const input = commandBoxView.input_query_val();
 
-		var searchResults = this.searchResults;
+		const searchResults = this.searchResults;
 		searchResults.query = input;
 		this.backend.fetch_promise(searchResults).done(function() {
-			var first = searchResults.at(0);
+			const first = searchResults.at(0);
 			that.player.play(first);
 		});
 	},

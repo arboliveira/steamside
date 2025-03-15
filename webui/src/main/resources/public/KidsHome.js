@@ -1,6 +1,6 @@
-"use strict";
+import {SpriteSheet} from "#steamside/spritesheet.js";
 
-var KidsSpriteSheet = Backbone.Model.extend(
+export const KidsSpriteSheet = Backbone.Model.extend(
 	{
 		/**
 		 * @type Sprite
@@ -13,14 +13,14 @@ var KidsSpriteSheet = Backbone.Model.extend(
 		greeting: null,
 
 		initialize: function () {
-			var sheet = new SpriteSheet({url: 'KidsHome.html'});
+			const sheet = new SpriteSheet({url: 'KidsHome.html'});
 			this.card = sheet.sprite("#KidsGameCard");
 			this.greeting = sheet.sprite("#KidsGreetingView");
 		}
 	}
 );
 
-var KidsView = Backbone.View.extend({
+export const KidsView = Backbone.View.extend({
 
 	spritesKids: null,
 
@@ -31,7 +31,7 @@ var KidsView = Backbone.View.extend({
 
 	render: function ()
 	{
-		var that = this;
+		const that = this;
 
 		this.$el
 			.removeClass("steamside-body-background")

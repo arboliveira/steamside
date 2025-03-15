@@ -1,6 +1,12 @@
-"use strict";
+import {TagStickerView} from "#steamside/TagStickerView.js";
+import {TagAGameView} from "#steamside/TagAGameView.js";
+import {SearchResults} from "#steamside/Search.js";
+import {CommandBoxView} from "#steamside/CommandBox.js";
+import {CollectionPickView} from "#steamside/CollectionPick.js";
+import {ContinueGames, DeckView} from "#steamside/GameCardDeck.js";
+import {SpriteSheet} from "#steamside/spritesheet.js";
 
-var CollectionEditSpriteSheet = Backbone.Model.extend(
+const CollectionEditSpriteSheet = Backbone.Model.extend(
 {
 	/**
 	 * @public
@@ -15,7 +21,7 @@ var CollectionEditSpriteSheet = Backbone.Model.extend(
 	view: null,
 
 	initialize: function () {
-		var sheet = new SpriteSheet({url: 'CollectionEdit.html'});
+		const sheet = new SpriteSheet({url: 'CollectionEdit.html'});
 		try {
 			this.edit = sheet.sprite("#tile-collection-edit");
 			this.view = sheet.sprite("#CollectionView");
@@ -27,12 +33,12 @@ var CollectionEditSpriteSheet = Backbone.Model.extend(
 });
 
 
-var CollectionEditSpriteSheetSingleton = {
+const CollectionEditSpriteSheetSingleton = {
 	sprites: new CollectionEditSpriteSheet()
 };
 
 
-var CollectionEditView = Backbone.View.extend({
+export const CollectionEditView = Backbone.View.extend({
 
 	events:
 	{
@@ -53,7 +59,7 @@ var CollectionEditView = Backbone.View.extend({
 	},
 
 	render: function () {
-		var that = this;
+		const that = this;
 		this.whenRendered =
 			CollectionEditView.sprite.sprite_promise().then(function(el) {
 				that.$el.append(el.clone());
@@ -65,10 +71,10 @@ var CollectionEditView = Backbone.View.extend({
 
 	render_el: function()
 	{
-		var that = this;
+		const that = this;
 
 		// TODO Reuse same continues collection as front page?
-		var continues = new ContinueGames();
+		const continues = new ContinueGames();
 
 		this.combineView = new CombineView({
 			backend: that.backend,
@@ -79,7 +85,7 @@ var CollectionEditView = Backbone.View.extend({
 		this.combine_purpose_el = this.$("#CombinePurposeView");
 		this.combine_purpose_el.remove();
 
-		var tag = that._tag;
+		const tag = that._tag;
 
 		this.$("#TagSticker").empty().append(
 			new TagStickerView({
@@ -90,7 +96,7 @@ var CollectionEditView = Backbone.View.extend({
 
 		//this.$("#display-collection-name").text(that._tag.name());
 
-		var inCollection = that._inventory;
+		const inCollection = that._inventory;
 
 		new DeckView({
             el: this.$('#games-in-collection-deck'),
@@ -116,9 +122,9 @@ var CollectionEditView = Backbone.View.extend({
 	},
 
 	renderSearch: function (continues) {
-		var that = this;
+		const that = this;
 
-		var collectionEditSearchResults = new SearchResults();
+		const collectionEditSearchResults = new SearchResults();
 		this.collectionEditSearchResults = collectionEditSearchResults;
 
 		new CommandBoxView(
@@ -156,8 +162,8 @@ var CollectionEditView = Backbone.View.extend({
 	},
 
 	on_game_card_tag: function(game, segmentWithGameCard) {
-		var that = this;
-		var view = new TagAGameView({
+		const that = this;
+		const view = new TagAGameView({
 				game: game,
 				cardTemplatePromise: that.cardTemplatePromise,
 				backend: that.backend
@@ -168,13 +174,13 @@ var CollectionEditView = Backbone.View.extend({
 	},
 
 	render_search_CommandBox: function(viewCommandBox) {
-		var view_el = viewCommandBox.el;
-		var searchEl = this.$('#collection-edit-search-command-box');
+		const view_el = viewCommandBox.el;
+		const searchEl = this.$('#collection-edit-search-command-box');
 		searchEl.empty();
 		searchEl.append(view_el);
-		var recent = this.$('#input-recent');
+		const recent = this.$('#input-recent');
 		recent.remove();
-		var form = this.$("#form-command-box");
+		const form = this.$("#form-command-box");
 		form.append(recent);
 		viewCommandBox.input_query_focus();
 
@@ -183,9 +189,9 @@ var CollectionEditView = Backbone.View.extend({
 	},
 
 	on_search_input_changed: function(view) {
-		var input = view.input_query_val();
-		var find = view.$el.find('#command-hint');
-		if (input == '') {
+		const input = view.input_query_val();
+		const find = view.$el.find('#command-hint');
+		if (input === '') {
 			find.text('recently played');
 		} else {
             find.text('search ' + input);
@@ -194,8 +200,8 @@ var CollectionEditView = Backbone.View.extend({
 
 	on_search_command: function(view)
 	{
-		var input = view.input_query_val();
-		if (input == '') {
+		const input = view.input_query_val();
+		if (input === '') {
             this.prepareSearchRecent();
 		} else {
 			this.collectionEditSearchResults.setQuery(input);
@@ -205,10 +211,10 @@ var CollectionEditView = Backbone.View.extend({
 
     prepareSearchRecent: function ()
 	{
-        var recent = this.$('#input-recent');
+        const recent = this.$('#input-recent');
         recent.attr('value', 'true');
-        var form = this.$("#form-command-box");
-        var q = form.serialize();
+        const form = this.$("#form-command-box");
+        const q = form.serialize();
         this.collectionEditSearchResults.setQueryString(q);
     },
 
@@ -218,30 +224,30 @@ var CollectionEditView = Backbone.View.extend({
 
 	find_play_button: function (viewGameCard)
 	{
-		var bar = viewGameCard.$el.find('.game-tile-command-bar');
+		const bar = viewGameCard.$el.find('.game-tile-command-bar');
 		return bar.find('.game-tile-play');
 	},
 
 	on_SearchResults_GameCard_render: function (viewGameCard) {
-		var play = this.find_play_button(viewGameCard);
-		var add = this.build_add_button(play, viewGameCard);
+		const play = this.find_play_button(viewGameCard);
+		const add = this.build_add_button(play, viewGameCard);
 		add.insertBefore(play);
 	},
 
 	on_GamesInCollection_GameCard_render: function (viewGameCard)
 	{
-		var play = this.find_play_button(viewGameCard);
-		var button = this.build_remove_button(play, viewGameCard);
+		const play = this.find_play_button(viewGameCard);
+		const button = this.build_remove_button(play, viewGameCard);
 		button.insertAfter(play);
 	},
 
 	build_add_button: function (play, viewGameCard)
 	{
-		var add = play.clone();
+		const add = play.clone();
 		add.text('add');
 		add.removeClass('game-tile-play');
 
-		var that = this;
+		const that = this;
 		add.click(function (e) {
 			e.preventDefault();
 			that.on_add_click(viewGameCard.model.appid());
@@ -253,11 +259,11 @@ var CollectionEditView = Backbone.View.extend({
 
 	build_remove_button: function (play, viewGameCard)
 	{
-		var button = play.clone();
+		const button = play.clone();
 		button.text('remove');
 		button.removeClass('game-tile-play');
 
-		var that = this;
+		const that = this;
 		button.click(function (e) {
 			e.preventDefault();
 			that.on_remove_click(viewGameCard.model.appid());
@@ -269,10 +275,10 @@ var CollectionEditView = Backbone.View.extend({
 
 	on_add_click: function(appid)
 	{
-		var that = this;
+		const that = this;
 
-		var name = that._tag.name();
-        var aUrl = "api/collection/" + name + "/add/" + appid;
+		const name = that._tag.name();
+        const aUrl = "api/collection/" + name + "/add/" + appid;
 
 		// TODO display 'adding...'
 		/*
@@ -289,10 +295,10 @@ var CollectionEditView = Backbone.View.extend({
 
 	on_remove_click: function(appid)
 	{
-		var that = this;
+		const that = this;
 
-		var name = that._tag.name();
-		var aUrl = "api/collection/" + name + "/remove/" + appid;
+		const name = that._tag.name();
+		const aUrl = "api/collection/" + name + "/remove/" + appid;
 
 		// TODO display 'removing...'
 		/*
@@ -311,9 +317,9 @@ var CollectionEditView = Backbone.View.extend({
 	{
 		e.preventDefault();
 
-		var that = this;
+		const that = this;
 
-		var viewCollectionPick = new CollectionPickView(
+		const viewCollectionPick = new CollectionPickView(
 			{
 				purpose_el: that.build_combine_purpose(),
 				on_collection_pick: function (collection) {
@@ -329,7 +335,7 @@ var CollectionEditView = Backbone.View.extend({
 
 	build_combine_purpose: function()
 	{
-		var el_combine_purpose = this.combine_purpose_el.clone();
+		const el_combine_purpose = this.combine_purpose_el.clone();
 
 		el_combine_purpose.find('#CombineCollectionName')
 			.text(this._tag.name());
@@ -367,7 +373,7 @@ var CollectionEditView = Backbone.View.extend({
 });
 
 
-var Combine = Backbone.Model.extend({
+const Combine = Backbone.Model.extend({
 
     initialize: function(options)
     {
@@ -399,7 +405,7 @@ var Combine = Backbone.Model.extend({
     },
 
     set_user_input_combined_name: function (input) {
-        var name = this.nameForCombinedCollection(input);
+        const name = this.nameForCombinedCollection(input);
         this.set_combined_name(name);
     },
 
@@ -425,25 +431,25 @@ var Combine = Backbone.Model.extend({
 
 	is_same_as_editing: function()
 	{
-		var combinedName = this.get_combined_name();
-		var collectionEditing = this.get_collection_editing();
-		return combinedName == collectionEditing;
+		const combinedName = this.get_combined_name();
+		const collectionEditing = this.get_collection_editing();
+		return combinedName === collectionEditing;
 	},
 
 	is_same_as_combine: function()
 	{
-		var combinedName = this.get_combined_name();
-		var collectionCombine = this.get_collection_combine();
-		return combinedName == collectionCombine;
+		const combinedName = this.get_combined_name();
+		const collectionCombine = this.get_collection_combine();
+		return combinedName === collectionCombine;
 	},
 
 	calc_same: function()
     {
-		var combinedName = this.get_combined_name();
+		const combinedName = this.get_combined_name();
 		if (
-			(this.get_collection_editing() == combinedName)
+			(this.get_collection_editing() === combinedName)
 			||
-			(this.get_collection_combine() == combinedName)
+			(this.get_collection_combine() === combinedName)
 			)
 		{
 			this.set_same(combinedName);
@@ -455,10 +461,10 @@ var Combine = Backbone.Model.extend({
     },
 
     nameForCombinedCollection: function(input) {
-        if (input == '')
+        if (input === '')
 		{
-			var collectionEditing = this.get_collection_editing();
-			var collectionCombine = this.get_collection_combine();
+			const collectionEditing = this.get_collection_editing();
+			const collectionCombine = this.get_collection_combine();
 			return collectionEditing + ' and ' + collectionCombine;
 		}
         return input;
@@ -466,14 +472,14 @@ var Combine = Backbone.Model.extend({
 
 });
 
-var CombineCommandBoxHintAView = Backbone.View.extend({
+const CombineCommandBoxHintAView = Backbone.View.extend({
 
 	combine: null,
 
     initialize: function(options)
     {
         this.$('#CombineCommandHintDelete').remove();
-		var combine = options.combine;
+		const combine = options.combine;
         this.combine = combine;
         this.listenTo(combine, 'change:combined_name', this.change_combined_name);
 		this.listenTo(combine, 'change:same', this.change_same);
@@ -482,14 +488,14 @@ var CombineCommandBoxHintAView = Backbone.View.extend({
 
     change_combined_name: function ()
     {
-		var el_hintCollection = this.$('#CombineCommandHintCollection');
-		var combinedName = this.combine.get_combined_name();
+		const el_hintCollection = this.$('#CombineCommandHintCollection');
+		const combinedName = this.combine.get_combined_name();
 		el_hintCollection.text(combinedName);
     },
 
     change_same: function ()
     {
-        var action = (this.combine.get_same() != null) ? 'Update' : 'Create';
+        const action = (this.combine.get_same() != null) ? 'Update' : 'Create';
         this.$('#CombineCommandHintAction').text(action);
     },
 
@@ -501,13 +507,13 @@ var CombineCommandBoxHintAView = Backbone.View.extend({
 
 });
 
-var CombineCommandBoxHintBView = Backbone.View.extend({
+const CombineCommandBoxHintBView = Backbone.View.extend({
 
 	combine: null,
 
     initialize: function(options)
     {
-		var combine = options.combine;
+		const combine = options.combine;
         this.combine = combine;
 		this.listenTo(combine, 'change:combined_name', this.change_combined_name);
 		this.listenTo(combine, 'change:collection_editing', this.change_collection_editing);
@@ -517,40 +523,40 @@ var CombineCommandBoxHintBView = Backbone.View.extend({
 
     change_combined_name: function ()
     {
-		var el_hintCollection = this.$('#CombineCommandHintCollection');
-		var combinedName = this.combine.get_combined_name();
+		const el_hintCollection = this.$('#CombineCommandHintCollection');
+		const combinedName = this.combine.get_combined_name();
 		el_hintCollection.text(combinedName);
     },
 
     change_collection_editing: function ()
     {
-		var el_deleteName_editing = this.$('#CombineCommandHintDelete1Name');
+		const el_deleteName_editing = this.$('#CombineCommandHintDelete1Name');
 		el_deleteName_editing.text(this.combine.get_collection_editing());
     },
 
     change_collection_combine: function ()
     {
-		var el_deleteName_combine = this.$('#CombineCommandHintDelete2Name');
+		const el_deleteName_combine = this.$('#CombineCommandHintDelete2Name');
 		el_deleteName_combine.text(this.combine.get_collection_combine());
     },
 
     change_same: function ()
     {
-		var same_as_combine = this.combine.is_same_as_combine();
-		var same_as_editing = this.combine.is_same_as_editing();
+		const same_as_combine = this.combine.is_same_as_combine();
+		const same_as_editing = this.combine.is_same_as_editing();
 
-        var same = same_as_combine || same_as_editing;
+        const same = same_as_combine || same_as_editing;
 
-		var action = same ? 'Update' : 'Create';
+		const action = same ? 'Update' : 'Create';
         this.$('#CombineCommandHintAction').text(action);
 
-		var el_delete_editing = this.$('#CombineCommandHintDelete1');
+		const el_delete_editing = this.$('#CombineCommandHintDelete1');
 		if (!same_as_editing)
 			el_delete_editing.show();
 		else
 			el_delete_editing.hide();
 
-		var el_delete_combine = this.$('#CombineCommandHintDelete2');
+		const el_delete_combine = this.$('#CombineCommandHintDelete2');
 		if (!same_as_combine)
 			el_delete_combine.show();
 		else
@@ -567,7 +573,7 @@ var CombineCommandBoxHintBView = Backbone.View.extend({
 
 });
 
-var CombineView = Backbone.View.extend({
+const CombineView = Backbone.View.extend({
 
     collection_editing: null,
 
@@ -584,7 +590,7 @@ var CombineView = Backbone.View.extend({
 
     renderCommandBox: function(collection_combine)
     {
-        var that = this;
+        const that = this;
 
 		this.combine = new Combine({
 			collection_editing: that.collection_editing,
@@ -594,7 +600,7 @@ var CombineView = Backbone.View.extend({
 		/**
 		 * @type CombineCommandBoxView
 		 */
-		var combineCommandBoxView = new CombineCommandBoxView(
+		const combineCommandBoxView = new CombineCommandBoxView(
 			{
 				backend: that.backend,
 				combine: that.combine,
@@ -615,7 +621,7 @@ var CombineView = Backbone.View.extend({
 
 });
 
-var CombineCommandBoxView = Backbone.View.extend({
+const CombineCommandBoxView = Backbone.View.extend({
 
 	backend: null,
 
@@ -636,7 +642,7 @@ var CombineCommandBoxView = Backbone.View.extend({
 		this.backend = options.backend;
         this.combine = options.combine;
 
-        var combineCommandHintTemplate = options.combineCommandHintTemplate;
+        const combineCommandHintTemplate = options.combineCommandHintTemplate;
 
         this.combineCommandHintAView = new CombineCommandBoxHintAView({
             el: combineCommandHintTemplate.clone(),
@@ -653,10 +659,10 @@ var CombineCommandBoxView = Backbone.View.extend({
 
     render: function()
     {
-        var collection_editing = this.combine.get_collection_editing();
-        var collection_combine = this.combine.get_collection_combine();
+        const collection_editing = this.combine.get_collection_editing();
+        const collection_combine = this.combine.get_collection_combine();
 
-        var that = this;
+        const that = this;
 
 		this.whenRendered = new CommandBoxView(
 			{
@@ -694,17 +700,17 @@ var CombineCommandBoxView = Backbone.View.extend({
 
     on_combine_change_input: function (view)
 	{
-        var input = view.input_query_val();
+        const input = view.input_query_val();
         this.combine.set_user_input_combined_name(input);
     },
 
 	on_combine_command: function(commandBoxView)
 	{
-		var combine = this.combine;
-		var editing_name = combine.get_collection_editing();
-		var combine_name = combine.get_collection_combine();
-		var spliced_name = combine.get_combined_name();
-		var aUrl =
+		const combine = this.combine;
+		const editing_name = combine.get_collection_editing();
+		const combine_name = combine.get_collection_combine();
+		const spliced_name = combine.get_combined_name();
+		const aUrl =
 			"api/collection/" +
 			encodeURIComponent(editing_name) +
 			"/combine/" +
@@ -719,7 +725,7 @@ var CombineCommandBoxView = Backbone.View.extend({
 		 },
 		 */
 
-		var that = this;
+		const that = this;
 
 		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()
@@ -734,15 +740,15 @@ var CombineCommandBoxView = Backbone.View.extend({
 
 	on_combine_command_alternate: function(commandBoxView)
 	{
-		var that = this;
-		var confirmCombine = new Combine(
+		const that = this;
+		const confirmCombine = new Combine(
 			{
 				collection_combine: that.combine.get_collection_combine(),
 				collection_editing: that.combine.get_collection_editing()
 			}
 		);
 
-		var combineCommandHintCView = new CombineCommandBoxHintBView(
+		const combineCommandHintCView = new CombineCommandBoxHintBView(
 		{
 			el: that.combineCommandHintTemplate.clone(),
 			combine: confirmCombine
@@ -757,11 +763,11 @@ var CombineCommandBoxView = Backbone.View.extend({
 
 	on_combine_command_confirm: function(commandBoxView)
 	{
-		var combine = this.combineCommandHintCView.combine;
-		var editing_name = combine.get_collection_editing();
-		var combine_name = combine.get_collection_combine();
-		var spliced_name = combine.get_combined_name();
-		var aUrl =
+		const combine = this.combineCommandHintCView.combine;
+		const editing_name = combine.get_collection_editing();
+		const combine_name = combine.get_collection_combine();
+		const spliced_name = combine.get_combined_name();
+		const aUrl =
 			"api/collection/" +
 			encodeURIComponent(editing_name) +
 			"/combine/" +
@@ -780,7 +786,7 @@ var CombineCommandBoxView = Backbone.View.extend({
 
 		this.combineCommandHintCView = null;
 
-		var that = this;
+		const that = this;
 
 		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()

@@ -18,48 +18,11 @@
 	<script src="backbone.js" type="text/javascript"></script>
 
 	<script src="spritesheet.js" type="text/javascript"></script>
-	<script src="Backend.js" type="text/javascript"></script>
 	<script src="GameCardDeck.js" type="text/javascript"></script>
-	<script src="SteamsideSpriteSheet.js" type="text/javascript"></script>
-
-	<script src="CollectionPick.js" type="text/javascript"></script>
 
 	<link href="Tag.css" rel="stylesheet" type="text/css" />
-	<script src="Tag.js" type="text/javascript"></script>
 
 	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
-	<script src="CommandBox.js" type="text/javascript"></script>
-
-	<script type="application/javascript">
-
-		var Tag_html = {
-
-			render_page: function ()
-			{
-				var game = new Game({
-					name: "You just opened this file in a browser, didn't you?"
-				});
-
-				var spritesSteamside = new SteamsideSpriteSheet();
-				var cardTemplatePromise =  spritesSteamside.card.sprite_promise();
-
-				var view = new TagAGameView({
-					game: game,
-					cardTemplatePromise: cardTemplatePromise,
-					backend: new Backend()
-				});
-				$("body").before(view.$el);
-
-				view.render();
-			}
-		};
-
-
-		$(function() {
-			Tag_html.render_page();
-		});
-
-	</script>
 </head>
 <body>
 
@@ -116,4 +79,53 @@
 </div>
 
 </body>
+
+
+<script type="importmap">
+	{
+		"imports": {
+			"#customary": "./../node_modules/customary/src/now.js",
+			"#customary/": "./../node_modules/customary/src/",
+			"#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+			"#steamside/": "./"
+		}
+	}
+</script>
+
+<script type="module">
+
+	import {Backend} from "#steamside/Backend.js";
+    import {TagAGameView} from "#steamside/TagAGameView.js";
+	import {SteamsideSpriteSheet} from "#steamside/SteamsideSpriteSheet.js";
+
+	const Tag_html = {
+
+		render_page: function ()
+		{
+			const game = new Game({
+				name: "You just opened this file in a browser, didn't you?"
+			});
+
+			const spritesSteamside = new SteamsideSpriteSheet();
+			const cardTemplatePromise =  spritesSteamside.card.sprite_promise();
+
+			const view = new TagAGameView({
+				game: game,
+				cardTemplatePromise: cardTemplatePromise,
+				backend: new Backend()
+			});
+			$("body").before(view.$el);
+
+			view.render();
+		}
+	};
+
+
+	$(function() {
+		Tag_html.render_page();
+	});
+
+</script>
+
+
 </html>

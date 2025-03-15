@@ -1,6 +1,6 @@
-"use strict";
+import {CommandBoxView} from "#steamside/CommandBox.js";
 
-Steamside.CollectionsNewWorld =
+export const Steamside_CollectionsNewWorld =
 {
 	nameController: 'CollectionsNewController',
 
@@ -17,7 +17,7 @@ Steamside.CollectionsNewWorld =
 };
 
 
-var CollectionNewView = Backbone.View.extend({
+const CollectionNewView = Backbone.View.extend({
 
 	el: "#collection-new",
 
@@ -30,7 +30,7 @@ var CollectionNewView = Backbone.View.extend({
 		/**
 		 * @type CollectionNewEmptyView
 		 */
-		var collectionNewEmptyView = new CollectionNewEmptyView({
+		const collectionNewEmptyView = new CollectionNewEmptyView({
 			el: this.$('#collection-new-empty-segment'),
 			backend: this.backend
 		});
@@ -39,7 +39,7 @@ var CollectionNewView = Backbone.View.extend({
 		/**
 		 * @type CollectionCopyAllCategoriesView
 		 */
-		var collectionCopyAllCategoriesView = new CollectionCopyAllCategoriesView({
+		const collectionCopyAllCategoriesView = new CollectionCopyAllCategoriesView({
 			el: this.$('#collection-copy-all-categories-segment'),
 			backend: this.backend
 		});
@@ -50,7 +50,7 @@ var CollectionNewView = Backbone.View.extend({
 }
 );
 
-var CollectionNewEmptyView = Backbone.View.extend({
+const CollectionNewEmptyView = Backbone.View.extend({
 
 	elCommandHintA: null,
 	elCommandHintB: null,
@@ -61,13 +61,13 @@ var CollectionNewEmptyView = Backbone.View.extend({
 	},
 
 	render: function() {
-		var that = this;
+		const that = this;
 
-		var $emptyCommandHint = this.$('#empty-command-hint');
+		const $emptyCommandHint = this.$('#empty-command-hint');
 		$emptyCommandHint.remove();
 		this.elCommandHintA = $emptyCommandHint.clone();
 		this.elCommandHintB = $emptyCommandHint.clone();
-		var selectorAfterwards = '#empty-command-hint-afterwards';
+		const selectorAfterwards = '#empty-command-hint-afterwards';
 		this.elCommandHintA.find(selectorAfterwards).text("add games");
 		this.elCommandHintB.find(selectorAfterwards).text("stay here");
 
@@ -87,7 +87,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 	},
 
 	on_empty_CommandBox_rendered: function(viewCommandBox) {
-		var targetEl = this.$('#div-empty-name-form');
+		const targetEl = this.$('#div-empty-name-form');
 		targetEl.empty();
 		targetEl.append(viewCommandBox.el);
 
@@ -100,24 +100,24 @@ var CollectionNewEmptyView = Backbone.View.extend({
 	},
 
 	nameForCollection: function(input) {
-		if (input == '') return "Favorites";
+		if (input === '') return "Favorites";
 		return input;
 	},
 
 	on_empty_command: function(view) {
-		var input = view.input_query_val();
+		const input = view.input_query_val();
 		this.createEmpty({name: input, stay: false});
 	},
 
 	on_empty_command_alternate: function(view) {
-		var input = view.input_query_val();
+		const input = view.input_query_val();
 		this.createEmpty({name: input, stay: false});
 	},
 
 	createEmpty: function(args) {     "use strict";
-		var name = this.nameForCollection(args.name);
-		var aUrl = "api/collection/" + encodeURIComponent(name) + "/create";
-		var that = this;
+		const name = this.nameForCollection(args.name);
+		const aUrl = "api/collection/" + encodeURIComponent(name) + "/create";
+		const that = this;
 
 		// TODO display 'creating...'
 		/*
@@ -129,7 +129,7 @@ var CollectionNewEmptyView = Backbone.View.extend({
 			.done(function()
 				{
 					if (args.stay) {
-						var input_el = that.$('#input-text-command-box');
+						const input_el = that.$('#input-text-command-box');
 						input_el.val('');
 						input_el.focus();
 						that.on_empty_change_input('');
@@ -141,19 +141,19 @@ var CollectionNewEmptyView = Backbone.View.extend({
 	},
 
 	updateWithInputValue: function (input) {
-		var name = this.nameForCollection(input);
-		var selector = '#empty-command-hint-subject';
+		const name = this.nameForCollection(input);
+		const selector = '#empty-command-hint-subject';
 		this.elCommandHintA.find(selector).text(name);
 		this.elCommandHintB.find(selector).text(name);
 	},
 
 	on_empty_change_input: function (view) {  "use strict";
-		var input = view.input_query_val();
+		const input = view.input_query_val();
 		this.updateWithInputValue(input);
 	}
 });
 
-var CollectionCopyAllCategoriesView = Backbone.View.extend({
+const CollectionCopyAllCategoriesView = Backbone.View.extend({
 
 	events: {
 		"click .button-copy-em-all": "buttonCopyEmAll"
@@ -170,8 +170,8 @@ var CollectionCopyAllCategoriesView = Backbone.View.extend({
 
 	buttonCopyEmAll: function (e) {
 		e.preventDefault();
-		var jLink = $(e.target);
-		var aUrl = jLink.attr( "href" );
+		const jLink = $(e.target);
+		const aUrl = jLink.attr( "href" );
 
 		this.backend.ajax_ajax_promise(aUrl)
 			.done(function()

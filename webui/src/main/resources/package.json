@@ -29,6 +29,7 @@
     "wireit": "^0.14.9"
   },
   "imports": {
+    "#steamside/*.js": "./public/*.js",
     "#customary/*.js": "./node_modules/customary/src/*.ts",
     "#customary": "./node_modules/customary/src/index.ts",
     "#customary-testing": "./node_modules/customary-testing/src/index.ts"

@@ -1,6 +1,4 @@
-"use strict";
-
-var MoreButtonView = Backbone.View.extend(
+export const MoreButtonView = Backbone.View.extend(
 {
 	deck: null,
 
@@ -11,7 +9,7 @@ var MoreButtonView = Backbone.View.extend(
 
 	initialize: function(a)
 	{
-		var that = this;
+		const that = this;
 
 		this.deck = a.deck;
 
@@ -27,7 +25,7 @@ var MoreButtonView = Backbone.View.extend(
 
 	render: function()
 	{
-		var showing = this.deck.tailVisibility;
+		const showing = this.deck.tailVisibility;
 		this.$('.more-button-text').text(!showing ? 'more...' : 'less...');
 		this.$el.fadeIn();
 		return this;
