@@ -3,7 +3,6 @@ import {Steamside_SettingsWorld} from "#steamside/Settings.js";
 import {Steamside_ExitWorld} from "#steamside/Exit.js";
 import {Steamside_InventoryWorld} from "#steamside/InventoryWorld.js";
 import {Steamside_CollectionsNewWorld} from "#steamside/CollectionNew.js";
-import {Steamside_SteamClientWorld} from "#steamside/SteamClient.js";
 import {Steamside_MyGamesWorld} from "#steamside/MyGames.js";
 import {Steamside_HomeWorld} from "#steamside/Home.js";
 import {SteamsideSpriteSheet} from "#steamside/SteamsideSpriteSheet.js";
@@ -36,7 +35,6 @@ export class Steamside_AngularJS
 
 		this.controller_HomeWorld();
 		this.controller_MyGamesWorld();
-		this.controller_SteamClientWorld();
 		this.controller_SettingsWorld();
 		this.controller_ExitWorld();
 		this.controller_InventoryWorld();
@@ -113,16 +111,6 @@ export class Steamside_AngularJS
 			}]);
 	}
 
-	controller_SteamClientWorld()
-	{
-		const that = this;
-		that.moduleSteamside.controller(
-			Steamside_SteamClientWorld.nameController,
-			['$scope', nameBackend, function ($scope, theBackend){
-				Steamside_SteamClientWorld.controller($scope, theBackend);
-			}]);
-	}
-
 	controller_SettingsWorld()
 	{
 		const that = this;
@@ -191,10 +179,7 @@ const SteamsideRouter =
 				templateUrl: Steamside_MyGamesWorld.htmlWorld,
 				controller: Steamside_MyGamesWorld.nameController
 			})
-			.when('/steamclient', {
-				templateUrl: Steamside_SteamClientWorld.htmlWorld,
-				controller: Steamside_SteamClientWorld.nameController
-			})
+			.when('/steamclient', {templateUrl: 'SteamClient.html'})
 			.when('/settings', {
 				templateUrl: Steamside_SettingsWorld.htmlWorld,
 				controller: Steamside_SettingsWorld.nameController
