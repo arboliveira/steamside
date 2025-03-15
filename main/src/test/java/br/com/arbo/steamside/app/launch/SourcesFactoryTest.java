@@ -3,6 +3,7 @@ package br.com.arbo.steamside.app.launch;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -35,7 +36,7 @@ public class SourcesFactoryTest
 
 		try (ConfigurableApplicationContext context =
 			SpringApplicationBuilderUtil.run(
-				builder.web(false),
+				builder.web(WebApplicationType.NONE),
 				sources))
 				{
 			context.getBean(RunGameCommand.class);

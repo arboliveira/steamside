@@ -4,13 +4,13 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.log4j.Logger;
-
 import br.com.arbo.steamside.app.browser.WebBrowser;
 import br.com.arbo.steamside.app.instance.DetectSteamside.Situation;
 import br.com.arbo.steamside.app.launch.LocalWebserver;
 import br.com.arbo.steamside.app.launch.Running;
 import br.com.arbo.steamside.app.port.PortAlreadyInUse;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class SingleInstancePerUser
 {
@@ -100,9 +100,9 @@ public class SingleInstancePerUser
 				this.firstfreefound = Optional.of(p);
 		}
 
-		private Logger getLogger()
+		private Log getLogger()
 		{
-			return Logger.getLogger(this.getClass());
+			return LogFactory.getLog(this.getClass());
 		}
 
 		private void notRunningSteamsideTryOnFirstFreeFound()

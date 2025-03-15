@@ -1,5 +1,6 @@
 package br.com.arbo.steamside.app.context;
 
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -13,7 +14,7 @@ public class SpringApplicationFactory
 		String... args)
 	{
 		SpringApplicationBuilder builder =
-			new SpringApplicationBuilder().web(false).headless(false);
+			new SpringApplicationBuilder().web(WebApplicationType.NONE).headless(false);
 
 		return start(builder, sources, args);
 	}

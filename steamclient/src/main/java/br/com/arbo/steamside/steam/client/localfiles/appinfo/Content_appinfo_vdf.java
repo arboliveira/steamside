@@ -8,13 +8,13 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
-import org.apache.log4j.Logger;
-
 import br.com.arbo.steamside.steam.client.localfiles.hex.HexBytes;
 import br.com.arbo.steamside.steam.client.localfiles.hex.HexInteger;
 import br.com.arbo.steamside.steam.client.localfiles.hex.HexLong;
 import br.com.arbo.steamside.steam.client.localfiles.io.ByteBufferX;
 import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  https://github.com/SteamDatabase/SteamAppInfo?tab=readme-ov-file#appinfovdf
@@ -73,10 +73,12 @@ public class Content_appinfo_vdf
 
 	}
 
-	private Logger getLogger()
+	private Log getLogger()
 	{
-		return Logger.getLogger(this.getClass());
+		return LogFactory.getLog(this.getClass());
 	}
+
+	private static final boolean VERBOSE = false;
 
 	private void go_app_id(
 		int app_id, String[] stringPool,
@@ -104,7 +106,9 @@ public class Content_appinfo_vdf
 	{
 		long int64_t = buffer.read__int64_t();
 
-		getLogger().debug(new HexLog(new HexLong(int64_t), info));
+		if (VERBOSE) {
+			getLogger().debug(new HexLog(new HexLong(int64_t), info));
+		}
 
 		return int64_t;
 	}
@@ -113,7 +117,9 @@ public class Content_appinfo_vdf
 	{
 		int uint32_t = buffer.read__uint32_t();
 
-		getLogger().debug(new HexLog(new HexInteger(uint32_t), info));
+		if (VERBOSE) {
+			getLogger().debug(new HexLog(new HexInteger(uint32_t), info));
+		}
 
 		return uint32_t;
 	}
@@ -122,7 +128,9 @@ public class Content_appinfo_vdf
 	{
 		long uint64_t = buffer.read__uint64_t();
 
-		getLogger().debug(new HexLog(new HexLong(uint64_t), info));
+		if (VERBOSE) {
+			getLogger().debug(new HexLog(new HexLong(uint64_t), info));
+		}
 
 		return uint64_t;
 	}
@@ -134,7 +142,9 @@ public class Content_appinfo_vdf
 		for (int i = 1; i <= size; i++)
 			data[i - 1] = buffer.read__uint8_t();
 
-		getLogger().debug(new HexLog(new HexBytes(data), info));
+		if (VERBOSE) {
+			getLogger().debug(new HexLog(new HexBytes(data), info));
+		}
 
 		return data;
 	}

@@ -7,10 +7,10 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
-import org.apache.log4j.Logger;
-
 import br.com.arbo.steamside.out.Dump;
 import br.com.arbo.steamside.steam.client.localfiles.vdf.KeyValueVisitor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class DumpAppinfoVdfParse
 {
@@ -51,9 +51,9 @@ public class DumpAppinfoVdfParse
 		return Dump.dumpToString(this::dump);
 	}
 
-	private Logger getLogger()
+	private Log getLogger()
 	{
-		return Logger.getLogger(this.getClass());
+		return LogFactory.getLog(this.getClass());
 	}
 
 	private static void print(String appid, AppInfo appinfo,

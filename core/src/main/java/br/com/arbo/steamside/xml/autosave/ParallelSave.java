@@ -3,12 +3,12 @@ package br.com.arbo.steamside.xml.autosave;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.log4j.Logger;
-
 import br.com.arbo.java.util.concurrent.DaemonThreadFactory;
 import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.settings.file.SaveFile;
 import br.com.arbo.steamside.xml.SteamsideXmlFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class ParallelSave
 {
@@ -22,9 +22,9 @@ public class ParallelSave
 			() -> save.save(SteamsideXmlFactory.valueOf(data)));
 	}
 
-	private Logger getLogger()
+	private Log getLogger()
 	{
-		return Logger.getLogger(this.getClass());
+		return LogFactory.getLog(this.getClass());
 	}
 
 	private ExecutorService newSingleDaemonThread()

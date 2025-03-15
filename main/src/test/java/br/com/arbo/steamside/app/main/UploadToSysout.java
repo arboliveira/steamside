@@ -1,8 +1,8 @@
 package br.com.arbo.steamside.app.main;
 
-import org.apache.log4j.Logger;
-
 import br.com.arbo.steamside.cloud.CopySteamsideXmlToCloud;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class UploadToSysout implements CopySteamsideXmlToCloud
 {
@@ -15,9 +15,9 @@ public class UploadToSysout implements CopySteamsideXmlToCloud
 		System.out.println(steamsideXmlContent);
 	}
 
-	private Logger getLogger()
+	private Log getLogger()
 	{
-		return Logger.getLogger(this.getClass());
+		return LogFactory.getLog(this.getClass());
 	}
 
 }

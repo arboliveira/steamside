@@ -12,8 +12,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import br.com.arbo.opersys.username.User;
 import br.com.arbo.org.springframework.boot.builder.Sources;
 import br.com.arbo.org.springframework.boot.builder.SpringApplicationBuilderUtil;
-import br.com.arbo.steamside.app.embedded.actuate.ActuatorEndpoints;
-import br.com.arbo.steamside.app.embedded.actuate.VdfStructureFromLocalconfigEndpoint;
 import br.com.arbo.steamside.app.launch.LaunchSequence;
 import br.com.arbo.steamside.app.launch.LocalWebserver;
 import br.com.arbo.steamside.app.launch.Running;
@@ -61,13 +59,8 @@ public class SpringBoot implements LocalWebserver
 		builder.listeners(new BannerPrepare());
 
 		sources
-			.sources(
-				ApiServlet.class, SimpleCORSFilter.class, Welcome.class,
-				ActuatorEndpoints.class,
-				VdfStructureFromLocalconfigEndpoint.class)
+			.sources(ApiServlet.class, SimpleCORSFilter.class, Welcome.class)
 			.registerSingleton(new PortCustomize(portInUse.port));
-
-		ActuatorEndpoints.contribute(sources);
 
 		return start(sources, builder);
 	}

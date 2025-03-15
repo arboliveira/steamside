@@ -1,9 +1,10 @@
 package br.com.arbo.steamside.app.embedded;
 
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 
-class PortCustomize implements EmbeddedServletContainerCustomizer {
+class PortCustomize implements
+		WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
 
 	PortCustomize(int port)
 	{
@@ -11,7 +12,7 @@ class PortCustomize implements EmbeddedServletContainerCustomizer {
 	}
 
 	@Override
-	public void customize(ConfigurableEmbeddedServletContainer container)
+	public void customize(ConfigurableServletWebServerFactory container)
 	{
 		container.setPort(port);
 	}

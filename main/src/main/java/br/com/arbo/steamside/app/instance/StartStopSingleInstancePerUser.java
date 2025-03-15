@@ -1,6 +1,6 @@
 package br.com.arbo.steamside.app.instance;
 
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.springframework.context.ApplicationListener;

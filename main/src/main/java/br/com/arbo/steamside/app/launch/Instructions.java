@@ -1,8 +1,8 @@
 package br.com.arbo.steamside.app.launch;
 
-import org.apache.log4j.Logger;
-
 import br.com.arbo.steamside.app.port.Port;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 final class Instructions {
 
@@ -20,9 +20,9 @@ final class Instructions {
 			.info(">>> STARTING EMBEDDED WEB SERVER, PRESS ENTER TO STOP");
 	}
 
-	private Logger getLogger()
+	private Log getLogger()
 	{
-		return Logger.getLogger(this.getClass());
+		return LogFactory.getLog(this.getClass());
 	}
 
 }

@@ -2,8 +2,6 @@ package br.com.arbo.steamside.firstrun;
 
 import javax.inject.Inject;
 
-import org.apache.log4j.Logger;
-
 import br.com.arbo.steamside.bootstrap.Bootstrap;
 import br.com.arbo.steamside.bootstrap.Event;
 import br.com.arbo.steamside.bootstrap.EventObserver;
@@ -12,6 +10,8 @@ import br.com.arbo.steamside.data.SteamsideData;
 import br.com.arbo.steamside.data.copy.CopyAllSteamCategories;
 import br.com.arbo.steamside.steam.client.home.SteamClientHome;
 import br.com.arbo.steamside.types.CollectionName;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class FirstRunObserver implements EventObserver
 {
@@ -48,9 +48,9 @@ public class FirstRunObserver implements EventObserver
 		c.favorite(c.find(new CollectionName("favorite")));
 	}
 
-	private Logger getLogger()
+	private Log getLogger()
 	{
-		return Logger.getLogger(this.getClass());
+		return LogFactory.getLog(this.getClass());
 	}
 
 	private final Bootstrap bootstrap;

@@ -6,7 +6,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import br.com.arbo.steamside.collections.TagsData;
 import br.com.arbo.steamside.collections.TagsWrites.TagTeam;
@@ -75,9 +76,9 @@ public class CopyAllSteamCategories
 		tags.addAll(toAdd.collect(Collectors.toList()));
 	}
 
-	private Logger getLogger()
+	private Log getLogger()
 	{
-		return Logger.getLogger(this.getClass());
+		return LogFactory.getLog(this.getClass());
 	}
 
 	private Stream<TagTuple> toTags(SteamCategory category)

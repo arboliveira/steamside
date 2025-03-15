@@ -7,7 +7,7 @@
 			<param name="ConversionPattern" value="%5p (%F:%L) %m%n"/>
 		</layout>
 	</appender>
-	
+
 	<logger name="br.com.arbo.steamside">
 		<level value="info" />
 		<appender-ref ref="CONSOLE" />

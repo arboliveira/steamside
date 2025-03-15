@@ -2,10 +2,10 @@ package br.com.arbo.steamside.app.main;
 
 import jakarta.xml.bind.JAXB;
 
-import org.apache.log4j.Logger;
-
 import br.com.arbo.steamside.settings.file.SaveFile;
 import br.com.arbo.steamside.xml.SteamsideXml;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class SaveToSysout implements SaveFile
 {
@@ -18,9 +18,9 @@ public class SaveToSysout implements SaveFile
 		JAXB.marshal(xml, System.out);
 	}
 
-	private Logger getLogger()
+	private Log getLogger()
 	{
-		return Logger.getLogger(this.getClass());
+		return LogFactory.getLog(this.getClass());
 	}
 
 }

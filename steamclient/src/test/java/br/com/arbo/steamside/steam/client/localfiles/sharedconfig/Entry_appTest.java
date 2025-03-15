@@ -18,7 +18,7 @@ public class Entry_appTest {
 	@Test
 	public void noTags__noProblem() {
 		new Entry_app().accept(tagVisitor);
-		Mockito.verifyZeroInteractions(tagVisitor);
+		Mockito.verifyNoInteractions(tagVisitor);
 	}
 
 	@Mock

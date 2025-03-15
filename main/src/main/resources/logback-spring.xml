@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--
+    CONSOLE_LOG_PATTERN_IS_UNDEFINED
+    -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!--
+    ⭐
+    .m2\repository\org\springframework\boot\spring-boot\3.4.4\spring-boot-3.4.4.jar!\org\springframework\boot\logging\logback\defaults.xml
+    -->
+    <property name="CONSOLE_LOG_PATTERN"
+value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}){} %clr(${LOG_CORRELATION_PATTERN:-}){faint}%clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+/>
+
+    <!--
+    ⭐
+    MOAR DEBUG
+    https://stackoverflow.com/questions/23123934/logback-show-logs-with-line-number/64286769#64286769
+
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN}\(%class{0}.java:%line\)%n"/>
+    -->
+
+    <!--
+    ⭐
+    .m2\repository\org\springframework\boot\spring-boot\3.4.4\spring-boot-3.4.4.jar!\org\springframework\boot\logging\logback\console-appender.xml
+    -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${CONSOLE_LOG_THRESHOLD}</level>
+        </filter>
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>${CONSOLE_LOG_CHARSET}</charset>
+        </encoder>
+        <withJansi>true</withJansi>
+    </appender>
+
+    <!--
+    Skipping provider "org.apache.commons.vfs2.provider.(...)
+    -->
+    <logger name="org.apache.commons.vfs2.impl.StandardFileSystemManager" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    ⭐
+    Loading source class br.com.arbo.steamside.api.app.AppSettingsImpl,
+    class br.com.arbo.steamside.api.continues.Continues,
+    class br.com.arbo.steamside.cloud.Uploader,
+    class br.com.arbo.steamside.app.embedded.SimpleCORSFilter,
+    -->
+    <logger name="org.springframework.boot.SpringApplication" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    CONDITIONS EVALUATION REPORT
+    -->
+    <logger name="org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLogger" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    Application availability state ReadinessState changed to ACCEPTING_TRAFFIC
+    -->
+    <logger name="org.springframework.boot.availability.ApplicationAvailabilityBean" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    None of the document roots [src/main/webapp, public, static] point to a directory and will be ignored.
+    -->
+    <logger name="org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    Activating profiles []
+    -->
+    <logger name="org.springframework.boot.web.servlet.context.ApplicationServletEnvironment" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    Published root WebApplicationContext as ServletContext attribute with name [org.springframework.web.context.WebApplicationContext.ROOT]
+    Root WebApplicationContext: initialization completed in 1186 ms
+    -->
+    <logger name="org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext" level="WARN"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    Initializing Servlet 'api'
+    Initializing Servlet 'dispatcherServlet'
+    -->
+    <logger name="org.springframework.web.servlet.DispatcherServlet" level="WARN"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    ⭐
+	{ [/search/search.json], params [query && recent=true]}: recent()
+    -->
+    <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    ⭐
+	Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+	Writing [br.com.arbo.steamside.api.session.SessionDTO@6f0be605]
+    -->
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    TODO how to activate while preserving the above?
+    <logger name="org.springframework.web.servlet" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    -->
+
+    <!--
+    Refreshing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext
+    -->
+    <logger name="ConfigServletWebServerApplicationContext" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    ⭐
+    STEAMSIDE USER FRIENDLY
+    -->
+    <logger name="br.com.arbo.steamside" level="ALL"><appender-ref ref="CONSOLE" /></logger>
+
+    <!--
+    ⭐
+    MOAR DEBUG
+
+    <root level="DEBUG"><appender-ref ref="CONSOLE" /></root>
+    -->
+
+
+    <!--
+    WIP
+    -->
+    <logger name="org.apache.http" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.apache.commons.vfs2" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.beans.factory.annotation.InjectionMetadata" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.beans.factory" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.context" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.core.env.StandardEnvironment" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.core.env" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.core.io.support.PathMatchingResourcePatternResolver" level="DEBUG"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.jndi" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.ui.context.support.UiApplicationContextUtils" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.web.context.support.AnnotationConfigWebApplicationContext" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.web.context.support.StandardServletEnvironment" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="INFO"><appender-ref ref="CONSOLE" /></logger>
+
+</configuration>

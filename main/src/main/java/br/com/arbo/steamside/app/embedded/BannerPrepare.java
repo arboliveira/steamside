@@ -19,7 +19,7 @@ public class BannerPrepare
 		MutablePropertySources propertySources =
 			event.getEnvironment().getPropertySources();
 		Map<String, Object> map = new HashMap<>();
-		map.put("banner.location", "banner-steamside.txt");
+		map.put("spring.banner.location", "banner-steamside.txt");
 		propertySources.addFirst(
 			new MapPropertySource(this.getClass().getName(), map));
 	}

@@ -18,15 +18,16 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
+			<!-- logback color on Windows -->
+			<groupId>org.fusesource.jansi</groupId>
+			<artifactId>jansi</artifactId>
+			<version>2.4.1</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
 			<groupId>br.com.arbo.steamside</groupId>
 			<artifactId>steamside-webui</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>br.com.arbo.steamside</groupId>
@@ -37,10 +38,6 @@
 			<groupId>br.com.arbo.steamside</groupId>
 			<artifactId>steamside-stats</artifactId>
 			<version>1.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.xml.bind</groupId>
