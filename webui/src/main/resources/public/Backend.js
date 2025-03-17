@@ -1,14 +1,30 @@
 import {ErrorHandler} from "#steamside/Error.js";
+import {fetchSessionData} from "#steamside/data-session.js";
 
-export const Backend = Backbone.Model.extend(
+export function newBackendMaybeDisabledThisSession() {
+	const backend = new Backend();
+	void fetchAndSetSessionBackendDisabled(backend);
+	return backend;
+}
+
+async function fetchAndSetSessionBackendDisabled(backend){
+	const json = await fetchSessionData();
+	backend.setSessionBackendDisabled(json.backoff);
+}
+
+export class Backend
 {
-	backoff: false,
+	#sessionBackendDisabled;
+
+	setSessionBackendDisabled(sessionBackendDisabled) {
+		this.#sessionBackendDisabled = !!sessionBackendDisabled;
+	}
 
 	/**
 	 * @param {Model | Collection} fetchable
 	 * @return {Deferred}
 	 */
-	fetch_promise: function(fetchable)
+	fetch_promise(fetchable)
 	{
 		const promise = fetchable.fetch({
 			reset: true,
@@ -24,9 +40,9 @@ export const Backend = Backbone.Model.extend(
 		});
 
 		return promise;
-	},
+	}
 
-	fetch_fetch_json: function(collection, success)
+	fetch_fetch_json(collection, success)
 	{
 		collection.fetch({
 			reset: true,
@@ -35,9 +51,9 @@ export const Backend = Backbone.Model.extend(
 			success: success,
 			error: function() { console.log(arguments); }
 		});
-	},
+	}
 
-	ajax_ajax_promise: function(aUrl)
+	ajax_ajax_promise(aUrl)
 	{
 		const promise = this.ajax_ajax_promise_2(aUrl);
 	
@@ -48,13 +64,13 @@ export const Backend = Backbone.Model.extend(
 	
 		return promise;
 		 
-	},
+	}
 
-	ajax_ajax_promise_2: function(aUrl)
+	ajax_ajax_promise_2(aUrl)
 	{
 		let promise;
 
-		if (this.is_backoff())
+		if (this.#sessionBackendDisabled)
 		{
 			alert("Back end is OFF. Ignoring: \n\n" + aUrl);
 
@@ -74,24 +90,6 @@ export const Backend = Backbone.Model.extend(
 		promise.fail(function() { console.log(arguments); });
 
 		return promise;
-	},
-
-	set_backoff: function(value)
-	{
-		this.backoff = value;
-	},
-
-	is_backoff: function()
-	{
-		return this.backoff;
 	}
-});
 
-export const BackoffModel = Backbone.Model.extend(
-{
-	url: "api/session/session.json",
-
-	backoff: function () {
-		return this.get("backoff");
-	}
-});
+}

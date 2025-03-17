@@ -1,4 +1,4 @@
-import {Backend, BackoffModel} from "#steamside/Backend.js";
+import {newBackendMaybeDisabledThisSession} from "#steamside/Backend.js";
 import {Steamside_SettingsWorld} from "#steamside/Settings.js";
 import {Steamside_ExitWorld} from "#steamside/Exit.js";
 import {Steamside_InventoryWorld} from "#steamside/InventoryWorld.js";
@@ -47,14 +47,8 @@ export class Steamside_AngularJS
 
 	constant_Backend()
 	{
-		const that = this;
-		const backoffModel = new BackoffModel();
-		const backend = new Backend();
-		backend.fetch_promise(backoffModel).done(function() {
-			backend.set_backoff(backoffModel.backoff());
-		});
-		that.moduleSteamside.constant(
-			nameBackend, backend);
+		const backend = newBackendMaybeDisabledThisSession();
+		this.moduleSteamside.constant(nameBackend, backend);
 	}
 
 	constant_SpritesKids() {
