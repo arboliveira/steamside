@@ -1,5 +1,4 @@
 import {newBackendMaybeDisabledThisSession} from "#steamside/Backend.js";
-import {Steamside_SettingsWorld} from "#steamside/Settings.js";
 import {Steamside_HomeWorld} from "#steamside/Home.js";
 import {SteamsideSpriteSheet} from "#steamside/SteamsideSpriteSheet.js";
 import {KidsSpriteSheet} from "#steamside/KidsHome.js";
@@ -30,7 +29,6 @@ export class Steamside_AngularJS
 		this.factory_KidsMode();
 
 		this.controller_HomeWorld();
-		this.controller_SettingsWorld();
 
 		this.config_routeProvider();
 	}
@@ -92,16 +90,6 @@ export class Steamside_AngularJS
 			}]);
 	}
 
-	controller_SettingsWorld()
-	{
-		const that = this;
-		that.moduleSteamside.controller(
-			Steamside_SettingsWorld.nameController,
-			['$scope', nameBackend, function ($scope, theBackend){
-				Steamside_SettingsWorld.controller($scope, theBackend);
-			}]);
-	}
-
 	config_routeProvider()
 	{
 		const that = this;
@@ -122,10 +110,7 @@ const SteamsideRouter =
 			})
 			.when('/mygames', {templateUrl: 'MyGames.html'})
 			.when('/steamclient', {templateUrl: 'SteamClient.html'})
-			.when('/settings', {
-				templateUrl: Steamside_SettingsWorld.htmlWorld,
-				controller: Steamside_SettingsWorld.nameController
-			})
+			.when('/settings', {templateUrl: 'Settings.html'})
 			.when('/exit', {templateUrl: 'Exit.html'})
 			.when('/collections/:name/edit', {templateUrl: 'InventoryWorld.html'})
 			.when('/collections/new', {templateUrl: 'CollectionNew.html'})

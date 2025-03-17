@@ -1,51 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html>
-<head>
-
-<!-- ======================================================================= -->
-<title>Cloud</title>
-
-
-	<!-- ======================================================================= -->
-
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-
 	<link href="steamside.css" rel="stylesheet" type="text/css" />
 	<link href="Forms.css" rel="stylesheet" type="text/css" />
 	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
-	<link rel="icon" type="image/png" href="steamside.png"/>
 
-	<link rel="stylesheet" type="text/css" href="tooltipster.css" />
-
-	<link href="http://fonts.googleapis.com/css?family=Arvo:regular, bold" rel="stylesheet" type="text/css" />
-	<link href="http://fonts.googleapis.com/css?family=Karla:regular" rel="stylesheet" type="text/css" />
+	<link href="animate.css" rel="stylesheet" type="text/css" />
 
 	<!-- ======================================================================= -->
 
-	<script src="jquery-2.1.1.js" type="text/javascript"></script>
-	<script type="text/javascript" src="jquery.tooltipster.js"></script>
-	<script src="underscore.js" type="text/javascript"></script>
-	<script src="backbone.js" type="text/javascript"></script>
-	<script src="stacktrace.js" type="text/javascript"></script>
-	<script src="jquery.mockjax.js" type="text/javascript"></script>
-
-	<script src="spritesheet.js" type="text/javascript"></script>
-	<script src="CommandBox.js" type="text/javascript"></script>
-	<script src="Cloud.js" type="text/javascript"></script>
-	<script src="Backend.js" type="text/javascript"></script>
-
-
-	<script type="application/javascript">
-		//<![CDATA[
-
-		import {Backend} from "#steamside/Backend.js";
-		import {CloudModel, CloudView} from "#steamside/Cloud.js";
-
-		var Cloud_html =
-		{
-			render_page: function ()
-			{
+	<!--
 				$.mockjax({
 					url: 'api/cloud/cloud.json',
 					type: 'POST',
@@ -59,26 +20,10 @@
 					status: 500,
 					statusText: 'POST failed'
 				});
-
-				$("body").prepend(
-					new CloudView({
-						model: new CloudModel(),
-						backend: new Backend()
-					}).render()
-						.el);
-			}
-		};
-
-		$(function() {
-			Cloud_html.render_page();
-		});
-		//]]>
-	</script>
+	-->
 
 
 <!-- ======================================================================= -->
-</head>
-<body>
 
 <div id="CloudView">
 
@@ -101,7 +46,7 @@
 				<label>
 					<input type="checkbox"
 						   id="CloudEnabledCheckbox"
-						   data-bind="checked: cloudEnabled" />
+						   ?checked="${this.__cloudEnabled}" />
 					<span class="form-label">
 						Enable cloud synchronization (mirror a copy of your data to a directory you can sync)</span>
 				</label>
@@ -110,8 +55,14 @@
 			<div class="form-break"></div>
 			<div class="form-text form-block" style="width: 60%">
 				<p>
-					<span id="CloudAddressCommandBoxView">
-					</span>
+					<label>
+						<span class="form-label command-label-span">Mirror to directory</span>
+						<input type="text" class="command-text-input"
+							   data-customary-bind="cloudSyncedLocation"
+							   value="${this.cloudSyncedLocation}"
+							   placeholder="(using default mirror directory)"
+						/>
+					</label>
 				</p>
 				<p>
 				<span class="question">
@@ -142,6 +93,3 @@
 <!-- ======================================================================= -->
 
 </div>
-
-</body>
-</html>
