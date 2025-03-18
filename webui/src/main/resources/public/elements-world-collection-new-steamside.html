@@ -1,0 +1,109 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<link href="Forms.css" rel="stylesheet" type="text/css" />
+<link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
+<link href="CommandBox.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+    <p class="purpose-of-this-section floatingpad">Let's start a new collection!
+        <button class="back-button" style="margin-left:20px">Maybe later</button>
+    </p>
+
+    <div id="collection-new-empty-segment" class="segment">
+
+        <div class="side-header side-header-at-left">
+            <p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+			Empty<br/>
+			from<br/>
+			scratch<br/>
+			</span>
+            </p>
+            <p class="side-links"><!--<a id="side-link" href="FavoritesSwitch.html">Switch...</a>--></p>
+        </div>
+
+        <div class="content content-at-right">
+
+            <!--
+			<span id="empty-command-hint" class="command-hint">
+				Create
+				<span id="empty-command-hint-subject" class="command-hint-special">Favorites</span>
+				collection and
+				<span id="empty-command-hint-afterwards">add games</span>
+			</span>
+			-->
+
+			<div id="div-empty-name-form">
+                <elements-collection-new-empty-command-box-steamside>
+                </elements-collection-new-empty-command-box-steamside>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="collection-copy-category-segment"  class="segment">
+
+        <!--
+        FIXME Never even had JavaScript for input and button. Implement "Sync" instead
+        -->
+
+        <div class="side-header side-header-at-right">
+            <p class="side-header-paragraph">
+			<span class="side-text side-text-at-right">
+			Copy<br/>
+			Steam<br/>
+			Category<br/>
+			</span>
+            </p>
+            <p class="side-links"><!--<a href="">Share...</a>--></p>
+        </div>
+
+        <div class="content content-at-left">
+
+            <div id="div-copy-steam-category-form">
+                <form action="">
+                    <div class="form-block form-text">
+                        <input type="text" name="copy-steam-category-name" id="input-copy-steam-category-name"
+                               class="command-text-input"
+                               placeholder="Name for copied collection"
+                                />
+                        <br/>
+                        <input class="command-button"  type="submit" value="Enter"/> <span id="copy-steam-category-command-hint" class="command-hint"> Pick Steam Category...</span>&nbsp;&nbsp;
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="collection-copy-all-categories-segment"  class="segment">
+
+        <div class="side-header side-header-at-left">
+            <p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+			All<br/>
+			From<br/>
+			Steam<br/>
+			</span>
+            </p>
+            <p class="side-links"><!--<a href="">Share...</a>--></p>
+        </div>
+
+        <div class="content content-at-right">
+
+            <div>
+                <p class="instructions-and-explanations">
+				<span class="floatingpad">
+					This will create Steamside Collections identical to your current Steam Categories.
+                </span>
+					<a href=""
+					   class="target-button button-copy-em-all">
+						Copy 'em all!</a>
+				</p>
+            </div>
+
+        </div>
+    </div>

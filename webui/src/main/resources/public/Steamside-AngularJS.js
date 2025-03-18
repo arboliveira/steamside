@@ -1,7 +1,5 @@
 import {newBackendMaybeDisabledThisSession} from "#steamside/Backend.js";
 import {Steamside_SettingsWorld} from "#steamside/Settings.js";
-import {Steamside_InventoryWorld} from "#steamside/InventoryWorld.js";
-import {Steamside_CollectionsNewWorld} from "#steamside/CollectionNew.js";
 import {Steamside_HomeWorld} from "#steamside/Home.js";
 import {SteamsideSpriteSheet} from "#steamside/SteamsideSpriteSheet.js";
 import {KidsSpriteSheet} from "#steamside/KidsHome.js";
@@ -33,8 +31,6 @@ export class Steamside_AngularJS
 
 		this.controller_HomeWorld();
 		this.controller_SettingsWorld();
-		this.controller_InventoryWorld();
-		this.controller_CollectionsNewWorld();
 
 		this.config_routeProvider();
 	}
@@ -106,32 +102,6 @@ export class Steamside_AngularJS
 			}]);
 	}
 
-	controller_InventoryWorld()
-	{
-		const that = this;
-		that.moduleSteamside.controller(
-			Steamside_InventoryWorld.nameController,
-			['$scope', '$routeParams',
-			nameBackend,
-			nameSpritesSteamside,
-				function ($scope, $routeParams,
-						  theBackend, spritesSteamside){
-					Steamside_InventoryWorld.controller(
-						$scope, $routeParams, theBackend,
-						spritesSteamside);
-				}]);
-	}
-
-	controller_CollectionsNewWorld()
-	{
-		const that = this;
-		that.moduleSteamside.controller(
-			Steamside_CollectionsNewWorld.nameController,
-			['$scope', nameBackend, function ($scope, theBackend){
-				Steamside_CollectionsNewWorld.controller($scope, theBackend);
-			}]);
-	}
-
 	config_routeProvider()
 	{
 		const that = this;
@@ -157,14 +127,8 @@ const SteamsideRouter =
 				controller: Steamside_SettingsWorld.nameController
 			})
 			.when('/exit', {templateUrl: 'Exit.html'})
-			.when('/collections/:name/edit', {
-				templateUrl: Steamside_InventoryWorld.htmlWorld,
-				controller: Steamside_InventoryWorld.nameController
-			})
-			.when('/collections/new', {
-				templateUrl: Steamside_CollectionsNewWorld.htmlWorld,
-				controller: Steamside_CollectionsNewWorld.nameController
-			})
+			.when('/collections/:name/edit', {templateUrl: 'InventoryWorld.html'})
+			.when('/collections/new', {templateUrl: 'CollectionNew.html'})
 			.otherwise({
 				redirectTo: '/'
 			});
