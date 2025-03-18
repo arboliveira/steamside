@@ -1,6 +1,5 @@
 import {newBackendMaybeDisabledThisSession} from "#steamside/Backend.js";
 import {Steamside_SettingsWorld} from "#steamside/Settings.js";
-import {Steamside_ExitWorld} from "#steamside/Exit.js";
 import {Steamside_InventoryWorld} from "#steamside/InventoryWorld.js";
 import {Steamside_CollectionsNewWorld} from "#steamside/CollectionNew.js";
 import {Steamside_MyGamesWorld} from "#steamside/MyGames.js";
@@ -36,7 +35,6 @@ export class Steamside_AngularJS
 		this.controller_HomeWorld();
 		this.controller_MyGamesWorld();
 		this.controller_SettingsWorld();
-		this.controller_ExitWorld();
 		this.controller_InventoryWorld();
 		this.controller_CollectionsNewWorld();
 
@@ -121,16 +119,6 @@ export class Steamside_AngularJS
 			}]);
 	}
 
-	controller_ExitWorld()
-	{
-		const that = this;
-		that.moduleSteamside.controller(
-			Steamside_ExitWorld.nameController,
-			['$scope', nameBackend, function ($scope, theBackend){
-				Steamside_ExitWorld.controller($scope, theBackend);
-			}]);
-	}
-
 	controller_InventoryWorld()
 	{
 		const that = this;
@@ -184,10 +172,7 @@ const SteamsideRouter =
 				templateUrl: Steamside_SettingsWorld.htmlWorld,
 				controller: Steamside_SettingsWorld.nameController
 			})
-			.when('/exit', {
-				templateUrl: Steamside_ExitWorld.htmlWorld,
-				controller: Steamside_ExitWorld.nameController
-			})
+			.when('/exit', {templateUrl: 'Exit.html'})
 			.when('/collections/:name/edit', {
 				templateUrl: Steamside_InventoryWorld.htmlWorld,
 				controller: Steamside_InventoryWorld.nameController
