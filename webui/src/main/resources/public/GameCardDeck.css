@@ -28,6 +28,7 @@
 }
 
 .game-tile-in-deck {
+	/* This is the style that makes the card tall enough for tags to appear inside */
 	float: left;
 	position: relative;
 	margin: 5px;
@@ -58,7 +59,6 @@
 	left: 0;
 	text-align: center;
 	z-index: 10;
-	display: none;
 }
 
 .what-will-happen {
@@ -142,6 +142,7 @@ a.display-collection-name {
 }
 
 .game-tag {
+	/* FIXME Should not be float (inverts order). Instead game-tag-list should be a flex */
     float: right;
 
     background-color: linen;    
