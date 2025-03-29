@@ -1,17 +1,16 @@
-package br.com.arbo.steamside.steam.client.library;
+package br.com.arbo.steamside.steam.client.home;
 
 import java.util.function.Consumer;
 
+import br.com.arbo.steamside.steam.client.library.Libraries;
 import org.junit.Test;
 
-import br.com.arbo.steamside.steam.client.home.DumpSteamCategoriesFrom_SteamClientHome;
-
-public class ExampleDumpSteamCategoriesFrom_Library
+public class ExampleDumpSteamCategoriesFrom_SteamClientHome
 {
 
 	public static void main(final String[] args)
 	{
-		new ExampleDumpSteamCategoriesFrom_Library().run();
+		new ExampleDumpSteamCategoriesFrom_SteamClientHome().run();
 	}
 
 	private Consumer<String> print = System.out::println;

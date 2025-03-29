@@ -12,6 +12,7 @@ import br.com.arbo.steamside.steam.client.localfiles.localconfig.File_localconfi
 import br.com.arbo.steamside.steam.client.localfiles.localconfig.Parse_localconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Data_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.File_sharedconfig_vdf;
+import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.InMemory_sharedconfig_vdf;
 import br.com.arbo.steamside.steam.client.localfiles.sharedconfig.Parse_sharedconfig_vdf;
 
 public class SteamClientHomeFromLocalFiles
@@ -61,6 +62,12 @@ public class SteamClientHomeFromLocalFiles
 
 	private Data_sharedconfig_vdf digest_sharedconfig_vdf()
 	{
+		boolean USELESS = true;
+
+		if (USELESS) {
+			return new InMemory_sharedconfig_vdf();
+		}
+
 		return SteamLocalFileUtils.doWithFile(
 			file_sharedconfig_vdf.sharedconfig_vdf(),
 			in -> new Parse_sharedconfig_vdf(in).parse());
