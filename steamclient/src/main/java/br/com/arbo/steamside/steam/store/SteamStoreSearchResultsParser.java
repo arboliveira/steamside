@@ -18,7 +18,7 @@ public class SteamStoreSearchResultsParser
 		Pattern pattern = SteamStoreSearchResultsParser.pattern();
 		Matcher matcher = pattern.matcher(
 			StringUtils.substringAfter(
-				content, "<div id=\"search_resultsRows\">"));
+				content, "<!-- List Items -->"));
 		while (matcher.find())
 		{
 			visitor.each(extractOne(matcher));
