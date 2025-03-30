@@ -17,6 +17,7 @@
     "link" : "api/app/12800/run",
     "image" : "http://cdn.akamai.steamstatic.com/steam/apps/12800/header.jpg",
     "store" : "http://store.steampowered.com/app/12800",
+    "unavailable" : "Y",
     "tags" : [ {
       "name" : "Open world"
     }, {

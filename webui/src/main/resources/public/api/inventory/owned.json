@@ -1,0 +1,16 @@
+[
+{
+    "appid" : "37600",
+    "name" : "Windosill",
+    "link" : "api/app/37600/run",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
+    "store" : "http://store.steampowered.com/app/37600",
+    "tags" : [ {
+        "name" : "Kids"
+    }, {
+        "name" : "favorite"
+    }, {
+        "name" : "Indie"
+    } ]
+}
+]

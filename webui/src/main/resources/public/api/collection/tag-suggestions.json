@@ -1,1 +1,9 @@
-[{"name":"Unplayed","count":"9"},{"name":"Favorites","count":"3"}]
+[
+  {"name":"Indie","count":"4"}
+,
+  {"name":"Hand drawn","count":"2"}
+,
+  {"name":"Unplayed","count":"9"}
+,
+  {"name":"Favorites","count":"3"}
+]
