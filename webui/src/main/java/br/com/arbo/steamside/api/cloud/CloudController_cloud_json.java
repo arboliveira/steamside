@@ -28,7 +28,7 @@ public class CloudController_cloud_json implements CloudController_cloud
 	{
 		CloudDTO dto = new CloudDTO();
 		dto.cloud = cloud();
-		dto.dontpad(localSettingsFactory);
+		dto.cloudSyncedLocation_hydrate(localSettingsFactory);
 		return dto;
 	}
 
@@ -37,7 +37,7 @@ public class CloudController_cloud_json implements CloudController_cloud
 	{
 		SteamsideLocalXml xml = new SteamsideLocalXml();
 		xml.cloud = payload.cloud;
-		xml.cloudSyncedLocation(Paths.get(payload.dontpad));
+		xml.cloudSyncedLocation(Paths.get(payload.cloudSyncedLocation));
 		persistence.write(xml);
 		return payload;
 	}

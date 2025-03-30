@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.arbo.steamside.api.app.AppCardDTO;
@@ -23,9 +23,9 @@ public class SearchController
 		return this.continues.continues();
 	}
 
-	@RequestMapping(value = "search.json", params = "query")
+	@RequestMapping(value = "{query}/search.json")
 	public List<AppCardDTO> search(
-		@RequestParam String query)
+			@PathVariable String query)
 	{
 		return new SearchController_search_json(tagsData).jsonable(query);
 	}

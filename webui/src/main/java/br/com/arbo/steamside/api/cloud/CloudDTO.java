@@ -9,7 +9,7 @@ import br.com.arbo.steamside.settings.local.LocalSettingsFactory.Missing;
 public class CloudDTO
 {
 
-	private static Optional<String> cloudSyncedLocation(
+	private static Optional<String> cloudSyncedLocation_read(
 		LocalSettingsFactory localSettingsFactory)
 	{
 		try
@@ -23,13 +23,13 @@ public class CloudDTO
 		}
 	}
 
-	public void dontpad(LocalSettingsFactory localSettingsFactory)
+	public void cloudSyncedLocation_hydrate(LocalSettingsFactory localSettingsFactory)
 	{
-		this.dontpad = cloudSyncedLocation(localSettingsFactory).orElse("");
+		this.cloudSyncedLocation = cloudSyncedLocation_read(localSettingsFactory).orElse("");
 	}
 
 	public boolean cloud;
 
-	public String dontpad;
+	public String cloudSyncedLocation;
 
 }

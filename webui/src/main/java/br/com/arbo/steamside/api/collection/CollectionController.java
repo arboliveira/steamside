@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.arbo.steamside.api.app.AppCardDTO;
@@ -77,8 +76,8 @@ public class CollectionController
 				new CollectionName(name)));
 	}
 
-	@RequestMapping(value = "collection.json", params = "name")
-	public List<AppCardDTO> json(@RequestParam String name)
+	@RequestMapping(value = "{name}/collection.json")
+	public List<AppCardDTO> json(@PathVariable String name)
 	{
 		return new CollectionController_collection_json(
 			name, apiAppSettings.limit(), sys, steamClientHome,
