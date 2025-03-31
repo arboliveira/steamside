@@ -1,0 +1,54 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
+<link href="heartbeat.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<div id="game-tile" class="game-tile game-tile-in-deck">
+    <div
+            style="transform: scale(1);"
+            data-why="https://stackoverflow.com/questions/30271404/how-should-position-fixed-work-in-a-shadow-dom-root/70422489#70422489"
+    >
+        <div class="game-tile-inner">
+            <a class="game-link" href="${this.game?.link}">
+                <img class="game-img" src="${this.game?.image}" />
+                <div class="game-tile-caption">
+                    <big><strong>
+                        <span class="game-name">${this.game?.name}</span>
+                    </strong></big>
+                </div>
+            </a>
+        </div>
+        <if-- condition="this.game_tile_inner_loading_overlay_visible">
+        <div class="game-tile-inner-loading-overlay" style="display: block;">
+            <img class="heartbeat" src="steamside.png" style="margin: 15%; width: 25%" />
+        </div>
+        </if-->
+    </div>
+    <if-- condition="this.instruments_panel_visible">
+    <div class="game-tile-command-bar">
+        <if-- condition="this.action_button_add_visible">
+            <a class="game-tile-command action-button-add" href="">add</a>
+        </if-->
+        <if-- condition="this.game_tile_play_visible">
+        <a class="game-tile-command game-tile-play" href="${this.game?.link}">play</a>
+        </if-->
+        <if-- condition="this.action_button_remove_visible">
+            <a class="game-tile-command action-button-remove" href="">remove</a>
+        </if-->
+        <a target="_blank" class="game-tile-command game-tile-store" href="${this.game?.store}">store</a>
+        <a class="game-tile-command game-tile-tag" href="">tag</a>
+    </div>
+    <div id="game-tag-list">
+        <span>&nbsp;</span>
+        <for-- items="this.game_tag_views" value="tag_view" index="index">
+		<span class="game-tag">
+			<a href="${tag_view.tag_url}" class="game-tag-link">
+				<span class="game-tag-name">${tag_view.tag_name}</span>
+			</a>
+		</span>
+        </for-->
+    </div>
+    </if-->
+</div>

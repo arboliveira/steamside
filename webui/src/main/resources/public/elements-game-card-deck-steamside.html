@@ -1,0 +1,37 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<div class="deck-bisected">
+    <div class="more-icon-container">
+        <if-- condition="this.more_icon_visible">
+            <a class='target-button more-icon'>${this.more_icon_symbol} ${this.deck_size}</a>
+        </if-->
+        <div class="deck-headliners">
+            <for-- items="this.headliners" value="card" index="index">
+                <elements-game-card-steamside
+                    .game="${card}"
+                    kids_mode=${this.kids_mode}
+                    include_action_button_remove="${this.include_action_button_remove}"
+                    include_action_button_add="${this.include_action_button_add}"
+                ></elements-game-card-steamside>
+            </for-->
+        </div>
+    </div>
+    <if-- condition="this.tailgaters_visible">
+        <div class="deck-tailgaters">
+            <for-- items="this.tailgaters" value="card" index="index">
+                <elements-game-card-steamside
+                    .game="${card}"
+                    kids_mode=${this.kids_mode}
+                    include_action_button_remove="${this.include_action_button_remove}"
+                    include_action_button_add="${this.include_action_button_add}"
+                    game_unavailable="${card.unavailable}"
+                    .game_tags="${card.tags}"
+                ></elements-game-card-steamside>
+            </for-->
+        </div>
+    </if-->
+</div>

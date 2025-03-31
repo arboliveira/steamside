@@ -1,0 +1,26 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+        <div id="TagStickersView">
+            <if-- condition="this.tags_exist">
+                <true-->
+                    <for-- items="this.tags_collection" value="tag">
+                        <elements-tag-sticker-steamside
+                                click_event="${this.click_event_on_stickers}"
+                                .tag="${tag}"
+                        >
+                        </elements-tag-sticker-steamside>
+                    </for-->
+                </true-->
+                <false-->
+            <p id="no-collections-yet" class="instructions-and-explanations"
+               style="clear: both">
+                <span id="choice-build-a-new-one">You haven't tagged any games yet.</span>
+                <a href="#/collections/new" class="target-button">Build a new collection</a>
+            </p>
+                </false-->
+            </if-->
+        </div>
+

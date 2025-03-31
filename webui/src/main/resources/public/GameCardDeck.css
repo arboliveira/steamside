@@ -125,7 +125,6 @@
     padding: 0.25em;
     padding-left: 0.5em;
     padding-right: 0.75em;
-    background-color: linen;
 
 	border-left: 4px outset #999;
 	border-top: 1px solid #999;
@@ -156,4 +155,12 @@ a.display-collection-name {
 	border-bottom: 1px solid #555;
 	border-top-right-radius: 0.5em;
 	border-bottom-right-radius: 0.5em;
+}
+
+.sticker-curated {
+	background-color: linen;
+}
+
+.sticker-builtin {
+	background-color: darkseagreen;
 }

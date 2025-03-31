@@ -1,0 +1,36 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<link href="Forms.css" rel="stylesheet" type="text/css" />
+<link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<div id="add-games-segment" class="segment">
+
+    <div class="side-header side-header-at-left">
+        <p class="side-header-paragraph">
+                <span class="side-text side-text-at-left">
+                Add<br/>
+                Games<br/>
+                </span>
+        </p>
+        <div class="side-links">
+            <ul>
+                <!--<li><a href="">Clear...</a></li>-->
+            </ul>
+        </div>
+    </div>
+
+    <div class="content content-at-right">
+        <elements-collection-edit-add-games-command-box-steamside
+                firstSearchResult_name="${this.firstSearchResult?.name}"
+        >
+        </elements-collection-edit-add-games-command-box-steamside>
+
+        <elements-game-card-deck-steamside
+                .collection="${this.collectionEditSearchResults}"
+                include_action_button_add="true"
+        ></elements-game-card-deck-steamside>
+    </div>
+
+</div>

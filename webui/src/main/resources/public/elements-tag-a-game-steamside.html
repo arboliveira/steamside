@@ -1,0 +1,62 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<link href="Forms.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<div id="TagAGameView" class="segment">
+
+    <div class="side-header side-header-at-left">
+        <p class="side-header-paragraph">
+			<span class="side-text side-text-at-left">
+			Tag
+			</span>
+        </p>
+    </div>
+
+    <div class="content content-at-right">
+
+        <p id="GameCardView" class="instructions-and-explanations">
+
+            <elements-game-card-steamside
+                    .game="${this.game}"
+            ></elements-game-card-steamside>
+
+        </p>
+
+        <div class="form-block form-text" style="width: 95%">
+
+            <elements-command-box-steamside
+                    placeholder_text="Collection for ${this.game?.name}"
+            >
+                <span slot="command-hint">
+                    <elements-command-hint-with-verb-and-subject-steamside
+                            class="viewHintA"
+                            verb="Tag as"
+                            subject="${this.commandHintsSubject}">
+                    </elements-command-hint-with-verb-and-subject-steamside>
+                </span>
+                <span slot="command-hint-alternate">
+                    <elements-command-hint-with-verb-and-subject-steamside
+                            class="viewHintB"
+                            verb="Search collections for"
+                            subject="${this.commandHintsSubject}">
+                    </elements-command-hint-with-verb-and-subject-steamside>
+                </span>
+            </elements-command-box-steamside>
+
+
+            <p>
+                <span class="instructions-and-explanations">Tagged recently:</span>
+
+            <div id="TagSuggestionsView">
+                <elements-tag-stickers-steamside
+                        .tags_collection="${this.suggestions}"
+                >
+                </elements-tag-stickers-steamside>
+            </div>
+            </p>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,41 @@
+.m-ore-icon {
+    position: absolute;
+    bottom: 300px;
+    right: 50px;
+    z-index: 10;
+}
+
+.more-icon-container {
+    position: relative;
+    display: inline-block;
+}
+
+a.more-icon {
+    position: absolute;
+    bottom: 0px;
+    right: 4px;
+    font-size: x-small;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+.deck-bisected {
+    --lip: 12%; /* room for extended width of first card */
+    --cols: 3;
+    --gtc: repeat(var(--cols), minmax(0, 1fr));
+    margin-left: var(--lip);
+}
+
+.deck-headliners {
+    margin-bottom: 2%; /* room for extended height of first card */
+    display: grid;
+    grid-template-columns: var(--gtc);
+}
+.deck-headliners > elements-game-card-steamside:first-of-type {
+    transform: scale(1.1);
+    transform-origin: top right;
+}
+.deck-tailgaters {
+    display: grid;
+    grid-template-columns: var(--gtc);
+}

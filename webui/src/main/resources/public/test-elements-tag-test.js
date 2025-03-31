@@ -17,9 +17,10 @@ describe(suite.title, async function () {
         it('looks good', async function () {
             this.retries(64);
 
-            const tagView = CT.querySelector('#TagAGameView', window);
-            
-            const tags = CT.querySelectorAll(".display-collection-name", tagView);
+            const element1 = CT.querySelector('elements-tag-a-game-steamside', window);
+            const element2 = CT.querySelector('elements-tag-stickers-steamside', element1);
+
+            const tags = CT.querySelectorAll("elements-tag-sticker-steamside", element2);
          
             function assertTag(n, expected) {
                 const name = CT.querySelector(".tag-sticker-name", tags[n]);

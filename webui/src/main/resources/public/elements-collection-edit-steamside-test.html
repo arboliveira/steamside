@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html><head>
+    <!-- ======================================================================= -->
+    <title>
+
+        collection-edit-steamside
+
+    </title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <!-- ======================================================================= -->
+</head>
+
+<body style="background-color: lightseagreen">
+
+<elements-collection-edit-steamside></elements-collection-edit-steamside>
+
+</body>
+
+<script type="importmap">
+    {
+        "imports": {
+            "sinon": "../node_modules/sinon/pkg/sinon-esm.js",
+            "#customary": "./../node_modules/customary/src/now.js",
+            "#customary/": "./../node_modules/customary/src/",
+            "#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+            "#steamside/": "./"
+        }
+    }
+</script>
+
+<script type="module">
+	import {Customary} from "#customary";
+    import {CollectionEditElement} from "#steamside/elements-collection-edit-steamside.js";
+
+		await Customary.untilDefined(CollectionEditElement);
+
+		const tag = {"name": "Hand drawn", "count": "2"};
+
+		const el = document.querySelector('elements-collection-edit-steamside');
+		el._tag = tag;
+</script>
+</html>

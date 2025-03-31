@@ -1,0 +1,32 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<link href="Forms.css" rel="stylesheet" type="text/css" />
+<link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<!--
+TODO Design an easy SegmentElement with "header_position" "left" or "right"
+TODO Wrap the picker and the command box within a parent segment "Combine"
+TODO Make inventory picker free-floating instead of an "Inventories" segment
+-->
+
+            <elements-collection-picker-steamside>
+                <span slot="purpose">
+                    <div id="CombinePurposeView" class="form-block form-text purpose-of-this-section">
+                        Combine
+                        <span id="CombineCollectionName" class="subject-collection-name">
+                                ${this.__tag?.name}
+                        </span>
+                        with...
+                    </div>
+                </span>
+            </elements-collection-picker-steamside>
+
+<if-- condition="this.combine_command_box_visible">
+    <elements-collection-edit-combine-command-box-steamside
+            collection_editing_name="${this.__tag?.name}"
+            collection_combining_name="${this.__tag_combining_name}"
+    >
+    </elements-collection-edit-combine-command-box-steamside>
+</if-->

@@ -22,11 +22,6 @@
 
 <!-- ======================================================================= -->
 
-  <script src="jquery-2.1.1.js" type="text/javascript"></script>
-  <script src="underscore.js" type="text/javascript"></script>
-  <script src="backbone.js" type="text/javascript"></script>
-  <script src="stacktrace.js" type="text/javascript"></script>
-
   <link href="animate.css" rel="stylesheet" type="text/css" />
 
   <!-- ======================================================================= -->
@@ -41,6 +36,7 @@
 <body>
 <!-- ======================================================================= -->
 
+<elements-tag-a-game-steamside></elements-tag-a-game-steamside>
 <div id="page-to-test"></div>
 
 <!-- ======================================================================= -->
@@ -57,32 +53,18 @@
 </script>
 
 <script type="module">
-  import {Backend} from "#steamside/Backend.js";
-  import {TagAGameView} from "#steamside/TagAGameView.js";
-  import {SteamsideSpriteSheet} from "#steamside/SteamsideSpriteSheet.js";
-  import {Game} from "#steamside/GameCardDeck.js";
+  import {Customary} from "#customary";
+  import {TagAGameElement} from "#steamside/elements-tag-a-game-steamside.js";
 
-  const game = new Game({
-    name: "Test Game"
-  });
+  await Customary.untilDefined(TagAGameElement);
 
-  const spritesSteamside = new SteamsideSpriteSheet();
-  const cardTemplatePromise =  spritesSteamside.card.sprite_promise();
+  const game = {
+    name: "Test Game",
+    "image" : "https://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
+  };
 
-  const viewBeingTested = new TagAGameView({
-    game: game,
-    cardTemplatePromise: cardTemplatePromise,
-    backend: new Backend()
-  }).render();
-
-  replaceTestableUI(viewBeingTested.$el);
-
-  function replaceTestableUI (el) {
-    const testbed = $('#page-to-test');
-    testbed.empty();
-    testbed.append(el);
-  }
-
+  const el = document.body.querySelector('elements-tag-a-game-steamside');
+  el.game = game;
 </script>
 
 </body>

@@ -1,0 +1,54 @@
+<elements-command-box-steamside
+        placeholder_text="Combine ${this.collection_editing_name} with ${this.collection_combining_name}"
+>
+        <span slot="command-hint">
+            <elements-command-hint-with-verb-and-subject-steamside
+                    class="viewHintA"
+                    verb="${this.verbA}"
+                    subject="${this.subjectA}">
+            </elements-command-hint-with-verb-and-subject-steamside>
+        </span>
+        <span slot="command-hint-alternate">
+            <elements-command-hint-with-verb-and-subject-steamside
+                    class="viewHintB"
+                    verb="${this.verbB}"
+                    subject="${this.subjectB}">
+            </elements-command-hint-with-verb-and-subject-steamside>
+        </span>
+</elements-command-box-steamside>
+
+
+<!--
+FIXME instead of verb-and-subject, slot with new RED command-hint elements
+-->
+<br/>
+<span id="CombineCommandHint" class="command-hint">
+    <span id="CombineCommandHintAction">
+        Create
+    </span>
+    <span id="CombineCommandHintCollection" class="command-hint-special">
+        Combined
+    </span>
+    collection
+    <span id="CombineCommandHintDelete">
+        <span id="CombineCommandHintDelete1">
+            +
+            <span style="color: red">
+                delete
+            </span>
+            <span id="CombineCommandHintDelete1Name" class="command-hint-special">
+                C1
+            </span>
+        </span>
+        <span id="CombineCommandHintDelete2">
+            +
+            <span style="color: red">
+                delete
+            </span>
+            <span id="CombineCommandHintDelete2Name" class="command-hint-special">
+                C2
+            </span>
+        </span>
+    </span>
+</span>
+
