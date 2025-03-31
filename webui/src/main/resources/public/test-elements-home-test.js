@@ -1,6 +1,6 @@
 import 'mocha';
-import { CustomaryTesting as CT } from "#customary-testing";
-import { expect, assert } from "chai";
+import {CustomaryTesting as CT} from "#customary-testing";
+import {assert, expect} from "chai";
 
 const suite = {
     title: 'Home',
@@ -14,17 +14,28 @@ describe(suite.title, async function () {
 
     before(() => _window = CT.open(suite.subject_html));
     after(() => _window.close());
-    
+
+    function findHome() {
+        const element1 = CT.querySelector('elements-world-home-steamside', _window);
+        const element2 = CT.querySelector('elements-world-home-advanced-mode-steamside', element1);
+        return element2;
+    }
+
+    function findSegment(segmentName) {
+        const element2 = findHome();
+        return CT.querySelector(segmentName, element2);
+    }
+
     describe('happy day: Continues', async function () {
         let segment;
         let b;
         it('looks good', async function () {
             this.retries(256);
 
-            segment = _window.$('#continues-segment');
-            
-            b = segment.find('.more-button-text');
-            assert.equal(b.is(':visible'), true, 'visible more button');
+            segment = findSegment('#continues-segment');
+            const element3 = CT.querySelector('elements-game-card-deck-steamside', segment);
+            b = CT.querySelector('.more-icon', element3);
+            expect(b.checkVisibility(), 'visible more button');
 
             const visibleGamesBeforeMoreClicked = visibleGames(segment);
             expect(visibleGamesBeforeMoreClicked).to.equal(3);
@@ -41,37 +52,42 @@ describe(suite.title, async function () {
     });
     
     describe('happy day: Search', async function () {
-        let segment, button;
+        let segment, commandBox, button;
 
         it('looks good', async function () {
             this.retries(64);
 
-            segment = _window.$('#search-segment');
+            const element1 = findHome();
+            const element2 = CT.querySelector('elements-world-home-search-segment-steamside', element1);
+            
+            segment = CT.querySelector('#search-segment', element2);
+            
+            const element3 = CT.querySelector('elements-world-home-search-command-box-steamside', element2);
+            const element4 = CT.querySelector('elements-command-box-steamside', element3);
+            
+            commandBox = CT.querySelector('.command-box', element4);
         });
         it('interact', async function () {
-            const input = segment.find('.command-text-input');
-            input.val('anything');
+            const input = commandBox.querySelector('.command-text-input');
+            CT.input('goat', input);
         });
         it('looks good', async function () {
             this.retries(64);
 
-            button = segment.find('.command-button').get(0);
+            button = commandBox.querySelector('.command-button');
             expect(button.value).eq('Enter');
         });
         it('interact', async function () {
-            // FIXME
-            if (false) {
-                button.click();
-            }
+            button.click();
         });
         it('looks good', async function () {
-            // FIXME
-            if (false) {
-                this.retries(512);
+            this.retries(64);
 
-                const searchResults = segment.find('.game-tile');
-                expect(searchResults.length).to.equal(4);
-            }
+            // FIXME input content changes on screen, but DOM input value does not ?!?
+            /*
+            const searchResults = visibleGames(segment);
+            expect(searchResults).to.equal(3);
+             */
         });
     });
     
@@ -80,10 +96,14 @@ describe(suite.title, async function () {
         it('looks good', async function () {
             this.retries(64);
 
-            segment = _window.$('#favorites-segment');
+            const element1 = findHome();
+            const element2 = CT.querySelector('elements-world-home-favorites-segment-steamside', element1);
 
-            b = segment.find('.more-button-text');
-            assert.equal(b.is(':visible'), true, 'visible more button');
+            segment = CT.querySelector('#favorites-segment', element2);
+
+            const element3 = CT.querySelector('elements-game-card-deck-steamside', segment);
+            b = CT.querySelector('.more-icon', element3);
+            expect(b.checkVisibility(), 'visible more button');
 
             const visibleGamesBeforeMoreClicked = visibleGames(segment);
             expect(visibleGamesBeforeMoreClicked).to.equal(3);
@@ -103,24 +123,32 @@ describe(suite.title, async function () {
         it('looks good', async function () {
             this.retries(64);
 
-            segment = _window.$('#favorites-segment');
+            const element1 = findHome();
+            const element2 = CT.querySelector('elements-world-home-favorites-segment-steamside', element1);
+
+            segment = CT.querySelector('#favorites-segment', element2);
         });
         it('interact', async function () {
-            const l = segment.find("#side-link-favorite-switch").get(0);
+            const l = segment.querySelector("#side-link-favorite-switch");
             l.click();
         });
         it('looks good', async function () {
             this.retries(512);
 
-            const listView = _window.$("#TagStickersView");
-            expect(listView.length).to.equal(1);
+            const element3 = CT.querySelector('elements-collection-picker-steamside', segment);
+            const element4 = CT.querySelector('elements-tag-stickers-steamside', element3);
+            
+            const listView = CT.querySelector("#TagStickersView", element4);
 
-            const info = listView.find("#TagStickerView");
+            const info = listView.querySelectorAll("elements-tag-sticker-steamside");
             assert.equal(info.length > 0, true, 'tag stickers');
         });
     });
 });
 
-function visibleGames(segment) {
-    return segment.find('.game-tile').filter(':visible').length;
+function visibleGames(withDeck) {
+    const element1 = CT.querySelector('elements-game-card-deck-steamside', withDeck);
+    const cards = [...CT.querySelectorAll('elements-game-card-steamside', element1)];
+    const visibleCards = cards.filter(card => card.checkVisibility());
+    return visibleCards.length;
 }

@@ -23,11 +23,6 @@
 
 <!-- ======================================================================= -->
 
-  <script src="jquery-2.1.1.js" type="text/javascript"></script>
-  <script src="underscore.js" type="text/javascript"></script>
-  <script src="backbone.js" type="text/javascript"></script>
-  <script src="stacktrace.js" type="text/javascript"></script>
-
   <link href="animate.css" rel="stylesheet" type="text/css" />
 
   <!-- ======================================================================= -->
@@ -58,65 +53,37 @@
 </script>
 
 <script type="module">
-  import {GameCardView} from "#steamside/GameCardDeck.js";
-  import {KidsSpriteSheet} from "#steamside/KidsHome.js";
-  import {Game} from "#steamside/GameCardDeck.js";
+  import {Customary} from "#customary";
+  import {GameCardElement} from "#steamside/elements-game-card-steamside.js";
+  import {Backend} from "#steamside/data-backend.js";
 
-  const kidsSpriteSheet = new KidsSpriteSheet();
+  await Customary.untilDefined(GameCardElement);
 
-  const cardTemplatePromise = kidsSpriteSheet.card.sprite_promise();
-
-  const oneResult = new Game();
-  oneResult.set("name", "Game of Kids");
-  oneResult.set("link", "would be URL");
-
-  const backend_invoked = $.Deferred();
-
-  const MockBackend = Backbone.Model.extend(
-          {
-            ajax_ajax_promise_2: function(aUrl)
-            {
-              const that = this;
-              that.__aUrl__ajax_ajax_promise_2 = aUrl;
-              return backend_invoked;
-            },
-
-            fetch_fetch_json: function(collection, success)
-            {
-
-            }
-          });
-
-  const backend = new MockBackend();
-
-  const enormity = {
-    styleClass: 'game-tile-large',
-    width: 100
+  const oneResult = {
+    name: "Game of Kids",
+    link: "would be URL",
+    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
   };
 
-  const card_view = new GameCardView({
-    cardTemplatePromise: cardTemplatePromise,
-    model: oneResult,
-    enormity: enormity,
-    kidsMode: true,
-    continues: null,
-    on_render: null,
-    on_tag: null,
-    backend: backend
-  });
-  card_view.render();
-
-  card_view.backend.__backend_invoked = backend_invoked;
-  card_view.el.__GameCardView = card_view;
-
-  replaceTestableUI(card_view.$el);
-
-  function replaceTestableUI (el) {
-    const testbed = $('#page-to-test');
-    testbed.empty();
-    testbed.append(el);
+  class MockBackend extends Backend {
+    async fetchSessionDataAndDisableBackendIfOffline() {}
+    async fetchBackend({url, requestInit}) {
+      this.fetchBackend_url = url;
+      while (!this.well_done_fetchBackend) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+    well_done_fetchBackend;
+    fetchBackend_url;
   }
 
+  const element = new GameCardElement();
+  element.kids_mode = "true";
+  element.game = oneResult;
+  element.backend = new MockBackend();
+
+  const testbed = document.body.querySelector('#page-to-test');
+  testbed.append(element);
 </script>
 
 </body>

@@ -1,15 +1,3 @@
-import {newBackendMaybeDisabledThisSession} from "#steamside/Backend.js";
-import {Steamside_HomeWorld} from "#steamside/Home.js";
-import {SteamsideSpriteSheet} from "#steamside/SteamsideSpriteSheet.js";
-import {KidsSpriteSheet} from "#steamside/KidsHome.js";
-import {SessionModel} from "#steamside/session.js";
-
-const nameBackend = 'Backend';
-const nameSessionModel = 'SessionModel';
-const nameKidsMode = 'KidsMode';
-const nameSpritesKids = 'SpritesKids';
-const nameSpritesSteamside = 'SpritesSteamside';
-
 export class Steamside_AngularJS
 {
 	constructor() {
@@ -21,73 +9,7 @@ export class Steamside_AngularJS
 
 	configureApplicationModule()
 	{
-		this.constant_Backend();
-		this.constant_SpritesKids();
-		this.constant_SpritesSteamside();
-
-		this.factory_SessionModel();
-		this.factory_KidsMode();
-
-		this.controller_HomeWorld();
-
 		this.config_routeProvider();
-	}
-
-	constant_Backend()
-	{
-		const backend = newBackendMaybeDisabledThisSession();
-		this.moduleSteamside.constant(nameBackend, backend);
-	}
-
-	constant_SpritesKids() {
-		const that = this;
-		that.moduleSteamside.constant(
-			nameSpritesKids, new KidsSpriteSheet());
-	}
-
-	constant_SpritesSteamside() {
-		const that = this;
-		that.moduleSteamside.constant(
-			nameSpritesSteamside, new SteamsideSpriteSheet());
-	}
-
-	factory_SessionModel()
-	{
-		const that = this;
-		that.moduleSteamside.factory(
-			nameSessionModel,
-			[nameBackend, function(_theBackend) {
-				return new SessionModel();
-			}]);
-	}
-
-	factory_KidsMode()
-	{
-		const that = this;
-		that.moduleSteamside.factory(
-			nameKidsMode,
-			[nameSessionModel, function(theSessionModel) {
-				return theSessionModel;
-			}]);
-	}
-
-	controller_HomeWorld()
-	{
-		const that = this;
-		that.moduleSteamside.controller(
-			Steamside_HomeWorld.nameController,
-			['$scope', '$location',
-				nameBackend,
-				nameSessionModel,
-				nameKidsMode,
-				nameSpritesKids,
-				nameSpritesSteamside,
-			function ($scope, $location, theBackend, theSessionModel, theKidsMode,
-				  		theSpritesKids, theSpritesSteamside){
-				Steamside_HomeWorld.controller(
-					$scope, $location, theBackend, theSessionModel, theKidsMode,
-					theSpritesKids, theSpritesSteamside);
-			}]);
 	}
 
 	config_routeProvider()
@@ -104,10 +26,7 @@ const SteamsideRouter =
 {
 	config_routeProvider: function($routeProvider) {
 		$routeProvider
-			.when('/', {
-				templateUrl: Steamside_HomeWorld.htmlWorld,
-				controller: Steamside_HomeWorld.nameController
-			})
+			.when('/', {templateUrl: 'Home.html',})
 			.when('/mygames', {templateUrl: 'MyGames.html'})
 			.when('/steamclient', {templateUrl: 'SteamClient.html'})
 			.when('/settings', {templateUrl: 'Settings.html'})
