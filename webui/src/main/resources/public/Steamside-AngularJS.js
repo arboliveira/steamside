@@ -2,7 +2,6 @@ import {newBackendMaybeDisabledThisSession} from "#steamside/Backend.js";
 import {Steamside_SettingsWorld} from "#steamside/Settings.js";
 import {Steamside_InventoryWorld} from "#steamside/InventoryWorld.js";
 import {Steamside_CollectionsNewWorld} from "#steamside/CollectionNew.js";
-import {Steamside_MyGamesWorld} from "#steamside/MyGames.js";
 import {Steamside_HomeWorld} from "#steamside/Home.js";
 import {SteamsideSpriteSheet} from "#steamside/SteamsideSpriteSheet.js";
 import {KidsSpriteSheet} from "#steamside/KidsHome.js";
@@ -33,7 +32,6 @@ export class Steamside_AngularJS
 		this.factory_KidsMode();
 
 		this.controller_HomeWorld();
-		this.controller_MyGamesWorld();
 		this.controller_SettingsWorld();
 		this.controller_InventoryWorld();
 		this.controller_CollectionsNewWorld();
@@ -98,17 +96,6 @@ export class Steamside_AngularJS
 			}]);
 	}
 
-	controller_MyGamesWorld()
-	{
-		const that = this;
-		that.moduleSteamside.controller(
-			Steamside_MyGamesWorld.nameController,
-				['$scope', nameBackend, nameSpritesSteamside,
-					function ($scope, theBackend, spritesSteamside){
-				Steamside_MyGamesWorld.controller($scope, theBackend, spritesSteamside);
-			}]);
-	}
-
 	controller_SettingsWorld()
 	{
 		const that = this;
@@ -163,10 +150,7 @@ const SteamsideRouter =
 				templateUrl: Steamside_HomeWorld.htmlWorld,
 				controller: Steamside_HomeWorld.nameController
 			})
-			.when('/mygames', {
-				templateUrl: Steamside_MyGamesWorld.htmlWorld,
-				controller: Steamside_MyGamesWorld.nameController
-			})
+			.when('/mygames', {templateUrl: 'MyGames.html'})
 			.when('/steamclient', {templateUrl: 'SteamClient.html'})
 			.when('/settings', {
 				templateUrl: Steamside_SettingsWorld.htmlWorld,
