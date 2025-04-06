@@ -1,0 +1,10 @@
+.game-over-banner
+{
+    background-color: turquoise;
+    border-radius: 50%;
+    border-color: silver;
+    border-width: 8px;
+    border-style: outset;
+    box-shadow: 0 0 0 1px navy;
+    padding: 8px;
+}

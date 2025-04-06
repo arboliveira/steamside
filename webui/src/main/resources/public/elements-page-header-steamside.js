@@ -1,33 +1,30 @@
 import {Customary, CustomaryElement} from "#customary";
 import {fetchKidsModeData} from "#steamside/data-kids-mode.js";
-import {WorldHomeAdvancedModeElement} from "#steamside/elements-world-home-advanced-mode-steamside.js";
-import {WorldHomeKidsModeElement} from "#steamside/elements-world-home-kids-mode-steamside.js";
 
 //import {CustomaryDeclaration} from "#customary";
 
-export class WorldHomeElement extends CustomaryElement {
+export class PageHeaderElement extends CustomaryElement {
 	/**
-	 * @type {CustomaryDeclaration<WorldHomeElement>}
+	 * @type {CustomaryDeclaration<PageHeaderElement>}
 	 */
 	static customary =
 		{
-			name: 'elements-world-home-steamside',
+			name: 'elements-page-header-steamside',
 			config: {
-				attributes: [
-				],
 				state: [
-					'__advancedMode_visible', 
+					'__advancedMode_visible',
 					'__kidsMode_visible', '__kidsMode',
 				],
+				define: {
+					fontLocations: [
+						'https://fonts.googleapis.com/css?family=Arvo:regular,bold',
+						'https://fonts.googleapis.com/css?family=Jura:regular,bold',
+					],
+				},
 			},
 			hooks: {
-				requires: [
-					WorldHomeAdvancedModeElement,
-					WorldHomeKidsModeElement
-				],
 				externalLoader: {
 					import_meta: import.meta,
-					css_dont: true,
 				},
 				lifecycle: {
 					connected: el => el.#on_connected(),
@@ -39,12 +36,12 @@ export class WorldHomeElement extends CustomaryElement {
 		}
 
 	#on_kidsMode_change(a) {
-		if (a) 
+		if (a)
 		{
 			this.__advancedMode_visible = false;
 			this.__kidsMode_visible = true;
-		} 
-		else 
+		}
+		else
 		{
 			this.__advancedMode_visible = true;
 			this.__kidsMode_visible = false;
@@ -56,4 +53,4 @@ export class WorldHomeElement extends CustomaryElement {
 		this.__kidsMode = await fetchKidsModeData();
 	}
 }
-Customary.declare(WorldHomeElement);
+Customary.declare(PageHeaderElement);

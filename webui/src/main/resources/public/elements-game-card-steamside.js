@@ -134,10 +134,11 @@ export class GameCardElement extends CustomaryElement {
 		if (!a) return;
 		const game_tags = a;
 		const views = game_tags.map(
-			tag => ({
-				tag_name: tag.name,
-				tag_url: "#/collections/" + tag.name + "/edit",
-			})
+			tag =>
+				({
+					tag_name: tag.name,
+					tag_url: `./InventoryWorld.html?name=${tag.name}`,
+				})
 		);
 		this.game_tag_views = views;
 	}

@@ -86,7 +86,7 @@ export class WorldCollectionNewElement extends CustomaryElement {
 				if (stay) {
 					// TODO Command box input: clear and focus
 				} else {
-					// TODO Open in another window: "/collections/" + name + "/edit"
+					// TODO Open in another window: `./InventoryWorld.html?name=${encoded}`
 				}
 	}
 

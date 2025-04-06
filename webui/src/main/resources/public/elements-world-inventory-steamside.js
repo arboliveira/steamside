@@ -32,15 +32,8 @@ export class WorldInventoryElement extends CustomaryElement {
 
 	async #on_connected()
 	{
-		const route = window.location.hash;
-
-		const a = 'collections/';
-		const z = '/edit';
-
-		const inventory_name = route.substring(
-			route.indexOf(a) + a.length,
-			route.lastIndexOf(z)
-		);
+		const inventory_name = new URLSearchParams(window.location.search)
+			.get('name');
 
 		/*
 		 https://github.com/jashkenas/backbone/issues/2566#issuecomment-26065829

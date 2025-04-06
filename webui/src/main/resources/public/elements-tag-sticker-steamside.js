@@ -75,7 +75,7 @@ export class TagStickerElement extends CustomaryElement {
 			
 			const name_text = this.tag.name;
 			const encoded = encodeURIComponent(name_text);
-			this.url = '#/collections/' + encoded + '/edit';
+			this.url = `./InventoryWorld.html?name=${encoded}`;
 		}
 	}
 

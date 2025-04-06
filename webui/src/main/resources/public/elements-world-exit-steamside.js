@@ -17,6 +17,12 @@ export class WorldExitElement extends CustomaryElement {
 					'try_again_text', 'command_line', 'command_line_visible',
 					'error_on_exit',
 				],
+				define: {
+					fontLocations: [
+						'https://fonts.googleapis.com/css?family=Arvo:regular,bold',
+						'https://fonts.googleapis.com/css?family=Jura:regular,bold',
+					],
+				},
 			},
 			values: {
 				'try_again_text': 'Try again?',
@@ -24,7 +30,6 @@ export class WorldExitElement extends CustomaryElement {
 			hooks: {
 				externalLoader: {
 					import_meta: import.meta,
-					css_dont: true,
 				},
 				lifecycle: {
 					connected: el => el.#on_connected(),

@@ -30,6 +30,7 @@ export class WorldHomeKidsModeElement extends CustomaryElement {
 	async #on_connected()
 	{
 		const classList = document.body.classList;
+		classList.remove("steamside-body-background");
 		classList.add("steamside-kids-body-background");
 	}
 }

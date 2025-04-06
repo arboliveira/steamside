@@ -4,7 +4,7 @@ import {assert, expect} from "chai";
 
 const suite = {
     title: 'Home',
-    subject_html: 'Steamside.html',
+    subject_html: 'index.html',
 };
 
 describe(suite.title, async function () {

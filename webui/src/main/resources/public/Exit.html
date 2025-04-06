@@ -1,3 +1,56 @@
-<div id="exit">
-    <elements-world-exit-steamside></elements-world-exit-steamside>
+<!DOCTYPE html>
+<html lang="en">
+<!-- ======================================================================= -->
+<head>
+<!-- ======================================================================= -->
+    <!-- --><title>
+
+    Exit &middot; Steamside
+
+    </title><!-- -->
+    <link href="./steamside.png" rel="icon" type="image/png"/>
+    <link href="./steamside-page.css" rel="stylesheet" type="text/css" />
+    <link href="./steamside-body-background.css" rel="stylesheet" type="text/css" />
+<!-- ======================================================================= -->
+</head>
+<!-- ======================================================================= -->
+<body class="steamside-body-background">
+<!-- ======================================================================= -->
+<div class="wrapper">
+    <header>
+        <elements-page-header-steamside></elements-page-header-steamside>
+    </header>
+    <main>
+        <!-- -->
+
+        <elements-world-exit-steamside></elements-world-exit-steamside>
+
+        <!-- -->
+    </main>
+    <footer>
+        <elements-page-footer-steamside></elements-page-footer-steamside>
+    </footer>
 </div>
+<!-- ======================================================================= -->
+<script type="importmap">
+    {
+        "imports": {
+            "#customary": "./customary.js",
+            "#steamside/": "./"
+        }
+    }
+</script>
+<!-- ======================================================================= -->
+<script type="module">
+	import "#steamside/elements-page-header-steamside.js";
+	import "#steamside/elements-page-footer-steamside.js";
+	////
+
+	import "#steamside/elements-world-exit-steamside.js";
+
+	////
+</script>
+<!-- ======================================================================= -->
+</body>
+<!-- ======================================================================= -->
+</html>
