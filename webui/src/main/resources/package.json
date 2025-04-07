@@ -3,10 +3,104 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "// ---- private ---- //": "",
-    "compile-watch": "tsc --build --verbose --watch",
-    "compile": "tsc --build --verbose"
+    "// ---- public ---- //": "//",
+    "start": "wireit",
+    "test": "wireit",
+    "// ---- troubleshoot ---- //": "//",
+    "start:in-dist": "wireit",
+    "test:in-dist": "wireit",
+    "// ---- make ---- //": "//",
+    "dist": "wireit",
+    "clean": "wireit",
+    "// ---- dev ---- //": "//",
+    "dev": "wireit",
+    "start:in-src": "wireit",
+    "test:in-src": "wireit",
+    "compile:watch": "wireit",
+    "// ---- command ---- //": "//",
+    "dist:website": "wireit",
+    "compile": "wireit"
+  },
+  "wireit": {
+    "start": {
+      "command": "npm run start:in-dist",
+      "service": true,
+      "dependencies": [
+        "dist"
+      ]
+    },
+    "test": {
+      "command": "npm run test:in-dist",
+      "service": true,
+      "dependencies": [
+        "dist"
+      ]
+    },
+    "start:in-dist": {
+      "command": "npx web-dev-server --watch --root-dir=.dist/website --open",
+      "service": true
+    },
+    "test:in-dist": {
+      "command": "npx web-dev-server --watch --root-dir=.dist/website --open=/test.html",
+      "service": true
+    },
+    "dist": {
+      "command": "npm run dist:website",
+      "dependencies": [
+        "build"
+      ]
+    },
+    "dist:website": {
+      "command": "npx webpack"
+    },
+    "build": {
+      "command": "npm run compile",
+      "dependencies": [
+        "clean",
+        "dist:participants"
+      ]
+    },
+    "compile": {
+      "command": "tsc --build --pretty --verbose"
+    },
+    "clean": {
+      "dependencies": [
+        "clean:dist",
+        "clean:src"
+      ]
+    },
+    "clean:dist": {
+      "command": "rimraf .dist"
+    },
+    "clean:src": {
+      "command": "rimraf --glob src/**/*.{d.ts,js.map,js} --glob tsconfig.tsbuildinfo"
+    },
+    "dev": {
+      "command": "npm run start:in-src",
+      "service": true,
+      "dependencies": [
+        "compile-watch"
+      ]
+    },
+    "start:in-src": {
+      "command": "npx web-dev-server --watch --open=src/index.html",
+      "service": true
+    },
+    "test:in-src": {
+      "command": "npx web-dev-server --watch --open=src/test.html",
+      "service": true
+    },
+    "compile:watch": {
+      "command": "tsc --build --pretty --verbose --watch",
+      "service": true
+    },
+    "dist:participants": {
+      "dependencies": [
+        "../customary:dist",
+        "../customary-catalog:dist",
+        "../customary-testing:dist"
+      ]
+    }
   },
   "dependencies": {
     "chai": "^5.1.1",

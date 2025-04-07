@@ -54,27 +54,15 @@
 <script type="module">
   import {Customary} from "#customary";
   import {GameCardElement} from "#steamside/elements-game-card-steamside.js";
-  import {Backend} from "#steamside/data-backend.js";
+  import {MockBackend} from "#steamside/test-mock-data-backend.js";
 
   await Customary.untilDefined(GameCardElement);
 
   const oneResult = {
     name: "Game of Kids",
     link: "would be URL",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
+    "image" : "https://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
   };
-
-  class MockBackend extends Backend {
-    async fetchSessionDataAndDisableBackendIfOffline() {}
-    async fetchBackend({url, requestInit}) {
-      this.fetchBackend_url = url;
-      while (!this.well_done_fetchBackend) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-    }
-    well_done_fetchBackend;
-    fetchBackend_url;
-  }
 
   const element = new GameCardElement();
   element.kids_mode = "true";

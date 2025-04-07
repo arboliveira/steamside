@@ -1,11 +1,7 @@
 {
   "include": ["public/**/*.ts"],
-  "exclude": [
-    "public/_script/**/*",
-  ],
   "compilerOptions": {
     "rootDir": "public",
-    "outDir": "public/_script",
     "paths": {
       "#steamside/*": ["./public/*"],
       "#customary-testing": ["./node_modules/customary-testing/src/index.ts"],
@@ -20,7 +16,7 @@
     "useDefineForClassFields": false,
     // ---- END lit decorators: @property @state @query
     // ---- CODING STANDARDS TYPICAL FOR ALL PROJECTS START HERE ----
-    "allowJs": true,
+    "allowJs": false,
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
