@@ -30,6 +30,27 @@ export class WorldHomeSearchCommandBoxElement extends CustomaryElement
                         listener: (el, event) =>
                                 el.#on_changed_input_text_command_box_value(<CustomEvent<any>>event),
                     },
+                    {
+                        selector: '.searched-recently',
+                        listener: (el, event) =>
+                        {
+                            const commandBox = el.renderRoot
+                                .querySelector('elements-command-box-steamside')! as CommandBoxElement;
+                            commandBox.input_text_command_box_value = (event.target! as any).textContent.trim();
+                            commandBox.commandPlease();
+                        },
+                    },
+                        /*
+                    {
+                        listener: (el, event) =>
+                            (el.querySelector('elements-command-box-steamside')
+                        as CommandBoxElement)!
+.set_input_text_command_box_value(event.target.textContent)
+
+
+    //selector: ".searched-recently",
+                    },
+                         */
                 ],
             }
         }

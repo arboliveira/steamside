@@ -1,9 +1,15 @@
 [
+  {"name":"Multiplayer","count":"4"}
+,
+  {"name":"Puzzles and Mysteries","count":"4"}
+,
+  {"name":"Cozy Crafting","count":"5"}
+,
+  {"name":"Boss Battles","count":"4"}
+,
+  {"name":"Survive This","count":"4"}
+,
   {"name":"Indie","count":"4"}
 ,
   {"name":"Hand drawn","count":"2"}
-,
-  {"name":"Unplayed","count":"9"}
-,
-  {"name":"Favorites","count":"3"}
 ]

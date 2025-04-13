@@ -1,0 +1,32 @@
+[
+  {
+      "appid": "1629520",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/1629520/header.jpg",
+      "link": "api/app/1629520/run",
+      "name": "A Little to the Left",
+      "store": "http://store.steampowered.com/app/1629520",
+      "tags": []
+  },
+  {
+      "appid": "400",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/400/header.jpg",
+      "link": "api/app/400/run",
+      "name": "Portal",
+      "store": "http://store.steampowered.com/app/400"
+  },
+  {
+      "appid": "32360",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/32360/header.jpg",
+      "link": "api/app/32360/run",
+      "name": "The Secret of Monkey Island: Special Edition",
+      "store": "http://store.steampowered.com/app/32360"
+  },
+  {
+      "appid": "653530",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/653530/header.jpg",
+      "link": "api/app/653530/run",
+      "name": "Return of the Obra Dinn",
+      "store": "http://store.steampowered.com/app/653530",
+      "tags": []
+  }
+]

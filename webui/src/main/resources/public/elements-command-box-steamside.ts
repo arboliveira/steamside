@@ -122,6 +122,10 @@ export class CommandBoxElement extends CustomaryElement
 
     #doCommand()
     {
+        this.commandPlease();
+    }
+
+    commandPlease() {
         this.dispatchEvent(
             new CustomEvent(
                 'CommandBoxElement:CommandPlease',

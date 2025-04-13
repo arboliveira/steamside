@@ -1,0 +1,33 @@
+[
+  {
+      "appid": "2138710",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/2138710/header.jpg",
+      "link": "api/app/2138710/run",
+      "name": "Sifu",
+      "store": "http://store.steampowered.com/app/2138710",
+      "tags": []
+  },
+  {
+      "appid": "892970",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/892970/header.jpg",
+      "link": "api/app/892970/run",
+      "name": "Valheim",
+      "store": "http://store.steampowered.com/app/892970",
+      "tags": []
+  },
+  {
+      "appid": "268910",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/268910/header.jpg",
+      "link": "api/app/268910/run",
+      "name": "Cuphead",
+      "store": "http://store.steampowered.com/app/268910",
+      "tags": []
+  },
+  {
+      "appid": "391540",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/391540/header.jpg",
+      "link": "api/app/391540/run",
+      "name": "Undertale",
+      "store": "http://store.steampowered.com/app/391540"
+  }
+]

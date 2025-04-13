@@ -1,0 +1,26 @@
+[
+  {
+      "appid": "305620",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/305620/header.jpg",
+      "link": "api/app/305620/run",
+      "name": "The Long Dark",
+      "store": "http://store.steampowered.com/app/305620",
+      "tags": []
+  },
+  {
+      "appid": "1326470",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/1326470/header.jpg",
+      "link": "api/app/1326470/run",
+      "name": "Sons Of The Forest",
+      "store": "http://store.steampowered.com/app/1326470",
+      "tags": []
+  },
+  {
+      "appid": "108600",
+      "image": "http://cdn.akamai.steamstatic.com/steam/apps/108600/header.jpg",
+      "link": "api/app/108600/run",
+      "name": "Project Zomboid",
+      "store": "http://store.steampowered.com/app/108600",
+      "tags": []
+  }
+]

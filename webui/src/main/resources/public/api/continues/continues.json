@@ -1,129 +1,90 @@
-[ {
-    "appid" : "70",
-    "name" : "Half-Life",
-    "link" : "api/app/70/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/70/header.jpg",
-    "store" : "http://store.steampowered.com/app/70",
-    "tags" : [ {
-        "name" : "Action"
-    } ]
-}, {
-    "appid" : "400",
-    "name" : "Portal",
-    "link" : "api/app/400/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/400/header.jpg",
-    "store" : "http://store.steampowered.com/app/400",
-    "tags" : [ {
-        "name" : "favorite"
-    } ]
-}, {
-    "appid" : "271590",
-    "name" : "Grand Theft Auto V",
-    "link" : "api/app/271590/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg",
-    "store" : "http://store.steampowered.com/app/271590",
-    "tags" : [ {
-        "name" : "Open world"
-    }, {
-        "name" : "Action"
-    } ]
-}, {
-    "appid" : "37600",
-    "name" : "Windosill",
-    "link" : "api/app/37600/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
-    "store" : "http://store.steampowered.com/app/37600",
-    "tags" : [ {
-        "name" : "Indie"
-    }, {
-        "name" : "favorite"
-    }, {
-        "name" : "Kids"
-    } ]
-}, {
-    "appid" : "730",
-    "name" : "Counter-Strike: Global Offensive",
-    "link" : "api/app/730/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/730/header.jpg",
-    "store" : "http://store.steampowered.com/app/730",
-    "tags" : [ {
-        "name" : "Action"
-    } ]
-}, {
-    "appid" : "72850",
-    "name" : "The Elder Scrolls V: Skyrim",
-    "link" : "api/app/72850/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/72850/header.jpg",
-    "store" : "http://store.steampowered.com/app/72850",
-    "tags" : [ {
-        "name" : "favorite"
-    }, {
-        "name" : "Open world"
-    } ]
-}, {
-    "appid" : "239030",
-    "name" : "Papers, Please",
-    "link" : "api/app/239030/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/239030/header.jpg",
-    "store" : "http://store.steampowered.com/app/239030",
-    "tags" : [ {
-        "name" : "Indie"
-    }, {
-        "name" : "favorite"
-    } ]
-}, {
-    "appid" : "50300",
-    "name" : "Spec Ops: The Line",
-    "link" : "api/app/50300/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/50300/header.jpg",
-    "store" : "http://store.steampowered.com/app/50300",
-    "unavailable" : "Y",
-    "tags" : [ {
-        "name" : "Action"
-    } ]
-}, {
-    "appid" : "218680",
-    "name" : "Scribblenauts Unlimited",
-    "link" : "api/app/218680/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/218680/header.jpg",
-    "store" : "http://store.steampowered.com/app/218680",
-    "tags" : [ {
-        "name" : "Kids"
-    } ]
-}, {
-    "appid" : "249130",
-    "name" : "LEGO MARVEL Super Heroes",
-    "link" : "api/app/249130/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/249130/header.jpg",
-    "store" : "http://store.steampowered.com/app/249130",
-    "tags" : [ {
-        "name" : "Kids"
-    } ]
-}, {
-    "appid" : "12800",
-    "name" : "FUEL",
-    "link" : "api/app/12800/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/12800/header.jpg",
-    "store" : "http://store.steampowered.com/app/12800",
-    "tags" : [ {
-        "name" : "Open world"
-    }, {
-        "name" : "Racing"
-    } ]
-}, {
-    "appid" : "224760",
-    "name" : "FEZ",
-    "link" : "api/app/224760/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/224760/header.jpg",
-    "store" : "http://store.steampowered.com/app/224760",
-    "tags" : [ {
-        "name" : "Indie"
-    } ]
-}, {
-    "appid" : "27000",
-    "name" : "The Path",
-    "link" : "api/app/27000/run",
-    "image" : "http://cdn.akamai.steamstatic.com/steam/apps/27000/header.jpg",
-    "store" : "http://store.steampowered.com/app/27000",
-    "tags" : [ ]
-} ]
+[
+    {
+        "appid": "289070",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/289070/header.jpg",
+        "link": "api/app/289070/run",
+        "name": "Sid Meier’s Civilization® VI",
+        "store": "http://store.steampowered.com/app/289070",
+        "tags": []
+    },
+    {
+        "appid": "607080",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/607080/header.jpg",
+        "link": "api/app/607080/run",
+        "name": "Psychonauts 2",
+        "store": "http://store.steampowered.com/app/607080",
+        "tags": []
+    },
+    {
+        "appid": "275850",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/275850/header.jpg",
+        "link": "api/app/275850/run",
+        "name": "No Man's Sky",
+        "store": "http://store.steampowered.com/app/275850",
+        "tags": []
+    },
+    {
+            "appid": "1659040",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/1659040/header.jpg",
+            "link": "api/app/1659040/run",
+            "name": "HITMAN World of Assassination",
+            "store": "http://store.steampowered.com/app/1659040",
+            "tags": []
+    },
+    {
+            "appid": "379720",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/379720/header.jpg",
+            "link": "api/app/379720/run",
+            "name": "DOOM",
+            "store": "http://store.steampowered.com/app/379720",
+            "tags": []
+    },
+    {
+        "appid": "2138710",
+        "image": "http://cdn.akamai.steamstatic.com/steam/apps/2138710/header.jpg",
+        "link": "api/app/2138710/run",
+        "name": "Sifu",
+        "store": "http://store.steampowered.com/app/2138710",
+        "tags": []
+    },
+    {
+            "appid": "1237970",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/1237970/header.jpg",
+            "link": "api/app/1237970/run",
+            "name": "Titanfall® 2",
+            "store": "http://store.steampowered.com/app/1237970",
+            "tags": []
+    },
+    {
+            "appid": "1850570",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/1850570/header.jpg",
+            "link": "api/app/1850570/run",
+            "name": "DEATH STRANDING DIRECTOR'S CUT",
+            "store": "http://store.steampowered.com/app/1850570",
+            "tags": []
+    },
+    {
+            "appid": "870780",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/870780/header.jpg",
+            "link": "api/app/870780/run",
+            "name": "Control Ultimate Edition",
+            "store": "http://store.steampowered.com/app/870780",
+            "tags": []
+    },
+    {
+            "appid": "1551360",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/1551360/header.jpg",
+            "link": "api/app/1551360/run",
+            "name": "Forza Horizon 5",
+            "store": "http://store.steampowered.com/app/1551360",
+            "tags": []
+    },
+    {
+            "appid": "225540",
+            "image": "http://cdn.akamai.steamstatic.com/steam/apps/225540/header.jpg",
+            "link": "api/app/225540/run",
+            "name": "Just Cause™ 3",
+            "store": "http://store.steampowered.com/app/225540",
+            "tags": []
+    }
+]
