@@ -96,9 +96,8 @@
     },
     "dist:participants": {
       "dependencies": [
-        "../customary:dist",
-        "../customary-catalog:dist",
-        "../customary-testing:dist"
+        "../../../../../customary:dist",
+        "../../../../../customary-testing:dist"
       ]
     }
   },
@@ -107,16 +106,19 @@
     "customary": "file:../../../../../customary",
     "customary-testing": "file:../../../../../customary-testing",
     "lit": "^3.2.0",
-    "mocha": "^10.7.3",
+    "mocha": "^11.0.1",
     "sinon": "^15.0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.3.19",
-    "@types/js-cookie": "^3.0.6",
     "@types/mocha": "^10.0.8",
     "@types/node": "^20.16.5",
     "@types/sinon": "^10.0.20",
     "@web/dev-server": "^0.4.6",
+    "copy-webpack-plugin": "^12.0.2",
+    "remove-files-webpack-plugin": "^1.5.0",
+    "replace-in-file-webpack-plugin": "^1.0.6",
+    "rimraf": "^6.0.1",
     "typescript": "^5.6.2",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4",

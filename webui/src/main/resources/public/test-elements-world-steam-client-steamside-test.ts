@@ -1,5 +1,4 @@
 import 'mocha';
-import 'sinon';
 import { CustomaryTesting as CT } from "#customary-testing";
 import Sinon from "sinon";
 import {SteamBrowserProtocolBackend, WorldSteamClientElement} from "#steamside/elements-world-steam-client-steamside";
