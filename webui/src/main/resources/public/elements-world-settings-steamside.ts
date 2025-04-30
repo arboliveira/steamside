@@ -43,7 +43,7 @@ export class WorldSettingsElement extends CustomaryElement
     
     #on_firstUpdated() 
     {
-        this.#sideshow.showtime(this);
+        this.#sideshow.showtime(this as any);
         Sideshow.customary_dispatchEvent_Customary_lifecycle_firstUpdated(this);
     }
 

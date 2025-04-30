@@ -13,20 +13,22 @@ describe(suite.title, async function () {
     this.timeout(4000);
     this.slow(500);
     let window: Window;
+    let home_el: HTMLElement;
     let card_view_el: GameCardElement;
+    let game_link: HTMLElement;
     let loadingOverlay: Element;
-    let backend: MockBackend;
+    let mockBackend: MockBackend;
     before(() => window = CT.open(suite.subject_html));
     after(() => window.close());
     describe('happy day', async function () {
         it('looks good', async function () {
             this.retries(64);
 
-            card_view_el = CT.querySelector('elements-game-card-steamside', window);
+            home_el = CT.querySelector('elements-world-home-steamside', window);
+            card_view_el = CT.querySelector('elements-game-card-steamside', home_el);
+            game_link = CT.querySelector('.game-link', card_view_el);
         });
         it('interact', async function () {
-            const game_link: HTMLElement = CT.querySelector('.game-link', card_view_el);
-
             // No asserts, just don't crash on mouseenter and mouseleave
             game_link.dispatchEvent(new MouseEvent('mouseenter', {bubbles: true}));
             game_link.dispatchEvent(new MouseEvent('mouseleave', {bubbles: true}));
@@ -40,16 +42,16 @@ describe(suite.title, async function () {
             expect(loadingOverlay.checkVisibility());
         });
         it('unblock', async function () {
-            backend = card_view_el.backend as MockBackend;
+            mockBackend = (home_el as any).mockBackend as MockBackend;
 
-            backend.well_done_fetchBackend = true;
+            mockBackend.let_it_go = true;
         });
         it('looks good', async function () {
             this.retries(64);
 
             expect(loadingOverlay.checkVisibility()).false;
             
-            const aUrl = backend.fetchBackend_url;
+            const aUrl = mockBackend.played_url;
             expect(aUrl).eq('would be URL');
         });
     });

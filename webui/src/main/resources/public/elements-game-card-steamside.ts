@@ -1,10 +1,17 @@
-import {Customary, CustomaryElement} from "#customary";
-import {Backend} from "#steamside/data-backend.js";
-import {pop_toast} from "#steamside/vfx-toaster.js";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 
-import {CustomaryDeclaration} from "#customary";
-import {Game} from "#steamside/data-game";
-import {Tag} from "#steamside/data-tag";
+import {toastOrNot} from "#steamside/vfx-toaster.js";
+
+import {Game} from "#steamside/data-game.js";
+import {Tag} from "#steamside/data-tag.js";
+
+import {PlayPleaseEvent} from "#steamside/requests/play/PlayPleaseEvent.js";
+import {
+	GameCardElement_ActionButtonClick_eventDetail,
+	GameCardElement_ActionButtonClick_eventName
+} from "#steamside/elements/game-card/GameCardElement_ActionButtonClick_Event.js";
+import {NowPlayingEvent} from "#steamside/requests/play/NowPlayingEvent.js";
+import {GameOverEvent} from "#steamside/requests/play/GameOverEvent.js";
 
 export class GameCardElement extends CustomaryElement
 {
@@ -16,6 +23,7 @@ export class GameCardElement extends CustomaryElement
 					'include_action_button_remove',
 					'include_action_button_add',
 					'kids_mode',
+					'now_playing',
 				],
 				state: [
 					'game',
@@ -41,6 +49,8 @@ export class GameCardElement extends CustomaryElement
 				changes: {
 					'game': (el, a) =>
 						el.#on_changed_game(a),
+					'now_playing': (el, a) =>
+						el.#on_changed_now_playing(a),
 					'game_tile_inner_loading_overlay_visible': (el, a) =>
 						el.#on_changed_game_tile_inner_loading_overlay_visible(a),
 					'include_action_button_remove': (el, a) =>
@@ -88,16 +98,15 @@ export class GameCardElement extends CustomaryElement
 							e, 'add'),
 					},
 					{
-						type: 'game:play:beforeSend',
-						listener: (el, e) => el.#game_play_beforeSend(),
+						type: NowPlayingEvent.eventName,
+						listener: (el, e) => el.#on_NowPlayingEvent(e as NowPlayingEvent),
 					},
 					{
-						type: 'game:play:complete',
-						listener: (el, e) => el.#game_play_complete(),
+						type: GameOverEvent.eventName,
+						listener: (el, e) => el.#on_GameOverEvent(e as GameOverEvent),
 					},
 				],
 				lifecycle: {
-					connected: el => el.#on_connected(),
 					willUpdate: el => el.#on_willUpdate(),
 				},
 			},
@@ -118,15 +127,18 @@ export class GameCardElement extends CustomaryElement
 
 	#on_action_button_click(e: Event, action_button: string) {
 		e.preventDefault();
+
+		const detail: GameCardElement_ActionButtonClick_eventDetail = {
+			action_button,
+			game: this.game,
+			originator: e.target as Element,
+		};
+
 		this.dispatchEvent(
 			new CustomEvent(
-				'GameCardElement:ActionButtonClick',
+				GameCardElement_ActionButtonClick_eventName,
 				{
-					detail: {
-						action_button,
-						game: this.game,
-						targetInteractedWith: e.target,
-					},
+					detail,
 					composed: true,
 					bubbles: true,
 				}
@@ -139,17 +151,15 @@ export class GameCardElement extends CustomaryElement
 		this.#on_changed_game_unavailable(a.unavailable);
 	}
 	
-	#on_changed_game_tags(a: Tag[]) {
-		if (!a) return;
-		const game_tags = a;
-		const views: TagView[] = game_tags.map(
+	#on_changed_game_tags(game_tags: Tag[]) {
+		if (!game_tags) return;
+		this.game_tag_views = game_tags.map(
 			tag =>
 				({
 					tag_name: tag.name,
 					tag_url: `./InventoryWorld.html?name=${tag.name}`,
 				})
 		);
-		this.game_tag_views = views;
 	}
 
 	#on_changed_game_unavailable(aBoolean: boolean)
@@ -201,22 +211,30 @@ export class GameCardElement extends CustomaryElement
 	}
 
 	async playGame() {
-		await this.gameRunner.runGame(this.game.link, this);
+		const url = this.game.link;
+
+		this.dispatchEvent(new PlayPleaseEvent({
+			appid: this.game.appid,
+			url,
+			originator: this,
+		}));
 	}
 
-	#game_play_beforeSend() {
-		this.#showOverlay();
+	#on_NowPlayingEvent(e: NowPlayingEvent) {
+		this.setAttribute('now_playing', 'true');
+		toastOrNot({
+			content: e.detail.toast_content,
+			target: this.renderRoot.lastElementChild!,
+		});
 	}
 
-	#game_play_complete() {
-		this.#hideOverlay();
-		this.#redisplay_continues();
+	#on_GameOverEvent(_e: GameOverEvent) {
+		this.setAttribute('now_playing', 'false');
+	}
+	#on_changed_now_playing(a: string | boolean | null) {
+		this.game_tile_inner_loading_overlay_visible = isOn(a);
 	}
 
-	#showOverlay() {
-		this.game_tile_inner_loading_overlay_visible = true;
-	}
-	
 	#on_changed_game_tile_inner_loading_overlay_visible(a: boolean) {
 		const underlay: Element = this.renderRoot.querySelector('.game-tile-inner')!;
 		if (a) {
@@ -226,72 +244,15 @@ export class GameCardElement extends CustomaryElement
 			underlay.classList.remove('game-tile-inner-blurred');
 		}
 	}
-
-	#hideOverlay() {
-		this.game_tile_inner_loading_overlay_visible = false;
-	}
-
-	#redisplay_continues() {
-		// FIXME happens after the game is played. may not be needed if continues view updates itself
-		// this.backend.fetch_fetch_json(this.continues);
-	}
-
-	async #on_connected()
-	{
-		await this.backend.fetchSessionDataAndDisableBackendIfOffline();
-	}
-	
-	backend = new Backend();
-	gameRunner = new GameRunner(this);
 }
 Customary.declare(GameCardElement);
-
-class GameRunner {
-	constructor(card: GameCardElement) {
-		this.card = card;
-	}
-
-	card: GameCardElement;
-
-	async runGame(aUrl: string, gameCardElement: GameCardElement) {
-		this.notify_before_send(gameCardElement);
-		try 
-		{
-			await this.card.backend.fetchBackend({url: aUrl});
-			this.notify_complete(gameCardElement);
-		}
-		catch (error)
-		{
-			pop_toast({
-				error: error as Error,
-				completion_fn: (target: Element) => this.notify_complete(target),
-				offline_imagine_spot: `you're playing`, 
-				target: gameCardElement.renderRoot.lastElementChild!
-			});
-		}
-	}
-
-	notify_before_send(target: Element) {
-		this.triggerEvent(target, 'game:play:beforeSend');
-	}
-
-	notify_complete(target: Element) {
-		this.triggerEvent(target, 'game:play:complete');
-	}
-
-	triggerEvent(target: Element, type: string) {
-		target.dispatchEvent(
-			new CustomEvent(
-				type,
-				{
-					composed: true,
-				}
-			)
-		);
-	}
-}
 
 type TagView = {
 	tag_name: string,
 	tag_url: string,
+}
+
+function isOn(a: string | boolean | null): boolean {
+	if (a === 'false') return false;
+	return !!a;
 }

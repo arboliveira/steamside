@@ -1,11 +1,17 @@
-import {Customary, CustomaryElement} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
+
 import {GameCardDeckElement} from "#steamside/elements-game-card-deck-steamside.js";
 import {TagAGameElement} from "#steamside/elements-tag-a-game-steamside.js";
 import {CollectionEditAddGamesCommandBoxElement} from "#steamside/elements-collection-edit-add-games-command-box-steamside.js";
 import {fetchSearchData} from "#steamside/data-search.js";
 
-import {CustomaryDeclaration} from "#customary";
-import {Game} from "#steamside/data-game";
+import {Game} from "#steamside/data-game.js";
+import {TagDoneEvent} from "#steamside/requests/tag/TagDoneEvent.js";
+import {toastOrNot} from "#steamside/vfx-toaster.js";
+import {
+	GameCardElement_ActionButtonClick_eventDetail,
+	GameCardElement_ActionButtonClick_eventName
+} from "#steamside/elements/game-card/GameCardElement_ActionButtonClick_Event.js";
 
 export class CollectionEditAddGamesElement extends CustomaryElement
 {
@@ -49,9 +55,13 @@ export class CollectionEditAddGamesElement extends CustomaryElement
 							el.#on_CommandBoxElement_CommandAlternatePlease(<CustomEvent>event),
 					},
 					{
-						type: 'GameCardElement:ActionButtonClick',
+						type: GameCardElement_ActionButtonClick_eventName,
 						selector: '.segment',
 						listener: (el, e) => el.#on_GameCardElement_ActionButtonClick(<CustomEvent>e),
+					},
+					{
+						type: TagDoneEvent.eventName,
+						listener: (el, e) => el.#on_TagDoneEvent(<TagDoneEvent>e),
 					},
 				],
 			}
@@ -89,36 +99,22 @@ export class CollectionEditAddGamesElement extends CustomaryElement
 		this.collectionEditSearchResults = await fetchSearchData(query);
 	}
 
-	async #on_GameCardElement_ActionButtonClick(event: CustomEvent) {
-		const {action_button, game, targetInteractedWith} = event.detail;
-		if (action_button === 'add') {
-			await this.#askAddGamePlease(game, targetInteractedWith);
-		}
-		if (action_button === 'tag') {
-			this.#openTagPickerWithinSegment(game, <Element>event.currentTarget);
+	async #on_GameCardElement_ActionButtonClick(
+		event: CustomEvent<GameCardElement_ActionButtonClick_eventDetail>
+	) {
+		switch (event.detail.action_button) {
+			case 'tag':
+				// FIXME too messy, open new window instead
+				new TagAGameElement().showTagAGame({game: event.detail.game, container: <Element>event.currentTarget});
+				break;
 		}
 	}
 
-	async #askAddGamePlease(game: Game, targetInteractedWith: Element) {
-		this.dispatchEvent(
-			new CustomEvent(
-				'CollectionEditAddGamesElement:AddGamePlease',
-				{
-					detail: {
-						game,
-						targetInteractedWith
-					},
-					composed: true,
-					bubbles: true,
-				}
-			)
-		);
-	}
-
-	#openTagPickerWithinSegment(game: Game, segment: Element) {
-		// FIXME too messy, open new window instead
-		new TagAGameElement()
-			.showTagAGame({game, container: segment});
+	async #on_TagDoneEvent(tagDoneEvent: TagDoneEvent) {
+		toastOrNot({
+			content: tagDoneEvent.detail.toast_content,
+			target: this.renderRoot.lastElementChild!,
+		});
 	}
 }
 Customary.declare(CollectionEditAddGamesElement);

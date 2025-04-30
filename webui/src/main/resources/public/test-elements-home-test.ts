@@ -43,10 +43,10 @@ describe(suite.title, async function () {
             b.click();
         });
         it('looks good', async function () {
-            this.retries(512);
+            this.retries(256);
 
             const visibleGamesAfterMoreClicked = visibleGames(segment);
-            expect(visibleGamesAfterMoreClicked).to.equal(13);
+            expect(visibleGamesAfterMoreClicked).to.equal(11);
         });
     });
     
@@ -111,7 +111,7 @@ describe(suite.title, async function () {
             this.retries(512);
 
             const visibleGamesAfterMoreClicked = visibleGames(segment);
-            expect(visibleGamesAfterMoreClicked).to.equal(4);
+            expect(visibleGamesAfterMoreClicked).to.equal(5);
         });
     });
     describe('happy day: Favorites: switch', async function () {

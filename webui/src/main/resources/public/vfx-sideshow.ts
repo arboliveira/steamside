@@ -1,4 +1,4 @@
-import {LitElement} from "lit";
+import {LitElement} from "#customary";
 
 export class Sideshow {
     #performers: LitElement[] = [];

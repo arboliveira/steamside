@@ -1,4 +1,25 @@
 import {BackendDisabledError, BackendFetchError} from "#steamside/data-backend.js";
+import {tippy} from "#steamside/integrations/tippy/tippy.js";
+
+export function toastOrNot(
+	{content, target}: {content?: string, target: Element}
+): HTMLElement | undefined {
+	return content ? toast({content, target}) : undefined;
+}
+
+export function toast(
+	{content, target}: {content: string, target: Element}
+): HTMLElement{
+	return tippy(target, {
+		content,
+		//hideOnClick: false,
+		maxWidth: 'none',
+		placement: 'bottom',
+		showOnCreate: true,
+		theme: 'light',
+		trigger: 'manual',
+	});
+}
 
 export function pop_toast(
 	{error, target, offline_imagine_spot, completion_fn}: {
@@ -27,8 +48,7 @@ export function pop_toast(
 		toast.showPopover();
 		setTimeout(
 			() => {
-				toast.hidePopover();
-				document.body.removeChild(toast);
+				end_toast(toast);
 				completion_fn?.(target);
 			},
 			6000
@@ -51,4 +71,9 @@ function makeToast(s: string) {
 	toast.popover = 'manual';
 	toast.innerText = s;
 	return toast;
+}
+
+export function end_toast(toast: HTMLElement) {
+	toast.hidePopover();
+	document.body.removeChild(toast);
 }

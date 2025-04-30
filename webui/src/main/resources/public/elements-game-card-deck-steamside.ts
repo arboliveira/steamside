@@ -48,8 +48,8 @@ export class GameCardDeckElement extends CustomaryElement
 	declare more_icon_symbol: string;
 	declare tailgaters_expanded: boolean;
 	declare deck_size: number;
-	declare headliners: Game[];
-	declare tailgaters: Game[];
+	declare headliners: CardView[];
+	declare tailgaters: CardView[];
 
 	#on_willUpdate() {
 		const expanded_permanently = this.kids_mode === 'true';
@@ -72,15 +72,22 @@ export class GameCardDeckElement extends CustomaryElement
 
 	#on_changed_collection(a: Game[]) {
 		this.deck_size = a.length;
-		this.headliners = a.slice(0, CARDS_PER_ROW);
-		this.tailgaters = a.slice(CARDS_PER_ROW);
+		this.headliners = a.slice(0, CARDS_PER_ROW).map(game => this.toCardView(game));
+		this.tailgaters = a.slice(CARDS_PER_ROW).map(game => this.toCardView(game));
 	}
 
 	#on_more_clicked(e: Event) {
 		e.preventDefault();
 		this.tailgaters_expanded = !this.tailgaters_expanded;
 	}
+
+	toCardView(game: Game): CardView {
+		const appid = game.appid;
+		return {game};
+	}
 }
 Customary.declare(GameCardDeckElement);
+
+type CardView = {game: Game};
 
 const CARDS_PER_ROW = 3;
