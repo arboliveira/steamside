@@ -1,8 +1,9 @@
 import {Customary, CustomaryElement} from "#customary";
+import {CustomaryDeclaration} from "#customary";
+
 import {TagStickerElement} from "#steamside/elements-tag-sticker-steamside.js";
 
-import {CustomaryDeclaration} from "#customary";
-import {Tag} from "#steamside/data-tag";
+import {Tag} from "#steamside/data-tag.js";
 
 export class TagStickersElement extends CustomaryElement
 {

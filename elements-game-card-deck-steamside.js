@@ -51,12 +51,16 @@ export class GameCardDeckElement extends CustomaryElement {
     }
     #on_changed_collection(a) {
         this.deck_size = a.length;
-        this.headliners = a.slice(0, CARDS_PER_ROW);
-        this.tailgaters = a.slice(CARDS_PER_ROW);
+        this.headliners = a.slice(0, CARDS_PER_ROW).map(game => this.toCardView(game));
+        this.tailgaters = a.slice(CARDS_PER_ROW).map(game => this.toCardView(game));
     }
     #on_more_clicked(e) {
         e.preventDefault();
         this.tailgaters_expanded = !this.tailgaters_expanded;
+    }
+    toCardView(game) {
+        const appid = game.appid;
+        return { game };
     }
 }
 Customary.declare(GameCardDeckElement);

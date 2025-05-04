@@ -1,10 +1,18 @@
-import {Customary, CustomaryElement} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
+
 import {fetchTagsData} from "#steamside/data-tags.js";
 import {TagStickersElement} from "#steamside/elements-tag-stickers-steamside.js";
 import {Sideshow} from "#steamside/vfx-sideshow.js";
 
-import {CustomaryDeclaration} from "#customary";
-import {Tag} from "#steamside/data-tag";
+import {Tag} from "#steamside/data-tag.js";
+import {
+	TagStickerElement_TagClicked_eventDetail,
+	TagStickerElement_TagClicked_eventName
+} from "#steamside/elements/tag-sticker/TagStickerElement_TagClicked_Event.js";
+import {
+	CollectionPickerElement_CollectionPicked_eventDetail,
+	CollectionPickerElement_CollectionPicked_eventName
+} from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
 
 export class CollectionPickerElement extends CustomaryElement {
 	static customary: CustomaryDeclaration<CollectionPickerElement> =
@@ -34,22 +42,21 @@ export class CollectionPickerElement extends CustomaryElement {
 				},
 				events: [
 					{
-						type: 'TagStickerElement:TagClicked',
-						listener: (el, e) => el.#on_click_one_tag(<CustomEvent>e),
+						type: TagStickerElement_TagClicked_eventName,
+						listener: (el, e) => el.#on_TagStickerElement_TagClicked(<CustomEvent>e),
 					},
 				],
 			}
 		}
 	declare tags: Tag[];
 
-	#on_click_one_tag(event: CustomEvent) {
+	#on_TagStickerElement_TagClicked(event: CustomEvent<TagStickerElement_TagClicked_eventDetail>) {
 		event.stopPropagation();
-		const name = event.detail;
 		this.dispatchEvent(
-			new CustomEvent(
-				'CollectionPickerElement:CollectionPicked',
+			new CustomEvent<CollectionPickerElement_CollectionPicked_eventDetail>(
+				CollectionPickerElement_CollectionPicked_eventName,
 				{
-					detail: name,
+					detail: {tagName: event.detail.tagName},
 					composed: true,
 				}
 			)

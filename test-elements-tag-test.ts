@@ -26,13 +26,17 @@ describe(suite.title, async function () {
                 const name = CT.querySelector(".tag-sticker-name", tags[n]);
                 expect(CT.allTextContent(name)).to.equal(expected);
             }
-            
-            assertTag(0, 'Indie');
-            assertTag(1, 'Hand drawn');
-            assertTag(2, 'Unplayed');
-            assertTag(3, 'Favorites');
-            
-            expect(tags).to.have.length(4);
+
+            const tagsArray = [
+                'Multiplayer', 'Puzzles and Mysteries', 'Cozy Crafting',
+                'Boss Battles', 'Survive This', 'Indie', 'Hand drawn',
+            ];
+
+            tagsArray.forEach((tag, index) => {
+                assertTag(index, tag);
+            });
+
+            expect(tags).to.have.length(tagsArray.length);
         });
     });
 });

@@ -4,17 +4,20 @@ export async function fetchSessionData() {
     const response = await fetch(fromUrl(location));
     const json = await response.json();
     return {
-        backoff: json.backoff === undefined // only present in mock json
-            ? false
-            : strictlyBoolean(json.backoff),
+        backoff: booleanNeed(json.backoff), // only present in mock json
         versionOfSteamside: json.versionOfSteamside,
         gamesOwned: json.gamesOwned,
         userName: json.userName,
-        kidsMode: strictlyBoolean(json.kidsMode),
+        kidsMode: booleanMust(json.kidsMode),
         executable: json.executable
     };
 }
-function strictlyBoolean(value) {
+function booleanNeed(value) {
+    if (value === undefined)
+        return false;
+    return booleanMust(value);
+}
+function booleanMust(value) {
     if (value === true)
         return true;
     if (value === false)

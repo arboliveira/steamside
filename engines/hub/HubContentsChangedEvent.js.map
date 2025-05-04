@@ -1,0 +1,1 @@
+{"version":3,"file":"HubContentsChangedEvent.js","sourceRoot":"","sources":["HubContentsChangedEvent.ts"],"names":[],"mappings":"AAIA,MAAM,OAAO,uBAAwB,SAAQ,WAA0C;aAC5D,cAAS,GAAW,uCAAuC,CAAC;IAEnF,YAAY,MAAqC;QAC7C,KAAK,CAAC,uBAAuB,CAAC,SAAS,EAAE;YACrC,MAAM;YACN,OAAO,EAAE,KAAK;SACjB,CAAC,CAAC;IACP,CAAC"}

@@ -1,4 +1,19 @@
 import { BackendDisabledError, BackendFetchError } from "#steamside/data-backend.js";
+import { tippy } from "#steamside/integrations/tippy/tippy.js";
+export function toastOrNot({ content, target }) {
+    return content ? toast({ content, target }) : undefined;
+}
+export function toast({ content, target }) {
+    return tippy(target, {
+        content,
+        //hideOnClick: false,
+        maxWidth: 'none',
+        placement: 'bottom',
+        showOnCreate: true,
+        theme: 'light',
+        trigger: 'manual',
+    });
+}
 export function pop_toast({ error, target, offline_imagine_spot, completion_fn }) {
     if (error instanceof BackendDisabledError) {
         const clarification = offline_imagine_spot
@@ -16,8 +31,7 @@ export function pop_toast({ error, target, offline_imagine_spot, completion_fn }
         document.body.appendChild(toast);
         toast.showPopover();
         setTimeout(() => {
-            toast.hidePopover();
-            document.body.removeChild(toast);
+            end_toast(toast);
             completion_fn?.(target);
         }, 6000);
         return;
@@ -36,5 +50,9 @@ function makeToast(s) {
     toast.popover = 'manual';
     toast.innerText = s;
     return toast;
+}
+export function end_toast(toast) {
+    toast.hidePopover();
+    document.body.removeChild(toast);
 }
 //# sourceMappingURL=vfx-toaster.js.map

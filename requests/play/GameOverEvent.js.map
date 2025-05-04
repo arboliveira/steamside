@@ -1,0 +1,1 @@
+{"version":3,"file":"GameOverEvent.js","sourceRoot":"","sources":["GameOverEvent.ts"],"names":[],"mappings":"AAIA,MAAM,OAAO,aAAc,SAAQ,WAAgC;aACxC,cAAS,GAAW,qBAAqB,CAAC;IAEjE,YAAY,MAA2B;QACnC,KAAK,CACD,aAAa,CAAC,SAAS,EAAE;YACrB,MAAM;YACN,OAAO,EAAE,IAAI;YACb,QAAQ,EAAE,IAAI;SACjB,CACJ,CAAC;IACN,CAAC"}

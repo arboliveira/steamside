@@ -3,6 +3,7 @@ import { CollectionPickerElement } from "#steamside/elements-collection-picker-s
 import { CollectionEditCombineCommandBoxElement } from "#steamside/elements-collection-edit-combine-command-box-steamside.js";
 import { Backend } from "#steamside/data-backend.js";
 import { pop_toast } from "#steamside/vfx-toaster.js";
+import { CollectionPickerElement_CollectionPicked_eventName } from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
 export class CollectionEditCombineElement extends CustomaryElement {
     constructor() {
         super(...arguments);
@@ -40,7 +41,7 @@ export class CollectionEditCombineElement extends CustomaryElement {
             },
             events: [
                 {
-                    type: 'CollectionPickerElement:CollectionPicked',
+                    type: CollectionPickerElement_CollectionPicked_eventName,
                     listener: (el, e) => el.#on_CollectionPickerElement_CollectionPicked(e),
                 },
                 {

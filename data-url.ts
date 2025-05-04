@@ -1,7 +1,5 @@
 export function fromUrl(location: string): string {
-	const offline = true;
-	const url = offline
-		? import.meta.resolve('./'+location)
-		: 'http://localhost:42424/' + location;
-	return url;
+	// same host and port
+	return import.meta.resolve('./' + location);
+	// FIXME autodetect a deep path and calibrate for root
 }

@@ -1,0 +1,1 @@
+{"version":3,"file":"UntagDoneEvent.js","sourceRoot":"","sources":["UntagDoneEvent.ts"],"names":[],"mappings":"AAQA,MAAM,OAAO,cAAe,SAAQ,WAAiC;aAC1C,cAAS,GAAW,oBAAoB,CAAC;IAEhE,YAAY,MAA4B;QACpC,KAAK,CAAC,cAAc,CAAC,SAAS,EAAE;YAC5B,MAAM;YACN,OAAO,EAAE,IAAI;YACb,QAAQ,EAAE,IAAI;SACjB,CAAC,CAAC;IACP,CAAC"}

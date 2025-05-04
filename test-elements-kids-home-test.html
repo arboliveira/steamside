@@ -36,6 +36,14 @@
 <body>
 <!-- ======================================================================= -->
 
+<template data-customary-name="elements-world-home-steamside">
+  <elements-game-card-steamside
+          kids_mode="true"
+  ></elements-game-card-steamside>
+</template>
+
+<elements-world-home-steamside></elements-world-home-steamside>
+
 <div id="page-to-test"></div>
 
 <!-- ======================================================================= -->
@@ -43,34 +51,51 @@
 <script type="importmap">
   {
     "imports": {
-      "#customary": "./../node_modules/customary/src/now.js",
-      "#customary/": "./../node_modules/customary/src/",
-      "#customary/lit": "./../node_modules/customary/.dist/bundled/customary-library.mjs",
+      "#customary": "./_dependencies/customary/customary.mjs",
       "#steamside/": "./"
     }
   }
 </script>
 
 <script type="module">
-  import {Customary} from "#customary";
   import {GameCardElement} from "#steamside/elements-game-card-steamside.js";
   import {MockBackend} from "#steamside/test-mock-data-backend.js";
+  import {PlayPleaseEvent} from "#steamside/requests/play/PlayPleaseEvent.js";
+  import {PlayRequest} from "#steamside/requests/play/PlayRequest.js";
 
-  await Customary.untilDefined(GameCardElement);
-
-  const oneResult = {
-    name: "Game of Kids",
-    link: "would be URL",
-    "image" : "https://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
+  /**
+   * @type {CustomaryDeclaration}
+   */
+  globalThis['customary:elements-world-home-steamside'] = {
+    hooks: {
+      requires: [GameCardElement],
+      lifecycle: {
+        firstUpdated: el => on_firstUpdated(el),
+      },
+      events: [
+        {
+          type: PlayPleaseEvent.eventName,
+          listener: (el, event) => on_PlayPleaseEvent(el, event),
+        },
+      ],
+    }
   };
 
-  const element = new GameCardElement();
-  element.kids_mode = "true";
-  element.game = oneResult;
-  element.backend = new MockBackend();
+  function on_firstUpdated(el) {
+    el.mockBackend = new MockBackend();
 
-  const testbed = document.body.querySelector('#page-to-test');
-  testbed.append(element);
+    const card = el.renderRoot.querySelector('elements-game-card-steamside');
+
+    card.game = {
+      name: "Game of Kids",
+      link: "would be URL",
+      "image": "https://cdn.akamai.steamstatic.com/steam/apps/37600/header.jpg",
+    };
+  }
+
+  function on_PlayPleaseEvent(el, event) {
+    void PlayRequest.play({event, dryRun: false, fetchFn: (url) => el.mockBackend.fetch({url})});
+  }
 </script>
 
 </body>

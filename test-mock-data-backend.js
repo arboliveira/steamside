@@ -1,17 +1,13 @@
-import { Backend } from "#steamside/data-backend.js";
-export class MockBackend extends Backend {
+export class MockBackend {
     constructor() {
-        super(...arguments);
-        this.well_done_fetchBackend = false;
-        this.fetchBackend_url = '';
+        this.played_url = '';
+        this.let_it_go = false;
     }
-    async fetchSessionDataAndDisableBackendIfOffline() { }
-    async fetchBackend({ url, requestInit }) {
-        this.fetchBackend_url = url;
-        while (!this.well_done_fetchBackend) {
+    async fetch({ url }) {
+        this.played_url = url;
+        while (!this.let_it_go) {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
-        return {};
     }
 }
 //# sourceMappingURL=test-mock-data-backend.js.map

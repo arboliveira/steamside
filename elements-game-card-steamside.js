@@ -1,12 +1,10 @@
 import { Customary, CustomaryElement } from "#customary";
-import { Backend } from "#steamside/data-backend.js";
-import { pop_toast } from "#steamside/vfx-toaster.js";
+import { toastOrNot } from "#steamside/vfx-toaster.js";
+import { PlayPleaseEvent } from "#steamside/requests/play/PlayPleaseEvent.js";
+import { GameCardElement_ActionButtonClick_eventName } from "#steamside/elements/game-card/GameCardElement_ActionButtonClick_Event.js";
+import { NowPlayingEvent } from "#steamside/requests/play/NowPlayingEvent.js";
+import { GameOverEvent } from "#steamside/requests/play/GameOverEvent.js";
 export class GameCardElement extends CustomaryElement {
-    constructor() {
-        super(...arguments);
-        this.backend = new Backend();
-        this.gameRunner = new GameRunner(this);
-    }
     static { this.customary = {
         name: 'elements-game-card-steamside',
         config: {
@@ -14,6 +12,7 @@ export class GameCardElement extends CustomaryElement {
                 'include_action_button_remove',
                 'include_action_button_add',
                 'kids_mode',
+                'now_playing',
             ],
             state: [
                 'game',
@@ -38,6 +37,7 @@ export class GameCardElement extends CustomaryElement {
             },
             changes: {
                 'game': (el, a) => el.#on_changed_game(a),
+                'now_playing': (el, a) => el.#on_changed_now_playing(a),
                 'game_tile_inner_loading_overlay_visible': (el, a) => el.#on_changed_game_tile_inner_loading_overlay_visible(a),
                 'include_action_button_remove': (el, a) => el.action_button_remove_visible = a === 'true',
                 'include_action_button_add': (el, a) => el.action_button_add_visible = a === 'true',
@@ -79,16 +79,15 @@ export class GameCardElement extends CustomaryElement {
                     listener: (el, e) => el.#on_action_button_click(e, 'add'),
                 },
                 {
-                    type: 'game:play:beforeSend',
-                    listener: (el, e) => el.#game_play_beforeSend(),
+                    type: NowPlayingEvent.eventName,
+                    listener: (el, e) => el.#on_NowPlayingEvent(e),
                 },
                 {
-                    type: 'game:play:complete',
-                    listener: (el, e) => el.#game_play_complete(),
+                    type: GameOverEvent.eventName,
+                    listener: (el, e) => el.#on_GameOverEvent(e),
                 },
             ],
             lifecycle: {
-                connected: el => el.#on_connected(),
                 willUpdate: el => el.#on_willUpdate(),
             },
         },
@@ -98,12 +97,13 @@ export class GameCardElement extends CustomaryElement {
     }
     #on_action_button_click(e, action_button) {
         e.preventDefault();
-        this.dispatchEvent(new CustomEvent('GameCardElement:ActionButtonClick', {
-            detail: {
-                action_button,
-                game: this.game,
-                targetInteractedWith: e.target,
-            },
+        const detail = {
+            action_button,
+            game: this.game,
+            originator: e.target,
+        };
+        this.dispatchEvent(new CustomEvent(GameCardElement_ActionButtonClick_eventName, {
+            detail,
             composed: true,
             bubbles: true,
         }));
@@ -112,15 +112,13 @@ export class GameCardElement extends CustomaryElement {
         this.#on_changed_game_tags(a.tags);
         this.#on_changed_game_unavailable(a.unavailable);
     }
-    #on_changed_game_tags(a) {
-        if (!a)
+    #on_changed_game_tags(game_tags) {
+        if (!game_tags)
             return;
-        const game_tags = a;
-        const views = game_tags.map(tag => ({
+        this.game_tag_views = game_tags.map(tag => ({
             tag_name: tag.name,
             tag_url: `./InventoryWorld.html?name=${tag.name}`,
         }));
-        this.game_tag_views = views;
     }
     #on_changed_game_unavailable(aBoolean) {
         const available = !aBoolean;
@@ -163,17 +161,25 @@ export class GameCardElement extends CustomaryElement {
         await this.playGame();
     }
     async playGame() {
-        await this.gameRunner.runGame(this.game.link, this);
+        const url = this.game.link;
+        this.dispatchEvent(new PlayPleaseEvent({
+            appid: this.game.appid,
+            url,
+            originator: this,
+        }));
     }
-    #game_play_beforeSend() {
-        this.#showOverlay();
+    #on_NowPlayingEvent(e) {
+        this.setAttribute('now_playing', 'true');
+        toastOrNot({
+            content: e.detail.toast_content,
+            target: this.renderRoot.lastElementChild,
+        });
     }
-    #game_play_complete() {
-        this.#hideOverlay();
-        this.#redisplay_continues();
+    #on_GameOverEvent(_e) {
+        this.setAttribute('now_playing', 'false');
     }
-    #showOverlay() {
-        this.game_tile_inner_loading_overlay_visible = true;
+    #on_changed_now_playing(a) {
+        this.game_tile_inner_loading_overlay_visible = isOn(a);
     }
     #on_changed_game_tile_inner_loading_overlay_visible(a) {
         const underlay = this.renderRoot.querySelector('.game-tile-inner');
@@ -184,47 +190,11 @@ export class GameCardElement extends CustomaryElement {
             underlay.classList.remove('game-tile-inner-blurred');
         }
     }
-    #hideOverlay() {
-        this.game_tile_inner_loading_overlay_visible = false;
-    }
-    #redisplay_continues() {
-        // FIXME happens after the game is played. may not be needed if continues view updates itself
-        // this.backend.fetch_fetch_json(this.continues);
-    }
-    async #on_connected() {
-        await this.backend.fetchSessionDataAndDisableBackendIfOffline();
-    }
 }
 Customary.declare(GameCardElement);
-class GameRunner {
-    constructor(card) {
-        this.card = card;
-    }
-    async runGame(aUrl, gameCardElement) {
-        this.notify_before_send(gameCardElement);
-        try {
-            await this.card.backend.fetchBackend({ url: aUrl });
-            this.notify_complete(gameCardElement);
-        }
-        catch (error) {
-            pop_toast({
-                error: error,
-                completion_fn: (target) => this.notify_complete(target),
-                offline_imagine_spot: `you're playing`,
-                target: gameCardElement.renderRoot.lastElementChild
-            });
-        }
-    }
-    notify_before_send(target) {
-        this.triggerEvent(target, 'game:play:beforeSend');
-    }
-    notify_complete(target) {
-        this.triggerEvent(target, 'game:play:complete');
-    }
-    triggerEvent(target, type) {
-        target.dispatchEvent(new CustomEvent(type, {
-            composed: true,
-        }));
-    }
+function isOn(a) {
+    if (a === 'false')
+        return false;
+    return !!a;
 }
 //# sourceMappingURL=elements-game-card-steamside.js.map

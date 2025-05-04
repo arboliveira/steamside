@@ -1,0 +1,31 @@
+.logo {
+    display: inline-block;
+    text-align: center;
+    font-family: serif;
+    border-style: outset; border-radius: 16px;
+    padding: 0px 10px 10px 10px;
+}
+.logo-caption {
+    font-style: italic; font-size: xx-large;
+}
+.logo-emoji {
+    font-size: xx-large;
+    margin: 0;
+}
+.logo-tagline {
+    font-style: italic;
+    font-size: small;
+    margin: 8px 0 0;
+}
+.mocha-stats-placeholder {
+    padding-top: 20px;
+    padding-right: 20px;
+}
+.title {
+    font-size: xxx-large;
+    padding: 0px 10px 10px 10px;
+    margin: -10px 0 20px 0;
+}
+button {
+    font-size: x-large;
+}

@@ -12,7 +12,7 @@
         <div class="deck-headliners">
             <for-- items="this.headliners" value="card" index="index">
                 <elements-game-card-steamside
-                    .game="${card}"
+                    .game="${card.game}"
                     kids_mode=${this.kids_mode}
                     include_action_button_remove="${this.include_action_button_remove}"
                     include_action_button_add="${this.include_action_button_add}"
@@ -24,7 +24,7 @@
         <div class="deck-tailgaters">
             <for-- items="this.tailgaters" value="card" index="index">
                 <elements-game-card-steamside
-                    .game="${card}"
+                    .game="${card.game}"
                     kids_mode=${this.kids_mode}
                     include_action_button_remove="${this.include_action_button_remove}"
                     include_action_button_add="${this.include_action_button_add}"

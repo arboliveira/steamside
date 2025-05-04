@@ -1,6 +1,8 @@
 import { Customary, CustomaryElement } from "#customary";
 import { Backend } from "#steamside/data-backend.js";
 import { CollectionPickerElement } from "#steamside/elements-collection-picker-steamside.js";
+import { TagStickerElement_TagClicked_eventName } from "#steamside/elements/tag-sticker/TagStickerElement_TagClicked_Event.js";
+import { CollectionPickerElement_CollectionPicked_eventName } from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
 export class WorldSettingsKidsKidEditElement extends CustomaryElement {
     constructor() {
         super(...arguments);
@@ -53,11 +55,11 @@ export class WorldSettingsKidsKidEditElement extends CustomaryElement {
                     listener: (el, e) => el.kid_user = e.target.value,
                 },
                 {
-                    type: 'TagStickerElement:TagClicked',
+                    type: TagStickerElement_TagClicked_eventName,
                     listener: (el) => el.#on_TagStickerElement_TagClicked(),
                 },
                 {
-                    type: 'CollectionPickerElement:CollectionPicked',
+                    type: CollectionPickerElement_CollectionPicked_eventName,
                     listener: (el, e) => el.#on_CollectionPickerElement_CollectionPicked(e),
                 },
                 {
@@ -126,7 +128,7 @@ export class WorldSettingsKidsKidEditElement extends CustomaryElement {
     }
     #on_CollectionPickerElement_CollectionPicked(e) {
         // FIXME receive or look up real tag so we can display count
-        this.kid_inventory = e.detail;
+        this.kid_inventory = e.detail.tagName;
         this.__collection_picker_visible = false;
         this.requestUpdate();
     }

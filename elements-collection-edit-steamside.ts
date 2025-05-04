@@ -1,17 +1,24 @@
-import {Customary, CustomaryElement} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
+
 import {TagStickerElement} from "#steamside/elements-tag-sticker-steamside.js";
 import {GameCardDeckElement} from "#steamside/elements-game-card-deck-steamside.js";
-import {Backend} from "#steamside/data-backend.js";
-import {pop_toast} from "#steamside/vfx-toaster.js";
+import {pop_toast, toastOrNot} from "#steamside/vfx-toaster.js";
 import {TagAGameElement} from "#steamside/elements-tag-a-game-steamside.js";
 import {fetchInventoryContentsOfTag} from "#steamside/data-inventory.js";
 import {CollectionEditAddGamesElement} from "#steamside/elements-collection-edit-add-games-steamside.js";
 import {CollectionEditCombineElement} from "#steamside/elements-collection-edit-combine-steamside.js";
 import {Sideshow} from "#steamside/vfx-sideshow.js";
 
-import {CustomaryDeclaration} from "#customary";
-import {Tag} from "#steamside/data-tag";
-import {Game} from "#steamside/data-game";
+import {Tag} from "#steamside/data-tag.js";
+import {Game} from "#steamside/data-game.js";
+import {TagPleaseEvent} from "#steamside/requests/tag/TagPleaseEvent.js";
+import {HubContentsChangedEvent} from "#steamside/engines/hub/HubContentsChangedEvent.js";
+import {UntagPleaseEvent} from "#steamside/requests/untag/UntagPleaseEvent.js";
+import {UntagDoneEvent} from "#steamside/requests/untag/UntagDoneEvent.js";
+import {
+	GameCardElement_ActionButtonClick_eventDetail,
+	GameCardElement_ActionButtonClick_eventName
+} from "#steamside/elements/game-card/GameCardElement_ActionButtonClick_Event.js";
 
 export class CollectionEditElement extends CustomaryElement
 {
@@ -47,7 +54,6 @@ export class CollectionEditElement extends CustomaryElement
 					css_dont: true,
 				},
 				lifecycle: {
-					connected: el => el.#on_connected(),
 					firstUpdated: el => el.#on_firstUpdated(),
 					willUpdate: el => el.#on_willUpdate(),
 				},
@@ -57,13 +63,16 @@ export class CollectionEditElement extends CustomaryElement
 				},
 				events: [
 					{
-						type: 'CollectionEditAddGamesElement:AddGamePlease',
-						selector: '.segment',
+						type: HubContentsChangedEvent.eventName,
 						listener: (el, e) =>
-								el.#on_CollectionEditAddGamesElement_AddGamePlease(<CustomEvent>e),
+								el.#on_HubContentsChangedEvent(<HubContentsChangedEvent>e),
 					},
 					{
-						type: 'GameCardElement:ActionButtonClick',
+						type: UntagDoneEvent.eventName,
+						listener: (el, e) => el.#on_UntagDoneEvent(<UntagDoneEvent>e),
+					},
+					{
+						type: GameCardElement_ActionButtonClick_eventName,
 						selector: '.segment',
 						listener: (el, e) =>
 								el.#on_GameCardElement_ActionButtonClick(<CustomEvent>e),
@@ -89,67 +98,47 @@ export class CollectionEditElement extends CustomaryElement
 		this.add_games_segment_visible = !read_only;
 	}
 	
-	async #on_GameCardElement_ActionButtonClick(event: CustomEvent) {
-		const {action_button, game, targetInteractedWith} = event.detail;
-		if (action_button === 'remove') {
-			await this.#removeGameFromInventory(game, targetInteractedWith);
-		}
-		if (action_button === 'tag') {
-			this.#openTagPickerWithinSegment(game, <Element>event.currentTarget);
+	async #on_GameCardElement_ActionButtonClick(
+		event: CustomEvent<GameCardElement_ActionButtonClick_eventDetail>
+	) {
+		switch (event.detail.action_button) {
+			case 'add':
+				this.dispatchEvent(new TagPleaseEvent({
+					tagName: this._tag.name,
+					game: event.detail.game,
+					originator: event.detail.originator,
+				}));
+				break;
+			case 'remove':
+				this.dispatchEvent(new UntagPleaseEvent({
+					tagName: this._tag.name,
+					game: event.detail.game,
+					originator: event.detail.originator,
+				}));
+				break;
+			case 'tag':
+				// FIXME too messy, open new window instead
+				new TagAGameElement().showTagAGame({
+					game: event.detail.game,
+					container: <Element>event.currentTarget
+				});
+				break;
 		}
 	}
-
-	async #on_CollectionEditAddGamesElement_AddGamePlease(event: CustomEvent) {
-		await this.#addGameToInventory(
-			event.detail.game,
-			event.detail.targetInteractedWith
-		);
-	}
-
-	async #addGameToInventory(game: Game, toastAnchor: Element) {
-		const name = this._tag.name;
-		const aUrl = "api/collection/" + name + "/add/" + game.appid;
-		
-		// FIXME display 'adding...'
-		try {
-			await this.backend.fetchBackend({url: aUrl});
-			
-			// FIXME nice to have: animate the card dropping into the inventory
+	async #on_HubContentsChangedEvent(e: HubContentsChangedEvent) {
+		if (this._tag?.name === e.detail.tagName) {
 			await this.#fetch_inventory();
-			
-			// FIXME nice to have: filter tagged cards out of search results
-		} catch (error) {
-			pop_toast({
-				error: error as Error,
-				offline_imagine_spot: `${game.name} was added to ${name}`,
-				target: toastAnchor,
-			});
 		}
+
+		// FIXME nice to have: animate the card dropping into the inventory
+		// FIXME nice to have: filter tagged cards out of search results
 	}
 
-	async #removeGameFromInventory(game: Game, element_clicked: Element) {
-		const name = this._tag.name;
-
-		const aUrl = "api/collection/" + name + "/remove/" + game.appid;
-		// FIXME display 'removing...'
-		try 
-		{
-			await this.backend.fetchBackend({url: aUrl});
-			await this.#fetch_inventory();
-		} 
-		catch (error) {
-			pop_toast({
-				error: error as Error,
-				offline_imagine_spot: `${game.name} was removed from ${name}`,
-				target: element_clicked,
-			});
-		}
-	}
-
-	#openTagPickerWithinSegment(game: Game, segment: Element) {
-		// FIXME too messy, open new window instead
-		new TagAGameElement()
-			.showTagAGame({game, container: segment});
+	async #on_UntagDoneEvent(untagDoneEvent: UntagDoneEvent) {
+		toastOrNot({
+			content: untagDoneEvent.detail.toast_content,
+			target: this.renderRoot.lastElementChild!,
+		});
 	}
 
 	async #fetch_inventory()
@@ -178,12 +167,5 @@ export class CollectionEditElement extends CustomaryElement
 	#on_firstUpdated() {
 		Sideshow.customary_dispatchEvent_Customary_lifecycle_firstUpdated(this);
 	}
-
-	async #on_connected()
-	{
-		await this.backend.fetchSessionDataAndDisableBackendIfOffline();
-	}
-
-	backend = new Backend();
 }
 Customary.declare(CollectionEditElement);

@@ -1,7 +1,11 @@
 import {Customary, CustomaryElement} from "#customary";
-
 import {CustomaryDeclaration} from "#customary";
-import {Tag} from "#steamside/data-tag";
+
+import {Tag} from "#steamside/data-tag.js";
+import {
+	TagStickerElement_TagClicked_eventDetail,
+	TagStickerElement_TagClicked_eventName
+} from "#steamside/elements/tag-sticker/TagStickerElement_TagClicked_Event.js";
 
 export class TagStickerElement extends CustomaryElement
 {
@@ -48,12 +52,11 @@ export class TagStickerElement extends CustomaryElement
 	#on_click(e: Event) {
 		if (this.click_event !== 'true') {
 			e.preventDefault();
-			const name = this.tag.name;
 			this.dispatchEvent(
-				new CustomEvent(
-					'TagStickerElement:TagClicked',
+				new CustomEvent<TagStickerElement_TagClicked_eventDetail>(
+					TagStickerElement_TagClicked_eventName,
 					{
-						detail: name,
+						detail: {tagName: this.tag.name},
 						composed: true,
 						bubbles: true,
 					}

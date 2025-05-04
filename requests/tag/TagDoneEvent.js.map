@@ -1,0 +1,1 @@
+{"version":3,"file":"TagDoneEvent.js","sourceRoot":"","sources":["TagDoneEvent.ts"],"names":[],"mappings":"AAQA,MAAM,OAAO,YAAa,SAAQ,WAA+B;aACtC,cAAS,GAAW,oBAAoB,CAAC;IAEhE,YAAY,MAA0B;QAClC,KAAK,CAAC,YAAY,CAAC,SAAS,EAAE;YAC1B,MAAM;YACN,OAAO,EAAE,IAAI;YACb,QAAQ,EAAE,IAAI;SACjB,CAAC,CAAC;IACP,CAAC"}

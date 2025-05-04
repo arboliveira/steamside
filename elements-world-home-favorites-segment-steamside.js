@@ -4,6 +4,7 @@ import { fetchFavoritesData } from "#steamside/data-favorites.js";
 import { Backend } from "#steamside/data-backend.js";
 import { pop_toast } from "#steamside/vfx-toaster.js";
 import { CollectionPickerElement } from "#steamside/elements-collection-picker-steamside.js";
+import { CollectionPickerElement_CollectionPicked_eventName } from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
 export class WorldHomeFavoritesSegmentElement extends CustomaryElement {
     constructor() {
         super(...arguments);
@@ -34,7 +35,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement {
             },
             events: [
                 {
-                    type: 'CollectionPickerElement:CollectionPicked',
+                    type: CollectionPickerElement_CollectionPicked_eventName,
                     listener: (el, e) => el.#on_select_new_favorite(e),
                 },
                 {
@@ -51,7 +52,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement {
         //$('html, body').scrollTop(viewCollectionPick.$el.offset().top);
     }
     async #on_select_new_favorite(event) {
-        const name = event.detail;
+        const name = event.detail.tagName;
         const target = event.currentTarget;
         // FIXME display 'setting favorites...'
         try {

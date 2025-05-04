@@ -1,0 +1,1 @@
+{"version":3,"file":"AppTagDoneEvent.js","sourceRoot":"","sources":["AppTagDoneEvent.ts"],"names":[],"mappings":"AAQA,MAAM,OAAO,eAAgB,SAAQ,WAAkC;aAC5C,cAAS,GAAW,wBAAwB,CAAC;IAEpE,YAAY,MAA6B;QACrC,KAAK,CAAC,eAAe,CAAC,SAAS,EAAE;YAC7B,MAAM;YACN,OAAO,EAAE,IAAI;YACb,QAAQ,EAAE,IAAI;SACjB,CAAC,CAAC;IACP,CAAC"}

@@ -1,18 +1,16 @@
+import { fetchSessionData } from "#steamside/data-session.js";
 export async function fetchOfflineModeData() {
-    // FIXME decouple from session: api/offline-mode.json never served from back-end
-    const location = "api/session/session.json";
-    const sameHostAndPort = import.meta.resolve('./' + location);
-    const response = await fetch(sameHostAndPort);
-    const json = await response.json();
-    return json.backoff === undefined // only present in mock json
-        ? false
-        : strictlyBoolean(json.backoff);
+    const sessionData = await fetchSessionData();
+    return sessionData.backoff;
 }
-function strictlyBoolean(value) {
-    if (value === true)
-        return true;
-    if (value === false)
-        return false;
-    throw new Error('Value must be boolean true or false');
+export function imagineDryRun({ dryRun, imagine, url, requestInit }) {
+    if (!dryRun) {
+        return undefined;
+    }
+    const clarification = `Dry run! 😴 Imagine ${imagine}... `;
+    const requestInitString = requestInit
+        ? JSON.stringify(requestInit)
+        : '';
+    return `${clarification}${url}${requestInitString}`;
 }
 //# sourceMappingURL=data-offline-mode.js.map

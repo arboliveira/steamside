@@ -2,6 +2,8 @@ import { Customary, CustomaryElement } from "#customary";
 import { fetchTagsData } from "#steamside/data-tags.js";
 import { TagStickersElement } from "#steamside/elements-tag-stickers-steamside.js";
 import { Sideshow } from "#steamside/vfx-sideshow.js";
+import { TagStickerElement_TagClicked_eventName } from "#steamside/elements/tag-sticker/TagStickerElement_TagClicked_Event.js";
+import { CollectionPickerElement_CollectionPicked_eventName } from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
 export class CollectionPickerElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-collection-picker-steamside',
@@ -27,17 +29,16 @@ export class CollectionPickerElement extends CustomaryElement {
             changes: {},
             events: [
                 {
-                    type: 'TagStickerElement:TagClicked',
-                    listener: (el, e) => el.#on_click_one_tag(e),
+                    type: TagStickerElement_TagClicked_eventName,
+                    listener: (el, e) => el.#on_TagStickerElement_TagClicked(e),
                 },
             ],
         }
     }; }
-    #on_click_one_tag(event) {
+    #on_TagStickerElement_TagClicked(event) {
         event.stopPropagation();
-        const name = event.detail;
-        this.dispatchEvent(new CustomEvent('CollectionPickerElement:CollectionPicked', {
-            detail: name,
+        this.dispatchEvent(new CustomEvent(CollectionPickerElement_CollectionPicked_eventName, {
+            detail: { tagName: event.detail.tagName },
             composed: true,
         }));
     }

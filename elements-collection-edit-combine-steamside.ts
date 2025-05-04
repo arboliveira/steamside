@@ -1,4 +1,6 @@
 import {Customary, CustomaryElement} from "#customary";
+import {CustomaryDeclaration} from "#customary";
+
 import {CollectionPickerElement} from "#steamside/elements-collection-picker-steamside.js";
 import {
 	CollectionEditCombineCommandBoxElement
@@ -6,8 +8,10 @@ import {
 import {Backend} from "#steamside/data-backend.js";
 import {pop_toast} from "#steamside/vfx-toaster.js";
 
-import {CustomaryDeclaration} from "#customary";
-import {Tag} from "#steamside/data-tag";
+import {Tag} from "#steamside/data-tag.js";
+import {
+	CollectionPickerElement_CollectionPicked_eventName
+} from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
 
 export class CollectionEditCombineElement extends CustomaryElement
 {
@@ -44,7 +48,7 @@ export class CollectionEditCombineElement extends CustomaryElement
 				},
 				events: [
 					{
-						type: 'CollectionPickerElement:CollectionPicked',
+						type: CollectionPickerElement_CollectionPicked_eventName,
 						listener: (el, e) => el.#on_CollectionPickerElement_CollectionPicked(<CustomEvent>e),
 					},
 					{

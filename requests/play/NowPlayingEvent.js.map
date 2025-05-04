@@ -1,0 +1,1 @@
+{"version":3,"file":"NowPlayingEvent.js","sourceRoot":"","sources":["NowPlayingEvent.ts"],"names":[],"mappings":"AAKA,MAAM,OAAO,eAAgB,SAAQ,WAA6B;aACvC,cAAS,GAAW,uBAAuB,CAAC;IAEnE,YAAY,MAAwB;QAChC,KAAK,CACD,eAAe,CAAC,SAAS,EAAE;YACvB,MAAM;YACN,OAAO,EAAE,IAAI;YACb,QAAQ,EAAE,IAAI;SACjB,CACJ,CAAC;IACN,CAAC"}

@@ -1,0 +1,25 @@
+<div style="display: flex; align-items: center">
+    <div class="logo">
+        <span class="logo-caption">
+            Customary<br>Testing<br>
+        </span>
+        <span class="logo-emoji">
+            &#x1f469;&#x200d;&#x1f52c;&#x1f52c;
+        </span>
+        <p class="logo-tagline">
+            Science saves lives
+        </p>
+    </div>
+    <div style="flex-grow: 1; text-align: center">
+        <div class="title">~ ${this.title} ~</div>
+        <div><button autofocus>run the tests</button></div>
+    </div>
+    <div class="mocha-stats-placeholder" style="align-self: flex-start">
+        <if-- condition="this.mocha_stats_placeholder_hidden">
+            <true--></true-->
+            <false-->
+                <span>(mocha will show test stats here)</span>
+            </false-->
+        </if-->
+    </div>
+</div>

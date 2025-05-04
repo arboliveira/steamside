@@ -1,14 +1,20 @@
 import {Customary, CustomaryElement} from "#customary";
-import {Backend} from "#steamside/data-backend.js";
+import {CustomaryDeclaration} from "#customary";
+
 import {GameCardElement} from "#steamside/elements-game-card-steamside.js";
 import {TagStickersElement} from "#steamside/elements-tag-stickers-steamside.js";
 import {CommandBoxElement} from "#steamside/elements-command-box-steamside.js";
 import {fetchTagSuggestionsData} from "#steamside/data-tag-suggestions.js";
-import {pop_toast} from "#steamside/vfx-toaster.js";
+import {toastOrNot} from "#steamside/vfx-toaster.js";
 
-import {CustomaryDeclaration} from "#customary";
-import {Game} from "#steamside/data-game";
-import {Tag} from "#steamside/data-tag";
+import {Game} from "#steamside/data-game.js";
+import {Tag} from "#steamside/data-tag.js";
+import {
+	TagStickerElement_TagClicked_eventDetail,
+	TagStickerElement_TagClicked_eventName
+} from "#steamside/elements/tag-sticker/TagStickerElement_TagClicked_Event.js";
+import {AppTagDoneEvent} from "#steamside/requests/app/AppTagDoneEvent.js";
+import {AppTagPleaseEvent} from "#steamside/requests/app/AppTagPleaseEvent.js";
 
 export class TagAGameElement extends CustomaryElement
 {
@@ -54,9 +60,15 @@ export class TagAGameElement extends CustomaryElement
 					{
 						type: 'CommandBoxElement:CommandPlease',
 						listener: (el, event) =>
-							el.#on_CommandBoxElement_CommandPlease(
-									(<CustomEvent>event).detail, event
-							),
+							el.#on_CommandBoxElement_CommandPlease((<CustomEvent>event).detail, event),
+					},
+					{
+						type: TagStickerElement_TagClicked_eventName,
+						listener: (el, e) => el.#on_TagStickerElement_TagClicked(<CustomEvent>e),
+					},
+					{
+						type: AppTagDoneEvent.eventName,
+						listener: (el, e) => el.#on_AppTagDoneEvent(<AppTagDoneEvent>e),
 					},
 				],
 			}
@@ -80,27 +92,27 @@ export class TagAGameElement extends CustomaryElement
 		const nameForCollection = this.#nameForCollection(detail);
 		await this.#addTagToGame(nameForCollection, <Element>event.target);
 	}
-	
-	async #addTagToGame(collection: string, ui: Element) {
-		const appid = this.game.appid;
-		const aUrl = "api/app/" + appid + "/tag/" + encodeURIComponent(collection);
-		try {
-			// FIXME display 'tagging...'
-			await this.backend.fetchBackend({url: aUrl});
-		}
-		catch (error)
-		{
-			// FIXME display 'tagging failed'
-			pop_toast({
-				error: error as Error,
-				offline_imagine_spot: `${this.game.name} was added to ${collection}`, 
-				target: ui,
-				completion_fn: () => this.#on_tagging_complete(),
-			});
-		}
+
+	async #addTagToGame(collection: string, originator: Element) {
+		this.dispatchEvent(new AppTagPleaseEvent({
+			game: this.game,
+			collection,
+			originator,
+		}));
 	}
-	
-	#on_tagging_complete() {
+
+	async #on_TagStickerElement_TagClicked(event: CustomEvent<TagStickerElement_TagClicked_eventDetail>) {
+		event.stopPropagation();
+
+		await this.#addTagToGame(event.detail.tagName, <Element>event.target);
+	}
+
+	async #on_AppTagDoneEvent(appTagDoneEvent: AppTagDoneEvent) {
+		toastOrNot({
+			content: appTagDoneEvent.detail.toast_content,
+			target: this.renderRoot.lastElementChild!,
+		});
+
 		const commandBox: CommandBoxElement = this.renderRoot.querySelector('elements-command-box-steamside')!;
 		commandBox.set_input_text_command_box_value('');
 	}
@@ -115,11 +127,7 @@ export class TagAGameElement extends CustomaryElement
 
 	async #on_connected()
 	{
-		await this.backend.fetchSessionDataAndDisableBackendIfOffline();
-		
 		this.suggestions = await fetchTagSuggestionsData();
 	}
-
-	backend = new Backend();
 }
 Customary.declare(TagAGameElement);
