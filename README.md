@@ -1,8 +1,20 @@
 # Steamside - Your companion on Steam
 
-[Visit the Steamside homepage](https://arboliveira.github.io/steamside/ "Steamside")   
+🕹️ [Play the Demo](https://arboliveira.github.io/steamside/ "Steamside Demo") 🎮  
+🧪 [Run the Unit Tests](https://arboliveira.github.io/steamside/test.html "Steamside Unit Tests") 👩‍🔬
 
-![Steamside, your companion on Steam](https://arboliveira.github.io/steamside/steamside.png "Steamside, your companion on Steam")  
+## Front-end built with
+- [👵 customary.js - fun as the web used to be](https://customaryjs.github.io/)
+- [Lit](https://lit.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [HTML5](https://www.w3.org/TR/html5/)
+- [CSS3](https://www.w3.org/Style/CSS/)
+
+## Back-end built with
+- [Spring Boot](https://spring.io/projects/spring-boot)
+- [Java 23](https://www.java.com)
+
+![Steamside, your companion on Steam](https://arboliveira.github.io/steamside/steamside.png "Steamside, your companion on Steam")
 
 ```
   .   ____          _            __ _ _
@@ -41,12 +53,3 @@
 12:23:10.741  INFO b.c.a.steamside.app.launch.Instructions  : >>> STARTED EMBEDDED WEB SERVER, PRESS ENTER TO STOP
 12:23:10.741  INFO b.c.a.steamside.app.launch.Instructions  : >>> APPLICATION READY TO USE: http://localhost:42424
 ```
-
-## Back-end built with
-- [Java 23](https://www.java.com)
-- [Spring Boot](https://spring.io/projects/spring-boot)
-## Front-end built with
-- [HTML5](https://www.w3.org/TR/html5/)
-- [CSS3](https://www.w3.org/Style/CSS/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Customary 👵](https://customaryjs.github.io/) 
