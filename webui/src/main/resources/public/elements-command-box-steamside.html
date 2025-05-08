@@ -9,16 +9,16 @@
 <div id="command-box" class="command-box">
     <form id="form-command-box">
         <label>
-            <if-- condition="this.__command_label_visible">
+            <customary:if condition="this.__command_label_visible">
 			<span id="CommandLabel" class="form-label">
 				${this.command_label_text}<br/></span>
-            </if-->
+            </customary:if>
             <input type="text" name="query" id="input-text-command-box"
                    class="command-text-input"
                    placeholder="${this.placeholder_text}"
                    value="${this.input_text_command_box_value}"
             />
-            <if-- condition="this.__command_button_strip_visible">
+            <customary:if condition="this.__command_button_strip_visible">
             <span id="command-button-strip">
 			<input id="command-button" class="command-button"
                    type="button" value="Enter"/>
@@ -28,7 +28,7 @@
                    type="button" value="Ctrl+Enter"/>
 			<slot name="command-hint-alternate" class="command-hint">
 				continue (another game)</slot>&nbsp;&nbsp;
-            <if-- condition="this.command_confirm_visible">
+            <customary:if condition="this.command_confirm_visible">
 			<span id="command-confirm">
 				<input id="command-button-confirm" class="command-button"
                        type="button" value="Shift+Enter"/>
@@ -37,12 +37,12 @@
 					<span id="command-confirm-what">${this.command_confirm_what_text}</span>
 				</span>
 			</span>
-            </if-->
+            </customary:if>
 			</span>
-            </if-->
-			<if-- condition="this.command_trouble_visible">
+            </customary:if>
+			<customary:if condition="this.command_trouble_visible">
             <span id="command-trouble" class="command-trouble">${this.command_trouble_text}</span>
-			</if-->
+			</customary:if>
         </label>
     </form>
 </div>
