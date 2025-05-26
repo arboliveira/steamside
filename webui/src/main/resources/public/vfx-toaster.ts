@@ -21,6 +21,20 @@ export function toast(
 	});
 }
 
+export function toastError(
+	{content, target}: {content: unknown, target: Element}
+): HTMLElement{
+	return tippy(target, {
+		content,
+		//hideOnClick: false,
+		maxWidth: 'none',
+		placement: 'bottom',
+		showOnCreate: true,
+		theme: 'error',
+		trigger: 'manual',
+	});
+}
+
 export function pop_toast(
 	{error, target, offline_imagine_spot, completion_fn}: {
 		error: Error,

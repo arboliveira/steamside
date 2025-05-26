@@ -1,8 +1,8 @@
 import {Customary, CustomaryElement} from "#customary";
-import {GameCardElement} from "#steamside/elements-game-card-steamside.js";
-
 import {CustomaryDeclaration} from "#customary";
-import {Game} from "#steamside/data-game";
+
+import {GameCardElement} from "#steamside/elements-game-card-steamside.js";
+import {Game} from "#steamside/data-game.js";
 
 export class GameCardDeckElement extends CustomaryElement
 {
@@ -37,9 +37,12 @@ export class GameCardDeckElement extends CustomaryElement
 				lifecycle: {
 					willUpdate: el => el.#on_willUpdate(), 
 				},
-				events: {
-					'.more-icon': (el, e) => el.#on_more_clicked(e),
-				},
+				events: [
+					{
+						selector: '.more-icon',
+						listener: (el, e) => el.#on_more_clicked(e),
+					},
+				],
 			}
 		}
 	declare kids_mode: string;

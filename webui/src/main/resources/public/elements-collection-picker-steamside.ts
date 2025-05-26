@@ -9,10 +9,8 @@ import {
 	TagStickerElement_TagClicked_eventDetail,
 	TagStickerElement_TagClicked_eventName
 } from "#steamside/elements/tag-sticker/TagStickerElement_TagClicked_Event.js";
-import {
-	CollectionPickerElement_CollectionPicked_eventDetail,
-	CollectionPickerElement_CollectionPicked_eventName
-} from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
+import {CollectionPicked} from "#steamside/elements/collection-picker/CollectionPicked.js";
+import {Skyward} from "#steamside/event-bus/Skyward.js";
 
 export class CollectionPickerElement extends CustomaryElement {
 	static customary: CustomaryDeclaration<CollectionPickerElement> =
@@ -51,16 +49,8 @@ export class CollectionPickerElement extends CustomaryElement {
 	declare tags: Tag[];
 
 	#on_TagStickerElement_TagClicked(event: CustomEvent<TagStickerElement_TagClicked_eventDetail>) {
-		event.stopPropagation();
-		this.dispatchEvent(
-			new CustomEvent<CollectionPickerElement_CollectionPicked_eventDetail>(
-				CollectionPickerElement_CollectionPicked_eventName,
-				{
-					detail: {tagName: event.detail.tagName},
-					composed: true,
-				}
-			)
-		);
+		Skyward.stage<CollectionPicked.EventDetail>(
+			event, this, {type: CollectionPicked.eventType, detail: {tagName: event.detail.tagName}});
 	}
 
 	#on_firstUpdated() {

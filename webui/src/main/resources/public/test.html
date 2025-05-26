@@ -29,11 +29,12 @@
 
 <script type="module">
     async function import_tests() {
+        await import('#steamside/test-elements-home-test.js');
+        await import('#steamside/InventoryWorld.html.test.js');
+        await import('#steamside/test-elements-world-steam-client-steamside-test.js');
         await import('#steamside/test-elements-tag-test.js');
         await import('#steamside/test-elements-cloud-test.js');
         await import('#steamside/test-elements-kids-home-test.js');
-        await import('#steamside/test-elements-world-steam-client-steamside-test.js');
-        await import('#steamside/test-elements-home-test.js');
     }
 
     const mocha_css = import.meta.resolve('mocha.css');

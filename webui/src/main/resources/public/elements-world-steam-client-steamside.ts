@@ -10,6 +10,7 @@ export class WorldSteamClientElement extends CustomaryElement {
         name: 'elements-world-steam-client-steamside',
         config: {
             state: [
+                'statusBackend',
                 'statusVisible', 'statusText', 
                 'anotherUserVisible', 
                 'buttonVisible', 'buttonText'
@@ -23,16 +24,17 @@ export class WorldSteamClientElement extends CustomaryElement {
             lifecycle: {
                 connected: el => el.#on_connected(),
             },
+            changes: {
+                'statusBackend': el => el.#on_statusBackend_change(),
+            },
             events: {
                 '.button-steam-browser-protocol': (el, e) =>
                     el.#buttonSteamBrowserProtocolClicked(e),
             },
         }
     }
-    async #on_connected()
-    {
-        await this.backend.fetchSessionDataAndDisableBackendIfOffline();
 
+    async #on_statusBackend_change() {
         const status = await this.statusBackend.fetchStatus();
 
         let statusVisible = false;
@@ -66,6 +68,14 @@ export class WorldSteamClientElement extends CustomaryElement {
         this.statusText = statusText;
     }
 
+    async #on_connected()
+    {
+        await this.backend.fetchSessionDataAndDisableBackendIfOffline();
+
+        this.statusBackend = new StatusBackend();
+    }
+
+    declare statusBackend: StatusBackend;
     declare statusVisible: boolean;
     declare anotherUserVisible: boolean;
     declare buttonVisible: boolean;
@@ -89,7 +99,6 @@ export class WorldSteamClientElement extends CustomaryElement {
         }
     }
 
-    statusBackend = new StatusBackend();
     backend = new Backend();
     steamBrowserProtocolBackend = new SteamBrowserProtocolBackend(this.backend);
 }

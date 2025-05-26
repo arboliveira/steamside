@@ -1,19 +1,12 @@
 import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 
-import {PlayPleaseEvent} from "#steamside/requests/play/PlayPleaseEvent.js";
 import {WorldHomeAdvancedModeElement} from "#steamside/elements-world-home-advanced-mode-steamside.js";
 import {WorldHomeKidsModeElement} from "#steamside/elements-world-home-kids-mode-steamside.js";
 
-import {PlayRequest} from "#steamside/requests/play/PlayRequest.js";
-import {fetchSessionData} from "#steamside/data-session.js";
-import {TagPleaseEvent} from "#steamside/requests/tag/TagPleaseEvent.js";
-import {TagRequest} from "#steamside/requests/tag/TagRequest.js";
-import {UntagPleaseEvent} from "#steamside/requests/untag/UntagPleaseEvent.js";
-import {UntagRequest} from "#steamside/requests/untag/UntagRequest.js";
-import {GameOverEvent} from "#steamside/requests/play/GameOverEvent.js";
-import {NowPlayingEvent} from "#steamside/requests/play/NowPlayingEvent.js";
-import {AppTagPleaseEvent} from "#steamside/requests/app/AppTagPleaseEvent.js";
-import {AppTagRequest} from "#steamside/requests/app/AppTagRequest.js";
+import {GameOver} from "#steamside/application/play/GameOverEvent.js";
+import {NowPlaying} from "#steamside/application/play/NowPlayingEvent.js";
+import {SteamsideApplication} from "#steamside/application/SteamsideApplication.js";
+import {EventBus} from "#steamside/event-bus/EventBus.js";
 
 export class WorldHomeElement extends CustomaryElement
 {
@@ -37,39 +30,12 @@ export class WorldHomeElement extends CustomaryElement
 				},
 				lifecycle: {
 					connected: el => el.#on_connected(),
+					disconnected: el => el.#on_disconnected(),
 				},
 				changes: {
 					'__kidsMode': (el, a) => el.#on_kidsMode_change(a),
 				},
 				events: [
-					{
-						type: PlayPleaseEvent.eventName,
-						listener: (el, event: Event) =>
-							el.#on_PlayPleaseEvent(event as PlayPleaseEvent),
-					},
-					{
-						type: NowPlayingEvent.eventName,
-						listener: (el, event: Event) => el.#on_NowPlaying(<NowPlayingEvent>event),
-					},
-					{
-						type: GameOverEvent.eventName,
-						listener: (el, event: Event) => el.#on_GameOver(<GameOverEvent>event),
-					},
-					{
-						type: TagPleaseEvent.eventName,
-						listener: (el, event: Event) =>
-							el.#on_TagPleaseEvent(event as TagPleaseEvent),
-					},
-					{
-						type: UntagPleaseEvent.eventName,
-						listener: (el, event: Event) =>
-							el.#on_UntagPleaseEvent(event as UntagPleaseEvent),
-					},
-					{
-						type: AppTagPleaseEvent.eventName,
-						listener: (el, event: Event) =>
-							el.#on_AppTagPleaseEvent(event as AppTagPleaseEvent),
-					},
 				],
 			},
 		}
@@ -77,8 +43,6 @@ export class WorldHomeElement extends CustomaryElement
 	declare __advancedMode_visible: boolean;
 	declare __kidsMode: boolean;
 	declare __kidsMode_visible: boolean;
-
-	private dryRun: boolean = false;
 
 	#on_kidsMode_change(a: boolean) {
 		if (a) 
@@ -93,35 +57,35 @@ export class WorldHomeElement extends CustomaryElement
 		}
 	}
 
-	async #on_PlayPleaseEvent(event: PlayPleaseEvent) {
-		await PlayRequest.play({event, dryRun: this.dryRun});
+	#on_NowPlaying(event: CustomEvent<NowPlaying.EventDetail>) {
+		// FIXME dispatch HubRefreshPlease to Continues element so fun is shown
 	}
 
-	async #on_TagPleaseEvent(event: TagPleaseEvent) {
-		await TagRequest.addGameToInventory({event, dryRun: this.dryRun});
-	}
-
-	async #on_UntagPleaseEvent(event: UntagPleaseEvent) {
-		await UntagRequest.removeGameFromInventory({event, dryRun: this.dryRun});
-	}
-
-	#on_NowPlaying(_event: NowPlayingEvent) {
-		// FIXME dispatch HubRefreshPlease to Continues element so joy is shown
-	}
-
-	#on_GameOver(_event: GameOverEvent) {
-		// FIXME dispatch HubRefreshPlease to Continues element so joy time is shown
-	}
-
-	async #on_AppTagPleaseEvent(event: AppTagPleaseEvent) {
-		await AppTagRequest.tagApp({event, dryRun: this.dryRun});
+	#on_GameOver(event: CustomEvent<GameOver.EventDetail>) {
+		// FIXME dispatch HubRefreshPlease to Continues element so fun time is shown
 	}
 
 	async #on_connected()
 	{
-		const sessionData = await fetchSessionData();
-		this.__kidsMode = sessionData.kidsMode;
-		this.dryRun = sessionData.backoff;
+		this.sky.on_connected();
+
+		const sessionData = await this.sky.on_connected_fetchSessionData();
+
+		this.__kidsMode = sessionData.kidsMode || kidsMode_from_url();
 	}
+
+	#on_disconnected()
+	{
+		this.sky.on_disconnected();
+	}
+
+	readonly sky: SteamsideApplication = new SteamsideApplication(new EventBus(this));
 }
 Customary.declare(WorldHomeElement);
+
+function kidsMode_from_url() {
+	const kids_mode_param = new URLSearchParams(window.location.search)
+		.get('kids');
+
+	return !['false', 'no', '0', ''].includes(kids_mode_param?.toLowerCase() ?? '');
+}

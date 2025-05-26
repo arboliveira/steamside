@@ -5,6 +5,7 @@
     "paths": {
       "#steamside/*": ["./public/*"],
       "#customary-testing": ["./node_modules/customary-testing/src/index.ts"],
+      "#customary-testing/*": ["./node_modules/customary-testing/src/*"],
       "#customary": ["./node_modules/customary/src/index.ts"],
       "#customary/*": ["./node_modules/customary/src/*"],
       "chai/*": ["./node_modules/chai/*"],
