@@ -3,7 +3,8 @@ import { fetchTagsData } from "#steamside/data-tags.js";
 import { TagStickersElement } from "#steamside/elements-tag-stickers-steamside.js";
 import { Sideshow } from "#steamside/vfx-sideshow.js";
 import { TagStickerElement_TagClicked_eventName } from "#steamside/elements/tag-sticker/TagStickerElement_TagClicked_Event.js";
-import { CollectionPickerElement_CollectionPicked_eventName } from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
+import { CollectionPicked } from "#steamside/elements/collection-picker/CollectionPicked.js";
+import { Skyward } from "#steamside/event-bus/Skyward.js";
 export class CollectionPickerElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-collection-picker-steamside',
@@ -36,11 +37,7 @@ export class CollectionPickerElement extends CustomaryElement {
         }
     }; }
     #on_TagStickerElement_TagClicked(event) {
-        event.stopPropagation();
-        this.dispatchEvent(new CustomEvent(CollectionPickerElement_CollectionPicked_eventName, {
-            detail: { tagName: event.detail.tagName },
-            composed: true,
-        }));
+        Skyward.stage(event, this, { type: CollectionPicked.eventType, detail: { tagName: event.detail.tagName } });
     }
     #on_firstUpdated() {
         Sideshow.customary_dispatchEvent_Customary_lifecycle_firstUpdated(this);

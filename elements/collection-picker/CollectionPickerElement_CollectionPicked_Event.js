@@ -1,2 +1,0 @@
-export const CollectionPickerElement_CollectionPicked_eventName = 'CollectionPickerElement:CollectionPicked';
-//# sourceMappingURL=CollectionPickerElement_CollectionPicked_Event.js.map

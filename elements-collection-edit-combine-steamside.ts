@@ -1,17 +1,24 @@
-import {Customary, CustomaryElement} from "#customary";
-import {CustomaryDeclaration} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 
 import {CollectionPickerElement} from "#steamside/elements-collection-picker-steamside.js";
 import {
 	CollectionEditCombineCommandBoxElement
 } from "#steamside/elements-collection-edit-combine-command-box-steamside.js";
 import {Backend} from "#steamside/data-backend.js";
-import {pop_toast} from "#steamside/vfx-toaster.js";
+import {pop_toast, toastError, toastOrNot} from "#steamside/vfx-toaster.js";
 
 import {Tag} from "#steamside/data-tag.js";
-import {
-	CollectionPickerElement_CollectionPicked_eventName
-} from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
+import {CombineAndDeleteSourcesPlease} from "#steamside/application/inventory/combine/CombineAndDeleteSourcesPlease.js";
+import {CombineAndDeleteSourcesDone} from "#steamside/application/inventory/combine/CombineAndDeleteSourcesDone.js";
+import {ConfirmPlease} from "#steamside/elements/command-box/ConfirmPlease.js";
+import {CommandPlease} from "#steamside/elements/command-box/CommandPlease.js";
+import {CollectionPicked} from "#steamside/elements/collection-picker/CollectionPicked.js";
+import {CommandAlternatePlease} from "#steamside/elements/command-box/CommandAlternatePlease.js";
+import {imagineDryRun} from "#steamside/data-offline-mode.js";
+import {Skyward} from "#steamside/event-bus/Skyward.js";
+import {SomethingWentWrong} from "#steamside/application/SomethingWentWrong.js";
+import {EventBusSubscribeOnConnected, EventBusUnsubscribeOnDisconnected} from "#steamside/event-bus/EventBusSubscribe.js";
+import {CombineAndDeleteSourcesDoing} from "#steamside/application/inventory/combine/CombineAndDeleteSourcesDoing.js";
 
 export class CollectionEditCombineElement extends CustomaryElement
 {
@@ -45,40 +52,52 @@ export class CollectionEditCombineElement extends CustomaryElement
 				},
 				lifecycle: {
 					connected: el => el.#on_connected(),
+					disconnected: el => el.#on_disconnected(),
 				},
 				events: [
 					{
-						type: CollectionPickerElement_CollectionPicked_eventName,
-						listener: (el, e) => el.#on_CollectionPickerElement_CollectionPicked(<CustomEvent>e),
+						type: CollectionPicked.eventType,
+						listener: (el, e) =>
+							el.#on_CollectionPickerElement_CollectionPicked(<CustomEvent>e),
 					},
 					{
-						type: 'CommandBoxElement:CommandPlease',
-						listener: (el) =>
-							el.#on_CommandBoxElement_CommandPlease(),
+						type: CommandPlease.eventType,
+						listener: (el, e) =>
+							el.#on_CommandBoxElement_CommandPlease(<CustomEvent>e),
 					},
 					{
-						type: 'CommandBoxElement:CommandAlternatePlease',
-						listener: (el, event) =>
-							el.#on_CommandBoxElement_CommandAlternatePlease(<CustomEvent>event),
+						type: CommandAlternatePlease.eventType,
+						listener: (el, e) =>
+							el.#on_CommandBoxElement_CommandAlternatePlease(<CustomEvent>e),
 					},
 					{
-						type: 'CommandBoxElement:ConfirmPlease',
-						listener: (el, event) =>
-							el.#on_CommandBoxElement_ConfirmPlease(<CustomEvent>event),
+						type: ConfirmPlease.eventType,
+						listener: (el, e) =>
+							el.#on_CommandBoxElement_ConfirmPlease(<CustomEvent>e),
+					},
+					{
+						type: CombineAndDeleteSourcesDone.eventType,
+						listener: (el, e) =>
+							el.#on_CombineAndDeleteSourcesDoneEvent(<CustomEvent>e),
+					},
+					{
+						type: SomethingWentWrong.eventType,
+						listener: (el, event) => el.#on_SomethingWentWrong(<CustomEvent>event),
 					},
 				],
 			}
 		}
+
 	declare __tag_combining_name: string;
 	declare combine_command_box_visible: boolean;
 	declare __tag: Tag;
 
-	#on_CollectionPickerElement_CollectionPicked(e: CustomEvent) {
-		this.__tag_combining_name = e.detail;
+	#on_CollectionPickerElement_CollectionPicked(e: CustomEvent<CollectionPicked.EventDetail>) {
+		this.__tag_combining_name = e.detail.tagName;
 		this.combine_command_box_visible = true;
 	}
 		
-	#on_CommandBoxElement_CommandPlease() {
+	#on_CommandBoxElement_CommandPlease(_e: CustomEvent<CommandPlease.EventDetail>) {
 		// on command, all variations delete one or both supplier collections
 		this.#askForConfirmation();
 	}
@@ -99,19 +118,45 @@ export class CollectionEditCombineElement extends CustomaryElement
 		await this.#combineAndKeepSources({receiver: inputValue});
 	}
 
-	async #on_CommandBoxElement_ConfirmPlease(event: CustomEvent) {
-		const inputValue = event.detail;
-		
-		const DID_YOU_WRITE_TESTS_ALREADY = false;
-		
-		if (!DID_YOU_WRITE_TESTS_ALREADY) {
-			throw new Error('Danger zone, write tests first');
-		}
-		
+	#on_CommandBoxElement_ConfirmPlease(event: CustomEvent<ConfirmPlease.EventDetail>) {
 		// TODO read state: previous action was command or command alternate
-		// TODO determine whether receiver is the editing or the combining
-		
-		await this.#combineAndDeleteSources({receiver: inputValue});
+		// TODO determine whether destination is the editing or the combining
+
+		Skyward.stage<CombineAndDeleteSourcesPlease.EventDetail>(
+			event, this, {type: CombineAndDeleteSourcesPlease.eventType,
+				detail: {
+					inventory_editing_alias: this.__tag.name,
+					inventory_combining_alias: this.__tag_combining_name,
+					inventory_destination: event.detail.input_text_command_box_value,
+			}});
+	}
+
+	#on_CombineAndDeleteSourcesDoing(e: CustomEvent<CombineAndDeleteSourcesDoing.EventDetail>) {
+		if (e.detail.inventory_editing_alias !== this.__tag.name) return;
+
+		const {inventory_combining_alias, inventory_editing_alias, inventory_destination,
+			dryRun, endpoint} = e.detail;
+
+		toastOrNot({
+			content: imagineDryRun({
+				imagine:
+					`${inventory_editing_alias} and ${inventory_combining_alias}`
+					+ ` were moved into ${inventory_destination}`,
+				url: endpoint, dryRun
+			}),
+			target: this.renderRoot.lastElementChild!
+		});
+	}
+
+	#on_CombineAndDeleteSourcesDoneEvent(event: CustomEvent<CombineAndDeleteSourcesDone.EventDetail>) {
+		// TODO Parent: listen, close combine segment, and refresh tag on display
+	}
+
+	#on_SomethingWentWrong(event: CustomEvent<SomethingWentWrong.EventDetail>)
+	{
+		//////if (event.detail.originatingTarget !== this) return;
+		//////event.stopPropagation();
+		toastError({content: event.detail.error, target: this.renderRoot.lastElementChild!});
 	}
 
 	#askForConfirmation() {
@@ -156,7 +201,7 @@ export class CollectionEditCombineElement extends CustomaryElement
 		catch (error) {
 			const imagine =
 				`${collection_editing_name} and` +
-				` ${collection_combining_name} were copied into ${receiver}`;	
+				` ${collection_combining_name} were copied into ${receiver}`;
 			pop_toast({
 				error: error as Error,
 				offline_imagine_spot: imagine,
@@ -165,69 +210,21 @@ export class CollectionEditCombineElement extends CustomaryElement
 		}
 	}
 
-	async #combineAndDeleteSources({receiver}:{receiver: string}) {
-		const collection_editing_name = this.__tag.name;
-		const collection_combining_name = this.__tag_combining_name;
-
-		const aUrl =
-			"api/collection/" +
-			encodeURIComponent(collection_editing_name) +
-			"/combine/" +
-			encodeURIComponent(collection_combining_name) +
-			"/into/" +
-			encodeURIComponent(receiver) +
-			"/move";
-		// TODO display 'combining...'
-		try
+	private readonly subscriptions: Array<{type: string, listener: EventListener}> = [
 		{
-			await this.backend.fetchBackend({url: aUrl});
-
-			// TODO Parent: listen, close combine segment, and refresh tag on display
-			this.dispatchEvent(
-				new CustomEvent(
-					'CollectionEditCombineElement:Combined',
-					{
-						detail: {
-							receiver,
-							collection_editing_name,
-							collection_combining_name,
-						},
-						composed: true,
-						bubbles: true,
-					}
-				)
-			);
-		}
-		catch (error) {
-			const imagine =
-				`${collection_editing_name} and` +
-				` ${collection_combining_name} were moved into ${receiver}`;
-			pop_toast({
-				error: error as Error,
-				offline_imagine_spot: imagine,
-				target: this.renderRoot.firstElementChild!,
-			});
-		}
-		
-		this.dispatchEvent(
-			new CustomEvent(
-				'CollectionEditCombineElement:Combined',
-				{
-					detail: {
-						receiver,
-						collection_editing_name,
-						collection_combining_name,
-					},
-					composed: true,
-					bubbles: true,
-				}
-			)
-		);
-	}
-
+			type: CombineAndDeleteSourcesDoing.eventType,
+			listener: event => this.#on_CombineAndDeleteSourcesDoing(<CustomEvent>event),
+		},
+	];
 	async #on_connected()
 	{
+		EventBusSubscribeOnConnected.subscribe(this, this.subscriptions);
+
 		await this.backend.fetchSessionDataAndDisableBackendIfOffline();
+	}
+	#on_disconnected()
+	{
+		EventBusUnsubscribeOnDisconnected.unsubscribe(this, this.subscriptions)
 	}
 
 	backend = new Backend();

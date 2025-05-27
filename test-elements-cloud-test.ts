@@ -1,5 +1,5 @@
 import 'mocha';
-import { CustomaryTesting as CT } from "#customary-testing";
+import * as CT from "#customary-testing";
 import { assert, expect } from "chai";
 import {WorldSettingsCloudElement} from "#steamside/elements-world-settings-cloud-steamside";
 

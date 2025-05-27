@@ -4,7 +4,7 @@ import { fetchFavoritesData } from "#steamside/data-favorites.js";
 import { Backend } from "#steamside/data-backend.js";
 import { pop_toast } from "#steamside/vfx-toaster.js";
 import { CollectionPickerElement } from "#steamside/elements-collection-picker-steamside.js";
-import { CollectionPickerElement_CollectionPicked_eventName } from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
+import { CollectionPicked, } from "#steamside/elements/collection-picker/CollectionPicked.js";
 export class WorldHomeFavoritesSegmentElement extends CustomaryElement {
     constructor() {
         super(...arguments);
@@ -35,7 +35,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement {
             },
             events: [
                 {
-                    type: CollectionPickerElement_CollectionPicked_eventName,
+                    type: CollectionPicked.eventType,
                     listener: (el, e) => el.#on_select_new_favorite(e),
                 },
                 {

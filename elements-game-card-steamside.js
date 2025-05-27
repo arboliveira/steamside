@@ -1,10 +1,30 @@
 import { Customary, CustomaryElement } from "#customary";
-import { toastOrNot } from "#steamside/vfx-toaster.js";
-import { PlayPleaseEvent } from "#steamside/requests/play/PlayPleaseEvent.js";
-import { GameCardElement_ActionButtonClick_eventName } from "#steamside/elements/game-card/GameCardElement_ActionButtonClick_Event.js";
-import { NowPlayingEvent } from "#steamside/requests/play/NowPlayingEvent.js";
-import { GameOverEvent } from "#steamside/requests/play/GameOverEvent.js";
+import { toastError, toastOrNot } from "#steamside/vfx-toaster.js";
+import { PlayPlease } from "#steamside/application/play/PlayPleaseEvent.js";
+import { GameActionButtonClick } from "#steamside/elements/game-card/GameActionButtonClick.js";
+import { NowPlaying } from "#steamside/application/play/NowPlayingEvent.js";
+import { GameOver } from "#steamside/application/play/GameOverEvent.js";
+import { CardDefaultActionPlease } from "#steamside/elements/game-card/CardDefaultActionPlease.js";
+import { Skyward } from "#steamside/event-bus/Skyward.js";
+import { GameCardTagPlease } from "#steamside/elements/game-card/GameCardTagPlease.js";
+import { imagineDryRun } from "#steamside/data-offline-mode.js";
+import { Fun } from "#steamside/application/Fun.js";
+import { EventBusSubscribeOnConnected, EventBusUnsubscribeOnDisconnected } from "#steamside/event-bus/EventBusSubscribe.js";
+import { SomethingWentWrong } from "#steamside/application/SomethingWentWrong.js";
 export class GameCardElement extends CustomaryElement {
+    constructor() {
+        super(...arguments);
+        this.subscriptions = [
+            {
+                type: NowPlaying.eventType,
+                listener: event => this.#on_NowPlayingEvent(event),
+            },
+            {
+                type: GameOver.eventType,
+                listener: event => this.#on_GameOverEvent(event),
+            },
+        ];
+    }
     static { this.customary = {
         name: 'elements-game-card-steamside',
         config: {
@@ -56,38 +76,46 @@ export class GameCardElement extends CustomaryElement {
                 {
                     type: 'click',
                     selector: '.game-link',
-                    listener: (el, e) => el.#gameClicked(e),
+                    listener: (el, e) => {
+                        e.preventDefault();
+                        el.#performDefaultAction();
+                    },
                 },
                 {
                     type: 'click',
-                    selector: '.game-tile-play',
-                    listener: (el, e) => el.#playClicked(e),
+                    selector: '.action-button-play',
+                    listener: (el, e) => {
+                        e.preventDefault();
+                        el.#playPlease();
+                    },
                 },
                 {
                     type: 'click',
-                    selector: '.game-tile-tag',
-                    listener: (el, e) => el.#on_action_button_click(e, 'tag'),
+                    selector: '.action-button-tag',
+                    listener: (el, e) => Skyward.stage(e, el, { type: GameCardTagPlease.eventType, detail: { game: el.game } }),
                 },
                 {
                     type: 'click',
                     selector: '.action-button-remove',
-                    listener: (el, e) => el.#on_action_button_click(e, 'remove'),
+                    listener: (el, e) => Skyward.stage(e, el, { type: GameActionButtonClick.eventType, detail: el.intention('remove') }),
                 },
                 {
                     type: 'click',
                     selector: '.action-button-add',
-                    listener: (el, e) => el.#on_action_button_click(e, 'add'),
+                    listener: (el, e) => Skyward.stage(e, el, { type: GameActionButtonClick.eventType, detail: el.intention('add') }),
                 },
                 {
-                    type: NowPlayingEvent.eventName,
-                    listener: (el, e) => el.#on_NowPlayingEvent(e),
+                    type: CardDefaultActionPlease.eventType,
+                    listener: el => el.#performDefaultAction(),
                 },
                 {
-                    type: GameOverEvent.eventName,
-                    listener: (el, e) => el.#on_GameOverEvent(e),
+                    type: SomethingWentWrong.eventType,
+                    listener: (el, event) => el.#on_SomethingWentWrong(event),
                 },
             ],
             lifecycle: {
+                connected: el => el.#on_connected(),
+                disconnected: el => el.#on_disconnected(),
                 willUpdate: el => el.#on_willUpdate(),
             },
         },
@@ -95,18 +123,8 @@ export class GameCardElement extends CustomaryElement {
     #on_willUpdate() {
         this.instruments_panel_visible = this.kids_mode !== 'true';
     }
-    #on_action_button_click(e, action_button) {
-        e.preventDefault();
-        const detail = {
-            action_button,
-            game: this.game,
-            originator: e.target,
-        };
-        this.dispatchEvent(new CustomEvent(GameCardElement_ActionButtonClick_eventName, {
-            detail,
-            composed: true,
-            bubbles: true,
-        }));
+    intention(action_button) {
+        return { action_button, game: this.game };
     }
     #on_changed_game(a) {
         this.#on_changed_game_tags(a.tags);
@@ -131,52 +149,62 @@ export class GameCardElement extends CustomaryElement {
     }
     #mouseenter_hot_zone(e) {
         e.preventDefault();
-        const littleCommandToLightUp = this.#littleCommandToLightUp();
-        if (littleCommandToLightUp == null)
+        const buttonOfDefaultAction = this.#buttonOfDefaultAction();
+        if (buttonOfDefaultAction == null)
             return;
-        littleCommandToLightUp.classList.add('what-will-happen');
+        buttonOfDefaultAction.classList.add('what-will-happen');
     }
     #mouseleave_hot_zone(e) {
         e.preventDefault();
-        const littleCommandToLightUp = this.#littleCommandToLightUp();
-        if (littleCommandToLightUp == null)
+        const buttonOfDefaultAction = this.#buttonOfDefaultAction();
+        if (buttonOfDefaultAction == null)
             return;
-        littleCommandToLightUp.classList.remove('what-will-happen');
+        buttonOfDefaultAction.classList.remove('what-will-happen');
     }
-    #littleCommandToLightUp() {
+    #buttonOfDefaultAction() {
         // return the first of them all
         return this.renderRoot.querySelector('.game-tile-command');
     }
-    async #gameClicked(e) {
-        e.preventDefault();
-        const w = this.#littleCommandToLightUp();
+    #performDefaultAction() {
+        const w = this.#buttonOfDefaultAction();
         if (w) {
             w.click();
-            return;
         }
-        await this.#playClicked(e);
-    }
-    async #playClicked(e) {
-        e.preventDefault();
-        await this.playGame();
-    }
-    async playGame() {
-        const url = this.game.link;
-        this.dispatchEvent(new PlayPleaseEvent({
-            appid: this.game.appid,
-            url,
-            originator: this,
-        }));
+        else {
+            // without action buttons (like in kids mode) the only way to win is... to play
+            this.#playPlease();
+        }
     }
     #on_NowPlayingEvent(e) {
+        if (e.detail.fun.id !== this.game.appid)
+            return;
         this.setAttribute('now_playing', 'true');
+        const { fun_endpoint, funName, dryRun } = e.detail;
         toastOrNot({
-            content: e.detail.toast_content,
-            target: this.renderRoot.lastElementChild,
+            content: imagineDryRun({ imagine: `you're playing ${funName}`, url: fun_endpoint, dryRun }),
+            target: this.renderRoot.lastElementChild
         });
     }
-    #on_GameOverEvent(_e) {
-        this.setAttribute('now_playing', 'false');
+    #playPlease() {
+        // target must be the card because "now playing" overlay blocks events on action buttons
+        Skyward.fly(this, {
+            type: PlayPlease.eventType,
+            detail: {
+                fun: new Fun(this.game.appid),
+                funName: this.game.name,
+                fun_endpoint: this.game.link,
+            }
+        });
+    }
+    #on_SomethingWentWrong(event) {
+        ////// if (event.detail.originatingTarget !== this) return;
+        ////// event.stopPropagation();
+        toastError({ content: event.detail.error, target: this.renderRoot.lastElementChild });
+    }
+    #on_GameOverEvent(e) {
+        if (e.detail.fun.id === this.game.appid) {
+            this.setAttribute('now_playing', 'false');
+        }
     }
     #on_changed_now_playing(a) {
         this.game_tile_inner_loading_overlay_visible = isOn(a);
@@ -189,6 +217,12 @@ export class GameCardElement extends CustomaryElement {
         else {
             underlay.classList.remove('game-tile-inner-blurred');
         }
+    }
+    #on_connected() {
+        EventBusSubscribeOnConnected.subscribe(this, this.subscriptions);
+    }
+    #on_disconnected() {
+        EventBusUnsubscribeOnDisconnected.unsubscribe(this, this.subscriptions);
     }
 }
 Customary.declare(GameCardElement);

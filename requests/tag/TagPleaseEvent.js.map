@@ -1,1 +1,0 @@
-{"version":3,"file":"TagPleaseEvent.js","sourceRoot":"","sources":["TagPleaseEvent.ts"],"names":[],"mappings":"AAQA,MAAM,OAAO,cAAe,SAAQ,WAAiC;aAC1C,cAAS,GAAW,sBAAsB,CAAC;IAElE,YAAY,MAA4B;QACpC,KAAK,CAAC,cAAc,CAAC,SAAS,EAAE;YAC5B,MAAM;YACN,QAAQ,EAAE,IAAI;YACd,OAAO,EAAE,IAAI;SAChB,CAAC,CAAC;IACP,CAAC"}

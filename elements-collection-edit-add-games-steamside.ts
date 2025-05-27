@@ -6,12 +6,9 @@ import {CollectionEditAddGamesCommandBoxElement} from "#steamside/elements-colle
 import {fetchSearchData} from "#steamside/data-search.js";
 
 import {Game} from "#steamside/data-game.js";
-import {TagDoneEvent} from "#steamside/requests/tag/TagDoneEvent.js";
-import {toastOrNot} from "#steamside/vfx-toaster.js";
-import {
-	GameCardElement_ActionButtonClick_eventDetail,
-	GameCardElement_ActionButtonClick_eventName
-} from "#steamside/elements/game-card/GameCardElement_ActionButtonClick_Event.js";
+import {CommandPlease} from "#steamside/elements/command-box/CommandPlease.js";
+import {CommandAlternatePlease} from "#steamside/elements/command-box/CommandAlternatePlease.js";
+import {GameCardTagPlease} from "#steamside/elements/game-card/GameCardTagPlease.js";
 
 export class CollectionEditAddGamesElement extends CustomaryElement
 {
@@ -45,23 +42,24 @@ export class CollectionEditAddGamesElement extends CustomaryElement
 				},
 				events: [
 					{
-						type: 'CommandBoxElement:CommandPlease',
-						listener: (el, event) =>
-							el.#on_CommandBoxElement_CommandPlease(<CustomEvent>event),
+						type: CommandPlease.eventType,
+						listener: (el, e) =>
+							el.#on_CommandBoxElement_CommandPlease(<CustomEvent>e),
 					},
 					{
-						type: 'CommandBoxElement:CommandAlternatePlease',
-						listener: (el, event) =>
-							el.#on_CommandBoxElement_CommandAlternatePlease(<CustomEvent>event),
+						type: CommandAlternatePlease.eventType,
+						listener: (el, e) =>
+							el.#on_CommandBoxElement_CommandAlternatePlease(<CustomEvent>e),
 					},
 					{
-						type: GameCardElement_ActionButtonClick_eventName,
+						type: GameCardTagPlease.eventType,
 						selector: '.segment',
-						listener: (el, e) => el.#on_GameCardElement_ActionButtonClick(<CustomEvent>e),
-					},
-					{
-						type: TagDoneEvent.eventName,
-						listener: (el, e) => el.#on_TagDoneEvent(<TagDoneEvent>e),
+						listener: (el, event) =>
+							// FIXME too messy, open new window instead
+							new TagAGameElement().showTagAGame({
+								game: (<CustomEvent<GameCardTagPlease.EventDetail>>event).detail.game,
+								container: <Element>event.currentTarget,
+							}),
 					},
 				],
 			}
@@ -73,8 +71,8 @@ export class CollectionEditAddGamesElement extends CustomaryElement
 		this.firstSearchResult = a[0];
 	}
 		
-	async #on_CommandBoxElement_CommandPlease(event: CustomEvent) {
-		const inputValue = event.detail;
+	async #on_CommandBoxElement_CommandPlease(event: CustomEvent<CommandPlease.EventDetail>) {
+		const inputValue = event.detail.input_text_command_box_value;
 		if (inputValue) {
 			await this.#search(inputValue);
 		}
@@ -97,24 +95,6 @@ export class CollectionEditAddGamesElement extends CustomaryElement
 
 	async #search(query: string) {
 		this.collectionEditSearchResults = await fetchSearchData(query);
-	}
-
-	async #on_GameCardElement_ActionButtonClick(
-		event: CustomEvent<GameCardElement_ActionButtonClick_eventDetail>
-	) {
-		switch (event.detail.action_button) {
-			case 'tag':
-				// FIXME too messy, open new window instead
-				new TagAGameElement().showTagAGame({game: event.detail.game, container: <Element>event.currentTarget});
-				break;
-		}
-	}
-
-	async #on_TagDoneEvent(tagDoneEvent: TagDoneEvent) {
-		toastOrNot({
-			content: tagDoneEvent.detail.toast_content,
-			target: this.renderRoot.lastElementChild!,
-		});
 	}
 }
 Customary.declare(CollectionEditAddGamesElement);

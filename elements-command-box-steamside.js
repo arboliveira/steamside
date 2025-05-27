@@ -1,5 +1,9 @@
 import { Customary, CustomaryElement } from "#customary";
 import { CommandHintWithVerbAndSubjectElement } from "#steamside/elements-command-hint-with-verb-and-subject-steamside.js";
+import { ConfirmPlease } from "#steamside/elements/command-box/ConfirmPlease.js";
+import { CommandPlease } from "#steamside/elements/command-box/CommandPlease.js";
+import { CommandAlternatePlease } from "#steamside/elements/command-box/CommandAlternatePlease.js";
+import { Skyward } from "#steamside/event-bus/Skyward.js";
 export class CommandBoxElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-command-box-steamside',
@@ -99,22 +103,19 @@ export class CommandBoxElement extends CustomaryElement {
         this.commandPlease();
     }
     commandPlease() {
-        this.dispatchEvent(new CustomEvent('CommandBoxElement:CommandPlease', {
-            detail: this.#trim(this.input_text_command_box_value),
-            composed: true,
-        }));
+        Skyward.fly(this, { type: CommandPlease.eventType, detail: {
+                input_text_command_box_value: this.#trim(this.input_text_command_box_value),
+            } });
     }
     #doCommandAlternate() {
-        this.dispatchEvent(new CustomEvent('CommandBoxElement:CommandAlternatePlease', {
-            detail: this.#trim(this.input_text_command_box_value),
-            composed: true,
-        }));
+        Skyward.fly(this, { type: CommandAlternatePlease.eventType, detail: {
+                input_text_command_box_value: this.#trim(this.input_text_command_box_value),
+            } });
     }
     #doCommandConfirm() {
-        this.dispatchEvent(new CustomEvent('CommandBoxElement:ConfirmPlease', {
-            detail: this.#trim(this.input_text_command_box_value),
-            composed: true,
-        }));
+        Skyward.fly(this, { type: ConfirmPlease.eventType, detail: {
+                input_text_command_box_value: this.#trim(this.input_text_command_box_value),
+            } });
     }
     #trim(s) {
         return s?.trim() || '';

@@ -1,9 +1,9 @@
 import {Customary, CustomaryElement} from "#customary";
+import {CustomaryDeclaration} from "#customary";
+
 import {CollectionEditElement} from "#steamside/elements-collection-edit-steamside.js";
 import {fetchTagSuggestionsData} from "#steamside/data-tag-suggestions.js";
-
-import {CustomaryDeclaration} from "#customary";
-import {Tag} from "#steamside/data-tag";
+import {Tag} from "#steamside/data-tag.js";
 
 export class WorldHomeSuggestedSegmentsElement extends CustomaryElement
 {
@@ -30,10 +30,6 @@ export class WorldHomeSuggestedSegmentsElement extends CustomaryElement
 				},
 				lifecycle: {
 					connected: el => el.#on_connected(),
-				},
-				changes: {
-				},
-				events: {
 				},
 			}
 		}

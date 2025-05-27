@@ -6,7 +6,8 @@ import { WorldHomeSuggestedSegmentsElement } from "#steamside/elements-world-hom
 import { TagAGameElement } from "#steamside/elements-tag-a-game-steamside.js";
 import { fetchContinuesData } from "#steamside/data-continues.js";
 import { fetchOwnedCountData } from "#steamside/data-owned-count-tag.js";
-import { GameCardElement_ActionButtonClick_eventName } from "#steamside/elements/game-card/GameCardElement_ActionButtonClick_Event.js";
+import { CardDefaultActionPlease } from "#steamside/elements/game-card/CardDefaultActionPlease.js";
+import { GameCardTagPlease } from "#steamside/elements/game-card/GameCardTagPlease.js";
 export class WorldHomeAdvancedModeElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-world-home-advanced-mode-steamside',
@@ -42,26 +43,22 @@ export class WorldHomeAdvancedModeElement extends CustomaryElement {
                     listener: (el, event) => el.#on_asked_continue_game(event),
                 },
                 {
+                    // TODO segment selector not really great to "tag a game" next to the game clicked
                     selector: '.segment',
-                    type: GameCardElement_ActionButtonClick_eventName,
-                    listener: (el, event) => el.#on_game_card_action_button_click(event),
+                    type: GameCardTagPlease.eventType,
+                    listener: (el, event) => new TagAGameElement().showTagAGame({
+                        game: event.detail.game,
+                        // TODO segment selector not really great to "tag a game" next to the game clicked
+                        container: event.currentTarget
+                    })
                 },
             ],
         }
     }; }
-    async #on_game_card_action_button_click(event) {
-        switch (event.detail.action_button) {
-            case 'tag':
-                new TagAGameElement().showTagAGame({
-                    game: event.detail.game,
-                    container: event.currentTarget
-                });
-                break;
-        }
-    }
     #on_asked_continue_game(event) {
         const { lastPlayed } = event.detail;
-        this.#getContinuesDeck().getCardAtIndex(lastPlayed - 1)?.playGame();
+        const gameCardElement = this.#getContinuesDeck().getCardAtIndex(lastPlayed - 1);
+        gameCardElement.dispatchEvent(new CustomEvent(CardDefaultActionPlease.eventType));
     }
     #getContinuesDeck() {
         return this.renderRoot

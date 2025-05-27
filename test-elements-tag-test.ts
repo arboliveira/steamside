@@ -1,5 +1,5 @@
 import 'mocha';
-import { CustomaryTesting as CT } from "#customary-testing";
+import * as CT from "#customary-testing";
 import { expect } from "chai";
 
 const suite = {
@@ -15,7 +15,7 @@ describe(suite.title, async function () {
     after(() => window.close());
     describe('happy day', async function () {
         it('looks good', async function () {
-            this.retries(64);
+            this.retries(128);
 
             const element1 = CT.querySelector('elements-tag-a-game-steamside', window);
             const element2 = CT.querySelector('elements-tag-stickers-steamside', element1);

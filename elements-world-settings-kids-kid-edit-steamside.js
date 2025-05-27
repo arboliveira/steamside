@@ -2,7 +2,7 @@ import { Customary, CustomaryElement } from "#customary";
 import { Backend } from "#steamside/data-backend.js";
 import { CollectionPickerElement } from "#steamside/elements-collection-picker-steamside.js";
 import { TagStickerElement_TagClicked_eventName } from "#steamside/elements/tag-sticker/TagStickerElement_TagClicked_Event.js";
-import { CollectionPickerElement_CollectionPicked_eventName } from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
+import { CollectionPicked } from "#steamside/elements/collection-picker/CollectionPicked.js";
 export class WorldSettingsKidsKidEditElement extends CustomaryElement {
     constructor() {
         super(...arguments);
@@ -59,7 +59,7 @@ export class WorldSettingsKidsKidEditElement extends CustomaryElement {
                     listener: (el) => el.#on_TagStickerElement_TagClicked(),
                 },
                 {
-                    type: CollectionPickerElement_CollectionPicked_eventName,
+                    type: CollectionPicked.eventType,
                     listener: (el, e) => el.#on_CollectionPickerElement_CollectionPicked(e),
                 },
                 {

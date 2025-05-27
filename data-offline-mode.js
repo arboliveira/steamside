@@ -11,6 +11,6 @@ export function imagineDryRun({ dryRun, imagine, url, requestInit }) {
     const requestInitString = requestInit
         ? JSON.stringify(requestInit)
         : '';
-    return `${clarification}${url}${requestInitString}`;
+    return `${clarification} 🌬️ ${url}${requestInitString}`;
 }
 //# sourceMappingURL=data-offline-mode.js.map

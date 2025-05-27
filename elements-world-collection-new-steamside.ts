@@ -6,6 +6,8 @@ import {
 } from "#steamside/elements-collection-new-empty-command-box-steamside.js";
 
 import {CustomaryDeclaration} from "#customary";
+import {CommandPlease} from "#steamside/elements/command-box/CommandPlease.js";
+import {CommandAlternatePlease} from "#steamside/elements/command-box/CommandAlternatePlease.js";
 
 export class WorldCollectionNewElement extends CustomaryElement
 {
@@ -37,14 +39,14 @@ export class WorldCollectionNewElement extends CustomaryElement
 				},
 				events: [
 					{
-						type: 'CommandBoxElement:CommandPlease',
-						listener: (el, event) =>
-							el.#on_CommandBoxElement_CommandPlease(<CustomEvent>event),
+						type: CommandPlease.eventType,
+						listener: (el, e) =>
+							el.#on_CommandBoxElement_CommandPlease(<CustomEvent>e),
 					},
 					{
-						type: 'CommandBoxElement:CommandAlternatePlease',
-						listener: (el, event) =>
-							el.#on_CommandBoxElement_CommandAlternatePlease(<CustomEvent>event),
+						type: CommandAlternatePlease.eventType,
+						listener: (el, e) =>
+							el.#on_CommandBoxElement_CommandAlternatePlease(<CustomEvent>e),
 					},
 					{
 						type: 'click',
@@ -55,8 +57,8 @@ export class WorldCollectionNewElement extends CustomaryElement
 			}
 		}
 
-	async #on_CommandBoxElement_CommandPlease(event: CustomEvent) {
-		const inputValue = event.detail;
+	async #on_CommandBoxElement_CommandPlease(event: CustomEvent<CommandPlease.EventDetail>) {
+		const inputValue = event.detail.input_text_command_box_value;
 		await this.#createEmpty({name: inputValue, stay: false});
 	}
 

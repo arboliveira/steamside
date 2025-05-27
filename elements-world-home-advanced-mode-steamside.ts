@@ -10,10 +10,8 @@ import {fetchOwnedCountData} from "#steamside/data-owned-count-tag.js";
 
 import {Game} from "#steamside/data-game.js";
 import {Tag} from "#steamside/data-tag.js";
-import {
-	GameCardElement_ActionButtonClick_eventDetail,
-	GameCardElement_ActionButtonClick_eventName
-} from "#steamside/elements/game-card/GameCardElement_ActionButtonClick_Event.js";
+import {CardDefaultActionPlease} from "#steamside/elements/game-card/CardDefaultActionPlease.js";
+import {GameCardTagPlease} from "#steamside/elements/game-card/GameCardTagPlease.js";
 
 export class WorldHomeAdvancedModeElement extends CustomaryElement
 {
@@ -53,10 +51,15 @@ export class WorldHomeAdvancedModeElement extends CustomaryElement
 							el.#on_asked_continue_game(event as CustomEvent),
 					},
 					{
+						// TODO segment selector not really great to "tag a game" next to the game clicked
 						selector: '.segment',
-						type: GameCardElement_ActionButtonClick_eventName,
+						type: GameCardTagPlease.eventType,
 						listener: (el, event) =>
-							el.#on_game_card_action_button_click(event as CustomEvent),
+							new TagAGameElement().showTagAGame({
+								game: (<CustomEvent<GameCardTagPlease.EventDetail>>event).detail.game,
+								// TODO segment selector not really great to "tag a game" next to the game clicked
+								container: <Element>event.currentTarget
+							})
 					},
 				],
 			}
@@ -66,22 +69,10 @@ export class WorldHomeAdvancedModeElement extends CustomaryElement
 	declare last_played_name_1: string;
 	declare last_played_name_2: string;
 
-	async #on_game_card_action_button_click(
-		event: CustomEvent<GameCardElement_ActionButtonClick_eventDetail>
-	) {
-		switch (event.detail.action_button) {
-			case 'tag':
-				new TagAGameElement().showTagAGame({
-					game: event.detail.game,
-					container: <Element>event.currentTarget
-				});
-				break;
-		}
-	}
-
 	#on_asked_continue_game(event: CustomEvent) {
 		const {lastPlayed} = event.detail;
-		this.#getContinuesDeck().getCardAtIndex(lastPlayed - 1)?.playGame();
+		const gameCardElement = this.#getContinuesDeck().getCardAtIndex(lastPlayed - 1);
+		gameCardElement.dispatchEvent(new CustomEvent(CardDefaultActionPlease.eventType));
 	}
 
 	#getContinuesDeck(): GameCardDeckElement {

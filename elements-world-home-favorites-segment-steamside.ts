@@ -6,11 +6,10 @@ import {pop_toast} from "#steamside/vfx-toaster.js";
 import {CollectionPickerElement} from "#steamside/elements-collection-picker-steamside.js";
 
 import {CustomaryDeclaration} from "#customary";
-import {Game} from "#steamside/data-game";
+import {Game} from "#steamside/data-game.js";
 import {
-	CollectionPickerElement_CollectionPicked_eventDetail,
-	CollectionPickerElement_CollectionPicked_eventName
-} from "#steamside/elements/collection-picker/CollectionPickerElement_CollectionPicked_Event.js";
+	CollectionPicked,
+} from "#steamside/elements/collection-picker/CollectionPicked.js";
 
 export class WorldHomeFavoritesSegmentElement extends CustomaryElement
 {
@@ -40,7 +39,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement
 				},
 				events: [
 					{
-						type: CollectionPickerElement_CollectionPicked_eventName,
+						type: CollectionPicked.eventType,
 						listener: (el, e) =>
 								el.#on_select_new_favorite(<CustomEvent>e),
 					},
@@ -65,7 +64,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement
 		//$('html, body').scrollTop(viewCollectionPick.$el.offset().top);
 	}
 
-	async #on_select_new_favorite(event: CustomEvent<CollectionPickerElement_CollectionPicked_eventDetail>) {
+	async #on_select_new_favorite(event: CustomEvent<CollectionPicked.EventDetail>) {
 		const name = event.detail.tagName;
 		const target = event.currentTarget as Element;
 		

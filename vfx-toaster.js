@@ -14,6 +14,17 @@ export function toast({ content, target }) {
         trigger: 'manual',
     });
 }
+export function toastError({ content, target }) {
+    return tippy(target, {
+        content,
+        //hideOnClick: false,
+        maxWidth: 'none',
+        placement: 'bottom',
+        showOnCreate: true,
+        theme: 'error',
+        trigger: 'manual',
+    });
+}
 export function pop_toast({ error, target, offline_imagine_spot, completion_fn }) {
     if (error instanceof BackendDisabledError) {
         const clarification = offline_imagine_spot

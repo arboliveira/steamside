@@ -12,3 +12,8 @@ html, body {
 main {
     flex: 1;
 }
+
+.tippy-box[data-theme~='error'] {
+    background-color: darkred;
+    color: gold;
+}

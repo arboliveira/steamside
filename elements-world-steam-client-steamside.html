@@ -17,23 +17,23 @@
         <div>
             <p id="SteamClientStatusView" class="instructions-and-explanations">
 				<span class="floatingpad">
-                    <if-- condition="this.statusVisible">
+                    <customary:if condition="this.statusVisible">
 					<span id="SteamClientStatusMessage">${this.statusText}</span>
-                    </if-->
-                    <if-- condition="this.anotherUserVisible">
+                    </customary:if>
+                    <customary:if condition="this.anotherUserVisible">
 					<span id="SteamClientAnotherUserMessage">
 						Another user is running Steam.
 					</span>
-                    </if-->
+                    </customary:if>
 				</span>
-                <if-- condition="this.buttonVisible">
+                <customary:if condition="this.buttonVisible">
                 <a href="api/steamclient/open/main"
                    id="ButtonOpenSteamClient"
                    class="button-steam-browser-protocol target-button"
                    >
                     ${this.buttonText}
                 </a>
-                </if-->
+                </customary:if>
             </p>
         </div>
 

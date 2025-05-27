@@ -1,23 +1,16 @@
 import { Customary, CustomaryElement } from "#customary";
 import { CollectionEditElement } from "#steamside/elements-collection-edit-steamside.js";
-import { fetchSessionData } from "#steamside/data-session.js";
-import { PlayPleaseEvent } from "#steamside/requests/play/PlayPleaseEvent.js";
-import { PlayRequest } from "#steamside/requests/play/PlayRequest.js";
-import { TagPleaseEvent } from "#steamside/requests/tag/TagPleaseEvent.js";
-import { TagRequest } from "#steamside/requests/tag/TagRequest.js";
-import { UntagPleaseEvent } from "#steamside/requests/untag/UntagPleaseEvent.js";
-import { UntagRequest } from "#steamside/requests/untag/UntagRequest.js";
-import { AppTagPleaseEvent } from "#steamside/requests/app/AppTagPleaseEvent.js";
-import { AppTagRequest } from "#steamside/requests/app/AppTagRequest.js";
+import { SteamsideApplication } from "#steamside/application/SteamsideApplication.js";
+import { EventBus } from "#steamside/event-bus/EventBus.js";
 export class WorldInventoryElement extends CustomaryElement {
     constructor() {
         super(...arguments);
-        this.dryRun = false;
+        this.sky = new SteamsideApplication(new EventBus(this));
     }
     static { this.customary = {
         name: 'elements-world-inventory-steamside',
         config: {
-            state: ['__tag'],
+            state: ['_tag'],
         },
         hooks: {
             requires: [CollectionEditElement],
@@ -27,52 +20,27 @@ export class WorldInventoryElement extends CustomaryElement {
             },
             lifecycle: {
                 connected: el => el.#on_connected(),
+                disconnected: el => el.#on_disconnected(),
             },
-            events: [
-                {
-                    type: PlayPleaseEvent.eventName,
-                    listener: (el, event) => el.#on_PlayPleaseEvent(event),
-                },
-                {
-                    type: TagPleaseEvent.eventName,
-                    listener: (el, event) => el.#on_TagPleaseEvent(event),
-                },
-                {
-                    type: UntagPleaseEvent.eventName,
-                    listener: (el, event) => el.#on_UntagPleaseEvent(event),
-                },
-                {
-                    type: AppTagPleaseEvent.eventName,
-                    listener: (el, event) => el.#on_AppTagPleaseEvent(event),
-                },
-            ],
         }
     }; }
-    async #on_PlayPleaseEvent(event) {
-        await PlayRequest.play({ event, dryRun: this.dryRun });
-    }
-    async #on_TagPleaseEvent(event) {
-        await TagRequest.addGameToInventory({ event, dryRun: this.dryRun });
-    }
-    async #on_UntagPleaseEvent(event) {
-        await UntagRequest.removeGameFromInventory({ event, dryRun: this.dryRun });
-    }
-    async #on_AppTagPleaseEvent(event) {
-        await AppTagRequest.tagApp({ event, dryRun: this.dryRun });
-    }
     async #on_connected() {
         const inventory_name = new URLSearchParams(window.location.search)
             .get('name');
         if (!inventory_name)
-            throw new Error('invalid name');
+            throw new Error('name: missing URL parameter');
         /*
          https://github.com/jashkenas/backbone/issues/2566#issuecomment-26065829
         */
         const workaroundFirefox = decodeURIComponent(inventory_name);
         // FIXME collection edit should receive tag name only
-        this.__tag = { name: workaroundFirefox };
-        const sessionData = await fetchSessionData();
-        this.dryRun = sessionData.backoff;
+        this._tag = { name: workaroundFirefox };
+        this.sky.on_connected();
+        // MUST be called after eventBus.on_connected() otherwise inner elements can't subscribe
+        await this.sky.on_connected_fetchSessionData();
+    }
+    #on_disconnected() {
+        this.sky.on_disconnected();
     }
 }
 Customary.declare(WorldInventoryElement);

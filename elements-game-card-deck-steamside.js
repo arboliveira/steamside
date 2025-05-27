@@ -30,9 +30,12 @@ export class GameCardDeckElement extends CustomaryElement {
             lifecycle: {
                 willUpdate: el => el.#on_willUpdate(),
             },
-            events: {
-                '.more-icon': (el, e) => el.#on_more_clicked(e),
-            },
+            events: [
+                {
+                    selector: '.more-icon',
+                    listener: (el, e) => el.#on_more_clicked(e),
+                },
+            ],
         }
     }; }
     #on_willUpdate() {

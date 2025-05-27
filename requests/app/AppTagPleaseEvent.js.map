@@ -1,1 +1,0 @@
-{"version":3,"file":"AppTagPleaseEvent.js","sourceRoot":"","sources":["AppTagPleaseEvent.ts"],"names":[],"mappings":"AAQA,MAAM,OAAO,iBAAkB,SAAQ,WAAoC;aAChD,cAAS,GAAW,0BAA0B,CAAC;IAEtE,YAAY,MAA+B;QACvC,KAAK,CAAC,iBAAiB,CAAC,SAAS,EAAE;YAC/B,MAAM;YACN,QAAQ,EAAE,IAAI;YACd,OAAO,EAAE,IAAI;SAChB,CAAC,CAAC;IACP,CAAC"}

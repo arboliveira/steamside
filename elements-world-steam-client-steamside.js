@@ -4,7 +4,6 @@ import { pop_toast } from "#steamside/vfx-toaster.js";
 export class WorldSteamClientElement extends CustomaryElement {
     constructor() {
         super(...arguments);
-        this.statusBackend = new StatusBackend();
         this.backend = new Backend();
         this.steamBrowserProtocolBackend = new SteamBrowserProtocolBackend(this.backend);
     }
@@ -12,6 +11,7 @@ export class WorldSteamClientElement extends CustomaryElement {
         name: 'elements-world-steam-client-steamside',
         config: {
             state: [
+                'statusBackend',
                 'statusVisible', 'statusText',
                 'anotherUserVisible',
                 'buttonVisible', 'buttonText'
@@ -25,13 +25,15 @@ export class WorldSteamClientElement extends CustomaryElement {
             lifecycle: {
                 connected: el => el.#on_connected(),
             },
+            changes: {
+                'statusBackend': el => el.#on_statusBackend_change(),
+            },
             events: {
                 '.button-steam-browser-protocol': (el, e) => el.#buttonSteamBrowserProtocolClicked(e),
             },
         }
     }; }
-    async #on_connected() {
-        await this.backend.fetchSessionDataAndDisableBackendIfOffline();
+    async #on_statusBackend_change() {
         const status = await this.statusBackend.fetchStatus();
         let statusVisible = false;
         let statusText = '';
@@ -56,6 +58,10 @@ export class WorldSteamClientElement extends CustomaryElement {
         this.buttonVisible = true;
         this.buttonText = buttonText;
         this.statusText = statusText;
+    }
+    async #on_connected() {
+        await this.backend.fetchSessionDataAndDisableBackendIfOffline();
+        this.statusBackend = new StatusBackend();
     }
     async #buttonSteamBrowserProtocolClicked(e) {
         e.preventDefault();

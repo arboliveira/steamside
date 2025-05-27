@@ -4,22 +4,22 @@
 <!-- ======================================================================= -->
 
         <div id="TagStickersView">
-            <if-- condition="this.tags_exist">
-                <true-->
-                    <for-- items="this.tags_collection" value="tag">
+            <customary:if condition="this.tags_exist">
+                <customary:true>
+                    <customary:for items="this.tags_collection" value="tag">
                         <elements-tag-sticker-steamside
                                 click_event="${this.click_event_on_stickers}"
                                 .tag="${tag}"
                         >
                         </elements-tag-sticker-steamside>
-                    </for-->
-                </true-->
-                <false-->
+                    </customary:for>
+                </customary:true>
+                <customary:false>
             <p id="no-collections-yet" class="instructions-and-explanations"
                style="clear: both">
                 <span id="choice-build-a-new-one">You haven't tagged any games yet.</span>
                 <a href="./CollectionNew.html" class="target-button">Build a new collection</a>
             </p>
-                </false-->
-            </if-->
+                </customary:false>
+            </customary:if>
         </div>

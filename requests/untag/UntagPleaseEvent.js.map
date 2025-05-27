@@ -1,1 +1,0 @@
-{"version":3,"file":"UntagPleaseEvent.js","sourceRoot":"","sources":["UntagPleaseEvent.ts"],"names":[],"mappings":"AAQA,MAAM,OAAO,gBAAiB,SAAQ,WAAmC;aAC9C,cAAS,GAAW,wBAAwB,CAAC;IAEpE,YAAY,MAA8B;QACtC,KAAK,CAAC,gBAAgB,CAAC,SAAS,EAAE;YAC9B,MAAM;YACN,QAAQ,EAAE,IAAI;YACd,OAAO,EAAE,IAAI;SAChB,CAAC,CAAC;IACP,CAAC"}

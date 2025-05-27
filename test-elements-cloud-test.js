@@ -1,5 +1,5 @@
 import 'mocha';
-import { CustomaryTesting as CT } from "#customary-testing";
+import * as CT from "#customary-testing";
 import { expect } from "chai";
 const suite = {
     title: 'Cloud',

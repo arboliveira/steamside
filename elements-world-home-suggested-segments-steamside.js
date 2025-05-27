@@ -23,8 +23,6 @@ export class WorldHomeSuggestedSegmentsElement extends CustomaryElement {
             lifecycle: {
                 connected: el => el.#on_connected(),
             },
-            changes: {},
-            events: {},
         }
     }; }
     async #fetch_tag_suggestions() {

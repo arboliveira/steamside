@@ -9,9 +9,9 @@ export async function fetchOfflineModeData(): Promise<boolean>
 
 export function imagineDryRun(
 	{dryRun, imagine, url, requestInit}: {
-		dryRun: boolean,
+		dryRun?: boolean,
 		imagine: string,
-		url: string,
+		url: RequestInfo | URL,
 		requestInit?: RequestInit,
 	}
 ): string | undefined
@@ -25,5 +25,5 @@ export function imagineDryRun(
 		? JSON.stringify(requestInit)
 		: '';
 
-	return `${clarification}${url}${requestInitString}`;
+	return `${clarification} 🌬️ ${url}${requestInitString}`;
 }
