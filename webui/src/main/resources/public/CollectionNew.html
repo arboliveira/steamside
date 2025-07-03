@@ -16,7 +16,9 @@
 <!-- ======================================================================= -->
 <body class="steamside-body-background">
 <!-- ======================================================================= -->
-<div class="wrapper">
+<collection-new-page-steamside></collection-new-page-steamside>
+<template data-customary-name="collection-new-page-steamside">
+<div class="page-wrapper">
     <header>
         <elements-page-header-steamside></elements-page-header-steamside>
     </header>
@@ -31,6 +33,7 @@
         <elements-page-footer-steamside></elements-page-footer-steamside>
     </footer>
 </div>
+</template>
 <!-- ======================================================================= -->
 <script type="importmap">
     {
@@ -44,12 +47,13 @@
 </script>
 <!-- ======================================================================= -->
 <script type="module">
-	import "#steamside/elements-page-header-steamside.js";
-	import "#steamside/elements-page-footer-steamside.js";
+    import {pageDeclaration} from "#steamside/elements/page/pageDeclaration.js";
 	////
-
-	import "#steamside/elements-world-collection-new-steamside.js";
-
+	import {WorldCollectionNewElement} from "#steamside/elements-world-collection-new-steamside.js";
+    /**
+     * @type {CustomaryDeclaration}
+     */
+    globalThis['customary:collection-new-page-steamside'] = pageDeclaration(WorldCollectionNewElement);
 	////
 </script>
 <!-- ======================================================================= -->

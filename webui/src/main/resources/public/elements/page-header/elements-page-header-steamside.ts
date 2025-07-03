@@ -1,33 +1,32 @@
 import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 
-import {WorldHomeAdvancedModeElement} from "#steamside/elements-world-home-advanced-mode-steamside.js";
-import {WorldHomeKidsModeElement} from "#steamside/elements-world-home-kids-mode-steamside.js";
-
-import {GameOver} from "#steamside/application/play/GameOverEvent.js";
-import {NowPlaying} from "#steamside/application/play/NowPlayingEvent.js";
-import {KidsModeRead} from "#steamside/application/modules/kids/KidsModeRead.js";
 import {Skyward} from "#steamside/event-bus/Skyward.js";
+
+import {WallpaperSettingsRead} from "#steamside/application/modules/settings/WallpaperSettingsRead.js";
+import {WallpaperRender} from "#steamside/application/modules/settings/WallpaperRender.js";
+import {KidsModeRead} from "#steamside/application/modules/kids/KidsModeRead.js";
 import {kidsMode_from_url} from "#steamside/application/modules/kids/kidsMode_from_url.js";
 
-export class WorldHomeElement extends CustomaryElement
+export class PageHeaderElement extends CustomaryElement
 {
-	static customary: CustomaryDeclaration<WorldHomeElement> =
+	static customary: CustomaryDeclaration<PageHeaderElement> =
 		{
-			name: 'elements-world-home-steamside',
+			name: 'elements-page-header-steamside',
 			config: {
 				state: [
-					'__advancedMode_visible', 
+					'__advancedMode_visible',
 					'__kidsMode_visible', '__kidsMode',
 				],
+				define: {
+					fontLocations: [
+						'https://fonts.googleapis.com/css?family=Arvo:regular,bold',
+						'https://fonts.googleapis.com/css?family=Jura:regular,bold',
+					],
+				},
 			},
 			hooks: {
-				requires: [
-					WorldHomeAdvancedModeElement,
-					WorldHomeKidsModeElement
-				],
 				externalLoader: {
 					import_meta: import.meta,
-					css_dont: true,
 				},
 				lifecycle: {
 					connected: el => el.#on_connected(),
@@ -41,44 +40,49 @@ export class WorldHomeElement extends CustomaryElement
 						listener: (el, e) =>
 							el.#on_KidsModeReadPlease_DONE(<CustomEvent>e),
 					},
+					{
+						type: WallpaperSettingsRead.eventTypeDone,
+						listener: (el, e) =>
+							el.#on_WallpaperSettingsRead_DONE(<CustomEvent>e),
+					},
 				],
-			},
+			}
 		}
-
 	declare __advancedMode_visible: boolean;
-	declare __kidsMode: boolean;
 	declare __kidsMode_visible: boolean;
+	declare __kidsMode: boolean;
 
 	#on_kidsMode_change(a: boolean) {
-		if (a) 
+		if (a)
 		{
 			this.__advancedMode_visible = false;
 			this.__kidsMode_visible = true;
-		} 
-		else 
+		}
+		else
 		{
 			this.__advancedMode_visible = true;
 			this.__kidsMode_visible = false;
 		}
 	}
 
-	#on_NowPlaying(event: CustomEvent<NowPlaying.EventDetail>) {
-		// FIXME dispatch HubRefreshPlease to Continues element so fun is shown
-	}
-
-	#on_GameOver(event: CustomEvent<GameOver.EventDetail>) {
-		// FIXME dispatch HubRefreshPlease to Continues element so fun time is shown
-	}
-
 	#on_KidsModeReadPlease_DONE(
 		event: CustomEvent<KidsModeRead.DoneDetail>
 	) {
 		this.__kidsMode = event.detail.kidsMode || kidsMode_from_url();
-	}
+    }
+
+	#on_WallpaperSettingsRead_DONE(
+		event: CustomEvent<WallpaperSettingsRead.DoneDetail>
+	) {
+		const wallpaperSettings = event.detail.wallpaperSettings;
+		if (!wallpaperSettings) return;
+		WallpaperRender.renderFirstWallpaper(wallpaperSettings);
+    }
 
 	#on_connected()
 	{
 		Skyward.fly(this, {type: KidsModeRead.eventTypePlease});
+		Skyward.fly(this, {type: WallpaperSettingsRead.eventTypePlease});
 	}
 }
-Customary.declare(WorldHomeElement);
+Customary.declare(PageHeaderElement);

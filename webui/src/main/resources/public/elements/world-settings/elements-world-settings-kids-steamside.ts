@@ -5,7 +5,7 @@ import {TagStickerElement} from "#steamside/elements-tag-sticker-steamside.js";
 import {
 	KidData_View,
 	WorldSettingsKidsKidEditElement
-} from "#steamside/elements-world-settings-kids-kid-edit-steamside.js";
+} from "#steamside/elements/world-settings/elements-world-settings-kids-kid-edit-steamside.js";
 import {pop_toast} from "#steamside/vfx-toaster.js";
 import {Sideshow} from "#steamside/vfx-sideshow.js";
 

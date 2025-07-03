@@ -3,7 +3,7 @@ import {expect} from "chai";
 import * as CT from "#customary-testing";
 
 import {BackendBridge} from "#steamside/application/BackendBridge.js";
-import {WorldHomeElement} from "#steamside/elements-world-home-steamside.js";
+import {SteamsideApplication} from "#steamside/application/SteamsideApplication.js";
 
 const suite = {
     title: 'Kids World',
@@ -17,6 +17,10 @@ describe(suite.title, async function () {
     let _window: Window;
     before(() => _window = CT.open(suite.subject_html));
     after(() => _window.close());
+
+    function findPage() {
+        return CT.querySelector('home-page-steamside', _window);
+    }
 
     function findWorld() {
         return CT.querySelector('elements-world-home-steamside', _window);
@@ -53,8 +57,9 @@ describe(suite.title, async function () {
         it('looks good', async function () {
             this.retries(64);
 
-            const world = findWorld() as WorldHomeElement;
-            world.sky.options.backend = mockBackend;
+            const page = findPage() as any;
+            const app: SteamsideApplication = page.app;
+            app.options.backend = mockBackend;
 
             _favoritesSegment = findAtHome('elements-world-home-favorites-segment-steamside');
         });

@@ -56,11 +56,6 @@ export class WorldSettingsCloudElement extends CustomaryElement
 						type: 'change',
 						listener: el => el.__cloudEnabled = !el.__cloudEnabled,
 					},
-					{
-						selector: 'input[data-customary-bind="cloudSyncedLocation"]',
-						listener: (el, e) =>
-								el.cloudSyncedLocation = (e.target as HTMLInputElement).value,
-					},
 				],
 			}
 		}

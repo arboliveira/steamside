@@ -229,8 +229,6 @@ export class GameCardElement extends CustomaryElement
 
 	#on_SomethingWentWrong(event: CustomEvent<SomethingWentWrong.EventDetail>)
 	{
-		////// if (event.detail.originatingTarget !== this) return;
-		////// event.stopPropagation();
 		toastError({content: event.detail.error, target: this.renderRoot.lastElementChild!});
 	}
 

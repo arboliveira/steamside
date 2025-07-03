@@ -16,7 +16,9 @@
 <!-- ======================================================================= -->
 <body class="steamside-body-background">
 <!-- ======================================================================= -->
-<div class="wrapper">
+<home-page-steamside></home-page-steamside>
+<template data-customary-name="home-page-steamside">
+<div class="page-wrapper">
 	<header>
 		<elements-page-header-steamside></elements-page-header-steamside>
 	</header>
@@ -31,13 +33,16 @@
 		<elements-page-footer-steamside></elements-page-footer-steamside>
 	</footer>
 </div>
+</template>
 <!-- ======================================================================= -->
+<!--
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
 <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 <link
 		rel="stylesheet"
 		href="https://unpkg.com/tippy.js@6/themes/light.css"
 />
+-->
 <!-- ======================================================================= -->
 <script type="importmap">
 	{
@@ -51,12 +56,13 @@
 </script>
 <!-- ======================================================================= -->
 <script type="module">
-	import "#steamside/elements-page-header-steamside.js";
-	import "#steamside/elements-page-footer-steamside.js";
+	import {pageDeclaration} from "#steamside/elements/page/pageDeclaration.js";
 	////
-
-	import "#steamside/elements-world-home-steamside.js";
-
+	import {WorldHomeElement} from "#steamside/elements-world-home-steamside.js";
+	/**
+	 * @type {CustomaryDeclaration}
+	 */
+	globalThis['customary:home-page-steamside'] = pageDeclaration(WorldHomeElement);
 	////
 </script>
 <!-- ======================================================================= -->

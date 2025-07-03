@@ -17,8 +17,10 @@ export class AppTagRequest {
 
         const backend: BackendBridge = new BackendBridge(dryRun ? {dryRun: true} : undefined);
 
+        const switchboard: EventTarget = event.currentTarget!;
+
         Skyward.orbit<AppTagDoing.EventDetail>(
-            event, {
+            switchboard, {
                 type: AppTagDoing.eventType,
                 detail: {fun, collection, endpoint, dryRun}
             });
@@ -32,7 +34,7 @@ export class AppTagRequest {
         }
         finally {
             Skyward.orbit<AppTagDone.EventDetail>(
-                event, {type: AppTagDone.eventType, detail: {fun, collection}});
+                switchboard, {type: AppTagDone.eventType, detail: {fun, collection}});
         }
     }
 }

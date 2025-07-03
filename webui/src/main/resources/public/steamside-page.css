@@ -3,8 +3,8 @@ html, body {
     margin: 0;
 }
 
-.wrapper {
-    min-height: 100%;
+.page-wrapper {
+    min-height: 100%;  /* only works without a shadow DOM i.e. customary.config.construct.shadowRootDont: true */
     display: flex;
     flex-direction: column;
 }

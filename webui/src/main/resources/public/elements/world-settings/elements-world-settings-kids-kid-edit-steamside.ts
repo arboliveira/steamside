@@ -54,16 +54,6 @@ export class WorldSettingsKidsKidEditElement extends CustomaryElement
 				},
 				events: [
 					{
-						selector: "input[data-customary-bind='kid_name']",
-						listener: (el, e) =>
-								el.kid_name = (e.target as HTMLInputElement).value,
-					},
-					{
-						selector: "input[data-customary-bind='kid_user']",
-						listener: (el, e) =>
-								el.kid_user = (e.target as HTMLInputElement).value,
-					},
-					{
 						type: TagStickerElement_TagClicked_eventName,
 						listener: (el) => el.#on_TagStickerElement_TagClicked(),
 					},

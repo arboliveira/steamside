@@ -18,8 +18,10 @@ export class UntagRequest {
         const backend: BackendBridge =
             new BackendBridge(dryRun ? {dryRun: true} : undefined);
 
+        const switchboard: EventTarget = event.currentTarget!;
+
         Skyward.orbit<UntagDoing.EventDetail>(
-            event, {
+            switchboard, {
                 type: UntagDoing.eventType,
                 detail: {fun, funName, tagName, dryRun, endpoint}
             }
@@ -35,7 +37,7 @@ export class UntagRequest {
         }
         finally {
             Skyward.orbit<UntagDone.EventDetail>(
-                event, {type: UntagDone.eventType, detail: {fun, tagName}});
+                switchboard, {type: UntagDone.eventType, detail: {fun, tagName}});
         }
     }
 }

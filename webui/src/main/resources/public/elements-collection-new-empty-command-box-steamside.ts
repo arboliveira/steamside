@@ -47,7 +47,8 @@ export class CollectionNewEmptyCommandBoxElement extends CustomaryElement {
 
     #on_firstUpdated() {
         const commandBox: CommandBoxElement = this.renderRoot.querySelector('elements-command-box-steamside')!;
-        commandBox.focus_on_input();
+        // FIXME focus when displayed
+        //commandBox.focus_on_input();
     }
 
     #on_CommandBoxElement_InputValueChanged(event: CustomEvent) {

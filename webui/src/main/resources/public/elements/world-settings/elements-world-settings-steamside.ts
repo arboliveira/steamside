@@ -1,9 +1,11 @@
-import {Customary, CustomaryElement} from "#customary";
-import {Sideshow} from "#steamside/vfx-sideshow.js";
-import {WorldSettingsCloudElement} from "#steamside/elements-world-settings-cloud-steamside.js";
-import {WorldSettingsKidsElement} from "#steamside/elements-world-settings-kids-steamside.js";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 
-import {CustomaryDeclaration} from "#customary";
+import {Sideshow} from "#steamside/vfx-sideshow.js";
+
+import {WorldSettingsCloudElement} from "#steamside/elements/world-settings/elements-world-settings-cloud-steamside.js";
+import {WorldSettingsKidsElement} from "#steamside/elements/world-settings/elements-world-settings-kids-steamside.js";
+import {SettingsWallpapersElement} from "#steamside/elements/world-settings/settings-wallpapers-steamside.js";
+import {SettingsBackupRestoreElement} from "#steamside/elements/world-settings/settings-backup-restore-steamside.js";
 
 export class WorldSettingsElement extends CustomaryElement
 {
@@ -19,6 +21,8 @@ export class WorldSettingsElement extends CustomaryElement
         },
         hooks: {
             requires: [
+                SettingsBackupRestoreElement,
+                SettingsWallpapersElement,
                 WorldSettingsCloudElement,
                 WorldSettingsKidsElement,
             ],
