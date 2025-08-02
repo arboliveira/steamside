@@ -43,17 +43,19 @@ export namespace Skyward {
      * Useful while handling application events, to emit granular progress events meant for event bus subscribers.
      */
     export function orbit<T>(
-        event: Event,
+        currentTarget: EventTarget,
         {type, detail} : {
             type: string,
             detail?: T,
         }
     ) {
-        const target = event.target;
-        if (!target) {
-            throw new Error("Event target was supposed to already be the event bus switchboard");
+        if (!currentTarget) {
+            throw new Error(
+                "Event bus switchboard should have been the event listener's owner." +
+                " Maybe event.currentTarget was null because it was read after end of propagation?"
+            );
         }
-        return target.dispatchEvent(new CustomEvent(type, {detail}));
+        return currentTarget.dispatchEvent(new CustomEvent(type, {detail}));
     }
 
     /**

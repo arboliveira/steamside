@@ -15,7 +15,7 @@ import {TagPlease} from "#steamside/application/tag/TagPlease.js";
 import {HubContentsChangedEvent} from "#steamside/application/hub/HubContentsChangedEvent.js";
 import {UntagPlease} from "#steamside/application/untag/UntagPlease.js";
 import {GameActionButtonClick} from "#steamside/elements/game-card/GameActionButtonClick.js";
-import {GameCardTagPlease} from "#steamside/elements/game-card/GameCardTagPlease.js";
+import {CardTag} from "#steamside/elements/game-card/CardTag.js";
 import {Skyward} from "#steamside/event-bus/Skyward.js";
 import {imagineDryRun} from "#steamside/data-offline-mode.js";
 import {Fun} from "#steamside/application/Fun.js";
@@ -23,6 +23,8 @@ import {SomethingWentWrong} from "#steamside/application/SomethingWentWrong.js";
 import {EventBusSubscribeOnConnected, EventBusUnsubscribeOnDisconnected} from "#steamside/event-bus/EventBusSubscribe.js";
 import {UntagDoing} from "#steamside/application/untag/UntagDoing.js";
 import {TagDoing} from "#steamside/application/tag/TagDoing.js";
+import {CardView} from "#steamside/elements-game-card-steamside.js";
+import {translateGameToCardView} from "#steamside/application/game/Game.js";
 
 export class CollectionEditElement extends CustomaryElement
 {
@@ -30,6 +32,7 @@ export class CollectionEditElement extends CustomaryElement
 		{
 			name: 'elements-collection-edit-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				define: {
 					fontLocations: [
 						"https://fonts.googleapis.com/css?family=Arvo:regular,bold",
@@ -40,7 +43,7 @@ export class CollectionEditElement extends CustomaryElement
 					'simplified',
 				],
 				state: [
-					'_tag', '_inventory',
+					'_tag', 'cards',
 					'add_games_segment_visible',
 					'combine_collection_picker_visible',
 				],
@@ -65,7 +68,6 @@ export class CollectionEditElement extends CustomaryElement
 				},
 				changes: {
 					'_tag': (el) => el.#on_changed_tag(),
-					'__inventory_dynamic': (el, a) => el._inventory = a,
 				},
 				events: [
 					{
@@ -74,12 +76,11 @@ export class CollectionEditElement extends CustomaryElement
 								el.#on_HubContentsChangedEvent(<HubContentsChangedEvent>e),
 					},
 					{
-						type: GameCardTagPlease.eventType,
-						selector: '.segment',
+						type: CardTag.eventTypePlease,
 						listener: (_el, e) =>
 							// FIXME too messy, open new window instead
 							new TagAGameElement().showTagAGame({
-								game: (<CustomEvent<GameCardTagPlease.EventDetail>>e).detail.game,
+								card: (<CustomEvent<CardTag.PleaseDetail>>e).detail.card,
 								container: e.currentTarget as Element,
 							}),
 					},
@@ -103,7 +104,7 @@ export class CollectionEditElement extends CustomaryElement
 	declare _tag: Tag;
 	declare simplified: string;
 	declare add_games_segment_visible: boolean;
-	declare _inventory: Array<Game>;
+	declare cards: Array<CardView>;
 	declare combine_collection_picker_visible: boolean;
 		
 	#on_willUpdate() {
@@ -189,7 +190,8 @@ export class CollectionEditElement extends CustomaryElement
 	async #fetch_inventory()
 	{
 		if (!this._tag) return;
-		this._inventory = await fetchInventoryContentsOfTag(this._tag);
+		const games: Game[] = await fetchInventoryContentsOfTag(this._tag);
+		this.cards = games.map(game => translateGameToCardView(game));
 	}
 
 	async #on_changed_tag() {

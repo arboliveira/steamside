@@ -1,7 +1,7 @@
 import 'mocha';
 import * as CT from "#customary-testing";
 import { assert, expect } from "chai";
-import {WorldSettingsCloudElement} from "#steamside/elements-world-settings-cloud-steamside";
+import {WorldSettingsCloudElement} from "#steamside/elements/world-settings/elements-world-settings-cloud-steamside.js";
 
 const suite = {
     title: 'Cloud',

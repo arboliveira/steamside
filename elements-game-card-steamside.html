@@ -5,18 +5,22 @@
 
 <!-- ======================================================================= -->
 
-<div id="game-tile" class="game-tile game-tile-in-deck">
+<div id="game-tile"
+     class="game-tile game-tile-in-deck ${this.card_scale_style}"
+     xmlns:customary="https://customaryjs.github.io/schema"
+>
     <div
             style="transform: scale(1);"
             data-why="https://stackoverflow.com/questions/30271404/how-should-position-fixed-work-in-a-shadow-dom-root/70422489#70422489"
     >
         <div class="game-tile-inner">
-            <a class="game-link" href="${this.game?.link}">
-                <img class="game-img" src="${this.game?.image}" />
+            <a class="game-link" href="${this.card?.link}" style="display: flex; flex-direction: column;">
+                <img class="game-img"
+                     src="${this.image_resolved}"
+                     style="align-self: center;"
+                />
                 <div class="game-tile-caption">
-                    <big><strong>
-                        <span class="game-name">${this.game?.name}</span>
-                    </strong></big>
+                    <span>${this.card?.name}</span>
                 </div>
             </a>
         </div>
@@ -32,17 +36,17 @@
             <a class="game-tile-command action-button-add" href="">add</a>
         </customary:if>
         <customary:if condition="this.game_tile_play_visible">
-        <a class="game-tile-command action-button-play" href="${this.game?.link}">play</a>
+        <a class="game-tile-command action-button-play" href="${this.card?.link}">play</a>
         </customary:if>
         <customary:if condition="this.action_button_remove_visible">
             <a class="game-tile-command action-button-remove" href="">remove</a>
         </customary:if>
-        <a target="_blank" class="game-tile-command game-tile-store" href="${this.game?.store}">store</a>
+        <a target="_blank" class="game-tile-command game-tile-store" href="${this.card?.store}">store</a>
         <a class="game-tile-command action-button-tag" href="">tag</a>
     </div>
     <div id="game-tag-list">
         <span>&nbsp;</span>
-        <customary:for items="this.game_tag_views" value="tag_view" index="index">
+        <customary:for items="this.card?.tags" value="tag_view" index="index">
 		<span class="game-tag">
 			<a href="${tag_view.tag_url}" class="game-tag-link">
 				<span class="game-tag-name">${tag_view.tag_name}</span>

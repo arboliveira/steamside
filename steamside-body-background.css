@@ -1,7 +1,14 @@
 .steamside-body-background
 {
+    --color_1: #1b2838;
+    --color_2: #171a21;
+    --image: linear-gradient(45deg, var(--color_1), var(--color_2));
+    background-color: var(--color_2);
+    background-image: var(--image);
+    background-position: center;
     background-size: 100% 100%;
-    background-image: url( 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/232430/e3df58e7dab4daad07342aa274e09b21ff4dd8a4.jpg' );
+    -background-size: contain; /* preserve aspect ratio */
+    background-repeat: repeat;
 }
 
 .steamside-kids-body-background {

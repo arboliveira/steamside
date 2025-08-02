@@ -1,0 +1,8 @@
+segment-steamside span[slot="actions"] ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+segment-steamside span[slot="actions"] a {
+    text-decoration: none;	/* hide link underline */
+}

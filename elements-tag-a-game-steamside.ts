@@ -1,13 +1,11 @@
-import {Customary, CustomaryElement} from "#customary";
-import {CustomaryDeclaration} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 
-import {GameCardElement} from "#steamside/elements-game-card-steamside.js";
+import {CardView, GameCardElement} from "#steamside/elements-game-card-steamside.js";
 import {TagStickersElement} from "#steamside/elements-tag-stickers-steamside.js";
 import {CommandBoxElement} from "#steamside/elements-command-box-steamside.js";
 import {fetchTagSuggestionsData} from "#steamside/data-tag-suggestions.js";
 import {toastError, toastOrNot} from "#steamside/vfx-toaster.js";
 
-import {Game} from "#steamside/data-game.js";
 import {Tag} from "#steamside/data-tag.js";
 import {
 	TagStickerElement_TagClicked_eventDetail,
@@ -22,6 +20,8 @@ import {imagineDryRun} from "#steamside/data-offline-mode.js";
 import {EventBusSubscribeOnConnected, EventBusUnsubscribeOnDisconnected} from "#steamside/event-bus/EventBusSubscribe.js";
 import {AppTagDoing} from "#steamside/application/app/AppTagDoing.js";
 import {SomethingWentWrong} from "#steamside/application/SomethingWentWrong.js";
+import {CommandBoxValue} from "#steamside/elements/command-box/CommandBoxValue.js";
+import {SegmentElement} from "#steamside/elements/segment/segment-steamside.js";
 
 export class TagAGameElement extends CustomaryElement
 {
@@ -29,13 +29,14 @@ export class TagAGameElement extends CustomaryElement
 		{
 			name: 'elements-tag-a-game-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				define: {
 					fontLocation: "https://fonts.googleapis.com/css?family=Arvo:regular",
 				},
 				attributes: [
 				],
 				state: [
-					'game',
+					'card',
 					'command_box_entered', 'commandHintsSubject',
 					'suggestions',
 				],
@@ -44,6 +45,7 @@ export class TagAGameElement extends CustomaryElement
 			},
 			hooks: {
  				requires: [
+					SegmentElement,
 					GameCardElement, 
 				    TagStickersElement, 
 				    CommandBoxElement
@@ -61,7 +63,7 @@ export class TagAGameElement extends CustomaryElement
 				},
 				events: [
 					{
-						type: 'CommandBoxElement:InputValueChanged',
+						type: CommandBoxValue.eventTypeChanged,
 						listener: (el, event) =>
 							el.#on_changed_input_text_command_box_value(<CustomEvent>event),
 					},
@@ -85,18 +87,18 @@ export class TagAGameElement extends CustomaryElement
 				],
 			}
 		}
-	declare game: Game;
+	declare card: CardView;
 	declare command_box_entered: string;
 	declare commandHintsSubject: string;
 	declare suggestions: Tag[];
 
-	showTagAGame({game, container}:{game: Game, container: Element}) {
-		this.game = game;
-		container.appendChild(this);
-	}	
+	showTagAGame({card, container}:{card: CardView, container: Element}) {
+		this.card = card;
+		container.parentNode?.insertBefore(this, container.nextSibling);
+	}
 		
-	#on_changed_input_text_command_box_value(event: CustomEvent) {
-		this.command_box_entered = event.detail;
+	#on_changed_input_text_command_box_value(event: CustomEvent<CommandBoxValue.ChangedDetail>) {
+		this.command_box_entered = event.detail.input_text_command_box_value;
 	}
 	
 	async #on_CommandBoxElement_CommandPlease(event: CustomEvent<CommandPlease.EventDetail>) {
@@ -109,14 +111,14 @@ export class TagAGameElement extends CustomaryElement
 			event, this, {
 				type: AppTagPlease.eventType,
 				detail: {
-					fun: new Fun(this.game.appid), collection}
+					fun: new Fun(this.card.appid), collection}
 				});
 	}
 
 	#on_AppTagDoing(e: CustomEvent<AppTagDoing.EventDetail>) {
-		if (e.detail.fun.id !== this.game.appid) return;
+		if (e.detail.fun.id !== this.card.appid) return;
 
-		const funName = this.game.name;
+		const funName = this.card.name;
 		const {collection, dryRun, endpoint} = e.detail;
 
 		toastOrNot({

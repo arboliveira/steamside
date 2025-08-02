@@ -1,0 +1,61 @@
+.page-header
+{
+    margin: 0 auto;
+    width: 100%;
+}
+.page-header-logo-section
+{
+    float:left;
+}
+.page-header-logo
+{
+    float:left;
+}
+.menu-wrapper
+{
+    font-family: Arvo, serif;
+    font-size: 1.2em;
+}
+.menu-wrapper .split {
+    width: 1px;
+    background: Crimson;
+}
+.menu-wrapper a
+{
+    text-decoration: none;	/* hide link underline */
+    padding-left: 1em;
+    padding-right: 1em;
+    display: block; /* entire rectangle clickable */
+}
+.menu-wrapper a:hover
+{
+    text-decoration: none;
+}
+.world-gateway {
+    display: flex;
+    align-content: center;
+    min-width: 3em;
+    text-align: center;
+}
+.world-gateway.enamel-plate {
+    background-color: paleturquoise;
+}
+.world-gateway:hover
+{
+    background: BurlyWood;
+    box-shadow: 0px 3px 30px rgba(255, 255, 255, 0.4) inset, 0px 5px 5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+.menu-wrapper .selected, .menu-wrapper .selected:hover {
+    box-shadow: inset 0px 3px 8px rgba(25, 30, 35, 0.3);
+}
+
+.kids-greeting {
+    font-family: Arvo, serif;
+    font-size: 2.5em;
+    font-weight: bolder;
+    color: cornflowerblue;
+    text-align: center;
+    padding-left: 2em;
+    padding-right: 2em;
+}

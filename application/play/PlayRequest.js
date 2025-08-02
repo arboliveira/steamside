@@ -9,7 +9,8 @@ export class PlayRequest {
         const dryRun = options.dryRun;
         const backend = options.backend ??
             new BackendBridge(dryRun ? { dryRun: true, sleep: 3000 } : undefined);
-        Skyward.orbit(event, {
+        const switchboard = event.currentTarget;
+        Skyward.orbit(switchboard, {
             type: NowPlaying.eventType,
             detail: { fun, funName, fun_endpoint, dryRun }
         });
@@ -21,7 +22,7 @@ export class PlayRequest {
             reentry_as_SomethingWentWrong(event, err);
         }
         finally {
-            Skyward.orbit(event, { type: GameOver.eventType, detail: { fun } });
+            Skyward.orbit(switchboard, { type: GameOver.eventType, detail: { fun } });
         }
     }
 }

@@ -1,16 +1,16 @@
 import { Customary, CustomaryElement } from "#customary";
 import { WorldHomeAdvancedModeElement } from "#steamside/elements-world-home-advanced-mode-steamside.js";
 import { WorldHomeKidsModeElement } from "#steamside/elements-world-home-kids-mode-steamside.js";
-import { SteamsideApplication } from "#steamside/application/SteamsideApplication.js";
-import { EventBus } from "#steamside/event-bus/EventBus.js";
+import { KidsModeRead } from "#steamside/application/modules/kids/KidsModeRead.js";
+import { Skyward } from "#steamside/event-bus/Skyward.js";
+import { kidsMode_from_url } from "#steamside/application/modules/kids/kidsMode_from_url.js";
 export class WorldHomeElement extends CustomaryElement {
-    constructor() {
-        super(...arguments);
-        this.sky = new SteamsideApplication(new EventBus(this));
-    }
     static { this.customary = {
         name: 'elements-world-home-steamside',
         config: {
+            construct: {
+                shadowRootDont: true,
+            },
             state: [
                 '__advancedMode_visible',
                 '__kidsMode_visible', '__kidsMode',
@@ -27,12 +27,16 @@ export class WorldHomeElement extends CustomaryElement {
             },
             lifecycle: {
                 connected: el => el.#on_connected(),
-                disconnected: el => el.#on_disconnected(),
             },
             changes: {
                 '__kidsMode': (el, a) => el.#on_kidsMode_change(a),
             },
-            events: [],
+            events: [
+                {
+                    type: KidsModeRead.eventTypeDone,
+                    listener: (el, e) => el.#on_KidsModeReadPlease_DONE(e),
+                },
+            ],
         },
     }; }
     #on_kidsMode_change(a) {
@@ -51,19 +55,12 @@ export class WorldHomeElement extends CustomaryElement {
     #on_GameOver(event) {
         // FIXME dispatch HubRefreshPlease to Continues element so fun time is shown
     }
-    async #on_connected() {
-        this.sky.on_connected();
-        const sessionData = await this.sky.on_connected_fetchSessionData();
-        this.__kidsMode = sessionData.kidsMode || kidsMode_from_url();
+    #on_KidsModeReadPlease_DONE(event) {
+        this.__kidsMode = event.detail.kidsMode || kidsMode_from_url();
     }
-    #on_disconnected() {
-        this.sky.on_disconnected();
+    #on_connected() {
+        Skyward.fly(this, { type: KidsModeRead.eventTypePlease });
     }
 }
 Customary.declare(WorldHomeElement);
-function kidsMode_from_url() {
-    const kids_mode_param = new URLSearchParams(window.location.search)
-        .get('kids');
-    return !['false', 'no', '0', ''].includes(kids_mode_param?.toLowerCase() ?? '');
-}
 //# sourceMappingURL=elements-world-home-steamside.js.map

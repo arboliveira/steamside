@@ -8,7 +8,9 @@ import {fetchSearchData} from "#steamside/data-search.js";
 import {Game} from "#steamside/data-game.js";
 import {CommandPlease} from "#steamside/elements/command-box/CommandPlease.js";
 import {CommandAlternatePlease} from "#steamside/elements/command-box/CommandAlternatePlease.js";
-import {GameCardTagPlease} from "#steamside/elements/game-card/GameCardTagPlease.js";
+import {CardTag} from "#steamside/elements/game-card/CardTag.js";
+import {CardView} from "#steamside/elements-game-card-steamside.js";
+import {translateGameToCardView} from "#steamside/application/game/Game.js";
 
 export class CollectionEditAddGamesElement extends CustomaryElement
 {
@@ -16,6 +18,7 @@ export class CollectionEditAddGamesElement extends CustomaryElement
 		{
 			name: 'elements-collection-edit-add-games-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				define: {
 					fontLocations: [
 						"https://fonts.googleapis.com/css?family=Arvo:regular,bold",
@@ -52,22 +55,21 @@ export class CollectionEditAddGamesElement extends CustomaryElement
 							el.#on_CommandBoxElement_CommandAlternatePlease(<CustomEvent>e),
 					},
 					{
-						type: GameCardTagPlease.eventType,
-						selector: '.segment',
-						listener: (el, event) =>
+						type: CardTag.eventTypePlease,
+						listener: (_el, event) =>
 							// FIXME too messy, open new window instead
 							new TagAGameElement().showTagAGame({
-								game: (<CustomEvent<GameCardTagPlease.EventDetail>>event).detail.game,
+								card: (<CustomEvent<CardTag.PleaseDetail>>event).detail.card,
 								container: <Element>event.currentTarget,
 							}),
 					},
 				],
 			}
 		}
-	declare firstSearchResult: Game;
-	declare collectionEditSearchResults: Game[];
+	declare firstSearchResult: CardView;
+	declare collectionEditSearchResults: CardView[];
 
-	#on_collectionEditSearchResults_change(a: Game[]) {
+	#on_collectionEditSearchResults_change(a: CardView[]) {
 		this.firstSearchResult = a[0];
 	}
 		
@@ -94,7 +96,8 @@ export class CollectionEditAddGamesElement extends CustomaryElement
 	}
 
 	async #search(query: string) {
-		this.collectionEditSearchResults = await fetchSearchData(query);
+		const searchResults: Game[] = await fetchSearchData(query);
+		this.collectionEditSearchResults = searchResults.map(game => translateGameToCardView(game));
 	}
 }
 Customary.declare(CollectionEditAddGamesElement);

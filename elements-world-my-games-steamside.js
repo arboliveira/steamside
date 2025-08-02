@@ -8,6 +8,7 @@ export class WorldMyGamesElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-world-my-games-steamside',
         config: {
+            construct: { shadowRootDont: true },
             state: [
                 '__tagless_tag',
                 '__owned_tag',

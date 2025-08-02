@@ -4,14 +4,10 @@
 }
 
 .command-text-input {
-	font-size:24px;
 	width: 99%;
 	padding-left: 0.25em;
-	margin-top: 1px;
-}
-
-.command-text-input:focus {
-	background-color: Aquamarine;
+	margin-top: 3px;
+	margin-bottom: 3px;
 }
 
 .command-button {
@@ -37,15 +33,11 @@
 }
 
 .command-hint {
-	padding: 0.2em;
-    font-family: "Karla";
+	p-adding: 0.2em;
+    font-family: "Karla", sans-serif;
 	font-size: x-small;
 	border-width: 1pt;
 	margin-left: 0;
-}
-
-.command-hint-special {
-	color: coral;
 }
 
 .command-trouble {
@@ -60,11 +52,4 @@
 {
 	color: red;
 	font-weight: bold;
-}
-
-.command-label-span
-{
-	padding: 0.2em;
-	padding-top: 0.1em;
-	padding-bottom: 0;
 }

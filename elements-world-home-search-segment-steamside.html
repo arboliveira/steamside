@@ -3,20 +3,24 @@
 
 <!-- ======================================================================= -->
 
-<div id="search-segment" class="segment">
-
-    <div class="side-header side-header-at-right">
-        <p class="side-header-paragraph">
-			<span class="side-text side-text-at-right">
+<segment-steamside>
+    <span slot="caption">
 			Search<br/>
 			&amp; do
-			</span>
-        </p>
-        <p class="side-links"><a class="vaporware" href="">Aliases...</a></p>
-        <p class="side-links"><a class="vaporware" href="">Clear</a></p>
-    </div>
+    </span>
+    <span slot="actions">
+        <customary:if condition="this.kids_mode!=='true'" >
+            <ul>
+                <li>
+                    <a class="vaporware" href="">Aliases...</a>
+                </li>
+                <li>
+                    <a class="vaporware" href="">Clear</a>
+                </li>
+            </ul>
+        </customary:if>
+    </span>
 
-    <div class="content content-at-left">
         <elements-world-home-search-command-box-steamside
                 last_played_name_1="${this.last_played_name_1}"
                 last_played_name_2="${this.last_played_name_2}"
@@ -25,9 +29,9 @@
         <div id="search-results-deck"
              style="margin-top: 10px;">
             <elements-game-card-deck-steamside
-                    .collection="${this.searchResults}"
+                    data-customary-expressions
+                    data-customary-expression-cards="${this.searchResults}"
             ></elements-game-card-deck-steamside>
         </div>
-    </div>
 
-</div>
+</segment-steamside>

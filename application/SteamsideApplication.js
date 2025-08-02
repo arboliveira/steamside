@@ -8,11 +8,23 @@ import { UntagPlease } from "#steamside/application/untag/UntagPlease.js";
 import { UntagRequest } from "#steamside/application/untag/UntagRequest.js";
 import { PlayPlease } from "#steamside/application/play/PlayPleaseEvent.js";
 import { TagPlease } from "#steamside/application/tag/TagPlease.js";
-import { fetchSessionData } from "#steamside/data-session.js";
+import { EventBus } from "#steamside/event-bus/EventBus.js";
+import { WriteOperations } from "#steamside/application/localfirst/WriteOperations.js";
+import { StorageBridge } from "#steamside/application/localfirst/StorageBridge.js";
+import { WallpaperSettingsRead } from "#steamside/application/modules/settings/WallpaperSettingsRead.js";
+import { WallpaperSettingsWrite } from "#steamside/application/modules/settings/WallpaperSettingsWrite.js";
+import { ReadOperations } from "#steamside/application/localfirst/ReadOperations.js";
+import { SessionHandshake } from "#steamside/application/session/SessionHandshake.js";
+import { KidsModeRead } from "#steamside/application/modules/kids/KidsModeRead.js";
+import { AllDataRead } from "#steamside/application/modules/backup/AllDataRead.js";
+import { AllDataWrite } from "#steamside/application/modules/backup/AllDataWrite.js";
 export class SteamsideApplication {
-    constructor(eventBus, options = {}) {
-        this.eventBus = eventBus;
+    constructor(options) {
         this.options = options;
+        this.sessionHandshake = new SessionHandshake();
+        this.eventBus = new EventBus({ switchboard: this.options.eventBus.switchboard });
+        this.readOperations = new ReadOperations(new StorageBridge(localStorage));
+        this.writeOperations = new WriteOperations(new StorageBridge(localStorage));
         this.dryRun = false;
         this.subscriptions = [
             {
@@ -34,21 +46,40 @@ export class SteamsideApplication {
             {
                 type: CombineAndDeleteSourcesPlease.eventType,
                 listener: event => CombineAndDeleteSources.on_CombineAndDeleteSourcesPlease(event, { dryRun: this.dryRun }),
-            }
+            },
+            {
+                type: AllDataRead.eventTypePlease,
+                listener: event => new AllDataRead.Command(this.readOperations).execute(event),
+            },
+            {
+                type: AllDataWrite.eventTypePlease,
+                listener: event => new AllDataWrite.Command(this.writeOperations).execute(event),
+            },
+            {
+                type: KidsModeRead.eventTypePlease,
+                listener: event => new KidsModeRead.Command(this.sessionHandshake).execute(event),
+            },
+            {
+                type: WallpaperSettingsRead.eventTypePlease,
+                listener: event => new WallpaperSettingsRead.Command(this.readOperations).execute(event),
+            },
+            {
+                type: WallpaperSettingsWrite.eventTypePlease,
+                listener: event => new WallpaperSettingsWrite.Command(this.writeOperations)
+                    .execute(event, { dryRun: this.dryRun }),
+            },
         ];
     }
-    on_connected() {
+    async on_connected() {
+        this.sessionHandshake.on_connected();
         this.eventBus.on_connected();
         this.eventBus.subscribe(...this.subscriptions);
+        const sessionData = await this.sessionHandshake.getSessionData();
+        this.dryRun = sessionData.backoff;
     }
     on_disconnected() {
         this.eventBus.unsubscribe(...this.subscriptions);
         this.eventBus.on_disconnected();
-    }
-    async on_connected_fetchSessionData() {
-        const sessionData = await fetchSessionData();
-        this.dryRun = sessionData.backoff;
-        return sessionData;
     }
 }
 //# sourceMappingURL=SteamsideApplication.js.map

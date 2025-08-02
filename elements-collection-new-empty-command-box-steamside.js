@@ -1,6 +1,7 @@
 import { Customary, CustomaryElement } from "#customary";
 import { CommandBoxElement } from "#steamside/elements-command-box-steamside.js";
 import { CommandHintWithVerbAndSubjectElement } from "#steamside/elements-command-hint-with-verb-and-subject-steamside.js";
+import { CommandBoxValue } from "#steamside/elements/command-box/CommandBoxValue.js";
 export class CollectionNewEmptyCommandBoxElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-collection-new-empty-command-box-steamside',
@@ -24,7 +25,7 @@ export class CollectionNewEmptyCommandBoxElement extends CustomaryElement {
             changes: {},
             events: [
                 {
-                    type: 'CommandBoxElement:InputValueChanged',
+                    type: CommandBoxValue.eventTypeChanged,
                     listener: (el, event) => el.#on_CommandBoxElement_InputValueChanged(event),
                 },
             ],
@@ -32,10 +33,11 @@ export class CollectionNewEmptyCommandBoxElement extends CustomaryElement {
     }; }
     #on_firstUpdated() {
         const commandBox = this.renderRoot.querySelector('elements-command-box-steamside');
-        commandBox.focus_on_input();
+        // FIXME focus when displayed
+        //commandBox.focus_on_input();
     }
     #on_CommandBoxElement_InputValueChanged(event) {
-        this.commandBox_inputValue = event.detail;
+        this.commandBox_inputValue = event.detail.input_text_command_box_value;
     }
     #on_willUpdate() {
         /*

@@ -1,16 +1,24 @@
 import { Customary, CustomaryElement } from "#customary";
 import { GameCardElement } from "#steamside/elements-game-card-steamside.js";
+import { ContinuePlay } from "#steamside/application/modules/continue/ContinuePlay.js";
+import { CardDefaultActionPlease } from "#steamside/elements/game-card/CardDefaultActionPlease.js";
 export class GameCardDeckElement extends CustomaryElement {
+    constructor() {
+        super(...arguments);
+        this.collapsedSize = 3;
+    }
     static { this.customary = {
         name: 'elements-game-card-deck-steamside',
         config: {
+            construct: { shadowRootDont: true },
             attributes: [
+                'collapsed_size',
                 'include_action_button_remove',
                 'include_action_button_add',
                 'kids_mode',
             ],
             state: [
-                'collection', 'headliners', 'tailgaters',
+                'cards',
                 'deck_size',
                 'tailgaters_visible', 'tailgaters_expanded',
                 'more_icon_visible', 'more_icon_symbol',
@@ -25,47 +33,60 @@ export class GameCardDeckElement extends CustomaryElement {
             },
             requires: [GameCardElement],
             changes: {
-                'collection': (el, a) => el.#on_changed_collection(a),
+                'cards': (el, a) => el.#on_changed_cards(a),
             },
             lifecycle: {
+                connected: el => el.#on_connected(),
                 willUpdate: el => el.#on_willUpdate(),
             },
             events: [
                 {
-                    selector: '.more-icon',
+                    selector: '.button-expand-card-deck',
                     listener: (el, e) => el.#on_more_clicked(e),
+                },
+                {
+                    type: ContinuePlay.eventTypePlease,
+                    listener: (el, event) => el.#on_asked_continue_game(event),
                 },
             ],
         }
     }; }
     #on_willUpdate() {
         const expanded_permanently = this.kids_mode === 'true';
-        // FIXME slide down and up on expand and contract
         this.tailgaters_visible =
             expanded_permanently
                 || this.tailgaters_expanded;
+        const expanded = this.tailgaters_visible;
+        this.collapsed_class = expanded ? 'expanded' : 'collapsed';
+        // TODO Unit test: card deck without cards provided (i.e. undefined)
         this.more_icon_visible =
             !expanded_permanently
-                && !!this.tailgaters?.length;
-        this.more_icon_symbol = this.tailgaters_expanded ? '🡩' : '🡫';
+                && this.cards?.length > this.collapsedSize;
+        this.more_icon_symbol = expanded ? '🡩' : '🡫';
+    }
+    #on_asked_continue_game(event) {
+        event.stopPropagation();
+        const { lastPlayed } = event.detail;
+        const gameCardElement = this.getCardAtIndex(lastPlayed - 1);
+        gameCardElement.dispatchEvent(new CustomEvent(CardDefaultActionPlease.eventType));
     }
     getCardAtIndex(index) {
         return this.renderRoot.querySelectorAll('elements-game-card-steamside')[index];
     }
-    #on_changed_collection(a) {
+    #on_changed_cards(a) {
         this.deck_size = a.length;
-        this.headliners = a.slice(0, CARDS_PER_ROW).map(game => this.toCardView(game));
-        this.tailgaters = a.slice(CARDS_PER_ROW).map(game => this.toCardView(game));
     }
     #on_more_clicked(e) {
         e.preventDefault();
         this.tailgaters_expanded = !this.tailgaters_expanded;
     }
-    toCardView(game) {
-        const appid = game.appid;
-        return { game };
+    async #on_connected() {
+        const styleSheet = document.createElement('style');
+        this.renderRoot.appendChild(styleSheet);
+        const selector = `.deck-unified.collapsed > :nth-child(n+${this.collapsedSize + 1})`;
+        const rule = '{ display: none; }';
+        styleSheet.sheet?.insertRule(`${selector} ${rule}`, styleSheet.sheet?.cssRules.length);
     }
 }
 Customary.declare(GameCardDeckElement);
-const CARDS_PER_ROW = 3;
 //# sourceMappingURL=elements-game-card-deck-steamside.js.map

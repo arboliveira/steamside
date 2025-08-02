@@ -12,6 +12,9 @@ describe(suite.title, async function () {
     let _window;
     before(() => _window = CT.open(suite.subject_html));
     after(() => _window.close());
+    function findPage() {
+        return CT.querySelector('home-page-steamside', _window);
+    }
     function findWorld() {
         return CT.querySelector('elements-world-home-steamside', _window);
     }
@@ -38,8 +41,9 @@ describe(suite.title, async function () {
     describe('happy day: Favorites', async function () {
         it('looks good', async function () {
             this.retries(64);
-            const world = findWorld();
-            world.sky.options.backend = mockBackend;
+            const page = findPage();
+            const app = page.app;
+            app.options.backend = mockBackend;
             _favoritesSegment = findAtHome('elements-world-home-favorites-segment-steamside');
         });
     });

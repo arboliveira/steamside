@@ -10,6 +10,7 @@ export class WorldExitElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-world-exit-steamside',
         config: {
+            construct: { shadowRootDont: true },
             state: [
                 'try_again_text', 'command_line', 'command_line_visible',
                 'error_on_exit',

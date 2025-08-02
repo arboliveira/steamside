@@ -19,8 +19,10 @@ export class TagRequest {
         const backend: BackendBridge =
             new BackendBridge(dryRun ? {dryRun: true} : undefined);
 
+        const switchboard: EventTarget = event.currentTarget!;
+
         Skyward.orbit<TagDoing.EventDetail>(
-            event, {type: TagDoing.eventType, detail: {fun, funName, tagName, endpoint, dryRun}});
+            switchboard, {type: TagDoing.eventType, detail: {fun, funName, tagName, endpoint, dryRun}});
         try
         {
             // FIXME POST: Not a read, not idempotent, has side effects
@@ -33,7 +35,7 @@ export class TagRequest {
         finally
         {
             Skyward.orbit<TagDone.EventDetail>(
-                event, {type: TagDone.eventType, detail: {fun, tagName}});
+                switchboard, {type: TagDone.eventType, detail: {fun, tagName}});
         }
     }
 }

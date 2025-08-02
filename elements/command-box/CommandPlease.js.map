@@ -1,1 +1,1 @@
-{"version":3,"file":"CommandPlease.js","sourceRoot":"","sources":["CommandPlease.ts"],"names":[],"mappings":"AAAA,MAAM,KAAW,aAAa,CAO7B;AAPD,WAAiB,eAAa;IAC1B,MAAM,aAAa;KAAG;IACT,yBAAS,GAAG,aAAa,aAAa,CAAC,IAAI,EAAE,CAAC;AAK/D,CAAC,EAPgB,aAAa,KAAb,aAAa,QAO7B"}
+{"version":3,"file":"CommandPlease.js","sourceRoot":"","sources":["CommandPlease.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,KAAK,EAAC,MAAM,uCAAuC,CAAC;AAE5D,MAAM,KAAW,aAAa,CAO7B;AAPD,WAAiB,eAAa;IAC1B,MAAM,aAAa;KAAG;IACT,yBAAS,GAAG,KAAK,CAAC,UAAU,CAAC,aAAa,CAAC,IAAI,CAAC,CAAC;AAKlE,CAAC,EAPgB,aAAa,KAAb,aAAa,QAO7B"}

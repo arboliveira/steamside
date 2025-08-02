@@ -25,12 +25,12 @@ export var Skyward;
      * Intended for application handlers, where target has already become the top level switchboard itself.
      * Useful while handling application events, to emit granular progress events meant for event bus subscribers.
      */
-    function orbit(event, { type, detail }) {
-        const target = event.target;
-        if (!target) {
-            throw new Error("Event target was supposed to already be the event bus switchboard");
+    function orbit(currentTarget, { type, detail }) {
+        if (!currentTarget) {
+            throw new Error("Event bus switchboard should have been the event listener's owner." +
+                " Maybe event.currentTarget was null because it was read after end of propagation?");
         }
-        return target.dispatchEvent(new CustomEvent(type, { detail }));
+        return currentTarget.dispatchEvent(new CustomEvent(type, { detail }));
     }
     Skyward.orbit = orbit;
     /**

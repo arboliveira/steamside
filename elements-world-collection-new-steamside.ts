@@ -1,13 +1,13 @@
-import {Customary, CustomaryElement} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 import {Backend} from "#steamside/data-backend.js";
 import {pop_toast} from "#steamside/vfx-toaster.js";
 import {
 	CollectionNewEmptyCommandBoxElement
 } from "#steamside/elements-collection-new-empty-command-box-steamside.js";
 
-import {CustomaryDeclaration} from "#customary";
 import {CommandPlease} from "#steamside/elements/command-box/CommandPlease.js";
 import {CommandAlternatePlease} from "#steamside/elements/command-box/CommandAlternatePlease.js";
+import {SegmentElement} from "#steamside/elements/segment/segment-steamside.js";
 
 export class WorldCollectionNewElement extends CustomaryElement
 {
@@ -15,6 +15,7 @@ export class WorldCollectionNewElement extends CustomaryElement
 		{
 			name: 'elements-world-collection-new-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				define: {
 					fontLocations: [
 						"https://fonts.googleapis.com/css?family=Arvo:regular,bold",
@@ -28,7 +29,7 @@ export class WorldCollectionNewElement extends CustomaryElement
 				]
 			},
 			hooks: {
-				requires: [CollectionNewEmptyCommandBoxElement],
+				requires: [SegmentElement, CollectionNewEmptyCommandBoxElement],
 				externalLoader: {
 					import_meta: import.meta,
 					css_dont: true,

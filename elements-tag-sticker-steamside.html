@@ -5,13 +5,10 @@
 
 <!-- ======================================================================= -->
 
-            <div id="TagStickerView"
-                 class="collection-name tag-outer-div">
-                <a href="${this.url}" target="_blank" id="collection-pick-one-link"
-                   class="display-collection-name">
-					<span
-                            id="collection-pick-one-name"
-                            class="tag-sticker-name">
+<a href="${this.url}" target="_blank" id="collection-pick-one-link"
+   class="display-collection-name inventory-name-sticker">
+            <div class="tag-outer-div">
+					<span class="tag-sticker-name">
 					${this.tag?.name}
 					</span>
                     <customary:if condition="this.count_visible">
@@ -21,5 +18,5 @@
 					${this.tag?.count}
 					</span>
                     </customary:if>
-                </a>
             </div>
+</a>

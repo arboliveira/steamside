@@ -18,8 +18,10 @@ export class PlayRequest {
             options.backend ??
             new BackendBridge(dryRun ? {dryRun: true, sleep: 3000} : undefined);
 
+        const switchboard: EventTarget = event.currentTarget!;
+        
         Skyward.orbit<NowPlaying.EventDetail>(
-            event,
+            switchboard,
             {
                 type: NowPlaying.eventType,
                 detail: {fun, funName, fun_endpoint, dryRun}
@@ -36,7 +38,7 @@ export class PlayRequest {
         }
         finally {
             Skyward.orbit<GameOver.EventDetail>(
-                event, {type: GameOver.eventType, detail: {fun}});
+                switchboard, {type: GameOver.eventType, detail: {fun}});
         }
     }
 }

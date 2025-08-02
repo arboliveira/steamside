@@ -1,10 +1,10 @@
-import {Customary, CustomaryElement} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
+
 import {CommandBoxElement} from "#steamside/elements-command-box-steamside.js";
 import {
     CommandHintWithVerbAndSubjectElement
 } from "#steamside/elements-command-hint-with-verb-and-subject-steamside.js";
-
-import {CustomaryDeclaration} from "#customary";
+import {CommandBoxValue} from "#steamside/elements/command-box/CommandBoxValue.js";
 
 export class CollectionEditAddGamesCommandBoxElement extends CustomaryElement
 {
@@ -36,7 +36,7 @@ export class CollectionEditAddGamesCommandBoxElement extends CustomaryElement
                 },
                 events: [
                     {
-                        type: 'CommandBoxElement:InputValueChanged',
+                        type: CommandBoxValue.eventTypeChanged,
                         listener: (el, event) =>
                                 el.#on_CommandBoxElement_InputValueChanged(<CustomEvent>event),
                     },
@@ -54,8 +54,8 @@ export class CollectionEditAddGamesCommandBoxElement extends CustomaryElement
         commandBox.focus_on_input();
     }
 
-    #on_CommandBoxElement_InputValueChanged(event: CustomEvent) {
-        this.commandBox_inputValue = event.detail;
+    #on_CommandBoxElement_InputValueChanged(event: CustomEvent<CommandBoxValue.ChangedDetail>) {
+        this.commandBox_inputValue = event.detail.input_text_command_box_value;
     }
 
     #on_willUpdate() {

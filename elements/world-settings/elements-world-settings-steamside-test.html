@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html><head>
+    <!-- ======================================================================= -->
+    <title>
+
+        world-settings-steamside
+
+    </title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <!-- ======================================================================= -->
+</head>
+
+<body style="background-color: lightseagreen">
+
+<elements-world-settings-steamside></elements-world-settings-steamside>
+
+</body>
+
+<script type="importmap">
+    {
+        "imports": {
+            "sinon": "_dependencies/sinon/pkg/sinon-esm.js",
+            "#customary": "./_dependencies/customary/customary.mjs",
+            "#steamside/": "./"
+        }
+    }
+</script>
+
+<script type="module">
+    import "#steamside/elements/world-settings/elements-world-settings-steamside.ts.js";
+</script>
+</html>

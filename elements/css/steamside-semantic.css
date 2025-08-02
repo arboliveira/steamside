@@ -1,0 +1,55 @@
+input[type="text"], textarea {
+    color: indigo;
+    background-color: PaleTurquoise;
+    font-size: 24px;
+}
+
+input[type="text"]::placeholder, textarea::placeholder {
+    color: darkgray;
+}
+
+input[type="text"]:focus, textarea:focus {
+    background-color: Aquamarine;
+}
+
+button, .target-button {
+    font-family: Arvo, monospace;
+    color: darkolivegreen;
+    border-radius: 10px;
+    border-color: Gray;
+    border-style: solid;
+    background-color: #f7f7f7;
+    margin: 1px;
+    padding: 8px;	/* distance from text to border */
+}
+
+button:focus, button:hover, .target-button:focus, .target-button:hover
+{
+    border-color: LightSteelBlue;
+    background: LightYellow;
+}
+
+a.target-button
+{
+    display: inline-block;
+    text-decoration: none;	/* hide link underline */
+    outline: none; /* hide dotted outline in Firefox */
+}
+
+article {
+    background-color: turquoise; /*rgba(210,180,140,0.9);*/ /*tan;*/
+    padding-top: 12px;
+    padding-right: 15px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    border-style: outset;
+    border-radius: 10px;
+    border-width: 1px;
+    font-family: Karla, sans-serif;
+    text-shadow: white 1px 1px 0px;
+}
+
+mark {
+    color: coral;
+    background-color: transparent;
+}

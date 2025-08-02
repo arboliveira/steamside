@@ -5,6 +5,6 @@ export namespace GameActionButtonClick {
 
     export type EventDetail = {
         action_button: string;
-        game: Game;
+        game: {appid: string, name: string};
     }
 }

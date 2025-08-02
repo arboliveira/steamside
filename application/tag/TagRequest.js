@@ -9,7 +9,8 @@ export class TagRequest {
         const endpoint = "api/collection/" + tagName + "/add/" + fun.id;
         const dryRun = options.dryRun;
         const backend = new BackendBridge(dryRun ? { dryRun: true } : undefined);
-        Skyward.orbit(event, { type: TagDoing.eventType, detail: { fun, funName, tagName, endpoint, dryRun } });
+        const switchboard = event.currentTarget;
+        Skyward.orbit(switchboard, { type: TagDoing.eventType, detail: { fun, funName, tagName, endpoint, dryRun } });
         try {
             // FIXME POST: Not a read, not idempotent, has side effects
             await backend.fetch(endpoint);
@@ -18,7 +19,7 @@ export class TagRequest {
             reentry_as_SomethingWentWrong(event, err);
         }
         finally {
-            Skyward.orbit(event, { type: TagDone.eventType, detail: { fun, tagName } });
+            Skyward.orbit(switchboard, { type: TagDone.eventType, detail: { fun, tagName } });
         }
     }
 }

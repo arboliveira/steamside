@@ -1,0 +1,48 @@
+.inventory-name-sticker {
+    padding: 0.25em;
+    padding-left: 0.5em;
+    padding-right: 0.75em;
+
+    margin-top: 0.25em;
+    margin-left: 0.25em;
+    margin-bottom: 0.5em;
+
+    display: flex;
+    align-items: baseline;
+
+    border-left: 4px outset #999;
+    border-top: 1px solid #999;
+    border-right: 2px solid #555;
+    border-bottom: 1px solid #555;
+    border-top-right-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+}
+
+.display-collection-name {
+    display: inline-block;
+    m-argin: 4px;
+}
+
+elements-tag-sticker-steamside > a.display-collection-name {
+    text-decoration: none;	/* hide link underline */
+}
+
+.tag-sticker-name {
+    font-family: "Arvo", monospace;
+    font-size: large;
+    font-weight: bolder;
+    color: crimson;
+    text-align: left;
+}
+
+.large-tag .tag-sticker-name {
+    font-size: xx-large;
+}
+
+.sticker-curated {
+    background-color: linen;
+}
+
+.sticker-builtin {
+    background-color: darkseagreen;
+}

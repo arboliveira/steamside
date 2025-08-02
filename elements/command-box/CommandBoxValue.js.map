@@ -1,0 +1,1 @@
+{"version":3,"file":"CommandBoxValue.js","sourceRoot":"","sources":["CommandBoxValue.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,KAAK,EAAC,MAAM,uCAAuC,CAAC;AAE5D,MAAM,KAAW,eAAe,CAI/B;AAJD,WAAiB,iBAAe;IAC5B,MAAM,eAAe;KAAG;IACX,kCAAgB,GAAW,KAAK,CAAC,WAAW,CAAC,eAAe,CAAC,IAAI,CAAC,CAAC;AAEpF,CAAC,EAJgB,eAAe,KAAf,eAAe,QAI/B"}

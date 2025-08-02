@@ -1,6 +1,7 @@
 import { Customary, CustomaryElement } from "#customary";
 import { CommandBoxElement } from "#steamside/elements-command-box-steamside.js";
 import { CommandHintWithVerbAndSubjectElement } from "#steamside/elements-command-hint-with-verb-and-subject-steamside.js";
+import { CommandBoxValue } from "#steamside/elements/command-box/CommandBoxValue.js";
 export class WorldHomeSearchCommandBoxElement extends CustomaryElement {
     static { this.customary = {
         config: {
@@ -19,7 +20,7 @@ export class WorldHomeSearchCommandBoxElement extends CustomaryElement {
             },
             events: [
                 {
-                    type: 'CommandBoxElement:InputValueChanged',
+                    type: CommandBoxValue.eventTypeChanged,
                     listener: (el, event) => el.#on_changed_input_text_command_box_value(event),
                 },
                 {
@@ -46,7 +47,7 @@ export class WorldHomeSearchCommandBoxElement extends CustomaryElement {
         }
     }; }
     #on_changed_input_text_command_box_value(event) {
-        this.command_box_entered = event.detail;
+        this.command_box_entered = event.detail.input_text_command_box_value;
         // FIXME Third command button: Windosill community hub
     }
     #on_willUpdate() {

@@ -4,6 +4,7 @@ import { pop_toast } from "#steamside/vfx-toaster.js";
 import { CollectionNewEmptyCommandBoxElement } from "#steamside/elements-collection-new-empty-command-box-steamside.js";
 import { CommandPlease } from "#steamside/elements/command-box/CommandPlease.js";
 import { CommandAlternatePlease } from "#steamside/elements/command-box/CommandAlternatePlease.js";
+import { SegmentElement } from "#steamside/elements/segment/segment-steamside.js";
 export class WorldCollectionNewElement extends CustomaryElement {
     constructor() {
         super(...arguments);
@@ -12,6 +13,7 @@ export class WorldCollectionNewElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-world-collection-new-steamside',
         config: {
+            construct: { shadowRootDont: true },
             define: {
                 fontLocations: [
                     "https://fonts.googleapis.com/css?family=Arvo:regular,bold",
@@ -25,7 +27,7 @@ export class WorldCollectionNewElement extends CustomaryElement {
             ]
         },
         hooks: {
-            requires: [CollectionNewEmptyCommandBoxElement],
+            requires: [SegmentElement, CollectionNewEmptyCommandBoxElement],
             externalLoader: {
                 import_meta: import.meta,
                 css_dont: true,

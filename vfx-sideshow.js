@@ -36,12 +36,12 @@ export class Sideshow {
         if (side === "left") {
             header.classList.add('side-header-at-left');
             content.classList.add('content-at-right');
-            segment.classList.add('animated', 'fadeInRight', 'steamside-animated');
+            segment.classList.add('animated', 'fadeInRight', 'sideshow-animate-css');
         }
         else {
             header.classList.add('side-header-at-right');
             content.classList.add('content-at-left');
-            segment.classList.add('animated', 'fadeInLeft', 'steamside-animated');
+            segment.classList.add('animated', 'fadeInLeft', 'sideshow-animate-css');
         }
     }
 }

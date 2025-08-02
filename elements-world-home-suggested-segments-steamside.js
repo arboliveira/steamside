@@ -5,6 +5,7 @@ export class WorldHomeSuggestedSegmentsElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-world-home-suggested-segments-steamside',
         config: {
+            construct: { shadowRootDont: true },
             define: {
                 fontLocation: "https://fonts.googleapis.com/css?family=Arvo:regular",
             },

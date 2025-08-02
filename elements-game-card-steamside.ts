@@ -2,16 +2,13 @@ import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 
 import {toastError, toastOrNot} from "#steamside/vfx-toaster.js";
 
-import {Game} from "#steamside/data-game.js";
-import {Tag} from "#steamside/data-tag.js";
-
 import {PlayPlease} from "#steamside/application/play/PlayPleaseEvent.js";
 import {GameActionButtonClick} from "#steamside/elements/game-card/GameActionButtonClick.js";
 import {NowPlaying} from "#steamside/application/play/NowPlayingEvent.js";
 import {GameOver} from "#steamside/application/play/GameOverEvent.js";
 import {CardDefaultActionPlease} from "#steamside/elements/game-card/CardDefaultActionPlease.js";
 import {Skyward} from "#steamside/event-bus/Skyward.js";
-import {GameCardTagPlease} from "#steamside/elements/game-card/GameCardTagPlease.js";
+import {CardTag} from "#steamside/elements/game-card/CardTag.js";
 import {imagineDryRun} from "#steamside/data-offline-mode.js";
 import {Fun} from "#steamside/application/Fun.js";
 import {EventBusSubscribeOnConnected, EventBusUnsubscribeOnDisconnected} from "#steamside/event-bus/EventBusSubscribe.js";
@@ -24,13 +21,16 @@ export class GameCardElement extends CustomaryElement
 			name: 'elements-game-card-steamside',
 			config: {
 				attributes: [
+					'card_scale',
 					'include_action_button_remove',
 					'include_action_button_add',
 					'kids_mode',
 					'now_playing',
 				],
 				state: [
-					'game',
+					'card',
+					'card_scale_style',
+					'image_resolved',
 					'instruments_panel_visible',
 					'game_tag_views',
 					'game_tile_inner_loading_overlay_visible',
@@ -48,11 +48,10 @@ export class GameCardElement extends CustomaryElement
 			hooks: {
 				externalLoader: {
 					import_meta: import.meta,
-					css_dont: true,
 				},
 				changes: {
-					'game': (el, a) =>
-						el.#on_changed_game(a),
+					'card': (el, a) =>
+						el.#on_changed_card(a),
 					'now_playing': (el, a) =>
 						el.#on_changed_now_playing(a),
 					'game_tile_inner_loading_overlay_visible': (el, a) =>
@@ -93,8 +92,12 @@ export class GameCardElement extends CustomaryElement
 						type: 'click',
 						selector: '.action-button-tag',
 						listener: (el, e) =>
-							Skyward.stage<GameCardTagPlease.EventDetail>(e, el,
-								{type: GameCardTagPlease.eventType, detail: {game: el.game}}),
+							Skyward.stage<CardTag.PleaseDetail>(e, el,
+								{
+									type: CardTag.eventTypePlease,
+									detail: {card: el.card},
+								}
+							),
 					},
 					{
 						type: 'click',
@@ -129,7 +132,10 @@ export class GameCardElement extends CustomaryElement
 
 	declare action_button_add_visible: boolean;
 	declare action_button_remove_visible: boolean;
-	declare game: Game;
+	declare card: CardView;
+	declare card_scale: string;
+	declare card_scale_style: string;
+	declare image_resolved: string;
 	declare game_tag_views: TagView[];
 	declare game_tile_inner_loading_overlay_visible: boolean;
 	declare game_tile_play_visible: boolean;
@@ -138,26 +144,33 @@ export class GameCardElement extends CustomaryElement
 
 	#on_willUpdate() {
 		this.instruments_panel_visible = this.kids_mode !== 'true';
+		this.card_scale_style = `card-scale-${this.card_scale || 'none'}`;
+		this.image_resolved = this.resolve_image();
+	}
+
+	resolve_image(): string {
+		const scale =  this.card_scale || 'header';
+		switch (scale) {
+			case '616x353':
+				return `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${this.card.appid}/capsule_616x353.jpg`;
+			case 'header' :
+				return `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${this.card.appid}/header.jpg`;
+			case '231x87' :
+				return `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${this.card.appid}/capsule_231x87.jpg`;
+			default:
+				throw new Error(scale);
+		}
 	}
 
 	private intention(action_button: string): GameActionButtonClick.EventDetail {
-		return {action_button, game: this.game};
+		return {action_button, game: {appid: this.card.appid, name: this.card.name}};
 	}
 
-	#on_changed_game(a: Game) {
-		this.#on_changed_game_tags(a.tags);
-		this.#on_changed_game_unavailable(a.unavailable);
-	}
-	
-	#on_changed_game_tags(game_tags: Tag[]) {
-		if (!game_tags) return;
-		this.game_tag_views = game_tags.map(
-			tag =>
-				({
-					tag_name: tag.name,
-					tag_url: `./InventoryWorld.html?name=${tag.name}`,
-				})
-		);
+	#on_changed_card(cardView: CardView) {
+		if (cardView.tags?.length) {
+			this.game_tag_views = cardView.tags;
+		}
+		this.#on_changed_game_unavailable(cardView.unavailable);
 	}
 
 	#on_changed_game_unavailable(aBoolean: boolean)
@@ -204,7 +217,7 @@ export class GameCardElement extends CustomaryElement
 	}
 
 	#on_NowPlayingEvent(e: CustomEvent<NowPlaying.EventDetail>) {
-		if (e.detail.fun.id !== this.game.appid) return;
+		if (e.detail.fun.id !== this.card.appid) return;
 
 		this.setAttribute('now_playing', 'true');
 
@@ -220,22 +233,20 @@ export class GameCardElement extends CustomaryElement
 		Skyward.fly<PlayPlease.EventDetail>(this, {
 			type: PlayPlease.eventType,
 			detail: {
-				fun: new Fun(this.game.appid),
-				funName: this.game.name,
-				fun_endpoint: this.game.link,
+				fun: new Fun(this.card.appid),
+				funName: this.card.name,
+				fun_endpoint: this.card.link,
 			}
 		});
 	}
 
 	#on_SomethingWentWrong(event: CustomEvent<SomethingWentWrong.EventDetail>)
 	{
-		////// if (event.detail.originatingTarget !== this) return;
-		////// event.stopPropagation();
 		toastError({content: event.detail.error, target: this.renderRoot.lastElementChild!});
 	}
 
 	#on_GameOverEvent(e: CustomEvent<GameOver.EventDetail>) {
-		if (e.detail.fun.id === this.game.appid) {
+		if (e.detail.fun.id === this.card.appid) {
 			this.setAttribute('now_playing', 'false');
 		}
 	}
@@ -277,7 +288,18 @@ export class GameCardElement extends CustomaryElement
 }
 Customary.declare(GameCardElement);
 
-type TagView = {
+export type CardView = {
+	appid: string,
+	name: string,
+	link: string,
+	image: string,
+	store: string,
+	unavailable: boolean,
+	tags?: Array<TagView>,
+	card_scale?: string,
+}
+
+export type TagView = {
 	tag_name: string,
 	tag_url: string,
 }

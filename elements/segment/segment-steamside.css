@@ -1,0 +1,39 @@
+section
+{
+    display: table;
+    table-layout: fixed;
+    width: 98%;
+    clear: both;
+    overflow: auto;
+    padding: 0;
+    backdrop-filter: blur(2px) hue-rotate(-0.25turn);
+    --top-and-bottom: 80px;
+    --left-and-right: auto;
+    margin: var(--top-and-bottom) var(--left-and-right);
+    --offset-x: 0.3em;
+    --offset-y: 0.1em;
+    --blur-radius: 1em;
+    --color: #66c0f4;
+    box-shadow: var(--offset-x) var(--offset-y) var(--blur-radius) var(--color);
+}
+
+aside
+{
+    margin: 0;
+    padding: 0.8em;
+    padding-top: 0.6em;
+    padding-bottom: 0.4em;
+    background-color: PaleTurquoise;
+}
+
+.side-text { font-family: Arvo; font-size: 16px; font-weight: bold; color: darkred; }
+
+.side-text-at-left  {text-shadow: -0.2em 0.2em 0.2em gray}
+.side-text-at-right {text-shadow: 0.2em 0.2em 0.2em gray}
+
+.side-links {
+    font-size: 0.75em;
+    font-family: Karla, sans-serif;
+    margin-top: 1.5em;
+    margin-bottom: 0;
+}

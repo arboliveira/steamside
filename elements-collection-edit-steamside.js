@@ -11,7 +11,7 @@ import { TagPlease } from "#steamside/application/tag/TagPlease.js";
 import { HubContentsChangedEvent } from "#steamside/application/hub/HubContentsChangedEvent.js";
 import { UntagPlease } from "#steamside/application/untag/UntagPlease.js";
 import { GameActionButtonClick } from "#steamside/elements/game-card/GameActionButtonClick.js";
-import { GameCardTagPlease } from "#steamside/elements/game-card/GameCardTagPlease.js";
+import { CardTag } from "#steamside/elements/game-card/CardTag.js";
 import { Skyward } from "#steamside/event-bus/Skyward.js";
 import { imagineDryRun } from "#steamside/data-offline-mode.js";
 import { Fun } from "#steamside/application/Fun.js";
@@ -19,6 +19,7 @@ import { SomethingWentWrong } from "#steamside/application/SomethingWentWrong.js
 import { EventBusSubscribeOnConnected, EventBusUnsubscribeOnDisconnected } from "#steamside/event-bus/EventBusSubscribe.js";
 import { UntagDoing } from "#steamside/application/untag/UntagDoing.js";
 import { TagDoing } from "#steamside/application/tag/TagDoing.js";
+import { translateGameToCardView } from "#steamside/application/game/Game.js";
 export class CollectionEditElement extends CustomaryElement {
     constructor() {
         super(...arguments);
@@ -36,6 +37,7 @@ export class CollectionEditElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-collection-edit-steamside',
         config: {
+            construct: { shadowRootDont: true },
             define: {
                 fontLocations: [
                     "https://fonts.googleapis.com/css?family=Arvo:regular,bold",
@@ -46,7 +48,7 @@ export class CollectionEditElement extends CustomaryElement {
                 'simplified',
             ],
             state: [
-                '_tag', '_inventory',
+                '_tag', 'cards',
                 'add_games_segment_visible',
                 'combine_collection_picker_visible',
             ],
@@ -70,7 +72,6 @@ export class CollectionEditElement extends CustomaryElement {
             },
             changes: {
                 '_tag': (el) => el.#on_changed_tag(),
-                '__inventory_dynamic': (el, a) => el._inventory = a,
             },
             events: [
                 {
@@ -78,12 +79,11 @@ export class CollectionEditElement extends CustomaryElement {
                     listener: (el, e) => el.#on_HubContentsChangedEvent(e),
                 },
                 {
-                    type: GameCardTagPlease.eventType,
-                    selector: '.segment',
+                    type: CardTag.eventTypePlease,
                     listener: (_el, e) => 
                     // FIXME too messy, open new window instead
                     new TagAGameElement().showTagAGame({
-                        game: e.detail.game,
+                        card: e.detail.card,
                         container: e.currentTarget,
                     }),
                 },
@@ -173,7 +173,8 @@ export class CollectionEditElement extends CustomaryElement {
     async #fetch_inventory() {
         if (!this._tag)
             return;
-        this._inventory = await fetchInventoryContentsOfTag(this._tag);
+        const games = await fetchInventoryContentsOfTag(this._tag);
+        this.cards = games.map(game => translateGameToCardView(game));
     }
     async #on_changed_tag() {
         try {

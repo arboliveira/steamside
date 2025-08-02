@@ -1,53 +1,44 @@
-<link href="steamside.css" rel="stylesheet" type="text/css" />
-<link href="animate.css" rel="stylesheet" type="text/css" />
-<link href="Forms.css" rel="stylesheet" type="text/css" />
-<link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
+<link href="elements/segment/segment-steamside-slots.css" rel="stylesheet" type="text/css" />
 
 <!-- ======================================================================= -->
 
-<div id="collection-segment" class="segment">
-
-    <div class="side-header side-header-at-right">
-        <p class="side-header-paragraph">
-                <span class="side-text side-text-at-right">
+<segment-steamside>
+    <span slot="caption">
                 Collec<br/>
                 tion<br/>
-                </span>
-        </p>
-        <div class="side-links">
+    </span>
+    <span slot="actions">
+        <customary:if condition="this.kids_mode!=='true'" >
             <ul>
                 <li><a class="vaporware" href="">Rename...</a></li>
                 <li><a id="side-link-combine" href="#">Combine...</a></li>
             </ul>
-        </div>
-    </div>
+        </customary:if>
+    </span>
 
-    <div class="content content-at-left">
-
-        <div id="CollectionView">
             <elements-tag-sticker-steamside
-                    .tag="${this._tag}"
+                    class="large-tag"
+                    data-customary-expressions
+                    data-customary-expression-tag="${this._tag}"
             >
             </elements-tag-sticker-steamside>
 
             <elements-game-card-deck-steamside
-                    .collection="${this._inventory}"
+                    data-customary-expressions
+                    data-customary-expression-cards="${this.cards}"
                     include_action_button_remove="true"
             ></elements-game-card-deck-steamside>
-        </div>
 
-        <customary:if condition="this.combine_collection_picker_visible">
-            <elements-collection-edit-combine-steamside
-                    .__tag="${this._tag}"
-            ></elements-collection-edit-combine-steamside>
-        </customary:if>
+</segment-steamside>
 
-    </div>
+<customary:if condition="this.combine_collection_picker_visible">
+    <elements-collection-edit-combine-steamside
+            data-customary-expressions
+            data-customary-expression-__tag="${this._tag}"
+    ></elements-collection-edit-combine-steamside>
+</customary:if>
 
 <customary:if condition="this.add_games_segment_visible">
     <elements-collection-edit-add-games-steamside>
     </elements-collection-edit-add-games-steamside>
 </customary:if>
-
-
-</div>

@@ -28,6 +28,7 @@ export class CollectionEditCombineElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-collection-edit-combine-steamside',
         config: {
+            construct: { shadowRootDont: true },
             define: {
                 fontLocations: [
                     "https://fonts.googleapis.com/css?family=Arvo:regular,bold",
@@ -47,7 +48,6 @@ export class CollectionEditCombineElement extends CustomaryElement {
             ],
             externalLoader: {
                 import_meta: import.meta,
-                css_dont: true,
             },
             changes: {
             //'__tag': (el, a) => el.#on_tag_change(a),

@@ -5,6 +5,7 @@ import { Sideshow } from "#steamside/vfx-sideshow.js";
 import { TagStickerElement_TagClicked_eventName } from "#steamside/elements/tag-sticker/TagStickerElement_TagClicked_Event.js";
 import { CollectionPicked } from "#steamside/elements/collection-picker/CollectionPicked.js";
 import { Skyward } from "#steamside/event-bus/Skyward.js";
+import { SegmentElement } from "#steamside/elements/segment/segment-steamside.js";
 export class CollectionPickerElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-collection-picker-steamside',
@@ -18,7 +19,7 @@ export class CollectionPickerElement extends CustomaryElement {
         },
         values: {},
         hooks: {
-            requires: [TagStickersElement],
+            requires: [SegmentElement, TagStickersElement],
             externalLoader: {
                 import_meta: import.meta,
                 css_dont: true,

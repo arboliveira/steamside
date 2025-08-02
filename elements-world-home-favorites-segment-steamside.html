@@ -4,28 +4,26 @@
 
 <!-- ======================================================================= -->
 
-<div id="favorites-segment" class="segment">
-
-    <div class="side-header side-header-at-left">
-        <p class="side-header-paragraph">
-			<span class="side-text side-text-at-left">
+<segment-steamside>
+    <span slot="caption">
 			Favor<br/>
 			ites<br/>
-			</span>
-        </p>
+    </span>
+    <span slot="actions">
         <customary:if condition="this.kids_mode!=='true'" >
-            <p class="side-links">
-            <a id="side-link-favorite-switch" href="">Switch...</a>
-        </p>
+            <ul>
+                <li>
+                    <a id="side-link-favorite-switch" href="">Switch...</a>
+                </li>
+            </ul>
         </customary:if>
-    </div>
+    </span>
 
-    <div class="content content-at-right">
         <elements-game-card-deck-steamside
-                .collection="${this.favorites}"
+                data-customary-expressions
+                data-customary-expression-cards="${this.favorites}"
                 kids_mode="${this.kids_mode}"
         ></elements-game-card-deck-steamside>
-    </div>
 
     <customary:if condition="this.collectionPicker_visible">
         <elements-collection-picker-steamside>
@@ -36,6 +34,4 @@
                 </span>
         </elements-collection-picker-steamside>
     </customary:if>
-
-</div>
-
+</segment-steamside>

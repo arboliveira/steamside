@@ -5,6 +5,8 @@ import { Backend } from "#steamside/data-backend.js";
 import { pop_toast } from "#steamside/vfx-toaster.js";
 import { CollectionPickerElement } from "#steamside/elements-collection-picker-steamside.js";
 import { CollectionPicked, } from "#steamside/elements/collection-picker/CollectionPicked.js";
+import { SegmentElement } from "#steamside/elements/segment/segment-steamside.js";
+import { translateGameToCardView } from "#steamside/application/game/Game.js";
 export class WorldHomeFavoritesSegmentElement extends CustomaryElement {
     constructor() {
         super(...arguments);
@@ -13,6 +15,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-world-home-favorites-segment-steamside',
         config: {
+            construct: { shadowRootDont: true },
             define: {
                 fontLocation: "https://fonts.googleapis.com/css?family=Arvo:regular",
             },
@@ -25,7 +28,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement {
             ],
         },
         hooks: {
-            requires: [GameCardDeckElement, CollectionPickerElement],
+            requires: [SegmentElement, GameCardDeckElement, CollectionPickerElement],
             externalLoader: {
                 import_meta: import.meta,
                 css_dont: true,
@@ -70,7 +73,8 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement {
         this.collectionPicker_visible = false;
     }
     async #fetch_favorites_collection() {
-        this.favorites = await fetchFavoritesData();
+        const favorites = await fetchFavoritesData();
+        this.favorites = favorites.map(game => translateGameToCardView(game));
     }
     async #on_connected() {
         await this.#fetch_favorites_collection();

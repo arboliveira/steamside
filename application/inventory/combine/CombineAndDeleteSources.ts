@@ -25,8 +25,10 @@ export class CombineAndDeleteSources {
         const backend: BackendBridge =
             new BackendBridge(dryRun ? {dryRun: true} : undefined);
 
+        const switchboard: EventTarget = event.currentTarget!;
+
         Skyward.orbit<CombineAndDeleteSourcesDoing.EventDetail>(
-            event, {
+            switchboard, {
                 type: CombineAndDeleteSourcesDoing.eventType,
                 detail: {
                     inventory_destination,
@@ -53,7 +55,7 @@ export class CombineAndDeleteSources {
         }
         finally {
             Skyward.orbit<CombineAndDeleteSourcesDone.EventDetail>(
-                event, {type: CombineAndDeleteSourcesDone.eventType, detail: {
+                switchboard, {type: CombineAndDeleteSourcesDone.eventType, detail: {
                         inventory_destination, inventory_combining_alias, inventory_editing_alias}});
         }
     }

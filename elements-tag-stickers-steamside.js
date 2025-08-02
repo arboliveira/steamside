@@ -4,6 +4,7 @@ export class TagStickersElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-tag-stickers-steamside',
         config: {
+            construct: { shadowRootDont: true },
             attributes: [
                 'click_event_on_stickers',
             ],

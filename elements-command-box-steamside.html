@@ -1,3 +1,5 @@
+<link href="elements/css/steamside-semantic.css" rel="stylesheet" type="text/css" xmlns="http://www.w3.org/1999/html"/>
+
 <link href="steamside.css" rel="stylesheet" type="text/css" />
 <link href="animate.css" rel="stylesheet" type="text/css" />
 <link href="CommandBox.css" rel="stylesheet" type="text/css" />
@@ -7,43 +9,62 @@
 
 <div id="search-command-box" class="form-block form-text" style="width: 95%">
 <div id="command-box" class="command-box">
-    <form id="form-command-box">
+<!--    <form id="form-command-box">-->
         <label>
-            <customary:if condition="this.__command_label_visible">
-			<span id="CommandLabel" class="form-label">
-				${this.command_label_text}<br/></span>
+            <customary:if condition="this.command_label_visible">
+				<div id="CommandLabel" class="form-label">
+					${this.command_label_text}</div>
             </customary:if>
-            <input type="text" name="query" id="input-text-command-box"
-                   class="command-text-input"
-                   placeholder="${this.placeholder_text}"
-                   value="${this.input_text_command_box_value}"
-            />
-            <customary:if condition="this.__command_button_strip_visible">
-            <span id="command-button-strip">
-			<input id="command-button" class="command-button"
-                   type="button" value="Enter"/>
-			<slot name="command-hint" class="command-hint">
-				continue (game)</slot>&nbsp;&nbsp;
-			<input id="command-button-alternate" class="command-button"
-                   type="button" value="Ctrl+Enter"/>
-			<slot name="command-hint-alternate" class="command-hint">
-				continue (another game)</slot>&nbsp;&nbsp;
-            <customary:if condition="this.command_confirm_visible">
-			<span id="command-confirm">
-				<input id="command-button-confirm" class="command-button"
-                       type="button" value="Shift+Enter"/>
-				<span id="command-hint-confirm" class="command-hint">
-					<span class="command-confirm">Confirm:</span>
-					<span id="command-confirm-what">${this.command_confirm_what_text}</span>
-				</span>
+			<customary:if condition="this.is_textarea">
+				<customary:false>
+					<input type="text" name="query" id="input-text-command-box"
+						   class="command-text-input"
+						   placeholder="${this.placeholder_text}"
+						   data-customary-bind="input_text_command_box_value"
+					/>
+				</customary:false>
+				<customary:true>
+					<textarea style="height:6em"
+							  class="command-text-input"
+							  placeholder="${this.placeholder_text}"
+							  data-customary-bind="input_text_command_box_value"
+					>
+					</textarea>
+				</customary:true>
+			</customary:if>
+			<span id="command-button-strip" style="display: flex; flex-direction: row; gap: 1em;">
+				<label>
+					<input id="command-button" class="command-button"
+						   type="button" value="${this.command_a_button_face}"
+					/>
+					<slot name="command-hint" class="command-hint">
+						slot="command-hint"
+					</slot>
+				</label>
+				<label>
+					<input id="command-button-alternate" class="command-button"
+						   type="button" value="${this.command_b_button_face}"/>
+					<slot name="command-hint-alternate" class="command-hint">
+						slot="command-hint-alternate"
+					</slot>
+				</label>
+				<customary:if condition="this.command_confirm_visible">
+					<label>
+						<span id="command-confirm">
+							<input id="command-button-confirm" class="command-button"
+								   type="button" value="Shift+Enter"/>
+							<span id="command-hint-confirm" class="command-hint">
+								<span class="command-confirm">Confirm:</span>
+								<span id="command-confirm-what">${this.command_confirm_what_text}</span>
+							</span>
+						</span>
+					</label>
+				</customary:if>
 			</span>
-            </customary:if>
-			</span>
-            </customary:if>
 			<customary:if condition="this.command_trouble_visible">
             <span id="command-trouble" class="command-trouble">${this.command_trouble_text}</span>
 			</customary:if>
         </label>
-    </form>
+<!--    </form>-->
 </div>
 </div>

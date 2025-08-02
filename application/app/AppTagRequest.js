@@ -9,7 +9,8 @@ export class AppTagRequest {
         const endpoint = "api/app/" + fun.id + "/tag/" + encodeURIComponent(collection);
         const dryRun = options.dryRun;
         const backend = new BackendBridge(dryRun ? { dryRun: true } : undefined);
-        Skyward.orbit(event, {
+        const switchboard = event.currentTarget;
+        Skyward.orbit(switchboard, {
             type: AppTagDoing.eventType,
             detail: { fun, collection, endpoint, dryRun }
         });
@@ -21,7 +22,7 @@ export class AppTagRequest {
             reentry_as_SomethingWentWrong(event, err);
         }
         finally {
-            Skyward.orbit(event, { type: AppTagDone.eventType, detail: { fun, collection } });
+            Skyward.orbit(switchboard, { type: AppTagDone.eventType, detail: { fun, collection } });
         }
     }
 }

@@ -4,6 +4,7 @@ export class TagStickerElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-tag-sticker-steamside',
         config: {
+            construct: { shadowRootDont: true },
             attributes: [
                 'click_event'
             ],
@@ -17,12 +18,9 @@ export class TagStickerElement extends CustomaryElement {
             'count_visible': true,
         },
         hooks: {
-            requires: [],
             externalLoader: {
                 import_meta: import.meta,
-                css_dont: true,
             },
-            lifecycle: {},
             changes: {
                 'tag': (el, a) => el.#on_changed_tag(a),
             },
@@ -45,7 +43,7 @@ export class TagStickerElement extends CustomaryElement {
     }
     #on_changed_tag(a) {
         this.count_visible = a.count !== undefined;
-        const surface = this.renderRoot.querySelector('a');
+        const surface = this.renderRoot.querySelector('.inventory-name-sticker');
         if (this.tag.builtin) {
             surface.classList.remove('sticker-curated');
             surface.classList.add('sticker-builtin');

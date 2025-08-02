@@ -1,0 +1,43 @@
+<segment-steamside>
+    <span slot="caption">
+			Wall
+			papers
+    </span>
+
+			<div class="form-text form-block" style="display: block;">
+				<p><label>
+					<input type="checkbox"
+						   data-customary-bind="enable_wallpaper"
+					/>
+					<span class="form-label">
+
+					Wallpapers
+
+					</span>
+				</label></p>
+				<p><label>
+						<textarea class="command-text-input"
+								  style="width: 100%; height: 3em; resize: vertical; font-size: 1.6em"
+							   data-customary-bind="wallpapers"
+							   placeholder="(no wallpapers)"
+						></textarea>
+				</label></p>
+				<p>
+					One URL per line. Prefix <span class="question" style="font-family: monospace">#</span> to comment.
+				</p>
+				<p><label>
+					<input type="checkbox"
+						   data-customary-bind="preserve_aspect_ratio"
+			   		/>
+					<span class="form-label">
+
+					Preserve aspect ratio
+
+					</span>
+				</label></p>
+			</div>
+
+		<div>
+			<button id="SaveButton">Save</button>
+		</div>
+</segment-steamside>

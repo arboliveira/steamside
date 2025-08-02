@@ -11,6 +11,7 @@ export class WorldHomeSuggestedSegmentsElement extends CustomaryElement
 		{
 			name: 'elements-world-home-suggested-segments-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				define: {
 					fontLocation: "https://fonts.googleapis.com/css?family=Arvo:regular",
 				},

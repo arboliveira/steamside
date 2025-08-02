@@ -9,7 +9,8 @@ export class UntagRequest {
         const endpoint = "api/collection/" + tagName + "/remove/" + fun.id;
         const dryRun = options.dryRun;
         const backend = new BackendBridge(dryRun ? { dryRun: true } : undefined);
-        Skyward.orbit(event, {
+        const switchboard = event.currentTarget;
+        Skyward.orbit(switchboard, {
             type: UntagDoing.eventType,
             detail: { fun, funName, tagName, dryRun, endpoint }
         });
@@ -21,7 +22,7 @@ export class UntagRequest {
             reentry_as_SomethingWentWrong(event, err);
         }
         finally {
-            Skyward.orbit(event, { type: UntagDone.eventType, detail: { fun, tagName } });
+            Skyward.orbit(switchboard, { type: UntagDone.eventType, detail: { fun, tagName } });
         }
     }
 }

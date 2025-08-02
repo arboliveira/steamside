@@ -1,0 +1,51 @@
+<link href="CommandBox.css" rel="stylesheet" type="text/css" />
+<segment-steamside>
+    <span slot="caption">
+			Cloud
+    </span>
+
+			<div class="form-text form-block">
+				<p>
+				<label>
+					<input type="checkbox"
+						   id="CloudEnabledCheckbox"
+						   data-customary-bind="__cloudEnabled" />
+					<span class="form-label">
+						Enable cloud synchronization (mirror a copy of your data to a directory you can sync)
+					</span>
+				</label>
+				</p>
+			</div>
+			<div class="form-break"></div>
+			<div class="form-text form-block" style="width: 60%">
+				<p>
+					<label>
+						<span class="form-label command-label-span">Mirror to directory</span>
+						<input type="text" class="command-text-input"
+							   data-customary-bind="cloudSyncedLocation"
+							   placeholder="(using default mirror directory)"
+						/>
+					</label>
+				</p>
+				<p>
+				<span class="question">
+					Full control?
+					</span>
+					Enter a directory of your choice, and use your favorite cloud service to sync across your computers.
+				</p>
+				<p>
+				<span class="question">
+					Keep it simple?
+					</span>
+					Leave it blank to use the default mirror directory, then just add it to your cloud service sync.
+				</p>
+			</div>
+
+		<div>
+			<button id="SaveButton"
+			   title="Saved. You need to restart Steamside for changes to take effect!">
+				Save
+			</button>
+		</div>
+</segment-steamside>
+

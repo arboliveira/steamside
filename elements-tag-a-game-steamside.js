@@ -14,6 +14,8 @@ import { imagineDryRun } from "#steamside/data-offline-mode.js";
 import { EventBusSubscribeOnConnected, EventBusUnsubscribeOnDisconnected } from "#steamside/event-bus/EventBusSubscribe.js";
 import { AppTagDoing } from "#steamside/application/app/AppTagDoing.js";
 import { SomethingWentWrong } from "#steamside/application/SomethingWentWrong.js";
+import { CommandBoxValue } from "#steamside/elements/command-box/CommandBoxValue.js";
+import { SegmentElement } from "#steamside/elements/segment/segment-steamside.js";
 export class TagAGameElement extends CustomaryElement {
     constructor() {
         super(...arguments);
@@ -27,12 +29,13 @@ export class TagAGameElement extends CustomaryElement {
     static { this.customary = {
         name: 'elements-tag-a-game-steamside',
         config: {
+            construct: { shadowRootDont: true },
             define: {
                 fontLocation: "https://fonts.googleapis.com/css?family=Arvo:regular",
             },
             attributes: [],
             state: [
-                'game',
+                'card',
                 'command_box_entered', 'commandHintsSubject',
                 'suggestions',
             ],
@@ -40,6 +43,7 @@ export class TagAGameElement extends CustomaryElement {
         values: {},
         hooks: {
             requires: [
+                SegmentElement,
                 GameCardElement,
                 TagStickersElement,
                 CommandBoxElement
@@ -56,7 +60,7 @@ export class TagAGameElement extends CustomaryElement {
             changes: {},
             events: [
                 {
-                    type: 'CommandBoxElement:InputValueChanged',
+                    type: CommandBoxValue.eventTypeChanged,
                     listener: (el, event) => el.#on_changed_input_text_command_box_value(event),
                 },
                 {
@@ -78,12 +82,12 @@ export class TagAGameElement extends CustomaryElement {
             ],
         }
     }; }
-    showTagAGame({ game, container }) {
-        this.game = game;
-        container.appendChild(this);
+    showTagAGame({ card, container }) {
+        this.card = card;
+        container.parentNode?.insertBefore(this, container.nextSibling);
     }
     #on_changed_input_text_command_box_value(event) {
-        this.command_box_entered = event.detail;
+        this.command_box_entered = event.detail.input_text_command_box_value;
     }
     async #on_CommandBoxElement_CommandPlease(event) {
         const nameForCollection = this.#nameForCollection(event.detail.input_text_command_box_value);
@@ -93,14 +97,14 @@ export class TagAGameElement extends CustomaryElement {
         Skyward.stage(event, this, {
             type: AppTagPlease.eventType,
             detail: {
-                fun: new Fun(this.game.appid), collection
+                fun: new Fun(this.card.appid), collection
             }
         });
     }
     #on_AppTagDoing(e) {
-        if (e.detail.fun.id !== this.game.appid)
+        if (e.detail.fun.id !== this.card.appid)
             return;
-        const funName = this.game.name;
+        const funName = this.card.name;
         const { collection, dryRun, endpoint } = e.detail;
         toastOrNot({
             content: imagineDryRun({ imagine: `${funName} was added to ${collection}`, url: endpoint, dryRun }),

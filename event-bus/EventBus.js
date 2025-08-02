@@ -1,8 +1,11 @@
 import { EventBusSubscribePlease } from "#steamside/event-bus/EventBusSubscribePlease.js";
 import { EventBusUnsubscribePlease } from "#steamside/event-bus/EventBusUnsubscribePlease.js";
 export class EventBus {
-    constructor(switchboard) {
-        this.switchboard = switchboard;
+    constructor(options) {
+        this.options = options;
+        // TODO investigate why document does not play well with Skyward.orbit ("Now Playing" goes to world element)
+        // private readonly switchboard: EventTarget = this.options.switchboard ?? document;
+        this.switchboard = this.options.switchboard;
         this.subscriptions = [
             {
                 type: EventBusSubscribePlease.eventType,

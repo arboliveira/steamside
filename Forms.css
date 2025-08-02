@@ -1,26 +1,25 @@
 .form-block
 {
-	display: inline-block;
-	border-style: outset;
-	border-width: 1px;
+	/* TODO transition to steamside-semantic.css */
+	/* ---- */
+	background-color: turquoise;
 	padding-top: 8px;
+	padding-right: 15px;
 	padding-bottom: 8px;
 	padding-left: 10px;
-	padding-right: 15px;
+	border-style: outset;
 	border-radius: 10px;
+	border-width: 1px;
+	font-family: Karla, sans-serif;
+	text-shadow: white 1px 1px 0px;
+	/* ---- */
+	font-size: 0.9em;
+	display: inline-block;
 }
 
 .form-block p
 {
 	margin: 0.5em;
-}
-
-.form-text
-{
-	font-size: 0.9em;
-	font-family: Karla;
-	background-color: turquoise; /*rgba(210,180,140,0.9);*/ /*tan;*/
-	text-shadow: white 1px 1px 0px;
 }
 
 .form-break

@@ -4,9 +4,12 @@ import {Subscription} from "#steamside/event-bus/EventBusSubscription.js";
 
 export class EventBus {
     constructor(
-        private readonly switchboard: EventTarget
+        private readonly options: {switchboard: EventTarget},
     ) {
     }
+    // TODO investigate why document does not play well with Skyward.orbit ("Now Playing" goes to world element)
+    // private readonly switchboard: EventTarget = this.options.switchboard ?? document;
+    private readonly switchboard: EventTarget = this.options.switchboard;
 
     subscribe(...subscriptions: Array<Subscription>) {
         for (const subscription of subscriptions) {

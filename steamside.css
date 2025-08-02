@@ -10,34 +10,6 @@
 	text-shadow: 0 0 1px rgba(0,0,0,0.5);
 }
 
-.segment
-{
-    display: table;
-    table-layout: fixed;
-    width: 98%;
-    clear: both;
-    overflow: auto;
-    padding: 0;
-    backdrop-filter: blur(2px) hue-rotate(-0.25turn);
-    --top-and-bottom: 80px;
-    --left-and-right: auto;
-    margin: var(--top-and-bottom) var(--left-and-right);
-    --offset-x: 0.3em;
-    --offset-y: 0.1em;
-    --blur-radius: 1em;
-    --color: lightgreen;
-    box-shadow: var(--offset-x) var(--offset-y) var(--blur-radius) var(--color);
-}
-
-.side-header
-{
-    margin: 0;
-    padding: 0.8em;
-    padding-top: 0.6em;
-    padding-bottom: 0.4em;
-    background-color: PaleTurquoise;
-}
-
 .side-header-at-left
 {
     /*
@@ -48,7 +20,7 @@
 }
 
 .side-header-at-left {
-    float: left;
+    float: left; /* keeps header plate tucked nicely at the top left corner */
     text-align: right;
 	border-top-right-radius: 0.5em;
 	border-bottom-right-radius: 0.5em;
@@ -76,25 +48,6 @@
 
 .side-header-paragraph {
     margin: 0 0 0.6em 0;
-}
-
-.side-text { font-family: Arvo; font-size: 20px; font-weight: bold; color: darkred; }
-
-.side-text-at-left  {text-shadow: -0.2em 0.2em 0.2em gray}
-.side-text-at-right {text-shadow: 0.2em 0.2em 0.2em gray}
-
-.side-links {
-    font-size: 0.75em;
-    font-family: Karla;
-    margin-top: 1.5em;
-    margin-bottom: 0em;
-}
-.side-links ul {
-    padding-left: 0px;
-    list-style:none;
-}
-.side-links a {
-    text-decoration: none;	/* hide link underline */
 }
 
 .content {
@@ -153,34 +106,15 @@ a.indicator {
     color: coral;
 }
 
-a.target-button
-{
-    font-family: Arvo;
-    display: inline-block;
-    border-radius: 10px;
-    border-color: Gray;
-    border-style: solid;
-    background: #f7f7f7;
-    margin: 1px;
-    padding: 8px;	/* distance from text to border */
-    text-decoration: none;	/* hide link underline */
-    outline: none; /* hide dotted outline in Firefox */
-}
-a.target-button:focus, a.target-button:hover
-{
-	border-color: LightSteelBlue;
-	background: LightYellow;
-}
-
 a.instructions-and-explanations
 {
 	text-decoration: none;	/* hide link underline */
 }
 
-.steamside-animated
+.sideshow-animate-css
 {
-	-webkit-animation-duration: 0.5s;
-	-moz-animation-duration: 0.5s;
+	--animate-duration: 200ms;
+	--animation-duration: 200ms;
 }
 
 .floatingpad {
@@ -192,4 +126,33 @@ a.instructions-and-explanations
 .question
 {
     color: darkslategray;
+}
+
+.start-game-banner, .game-over-banner
+{
+    border-radius: 50%;
+    border-color: silver;
+    border-width: 8px;
+    border-style: outset;
+    box-shadow: 0 0 0 1px navy;
+    font-family: Jura, monospace;
+    text-align: center;
+    font-weight: bold;
+}
+
+a.low-key-clickable {
+    text-decoration: none;	/* hide link underline */
+}
+
+.game-over-banner {
+    background: gold;
+    padding: 1em;
+}
+
+.enamel-plate
+{
+    background-color: aquamarine;
+    border-radius: 4px;
+    border: crimson solid 2px;
+    box-shadow: 0 0 0 1px navy;
 }
