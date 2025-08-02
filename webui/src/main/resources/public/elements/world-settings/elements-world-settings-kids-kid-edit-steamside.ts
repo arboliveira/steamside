@@ -35,6 +35,7 @@ export class WorldSettingsKidsKidEditElement extends CustomaryElement
 						'https://fonts.googleapis.com/css?family=Karla:regular',
 					],
 				},
+				construct: {shadowRootDont: true},
 			},
 			values: {
 			},

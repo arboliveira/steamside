@@ -2,33 +2,7 @@
 <link href="animate.css" rel="stylesheet" type="text/css" />
 <link href="Forms.css" rel="stylesheet" type="text/css" />
 
-    <!-- ======================================================================= -->
-
-    <div id="continues-segment" class="segment">
-
-        <div class="side-header side-header-at-left">
-            <p class="side-header-paragraph">
-			<span class="side-text side-text-at-left">
-			Con<br/>
-			tinue<br/>
-			</span>
-            </p>
-            <div class="side-links">
-                <ul>
-                    <li><a class="vaporware" href="">History</a></li>
-                    <li><a class="vaporware" href="">Statistics</a></li>
-                    <li><a class="vaporware" href="">Kids mode...</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="content content-at-right">
-                <elements-game-card-deck-steamside
-                        .collection="${this.continues}"
-                ></elements-game-card-deck-steamside>
-        </div>
-
-    </div>
+    <area-continue-steamside></area-continue-steamside>
 
     <!-- ======================================================================= -->
 
@@ -51,23 +25,20 @@
 
     <!-- ======================================================================= -->
 
-    <div id="collections-segment"  class="segment">
-
-        <div class="side-header side-header-at-right">
-            <p class="side-header-paragraph">
-			<span class="side-text side-text-at-right">
+<segment-steamside>
+    <span slot="caption">
 			High<br/>
 			scores<br/>
-			</span>
-            </p>
-            <p class="side-links"><a class="vaporware" href="">Share...</a></p>
-        </div>
+    </span>
+    <span slot="actions">
+        <ul>
+            <li><a class="vaporware" href="">Share...</a></li>
+        </ul>
+    </span>
 
-        <div class="content content-at-left">
             <div class="form-block form-text purpose-of-this-section">
                 <p>
                 <span id="number-of-games">${this.numberOfGamesOwned}</span> games owned
                 </p>
             </div>
-        </div>
-    </div>
+</segment-steamside>

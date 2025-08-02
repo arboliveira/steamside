@@ -1,0 +1,37 @@
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+
+<!-- ======================================================================= -->
+
+<section>
+
+    <aside class="side-header side-header-at-left">
+        <span class="side-header-paragraph">
+            <span class="side-text side-text-at-left">
+                <slot name="caption">
+                    Seg<br/>
+                    ment<br/>
+                </slot>
+            </span>
+        </span>
+        <span class="side-links">
+            <slot name="actions">
+<!--
+                <ul>
+                    <li>Actions</li>
+                    <li>Go</li>
+                    <li>Here</li>
+                </ul>
+-->
+            </slot>
+        </span>
+    </aside>
+
+    <div class="content content-at-right">
+        <slot>
+            <p class="floatingpad">
+                Segment content goes here
+            </p>
+        </slot>
+    </div>
+
+</section>

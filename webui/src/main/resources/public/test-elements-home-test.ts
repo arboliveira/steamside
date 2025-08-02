@@ -20,13 +20,17 @@ describe(suite.title, async function () {
         return CT.querySelector('elements-world-home-advanced-mode-steamside', page);
     }
 
-    function findAtHome(segmentName: string) {
+    function findAtHome(selector: string) {
         const homeElement = findHome();
-        return CT.querySelector(segmentName, homeElement);
+        return CT.querySelector(selector, homeElement);
     }
 
     function findDeck(container: Element) {
-        return CT.querySelector('elements-game-card-deck-steamside', container);
+        return CT.querySelector('elements-game-card-deck-steamside', container, {shadowNot: true});
+    }
+
+    function findExpandButton(deck: Element): HTMLElement {
+        return CT.querySelector('button.button-expand-card-deck', deck);
     }
     
     function spotCard(needle: string, deck: Element): Element {
@@ -49,7 +53,8 @@ describe(suite.title, async function () {
 
         it('looks good', async function () {
             this.retries(128);
-            _continuesSegment = findAtHome('#continues-segment');
+            const area = findAtHome('area-continue-steamside');
+            _continuesSegment = CT.querySelector('#continue-segment-steamside', area);
             _continuesDeck = findDeck(_continuesSegment);
             _suggestedElement = findAtHome('elements-world-home-suggested-segments-steamside');
 
@@ -79,7 +84,7 @@ describe(suite.title, async function () {
         it('looks good', async function () {
             this.retries(256);
 
-            moreIcon = CT.querySelector('.more-icon', _continuesDeck);
+            moreIcon = findExpandButton(_continuesDeck);
             expect(moreIcon.checkVisibility(), 'visible more icon');
 
             const visibleCardsBeforeMoreClicked = countVisibleCardsIn(_continuesSegment);
@@ -149,7 +154,7 @@ describe(suite.title, async function () {
         it('looks good', async function () {
             this.retries(256);
 
-            moreIcon = CT.querySelector('.more-icon', _continuesDeck);
+            moreIcon = findExpandButton(_continuesDeck);
             expect(moreIcon.checkVisibility(), 'visible more icon');
 
             const visibleCardsBeforeMoreClicked = countVisibleCardsIn(_continuesSegment);
@@ -181,10 +186,10 @@ describe(suite.title, async function () {
         it('looks good', async function () {
             this.retries(64);
 
-            segment = CT.querySelector('#favorites-segment', _favoritesSegment);
+            segment = CT.querySelector('segment-steamside', _favoritesSegment);
 
-            const element3 = CT.querySelector('elements-game-card-deck-steamside', segment);
-            b = CT.querySelector('.more-icon', element3);
+            const element3 = findDeck(segment);
+            b = findExpandButton(element3);
             expect(b.checkVisibility(), 'visible more button');
 
             const visibleGamesBeforeMoreClicked = countVisibleCardsIn(segment);
@@ -206,7 +211,7 @@ describe(suite.title, async function () {
         it('looks good', async function () {
             this.retries(64);
 
-            segment = CT.querySelector('#favorites-segment', _favoritesSegment);
+            segment = CT.querySelector('segment-steamside', _favoritesSegment);
         });
         it('interact', async function () {
             const l: HTMLElement = segment.querySelector("#side-link-favorite-switch")!;
@@ -215,7 +220,7 @@ describe(suite.title, async function () {
         it('looks good', async function () {
             this.retries(512);
 
-            const element3 = CT.querySelector('elements-collection-picker-steamside', segment);
+            const element3 = CT.querySelector('elements-collection-picker-steamside', segment, {shadowNot: true});
             const element4 = CT.querySelector('elements-tag-stickers-steamside', element3);
             
             const listView = CT.querySelector("#TagStickersView", element4);
@@ -224,11 +229,11 @@ describe(suite.title, async function () {
             assert.equal(info.length > 0, true, 'tag stickers');
         });
     });
-});
 
-function countVisibleCardsIn(deckHolder: Element) {
-    const deck = CT.querySelector('elements-game-card-deck-steamside', deckHolder);
-    const cards = [...CT.querySelectorAll('elements-game-card-steamside', deck)];
-    const visibleCards = cards.filter(card => card.checkVisibility());
-    return visibleCards.length;
-}
+    function countVisibleCardsIn(deckHolder: Element) {
+        const deck = findDeck(deckHolder);
+        const cards = [...CT.querySelectorAll('elements-game-card-steamside', deck)];
+        const visibleCards = cards.filter(card => card.checkVisibility());
+        return visibleCards.length;
+    }
+});

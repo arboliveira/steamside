@@ -1,27 +1,10 @@
-<link href="steamside.css" rel="stylesheet" type="text/css" xmlns="http://www.w3.org/1999/html"/>
-	<link href="Forms.css" rel="stylesheet" type="text/css" />
-	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
-
-	<link href="animate.css" rel="stylesheet" type="text/css" />
-
-<!-- ======================================================================= -->
-
-<div class="segment">
-
-	<div class="side-header side-header-at-left">
-		<p class="side-header-paragraph">
-		<span class="side-text side-text-at-left">
+<segment-steamside>
+    <span slot="caption">
 			Backup &
 			Restore
-		</span>
-		</p>
-	</div>
+    </span>
 
-	<div class="content content-at-right">
-		<div>
-			<a id="BackupButton" href="#" class="target-button tooltip">💾 Backup all Steamside data</a>
-			<a id="RestoreButton" href="#" class="target-button tooltip">✨ Restore all Steamside data</a>
+			<button id="BackupButton">💾 Backup all Steamside data...</button>
+			<button id="RestoreButton">✨ Restore all Steamside data...</button>
 			<input type="file" id="RestoreFileInput" style="display: none" accept=".json" />
-		</div>
-	</div>
-</div>
+</segment-steamside>

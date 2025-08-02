@@ -4,34 +4,20 @@
 
 <!-- ======================================================================= -->
 
-<div class="deck-bisected">
-    <div class="more-icon-container">
-        <customary:if condition="this.more_icon_visible">
-            <a class='target-button more-icon'>${this.more_icon_symbol} ${this.deck_size}</a>
-        </customary:if>
-        <div class="deck-headliners">
-            <customary:for items="this.headliners" value="card" index="index">
-                <elements-game-card-steamside
-                    .game="${card.game}"
-                    kids_mode=${this.kids_mode}
-                    include_action_button_remove="${this.include_action_button_remove}"
-                    include_action_button_add="${this.include_action_button_add}"
-                ></elements-game-card-steamside>
-            </customary:for>
-        </div>
-    </div>
-    <customary:if condition="this.tailgaters_visible">
-        <div class="deck-tailgaters">
-            <customary:for items="this.tailgaters" value="card" index="index">
-                <elements-game-card-steamside
-                    .game="${card.game}"
-                    kids_mode=${this.kids_mode}
-                    include_action_button_remove="${this.include_action_button_remove}"
-                    include_action_button_add="${this.include_action_button_add}"
-                    game_unavailable="${card.unavailable}"
-                    .game_tags="${card.tags}"
-                ></elements-game-card-steamside>
-            </customary:for>
-        </div>
-    </customary:if>
+<customary:if condition="this.more_icon_visible">
+    <button class='button-expand-card-deck'>${this.more_icon_symbol} ${this.deck_size}</button>
+</customary:if>
+<div class="deck-unified ${this.collapsed_class}">
+    <customary:for items="this.cards" value="card" index="index">
+        <elements-game-card-steamside
+                data-customary-expressions
+                data-customary-expression-card="${card}"
+                data-customary-expression-game_tags="${card.tags}"
+                card_scale="${card.card_scale}"
+                kids_mode=${this.kids_mode}
+                include_action_button_remove="${this.include_action_button_remove}"
+                include_action_button_add="${this.include_action_button_add}"
+                game_unavailable="${card.unavailable}"
+        ></elements-game-card-steamside>
+    </customary:for>
 </div>

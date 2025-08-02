@@ -1,5 +1,13 @@
 [
   {
+    "appid": "268910",
+    "image": "http://cdn.akamai.steamstatic.com/steam/apps/268910/header.jpg",
+    "link": "api/app/268910/run",
+    "name": "Cuphead",
+    "store": "http://store.steampowered.com/app/268910",
+    "tags": []
+  },
+  {
     "appid":"204240",
     "image":"http://cdn.akamai.steamstatic.com/steam/apps/204240/header.jpg",
     "link":"api/app/204240/run",

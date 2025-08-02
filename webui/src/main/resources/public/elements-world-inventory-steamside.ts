@@ -10,6 +10,7 @@ export class WorldInventoryElement extends CustomaryElement
 		{
 			name: 'elements-world-inventory-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				state: ['_tag'],
 			},
 			hooks: {

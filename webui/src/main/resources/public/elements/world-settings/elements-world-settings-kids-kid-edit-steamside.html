@@ -1,28 +1,19 @@
-	<link href="steamside.css" rel="stylesheet" type="text/css" />
-	<link href="Forms.css" rel="stylesheet" type="text/css" />
 	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
-	<link href="GameCardDeck.css" rel="stylesheet" type="text/css" />
-	<link href="KidsSettings.css" rel="stylesheet" type="text/css" />
-	<link href="CollectionEdit.css" rel="stylesheet" type="text/css" />
-	<link href="Tag.css" rel="stylesheet" type="text/css" />
 
 	<!-- ======================================================================= -->
 
-	<div id="kid-edit-segment" class="segment">
 
-		<div class="side-header side-header-at-left">
-			<p class="side-header-paragraph">
-			<span class="side-text side-text-at-left">
-				Kid
-			</span>
-			</p>
-			<p class="side-links">
-				<a id="side-link-inventory-switch" href="">Inventory</a>
-				<a id="DeleteKid" href="">Delete</a>
-			</p>
-		</div>
+	<segment-steamside>
+		<span slot="caption">
+			Kid
+		</span>
+			<span slot="actions">
+			<ul>
+				<li><a id="side-link-inventory-switch" href="">Inventory</a></li>
+				<li><a id="DeleteKid" href="">Delete</a></li>
+			</ul>
+		</span>
 
-		<div class="content content-at-right">
 
 			<input type="hidden" value="${this.kid_id}">
 			<div class="form-text form-block">
@@ -52,7 +43,7 @@
 					<label>
 					<span class="form-label command-label-span">
 						Can see and play</span>
-						<div id="InventoryInput" class="collection-name">
+						<div id="InventoryInput">
 							<elements-tag-sticker-steamside
 									.tag="${this.__can_see_and_play_sticker_tag}"
 									click_event="false"
@@ -68,16 +59,8 @@
 			</div>
 			<div class="form-break"></div>
 			<div>
-				<a id="SaveButton"
-				   href="#"
-				   class="target-button">
-					Save</a>
+				<button id="SaveButton">
+					Save</button>
 			</div>
 
-		</div>
-
-	</div>
-
-	<!-- ======================================================================= -->
-
-
+	</segment-steamside>

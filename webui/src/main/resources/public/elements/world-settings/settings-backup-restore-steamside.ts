@@ -12,6 +12,7 @@ export class SettingsBackupRestoreElement extends CustomaryElement
 		{
 			name: 'settings-backup-restore-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				define: {
 					fontLocations: [
 						"https://fonts.googleapis.com/css?family=Arvo:regular,bold",

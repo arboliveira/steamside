@@ -1,0 +1,56 @@
+:root {
+    --growth: 5;
+    --padding-small-enamel-plate: 4px;
+    --border-radius-small-enamel-plate: 4px;
+    --border-width-small-enamel-plate: 2px;
+    --font-size-small-name: 2em;
+    --font-size-small-tagline: 0.8em;
+    --height-small-image: 52px;
+    --padding-left-small-image: 4px;
+}
+
+.logo-steamside-small.enamel-plate {
+    padding: var(--padding-small-enamel-plate);
+    border-width: var(--border-width-small-enamel-plate);
+}
+.logo-steamside-large.enamel-plate {
+    padding: calc(var(--padding-small-enamel-plate) * var(--growth));
+    border-width: calc(var(--border-width-small-enamel-plate) * var(--growth));
+}
+
+.steamside-logo-name
+{
+    font-family: Jura, monospace;
+    font-weight: bold;
+}
+.steamside-logo-name-color
+{
+    color: darkred;
+}
+.logo-steamside-small .steamside-logo-name
+{
+    font-size: var(--font-size-small-name);
+}
+.logo-steamside-large .steamside-logo-name {
+    font-size: calc(var(--font-size-small-name) * var(--growth));
+}
+
+.steamside-logo-tagline {
+    font-family: Arvo, serif;
+    color: darkblue;
+}
+.logo-steamside-small .steamside-logo-tagline {
+    font-size: var(--font-size-small-tagline);
+}
+.logo-steamside-large .steamside-logo-tagline {
+    font-size: calc(var(--font-size-small-tagline) * var(--growth));
+}
+
+.logo-steamside-small .steamside-logo-image {
+    height: var(--height-small-image);
+    padding-left: var(--padding-left-small-image);
+}
+.logo-steamside-large .steamside-logo-image {
+    height: calc(var(--height-small-image) * var(--growth));
+    padding-left: calc(var(--padding-left-small-image) * var(--growth));
+}

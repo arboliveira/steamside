@@ -6,6 +6,7 @@ import {CloudSettings, fetchCloudSettingsData} from "#steamside/data-cloud-setti
 import {Sideshow} from "#steamside/vfx-sideshow.js";
 
 import {CustomaryDeclaration} from "#customary";
+import {SegmentElement} from "#steamside/elements/segment/segment-steamside.js";
 
 export class WorldSettingsCloudElement extends CustomaryElement
 {
@@ -26,10 +27,11 @@ export class WorldSettingsCloudElement extends CustomaryElement
 						'https://fonts.googleapis.com/css?family=Karla:regular',
 					],
 				},
+				construct: {shadowRootDont: true},
 			},
 			hooks: {
 				requires: [
-					CommandBoxElement,
+					SegmentElement, CommandBoxElement,
 				],
 				properties: {
 					'__cloudEnabled': {type: Boolean},

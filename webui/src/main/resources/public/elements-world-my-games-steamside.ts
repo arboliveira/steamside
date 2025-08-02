@@ -14,6 +14,7 @@ export class WorldMyGamesElement extends CustomaryElement
 		{
 			name: 'elements-world-my-games-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				state: [
 					'__tagless_tag', 
 					'__owned_tag',

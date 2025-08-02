@@ -1,33 +1,15 @@
-	<link href="steamside.css" rel="stylesheet" type="text/css" />
-	<link href="Forms.css" rel="stylesheet" type="text/css" />
-	<link href="CommandBox.css" rel="stylesheet" type="text/css" />
-
-	<link href="animate.css" rel="stylesheet" type="text/css" />
-
-<!-- ======================================================================= -->
-
-<div id="CloudView">
-
-<!-- ======================================================================= -->
-
-	<div id="cloud-settings-segment" class="segment">
-
-	<div class="side-header side-header-at-left">
-		<p class="side-header-paragraph">
-		<span class="side-text side-text-at-left">
+<link href="CommandBox.css" rel="stylesheet" type="text/css" />
+<segment-steamside>
+    <span slot="caption">
 			Cloud
-		</span>
-		</p>
-	</div>
-
-	<div class="content content-at-right">
+    </span>
 
 			<div class="form-text form-block">
 				<p>
 				<label>
 					<input type="checkbox"
 						   id="CloudEnabledCheckbox"
-						   ?checked="${this.__cloudEnabled}" />
+						   data-customary-bind="__cloudEnabled" />
 					<span class="form-label">
 						Enable cloud synchronization (mirror a copy of your data to a directory you can sync)
 					</span>
@@ -60,17 +42,10 @@
 			</div>
 
 		<div>
-			<a id="SaveButton"
-			   href="#"
-			   class="target-button tooltip"
+			<button id="SaveButton"
 			   title="Saved. You need to restart Steamside for changes to take effect!">
-				Save</a>
+				Save
+			</button>
 		</div>
+</segment-steamside>
 
-	</div>
-
-</div>
-
-<!-- ======================================================================= -->
-
-</div>

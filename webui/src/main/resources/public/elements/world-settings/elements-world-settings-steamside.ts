@@ -18,6 +18,7 @@ export class WorldSettingsElement extends CustomaryElement
                 'anotherUserVisible', 
                 'buttonVisible', 'buttonText'
             ],
+            construct: {shadowRootDont: true},
         },
         hooks: {
             requires: [

@@ -7,6 +7,9 @@ export namespace event {
     export function typeDone(name: string): string {
         return `${type(name)}:DONE`;
     }
+    export function typeChanged(name: string): string {
+        return `${type(name)}:CHANGED`;
+    }
     function type(name: string): string {
         return `${ns}:${name}`;
     }

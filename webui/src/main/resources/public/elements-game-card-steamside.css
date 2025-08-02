@@ -1,0 +1,45 @@
+.game-tile-in-deck {
+    /* This is the style that makes the card tall enough for tags to appear inside */
+    float: left;
+    position: relative;
+    margin: 5px;
+}
+
+.game-img {
+    border-top: 2px solid #555;
+    border-right: 1px solid #999;
+    border-bottom: 1px solid #999;
+    border-left: 2px solid #555;
+    width: 100%;
+}
+
+.card-scale-header img {
+    max-width: 460px;
+    max-height: 215px;
+}
+
+.card-scale-231x87 img {
+    max-width: 231px;
+    max-height: 87px;
+}
+
+.card-scale-616x353 img {
+    max-width: 616px;
+    max-height: 353px;
+}
+
+.game-tile-caption {
+    font-size: large;
+    text-align: left;
+    margin-top: 2px;
+}
+
+.game-tile-inner-loading-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    z-index: 10;
+}

@@ -1,10 +1,10 @@
-import {Customary, CustomaryElement} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
+
 import {CommandBoxElement} from "#steamside/elements-command-box-steamside.js";
 import {
     CommandHintWithVerbAndSubjectElement
 } from "#steamside/elements-command-hint-with-verb-and-subject-steamside.js";
-
-import {CustomaryDeclaration} from "#customary";
+import {CommandBoxValue} from "#steamside/elements/command-box/CommandBoxValue.js";
 
 export class WorldHomeSearchCommandBoxElement extends CustomaryElement
 {
@@ -26,9 +26,9 @@ export class WorldHomeSearchCommandBoxElement extends CustomaryElement
                 },
                 events: [
                     {
-                        type: 'CommandBoxElement:InputValueChanged',
+                        type: CommandBoxValue.eventTypeChanged,
                         listener: (el, event) =>
-                                el.#on_changed_input_text_command_box_value(<CustomEvent<any>>event),
+                                el.#on_changed_input_text_command_box_value(<CustomEvent>event),
                     },
                     {
                         selector: '.searched-recently',
@@ -63,8 +63,8 @@ export class WorldHomeSearchCommandBoxElement extends CustomaryElement
     declare last_played_name_1: string;
     declare last_played_name_2: string;
 
-    #on_changed_input_text_command_box_value(event: CustomEvent) {
-        this.command_box_entered = event.detail;
+    #on_changed_input_text_command_box_value(event: CustomEvent<CommandBoxValue.ChangedDetail>) {
+        this.command_box_entered = event.detail.input_text_command_box_value;
         // FIXME Third command button: Windosill community hub
     }
     

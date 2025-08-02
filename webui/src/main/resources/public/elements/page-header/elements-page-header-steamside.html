@@ -1,56 +1,56 @@
 <!-- ======================================================================= -->
 
-	<link href="steamside.css" rel="stylesheet" type="text/css" />
+<link href="elements/css/steamside-semantic.css" rel="stylesheet" type="text/css" xmlns="http://www.w3.org/1999/html"/>
+
+<link href="steamside.css" rel="stylesheet" type="text/css" />
+
+<link href="Forms.css" rel="stylesheet" type="text/css" />
+
+<link href="elements/segment/segment-steamside-slots.css" rel="stylesheet" type="text/css" />
 
 <!-- ======================================================================= -->
 
-<div id="page-header" class="page-header">
+<div id="page-header" class="page-header"
+	 style="display:flex; justify-content: space-between; align-items: stretch; gap: 4em;"
+>
 
-	<div class="page-header-logo-section page-header-stamp">
-		<a href="./">
-		<div class="page-header-logo">
-			<img src="steamside.png" height="45" width="45" />
-		</div>
-		<div class="page-header-name" style="text-align:center;">
-			<span class="page-header-name-text"  style="line-height: 0.90em">Steamside</span>
-			<br style="margin:0"/>
-			<span style="font-size: 0.8em;font-family:Arvo">
-				Your <span style="color:DarkRed">companion</span> on Steam</span>
-		</div>
+	<div class="page-header-logo-section">
+		<a href="./" class="low-key-clickable">
+			<logo-steamside size="small"></logo-steamside>
 		</a>
 	</div>
 
 	<customary:if condition="this.__advancedMode_visible">
 
-	<div id="PageHeaderBannerSection" class="menu-wrapper page-header-stamp">
-		<div id="PageHeaderBannerMenu" class="content-wrap">
-			<ul>
-				<li><a href="./MyGames.html">My games</a></li><li class="split"></li>
-				<li><a href="https://steampowered.com" target="_blank">Steam Store</a></li><li class="split"></li>
-				<li><a href="./SteamClient.html">Steam Client</a></li><li class="split"></li>
-				<li><a class="vaporware" id="nav-utilities">Utilities</a></li><li class="split"></li>
-				<li><a href="./Settings.html">Settings</a></li><li class="split"></li>
-				<li><a class="vaporware">Help</a></li><li class="split"></li>
-				<li><a href="https://github.com/arboliveira/steamside" target="_blank">
-					About&nbsp;
-					<img src="./Octicons-mark-github.svg" style="width: 16px; height: auto" alt="GitHub logo" />
-				</a></li><li class="split"></li>
-				<li><a href="./test.html" target="_blank">Unit Tests</a></li><li class="split"></li>
-				<li><a href="./Exit.html">Exit</a></li>
-			</ul>
-		</div>
-	</div>
+	<nav class="menu-wrapper"
+		 style="display:flex; flex-wrap: wrap; gap: 1em; align-items: stretch; align-content: stretch; justify-content: space-evenly"
+	>
+		<a class="world-gateway enamel-plate" href="./MyGames.html">My games</a>
+		<a class="world-gateway enamel-plate" href="https://steampowered.com" target="_blank">Steam Store</a>
+		<a class="world-gateway enamel-plate" href="./SteamClient.html">Steam Client</a>
+		<a class="world-gateway enamel-plate vaporware" id="nav-utilities">Utilities</a></a>
+		<a class="world-gateway enamel-plate" href="./Settings.html">Settings</a>
+		<a class="world-gateway enamel-plate vaporware">Help</a>
+		<a class="world-gateway enamel-plate"
+			 href="https://github.com/arboliveira/steamside" target="_blank">
+				About&nbsp;
+				<img src="./Octicons-mark-github.svg" style="width: 16px; height: auto" alt="GitHub logo" />
+		</a>
+		<a class="world-gateway enamel-plate" href="./test.html" target="_blank">Unit Tests</a>
+		<a class="world-gateway enamel-plate" href="./Exit.html">Exit</a>
+	</nav>
 
 	</customary:if>
 
 	<customary:if condition="this.__kidsMode_visible">
 
-		<div id="PageHeaderBannerSection" class="menu-wrapper page-header-stamp">
+		<nav class="menu-wrapper enamel-plate"
+				style="display: flex; align-items: center;">
 			<div id="KidsGreetingView" class="kids-greeting">
 				<!-- FIXME Substitute kid's name here -->
 				<span id="KidName">Kid</span>'s games
 			</div>
-		</div>
+		</nav>
 
 	</customary:if>
 

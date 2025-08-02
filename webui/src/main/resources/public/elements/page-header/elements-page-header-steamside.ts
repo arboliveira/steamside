@@ -6,6 +6,7 @@ import {WallpaperSettingsRead} from "#steamside/application/modules/settings/Wal
 import {WallpaperRender} from "#steamside/application/modules/settings/WallpaperRender.js";
 import {KidsModeRead} from "#steamside/application/modules/kids/KidsModeRead.js";
 import {kidsMode_from_url} from "#steamside/application/modules/kids/kidsMode_from_url.js";
+import {LogoElement} from "#steamside/elements/logo/logo-steamside.js";
 
 export class PageHeaderElement extends CustomaryElement
 {
@@ -17,6 +18,7 @@ export class PageHeaderElement extends CustomaryElement
 					'__advancedMode_visible',
 					'__kidsMode_visible', '__kidsMode',
 				],
+				construct: {shadowRootDont: true},
 				define: {
 					fontLocations: [
 						'https://fonts.googleapis.com/css?family=Arvo:regular,bold',
@@ -25,6 +27,9 @@ export class PageHeaderElement extends CustomaryElement
 				},
 			},
 			hooks: {
+				requires: [
+					LogoElement,
+				],
 				externalLoader: {
 					import_meta: import.meta,
 				},

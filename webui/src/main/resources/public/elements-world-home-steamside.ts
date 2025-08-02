@@ -15,6 +15,9 @@ export class WorldHomeElement extends CustomaryElement
 		{
 			name: 'elements-world-home-steamside',
 			config: {
+				construct: {
+					shadowRootDont: true,
+				},
 				state: [
 					'__advancedMode_visible', 
 					'__kidsMode_visible', '__kidsMode',

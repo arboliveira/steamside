@@ -11,6 +11,10 @@ import {CommandAlternatePlease} from "#steamside/elements/command-box/CommandAlt
 import {ConfirmPlease} from "#steamside/elements/command-box/ConfirmPlease.js";
 import {PlayError} from "#steamside/application/play/PlayError.js";
 import {toastError} from "#steamside/vfx-toaster.js";
+import {CardView} from "#steamside/elements-game-card-steamside.js";
+import {translateGameToCardView} from "#steamside/application/game/Game.js";
+import {ContinuePlay} from "#steamside/application/modules/continue/ContinuePlay.js";
+import {Skyward} from "#steamside/event-bus/Skyward.js";
 
 export class WorldHomeSearchSegmentElement extends CustomaryElement 
 {
@@ -18,6 +22,7 @@ export class WorldHomeSearchSegmentElement extends CustomaryElement
 		{
 			name: 'elements-world-home-search-segment-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				define: {
 					fontLocation: "https://fonts.googleapis.com/css?family=Arvo:regular,bold",
 				},
@@ -68,7 +73,7 @@ export class WorldHomeSearchSegmentElement extends CustomaryElement
 			}
 		}
 
-	declare searchResults: Game[];
+	declare searchResults: CardView[];
 
 	async #on_CommandBoxElement_CommandPlease(event: CustomEvent<CommandPlease.EventDetail>) {
 		const command_box_entered = event.detail.input_text_command_box_value;
@@ -77,7 +82,7 @@ export class WorldHomeSearchSegmentElement extends CustomaryElement
 		}
 		else
 		{
-			this.#continue_game_1();
+			this.#continue_game_1(event);
 		}
 	}
 
@@ -88,7 +93,7 @@ export class WorldHomeSearchSegmentElement extends CustomaryElement
 		}
 		else
 		{
-			this.#continue_game_2();
+			this.#continue_game_2(event);
 		}
 	}
 
@@ -108,35 +113,20 @@ export class WorldHomeSearchSegmentElement extends CustomaryElement
 	}
 
 	async #search(command_box_entered: string) {
-		this.searchResults = await fetchSearchData(command_box_entered);
+		const searchResults: Game[] = await fetchSearchData(command_box_entered);
+		this.searchResults = searchResults.map(game => translateGameToCardView(game));
 	}
 
-	#continue_game_1() {
-		this.dispatchEvent(
-			new CustomEvent(
-				'WorldHomeSearchSegmentElement:asks-to:continue-game',
-				{
-					detail: {lastPlayed: 1},
-					composed: true,
-				}
-			)
-		);
+	#continue_game_1(event: CustomEvent<CommandPlease.EventDetail>) {
+		Skyward.stage(event, this, {type: ContinuePlay.eventTypePlease, detail: {lastPlayed: 1}});
 	}
 
 	#search_and_play(command_box_entered: string) {
 		// TODO search then play
 	}
 
-	#continue_game_2() {
-		this.dispatchEvent(
-			new CustomEvent(
-				'WorldHomeSearchSegmentElement:asks-to:continue-game',
-				{
-					detail: {lastPlayed: 2},
-					composed: true,
-				}
-			)
-		);
+	#continue_game_2(event: CustomEvent<CommandPlease.EventDetail>) {
+		Skyward.stage(event, this, {type: ContinuePlay.eventTypePlease, detail: {lastPlayed: 2}});
 	}
 }
 Customary.declare(WorldHomeSearchSegmentElement);

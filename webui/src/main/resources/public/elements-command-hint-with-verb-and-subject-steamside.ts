@@ -15,7 +15,8 @@ export class CommandHintWithVerbAndSubjectElement extends CustomaryElement {
                 ],
                 define: {
                     fontLocation: 'https://fonts.googleapis.com/css?family=Karla:regular, bold' 
-                }
+                },
+                construct: {shadowRootDont: true},
             },
             hooks: {
                 externalLoader: {

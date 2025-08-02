@@ -11,6 +11,7 @@ export class TagStickersElement extends CustomaryElement
 		{
 			name: 'elements-tag-stickers-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				attributes: [
 					'click_event_on_stickers',
 				],

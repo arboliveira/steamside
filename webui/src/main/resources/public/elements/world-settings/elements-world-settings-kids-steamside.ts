@@ -1,4 +1,4 @@
-import {Customary, CustomaryElement} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 import {Backend} from "#steamside/data-backend.js";
 import {fetchKidsData, Kid} from "#steamside/data-kids.js";
 import {TagStickerElement} from "#steamside/elements-tag-sticker-steamside.js";
@@ -9,7 +9,7 @@ import {
 import {pop_toast} from "#steamside/vfx-toaster.js";
 import {Sideshow} from "#steamside/vfx-sideshow.js";
 
-import {CustomaryDeclaration} from "#customary";
+import {SegmentElement} from "#steamside/elements/segment/segment-steamside.js";
 
 export class WorldSettingsKidsElement extends CustomaryElement
 {
@@ -28,17 +28,16 @@ export class WorldSettingsKidsElement extends CustomaryElement
 						'https://fonts.googleapis.com/css?family=Karla:regular',
 					],
 				},
-			},
-			values: {
+				construct: {shadowRootDont: true},
 			},
 			hooks: {
 				requires: [
+					SegmentElement,
 					TagStickerElement,
 					WorldSettingsKidsKidEditElement,
 				],
 				externalLoader: {
 					import_meta: import.meta,
-					css_dont: true,
 				},
 				lifecycle: {
 					connected: el => el.#on_connected(),
@@ -97,7 +96,7 @@ export class WorldSettingsKidsElement extends CustomaryElement
 	#editKid(kid: KidData_View) {
 		 const editor = new WorldSettingsKidsKidEditElement();
 		 editor.__kid = kid;
-		 this.renderRoot.querySelector(".segment")!.appendChild(editor);
+		 this.parentElement!.appendChild(editor);
 		// FIXME editor segment title: "New Kid", "Edit Kid"
 	}
 

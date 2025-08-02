@@ -1,14 +1,15 @@
-import {Customary, CustomaryElement} from "#customary";
+import {Customary, CustomaryDeclaration, CustomaryElement} from "#customary";
 import {Backend} from "#steamside/data-backend.js";
 import {pop_toast} from "#steamside/vfx-toaster.js";
 
-import {CustomaryDeclaration} from "#customary";
+import {SegmentElement} from "#steamside/elements/segment/segment-steamside.js";
 
 export class WorldSteamClientElement extends CustomaryElement {
     static customary: CustomaryDeclaration<WorldSteamClientElement> =
     {
         name: 'elements-world-steam-client-steamside',
         config: {
+            construct: {shadowRootDont: true},
             state: [
                 'statusBackend',
                 'statusVisible', 'statusText', 
@@ -17,6 +18,7 @@ export class WorldSteamClientElement extends CustomaryElement {
             ],
         },
         hooks: {
+            requires: [SegmentElement],
             externalLoader: {
                 import_meta: import.meta,
                 css_dont: true,

@@ -10,6 +10,9 @@ import {Game} from "#steamside/data-game.js";
 import {
 	CollectionPicked,
 } from "#steamside/elements/collection-picker/CollectionPicked.js";
+import {SegmentElement} from "#steamside/elements/segment/segment-steamside.js";
+import {CardView} from "#steamside/elements-game-card-steamside.js";
+import {translateGameToCardView} from "#steamside/application/game/Game.js";
 
 export class WorldHomeFavoritesSegmentElement extends CustomaryElement
 {
@@ -17,6 +20,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement
 		{
 			name: 'elements-world-home-favorites-segment-steamside',
 			config: {
+				construct: {shadowRootDont: true},
 				define: {
 					fontLocation: "https://fonts.googleapis.com/css?family=Arvo:regular",
 				},
@@ -29,7 +33,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement
 				],
 			},
 			hooks: {
-				requires: [GameCardDeckElement, CollectionPickerElement],
+				requires: [SegmentElement, GameCardDeckElement, CollectionPickerElement],
 				externalLoader: {
 					import_meta: import.meta,
 					css_dont: true,
@@ -53,7 +57,7 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement
 		}
 
 	declare collectionPicker_visible: boolean;
-	declare favorites: Game[];
+	declare favorites: CardView[];
 
 	#switchClicked(e: Event) {
 		e.preventDefault();
@@ -87,7 +91,8 @@ export class WorldHomeFavoritesSegmentElement extends CustomaryElement
 
 	async #fetch_favorites_collection()
 	{
-		this.favorites = await fetchFavoritesData();
+		const favorites: Game[] = await fetchFavoritesData();
+		this.favorites = favorites.map(game => translateGameToCardView(game));
 	}
 
 	async #on_connected()

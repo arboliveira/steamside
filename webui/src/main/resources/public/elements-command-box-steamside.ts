@@ -9,6 +9,7 @@ import {ConfirmPlease} from "#steamside/elements/command-box/ConfirmPlease.js";
 import {CommandPlease} from "#steamside/elements/command-box/CommandPlease.js";
 import {CommandAlternatePlease} from "#steamside/elements/command-box/CommandAlternatePlease.js";
 import {Skyward} from "#steamside/event-bus/Skyward.js";
+import {CommandBoxValue} from "#steamside/elements/command-box/CommandBoxValue.js";
 
 export class CommandBoxElement extends CustomaryElement
 {
@@ -16,23 +17,24 @@ export class CommandBoxElement extends CustomaryElement
     {
         name: 'elements-command-box-steamside',
         config: {
-            state: [
-                'input_text_command_box_value',
-                'command_confirm_visible',
-                'command_confirm_what_text',
-                'command_trouble_visible',
-                '__command_label_visible',
-                '__command_button_strip_visible',
-            ],
             attributes: [
+                'input_text_command_box_value',
                 'command_label_text',
                 'command_label_visible',
                 'placeholder_text',
-                'command_button_strip_visible',
+                'is_textarea',
+            ],
+            state: [
+                'command_a_button_face',
+                'command_b_button_face',
+                'command_c_button_face',
+                'command_confirm_visible',
+                'command_confirm_what_text',
+                'command_trouble_visible',
             ],
         },
         values: {
-            'input_text_command_box_value': '',
+            '____input_text_command_box_value': '',
             'command_label_text': 'Command label',
             'command_confirm_visible': false,
             'command_confirm_what_text': 'Yes, do it already',
@@ -47,25 +49,22 @@ export class CommandBoxElement extends CustomaryElement
                 css_dont: true,
             },
             changes: {
-                'input_text_command_box_value': (el, a) => 
+                'input_text_command_box_value': (el, a) =>
                     el.#on_changed_input_text_command_box_value(a),
             },
             events: [
                 {
                     type: 'keydown',
-                    selector: '#input-text-command-box',
+                    selector: 'input, textarea', // #input-text-command-box, 
                     listener: (el, e) => el.#event_keydown_input(<KeyboardEvent>e),
                 },
+                /*
                 {
                     type: 'keyup',
                     selector: '#input-text-command-box',
                     listener: (el, e) => el.#event_keyup_input(e),
                 },
-                {
-                    type: 'change',
-                    selector: '#input-text-command-box',
-                    listener: (el, e) => el.#event_change_input(e),
-                },
+                 */
                 {
                     type: 'click',
                     selector: '#command-button',
@@ -89,12 +88,11 @@ export class CommandBoxElement extends CustomaryElement
         }
     }
     declare next_render_do_focus: boolean;
-    declare __command_label_visible: boolean;
-    declare __command_button_strip_visible: boolean;
     declare input_text_command_box_value: string;
     declare command_confirm_visible: boolean;
-    declare command_label_visible: string;
-    declare command_button_strip_visible: string;
+    declare command_a_button_face: string;
+    declare command_b_button_face: string;
+    declare is_textarea: string;
 
     #on_updated() {
         if (this.next_render_do_focus) {
@@ -106,22 +104,26 @@ export class CommandBoxElement extends CustomaryElement
     }
 
     #on_willUpdate() {
-        // TODO possibly no usages anywhere - remove
-        this.__command_label_visible = this.command_label_visible === 'true';
-        
-        // TODO no usages anywhere - remove
-        this.__command_button_strip_visible = this.command_button_strip_visible !== 'false';
+        const plain = !this.is_textarea;
+        if (plain) {
+            this.command_a_button_face = 'Enter';
+            this.command_b_button_face = 'Ctrl+Enter';
+        }
+        else {
+            this.command_a_button_face = 'Ctrl+Enter';
+            this.command_b_button_face = 'Ctrl+Shift+Enter';
+        }
     }
-    
+
     #on_changed_input_text_command_box_value(a: string) {
-        this.dispatchEvent(
-            new CustomEvent(
-                'CommandBoxElement:InputValueChanged', 
-                {
-                    detail: this.#trim(a),
-                    composed: true,
+        Skyward.fly<CommandBoxValue.ChangedDetail>(
+            this,
+            {
+                type: CommandBoxValue.eventTypeChanged,
+                detail: {
+                    input_text_command_box_value: this.#trim(a),
                 }
-            )
+            }
         );
     }
 
@@ -164,29 +166,53 @@ export class CommandBoxElement extends CustomaryElement
         this.input_text_command_box_value = (e.target as HTMLInputElement).value;
     }
 
-    #event_change_input(e: Event) {
-        e.preventDefault();
-        this.input_text_command_box_value = (e.target as HTMLInputElement).value;
-    }
-
     #event_keydown_input(e: KeyboardEvent) {
-        if (!(e.code === 'Enter')) return;
-
-        e.preventDefault();
-
-        if (e.shiftKey)
-        {
-            this.#doCommandConfirm();
-            return;
+        if (e.code === 'Enter') {
+            this.#on_EnterKeyPressed(e);
         }
+    }
+    
+    #on_EnterKeyPressed(e: KeyboardEvent) {
+        const plain = !this.is_textarea;
 
-        if (e.ctrlKey)
-        {
-            this.#doCommandAlternate();
-            return;
+        if (plain) {
+            if (!e.ctrlKey && !e.shiftKey) {
+                e.preventDefault();
+                this.#doCommand();
+                return;
+            }
+
+            if (e.ctrlKey && !e.shiftKey) {
+                e.preventDefault();
+                this.#doCommandAlternate();
+                return;
+            }
+
+            if (!e.ctrlKey && e.shiftKey) {
+                e.preventDefault();
+                this.#doCommandConfirm();
+                return;
+            }
         }
+        else {
+            if (e.ctrlKey && !e.shiftKey) {
+                e.preventDefault();
+                this.#doCommand();
+                return;
+            }
 
-        this.#doCommand();
+            if (e.ctrlKey && e.shiftKey) {
+                e.preventDefault();
+                this.#doCommandAlternate();
+                return;
+            }
+
+            if (!e.ctrlKey && e.shiftKey) {
+                e.preventDefault();
+                this.#doCommandConfirm();
+                return;
+            }
+        }
     }
 
     input_query_el(): HTMLInputElement {

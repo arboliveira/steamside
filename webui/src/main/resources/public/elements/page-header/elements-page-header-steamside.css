@@ -1,6 +1,6 @@
 .page-header
 {
-    margin: 0px auto;
+    margin: 0 auto;
     width: 100%;
 }
 .page-header-logo-section
@@ -11,87 +11,47 @@
 {
     float:left;
 }
-.page-header-stamp
-{
-    background-color: aquamarine;
-    border-radius: 4px;
-    border: crimson solid 2px;
-    box-shadow: 0 0 0 1px navy;
-    padding: 8px;
-}
-.page-header-name
-{
-    float:left;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-.page-header-name-text
-{
-    font-family: Jura;
-    font-weight: bold;
-    font-size: 2em;
-    color: darkred;
-}
-
 .menu-wrapper
 {
-    font-family: Arvo;
-    font-size: 1em;
-    float: right;
-    height: 50px;
-    line-height: 50px;
+    font-family: Arvo, serif;
+    font-size: 1.2em;
 }
-.menu-wrapper ul {
-    list-style: none;
-    float: left;
-    margin: 0;
-    padding: 0;
-}
-.menu-wrapper ul li {
-    float: left;
-    height: 50px;
-    line-height: 50px;
-}
-.menu-wrapper ul .split {
+.menu-wrapper .split {
     width: 1px;
     background: Crimson;
 }
-.menu-wrapper ul li a
+.menu-wrapper a
 {
     text-decoration: none;	/* hide link underline */
-    padding: 0 20px;
-    display: block;
+    padding-left: 1em;
+    padding-right: 1em;
+    display: block; /* entire rectangle clickable */
 }
-.menu-wrapper ul li a:hover
+.menu-wrapper a:hover
 {
     text-decoration: none;
 }
-.menu-wrapper ul li:hover
+.world-gateway {
+    display: flex;
+    align-content: center;
+    min-width: 3em;
+    text-align: center;
+}
+.world-gateway.enamel-plate {
+    background-color: paleturquoise;
+}
+.world-gateway:hover
 {
     background: BurlyWood;
-    -webkit-box-shadow: 0px 3px 30px rgba(255, 255, 255, 0.4) inset, 0px 5px 5px rgba(0, 0, 0, 0.2);
     box-shadow: 0px 3px 30px rgba(255, 255, 255, 0.4) inset, 0px 5px 5px rgba(0, 0, 0, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.45);
-    border-right: 1px solid rgba(255, 255, 255, 0.45);
-    margin: 0 -1px;
-    position: relative;
     z-index: 10;
 }
-.menu-wrapper ul .selected, .menu-wrapper ul .selected:hover {
-    border-left: 1px solid rgba(255, 255, 255, 0.37);
-    border-right: 1px solid rgba(255, 255, 255, 0.37);
-    -webkit-box-shadow: inset 0px 3px 8px rgba(25, 30, 35, 0.3);
+.menu-wrapper .selected, .menu-wrapper .selected:hover {
     box-shadow: inset 0px 3px 8px rgba(25, 30, 35, 0.3);
-    margin: 0 0;
-}
-
-.content-wrap {
-    padding: 0 0px;
-    margin: 0 auto;
 }
 
 .kids-greeting {
-    font-family: Arvo;
+    font-family: Arvo, serif;
     font-size: 2.5em;
     font-weight: bolder;
     color: cornflowerblue;

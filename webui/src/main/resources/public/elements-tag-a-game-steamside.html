@@ -4,22 +4,16 @@
 
 <!-- ======================================================================= -->
 
-<div id="TagAGameView" class="segment">
-
-    <div class="side-header side-header-at-left">
-        <p class="side-header-paragraph">
-			<span class="side-text side-text-at-left">
+<segment-steamside>
+    <span slot="caption">
 			Tag
-			</span>
-        </p>
-    </div>
-
-    <div class="content content-at-right">
+    </span>
 
         <p id="GameCardView" class="instructions-and-explanations">
 
             <elements-game-card-steamside
-                    .game="${this.game}"
+                    data-customary-expressions
+                    data-customary-expression-card="${this.card}"
             ></elements-game-card-steamside>
 
         </p>
@@ -27,7 +21,7 @@
         <div class="form-block form-text" style="width: 95%">
 
             <elements-command-box-steamside
-                    placeholder_text="Collection for ${this.game?.name}"
+                    placeholder_text="Collection for ${this.card?.name}"
             >
                 <span slot="command-hint">
                     <elements-command-hint-with-verb-and-subject-steamside
@@ -51,12 +45,11 @@
 
             <div id="TagSuggestionsView">
                 <elements-tag-stickers-steamside
-                        .tags_collection="${this.suggestions}"
+                        data-customary-expressions
+                        data-customary-expression-tags_collection="${this.suggestions}"
                 >
                 </elements-tag-stickers-steamside>
             </div>
             </p>
         </div>
-
-    </div>
-</div>
+</segment-steamside>
